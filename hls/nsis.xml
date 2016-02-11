@@ -1,0 +1,48 @@
+<document exts="nsi" langs="NSIS">
+
+<item name="options" casecare="0" wrap="0"> 
+</item>
+
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\babort\b;
+\bbreak\b;\bcall\b;\bcase\b;\bdefault\b;\bdo\b;
+\belse\b;\bendif\b;\bendswitch\b;\bendwhile\b;
+\bfile\b;\bfor\b;\bfunction\b;\bfunctionend\b;
+\bgoto\b;\bif\b;\binsttype\b;\bloopuntil\b;\bname\b;
+\bname\b;\bnext\b;\boutfile\b;\bpage\b;\bpageex\b;
+\bpageexend\b;\bsection\b;\bsectionend\b;\bsectiongroup\b;\bsectionin\b;\bswitch\b;
+\bvar\b;\bwhile\b;\brequestexecutionlevel\b;
+\bcrccheck\b;\bsetcompressor\b;
+\bshowinstdetails\b;\bshowuninstdetails\b;
+\boutfile\b;\brequestexecutionlevel\b;\binstalldir\b;
+\bsetoutpath\b;\bsetshellvarcontext\b;
+\bwriteuninstaller\b;\bwriteregstr\b;\bcreatedirectory\b;\bsectionend\b</item>
+
+<item name="instattrs" type="keywords" color="keywords">\baddbrandingimage\b;\ballowrootdirinstall\b;\bautoclosewindow\b;\bbgfont\b;\bbggradient\b;\bbrandingtext\b;\bcaption\b;\bchangeui\b;\bcheckbitmap\b;\bcompletedtext\b;\bcomponenttext\b;
+\bcrccheck\b;\bdetailsbuttontext\b;\bdirtext\b;
+\bdirvar\b;\bdirverify\b;\bfileerrortext\b;\bicon\b;
+\binstallbuttontext\b;\binstallcolors\b;\binstalldir\b;
+\binstalldirregkey\b</item>
+
+<item name="funx" type="keywords" color="functions" fontstyle="bold">\bcreateshortcut\b;
+\bdelete\b;\bdeleteregkey\b;\bdetailprint\b;
+\bdialog\b;\bfindwindow\b;\bgetdlgitem\b;
+\bintcmp\b;\bintop\b;\bmessagebox\b;\breadregstr\b;
+\brmdir\b;\bsectiongettext\b;\bsendmessage\b;\bsetctlcolors\b;\bstrcpy\b</item>
+
+
+<item name="quotes" type="item" color="quotes">("[^\"]*")</item>
+
+<item name="char" type="item" color="quotes">('[^']*')</item>
+
+<item name="macro" type="item" color="preproc" fontstyle="italic">^\!.*</item>
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">\;[^\n]*</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">/\*</item>
+
+<item name="mcomment-end" type="mcomment-end">\*/</item>
+
+<item name="cm_single" type="comment">;%s</item>
+
+
+</document>

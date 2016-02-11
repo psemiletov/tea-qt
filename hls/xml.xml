@@ -1,0 +1,16 @@
+<document exts="htm;html;xml;xhtml;ts;osm;xsl" langs="HTML;XHTML;XML">
+
+<item name="options" wrap="1"></item>
+
+<item name="tags" type="keywords" color="tags" fontstyle="bold">&lt;(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+&gt;</item>
+
+<item name="attr-content" type="keywords" color="quotes">("[^\"]*"|'[^']*')</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">&lt;!--</item>
+
+<item name="mcomment-end" type="mcomment-end">--&gt;</item>
+
+<item name="cm_mult" type="comment">&lt;!-- %s --&gt;</item>
+<item name="cm_single" type="comment">&lt;!-- %s --&gt;</item>
+
+</document>

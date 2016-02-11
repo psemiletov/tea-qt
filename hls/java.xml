@@ -1,0 +1,45 @@
+<document exts="java" langs="Java">
+
+<item name="options" wrap="0"> 
+</item>
+
+<item name="types" type="types" color="type" fontstyle="bold">
+\bboolean\b;\bdouble\b;\bbyte\b;\bint\b;\bshort\b;\bchar\b;
+\bvoid\b;\blong\b;\bfloat\b;
+</item>
+
+	
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">
+\babstract\b;\bcontinue\b;\bfor\b;\bnew\b;\bswitch\b;
+\bassert\b;\bdefault\b;\bif\b;\bpackage\b;\bsynchronized\b;
+\bdo\b;\bgoto\b;\bprivate\b;\bthis\b;
+\bbreak\b;\bimplements\b;\bprotected\b;\bthrow\b;
+\bbyte\b;\belse\b;\bimport\b;\bpublic\b;\bthrows\b;
+\bcase\b;\benum\b;\binstanceof\b;\breturn\b;\btransient\b;
+\bcatch\b;\bextends\b;\btry\b;
+\bfinal\b;\binterface\b;\bstatic\b;
+\bclass\b;\bfinally\b;\bstrictfp\b;\bvolatile\b;
+\bconst\b;\bnative\b;\bsuper\b;\bwhile\b;\btrue\b;\bfalse\b
+</item>
+
+<item name="functions" type="item" color="functions">\b[A-Za-z0-9_]+(?=\()</item>
+
+<item name="include" type="item" color="include" fontstyle="italic">^#import</item>
+
+<item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
+
+<item name="quotes" type="item" color="quotes">("[^\"]*")</item>
+
+<item name="char" type="item" color="quotes">('[^']*')</item>
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">//[^\n]*</item>
+
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">/\*</item>
+
+<item name="mcomment-end" type="mcomment-end">\*/</item>
+
+<item name="cm_mult" type="comment">/*%s*/</item>
+<item name="cm_single" type="comment">//%s</item>
+
+</document>

@@ -1,0 +1,95 @@
+<document exts="d" langs="D">
+
+<item name="options" wrap="0"> 
+</item>
+
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\balias\b;
+\bbreak\b;
+\bcase\b;
+\bcatch\b;
+\bclass\b;
+\bdelegate\b;
+\bdo\b;
+\belse\b;
+\benum\b;
+\bfinally\b;
+\bfor\b;
+\bforeach\b;
+\bfunction\b;
+\bif\b;
+\bimport\b;
+\bnew\b;
+\bprivate\b;
+\breturn\b;
+\bstatic\b;
+\bsuper\b;
+\bswitch\b;
+\bthis\b;
+\bthrow\b;
+\btry\b;
+\btypedef\b;
+\bwhile\b;
+\bauto\b;
+\bdelete\b;
+\bstruct\b;
+\btypeof\b;
+\bprivate\b;
+\bpublic\b;
+\bdefault\b;
+\bin\b;
+\bout\b;
+\bbody\b;
+\bversion\b;
+\bassert\b;
+\bcontinue\b;
+\balign\b;
+\bunion\b;
+\bcast\b;
+\bvolatile\b;
+\bmodule\b;
+\bscope\b;
+\btemplate\b;
+\bis\b;
+\bconst\b</item>
+
+<item name="types" type="keywords" color="type">\bbit\b;
+\bbool\b;
+\bbyte\b;
+\bcdouble\b;
+\bcent\b;
+\bcfloat\b;
+\bchar\b;
+\bcreal\b;
+\bdchar\b;
+\bdouble\b;
+\bfloat\b;
+\bifloat\b;
+\bifoduble\b;
+\bint\b;
+\bireal\b;
+\blong\b;
+\breal\b;
+\bshort\b;
+\bubyte\b;
+\bucent\b;
+\buint\b;
+\bulong\b;
+\bushort\b;
+\bvoid\b;
+\bwchar\b</item>
+
+
+<item name="quotes" type="item" color="quotes">("[^\"]*")</item>
+
+<item name="char" type="item" color="quotes">('[^']*')</item>
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">//[^\n]*</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">/\*</item>
+
+<item name="mcomment-end" type="mcomment-end">\*/</item>
+
+<item name="cm_mult" type="comment">/*%s*/</item>
+<item name="cm_single" type="comment">//%s</item>
+
+</document>

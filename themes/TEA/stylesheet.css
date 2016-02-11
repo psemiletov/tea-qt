@@ -1,0 +1,4 @@
+QTabWidget::pane#tab_widget { 
+border-top: 0px solid grey; 
+background-color: grey;
+}

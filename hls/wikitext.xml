@@ -1,0 +1,20 @@
+<document exts="wiki" langs="Wikitext">
+
+<item name="options" wrap="1"></item>
+
+<item name="tags" type="keywords" color="tags" fontstyle="bold">(&lt;[a-zA-Z\d:]+\b|&lt;\?[a-zA-Z\d:]+\b|\?&gt;|&gt;|/&gt;|&lt;/[a-zA-Z\d:]+&gt;)</item>
+<item name="attrs" type="keywords" color="modifiers">[a-zA-Z:]+=</item>
+<item name="entities" type="keywords" color="tags">&amp;[a-zA-Z_][a-zA-Z0-9.:_-]*;</item>
+
+<item name="braces" type="keywords" color="tags" fontstyle="bold">\[|\]</item>
+
+<item name="attr-content" type="keywords" color="quotes">("[^\"]*"|'[^']*')</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">&lt;!--</item>
+
+<item name="mcomment-end" type="mcomment-end">--&gt;</item>
+
+<item name="cm_mult" type="comment">&lt;!-- %s --&gt;</item>
+<item name="cm_single" type="comment">&lt;!-- %s --&gt;</item>
+
+</document>

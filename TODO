@@ -1,0 +1,45 @@
+just ideas:
+
+file compare
+filesToolbar странно меняет размер иконки
+спеллчекер плохо работает с кавычками елочкой
+вставка картинки как base64?
+в сборке Qt5, шорткаты с Alt стали языко-зависимыми
+переключение галочки на фаззи/regexp при нажатии
+Ada, JS hl
+массовая перекодировка выделенных файлов. окно ИЗ - В
+вытащить меню таблиц мультизамен в режим фприказчика, проверить обработку
+batch-обработка картинок: обрезка, масштабирование, поворот, зеркало?
+при закрытии календарной записи будет автоматический возврат на панель календаря
+autosave bookmarks?
+autocompletion
+broken local links checking
+remember wrap setting //add to the triplex field
+Highlight all search results
+gradient colorization in palettes
+"entity to text" function
+autoscroll //useful for musicians. define the speed in bpm?
+numbers into words
+ctags support
+make max recent items user-modified
+hl for gas, Lisp
+units conversion
+PDF text reader
+add function to update hls cache manually
+unicode table window
+split document panel
+ANSI art support
+play the chords by name, i.e. select AmDm, then use something like "Play melody"
+chords to tabs, heh heh
+parse the compiler output, goto the error by clicking at logmemo
+0-9 markers
+goto start/end of the code block
+PalmDOC (pdb) read-only support? http://wiki.mobileread.com/wiki/PalmDOC, http://www.hotpaw.com/rhn/palm/pdb.txt
+epub support
+CSound hl
+gz file save?
+select code block
+
+планы:
+
+использовать libretta::CPainFile вместо QSettings

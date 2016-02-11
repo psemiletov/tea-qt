@@ -1,0 +1,797 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>TEA Fine Manual</title>
+</head>
+<body>
+<h1>TEA Fine Manual</h1>
+<br>
+<h2>Table of content</h2>
+<br><br>
+
+<a href="#mni_intro">Introduction</a><br>
+<a href="#mni_interface">Interface</a><br>
+<a href="#mni_manager">File manager</a><br>
+<a href="#mni_todo">Dates panel</a><br>
+<a href="#mni_file">File</a><br>
+<a href="#mni_calendar">Calendar</a><br>
+<a href="#mni_edit">Edit</a><br>
+<a href="#mni_markup">Markup</a><br>
+<a href="#mni_search">Search</a><br>
+<a href="#mni_functions">Functions</a><br>
+<a href="#mni_spell">Functions - Spell checking</a><br>
+<a href="#mni_plugins">Functions - Plugins</a><br>
+<a href="#mni_run">Run</a><br>
+<a href="#mni_nav">Nav</a><br>
+<a href="#mni_fm">Fm</a><br>
+<a href="#mni_view">View</a><br>
+<a href="#mni_prefs">Preferences</a><br>
+<a href="#mni_notes">Notes</a><br>
+<a href="#mni_author">Other author's projects</a><br>
+
+<a name="mni_introe"></a>
+<h3>Introduction</h3>
+
+<p>TEA has a long history of the development. At the autumn of year 2000, there was first implementation of TEA, written in Object Pascal using Borland Delphi. Since then, TEA was many times rewritten from zero (Pascal - C/Gtk - C++/Qt) and opened it's source. The initial TEA UI was inspired by Impulse Tracker and Sound Forge. Later, the conception of sliding panels and tabs has been implemented.</p>
+
+<p>Now TEA has THREE branches. This, TEA-Qt, is the modern one. There also outdated TEA-GTK (Gtk 2) and TEA-GTK (GTK 3), the buggy one! So use TEA-Qt.</p>
+
+<p>TEA has two homesites: <a href="http://semiletov.org/tea">semiletov.org/tea</a> and <a href="http://tea.ourproject.org/">tea.ourproject.org</a>. If one of them is down, go to another one.</p>
+
+
+<p>Normally, TEA holds its configuration data and other support files at $HOME/.config/tea (or, under Window, at drive:\Documents and Settings\username\tea). But if you want to start TEA from the flash drive in the portable mode, TEA must read/write configuration data into the directory with the TEA binary. To start TEA in the portable mode, use "--p" command line option:
+</p>
+
+<p>tea --p</p>
+
+<p>As you know, TEA under *NIX is a single binary. Under Windows TEA installation directory contains all what you need to start TEA portable. Please note, that your NORMAL-MODE settings are stills exists and available anytime when you start TEA WITHOUT the "--p" key. TEA preferences of portable and normal modes are eacj other independend and exists in parallel.</p>
+
+<br>
+<a name="mni_interface"></a>
+<h3>Interface</h3>
+
+<p>From the top to bottom, there are:</p>
+
+<p>1. <b>The main menu</b>. Note that you can tear submenus off and place them somewhere over the desktop. Menu items are highly depended on the current task or even editor mode. Some menus can be visible or hidden according to the task (editing, file browsing, etc.).</p>
+
+<p>2. <b>The toolbars area</b>. Actually, toolbars can be parked at the any side of TEA window. Positions are saved between sessions. To turn the toolbar on and off, use the context menu for the toolbar (right click on the toolbar). If no toolbar is visible, do the right click on the menu bar.</p>
+
+<p>3. <b>The tabbed area</b>. It contains four main tabs - <b>edit</b>, <b>manage</b>, <b>tune</b> and <b>learn</b>. <b>Edit</b> - that where you see opened documents. <b>Manage</b> - a built-in file manager. <b>Tune</b> - here you can change TEA preferences. All changes will be applied immediately. <b>Todo</b> - the simple calendar with the organizer functions. <b>Learn</b> - the built-in User manual. This, the magnificious one.</p>
+
+<p>4. <b>Logmemo</b>. It is a notification area. Destination: all warnings, information messages and the results of some text-processing functions.</p>
+
+<p>5. <b>The Famous input field (FIF)</b>. An input text field to put here values for text-processing functions. Also it is used for Find/Replace (read about a <b>Search</b> menu for details). FIF has three buttons - <b>Find</b>, <b>Find previous</b> and <b>Find next</b>. FIF is used also for a search in the TEA manual, menu items list (at the hotkeys customization page) and even the built-in file manager.</p>
+
+<p>6. <b>The status bar</b>. You can setup the status bar's content via the preferences <b>Interface</b> page.</p>
+
+<br>
+<a name="mni_manager"></a>
+<h3>File manager</h3>
+
+<p>The TEA's file manager is hidden under the <b>manage</b> tab. It is not an additional bloatware tool, but an essential part of the editor. It replaces the standart File save/open dialogs (by the way, you can bring them back using <b>Tune &gt; Common &gt; Use traditional File Save/Open dialogs</b> option).</p>
+
+<p>Let's see on the shining force of TEA's file manager.</p>
+
+<p>The directory bar is located on the top. There are an entry with the current directory path, and a nice toolbar with following buttons:</p>
+
+<p><b>Go</b> - navigates to the directory with the path from the text entry.</p>
+
+<p><b>Home</b> - teleports you to your cozy home directory.</p>
+
+<p><b>Refresh</b> - refreshes a files list to your pleasure.</p>
+
+<p><b>File operations</b> button with submenu. It contains some utility actions such as <b>Create new directory</b>, <b>Rename</b> and <b>Delete file</b>. Please note that TEA does not deletes the directories.</p>
+
+<p>The <b>right panel</b> of the file manager.</p>
+
+<p>At the top you see the file name field. Here you can give the name for a file to open or save it. To save the current file under some name, just put the filename into the <b>Name</b> text entry and press the <b>Save as</b> button. To open a file, do the double click on the file name at the files list, or put the file name into the <b>Name</b> entry and press the <b>Open</b> button. You can use the Enter key inside of this input field. The action is related to the menu item  (File open or Save as) that you used to open the file manager tab.<p>
+
+<p>You can also select files multiply (Ctrl-click or INSERT key) and then press the <b>Open</b> button. All files are being saved/opened with the encoding that is selected at the list below from the <b>Name</b> entry. There is also a "?" button. Select some file and press this button - it tries to autodetect the file's character set and activate it at the encodings list. Currently only HTML files or Russian charsets are supported for automatic detection.</p>
+
+<p><b>Bookmarks</b> list. You can easely add and remove the directory bookmarks using the "+" and "-" buttons. The "+" button adds a bookmark to the file system tree's current directory. The "-"  button removes the selected bookmark. To activate the bookmark and navigate to the according directory, double click on the bookmark.</p>
+
+<p>The are some special bookmarks at the top of the list: snippets, templates, scripts. You can't remove them. They point to the TEA special directories for user's items such as templates, snippets, etc.</p>
+
+<p>You can enable the <b>Tune &gt; Common &gt; Automatic preview images at file manager</b> option to show a small preview window near the file manager. Also, when the cursor is located on the image file, you can use <b>Open at cursor</b> (F2) function to view the image at the full-size in another built-in image viewer (see the <b>Open at cursor</b> description).</p>
+
+
+<br>
+<a name="mni_todo"></a>
+<h3>Dates panel</h3>
+
+<p>As you can notice, TEA has the built-in calendar-organizer under the <b>dates</b> tab of the main window. By double-clicking on the days, you create or open the file-per-day text documents. When you close such file, its content will be saved automatically. To remove the day record, use <b>Calendar &gt; Remove day record</b>.</p>
+
+<p>At the text you can specify the time signature for the alarm event. This signature has the format <i>[hh:mm]</i> in the 24 hour day. All text after such signature and before the next one will be treated as the alarm message. For example:</p>
+
+<p>[20:00] go to the theatre<br>
+[23:00] howl at the moon
+</p>
+
+<p>For sure, you need to have TEA running to see the alarm message!</p>
+
+<p>Single click on the date cell shows the day record (if any) at the logmemo area.</p>
+
+<p>At the <b>Tune</b> page, you can set the <b>Start week on Sunday</b> option to the "on". The calendar widget can work in two modes - the normal and the lunar one. Read the <a href="#mni_calendar">Calendar</a> section for details.</p>
+
+<br>
+<a name="mni_file"></a>
+<h3>File</h3>
+
+<p><b>New</b>. Impossible! It's a kind of magic. This menu item creates a new blank document where you can type any words those you want. For example, type the word "hello". It's a very cheerful word. That what we usually say to all good people around. Hello! And your world becomes brighter. So, if you can type this word, it means that you can type any another one, and more than once. It's a true miracle.</p>
+
+<p><b>Open</b> - for sure, this menu item helps you to open any file that you already stored at your hard disk. There are many files, including the evil mature rating violent games - don't even try to open them with TEA. Oh, no! TEA is good.</p>
+
+<p>If you are using the build-in file manager, read the <a href="#mni_manager">File manager</a> chapter. Otherwise, read the words of true about the File open dialog window.</p>
+
+<p>There is a small secret at the File open dialog window. The character set combobox. Yes. With that fine tool in the box, you can open a text file in any encoding that is known by a human being. But be careful! You must know exactly which encoding you need to use to read your file correctly. Otherwise you shall see many weird letters that can harm your spiritual calmness. If so, close your eyes quickly and type "hello" at seven times! Or you can try to load your file with another encoding selected. So choose wise. By the way, TEA can try to auto-detect the encoding - just press the "?" button (on the right from the character set list).</p>
+
+<p>TEA can open all plain text files, and also ODT (OpenDocument Text), KWD (old KWord's format), FB2, DOCX, RTF, SXW (old OOo/StarOffice format), ABW (Abiword) formats and gzipped files. But only the plain text files can be saved with TEA. About other mentioned formats - TEA just can extract text from them, trying to preserve the basic layout (indents, paragraphs).</p>
+
+<p><b>Save</b> - if your file is already saved, this menu item saves it again. That is how it works. But, if a file is not saved, you shall see a surprise! A <a href="#mni_manager">File manager</a>. There, put the file name into to the <b>Name</b> entry and press the <b>Save as</b> button.</p>
+
+<p>Now you already know how to save and load your work. If you see the mushroom cloud from a nuclear explosion, what you gonna do? Yes, save and cover. Want to be one of those happy people on the picture below?</p>
+
+<center><img src=":/images/happy-people-bw.png" border="0" alt="" width="318" height="140"></center>
+
+<p>Save and cover! But remember, you need to place your PC to the safe place. Otherwise, the nuclear heat can destroy your files.</p>
+
+<p>This man is looking disapointed. What's happen? Oh no, he lost his files!</p>
+
+<center><img src=":/images/mister.png" border="0" alt="" width="150" height="200"></center>
+
+<p>Let's ask him: "Hey mister, why are you sad?" And he'll answer: "I'd forgotten to save and cover". That's it. He'd forgotten. He is not happy anymore. At least he'd survived.</p>
+
+<p><b>Last closed file</b> - opens a last closed file. This sentence is a greater paradox of XXI century CE.</p>
+
+<p><b>Open at cursor, or F2 as a shortcut</b> - this feature transforms a user into the so-called "F2 addict". Strange mind and body transformations can happen, so you warned!</p>
+
+<p>Put the cursor at the file name in the href-link. Press F2. See THAT miracle? TEA opens a file with the file name that was pointed. If this file is already opened, its tab will be focused. If the file is an image, TEA show it in the build-in image browser. But, what if you don't work with the [X]HTML code, but use a real file names in your text and want to open them? TEA can handle that - just select a file name (not just put a cursor on it) and press F2.</p>
+
+<p>What is the difference? TEA can open a "file under cursor" when the file name is enclosed with quotes. As in HTML or most of the code sources. In other cases, you need to select file name manually with Shift-cursor keys or using a mouse.</p>
+
+<p>And a bit more - using <b>Open at cursor</b> you can navigate through local href-links.</p>
+
+<p>You can also use <b>Open at cursor</b> at the built-in file manager to open the image file with the preview window.</p>
+
+<p>Also, you can open file at cursor with any external program. Read about the "Run" menu for details.</p>
+
+<p><b>Crapbook</b> - opens a special file where you can put some notes, pieces of a text, etc. The crapbook file will be saved automatically when you close it. If the Crapbook file is opened and you exiting TEA, the content of a Crapbook is saved too.</p>
+
+
+<p><b>Notes</b> - a kind of crapbook, but connected to the current file. Useful to put the notes releated to the current file's content. The .notes file is autosaved on exit.</p>
+
+
+<p><b>Save as different &gt; Save .bak</b> - saves a content of the current document with name, where the "bak" extension added.</p>
+
+<p><b>Save as different &gt; Save timestamped version</b> - saves a content of the current document with name, where the timestamp is added. So you shall know the date and time related to the saved version. Note about timestamp format. Is is yyyy-MM-dd-hh-mm-ss. So the first comes a year, then a month, then days, hours, minutes and seconds.</p>
+
+<p><b>Recent files</b>. From this submenu you can open one of the last dozen opened files. TEA remembers the name, the encoding and the current position of the file when you close the document, so at the next time TEA already know the charset and the position, where to start an editing.</p>
+
+<p><b>Templates</b> - to create a new file from the template, select a template from this menu. To create a new template, save a text file into the TEA <i>templates</i> directory. It is available from <i>templates</i> bookmark at the TEA's file manager (or at the left sidebar at <b>File save</b> dialog). And vice versa, to open the template use the file manager's <i>templates</i> bookmark again. The character set of templates is always UTF-8. TEA sets it automatically even if you choose another encoding.</p>
+
+<p>To delete or rename the template, use the file manager or File save/open dialogs.</p>
+
+<p><b>Sessions</b> - at this menu sessions are available. The session is a simple list of opened files. To load them all, just choose a session name from this menu. To save a session, put the name of the session into the Famous input field, then use <b>File  &gt;  Save different  &gt;  Save session</b>. At the preferences <b>Common</b> page you can check the <b>Restore the last session on start-up</b> option. If this option is turned on, TEA will save the session on exit (under the name <i>def-session-777</i>), and then load this session when starting.</p>
+
+<p><b>Bookmarks</b> - this menu is similar to <b>Recent files</b>, but the files list is updating by you, not by TEA. To add a current file to this list, use <b>Edit bookmarks &gt; Add to bookmarks</b> function. If the bookmarks list already contains the adding file, its record will be updated with new position and charset values. To delete the bookmark, open the bookmarks list from the <b>File &gt; Configs</b> menu, delete the needed line and save the list in a usual way. The wrong bookmark can be temporary disabling with the "#" prefix. To search wrong paths and disable such bookmarks automatically, use <b>Edit bookmarks &gt; Find obsolete paths</b> function.</p>
+
+<p><b>File actions</b> submenu. From this menu you can do some magical things. <b>Set UNIX end of line</b>, <b>Set Windows end of line</b>, <b>Set traditional Mac end of line</b> - those functions allow you to override the file's end of line (EOL). When you save the file, the choosed EOL will be applied. To check the file's EOL, select a file at the built-in file manager and use <b>Fm &gt; File information &gt; Full info</b>.</p>
+
+
+<p><b>Exit</b> - closes TEA. To reduce the annoyance, TEA doesn't ask to confirm it. And another thing related to confirmations - TEA automatically proposes to save the modified existing files only. I.e. if you close (with TEA or by Ctrl-W) the modified new,  nonamed file, TEA silently will close it.</p>
+
+
+<br>
+<a name="mni_calendar"></a>
+<h3>Calendar</h3>
+
+<p>This menu is available only when the <b>todo</b> panel is active.</p>
+
+<p><b>Moon mode on/off</b> - switch calendar widget to the moon/normal modes. In the first one the moon phases are shown. Also you'll see the moon day number after the slash (before the gregorian day  number). I.e. the format is: normal day number / moon day number.</p>
+
+<p>Some words about the calculation of moon day. First of all, you need to select the right Earth hemispehere at Tune - Common - Nortern hemisphere (on/off). The other important thing is the algorithm (Tune - Common - Moon phase algorithm). The speed and precision are vary, try for yourself. There are several algorithms were been used. Some of them are based on Ben Danglish's arcticle at http://www.ben-daglish.net/moon.shtml, another one on the Alexander Leushkanov's arcticle - http://www.astrogalaxy.ru/275.html.</p>
+
+<p>Due to some technical source, the image of moon phase for days 12 and 13 are the same.</p>
+
+<p><b>Add or subtract years/months/days</b> - allows to navigate through the calendar back and forward on N years, or months, or days. For example, you need to see the day +6 after the current one. Put "6" into the Famous Input Field, and then use <b>Add or subtract &gt; days</b>. If you want to move backward, put the negative value into the FIF, i.e. "-6" instead of "6".</p>
+
+<p><b>Number of days between two dates</b> - calculates the number of days between two dates. Select the first date at the Calendar and use <b>Mark first date</b> menu item. Select the last date at the Calendar and use <b>Mark last date</b>. Use <b>Number of days between two dates</b> funtions to measure the difference between the first and second dates.</p>
+
+<p><b>Calculate moon days between dates</b> - creates a list with a moon days between two dates (<b>Mark first/last date</b>).</p>
+
+
+<br>
+<a name="mni_edit"></a>
+<h3>Edit</h3>
+
+<p>Some notes about <b>Indent/Un-indent</b> functions. There are two hardcoded keyboard shortcuts are assigned to this functions - Tab and Shift-Tab. If no text selected, <b>Indent (Tab)</b> inserts a tab character or a space (spaces). Such behavior is depended from <b>Tune &gt; Interface &gt; Use spaces instead of tabs</b> and <b>Tab width in spaces</b> options.</p>
+
+<p>If <b>Use spaces instead of tabs</b> is checked on, the editor will insert (by Tab key) the number of spaces that defined at <b>Tab width in spaces</b>. Otherwise, TEA inserts a single tab.</p>
+
+<p>TEA also has the <b>Automatic indent</b> option, disabled by default.</p>
+
+<p><b>Indent by first line</b> - this function indents all selected lines with the same indent as the first line's of selection indent.</p>
+
+<p><b>Variants</b> - this function shows a user-defined menu for the selected word. Menu has items (words) to replace the selected word. For example, we want to see the list of variants for the word "animal". Create the file with name "animal" at TEA's <i>variants</i> directory (see $HOME/.config/tea/variants (or, under Window, at drive:\Documents and Settings\username\tea\variants)). Put to this file the list of items:
+</p>
+
+<p>cow<br>
+dog<br>
+cat<br>
+wolf
+</p>
+
+<p>Save the file, then open some text and select there "animal". Use <b>Edit - Variants</b> function to open the list of variants for the selected word.</p>
+
+<p><b>Storage files</b> - you can use some file as a "storage" file to copy text directly to it from different sources. <b>Set as storage file</b> chooses the current opened file as the storage file. Then, if ypu want copy and paste some text into that file, just use <b>Copy to storage file</b>. Also you can capture the system's clipboard for the text and put it to the storage using <b>Start/stop capture clipboard to storage file</b>. You may has just one storage file per session. When you close the storage file, all further pasting to it will be disabled until you not set a storage file again.</p>
+
+
+<br>
+<a name="mni_markup"></a>
+<h3>Markup</h3>
+
+<p>The functions from this menu are mainly working depending of the selected markup <b>Mode</b>. There several modes are available - HTML, XHTML, LaTeX, Wikitext, Lout and Docbook. When you select some mode from the <b>Mode</b> menu, you set the markup mode for the current document. So different documents have different, separated modes. It allows to edit one file as HTML and another one as Docbook XML with the same menu item. So, menu items acts differently according to the document's markup mode. To use Wikitext mode, set this mode manually from the menu Mode, or use .wiki as the filename extension.</p>
+
+<p>You can select a text and use some function, for example the "Paragraph". If you don't select any text, TEA just insert tags at the cursor position.</p>
+
+<p>Beside the tag-related functions, <b>Markup</b> menu has a set of [X]HTML tools.</p>
+
+<p><b>[X]HTML tools - Rename selected file</b> - renames the file and changes the selection text. For example, you have (in your HTML document) a h-ref link to some file. You want to rename that file. Select its file name at the text, then put into the FIF a new file name (without the full path, just the name.ext), and use this function. Voila!</p>
+
+<p><b>[X]HTML tools &gt; Document weight</b> - calculates a total document weight including all SRC-staff (images, flashes etc). Look for the result at the Logmemo.</p>
+
+<p><b>[X]HTML tools &gt; Convert tags to entities</b> - if you want to show some HTML-tagged code in your [X]HTML-document, select your code and use this function. You'll get, for example:</p>
+
+<p>&amp;lt;b&amp;gt;demo&amp;lt;/b&amp;gt;
+</p>
+
+<p><b>[X]HTML tools &gt; Text to HTML</b> - this function converts a plain text into the nice HTML/XHTML-formatted code using CSS.</p>
+
+<p><b>[X]HTML tools &gt; Preview selected color</b> - previews the selected (withing the text) color at the Famous input field. The color can be in the form of the hex value or the named color (darkBlue, red, white, etc).</p>
+
+<p><b>Antispam e-mail</b> - makes a selected mailto-link possibly invisible to those damned spammer e-mail harvesters, by converting an address into integer-coded entities. For example, if you will look at the source of that document, <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#101;&#97;&#64;&#108;&#105;&#115;&#116;&#46;&#114;&#117;">mailto:tea@list.ru</a> will look like the heap of a garbage. I hope that spam harvesters do not understands it.
+</p>
+
+<br><br>
+<a name="mni_search"></a>
+<h3>Search</h3>
+
+<p>TEA has no dialog windows for find/replace functions. TEA uses the Famous input field and menu-driven interface.</p>
+
+<p>To find a substring within the text, put your substring into the Famous input field (Use Ctrl-F to focus it) and press Enter. Then you can use <b>Find next</b> or <b>Find previous</b> functions. There are also three buttons near the Famous input field. They are: Find, Find previous and Find next. On search, TEA <b>starts from the cursor position</b>. You can set <b>Whole words</b> and <b>Case sensitive</b> options by checking the according menu items.</p>
+
+<p>To replace the selected (i.e. text that been found) text with a new one, put the new value to the Famous input field and use the <b>Replace with</b> function. Thus, you can walk through the text using <b>Find next</b> and apply <b>Replace with</b> when you need. </p>
+
+<p>To replace all occurrences of a substring in the text, put a special command into the Famous input field:</p>
+
+<p>old value~new value</p>
+
+<p>So, the "~" is the delimeter. For example, you want to replace all occurrences of the word "cat" to the "mouse". The command will be:</p>
+
+<p>cat~mouse</p>
+
+<p>So put such command to the Famous input field and apply the <b>Replace all</b> function.</p>
+
+<p>If you want to delete some substring from the text, use the <i>substring~</i> formulae. For example, to remove all occurencies of the word "weapon" from the text you can use "weapon~".</p>
+
+<p>While search or replace you can use regular expressions. To do so, turn on the <b>Regexp mode</b> option (below the <b>Whole words</b>). For example, to convert HTML italic tag into the TeX tag you can use the following formulae:</p>
+
+<p><i>&lt;i&gt;([^&lt;]*)&lt;/i&gt;~\emph{\1}</i></p>
+
+<p>Please note that <i>\1</i> acts like a content of the captured (with "parentheses") part of the source string. To have the access to the second such part, use \2, \3 for the third, etc.</p>
+
+<p>Another example - how to find all numbers at the text? Use the <i>(\d+)</i> regexp at the FIF.</p>
+
+<p>Don't forget to disable the <b>Regexp mode</b> when you need to do a usual searching. Also the <b>Regexp mode</b> overrides the the <b>Case insensitive</b> mode, i.e. with <b>Regexp mode</b> the <b>Case sensitive</b>  is ON by default.</p>
+
+
+<p><b>Fuzzy mode</b> - enables very basic "fuzzy search" support. For example, you need to find some word, but don't remember how exactly it written. So in fuzzy mode, TEA can find similar word (if they have the same length, i.e "fender", "lender", etc). The factor of similarity can be defined at <b>Tune - Functions - Miscellaneous - Fuzzy search factor</b>.</p>
+
+<p><b>In the file manager mode</b>, "Replace all" works with all selected files and the charset from the charset selector of the file manager panel.</p>
+
+<p>At the last, <b>Replace all in opened files</b> works as the <b>Replace all</b>, but in the scope of all opened files.</p>
+
+
+<p><b>Search in files</b> - searches the text given at FIF within all text files, starting from the current directory at the built-in file manager (the <b>Manage</b> tab), and deeper into the subdirectories.  For a text encoding, TEA uses the charset that is selected at the charset list on the <b>Manage</b> tab.</p>
+
+<p>Actually, TEA searches not in the ALL files. For the central processing unit, there is no difference between text files or mp3, or images. Programs must know the difference, but how? And why it is so important to identify the text file? If the program cannot do that, it will search the text in all files - images, sounds, videos, etc.. Too much time! Thus, TEA must know the difference. So TEA presumes that text files is the files with extenstions those TEA recognizes for syntax highlighting. Also, TEA know that text files are txt, odt, kwd, docx and other formats those TEA support. Finally, TEA know about some definitely text files those have names such as README, ChangeLog, etc.
+</p>
+
+<p>So, TEA cannot search in all other files and currently there is no way to define custom file-name mask or something like that.</p>
+
+<br>
+<a name="mni_functions"></a>
+<h3>Functions</h3>
+
+<p>To use text-processing functions, you need to select some text first. Some functions (such as <b>Text statistics</b>) can work with a whole text if no fragment is selected. Also there are some special cases when TEA can treat the current word as a selection when there is no text is actually selected. For example, it is a behavior of <b>UPCASE</b> and <b>lowcase</b> functions. But such behavior is a rare exception from the rule.</p>
+
+<p>Some functions takes the parameter that you must place into the Famous input field. For example, the function <b>Remove lines &lt; N size</b> gets N value from the Famous input field, so first you type the value,  then call a function. There are no default values.
+</p>
+
+<p><b>Cells</b> submenu is used for all table-like data processing. It can be LaTeX tables, CSV-data, etc. In all cases you need to define (at FIF) the column separator to tell TEA how to parse the strings.</p>
+
+<p><b>Functions &gt; Cells &gt; Sort table by column ABC</b> - sorts the text table by the column with the ABC order.
+</p>
+
+<p>Format string for FIF: <i>separator~column number</i></p>
+
+<p>Columns range starts from 0, i.e. the first colums is 0, the second is 1, etc.</p>
+
+<p>For example, we have LaTeX table with 4 rows, 2 columns:</p>
+
+<p>dog&amp;cat<br>
+lamb&amp;cow<br>
+snake&amp;wombat<br>
+wolf&amp;tiger</p>
+
+<p>Now we want to sort it by the second (1) column (where the "cat", "cow", etc.). Select the text, put "&amp;~1" into the FIF, and call this function. The table will be sorted by the second column.</p>
+
+<p>It is good to process the table without line-breaks (such as "\\" in LaTeX), and then add line-breaks to the result using the "Apply to each line" function with FIF value "%s\\".
+</p>
+
+
+<p><b>Functions &gt; Cells &gt; Swap cells</b> - swaps the cells of the table by columns.</p>
+
+<p>FIF format string: separator~column1~column2</p>
+
+<p>For example (with the previous sample table) we want to swap column 0 with 1 - the column with "cat" must be before "dog" column. Select the text, put into the FIF "&amp;~0~1", and call <b>Swap cells</b>.
+</p>
+
+<p><b>Functions &gt; Cells &gt; Delete by column</b> - delete column by the given number (0..n).
+</p>
+
+<p>FIF format: separator~column number</p>
+
+<p>0 - first column, 1 - second, etc.</p>
+
+
+<p><b>Functions &gt; Cells &gt; Copy by column[s]</b> - copy columns to the clipboard.</p>
+
+<p>FIF format: separator~column 1[~column 2]</p>
+
+<p>If the column2 is not given, the column1 will be copied, else - from column1 to column 2.</p>
+
+
+<p><b>Functions &gt; Analysis &gt; Text statistics</b> - outputs text statistics for the whole text or the selection into the Logmemo.</p> 
+
+<p><b>Functions &gt; Analysis &gt; Words lengths</b> - how much words with length from 1 to 32.</p> 
+
+<p><b>Functions &gt; Analysis &gt; UNITAZ</b> - the UNIversal Text AnalyZer that compute frequencies of words and give some other related information.
+ </p> 
+
+<p><b>Functions &gt; Analysis &gt;  Count the substring</b> - number of occurrences of the substring (put it to the Famous Input Field) in the document. See the result at the logmemo. The "Search - Case sensitive" is used as an option.
+</p> 
+
+<p><b>Functions &gt; Analysis &gt; Extract words</b> - extracts all word from the document and place them into the newly created one.
+</p> 
+
+<h3>Functions  &gt; Tables</h3>
+
+<p>In TEA, the <i>tables</i> is a something like a set of rules for the text replacing. At the first, you need to create the file with a table (<i>key=value</i> format). Here is an example:</p>
+
+<pre>cat=dog
+mew=bow-wow</pre>
+
+<p>Then save this file as a replacement table file at the special TEA directory called <i>tables</i>. It is available at the file manager's bookmarks panel or file save dialog favourities. After you save the table under some name, it shows at the <b>Functions  &gt; Tables</b> menu.</p>
+
+<p>Now try to apply this table. Create a new file and write some text like this: <i>The cat say: "mew"</i>. Select this text, then select your table from the menu and see what will happen. As a result we have a new sentence: <i>The dog say: "bow-wow"</i>. So the tables is a way to do a multiply replacement.</p>
+
+<p>If the <b>Regexp mode</b> at the <b>Search options</b> is turned on, the table will use the <i>keys</i> as the regexps.</p>
+
+<p><b>In the file manager mode</b>, tables works with all selected files and the charset from the charset selector of the file manager panel.</p>
+
+
+<h3>Functions  &gt; Snippets</h3>
+
+<p>The snippet is the piece of code, which you can insert into the text. TEA keeps an each snippet as the single file in the <i>$HOME/.tea/snippets</i> directory. The file name of a snippet is the menu item in Snippets-menu, i.e. the content of Snippets menu is the list of files from <i>$HOME/.tea/snippets</i>. To create a new snippet, you need:</p>
+
+<p>1. Write some text.<br>
+2. <b>File &gt; Save As</b>. Click the "snippets" bookmark to open a snippets directory, then save your file as a usual one. Note: Do not save a snippet under the name of any other TEA menu item! Menu item names should not duplicates, otherwise TEA cannot set keyboard shortcuts properly. It is important when you give a name for the snippet, or the script, template, session name, etc.
+<br>
+3. Enjoy :)
+</p>
+
+<p>You can create a snippet that use a text selection in a some way. For example, you want to make a snippet which encloses the selected text into some HTML-tags. The <b>%s</b> macro represents a text selection. Here is the example of such snippet:</p>
+
+<p>&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</p>
+
+<p>When this snippet will be applied, <b>%s</b> will be replaced with the selected text. If there no text is selected, snippet content will be inserted into the text (but without the "%s" macro).</p>
+
+<p>To open a snippet for the editing, use <b>snippets</b> directory boomark at the TEA file manager or File save/open dialog. From there you can also rename or delete snippets (use the context menu - the right click - in File save/open dialogs).</p>
+
+
+<h3>Functions  &gt; Scripts</h3>
+
+<h4>Scripts from the user's point of view</h4>
+
+<p>With TEA you can use scripts to process a <b>selected text</b>, just as you use a built-in TEA functions. If the script can handle some parameters, put them into the Famous input field.</p>
+
+<p>TEA can work with scripts those written in Python, Perl, Ruby and Bash (Sh). To install a script, just copy it to <i>$HOME/.config/tea/scripts</i> (you can use "scripts" shortcut at the Save As dialog to save your file as a TEA script). If a script is packed, please unpack it first. TEA will "see" the newly installed scripts after restart or when you save the script from TEA. The scripts management stuff is similar to snippets.</p>
+
+<h4>Scripts from the developer's point of view</h4>
+
+<p> How to write a script for TEA? It's a quite simple. But the first thing that you must to know it is how TEA gives a text to the script and how TEA takes a processed text back to replace the selection with it.</p>
+
+<p>TEA runs each script with one or two parameters. Both of them are file names. The first file contains the text (UTF-8). This text is a selected text that TEA gets at the current document. And the second file (if exists) contains a text (UTF-8) from the Famous input field. So your script can read the first file to obtain the text data, and read the second file to get some optional parameters for your script.</p>
+ 
+<p>Be careful with the text handling - TEA internally operates with UTF-8 encoding, so all text processing at the script must be UTF-8-safe. OK, now let's see how a script can return a processed text. Just write that processed text to the first file again, i.e. to the file, which file name you take from the first parameter of your script.</p>
+
+<p>Below this lines you shall see an example of UTF8-safe Python-script that takes a text, swaps the case, and returns the processed text back to the TEA.</p>
+
+<pre>import sys
+import string
+import codecs
+f = codecs.open(sys.argv[1], "r", "utf-8" )
+u = f.read()
+f.close
+u = u.swapcase()
+f = codecs.open(sys.argv[1], "w+", "utf-8" )
+f.write (u)
+f.close</pre>
+
+<p>sys.argv[1] contains a name of file with the text from TEA. We read the whole content of that file, then we process this content, and then we write it back to the sys.argv[1]-file. Voila! Please note how to use the codecs.</p> 
+
+<p>And another example - the "inline" calculator. Here we don't use any codecs because we work with a numerical data: </p>
+
+<pre>import sys
+f = file (sys.argv[1], 'r')
+s = f.read()
+f.close
+t = eval (s)
+f = file (sys.argv[1], 'w+')
+f.write (str (t))
+f.close
+</pre>
+
+<p>But what if we need to get some additional user's parameters to the script? They are available as a string, and you can read it from the file that named at sys.argv[2] (in Python). At Bash-script, use $1 to get the first parameter, and $2 for the second. Summing this all, the second parameter is a file which contains a text from the Famous input field. Note that Ruby scripts takes the first parameter in <i>ARGV[0]</i>, and the second in <i>ARGV[1]</i>.</p>
+
+
+<p>Some notes about the BASH-scripts and sed/ed/etc stuff. The trick is to use a temporal file. First copy the $1 into some temp. file, then process this temporal file and put the result back into the $1. Here is an example (replacing all "dog" with
+"cat") of such script:</p> 
+
+<pre>cp $1 /tmp/xyz.xyz
+sed 's/dog/cat/g' /tmp/xyz.xyz > $1</pre>
+
+
+<p>If you wish to contribute some scripts to the TEA site scripts repository, please consider to contribute your script with a public domain status. Or at least with the Free license. There is also will be useful to put the credits and the description somewhere in the comments within your script.</p>
+
+
+<p><b>Sort  &gt;  Sort case sensitively</b> - sorts selected lines alphabetically and case sensitively.</p>
+
+<p><b>Sort  &gt;  Flip a list</b> - reverses lines order. Was:</p>
+
+<p>Dog<br>
+Cat<br>
+Cow</p>
+
+<p>Will be:</p>
+
+<p>Cow<br>
+Cat<br>
+Dog</p>
+
+<p><b>Filter &gt; Remove duplicates</b> - useful when the string list has duplicated elements. Any duplicated item AFTER the original one will be removed. Can be slow on slow machines.</p>
+
+<p><b>Filter &gt; Remove empty lines</b> - no empty lines will surrender! Empty lines are useless. </p>
+
+<p><b>Filter &gt; Remove lines &lt; N size</b> - remove lines with the length less than N. N is the number of characters. Write the number into the Famous input field.</p>
+
+<p><b>Filter &gt; Remove lines &gt; N size</b> - acts like the previous function, but removes all strings those larger than N characters.</p>
+
+<p><b>Filter &gt; Filter with regexp</b> - filter a list using the regular expression. For more info, see <a href="http://www.regular-expressions.info">www.regular-expressions.info</a>. However, here is a a brief example. Let's presume you have a list:</p>
+
+<p>hello.doc<br>
+example.txt<br>
+nature.jpeg<br>
+mytext.txt</p>
+
+<p>And you want to filter all items with "txt"-extension. So the regexp (regular expression) for this will be:</p>
+
+<p>.*\.txt$</p>
+
+<p>Put it into the Famous input field, select the text and apply a function. Voila!</p>
+
+<p><b>Filter &gt; Remove after delimeter at each line</b>. Removes the substring after the delimeter at each selected line. You need to put the delimeter into the FIF. For example, the delimeter is ")", and the selected text is:
+</p>
+
+<pre>1.) Nirvana
+2.) Grajdanskaya Oborona
+3.) The Cranberries</pre>
+
+<p>Apply the filter, and you'll get this:</p>
+
+<pre>1.
+2.
+3.</pre>
+
+<p><b>Filter &gt; Remove before delimeter at each line</b>. Removes the substring BEFORE the delimeter at each selected line. You need to put the delimeter into the FIF. For example, the delimeter is ")", and the selected text is:
+</p>
+
+<pre>1.) Nirvana
+2.) Grajdanskaya Oborona
+3.) The Cranberries</pre>
+
+<p>Apply the filter, and you'll get this:</p>
+
+<pre>Nirvana
+Grajdanskaya Oborona
+The Cranberries</pre>
+
+
+<p><b>Math &gt; Evaluate</b> - calculates the expression that selected at the text. For example you can write 2+2, then select it and apply <b>Evaluate</b>. After such action you shall see the result at the logmemo. In your expression can may use the following operators: +, -, *, /, ^ (power), % (get percent value). The bracers are not supported. Here are some examples:</p>
+
+<pre>2/3*123
+5+5+5
+1-200*89
+2^8
+250%4 //what is 4 per cent of 250?</pre>
+
+<p><b>Math &gt; Decimal to binary</b> - converts the decimal integer into its binary representation. Example: was 255, will be 0000 0000 0000 0000 0000 0000 1111 1111.</p>
+
+<p><b>Math &gt; Binary to decimal</b> - works with unsigned int binary numbers only.</p>
+
+<p><b>Math &gt; Flip bits (bitwise complement)</b> -use this function to flip a bit at the binary value. Example: was 0000 0010, will be 1111 1101.</p>
+
+<p><b>Math &gt; Enumerate</b> - Enumerates lines from the selected text. Place the parameter string of this function into the Famous input field. Syntax: <i>step~zero_padding~prefix</i>.</p>
+
+<p><i>Step</i> is the step of an increment. For example, the step 1 gives a numbers 1, 2, 3 etc. Step = 10 will give us 10, 20, 30.</p>
+
+<p><i>Zero padding</i> defines how many digits are in each number. For example, if <i>zero padding</i> = 3, and <i>step</i> = 1, we shall have 001, 002, 003 etc.
+</p>
+
+<p><i>Prefix</i> is a prefix after the number and before the string. Prefix can have a significant trailing spaces.</p>
+
+<p>Here are some examples and results:</p>
+
+<p>example 1, parameters are "<i>1~3~) </i>" (without quotes). Result is:</p>
+
+<pre>001) dog
+002) cat
+003) mouse</pre>
+
+<p>example 2, parameters are "<i>10~1 </i>" (without quotes). Result is:</p>
+
+<pre>10 dog
+20 cat
+30 mouse</pre>
+
+<p>example 3, the parameter is "<i>1</i>" (without quotes). Result is:</p>
+
+<pre>1dog
+2cat
+3mouse</pre>
+
+<p>You can use this function even without the parameters - in such case, padding = 0, step = 1, and the prefix is an empty string. You can use the single <i>step</i> parameter or the pair <i>step</i> and <i>padding</i>, or all three parameters.</p>
+
+<p><b>Math &gt; Arabic to Roman</b> - converts "usual" numbers into the Roman form (i.e 20 to XX).</p>
+
+
+<h3>Functions  &gt; Morse code</h3>
+
+<p><b>From Morse To English</b>. I am not a guru in Morse codes, but I hope that my effort to implement such function is right. With this menu item you can translate the English text into the Morse code. For example, was:</p>
+
+<p>tea and coffee</p>
+
+<p>Will be:</p>
+
+<p>- . .- .- -. -.. -.-. --- ..-. ..-. . .</p> 
+
+<p>Note that TEA puts a single space between two Morse codes.</p>
+
+<p><b>From Morse To English</b>. The inverse action for the previous function. You can decode any English Morse-coded message. You must to know that TEA; supposes that there are single spaces between Morse-codes, as in the example written before.</p>
+
+<p><b>Text  &gt; Remove formatting at each line</b> - removes the formatting (tabs, new lines, double spaces etc.) at each selected line.</p>
+
+<p><b>Text  &gt; Remove formatting</b> - removes the formatting from the whole selected text, so the text will be converted to the one big  string without new lines, double spaces, etc.</p>
+
+<p><b>Text  &gt; Apply to each line</b> is a powerful tool to add some text into the each line of the selection.  And again we use the Famous input field. For example, I want to add br-tag at the end of each line. So I type into the entry:</p>
+
+<p>%s&lt;br&gt;</p>
+
+<p>And then I apply this function to get br-tag added at the end of each line. The %s macro points to the each line of the selection. So consider that the %s represents a text of the each line. In another example, I want to enclose an each line into a pair of li-tags. The formula for the Famous input field will be:</p>
+
+<p>&lt;li>%s&lt;/li&gt;</p>
+
+<p>And another example:</p>
+
+<p>&lt;a href=&quot;%s&quot;&gt;%s&lt;/a&gt;</p>
+
+
+<p>You can also apply the snippets (from the TEA's snippets directory). To do such thing, use the <i>@@snippetname</i> at the FIF. For exampe, if you have the snipped named "myitalic", use <i>@@myitalic</i>. As you remember, snippets can contain the %s macro to substitude the seletected text. In the case of "Apply to each line" function, %s will mean the the text of each selected line.</p>
+
+<p><b>Text  &gt; Escape regexp</b> useful to escape regexp special characters such as $, *, +, [, ], 
+etc .</p>
+
+
+<br><br>
+<a name="mni_spell"></a>
+<h3>Functions  &gt; Spell-checking</h3>
+
+<p>TEA can use two spell checking engines: Aspell and Hunspell. To switch between them use the list <b>Spell checker engine</b> at <b>Tune - Functions</b> page.</p>
+
+<p>Aspell engine uses system-wide installed dictionaries (use the your Linux distro package manager to install them). At the Windows, you need some extra things to do. First, download and install Aspell full installer from the <a href="http://aspell.net/win32/">http://aspell.net/win32/</a>. Then, from the same page, download and install some dictionaries. You need to put them into the directory, where Aspell is installed. By default, it is C:\Program Files\Aspell. Finally, at TEA, you need to set the path to the Aspell - go to the <b>Tune - Functions</b>, change the <b>Aspell directory</b> option to the correct onem and restart TEA.<p>
+
+<p>For Hunspell, you also need to set the path to the dictionaries by youself, manually. It is possible that the dictionaries are already installed because Hunspell is the spell checking engine for Firefox, OpenOffice.org and Opera. For example, Firefox (in a case of the user local home directory installation) holds the dictionaries at <i>firefox/dictionaries</i> directory. Also you can download dictionaries from <a href="http://extensions.libreoffice.org/extension-center?getCategories=Dictionary">LibreOffice</a> and <a href="http://extensions.openoffice.org">OpenOffice.org</a> extension repositories. There are files with OXT extension. Internally they are common ZIP-files. So download and rename filename.oxt to filenname.zip.
+
+Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i> files from ZIP. Then select this directory using <b>Select</b> button at the <b>Tune - Functions - Hunspell dictionaries path</b> option.</p> 
+
+<p>When the dictionary stuff is configured, you need to go to the menu <b>Functions - Spell checker languages</b> and select the language what you need. Without this last step the spell checking will fail. Also <b>select the language</b> in this way after you change the engine from Aspell to Hunspell or vice versa.</p>
+
+<p>It's a good idea to restart TEA after adding the dictionary.</p>
+
+<p><b>Spell-checker languages</b> -  At this menu you can find the list of dictionaries which installed for aspell (from the distro or so). To spell check, use one of those menu items. It works with the whole text, not with the selection only.</p>
+
+<p>The menu item with the language name is used also to set the default spell-checker language. Default value is a language of your locale. To do a simple check with the default language, use <b>Spell check</b> menu item.</p>
+
+<p><b>Suggest</b> - shows the list with suggestions for the current misspelled word (actually, the word under the cursor). To use this function, use <b>Spell check</b> first. Possibly incorrect words will be underlined.</p>
+
+<p>You can fix them with the <b>Suggest</b> functions or by the hand. When you fix the error you can see that the fixed word is colored as before. That is because the nature of the TEA spellchecker - it updates manually, so to update error marks select the same spell checking menu item again. To turn error marks off, use <b>View &gt; Hide error marks</b>.</p>
+
+<p><b>Add to dictionary</b> - add the <u>underlined as incorrect</u> word to the user's local dictionary. Actually, this function adds to the dictionary any word at the cursor.</p>
+
+<p>Beware that some correct words TEA can mark as incorrect. It's due to the current word parsing, it will be fixed soon as possible.</p>
+
+<p><b>Remove from dictionary</b>- this function is Hunspell-only. An updated dictionary will be loaded after the next session.</p>
+
+
+<br>
+<a name="mni_plugins"></a>
+<p><b>Functions &gt; Plugins</b>. TEA (Qt5-builds) can run the plugins written in QML (see the source code tarball/manuals/plugins for the details how to write TEA plugins). The plugins are snipped as archived directories (TEA itself can unpack ZIPped plugin to plugins folder if you try open such achive in TEA). To install the plugin. just unpack it WITH its directory to $HOME/.config/tea/plugins (UNIX-way) or drive:\Documents and Settings\username\tea\plugins (Windows-way). Then restart TEA to rescan the plugins list. Delete plugin's directory to uninstall it. I am not responsible on how plugin work - it can do everything just like the normal stand-alone program,  so trust your plugin developer or don't use it.
+</p>
+
+
+<br><br>
+<a name="mni_run"></a>
+<h3>Run</h3>
+
+<p>This menu is designed for running the current file with external programs, browsers for example. To add some items to menu, go to <b>File &gt; Configs &gt; Programs list config</b>, edit that file and then save it. The configuration file has the simple ini-like format. Each line has the following format:</p>
+
+<p>meni item caption=command line</p>
+
+<p>An example of the command line for a browser starting:</p>
+
+<p>konqueror=konqueror %s</p>
+
+<p>%s is a needful macro for a current filename, so use it in the properly place. For Win32 you need to use the full path for the executable file, with the double quotes (macro %s needs its quotes too!). For example:</p>
+
+<p>opera="C:\Program Files\Opera\opera.exe" "%s"</p>
+
+<p>To open the <b>current selected file</b> or <b>file at cursor</b> at the text (as by F2, but with external program) use %i macro.</p>
+
+<p>For example, if you want to open the image file with gimp, put the following command line to the config file:</p>
+
+<p>gimp=gimp %i</p>
+
+<p>Then, at HTML or LaTeX file, move the cursor to the image file name. Then call "gimp" menu item from the "Run" menu. Enjoy.</p>
+
+<br>
+<a name="mni_nav"></a>
+<h3>Nav</h3>
+
+<p><b>Labels, Update labels</b>. You can put some specially formatted labels into the text and then switch between them from the <b>Labels</b> menu (or <img src=":/icons/labels.png" border="0" alt="" width="24" height="24"> drop-down list on the toolbar). How it works? The label is just a text embraced with the opening and the ending sequences ("[?" and "?]" by default, this values can be redefined at <b>Tune - Functions - Labels</b>).</p>
+
+<p>For example, put into your text some lines such as "[? dogs ?]", "[? cats ?]". Then make TEA know this labeles using <b>Update labels</b> menu item or press the <img src=":/icons/labels.png" border="0" alt="" width="24" height="24"> button on the toolbar. The <b>Labels</b> menu and <img src=":/icons/labels.png" border="0" alt="" width="24" height="24"> drop-down list will be filled with labels "dogs" and "cats". You can select them from the menu or the list and navigate to the text near the selected label. Please note that labels are updating manually only.</p>
+
+
+<p><b>Go to line</b> - moves the cursor position to the line number that you provide in the Famous input field.</p>
+
+<p><b>Save position/Go to saved position</b> - these functions are good to make a quick jump through a large text, when you need to look something at the one place, then return to the currently editing place, etc.</p>
+
+
+<br>
+<a name="mni_fm"></a>
+<h3>Fm</h3>
+
+<p><b>Fm</b> is meaning the <b>File manager</b>. This menu contain functions those related to TEA file manager. For example, you can rename files or directories or get the MD5 checksum. Explore and use!</p>
+
+<p>For some function such as <b>MD5 checksum</b>, select the file first, and then apply the function.</p>
+
+<p><b>Fm &gt; Select by regexp/Deselect by regexp</b> - use this functions to select or deselect files by regexp pattern. For example, to select all txt-files at the current dir, put the following regexps into the FIF:"<i>.*\.txt$</i>" (without quotes!)
+then, use <b>Select by regexp</b>. Then you can press Open button to open all selected files.</p>
+
+<p><b>Fm &gt; File information &gt; Full info</b> - gives you a full information about the file (creation/modification time, etc). For the 16 bit PCM WAV files it calculates the RMS (for the both channels). For other WAV's shows just the properties such as bit depth, etc.</p>
+
+<p><b>Fm &gt; File information &gt; Count lines in selected files</b> - please note that empty lines will be also counted.</p>
+
+<p><b>Fm &gt; Images &gt; Scale by percentages/Scale by side</b> - among other non-text related functions TEA has the ability of batch conversion of images. It is useful when you want to scale them or convert to another format.</p>
+
+<p>For example, we want to scale selected images by 50 per cents, put the the processed images into the new directory and zip that directory:</p>
+
+<p>1. Select files at the File manager. To select them multiply, use Ctrl-Click (or Ctrl-A to select all).
+<br>
+2. Put the desired perecentage into the Famous Input Field. The value must be a simple integer number without the % sign.<br>
+3. At the <b>Tune &gt; Images</b> check the <b>Zip directory with processed images</b> option.<br>
+4. Apply the <b>Scale by percentages</b> function.</p>
+
+<p>After that, TEA creates a new directory as a subdirectory of a current one. This new directory has the random name that starts with "images-out-". Into this directory TEA put all converted images, leaving the originals unmodified.</p>
+
+<p>You can want to scale images in a more precise way and define the size manually. To do that, put the image side size into the Famous Input Field and apply <b>Scale by side</b>. As you know, each photo has dimensions. For example, 640x480. If the width is larger than height, the image has a horizontal orientation (TEA does not support EXIF data), and vise versa. So we can use the <i>side</i> - the larger side of an image. Usually all photos has a standart dimensions with some aspect ratio in a mind, so the larger side for all of photos is the same.</p>
+
+<p>For example, we want to scale all images (photos wit a right aspect ratio/dimension) to width 640 and, if the image has a vertical orientation, to the height 640. Put that 640 into the Famous Input Field and apply <b>Scale by side</b>.</p>
+
+<p>Image convestion options are places at the <b>Tune &gt; Images</b> page. With the <b>Image conversion output format</b> list you can set the output format. The <b>Output images quality</b> (from 0 to 100) is used mainly for JPEG. A default value is -1 that means the internaly defined value. The <b>Scale images with bilinear filtering</b> checkbox affects images when you scale them, to smooth the image and make it less "rough".</p>
+
+<p><b>Fm &gt; Images &gt; Create web gallery</b> - yes, TEA can create a simple table-based web gallary. Dp the following steps:
+</p>
+
+<p>1. Put your images in some directory. Save the html-file there. Open that file with TEA.<br>
+<p>2. Go to the TEA's file manager, select image files those you want to put into the weg gallery.<br>
+<p>3. Use the <b>Create web gallery</b> function.<br>
+<p>4. The thumbnails and the HTML-table shall be created.</p>
+
+<p>You can customize the gallery using the <b>Tune  &gt;  Images  &gt; Web gallery options</b>. There is a thumbnail size, cells per row, et cetera.</p>
+
+
+<p><b>TEA as a ZIP packer/unpacker</b></p>
+
+<p>TEA provides simple functions to pack files (not directories) to the archive. To do such thing, set the archive name first (do that at the directory where you want to create the archive):<br>
+<b>Fm &gt; ZIP &gt; Create new ZIP</b><br>
+The input dialog box will be provided. Then, walk through your directories. Select any files and use <b>Add to ZIP</b> to add them into the archive. Please note - all that happens virtually until you do not use a <b>Save ZIP</b> funcion. To pack the files physically, apply <b>Save ZIP</b>.</p>
+
+<p>All files will be packed into the archive that has a one subdirectory names as the achive name, but without .zip-extension.</p>
+
+<p>You can also unpack the selected ZIP-file into the current directory. Use the <b>Unpack ZIP to current directory</b> function. Please note that the file names charset (inside of the ZIP-archive) are controlled via <b>Tune - Common - ZIP unpacking: file names charset/ZIP packing: file names charset</b>  options. So, if you see weird characters after you unpacked ZIP-file, try to tune the charset. To do this less painful, select some charset at <b>ZIP unpacking: file names charset</b> and try how is looking file name - use <b>List ZIP content</b> menu item. It simple lists the archive content (file names) into the Logmemo using selected charset.</p>
+
+<p>And another note - TEA does not support password-protected ZIPs.</p>
+
+<br>
+<a name="mni_view"></a>
+<h3>View</h3>
+
+<p><b>Highlighting mode</b> - from this submenu you can set the highlighting mode manually. It is useful for a new unsaved files or for file without extensions.</p>
+
+<p><b>Hide error marks</b> - hides the underlined marks those were set by the spell-checker.</p>
+
+<p><b>Toggle word wrap</b> - turn word wrapping on/off for the current document.</p>
+
+<p><b>Palettes</b> - from this submenu you can select the color scheme that affects a text editing area. To define your own colors you can create your own palette based on some build-in palettes (see the source directory, palettes subdir). Then save your palette into the <i>$HOME/.config/tea/palettes</i> directory and choose one from the <b>Palettes</b> menu.</p>
+
+<p>TEA partially supports Eclipse IDE themes (<a href="http://eclipsecolorthemes.org">eclipsecolorthemes.org</a>) - just put XML file of theme to TEA palettes directory and select from menu as the native TEA palette. Please note that TEA palette format supports more highlighting elements than Eclipse Color Theme plugin, so Eclipse themes will be not so colorful as TEA native palettes.</p>
+
+<p><b>Profiles</b> - this menu allows you to switch between view profiles (they includes parameters such as window position, size, word wrap and line numbering settings, etc.). So you can save your current settings via <b>Save profile</b> function, and named profile will appear at the <b>Profiles</b> menu. In any time you can select it to recall saved settings.</p>
+
+
+<br>
+<a name="mni_prefs"></a>
+<h3>Preferences</h3>
+
+<p>On <b>Keyboard</b> tab you can assign the shortcuts with the menu items. To set a new hotkey, select a menu item from the list, then press some hotkey combination at the entry to the right from the list, and press the <b>Assign</b> button. To remove a hotkey, select the menu item from the list and press <b>Remove</b> button. To re-assing the hotkey that already in use, do <b>Remove</b> for this shortcut first.</p>
+
+<p><b>Add user font</b> button - you can add fonts to TEA locally, instead of system fonts database. Just select font file (TTF or OTF) and this font will be available in TEA. To remove such font, you need to edit TEA configuration file "userfonts.txt" (at $HOME/.config/tea), delete the line with font's file path, save "userfonts.txt" and restart TEA.</p>
+
+<p><b>Word wrap</b> - use word wrapping globally for all documents, including new ones.</p>
+
+<p><b>Use wrap setting from highlighting module</b> on the <b>Interface</b> page means that the word wrap settings will be taken from the syntax highlighting modules, not from the global <b>Word wrap</b> option. Some modules has word wrapping turned on, and some turned off. For example, for C++ the word wrap setting is on. For the plain text or for the HTML - is off.</p>
+
+<br>
+<a name="mni_notes"></a>
+<h3>Notes</h3>
+
+<p>The legacy "--charset=codepage" command line option is supported. This command sets the codepage for the following files. For example:</p>
+
+<p><i>tea --charset=window-1251 file1.txt file2.txt --charset=utf-8 file3.txt</i></p>
+
+<p>By default (if no charset defined manually) TEA uses UTF-8.</p>
+
+<p>This manual and all TEA media stuff (palettes, images, etc) is the public domain. TEA source code is licensed under GPL v3.</p>
+
+<p>User's syntax hl files can be added to the <i>$HOME/.config/tea/hls</i> directory. See the working hl files at the TEA source directory, the <i>hls</i> subdirectory. Feel free to contribute your hl files. Please use color references from the palette files (look at <i>palettes</i> directory at the source). I.e. use "preproc" or "types" color instead of the hexodecimal value.
+</p>
+
+<br>
+<a name="mni_author"></a>
+<h3>Other author's projects</h3>
+
+<p><a href="http://semiletov.org/">My home site with the prose, programs, music and other things.</a></p>
+
+<p><a href="https://sites.google.com/site/studiadrymba/home">Drymba studio</a> - the indie film studio that make ultra-low-budget movies and clay/3D cartoons. I'm one of the creators. Public domain.</p>
+
+<p><a href="http://www.jamendo.com/en/artist/Atomnaya_Smena/">Atomnaya Smena</a> - my one-person music project. Rock/Indietronica/Symphonic/Psytrance. All music is in the public domain.</p>
+
+<p><a href="http://www.jamendo.com/en/artist/Nesmeyana">Nesmeyana</a> - the band where I am one of the members. All music is in the public domain.</p>
+
+<p><a href="http://www.jamendo.com/en/artist/Kostny_Mozg">Kostny Mozg</a> - the indie/hip-hop/techno band, where I am one of the members. Public domain and Artistic License.</p>
+
+</body>
+</html>

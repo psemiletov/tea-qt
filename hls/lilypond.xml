@@ -1,0 +1,22 @@
+<document exts="ly" langs="LilyPond">
+
+<item name="options" wrap="0"> 
+</item>
+
+<item name="class" type="item" color="class" fontstyle="bold">\\[A-Za-z]+\b</item>
+
+<item name="quotes" type="item" color="quotes">("[^\"]*")</item>
+
+<item name="char" type="item" color="quotes">('[^']*')</item>
+
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">%[^\n]*</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">%\{</item>
+
+<item name="mcomment-end" type="mcomment-end">%\}</item>
+
+<item name="cm_mult" type="comment">%{%s%}</item>
+<item name="cm_single" type="comment">%%s</item>
+
+</document>

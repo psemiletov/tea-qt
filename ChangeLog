@@ -1,0 +1,878 @@
+2015/September
+
+*goto line function fixed
+
+
+2015/July
+
+* qmake prefix option fixed
+* built-in calc fixes
+
+2015/April - 41.0.0
++ themes engine
+* many fixes
+
+2015/feb
++ New icons set
+* source configuration options via qmake has been changed (see README)
+
+2015/jan
++ Functions - Cells - Sort table by column ABC
++ Functions - Cells Swap cells
++ Functions - Cells - Delete by column
++ Functions - Cells - Copy by column[s]
++ Partial Eclipse themes support from http://eclipsecolorthemes.org/ (put them into tea Palettes directory)
+
+2014/december
++ Sorting modes at File Manager
+* OS/2 building fixes
+* documentation fixes
+
+2014/november
+
++ single instance application mode
++ new TEA icons
++ Search - From cursor (option, ON by default)
++ Tune - Common - Use Alt key to access main menu (option, default is OFF)
+* misc. fixes
+
+2014/june-october
+
++ File - Notes
++ QML plugins support
++ items from Programs menu can be used with TEA's file manager (for the current file at the File manager)
++ code and docs cleanup
++ Tune - Common - Charset for file open from command line
+
+2014/feb-march
++ Functions - Statistics - Words lengths
++ Programs from Run menu can be opened with "file at cursor". Use %i macro.
+For example: gimp %i
+Set cursor to filename at the text, then use Run - gimp
+
+
+2014/jan
++ zip unpacker can work with multiply selected files
+
+2013/nov
+* LaTeX support fixes
+* hardcoded keyboard shortcuts can be redefined
+
+2013/sept-oct
+* 37.0.0 - many new functions and fixes
+
+2013/sept
+* LaTeX hl fixed
++ Functions - Text - Double quotes to TeX quotes //work with ""
+
+2013/aug
+* some 
+
+2013/july
+* "open at cursor" compatible with local id-labels
++ grey background of the tab widget to indicate that there is no any new files by default
+
+2013/may-june
++ new syntax hl engine
++ full Qt5 support
++ CLANG support
+
+
+2013/march
++ more natural line ending handling.
++ file manager mult. selection via INS
+
+2013/february
++ "Wikitext" markup mode is changed to MediaWiki and DokuWiki modes. For the automatical mode switch use
+files with extensions "mediawiki" and "dokuwiki"
+
+2013/january
++ new FB2 and ABW parsers
++ Hunspell on Win32
+* all spellchecker stuff is fixed
++ more QT5 compatibility
++ @@snippetname as parameter to Functions - Text - Apply to each line
+
+
+2012/12/24
++ Qt 5 compatibility
+
+2012/12/11
+//33.3.4
+
+2012/09/18
+* File - Save timestamped version now has a different file name format:
+filename + date + time + ext
+instead of the old one:
+date + time + filename + ext
+
+
+2012/08/28
++ --p command lin option for portable mode ON
+* image converter/scaler fixed
+
+2012/07/22
+* Undo fix after "replace all"
+* built-in calculator now supports braces
+
+
+2012/04/28
++ Qt5 alpha compatibility
+* Win32/OS2: Aspell path selection from UI - fixed
+
+2012/03/11
+* UI styles switching fixed
+
+2012/03/03
++ Python hl //very ugly
++ moon calendar
++ much more
+
+2012/01/13
++ Edit - Set as storage file
++ Edit - Copy to storage file
++ Edit - Start/stop capture clipboard to storage file
+
+2012/01/11
++ Tune - Common - Documents tabs align
++ Tune - Common - UI tabs align
+
+2012/01/04
++ Calendar - Go to current date
+* almost all menus are tearable now
+
+2011/12/31
+* replacement tables now works also with seletect files //from the file manager
+* replace all - works with selected files in file manager mode
+* ODT reader - fixed
+
+2011/12/24
+* editor widget redraw optimizations
+
+2011/12/17
+* built-in calculator - unner resolution has been changed from float to double
+
+2011/11/16
+* fb2 charset support
+
+2011/09/19
+* 31.0.0
+
+2011/08/31
+* change profiles - fixed
+
+2011/08/07
+* 30.1.0
+* new stuff etc.
+
+2011/07/03
+* zip library support cleanup
+* TEA can deal with urls from Chrome addr bar //fix
+
+2011/07/02
+* OS/2 fixes
+
+2011/06/01
+* xml syntax hl fixes
++ labels
+
+2011/05/20
+* more fixes
+
+2011/04/25
++ Markup - [X]HTML tools - Rename selected file
++ Perl hl fixes
+
+2011/04/09
+* drag and drop - fixed 100%!!!
+
+2011/04/04
+* drag and drop fixed
+
+2011/04/01
+* native file save/open dialogs were been disabled to gain the ability of modification
+
+2011/03/09
++ some new palettes
+
+2011/03/06
+* image processing speed-up
+* misc fixes and code cleanup
+
+2010/10/15
+- all screen-shooting stuff has been removed as buggy and UI non-friendly
+
+2010/07/28
+* tabulation width has been fixed
+* documentation has been updated
+
+2010/07/10
++ French UI translation by gholafox
+
+2010/06/24
+* drag'n'drop files to TEA - the charset from the file manager's charset list is used
+* HTML/XML commenting is fixed
+
+//28.0.0
+2010/05/14
+* search backwards - fixed
+
+2010/05/12
++ Functions - Images - Save image from clipboard to file
+
+2010/05/06
++ task-oriented main menu
++ Calendar menu //visible when the todo panel is active
++ Calendar - Add or subtract - years/months/days
+use the negative value to represent N-days before the selected date
++ Calendar - Days between two dates
+
+2010/05/05
+* all files at TEA config directory will be saved automatically on closing
+* files from the TEA config directory are not adding to the recent files list
++ main ui - "todo" panel
++ Tune - Common - Start week on Sunday
+* editor area and logmemo manual resizing - fixed
++ Tune - Images page. All image-related options weve moved here
+
+
+2010/05/02
++ Functions - Images - Capture desktop
+
+2010/04/30
++ Functions - Images - Show image from clipboard
++ Functions - Images - Capture active window
++ Tune - Images - Screen capture delay, seconds
+
+2010/04/25
++ Edit - Comment selection
+
+2010/04/18
++ Fman panel - "?" button //the Magical charset guesser button
+
+2010/04/16
+* more fman fixes
+
+2010/04/11 //27.1.0
+
+2010/04/04
+* drag from the fman fix
+
+2010/04/02
+* The Manuals have been updated 
+* Edit- Copy now copies text from the manual, if the Learn tab is active
+
+2010/03/31 //27.0.2
++ File - File actions - Set UNIX end of line
++ File - File actions - Set Windows end of line
++ File - File actions - Set traditional Mac end of line
+
+* Fm - File information - Full info //now detects the end of line of the selected file
+
+
+2010/03/23 //27.0.1
+* Web-gallery tool fixed
+
+2010/02/28
+* Morse encoder can handle the lower case text
+* a few Russian manual fixes
+
+2010/02/25 //27.0.0
++ Fm - Select by regexp
++ Fm - Deselect by regexp
+for example, to select all *.txt-files, put the following regexps into the FIF:".*\.txt$" (without quotes!)
+then, use Select by regexp. Then you can press Open button to open all selected files
++ Fm - File info - Count lines in selected files
+//select some files, then use this function
+
+2010/02/24
++ when launching a program from TEA, the output goes into Logmemo
+
+2010/02/19
+* new brackets hl code //from qwriter
++ app.version() - script func., returns the TEA version 
+
+2010/02/15
++ View - Profiles
++ View - Save profile
+
+2010/02/11
++ Search - Find in files
+
+2010/02/06
++ German UI translation by Tobias Quathamer
+
+2010/02/05
+* Win32 version uses ini-file config instead of Registry
+
+2010/02/04
++ app.call_menuitem (item_name) function is available from QtScript/JS script
+you can activate any TEA's menu item by its caption. For example:
+fif.setText ("hello~hallo");
+app.call_menuitem ("Replace all");
+please note that the menu item name is a localized version, i.e. call 
+the translated menu item, if the translation is exists
+
+
+2010/01/25
++ line numbers area //based on qwriter code
+
+2010/01/23 //26.2.2
+* xml/html, clike hl modules fixed 
++ new FIF - the editable combobox instead of the old line edit
+
+2010/01/22
+* old FIF autocompletion mode is coming back
+
+
+2010/01/07
+* XML/HTML syntax hl improvements
+
+2010/01/04 //26.2.0
+* some fixes to make TEA GCC4x compatible
+* other fixes
+
+2009/12/27
++ Edit - Indent by first line
+
+2009/12/22
++ Fman - Images - Create web gallery
+* "Fman - Image conversion" has been renamed to "Images"
++ "Tune - Functions - Web gallery options" section
+* Tune page UI improvemets
+
+2009/12/16
++ new FIF autocompletion UI
+
+2009/12/07
+//26.1.0
+
+2009/12/04
++ LilyPond basic hl
++ NASM hl
+* TEA now loads the last selected palette. And old mechanism via "def_palette" file now
+is obsolete. To tweak the palette, create the own one.
+
+2009/11/14
++ Functions - Filter - Remove before delimeter at each line
++ Functions - Filter - Remove after delimeter at each line
+
+
+2009/11/06
++ "margin_color" color name for palette files. If no margin_color is defined, TEA takes
+the text color as one.
++ Bash script hl module
+
+2009/10/20
+* syntax hl inner changes. Strikeout and underline font style parameteres has been added
+
+2009/10/17
+* syntax hl engine fixes
+
+2009/09/31 -- 26.0.0
++ Functions - Remove from dictionary 
+//This function is Hunspell-only. An updated dictionary will be loaded after the next session.
++ Vala syntax hl module
+* hl engine fixes (now keywords are bold only with "fontstyle=bold" attribute at the hl file)
+* "replace all" function now can be case-insensetive 
+* misc documentation fixes and additions
+
+2009/09/26
++ Lua syntax hl module
++ Perl syntax hl module
+
+2009/09/21
++ "File - Edit bookmarks" menu
+* "Add to bookmarks" has been moved to "Edit bookmarks" 
++ File - Edit bookmarks - Find obsolete paths //all obsolete bookmarks will be prefixed with #
+* dynamic menu items those started from # are not visible anymore, so you can comment out
+any line at the list-like config file such as external programs list, etc.
+
++ qmake options:
+
+  USE_ASPELL=true/false      //true by default
+  USE_HUNSPELL=true/false    //true by default
+
+example to disable Hunspell, but with the Aspell supported:
+
+qmake USE_HUNSPELL=false    
+
+to disable just Aspell:
+
+qmake USE_ASPELL=false    
+
+to disable both:
+
+qmake USE_HUNSPELL=false USE_ASPELL=false
+
+to enable all:
+
+qmake
+
+
+2009/09/20
++ Tune::Functions - Hunspell dictionaries directory
++ Tune::Functions - Spell checker engine
+
+2009/09/15
++ qmake PREFIX=path works fine
+
+2009/08/12
++ Search - Replace all in opened files
+
+2009/08/11
+* document tabs are movable
+
+2009/08/10
+//25.1.0
+
+2009/08/06
++ Tune::Interface - "Cursor center on scroll" option //can be buggy
+* very cool fixes 
+
+2009/08/05
+* MRU list fixes
++ Margin options at the Tune::Interface page
+
+2009/07/25 
+//25.0.0
+
+2009/07/10
++ --charset=codepage command line option is re-implemented
+
+2009/07/07
++ new KWD and DOCX format readers
+
+2009/07/02
++ new ODT format reader
+
+2009/07/01
++ FIF can search in the File manager //case-insensetive, with MatchStartsWith option
+* spell checker progress shows correctly  
+
+2009/06/01
+* all dynamic menus can be teared off
+* Lout IncludeGraphic support on Insert image  
+
+2009/05/28
++ Functions - Math - Binary to decimal //works with unsigned int binary numbers only
++ Search - Regexp mode //affect the searching, tables
++ more UI tweaks for smalls-screen devices
+* all options from UI::Tune::Rare moved to UI::Tune::Common
+* "Tab width in spaces" option moved to UI::Tune::Interface
+* fixes at the tables engine
+
+2009/05/27 //23.7.0
+* main window can be resized to any size //useful for EEE PC 701 users
+
+2009/05/26
++ Functions - Tables
+
+2009/05/24 //23.6.0
+* win32: Templates and snippets were been fixed
+
+2009/05/23
++ Functions - Math - Decimal to binary //use with decimal representation
++ Functions - Math - Flip bits (bitwise complement) //use with binary representation
+
+2009/05/21
++ Markup - HTML tools - Strip HTML tags
+
+2009/05/16
++ "+" and "-" keys scales image at the image viewer
++ drag from the TEA's file manager to outside      
+
+2009/04/16
+* some file manager improvenents
+
+2009/04/04
++ View - Highlighting mode menu to set the hl-mode manually
++ File manager::places - configs item //to speed-up access to TEA config files
++ Markup - Mode - Lout  
+
+2009/04/03
++ FIF works to search at the Tune/Keyboard/Shortcuts list 
++ Lout syntax HL (if the file has the extension "lout" - foobar.lout)
+
+2009/04/01
+* Tune window fixes
+
+2009/03/25
++ PHP syntax hl - made by Boo-boo
+
+
+2009/03/24 //23.3.0
++ D syntax hl
++ "Fm - File information - Full info" can read WAV file properties and calculate
+the RMS. RMS is calculated for 16 bit PCM files only.
+
+2009/03/10
++ Enter key work at the file name entry at the file manager. If user
+used Open file, Enter key acts to open file, if the "Save as" is used,
+Enter acts like fileman's "Save as" button 
+
+2009/03/07 //23.2.0
++ FB2 format read-only support (via the inner ABW tio module)
+* file manager fixes
+
+2009/03/06
+* string list functions fixes
+* OOP design fixes, tea binary site has been reduced by ~10 kbytes 
+* resourses cleanup
+
+2009/03/05
++ Functions - Sort - Sort case insensitively
+
+2009/03/03 //23.1.1
+* indent/unindent fixed
++ Verilog hl
++ Tune - Rare - Use wrap setting from highlighting module
++ some focusing fixes for the file manager
+  
+
+2009/02/28 //23.1.0
++ Edit - Indent
++ Edit - Un-indent
+
+2009/02/27
++ Tune - Rare page
+* "Use traditional File Save/Open dialogs" and "Override locale" options have been
+moved to the Rare page
+* templates - fixed
+* LaTeX markup mode small fixes
+
+2009/02/26
++ tab - indent the selected block by space or tab
++ shift-tab - unindent by the one space or tab 
+ //depending of "Use spaces instead of tabs" options
+- zip code:: crypt.h //because TEA doesn't support passworded ZIP-files
+   
+
+2009/02/23
++ Tune - Common - Automatic indent
++ Tune - Common - Use spaces instead of tabs
++ Tune - Functions - Tab width in spaces  
++ Tab key at the editor indents selection (if some text is selected)
+  
+
+2009/02/22
++ image viewer::rotate by [ and ] keys
+
+2009/02/16
+* Morse code table fixed
++ image viewer (not a automatic previewer) can handle Space, PageUp/Down, Home and End keys to navigate
+through the images in the current directory  
+* statistics::line count for the selected text - fixed 
+
+2009/02/12
+* for "Automatic preview images" TEA reads the thumbnails from the .thumbnails
+directory //*nix only
+
+2009/02/11
++ Tune - Common - Automatic preview images at file manager //off by default
++ Fm - Preview image //for the current selected at the file manager  
+* "File - Open at cursor" works in a same way when the file manager is focused 
+
+2009/02/09 //23.0.0
++ BASIC syntax hl
++ new logo at the About window
++ LaTeX syntax hl
+
+
+2009/02/07
++ Fm - ZIP - Create new ZIP
++ Fm - ZIP - Add to ZIP
++ Fm - ZIP - Save ZIP
+ 
+
+2009/02/05
++ SLA (Scribus) format //read only
+
+2009/02/04
++ Functions - Text - Escape regexp
++ weak RTF support //read only
+
+2009/02/03
++ input box for Save session //instead of file name in FIF
+
+
+2009/02/02
++ ODT, SXW (old OOo format), KWD (old KWord format), ABW (AbiWord), DOCX documents
+  //read only
+
+2009/01/26
++ Fman - Image conversion - Scale by side
++ Fman - Image conversion - Scale by percentages
+//1. put the val into the FIF
+  2. select images
+  3. apply the function
+* Fortran hl fixes
++ Tune - Functions - Image conversion output format
++ Tune - Functions - Scale images with bilinear filtering
++ Tune - Functions - Output images quality
+//mainly for JPEG. Use -1 for default settings, otherwise 0..100
++ Tune - Functions - Zip directory with processed images
+
+
+2009/01/21 //22.3.0
++ Initial Fortran syntax hl. The fortran.xml is based on Fortran 90 spec
++ C# syntax hl
+
+2009/01/20
++ Functions - Text - Remove trailing spaces //on the each line
+
+2009/01/20 //22.2.1
+* Aplly to each line - fixed
+
+2009/01/17 //22.2.0
++ Snippets, Scripts, Sessions and Templates now can hold submenus
+- Qt version checking in src.pro is removed (it never worked fine on some distros)
+
+2009/01/14
+* Search options are saving now
+* Image viewer hides itself when the file manager lost a focus
++ Autocompletion for the FIF
+
+2009/01/11 //22.1.0
+* MD5 checksum evaluation - fixed
+
+2009/01/10
+* paired braces hl - fixed
+
+2009/01/09
+* Toggle header/source - fixed
++ Functions - Analyze - Count the substring (regexp)
++ Functions - Analyze - Count the substring
+//the "Search - Case sensitive" is used as an option
+//Use the FIF to define a substring.
+
+
+2009/01/07
+* text to html - fixed
+* several memory leaks - fixed
+* markup engine inner changes
+
+
+2009/01/02 //22.0.1
+* shortcuts bug - fixed
+* "keys" file is renamed to "shortcuts", so all your previous hotkeys were lost
+assign them again!
+* "famous input field" is used instead of FEF :)
+
+
+2009/01/02
+* shortcuts engine - fixed
+* the "fte" script object is renamed to "fef" according to the FTE > FEF renaming
+
+2008/12/31
++ File manager :: backspace navigates the fman to the directory at the upper level
+- old image viewer
+* syntax hl engine can be case insensetive
+
+2008/12/29
++ Seed7 syntax hl
++ much better C/C++ hl
+
+2008/12/27
++ Search - Whole words option
++ Search - Case sensitive
+
+2008/12/25
+* the "setup" tab has been renamed to "tune"
+* "replace all" - fixed
+
+2008/12/22
++ Functions - Analyze - UNITAZ quantity sorting
++ Functions - Analyze - UNITAZ sorting alphabet
+- Functions - Analyze - UNITAZ
+* Ctrl-F can be assigned twise - for Search and for the Focus the Famous entry field.
+  Please remove the first assignment manually to make the second one working properly
+
+2008/12/21 //21.1.3
+* some UNITAZ fixes and improvements
+
+2008/12/20 //21.1.2
++ Functions - Analyze - UNITAZ
+
+2008/12/19
+* c/c++ hl fixed
+
+2008/12/17 //21.1.1
+* hl fixes
+* Pascal hl file fixed
+
+2008/12/16 //21.1.0
+* "Functions - Statistics" is renamed to Analyze
+* Extraction - Exract words is moved to Analyze
+- Extraction submenu
+- Single application mode
+
+2008/12/15
+* misc inner changes
+* single_application engine is updated to 1.0
+
+2008/12/10 //21.0.5
++ File - File actions - Reload //i.e. revert to saved
++ File - File actions - Reload with encoding //use double click to reload current document with the selected charset
+
+
+2008/12/08 //21.0.4
+* Pascal hl fixed
+* some other bug fixes
+
+
+2008/11/29 //21.0.3
+* spellchecker is fixed!!!
++ progressbar for the spellchecker
+
+2008/11/27 //21.0.2
+* src.pro: QT version checking is disabled due to some reasons
+* the inner changes to improve the loading speed
+
+
+2008/11/24
+* IDE switched to QDevelop ;)
+* Ctrl-F is now assigned for Focus the Famous text entry
+* some bugs were fixed
+
+2008/11/19 - 21.0.0
+
+2008/11/14
++ Fm - File information - MD5 checksum
++ Fm - File information - MD4 checksum
++ Fm - File information - SHA1 checksum
+
+2008/11/12
++ new file manager
++ menu Fm
++ Fm - File operations - Create new directory
++ Fm - File operations - Rename
++ Fm - File operations - Delete file
+* the < and > buttons of the Famous text entry is working
++ Famous text entry is the search field for the Manual browser
+- Manual browser own search entry
+
+2008/10/24
+* QTextEdit is replaced by QTextEdit to improve large files editing
++ Java Script as built-in macro-language //see the Manual
+
+2008/10/09
++ new manual browser
+
+2008/10/01
++ Java 3.0 syntax highlighting
++ Pascal syntax highlighting (Turbo/Borland Pascal, Object Pascal, Free Pascal)
++ new highlighting engine
++ View - Palettes
+
+2008/09/24
++ Markup - [X]HTML Tools - Preview selected color
+//the color can be in the form of the hex value or the named color (darkBlue, red, white, etc)
+* Last opened file is renamed to Last closed file
+
+2008/09/08
+* "Additional highlighting" is renamed to "Highlight current line"
++ "Highlight paired brackets" option
+
+2008/09/03 //19.1.1
+* Apply to each line - fixed
+
+2008/09/01 //19.1.0 - good
+
+2008/08/29
++ Statistics::author's sheets
++ File - Sessions
++ File - Save different - Save session
++ Prefs::Restore the last session on start-up
+
+2008/08/18
++ View - Stay on top
+
+2008/08/15
++ Qt version detection on the qmake stage
++ Functions - Math - Enumerate
+Enumerates lines from the selected text. Params = Famous text entry.
+Syntax: step~zero_padding~prefix
+Examples:
+"1~1~) " //without quotes
+"1~3~ "
+"10"
+"10~5"
+
+
+2008/08/04 //19.0.5
+* norv.wood theme bug is fixed
+
+
+2008/08/04 //19.0.4
+* spellchecker words parser is fixed
+
+2008/08/04 //19.0.3
+* more fixes
+
+2008/08/04 //19.0.2
+* some file manager fixes
+
+2008/08/04 //19.0.1
++ Preferences - Override locale option //to redefine the program's locale, use the two-letters code: en, ru, uk, etc.
++ Single instance mode for Windows
+
+2008/08/01 //19.0.0
+
+2008/07/30
++ Functions - Text - Quotes to facing quotes
+
+
+2008/07/28
++ Dialogs remembers their sizes
+* SingleApplication libary copy is relicensed to GPL (from LGPL) for an accordance of the main program license.
+see LGPL, section 3: "You may opt to apply the terms of the ordinary GNU General Public
+License instead of this License to a given copy of the Library.  To do
+this, you must alter all the notices that refer to this License, so
+that they refer to the ordinary GNU General Public License, version 2,
+instead of to this License.  (If a newer version than version 2 of the
+ordinary GNU General Public License has appeared, then you can specify
+that version instead if you wish.)  Do not make any other change in
+these notices".
+
+2008/07/25
++ UNIX: File manager
++ UNIX: single-instance mode
+* UNIX: "Insert image" calls the file manager page
++ UNIX: Preferences - Use traditional File save/open dialogs
+- TEAVisor
+
+2008/07/18
+* fixed: restore the positions of toolbars
+
+2008/07/17
++ NorwegianWood UI style //from QT demo
+
+2008/07/16 //18.1.1
+* templates/snippets/scripts shortcuts at File Save/Open dialogs are working by deafult.
+The reason of a non-working state: when the hidden files visibility of off, those shortcurs are not working
+
+2008/07/16 //18.1.0
+* obscure "QObject: Do not delete object, 'unnamed', during its event handler" is fixed
+
+2008/07/15
++ Qt 4.4 is minimum requirement
+* fixed: open file from the command line with a full path as the parameter
+
+2008/07/14 - 18.0.3
++ Qt 4.4 compatibility. TEA doesn't crushes on start anymore
+* more fixes
+
+2008/07/12
+* antispam e-mail - fixed
+
+2008/07/11
++ Scripts support //compatible with TEA-GTK
+* some fixes
+
+2008/07/08
+* "Highlight current line" option is changed to "Additional highlighting"
++ with Additional highlighting enabled, TEA highlights the current line and pair brackers
+
+
+2008/04/12 - initial release

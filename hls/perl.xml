@@ -1,0 +1,76 @@
+<document exts="pl;pm" langs="Perl">
+
+<item name="options" wrap="0"></item>
+
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\bif\b;
+\bmy\b;
+\bsub\b;
+\bdie\b;
+\buse\b;
+\brequire \b;
+\bunless\b;
+\bwhile\b;
+\buntil\b;
+\bforeach\b;
+\bprint\b;
+\blength\b;
+\bdo\b;
+\bnext\b;
+\blast\b;
+\bundef\b;
+\belsif\b;
+\bopen\b;
+\bredo\b;
+\bcontinue\b;
+\bchomp\b;
+\beof\b;
+\bclose\b;
+\breset\b;
+\blast\b;
+\bdefined\b;
+\bwhen\b;
+\bsplit\b;
+\bgiven\b;
+\bsay\b;
+\bexists\b;
+\bgoto\b;
+\bwarn\b;
+\beval\b;
+\breturn\b;
+\bwantarray\b;
+\bsplit\b;
+\blocal\b;
+\bshift\b;
+\bpush\b;
+\bpop\b;
+\bgrep\b;
+\bscalar\b;
+\bchdir\b;
+\bclosedir\b;
+\bglob\b;
+\breadline\b;
+\bimport\b;
+\bunimport\b;
+\bsystem\b;
+\bjoin\b;
+\bstat\b;
+\bgetpwnam\b;
+\bprintf\b;
+\bwait\b;
+\bwaitpid\b;
+\bsyscall\b</item>
+
+
+<item name="quotes" type="item" color="quotes">("[^\"]*")</item>
+
+<item name="char" type="item" color="quotes">('[^']*')</item>
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">#[^\n]*</item>
+
+<item name="cm_single" type="comment">#%s</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">=begin*</item>
+
+<item name="mcomment-end" type="mcomment-end">*=end</item>
+
+</document>

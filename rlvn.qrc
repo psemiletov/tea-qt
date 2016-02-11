@@ -1,0 +1,110 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+
+    <file>icons/file-new.png</file>
+    <file>icons/file-open.png</file>
+    <file>icons/file-open-active.png</file>
+    <file>icons/file-save.png</file>
+    <file>icons/file-save-active.png</file>
+    <file>icons/file-save-as.png</file>
+    <file>icons/edit-copy.png</file>
+    <file>icons/edit-copy-active.png</file>
+    <file>icons/edit-cut.png</file>
+    <file>icons/edit-cut-active.png</file>
+    <file>icons/edit-paste.png</file>
+    <file>icons/edit-paste-active.png</file>
+    <file>icons/current-list.png</file>
+    <file>icons/create-dir.png</file>
+    <file>icons/home.png</file>
+    <file>icons/refresh.png</file>
+    <file>icons/go.png</file>
+    <file>icons/fn-spell-check.png</file>
+    <file>icons/search_find.png</file>
+    <file>icons/tea_icon_v2.png</file>
+    <file>icons/tea-icon-v3-01.png</file>
+    <file>icons/tea-icon-v3-02.png</file>
+    <file>icons/tea-icon-v3-03.png</file>
+    <file>icons/labels.png</file>
+
+
+    <file>translations/tea_ru.qm</file>
+    <file>translations/tea_de.qm</file>
+    <file>translations/tea_fr.qm</file>
+
+    <file>images/happy-people-bw.png</file>
+    <file>images/mister.png</file>
+    <file>images/moon-phases.png</file>
+
+    <file>manuals/en.html</file>
+    <file>manuals/ru.html</file>
+
+    <file>text-data/lorem-ipsum</file>
+    <file>text-data/morse-en</file>
+    <file>text-data/morse-ru</file>
+    <file>text-data/template-html</file>
+    <file>text-data/template-html5</file>
+
+    <file>text-data/tpl_cpp.cpp</file>
+    <file>text-data/tpl_c.c</file>
+
+    <file>text-data/cm-tf-exts</file>
+    <file>text-data/cm-tf-names</file>
+
+    <file>themes/TEA/stylesheet.css</file>
+    <file>themes/Cotton/stylesheet.css</file>
+    <file>themes/Plum/stylesheet.css</file>
+    <file>themes/Smaragd/stylesheet.css</file>
+    <file>themes/Turbo/stylesheet.css</file>
+    <file>themes/Vegan/stylesheet.css</file>
+
+    <file>palettes/paper-old</file>
+    <file>palettes/paper-toilet</file>
+    <file>palettes/TEA</file>
+    <file>palettes/UNIX</file>
+    <file>palettes/Linux MC</file>
+    <file>palettes/Pines</file>
+    <file>palettes/Vinyl</file>
+    <file>palettes/Berry</file>
+    <file>palettes/Turbo90</file>
+
+    <file>hls/xml.xml</file>
+    <file>hls/clike.xml</file>
+    <file>hls/po.xml</file>
+    <file>hls/java.xml</file>
+    <file>hls/python.xml</file>
+    <file>hls/pascal.xml</file>
+    <file>hls/seed7.xml</file>
+    <file>hls/nsis.xml</file>
+    <file>hls/fortran.xml</file>
+    <file>hls/cs.xml</file>
+    <file>hls/basic.xml</file>
+    <file>hls/tex.xml</file>
+    <file>hls/verilog.xml</file>
+    <file>hls/d.xml</file>
+    <file>hls/php.xml</file>
+    <file>hls/lout.xml</file>
+    <file>hls/lua.xml</file>
+    <file>hls/perl.xml</file>
+    <file>hls/vala.xml</file>
+    <file>hls/bash.xml</file>
+    <file>hls/nasm.xml</file>
+    <file>hls/lilypond.xml</file>
+    <file>hls/wikitext.xml</file>
+    <file>hls/r.xml</file>
+
+    <file>INSTALL</file>
+    <file>README</file>
+    <file>NEWS</file>
+    <file>TODO</file>
+    <file>NEWS-RU</file>
+    <file>COPYING</file>
+    <file>AUTHORS</file>
+    <file>ChangeLog</file>
+
+    <file>encsign/KOI8-R</file>
+    <file>encsign/KOI8-U</file>
+    <file>encsign/CP1251</file>
+    <file>encsign/CP866</file>
+
+</qresource>
+</RCC>

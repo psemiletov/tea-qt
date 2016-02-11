@@ -1,0 +1,74 @@
+<document exts="lua" langs="lua">
+
+<item name="options" wrap="0"> 
+</item>
+
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\band\b;
+\bbreak\b;
+\bdo\b;
+\belse\b;
+\belseif\b;
+\bend\b;
+\bfalse\b;
+\bfor\b;
+\bfunction\b;
+\bif\b;
+\bin\b;
+\blocal\b;
+\bnil\b;
+\bnot\b;
+\bor\b;
+\brepeat\b;
+\breturn\b;
+\bthen\b;
+\btrue\b;
+\buntil\b;
+\bwhile\b</item>
+
+<item name="functions" type="keywords" color="functions">\bassert\b;
+\bcollectgarbage\b;
+\bdofile\b;
+\berror\b;
+\b_G\b;
+\bgetenv\b;
+\bgetmetatable\b;
+\bipairs\b;
+\bload\b;
+\bloadfile\b;
+\bloadstring\b;
+\bnext\b;
+\bpairs\b;
+\bpcall\b;
+\bprint\b;
+\brawequal\b;
+\brawget\b;
+\brawset\b;
+\bselect\b;
+\bsetfenv\b;
+\bsetmetatable\b;
+\btonumber\b;
+\btostring\b;
+\btype\b;
+\bunpack\b;
+\b_VERSION\b;
+\bxpcall\b;
+\bmodule\b;
+\brequire\b</item>
+
+<item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
+
+<item name="quotes" type="item" color="quotes">("[^\"]*")</item>
+
+<item name="char" type="item" color="quotes">('[^']*')</item>
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">--[^\n]*</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">--\[\[</item>
+
+<item name="mcomment-end" type="mcomment-end">--\]\]</item>
+
+<item name="cm_mult" type="comment">--[[%s--]]</item>
+<item name="cm_single" type="comment">--%s</item>
+
+
+</document>

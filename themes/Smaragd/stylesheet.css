@@ -1,0 +1,52 @@
+QWidget
+{
+  background-color: #0d553f;  color:  white;
+}
+
+QLineEdit 
+{           
+border: 1px solid black;
+border-radius: 3px;           
+background-color: #005300;
+color: white;           
+selection-background-color: darkgray;          
+}
+
+/*QComboBox#FIF{           border-radius: 8px;          }*/         
+
+QPlainTextEdit
+{
+ border-radius: 3px;
+}                   
+
+QMenu 
+{
+background-color: #33684f;   
+border: 1px solid black;
+}
+
+QMenu::item 
+{    
+background-color: transparent;
+}
+
+QMenu::item:selected {
+background-color: #87a787;    
+color: black;
+}
+
+QTreeView
+{
+alternate-background-color: #2d5e5e;
+}
+
+QScrollBar:vertical 
+{
+ width: 24px;   
+ border: 1px solid grey;
+}
+
+QTabWidget::pane
+{  border: 0px;}
+
+/*QTabWidget::tab-bar#tab_widget{    alignment: center;}*/

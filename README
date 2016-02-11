@@ -1,0 +1,89 @@
+===TEA===
+http://semiletov.org/tea
+http://tea.ourproject.org
+
+===INTRO===
+
+TEA is good. TEA is a text editor with the hundreds of features.
+
+===INSTALLATION===
+
+If you have installed Qt 4.6+ or Qt 5, just run:
+
+qmake
+make
+make install
+
+To make some source configuration, use CONFIG variable at qmake command line parameter. For example:
+
+qmake "CONFIG+=useclang CONFIG+=noaspell"
+
+You can use some values:
+
+useclang - TEA will be compiled with Clang.
+noaspell - disable the Aspell (if you have it installed, but  do not want to compile TEA with Aspell support)
+nohunpell - disable Hunspell for TEA.
+
+If you have installed both Qt4  and Qt5, use the qmake from Qt4 or Qt5 to configure TEA with exact version of QT. The common solution is to make symlink to qmake from Qt5 and name it qmake5, then use qmake5 instead of the usual qmake.
+
+
+/*
+
+Snippet for Ubuntu users (Qt5 build) - run this from Terminal at the TEA source directory (unpacked):
+
+sudo apt-get install g++ 
+sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev
+sudo apt-get install qt5-default qttools5-dev-tools
+sudo apt-get install libqt5qml5 libqt5quick5 qtdeclarative5-dev
+qmake
+make
+sudo make install
+
+
+Snippet for Ubuntu users (Qt4 build):
+
+sudo apt-get install g++ 
+sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev
+sudo apt-get install libqt4-dev qt4-dev-tools
+qmake
+make
+sudo make install
+
+*/
+
+===DEPENDENCIES===
+
+Qt 4.4, Qt 5 or higher. Optional: libaspell, libhunspell-1.2
+Debian/Ubuntu users need to install zlib1g-dev, and, optionally: libaspell-dev, libhunspell-dev packages
+
+If there the context menus are not localized, install the 
+qttranslations package from your distro's repository.
+
+===NOTE FOR PACKAGE MAINTAINERS===
+
+TEA after the compilation is a single binary file (with embeded resources). To override the default installation path (/usr/local/bin) use:
+
+qmake PREFIX=your_path
+make
+make install
+
+===NOTE FOR UBUNTU USERS===
+
+User defined hotkeys cannot work due to Qt5 and Unity global menu feature. To remove global menu support in Qt5 apps, do 
+
+sudo apt-get autoremove appmenu-qt5
+
+or, if you want to remove also GTK global menus, use:
+
+sudo apt-get autoremove appmenu-gtk appmenu-gtk3 appmenu-qt5
+
+
+===LICENSE NOTES===
+
+TEA code is licensed under GPL V3 and, partially, as a Public Domain. TEA media (images, etc), manuals and translations are public domain. Note to contributors - please put your translations into the public domain or GPL.
+
+===DONATE===
+
+If you want to support TEA via donation, better give your support to the Ukrainian dog shelter Lyubas House - http://lyubas.pp.ua. There are lot of dogs with disabilities, and they need help more than TEA. To donate via PayPal, please see http://www.ukraineanimalrescue.org/#!lyubas-house/cxfj. Please specify "For Lyubas's House" in the comments of donation, because there are other projects uses that PayPal account.
+
+Ежели вы хотите как-то поддержать разработку TEA денежно, лучше поддержите киевский приют для собак Дом Любчика - http://lyubas.pp.ua. Любчик - это пёс на инвалидной коляске. У него много друзей, которым всегда нужна помощь.

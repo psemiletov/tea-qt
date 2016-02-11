@@ -1,0 +1,19 @@
+<document exts="tex;lyx" langs="TeX;LaTeX">
+
+<item name="options" wrap="1"></item>
+
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\\(?:[\w@]+|.)</item>
+
+<item name="quotes" type="item" color="quotes">(``[^\``]*'')</item>
+
+<item name="char" type="item" color="quotes">(`[^`]*')</item>
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">%.*</item>
+
+<item name="cm_single" type="comment">%%s</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">/\*</item>
+
+<item name="mcomment-end" type="mcomment-end">\*/</item>
+
+</document>

@@ -4411,11 +4411,54 @@ void rvln::fn_rm_formatting_at_each_line()
 }
 
 
+//from http://www.cyberforum.ru/cpp-beginners/thread125615.html
+int get_arab_num(std::string rom_str)
+{
+    int res = 0;
+    for(size_t i = 0; i < rom_str.length(); ++i)
+    {
+        switch(rom_str[i])
+        {
+        case 'M': 
+            res += 1000;
+            break;
+        case 'D': 
+            res += 500;
+            break;
+        case 'C':
+            i + 1 < rom_str.length() 
+                    &&  (rom_str[i + 1] == 'D' 
+                         || rom_str[i + 1] == 'M') ? res -= 100 : res += 100;            
+            break;
+        case 'L': 
+            res += 50;
+            break;
+        case 'X': 
+            i + 1 < rom_str.length() 
+                    &&  (rom_str[i + 1] == 'L' 
+                         || rom_str[i + 1] == 'C') ? res -= 10 : res += 10;            
+            break;
+        case 'V': 
+            res += 5;
+            break;
+        case 'I': 
+            i + 1 < rom_str.length() 
+                    &&  (rom_str[i + 1] == 'V' 
+                         || rom_str[i + 1] == 'X') ? res -= 1 : res += 1;            
+            break;
+ 
+        }//switch
+    }//for
+    return res;
+}
+
 void rvln::fn_number_arabic_to_roman()
 {
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (arabicToRoman (d->textEdit->textCursor().selectedText().toUInt()));
+     
+   
 }
 
 
@@ -4423,7 +4466,11 @@ void rvln::fn_number_roman_to_arabic()
 {
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (QString::number(romanToDecimal (d->textEdit->textCursor().selectedText().toUpper().toUtf8().data())));
+     //d->textEdit->textCursor().insertText (QString::number(romanToDecimal (d->textEdit->textCursor().selectedText().toUpper().toUtf8().data())));
+     d->textEdit->textCursor().insertText (QString::number(get_arab_num (d->textEdit->textCursor().selectedText().toUpper().toStdString())));
+     
+          
+
 }
 
 

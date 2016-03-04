@@ -1512,6 +1512,9 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Binary to decimal"), SLOT(fn_binary_to_decimal()));
   add_to_menu (tm, tr ("Flip bits (bitwise complement)"), SLOT(fn_number_flip_bits()));
   add_to_menu (tm, tr ("Enumerate"), SLOT(fn_enum()));
+  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
+
+
 
 
   tm = menu_functions->addMenu (tr ("Morse code"));
@@ -9156,8 +9159,7 @@ void rvln::fn_table_copy_cells()
   
   QStringList sl_temp = t.split (QChar::ParagraphSeparator); 
     
-  QList <QStringList> output;
-  
+  QList <QStringList> output;  
   if (col2 > 0)
   foreach (QString v, sl_temp)  
           {
@@ -9335,3 +9337,37 @@ void rvln::test()
   
 }
 
+
+
+void rvln::fn_sum_by_last_col()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+      
+
+  QString t = d->textEdit->textCursor().selectedText();
+  t = t.replace (",", ".");	
+	  
+  if (t.isEmpty())
+	 return;
+  
+  double sum = 0.0f;
+  
+  QStringList l = t.split (QChar::ParagraphSeparator); 
+  
+  
+  for (int i = 0; i < l.size(); i++)
+      {
+       QStringList t = l[i].split (" ");
+       if (t.size() > 0)
+          {
+           //qDebug() << t[t.size() - 1];
+           sum += t[t.size() - 1].toDouble();
+          }
+      }
+    
+  log->log (tr ("sum: %1").arg (sum));
+
+      
+}      

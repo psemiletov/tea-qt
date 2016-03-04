@@ -465,6 +465,8 @@ main window callbacks
 
   void cal_remove();
 
+  void fn_sum_by_last_col();
+  
 
   void fn_insert_cpp();
   void fn_insert_c();

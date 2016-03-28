@@ -152,7 +152,7 @@ public slots:
 };
 
 
-class CTextListWindow: public QWidget
+class CTextListWnd: public QWidget
 {
   Q_OBJECT
 
@@ -160,7 +160,7 @@ public:
 
   QListWidget *list;
   
-  CTextListWindow (const QString &title, const QString &label_text);
+  CTextListWnd (const QString &title, const QString &label_text);
 
 protected:
 
@@ -495,6 +495,9 @@ main window callbacks
   void ed_unindent();
  
   void ed_comment();
+
+//  void ed_paste_from_charset();
+
 
   void set_as_storage_file();
   void copy_to_storage_file();

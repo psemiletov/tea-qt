@@ -271,15 +271,13 @@ CDocument::~CDocument()
   if (file_name.startsWith (holder->todo.dir_days))
       holder->todo.load_dayfile();
 
+
+  QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
+  w->setWindowTitle ("");
+
   int i = holder->tab_widget->indexOf (tab_page);
   if (i != -1)
      holder->tab_widget->removeTab (i);
-     
-     
-  QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
-
-  w->setWindowTitle ("");
-    
 }
 
 

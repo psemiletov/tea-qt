@@ -198,20 +198,16 @@ bool CTioABW::load (const QString &fname)
 
 bool CTioODTSpecial::load (const QString &fname)
 {
- qDebug() << "CTioODTSpecial::load - start";
- 
-  data.clear();
 
+  data.clear();
   
   CZipper zipper;
   
-    
   if (! zipper.read_as_utf8 (fname, "content.xml"))
      {
       qDebug() << "cannot read content.xml";
       return false;
      }
-
    
   QXmlStreamReader xml (zipper.string_data);
  
@@ -254,8 +250,6 @@ bool CTioODTSpecial::load (const QString &fname)
     
    if (xml.hasError()) 
       qDebug() << "xml parse error";
- 
-   qDebug() << "CTioODTSpecial::load - end";
    
   return true;
 }
@@ -362,7 +356,6 @@ CCharsetMagic::CCharsetMagic()
 
            if (fn == "KOI8-U")
               koi8u = sl;
-
            
            for (int i = 0; i < bsl.count(); i++) 
                sl->words.append (bsl[i]);        

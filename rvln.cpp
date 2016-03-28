@@ -48,6 +48,8 @@ started at 08 November 2007
 #include <QImageWriter>
 #include <QDesktopServices>
 #include <QColorDialog>
+#include <QTextCodec>
+#include <QMimeData>
 
 #include <QScrollArea>
 
@@ -775,7 +777,7 @@ rvln::rvln()
   
   setAcceptDrops (true);
   
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov - tea@list.ru<br>site 1: http://semiletov.org/tea<br>site 2: http://tea.ourproject.org<br>read the Manual under the <i>Learn</i> tab!").arg (QString (VERSION_NUMBER)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>site 1: http://semiletov.org/tea<br>site 2: http://tea.ourproject.org<br>site 3 (development): https://github.com/psemiletov/tea-qt<br>read the Manual under the <i>Learn</i> tab!").arg (QString (VERSION_NUMBER)));
 
   
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
@@ -1306,6 +1308,10 @@ void rvln::createMenus()
   editMenu->addAction (copyAct);
   editMenu->addAction (pasteAct);
 
+  add_to_menu (editMenu, tr ("Paste from charset"), SLOT(ed_paste_from_charset()));
+
+
+
   editMenu->addSeparator();
 
   add_to_menu (editMenu, tr ("Copy current file name"), SLOT(edit_copy_current_fname()));
@@ -1512,7 +1518,7 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Binary to decimal"), SLOT(fn_binary_to_decimal()));
   add_to_menu (tm, tr ("Flip bits (bitwise complement)"), SLOT(fn_number_flip_bits()));
   add_to_menu (tm, tr ("Enumerate"), SLOT(fn_enum()));
-  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
+//  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
 
 
 
@@ -4672,10 +4678,6 @@ void CAboutWindow::closeEvent (QCloseEvent *event)
 }
 
 
-void CTextListWindow::closeEvent (QCloseEvent *event)
-{
-  event->accept();
-}
 
 
 void CAboutWindow::update_image()
@@ -6064,7 +6066,13 @@ void rvln::file_reload()
 }
 
 
-CTextListWindow::CTextListWindow (const QString &title, const QString &label_text)
+void CTextListWnd::closeEvent (QCloseEvent *event)
+{
+  event->accept();
+}
+
+
+CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
 {
   setAttribute (Qt::WA_DeleteOnClose);
   QVBoxLayout *lt = new QVBoxLayout;
@@ -6091,7 +6099,7 @@ void rvln::file_reload_enc_itemDoubleClicked (QListWidgetItem *item)
 
 void rvln::file_reload_enc()
 {
-  CTextListWindow *w = new CTextListWindow (tr ("Reload with encoding"), tr ("Charset"));
+  CTextListWnd *w = new CTextListWnd (tr ("Reload with encoding"), tr ("Charset"));
 
   if (sl_last_used_charsets.size () > 0)
      w->list->addItems (sl_last_used_charsets + sl_charsets);
@@ -7331,7 +7339,7 @@ void rvln::search_in_files()
 
   pb_status->hide();
 
-  CTextListWindow *w = new CTextListWindow (tr ("Search results"), tr ("Files"));
+  CTextListWnd *w = new CTextListWnd (tr ("Search results"), tr ("Files"));
 
   w->list->addItems (lresult);
      
@@ -9371,3 +9379,39 @@ void rvln::fn_sum_by_last_col()
 
       
 }      
+
+/*
+void rvln::ed_paste_from_charset()
+{
+  CTextListWindow w (tr ("Select"), tr ("Available effects"));
+
+  w.list->addItems (sl_charsets);
+
+  int result = w.exec();
+
+  if (result != QDialog::Accepted)
+      return;
+
+  //AFx *f = avail_fx->find_by_name (w.list->currentItem()->text());
+
+  QClipboard *clipboard = QApplication::clipboard();
+  const QMimeData *mimeData = clipboard->mimeData();
+  
+  if (!mimeData->hasText())
+     {
+      qDebug() << "! text";
+      return;
+     
+     }
+  
+ // QString t = clipboard->text();
+
+  QTextCodec *codec = QTextCodec::codecForName (w.list->currentItem()->text().toLatin1());
+  
+  
+  QString s = codec->toUnicode (mimeData->data("text/plain"));
+  
+  qDebug() << s.toUtf8().data();
+
+}
+*/

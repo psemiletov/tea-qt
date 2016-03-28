@@ -7,8 +7,16 @@ this code is Public Domain
 #include "utils.h"
 
 #include <QDir>
+#include <QFileInfoList>
+#include <QFileInfo>
+
 #include <QLabel>
 
+#include <QPushButton>
+#include <QMenu>
+#include <QStringList>
+#include <QAction>
+#include <QListWidgetItem>
 
 void create_menu_from_list (QObject *handler,
                             QMenu *menu,
@@ -170,3 +178,39 @@ QComboBox* new_combobox (QBoxLayout *layout,
 
   return r;
 }
+
+/*
+CTextListWindow::CTextListWindow (const QString &title, const QString &label_text): QDialog (0) 
+{
+  //setAttribute (Qt::WA_DeleteOnClose);
+  QVBoxLayout *lt = new QVBoxLayout;
+
+  QLabel *l = new QLabel (label_text);
+
+  list = new QListWidget (this);
+   
+  lt->addWidget (l);
+  lt->addWidget (list);
+    
+  QHBoxLayout *lt_h = new QHBoxLayout;
+  
+  QPushButton *bt_apply = new QPushButton (tr ("OK"));
+  QPushButton *bt_exit = new QPushButton (tr ("Exit"));
+
+  connect (list, SIGNAL(itemActivated (QListWidgetItem *)), this, SLOT(accept()));
+
+
+  connect (bt_apply, SIGNAL(clicked()), this, SLOT(accept()));
+  connect (bt_exit, SIGNAL(clicked()), this, SLOT(reject()));
+
+  lt_h->addWidget (bt_apply);
+  lt_h->addWidget (bt_exit);
+
+  lt->addLayout (lt_h);
+
+  setLayout (lt);
+    
+  setWindowTitle (title);
+}
+
+*/

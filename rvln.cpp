@@ -1308,7 +1308,7 @@ void rvln::createMenus()
   editMenu->addAction (copyAct);
   editMenu->addAction (pasteAct);
 
-  add_to_menu (editMenu, tr ("Paste from charset"), SLOT(ed_paste_from_charset()));
+ // add_to_menu (editMenu, tr ("Paste from charset"), SLOT(ed_paste_from_charset()));
 
 
 
@@ -1518,7 +1518,7 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Binary to decimal"), SLOT(fn_binary_to_decimal()));
   add_to_menu (tm, tr ("Flip bits (bitwise complement)"), SLOT(fn_number_flip_bits()));
   add_to_menu (tm, tr ("Enumerate"), SLOT(fn_enum()));
-//  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
+  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
 
 
 

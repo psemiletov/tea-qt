@@ -1674,15 +1674,27 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov - tea@list.ru&lt;br&gt;site 1: http://semiletov.org/tea&lt;br&gt;site 2: http://tea.ourproject.org&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Themes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>FIF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;site 1: http://semiletov.org/tea&lt;br&gt;site 2: http://tea.ourproject.org&lt;br&gt;site 3 (development): https://github.com/psemiletov/tea-qt&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paste from charset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sum by last column</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sum: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

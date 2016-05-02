@@ -1763,10 +1763,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Paste from charset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sum by last column</source>
         <translation type="unfinished"></translation>
     </message>

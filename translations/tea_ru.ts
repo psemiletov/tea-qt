@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru_RU">
+<TS version="2.0" language="ru_RU">
 <context>
     <name>CAboutWindow</name>
     <message>
@@ -1993,11 +1993,6 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
         <location filename="../rvln.cpp" line="1278"/>
         <source>Set old Mac end of line (CR)</source>
         <translation>Установить старый Маковский конец строки (CR)</translation>
-    </message>
-    <message>
-        <location filename="../rvln.cpp" line="1311"/>
-        <source>Paste from charset</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1556"/>

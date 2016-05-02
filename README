@@ -1,6 +1,8 @@
 ===TEA===
+
 http://semiletov.org/tea
 http://tea.ourproject.org
+https://github.com/psemiletov/tea-qt
 
 ===INTRO===
 
@@ -53,7 +55,7 @@ sudo make install
 
 ===DEPENDENCIES===
 
-Qt 4.4, Qt 5 or higher. Optional: libaspell, libhunspell-1.2
+Qt 4.6+ or Qt 5+. Optional: libaspell, libhunspell-1.2
 Debian/Ubuntu users need to install zlib1g-dev, and, optionally: libaspell-dev, libhunspell-dev packages
 
 If there the context menus are not localized, install the 

@@ -1686,10 +1686,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Paste from charset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sum by last column</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1186,11 +1186,11 @@ opera=opera %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove before delimeter at each line</source>
+        <source>Remove before delimiter at each line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove after delimeter at each line</source>
+        <source>Remove after delimiter at each line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

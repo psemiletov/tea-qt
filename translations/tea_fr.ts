@@ -1212,11 +1212,11 @@ opera=opera %s</source>
         <translation>Indenter par la première ligne</translation>
     </message>
     <message>
-        <source>Remove before delimeter at each line</source>
+        <source>Remove before delimiter at each line</source>
         <translation>Supprimer les délimiteurs avant à chaque ligne</translation>
     </message>
     <message>
-        <source>Remove after delimeter at each line</source>
+        <source>Remove after delimiter at each line</source>
         <translation>Supprimer les délimiteurs après à chaque ligne</translation>
     </message>
     <message>

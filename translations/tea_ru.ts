@@ -782,12 +782,12 @@ Do you want to save your changes?</source>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1504"/>
-        <source>Remove before delimeter at each line</source>
+        <source>Remove before delimiter at each line</source>
         <translation>Удалить перед разделителем в каждой строке</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1505"/>
-        <source>Remove after delimeter at each line</source>
+        <source>Remove after delimiter at each line</source>
         <translation>Удалить после разделителя в каждой строке</translation>
     </message>
     <message>

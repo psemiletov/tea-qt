@@ -61,7 +61,7 @@ qttranslations package from your distro's repository.
 
 ===NOTE FOR PACKAGE MAINTAINERS===
 
-TEA after the compilation is a single binary file (with embeded resources). To override the default installation path (/usr/local/bin) use:
+TEA after the compilation is a single binary file (with embedded resources). To override the default installation path (/usr/local/bin) use:
 
 qmake PREFIX=your_path
 make

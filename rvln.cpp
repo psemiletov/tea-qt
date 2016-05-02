@@ -1501,8 +1501,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Remove empty lines"), SLOT(fn_filter_rm_empty()));
   add_to_menu (tm, tr ("Remove lines < N size"), SLOT(fn_filter_rm_less_than()));
   add_to_menu (tm, tr ("Remove lines > N size"), SLOT(fn_filter_rm_greater_than()));
-  add_to_menu (tm, tr ("Remove before delimeter at each line"), SLOT(fn_filter_delete_before_sep()));
-  add_to_menu (tm, tr ("Remove after delimeter at each line"), SLOT(fn_filter_delete_after_sep()));
+  add_to_menu (tm, tr ("Remove before delimiter at each line"), SLOT(fn_filter_delete_before_sep()));
+  add_to_menu (tm, tr ("Remove after delimiter at each line"), SLOT(fn_filter_delete_after_sep()));
 
   add_to_menu (tm, tr ("Filter with regexp"), SLOT(fn_filter_with_regexp()));
 

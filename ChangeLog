@@ -357,8 +357,8 @@ the translated menu item, if the translation is exists
 is obsolete. To tweak the palette, create the own one.
 
 2009/11/14
-+ Functions - Filter - Remove before delimeter at each line
-+ Functions - Filter - Remove after delimeter at each line
++ Functions - Filter - Remove before delimiter at each line
++ Functions - Filter - Remove after delimiter at each line
 
 
 2009/11/06
@@ -828,7 +828,7 @@ Examples:
 
 2008/07/28
 + Dialogs remembers their sizes
-* SingleApplication libary copy is relicensed to GPL (from LGPL) for an accordance of the main program license.
+* SingleApplication library copy is relicensed to GPL (from LGPL) for an accordance of the main program license.
 see LGPL, section 3: "You may opt to apply the terms of the ordinary GNU General Public
 License instead of this License to a given copy of the Library.  To do
 this, you must alter all the notices that refer to this License, so
@@ -852,7 +852,7 @@ these notices".
 + NorwegianWood UI style //from QT demo
 
 2008/07/16 //18.1.1
-* templates/snippets/scripts shortcuts at File Save/Open dialogs are working by deafult.
+* templates/snippets/scripts shortcuts at File Save/Open dialogs are working by default.
 The reason of a non-working state: when the hidden files visibility of off, those shortcurs are not working
 
 2008/07/16 //18.1.0

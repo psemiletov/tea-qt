@@ -22,16 +22,18 @@ bool CTioPlainText::load (const QString &fname)
 
   QByteArray block = feol_detector.read (4096);
 
+  eol = "\n";
 
   if (block.indexOf ("\r\n") != -1)
      eol = "\r\n";
   else
-  if (block.indexOf ('\n') != -1)
-      eol = "\n";
-  else
-      if (block.indexOf ('\r') != -1)
-          eol = "\r";
-
+      {
+       if (block.indexOf ('\n') != -1)
+          eol = "\n";
+       else
+           if (block.indexOf ('\r') != -1)
+              eol = "\r";
+      }   
   /*
    if (eol == "\n")
      qDebug() << "LF";

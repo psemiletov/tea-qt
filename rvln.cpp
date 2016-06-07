@@ -4557,7 +4557,14 @@ void rvln::file_open_program()
 
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
+      QFileInfo fi (d->file_name);
+     
       command = command.replace ("%s", d->file_name);
+      command = command.replace ("%fbasename", fi.baseName());
+      command = command.replace ("%ffilename", fi.fileName());
+      command = command.replace ("%fext", fi.suffix());
+      command = command.replace ("%fdir", fi.canonicalPath());
+           
 
       QString fname = d->get_filename_at_cursor();
       if (! fname.isEmpty())

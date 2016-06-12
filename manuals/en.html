@@ -667,6 +667,9 @@ Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i
 
 <p>opera="C:\Program Files\Opera\opera.exe" "%s"</p>
 
+<p>Some more precise macros are available: %fbasename, %ffilename, %fext, %fdir. This allows to use the parts of the path. Thus, if we have the full path "/mnt/foo/bar.txt", %fdir = "/mnt/foo", %fbasename = "bar", %ffilename = "bar.txt", %fext = "txt". So the full path at the command line can be presented in the following way: %fdir/%fbasename.%fext
+</p>
+
 <p>To open the <b>current selected file</b> or <b>file at cursor</b> at the text (as by F2, but with external program) use %i macro.</p>
 
 <p>For example, if you want to open the image file with gimp, put the following command line to the config file:</p>

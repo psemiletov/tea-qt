@@ -1347,7 +1347,7 @@ void rvln::createMenus()
   tm->setTearOffEnabled (true);
 
   create_menu_from_list (this, tm,
-                         QString ("HTML XHTML Docbook LaTeX Lout DokuWiki MediaWiki").split (" "),
+                         QString ("HTML XHTML Docbook LaTeX Markdown Lout DokuWiki MediaWiki").split (" "),
                          SLOT (mrkup_mode_choosed()));
 
   tm = menu_markup->addMenu (tr ("Header"));
@@ -4113,10 +4113,20 @@ void rvln::mrkup_header()
 
   QAction *a = qobject_cast<QAction *>(sender());
 
-  QString r = QString ("<%1>%2</%1>").arg (
-                       a->text().toLower()).arg (
-                       d->textEdit->textCursor().selectedText());
-
+  QString r;
+  
+  if (documents->markup_mode == "Markdown")
+     {
+      QString t;
+      int n = a->text().toLower()[1].digitValue();
+      t.fill ('#', n);
+      t = t + " " + d->textEdit->textCursor().selectedText();
+     }
+  else
+  r = QString ("<%1>%2</%1>").arg (
+               a->text().toLower()).arg (
+               d->textEdit->textCursor().selectedText());
+                       
   d->textEdit->textCursor().insertText (r);
 }
 
@@ -4515,9 +4525,7 @@ void rvln::file_open_bookmarks_file()
 
 void rvln::file_open_programs_file()
 {
-//#if defined(Q_WS_WIN) || defined(Q_OS_OS2)
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
 
   if (! file_exists (fname_programs))
      qstring_save (fname_programs, tr ("#external programs list. example:\nopera=\"C:\\Program Files\\Opera\\opera.exe \" \"%s\""));
@@ -6405,7 +6413,6 @@ void rvln::create_markup_hash()
 
 void rvln::create_markup_hash()
 {
-  
   CMarkupPair *p = new CMarkupPair;
 
   p->pattern["Docbook"] = "<emphasis role=\"bold\">%s</emphasis>";
@@ -6415,6 +6422,7 @@ void rvln::create_markup_hash()
   p->pattern["Lout"] = "@B{%s}";
   p->pattern["MediaWiki"] = "'''%s'''";
   p->pattern["DokuWiki"] = "**%s**";
+  p->pattern["Markdown"] = "**%s**";
   
   hs_markup.insert ("bold", p);
 
@@ -6457,6 +6465,7 @@ void rvln::create_markup_hash()
   p->pattern["Lout"] = "@I{%s}";
   p->pattern["MediaWiki"] = "''%s''";
   p->pattern["DokuWiki"] = "//%s//";
+  p->pattern["Markdown"] = "*%s*";
   
   hs_markup.insert ("italic", p);
 
@@ -6490,7 +6499,8 @@ void rvln::create_markup_hash()
   p->pattern["HTML"] = "<a href=\"\">%s</a>";
   p->pattern["XHTML"] = "<a href=\"\">%s</a>";
   p->pattern["LaTeX"] = "\\href{}{%s}";
-  
+  p->pattern["Markdown"] = "[](%s)";
+
   hs_markup.insert ("link", p);
 
 
@@ -6502,6 +6512,7 @@ void rvln::create_markup_hash()
   p->pattern["Lout"] = "@LLP";
   p->pattern["MediaWiki"] = "<br />";
   p->pattern["DokuWiki"] = "\\\\ ";
+  p->pattern["DokuWiki"] = "  ";
 
   hs_markup.insert ("newline", p);
 }

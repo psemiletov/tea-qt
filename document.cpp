@@ -808,6 +808,9 @@ void CDocument::set_markup_mode()
   else
   if (e == "mediawiki")
     markup_mode = "MediaWiki";
+  else
+  if (e == "md")
+  markup_mode = "Markdown";  
 }
 
 

@@ -1,16 +1,16 @@
 =====NEWS ABOUT TEA====
-TEA 41.1.1, April 2016
+TEA 42.0.0, August 2016
 ---------------------------------------
 http://semiletov.org/tea
 http://tea.ourproject.org
 https://github.com/psemiletov/tea-qt
 ---------------------------------------
-
-+ Functions - Math -  Sum by last column - sums values of each last column at the selection. For example, we can calculate the simply text list:
-
-Carrots 14
-Apples 45.8
-Oranges 11
+  
+  Hi. This release contains misc. fixes and new functions.
+  Command lines at Run menu now can use the separated file path parts (macros %fbasename, %ffilename, %fext, %fdir).
+  The markup mode has the basic Markdown support.
+  English manual fixes by Dr. Tobias Quathamer.
+  Many code fixes.
 
    If you want to support TEA via donation, better support the Ukrainian dog shelter Lyubas House - http://www.ukraineanimalrescue.org/#!lyubas-house/cxfj/. There are lot of dogs with disabilities, and they need help more than TEA.
 

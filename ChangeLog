@@ -1,6 +1,9 @@
 2016 summer
 + basic Markdown support
 + file path elements in command line to call external program
+* palettes fix
+* English manual fix by Dr. Tobias Quathamer.
+* other fixes
 
 2016
 + Functions - math - Sum by last column

@@ -698,7 +698,14 @@ rvln::rvln()
   documents->todo.dir_days = dir_days;
   documents->fname_crapbook = fname_crapbook;
  // documents->load_palette (fname_def_palette);
+ 
+ // qDebug() << "fname_def_palette:" << fname_def_palette;
+ 
   load_palette (fname_def_palette);
+ 
+  update_stylesheet (fname_stylesheet);
+  documents->apply_settings();
+
  
   documents->todo.load_dayfile();
 
@@ -5428,7 +5435,6 @@ void rvln::load_palette (const QString &fileName)
   else
       global_palette = hash_load_keyval (fileName);
 }
-
 
 
 void rvln::file_use_palette()

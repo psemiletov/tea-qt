@@ -69,7 +69,8 @@ SOURCES += rvln.cpp \
     quazipnewinfo.cpp \
     unzip.c \
     zip.c \
-    single_application.cpp
+    single_application.cpp \
+    exif.cpp
 
 HEADERS += rvln.h \
     todo.h \
@@ -97,7 +98,9 @@ HEADERS += rvln.h \
     quazipnewinfo.h \
     unzip.h \
     zip.h \
-    single_application.h
+    single_application.h \
+    exif.h
+
 
 
 TEMPLATE = app

@@ -2908,14 +2908,13 @@ void rvln::createOptions()
 
   vb_images->addWidget (cb_output_image_flt);
 
-   spb_img_quality = new_spin_box (vb_images, tr ("Output images quality"), -1, 100, settings->value ("img_quality", "-1").toInt());
+  spb_img_quality = new_spin_box (vb_images, tr ("Output images quality"), -1, 100, settings->value ("img_quality", "-1").toInt());
 
 
   cb_zip_after_scale = new QCheckBox (tr ("Zip directory with processed images"), this);
   cb_zip_after_scale->setCheckState (Qt::CheckState (settings->value ("img_post_proc", 0).toInt()));
 
   vb_images->addWidget (cb_zip_after_scale);
-
   page_images_layout->addWidget (gb_images);
 
 
@@ -2929,9 +2928,26 @@ void rvln::createOptions()
   gb_webgallery->setLayout(vb_webgal);
   page_images_layout->addWidget (gb_webgallery);
 
+  
+  QGroupBox *gb_exif = new QGroupBox (tr ("EXIF"));
+  QVBoxLayout *vb_exif = new QVBoxLayout;
+  gb_exif->setLayout(vb_exif);
+  page_images_layout->addWidget (gb_exif);
+
+  cb_zor_use_exif= new QCheckBox (tr ("Use EXIF orientation at image viewer"), this);
+  cb_zor_use_exif->setCheckState (Qt::CheckState (settings->value ("zor_use_exif_orientation", 0).toInt()));
+  vb_exif->addWidget (cb_zor_use_exif);
+      
+  
+  
   page_images->setLayout (page_images_layout);
   page_images->show();
 
+  
+  
+  
+  
+  
   tab_options->addTab (page_images, tr ("Images"));
 ////////////////////////////
 
@@ -8344,6 +8360,9 @@ void rvln::leaving_tune()
 
   settings->setValue("img_quality", spb_img_quality->value());
   settings->setValue ("img_post_proc", cb_zip_after_scale->checkState());
+
+
+  settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->checkState());
 
   settings->setValue ("ed_side_size", ed_side_size->text());
 

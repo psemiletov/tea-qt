@@ -3,8 +3,6 @@ this code is Public Domain
 */
 
 
-#include "img_viewer.h"
-#include "utils.h"
 
 #include <QDebug>
 
@@ -18,6 +16,16 @@ this code is Public Domain
 #include <QDir>
 #include <QImageReader>
 #include <QKeyEvent>
+
+#include <QSettings>
+
+#include "img_viewer.h"
+
+#include "exif.h"
+#include "utils.h"
+
+
+extern QSettings *settings;
 
 
 CImgViewer::CImgViewer (QObject *parent): QObject (parent)
@@ -59,7 +67,7 @@ void CImgViewer::set_image_full (const QString &fname)
 {
  // window_full.show_image (fname);
   window_full.load_image (fname);
- 
+  //qDebug() << "get_exif_orintation " << get_exif_orintation (fname);
 }
 
 
@@ -378,7 +386,7 @@ void CZORWindow::load_image (const QString &fname)
   if (! file_exists (fname))
      return;
 
-  qDebug() << "CZORWindow::load_image " << fname;
+ // qDebug() << "CZORWindow::load_image " << fname;
   
   fname_image = fname;
  
@@ -387,6 +395,12 @@ void CZORWindow::load_image (const QString &fname)
      
   
   bool orientation_portrait = false; 
+  
+  
+  if (settings->value ("zor_use_exif_orientation", 0).toInt())
+  if (get_exif_orientation (fname) == 6)
+     orientation_portrait = true;
+  
   bool need_to_scale = false;
   
   if (source_image.size().height() > source_image.size().height())
@@ -394,6 +408,15 @@ void CZORWindow::load_image (const QString &fname)
   
   if (source_image.size().height() > 600 || source_image.size().width() > 800)
      need_to_scale = true;
+  
+  if (orientation_portrait)
+     {
+      QTransform transform;
+      transform.rotate (90);
+      QImage transformed_image = source_image.transformed (transform);
+      transformed_image = transformed_image.scaled (size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+      source_image = transformed_image;
+     }
   
   if (need_to_scale)
     {  

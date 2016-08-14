@@ -359,6 +359,7 @@ public:
 
   QSpinBox *spb_img_quality;
   QCheckBox *cb_zip_after_scale;
+  QCheckBox *cb_zor_use_exif;
 
 
 protected:

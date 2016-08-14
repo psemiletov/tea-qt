@@ -165,7 +165,9 @@ DISTFILES += ChangeLog \
     themes/Smaragd/stylesheet.css \
     themes/TEA/stylesheet.css \
     themes/Turbo/stylesheet.css \
-    themes/Vegan/stylesheet.css
+    themes/Vegan/stylesheet.css \
+    themes/Ягодная/stylesheet.css 
+    
 
 
 unix:  {

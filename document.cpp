@@ -489,8 +489,6 @@ QString CDocument::get_filename_at_cursor()
         return QString();
 
      x = x.mid (i + 1);   
-
-//     qDebug() << "x = " << x;
      
      result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
      //qDebug() << "in cur dir: " << result;

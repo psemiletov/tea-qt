@@ -9,7 +9,7 @@ ZIP and Zlib stuff by:
 Zlib - (C) 1995-2005 Jean-loup Gailly and Mark Adler
 Zip/Unzip - (C) 1998-2005 Gilles Vollant
 QuaZIP - (C) 2005-2007 Sergey A. Tachenov
-
+exif.h/cpp - public domain code from http://imonad.com
 Some code snippets were taken from qtcentre programming forum.
 
 ##

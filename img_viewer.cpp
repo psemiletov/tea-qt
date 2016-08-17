@@ -396,9 +396,11 @@ void CZORWindow::load_image (const QString &fname)
   
   bool orientation_portrait = false; 
   
+  int exif_orientation = get_exif_orientation (fname);
+  qDebug() << "exif_orientation: " << exif_orientation;
   
   if (settings->value ("zor_use_exif_orientation", 0).toInt())
-  if (get_exif_orientation (fname) == 6)
+  if (exif_orientation == 6 || exif_orientation == 8)
      orientation_portrait = true;
   
   bool need_to_scale = false;
@@ -409,10 +411,32 @@ void CZORWindow::load_image (const QString &fname)
   if (source_image.size().height() > 600 || source_image.size().width() > 800)
      need_to_scale = true;
   
+  if (exif_orientation == 3)
+     {
+      QTransform transform;
+      
+      transform.rotate (180);
+      
+      QImage transformed_image = source_image.transformed (transform);
+      transformed_image = transformed_image.scaled (size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+      source_image = transformed_image;
+     }
+     
+  
   if (orientation_portrait)
      {
       QTransform transform;
-      transform.rotate (90);
+      
+      qreal angle;
+      
+      if (exif_orientation == 6)
+         angle = 90;
+      else   
+      if (exif_orientation == 8) //make clockwise
+         angle = 270;
+      
+      transform.rotate (angle);
+      
       QImage transformed_image = source_image.transformed (transform);
       transformed_image = transformed_image.scaled (size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
       source_image = transformed_image;

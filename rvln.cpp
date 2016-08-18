@@ -34,6 +34,8 @@ started at 08 November 2007
 #include "tzipper.h"
 #include "wavinfo.h"
 #include <math.h>
+#include "exif.h"
+
 
 #include <QMimeData>
 #include <QStyleFactory>
@@ -2907,14 +2909,28 @@ void rvln::createOptions()
   cb_output_image_flt->setCheckState (Qt::CheckState (settings->value ("img_filter", 0).toInt()));
 
   vb_images->addWidget (cb_output_image_flt);
-
+  
   spb_img_quality = new_spin_box (vb_images, tr ("Output images quality"), -1, 100, settings->value ("img_quality", "-1").toInt());
 
+
+  cb_exif_rotate = new QCheckBox (tr ("Apply hard rotation by EXIF data"), this);
+  cb_exif_rotate->setCheckState (Qt::CheckState (settings->value ("cb_exif_rotate", 0).toInt()));
+
+
+
+  cb_output_image_flt = new QCheckBox (tr ("Scale images with bilinear filtering"), this);
+  cb_output_image_flt->setCheckState (Qt::CheckState (settings->value ("img_filter", 0).toInt()));
+
+  vb_images->addWidget (cb_output_image_flt);
 
   cb_zip_after_scale = new QCheckBox (tr ("Zip directory with processed images"), this);
   cb_zip_after_scale->setCheckState (Qt::CheckState (settings->value ("img_post_proc", 0).toInt()));
 
   vb_images->addWidget (cb_zip_after_scale);
+
+
+  vb_images->addWidget (cb_exif_rotate);
+
   page_images_layout->addWidget (gb_images);
 
 
@@ -6728,7 +6744,33 @@ void rvln::fman_convert_images (bool by_side, int value)
               if (! source.isNull())
                  {
                   qApp->processEvents();
+                  
+                 if (settings->value ("cb_exif_rotate", 0).toInt()) 
+                    {
+                     int exif_orientation = get_exif_orientation (fname);
+                      
+                     QTransform transform;
+                     qreal angle = 0;
+      
+                     if (exif_orientation == 3)
+                        angle = 180;
+                     else    
+                     if (exif_orientation == 6)
+                        angle = 90;
+                     else   
+                     if (exif_orientation == 8)
+                        angle = 270;
+      
+                     if (angle != 0)
+                        {
+                        transform.rotate (angle);
+                        source = source.transformed (transform);
+                        }
+                    }
+
+                  
                   QImage dest = image_scale_by (source, by_side, value, transformMode);
+
 
                   QString fmt (settings->value ("output_image_fmt", "jpg").toString());
 
@@ -8361,6 +8403,7 @@ void rvln::leaving_tune()
   settings->setValue("img_quality", spb_img_quality->value());
   settings->setValue ("img_post_proc", cb_zip_after_scale->checkState());
 
+  settings->setValue ("cb_exif_rotate", cb_exif_rotate->checkState());
 
   settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->checkState());
 

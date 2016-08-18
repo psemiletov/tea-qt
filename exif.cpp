@@ -9,72 +9,78 @@
 #include "exif.h"
 
 
-
-
+/*
 Exif::Exif(){
 }
 
 Exif::~Exif(){
 }
+*/
 
-rint8u readByte(QFile &file){
-    char a;
-    file.getChar(&a);
-    return (rint8u)a;
+rint8u readByte(QFile &file)
+{
+  char a;
+  file.getChar (&a);
+  return (rint8u)a;
 }
 
 
 //--------------------------------------------------------------------------
 // Parse the marker stream until SOS or EOI is seen;
 //--------------------------------------------------------------------------
-int Exif::readJpegSections(QFile &file, int *Orientation){
-    QByteArray *data;
-    rint8u a;
+int Exif::readJpegSections(QFile &file, int *Orientation)
+{
+  QByteArray *data;
+  rint8u a = readByte(file);
 
-    a = readByte(file);
-
-    if (a != 0xff){
-            return -1;
-    }else{
-        rint8u b;
-        b = readByte(file);
-        if(b != M_SOI) return -1;
-    }
+  if (a != 0xff)
+     {
+      return -1;
+     }
+  else
+      {
+       rint8u b = readByte (file);
+       if (b != M_SOI) 
+          return -1;
+      }
 
     //int SectionsRead=0;
-    for(;;){
+   for (;;)
+       {
         int itemlen;
         int prev;
         rint8u  marker = 0;
-        rint8u ll,lh;
+        rint8u ll, lh;
 
         prev = 0;
-        for(int i=0;;i++){
-            marker = readByte(file);
-            if (marker != 0xff && prev == 0xff) break;
-            prev = marker;
-        }
-
+        
+        for (int i = 0; ; i++)
+            {
+             marker = readByte (file);
+             if (marker != 0xff && prev == 0xff) 
+                break;
+             prev = marker;
+            }
 
         // Read the length of the section.
-        lh = readByte(file);
-        ll = readByte(file);
+        lh = readByte (file);
+        ll = readByte (file);
         itemlen = (lh << 8) | ll;
 
-        if (itemlen < 2){ // Invalid marker
-            return -1;
-        }
+        if (itemlen < 2) // Invalid marker
+           return -1;
+           
+        data = new QByteArray (file.read (itemlen - 2)); // Read the whole section.
+        if (data->isEmpty()) 
+           return -1; // Could not allocate memory
 
-        data = new QByteArray(file.read(itemlen-2)); // Read the whole section.
-        if(data->isEmpty()) return -1; // Could not allocate memory
+        if(data->size() != itemlen - 2) 
+           return -1; // Premature end of file?
 
-        if(data->size() != itemlen-2) return -1; // Premature end of file?
-        //sections.append(section);
-
-
-        switch(marker){
-            case M_SOS:   // stop before hitting compressed data
-                return 0;
+        switch (marker)
+               {
+                case M_SOS:   // stop before hitting compressed data
+                             return 0;
 
             case M_EOI:   // in case it's a tables-only JPEG stream
                 return -1;
@@ -356,17 +362,17 @@ int Exif::processEXIF(QByteArray *data, int itemlen, int *Orientation){
     return 0;
 }
 
-int Exif::readJpegFile(QFile &file, int *Orientation){
-    readJpegSections(file, Orientation);
-
-    return 0;
+int Exif::readJpegFile(QFile &file, int *Orientation)
+{
+  readJpegSections(file, Orientation);
+  return 0;
 }
 
-
-
-int Exif::getExifOrientation(QFile &file, int *Orientation){
-    readJpegFile(file, Orientation);
-    return 0;
+int Exif::getExifOrientation(QFile &file)
+{
+  int r;
+  readJpegFile(file, &r);
+  return r;
 }
 
 
@@ -377,7 +383,7 @@ int get_exif_orientation (const QString &fname)
   QFile file (fname);
   if (file.open(QIODevice::ReadOnly))
      {
-      exif.getExifOrientation(file, &o);
+      o = exif.getExifOrientation(file/*, &o*/);
       file.close();
      }
      

@@ -48,9 +48,12 @@ typedef unsigned int  rint32u;
 
 class Exif{
 public:
-    Exif();
-    ~Exif();
-    int getExifOrientation(QFile &file, int *Orientation);
+    //Exif();
+    //~Exif();
+    //int getExifOrientation(QFile &file, int *Orientation);
+    
+    int getExifOrientation(QFile &file);
+    
     int readJpegFile(QFile &file, int *Orientation);
     int readJpegSections(QFile &file, int *Orientation);
     int processEXIF(QByteArray *barr, int itemlen, int *Orientation);

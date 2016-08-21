@@ -25,6 +25,7 @@ You can use some values:
 useclang - TEA will be compiled with Clang.
 noaspell - disable the Aspell (if you have it installed, but  do not want to compile TEA with Aspell support)
 nohunpell - disable Hunspell for TEA.
+usepoppler - use libpoppler-qt5 for PDF text layer import. DISABLED by default
 
 If you have installed both Qt4  and Qt5, use the qmake from Qt4 or Qt5 to configure TEA with exact version of QT. The common solution is to make symlink to qmake from Qt5 and name it qmake5, then use qmake5 instead of the usual qmake.
 

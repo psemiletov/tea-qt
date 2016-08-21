@@ -46,6 +46,7 @@ useclang{
 }
 
 
+
 SOURCES += rvln.cpp \
     main.cpp \
     todo.cpp \
@@ -195,14 +196,15 @@ exists("/usr/include/aspell.h") {
 }
 }
 
-contains(USE_POPPLER,true){
- 
+#contains(USE_POPPLER,true){
+
+usepoppler{
+system(pkg-config --exists poppler-qt5) {
     message ("poppler enabled")
         PKGCONFIG += poppler-qt5
             DEFINES += POPPLER_ENABLE
+        }
 }
-                
-
 
 
 

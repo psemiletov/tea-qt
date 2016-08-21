@@ -145,6 +145,22 @@ public:
 };
 
 
+
+#ifdef POPPLER_ENABLE
+
+class CTioPDF: public CTioReadOnly
+{
+  Q_OBJECT
+
+public:
+
+  CTioPDF();
+  bool load (const QString &fname);
+};
+
+#endif
+
+
 class CTioHandler: public QObject
 {
   Q_OBJECT

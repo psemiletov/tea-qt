@@ -6,6 +6,13 @@
 #include <QTextStream>
 #include <QDebug>
 
+#ifdef POPPLER_ENABLE
+
+#include <poppler-qt5.h>
+
+#endif
+
+
 
 bool CTioPlainText::load (const QString &fname)
 {
@@ -95,6 +102,12 @@ CTioHandler::CTioHandler()
   list.append (new CTioABW);
   list.append (new CTioFB2);
   list.append (new CTioRTF);
+
+#ifdef POPPLER_ENABLE
+  
+  list.append (new CTioPDF);
+    
+#endif    
 }
 
 
@@ -706,3 +719,58 @@ bool CTioRTF::load (const QString &fname)
 
 
 */
+
+#ifdef POPPLER_ENABLE
+
+
+CTioPDF::CTioPDF()
+{
+  ronly = true;
+  extensions.append ("pdf");
+}
+
+
+bool CTioPDF::load (const QString &fname)
+{
+  //QByteArray ba = file_load (fname);
+
+  //QString text;
+  
+  Poppler::Document *d = Poppler::Document::load (fname);
+  if (! d || d->isLocked()) 
+     {
+      delete d;
+      return false;
+     }
+     
+     
+  int pages_count = d->numPages();   
+  
+  for (int i = 0; i < pages_count; i++)
+      {
+       Poppler::Page *p = d->page (i);
+      
+       QList<Poppler::TextBox*> tb = p->textList();
+       
+       
+       for (int j = 0; j < tb.size(); j++)
+           {
+           
+                data += tb[j]->text();
+                //if (tb[j]->hasSpaceAfter())
+                data += " ";
+          
+                delete tb[j];
+                  
+           }
+      }
+     
+     
+     
+  delete d;
+         
+
+  return true;
+}
+
+#endif

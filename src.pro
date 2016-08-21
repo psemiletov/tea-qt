@@ -10,6 +10,7 @@ DEFINES += 'VERSION_NUMBER=\'"42.0.0"\''
 DEFINES += NOCRYPT \
           NOUNCRYPT
 
+USE_POPPLER = false
 USE_ASPELL = true
 USE_HUNSPELL = true
 USE_PRINTER = true 
@@ -194,6 +195,17 @@ exists("/usr/include/aspell.h") {
 }
 }
 
+contains(USE_POPPLER,true){
+ 
+    message ("poppler enabled")
+        PKGCONFIG += poppler-qt5
+            DEFINES += POPPLER_ENABLE
+}
+                
+
+
+
+
 contains(USE_HUNSPELL,true){
 exists("/usr/include/hunspell/hunspell.hxx") { 
     message ("hunspell enabled")
@@ -205,6 +217,9 @@ exists("/usr/include/hunspell/hunspell.hxx") {
 
 
 }
+
+
+ poppler-qt5
 
 
 win32: {

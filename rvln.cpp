@@ -8726,7 +8726,7 @@ void rvln::view_use_theme()
   QAction *a = qobject_cast<QAction *>(sender());
   QString css_fname = a->data().toString() + "/" + "stylesheet.css";
   
-  qDebug() << css_fname;
+ // qDebug() << css_fname;
   
   if (! file_exists (css_fname))
      {

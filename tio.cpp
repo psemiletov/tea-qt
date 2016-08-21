@@ -867,11 +867,8 @@ bool CTioPDF::load (const QString &fname)
 
 #ifdef DJVU_ENABLE
 
-/* Options */
-//const char *inputfilename = 0;
-//const char *outputfilename = 0;
+
 const char *detail = 0;
-//const char *pagespec = 0;
 int escape = 0;
 
 QString temp_data_s;
@@ -921,6 +918,8 @@ dopage(int pageno)
   const char *lvl = (detail) ? detail : "page";
   while ((r = ddjvu_document_get_pagetext(doc,pageno-1,lvl))==miniexp_dummy)
     handle(TRUE);
+    
+    /*
   if (detail)
     {
       miniexp_io_t io;
@@ -933,22 +932,23 @@ dopage(int pageno)
 #endif
       miniexp_pprint_r(&io, r, 72);
     }
-  else if ((r = miniexp_nth(5, r)) && miniexp_stringp(r))
+  else
+  */
+   if ((r = miniexp_nth(5, r)) && miniexp_stringp(r))
     {
       const char *s = miniexp_to_str(r); 
-      if (! escape)
-        //fputs(s, stdout);
+     // if (! escape)
         temp_data_s.append (s);
-      else
+     /* else
         {
           unsigned char c;
           while ((c = *(unsigned char*)s++))
             {
               bool esc = false;
               if (c == '\\' || c >= 0x7f)
-                esc = true; /* non-ascii */
+                esc = true; // non-ascii
               if (c < 0x20 && !strchr("\013\035\037\012", c))
-                esc = true; /* non-printable other than separators */
+                esc = true; // non-printable other than separators
               if (esc)
                 //printf("\\%03o", c);
                 temp_data_s.append (' ');
@@ -956,7 +956,7 @@ dopage(int pageno)
                 //putc(c, stdout);
                 temp_data_s.append (c);
             }
-        }
+        }*/
       temp_data_s.append ('\n');  
       //fputs("\n\f", stdout);
     }
@@ -1041,22 +1041,20 @@ CTioDJVU::CTioDJVU()
 
 bool CTioDJVU::load (const QString &fname)
 {
-  //QByteArray ba = file_load (fname);
+
 #if defined(_WIN32) && !defined(__CYGWIN32__)
   _setmbcp(_MB_CP_OEM);
 #endif
   
-   /* Defaults */
    
- // inputfilename = fname.toUtf8().data();
-  
-  //  pagespec = "1-$";
-  
   /* Create context and document */
   if (! (ctx = ddjvu_context_create("tea")))
-    die(i18n("Cannot create djvu context."));
+     return false;
+//    die(i18n("Cannot create djvu context."));
   if (! (doc = ddjvu_document_create_by_filename(ctx, fname.toUtf8().data(), TRUE)))
-    die(i18n("Cannot open djvu document '%s'."), fname.toUtf8().data());
+    //die(i18n("Cannot open djvu document '%s'."), fname.toUtf8().data());
+    return false;
+
     
   while (! ddjvu_document_decoding_done(doc))
     handle(TRUE);

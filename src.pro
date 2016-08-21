@@ -13,7 +13,7 @@ DEFINES += NOCRYPT \
 USE_POPPLER = false
 USE_ASPELL = true
 USE_HUNSPELL = true
-USE_PRINTER = true 
+USE_PRINTER = true
 
 
 #PREFIX = /usr/local/bin
@@ -37,6 +37,7 @@ noprinter{
 DEFINES -= PRINTER_ENABLE
 message ("Printer OFF")
 }
+
 
 useclang{
     message ("Clang enabled")
@@ -172,7 +173,6 @@ DISTFILES += ChangeLog \
     themes/Turbo/stylesheet.css \
     themes/Vegan/stylesheet.css \
     themes/Ягодная/stylesheet.css 
-    
 
 
 unix:  {
@@ -196,17 +196,6 @@ exists("/usr/include/aspell.h") {
 }
 }
 
-#contains(USE_POPPLER,true){
-
-usepoppler{
-system(pkg-config --exists poppler-qt5) {
-    message ("poppler enabled")
-        PKGCONFIG += poppler-qt5
-            DEFINES += POPPLER_ENABLE
-        }
-}
-
-
 
 contains(USE_HUNSPELL,true){
 exists("/usr/include/hunspell/hunspell.hxx") { 
@@ -218,10 +207,20 @@ exists("/usr/include/hunspell/hunspell.hxx") {
                 }
 
 
+#contains(USE_POPPLER,true){
+
+usepoppler{
+system(pkg-config --exists poppler-qt5) {
+    message ("poppler enabled")
+        PKGCONFIG += poppler-qt5
+            DEFINES += POPPLER_ENABLE
+        }
 }
 
 
- poppler-qt5
+}
+
+
 
 
 win32: {

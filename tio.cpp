@@ -1,3 +1,54 @@
+/*
+
+DJVU read code taken fromdvutxt.c:  
+
+//C- DjVuLibre-3.5
+//C- Copyright (c) 2002  Leon Bottou and Yann Le Cun.
+//C- Copyright (c) 2001  AT&T
+
+//C- DjVuLibre-3.5 is derived from the DjVu(r) Reference Library from
+//C- Lizardtech Software.  Lizardtech Software has authorized us to
+//C- replace the original DjVu(r) Reference Library notice by the following
+//C- text (see doc/lizard2002.djvu and doc/lizardtech2007.djvu):
+//C-
+//C-  ------------------------------------------------------------------
+//C- | DjVu (r) Reference Library (v. 3.5)
+//C- | Copyright (c) 1999-2001 LizardTech, Inc. All Rights Reserved.
+//C- | The DjVu Reference Library is protected by U.S. Pat. No.
+//C- | 6,058,214 and patents pending.
+//C- |
+//C- | This software is subject to, and may be distributed under, the
+//C- | GNU General Public License, either Version 2 of the license,
+//C- | or (at your option) any later version. The license should have
+//C- | accompanied the software or you may obtain a copy of the license
+//C- | from the Free Software Foundation at http://www.fsf.org .
+//C- |
+//C- | The computer code originally released by LizardTech under this
+//C- | license and unmodified by other parties is deemed "the LIZARDTECH
+//C- | ORIGINAL CODE."  Subject to any third party intellectual property
+//C- | claims, LizardTech grants recipient a worldwide, royalty-free, 
+//C- | non-exclusive license to make, use, sell, or otherwise dispose of 
+//C- | the LIZARDTECH ORIGINAL CODE or of programs derived from the 
+//C- | LIZARDTECH ORIGINAL CODE in compliance with the terms of the GNU 
+//C- | General Public License.   This grant only confers the right to 
+//C- | infringe patent claims underlying the LIZARDTECH ORIGINAL CODE to 
+//C- | the extent such infringement is reasonably necessary to enable 
+//C- | recipient to make, have made, practice, sell, or otherwise dispose 
+//C- | of the LIZARDTECH ORIGINAL CODE (or portions thereof) and not to 
+//C- | any greater extent that may be necessary to utilize further 
+//C- | modifications or combinations.
+//C- |
+//C- | The LIZARDTECH ORIGINAL CODE is provided "AS IS" WITHOUT WARRANTY
+//C- | OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+//C- | TO ANY WARRANTY OF NON-INFRINGEMENT, OR ANY IMPLIED WARRANTY OF
+//C- | MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+//C- +------------------------------------------------------------------
+
+
+
+
+*/
+
 #include "tio.h"
 #include "utils.h"
 #include "tzipper.h"
@@ -9,6 +60,35 @@
 #ifdef POPPLER_ENABLE
 
 #include <poppler-qt5.h>
+
+#endif
+
+
+#ifdef DJVU_ENABLE
+
+#include <stddef.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <locale.h>
+#include <fcntl.h>
+#include <errno.h>
+
+#if defined(_WIN32) && !defined(__CYGWIN32__)
+# include <mbctype.h>
+#endif
+
+#include "libdjvu/miniexp.h"
+#include "libdjvu/ddjvuapi.h"
+
+
+/* Some day we'll redo i18n right. */
+#ifndef i18n
+# define i18n(x) (x)
+# define I18N(x) (x)
+#endif
+
 
 #endif
 
@@ -108,6 +188,13 @@ CTioHandler::CTioHandler()
   list.append (new CTioPDF);
     
 #endif    
+
+#ifdef DJVU_ENABLE
+  
+  list.append (new CTioDJVU);
+    
+#endif    
+
 }
 
 
@@ -770,6 +857,222 @@ bool CTioPDF::load (const QString &fname)
   delete d;
          
 
+  return true;
+}
+
+#endif
+
+
+
+
+#ifdef DJVU_ENABLE
+
+/* Options */
+//const char *inputfilename = 0;
+//const char *outputfilename = 0;
+const char *detail = 0;
+//const char *pagespec = 0;
+int escape = 0;
+
+QString temp_data_s;
+
+ddjvu_context_t *ctx;
+ddjvu_document_t *doc;
+
+
+void
+handle(int wait)
+{
+  const ddjvu_message_t *msg;
+  if (!ctx)
+    return;
+  if (wait)
+    msg = ddjvu_message_wait(ctx);
+  while ((msg = ddjvu_message_peek(ctx)))
+    {
+      switch(msg->m_any.tag)
+        {
+        case DDJVU_ERROR:
+          fprintf(stderr,"djvutxt: %s\n", msg->m_error.message);
+          if (msg->m_error.filename)
+            fprintf(stderr,"djvutxt: '%s:%d'\n", 
+                    msg->m_error.filename, msg->m_error.lineno);
+          //exit(10);
+          return;
+        default:
+          break;
+        }
+      ddjvu_message_pop(ctx);
+    }
+}
+
+
+void 
+die(const char *fmt, ...)
+{
+ return;
+}
+
+
+void
+dopage(int pageno)
+{
+  miniexp_t r = miniexp_nil;
+  const char *lvl = (detail) ? detail : "page";
+  while ((r = ddjvu_document_get_pagetext(doc,pageno-1,lvl))==miniexp_dummy)
+    handle(TRUE);
+  if (detail)
+    {
+      miniexp_io_t io;
+      miniexp_io_init(&io);
+#ifdef miniexp_io_print7bits
+      int flags = (escape) ? miniexp_io_print7bits : 0;
+      io.p_flags = &flags;
+#else
+      io.p_print7bits = &escape;
+#endif
+      miniexp_pprint_r(&io, r, 72);
+    }
+  else if ((r = miniexp_nth(5, r)) && miniexp_stringp(r))
+    {
+      const char *s = miniexp_to_str(r); 
+      if (! escape)
+        //fputs(s, stdout);
+        temp_data_s.append (s);
+      else
+        {
+          unsigned char c;
+          while ((c = *(unsigned char*)s++))
+            {
+              bool esc = false;
+              if (c == '\\' || c >= 0x7f)
+                esc = true; /* non-ascii */
+              if (c < 0x20 && !strchr("\013\035\037\012", c))
+                esc = true; /* non-printable other than separators */
+              if (esc)
+                //printf("\\%03o", c);
+                temp_data_s.append (' ');
+              else
+                //putc(c, stdout);
+                temp_data_s.append (c);
+            }
+        }
+      temp_data_s.append ('\n');  
+      //fputs("\n\f", stdout);
+    }
+}
+
+
+void
+parse_pagespec(const char *s, int max_page, void (*dopage)(int))
+{
+  static const char *err = I18N("invalid page specification: %s");
+  int spec = 0;
+  int both = 1;
+  int start_page = 1;
+  int end_page = max_page;
+  int pageno;
+  char *p = (char*)s;
+  while (*p)
+    {
+      spec = 0;
+      while (*p==' ')
+        p += 1;
+      if (! *p)
+        break;
+      if (*p>='0' && *p<='9') {
+        end_page = strtol(p, &p, 10);
+        spec = 1;
+      } else if (*p=='$') {
+        spec = 1;
+        end_page = max_page;
+        p += 1;
+      } else if (both) {
+        end_page = 1;
+      } else {
+        end_page = max_page;
+      }
+      while (*p==' ')
+        p += 1;
+      if (both) {
+        start_page = end_page;
+        if (*p == '-') {
+          p += 1;
+          both = 0;
+          continue;
+        }
+      }
+      both = 1;
+      while (*p==' ')
+        p += 1;
+      if (*p && *p != ',')
+        die(i18n(err), s);
+      if (*p == ',')
+        p += 1;
+      if (! spec)
+        die(i18n(err), s);
+      if (end_page < 0)
+        end_page = 0;
+      if (start_page < 0)
+        start_page = 0;
+      if (end_page > max_page)
+        end_page = max_page;
+      if (start_page > max_page)
+        start_page = max_page;
+      if (start_page <= end_page)
+        for(pageno=start_page; pageno<=end_page; pageno++)
+          (*dopage)(pageno);
+      else
+        for(pageno=start_page; pageno>=end_page; pageno--)
+          (*dopage)(pageno);
+    }
+  if (! spec)
+    die(i18n(err), s);
+}
+
+
+
+CTioDJVU::CTioDJVU()
+{
+  ronly = true;
+  extensions.append ("djvu");
+}
+
+
+bool CTioDJVU::load (const QString &fname)
+{
+  //QByteArray ba = file_load (fname);
+#if defined(_WIN32) && !defined(__CYGWIN32__)
+  _setmbcp(_MB_CP_OEM);
+#endif
+  
+   /* Defaults */
+   
+ // inputfilename = fname.toUtf8().data();
+  
+  //  pagespec = "1-$";
+  
+  /* Create context and document */
+  if (! (ctx = ddjvu_context_create("tea")))
+    die(i18n("Cannot create djvu context."));
+  if (! (doc = ddjvu_document_create_by_filename(ctx, fname.toUtf8().data(), TRUE)))
+    die(i18n("Cannot open djvu document '%s'."), fname.toUtf8().data());
+    
+  while (! ddjvu_document_decoding_done(doc))
+    handle(TRUE);
+
+  /* Process all pages */
+  int i = ddjvu_document_get_pagenum(doc);
+  parse_pagespec("1-$", i, dopage);
+  
+  /* Close */
+  if (doc)
+    ddjvu_document_release(doc);
+  if (ctx)
+    ddjvu_context_release(ctx);
+
+  
+  data = temp_data_s;
   return true;
 }
 

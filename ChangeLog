@@ -2,6 +2,7 @@
 + Tune - Images - Use EXIF orientation at image viewer
 + Tune - Images - Apply hard rotation by EXIF data
 + new themes and palettes
++ optional libpoppler support (see README) for text extraction from PDF
 
 2016 summer
 + basic Markdown support

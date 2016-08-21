@@ -211,9 +211,18 @@ exists("/usr/include/hunspell/hunspell.hxx") {
 
 usepoppler{
 system(pkg-config --exists poppler-qt5) {
-    message ("poppler enabled")
+    message ("DJVU enabled")
         PKGCONFIG += poppler-qt5
             DEFINES += POPPLER_ENABLE
+        }
+}
+
+
+usedjvu{
+system(pkg-config --exists ddjvuapi) {
+    message ("djvu enabled")
+        PKGCONFIG += ddjvuapi
+            DEFINES += DJVU_ENABLE
         }
 }
 

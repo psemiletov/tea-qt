@@ -161,6 +161,24 @@ public:
 #endif
 
 
+
+
+#ifdef DJVU_ENABLE
+
+class CTioDJVU: public CTioReadOnly
+{
+  Q_OBJECT
+
+public:
+
+  CTioDJVU();
+  bool load (const QString &fname);
+};
+
+#endif
+
+
+
 class CTioHandler: public QObject
 {
   Q_OBJECT

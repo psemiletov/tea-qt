@@ -457,12 +457,10 @@ void rvln::create_main_widget()
   connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
 
   main_tab_widget->setMinimumHeight (10);
-//  log_memo->setMinimumHeight (10);
   log->setMinimumHeight (10);
 
   
   mainSplitter->addWidget (main_tab_widget);
-//  mainSplitter->addWidget (log_memo);
   mainSplitter->addWidget (log);
 
   
@@ -479,7 +477,10 @@ void rvln::create_main_widget()
   connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
   connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
 
-  bt_find->setIcon (QIcon (":/icons/search_find.png"));
+ 
+  bt_find->setIcon (get_theme_icon ("search_find.png"));
+
+
 
   QLabel *l_fif = new QLabel (tr ("FIF"));
  
@@ -573,7 +574,7 @@ void rvln::init_styles()
 
   fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
 
-  qDebug() << "fname_stylesheet = " << fname_stylesheet;
+ // qDebug() << "fname_stylesheet = " << fname_stylesheet;
 
 //  qApp->setStyleSheet("QMenu { background-color: blue }");
   
@@ -699,13 +700,10 @@ rvln::rvln()
   documents->dir_config = dir_config;
   documents->todo.dir_days = dir_days;
   documents->fname_crapbook = fname_crapbook;
- // documents->load_palette (fname_def_palette);
- 
- // qDebug() << "fname_def_palette:" << fname_def_palette;
  
   load_palette (fname_def_palette);
  
-  update_stylesheet (fname_stylesheet);
+ // update_stylesheet (fname_stylesheet);
   documents->apply_settings();
 
  
@@ -732,7 +730,7 @@ rvln::rvln()
   createManual();
   
   updateFonts();
-  //update_logmemo_palette();
+ 
 
   //update_stylesheet (fname_stylesheet);
   
@@ -1166,41 +1164,42 @@ void rvln::about()
 void rvln::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
-  act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
+  //act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
+  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+
+
 
   connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
-  filesAct = new QAction (QIcon (":/icons/current-list.png"), tr ("Files"), this);
-  //connect (filesAct, SIGNAL(triggered()), this, SLOT(filesAct->show()));
+  filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
   
   
-  act_labels = new QAction (QIcon (":/icons/labels.png"), tr ("Labels"), this);
+  act_labels = new QAction (get_theme_icon ("labels.png"), tr ("Labels"), this);
   connect (act_labels, SIGNAL(triggered()), this, SLOT(update_labels_list()));
 
-  newAct = new QAction (QIcon (":/icons/file-new.png"), tr ("New"), this);
+  newAct = new QAction (get_theme_icon ("file-new.png"), tr ("New"), this);
 
   newAct->setShortcut (QKeySequence ("Ctrl+N"));
   newAct->setStatusTip (tr ("Create a new file"));
   connect (newAct, SIGNAL(triggered()), this, SLOT(newFile()));
 
-  QIcon ic_file_open (":/icons/file-open.png");
-  ic_file_open.addFile (":/icons/file-open-active.png", QSize(), QIcon::Active); 
+  QIcon ic_file_open = get_theme_icon ("file-open.png");
+  ic_file_open.addFile (get_theme_icon_fname ("file-open-active.png"), QSize(), QIcon::Active); 
   
   openAct = new QAction (ic_file_open, tr ("Open file"), this);
     
-  //openAct = new QAction (QIcon (":/icons/file-open.png"), tr ("Open file"), this);
   openAct->setStatusTip (tr ("Open an existing file"));
   connect (openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-  QIcon ic_file_save (":/icons/file-save.png");
-  ic_file_save.addFile (":/icons/file-save-active.png", QSize(), QIcon::Active); 
+  QIcon ic_file_save = get_theme_icon ("file-save.png");
+  ic_file_save.addFile (get_theme_icon_fname ("file-save-active.png"), QSize(), QIcon::Active); 
   
   saveAct = new QAction (ic_file_save, tr ("Save"), this);
   saveAct->setShortcut (QKeySequence ("Ctrl+S"));
   saveAct->setStatusTip (tr ("Save the document to disk"));
   connect (saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
-  saveAsAct = new QAction (QIcon (":/icons/file-save-as.png"), tr ("Save As"), this);
+  saveAsAct = new QAction (get_theme_icon ("file-save-as.png"), tr ("Save As"), this);
   saveAsAct->setStatusTip (tr ("Save the document under a new name"));
   connect (saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
@@ -1209,16 +1208,16 @@ void rvln::createActions()
   exitAct->setStatusTip (tr ("Exit the application"));
   connect (exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-  QIcon ic_edit_cut (":/icons/edit-cut.png");
-  ic_edit_cut.addFile (":/icons/edit-cut-active.png", QSize(), QIcon::Active); 
+  QIcon ic_edit_cut = get_theme_icon ("edit-cut.png");
+  ic_edit_cut.addFile (get_theme_icon_fname ("edit-cut-active.png"), QSize(), QIcon::Active); 
       
   cutAct = new QAction (ic_edit_cut, tr ("Cut"), this);
   cutAct->setShortcut (QKeySequence ("Ctrl+X"));
   cutAct->setStatusTip (tr ("Cut the current selection's contents to the clipboard"));
   connect (cutAct, SIGNAL(triggered()), this, SLOT(ed_cut()));
 
-  QIcon ic_edit_copy (":/icons/edit-copy.png");
-  ic_edit_copy.addFile (":/icons/edit-copy-active.png", QSize(), QIcon::Active); 
+  QIcon ic_edit_copy = get_theme_icon ("edit-copy.png");
+  ic_edit_copy.addFile (get_theme_icon_fname ("edit-copy-active.png"), QSize(), QIcon::Active); 
     
   
   copyAct = new QAction (ic_edit_copy, tr("Copy"), this);
@@ -1226,8 +1225,8 @@ void rvln::createActions()
   copyAct->setStatusTip (tr ("Copy the current selection's contents to the clipboard"));
   connect (copyAct, SIGNAL(triggered()), this, SLOT(ed_copy()));
 
-  QIcon ic_edit_paste (":/icons/edit-paste.png");
-  ic_edit_paste.addFile (":/icons/edit-paste-active.png", QSize(), QIcon::Active); 
+  QIcon ic_edit_paste = get_theme_icon ("edit-paste.png");
+  ic_edit_paste.addFile (get_theme_icon_fname ("edit-paste-active.png"), QSize(), QIcon::Active); 
     
   
   pasteAct = new QAction (ic_edit_paste, tr("Paste"), this);
@@ -1258,7 +1257,7 @@ void rvln::createMenus()
   //fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
-  add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", ":/icons/file-open.png");
+  add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
   add_to_menu (fileMenu, tr ("Last closed file"), SLOT(file_last_opened()));
   add_to_menu (fileMenu, tr ("Open at cursor"), SLOT(open_at_cursor()), "F2");
   add_to_menu (fileMenu, tr ("Crapbook"), SLOT(file_crapbook()), "Alt+M");
@@ -1586,7 +1585,7 @@ void rvln::createMenus()
   menu_spell_langs = menu_functions->addMenu (tr ("Spell-checker languages"));
   menu_spell_langs->setTearOffEnabled (true);
 
-  add_to_menu (menu_functions, tr ("Spell check"), SLOT(fn_spell_check()), "", ":/icons/fn-spell-check.png");
+  add_to_menu (menu_functions, tr ("Spell check"), SLOT(fn_spell_check()), "", get_theme_icon_fname ("fn-spell-check.png"));
   add_to_menu (menu_functions, tr ("Suggest"), SLOT(fn_spell_suggest()));
   add_to_menu (menu_functions, tr ("Add to dictionary"), SLOT(fn_spell_add_to_dict()));
   add_to_menu (menu_functions, tr ("Remove from dictionary"), SLOT(fn_remove_from_dict()));
@@ -1768,7 +1767,7 @@ void rvln::createToolBars()
   filesToolBar->setIconSize (QSize (icon_size, icon_size));
       
   QToolButton *tb_current_list = new QToolButton();
-  tb_current_list->setIcon(QIcon (":/icons/current-list.png"));
+  tb_current_list->setIcon (get_theme_icon ("current-list.png"));
     
   tb_current_list->setMenu (current_files_menu);
   tb_current_list->setPopupMode(QToolButton::InstantPopup);
@@ -3164,7 +3163,6 @@ void rvln::nav_goto_pos()
 void rvln::slot_editor_fontname_changed (const QString &text)
 {
   settings->setValue ("editor_font_name", text);
-  //updateFonts();
   update_stylesheet (fname_stylesheet);
 }
 
@@ -3172,9 +3170,7 @@ void rvln::slot_editor_fontname_changed (const QString &text)
 void rvln::slot_app_fontname_changed (const QString &text)
 {
   settings->setValue ("app_font_name", text);
-//  updateFonts();
   update_stylesheet (fname_stylesheet);
-
 }
 
 
@@ -5647,14 +5643,14 @@ void rvln::createFman()
   tb_fman_dir = new QToolBar;
   tb_fman_dir->setObjectName ("tb_fman_dir");
 
-  QAction *act_fman_go = new QAction (QIcon( ":/icons/go.png"), tr ("Go"), this);
+  QAction *act_fman_go = new QAction (get_theme_icon("go.png"), tr ("Go"), this);
   connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
 
-  QAction *act_fman_home = new QAction (QIcon (":/icons/home.png"), tr ("Home"), this);
+  QAction *act_fman_home = new QAction (get_theme_icon ("home.png"), tr ("Home"), this);
   connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
 
-  QAction *act_fman_refresh = new QAction (QIcon (":/icons/refresh.png"), tr ("Refresh"), this);
-  QAction *act_fman_ops = new QAction (QIcon (":/icons/create-dir.png"), tr ("Operations"), this);
+  QAction *act_fman_refresh = new QAction (get_theme_icon ("refresh.png"), tr ("Refresh"), this);
+  QAction *act_fman_ops = new QAction (get_theme_icon ("create-dir.png"), tr ("Operations"), this);
   act_fman_ops->setMenu (menu_fm_file_ops);
 
   tb_fman_dir->addAction (act_fman_go);
@@ -8617,7 +8613,7 @@ void rvln::file_notes()
 
 void rvln::update_stylesheet (const QString &f)
 {
-
+qDebug() << "update_stylesheet";
 //Update paletted
 
   int darker_val = settings->value ("darker_val", 100).toInt();
@@ -8679,7 +8675,7 @@ void rvln::update_stylesheet (const QString &f)
                            t_sel_back_color);
   
 
-   stylesheet += css_tea_man;
+  stylesheet += css_tea_man;
 
 
   QString css_fif = QString ("QComboBox#FIF { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
@@ -8698,27 +8694,41 @@ void rvln::update_stylesheet (const QString &f)
   QString cssfile = qstring_load (f);
 
   QString css_path = get_file_path (f) + "/"; 
+  theme_dir = css_path;
+
 
   cssfile = cssfile.replace ("./", css_path); 
 
   cssfile += stylesheet;
-  //stylesheet += cssfile;
-
+  
 
   qApp->setStyleSheet ("");
   qApp->setStyleSheet (cssfile);
   
-  
-  /*
-  QString cssfile = qstring_load (f);
+  //qDebug() << "css_path " << css_path;
 
-  stylesheet += cssfile;
-
-  qApp->setStyleSheet ("");
-  qApp->setStyleSheet (stylesheet);
-*/
 }
 
+
+QIcon rvln::get_theme_icon (const QString &name)
+{
+  QString fname = theme_dir + "icons/" + name;
+  
+  if (file_exists (fname))
+     return QIcon (fname);
+  else     
+      return QIcon (":/icons/" + name);
+}
+
+QString rvln::get_theme_icon_fname (const QString &name)
+{
+  QString fname = theme_dir + "icons/" + name;
+  
+  if (file_exists (fname))
+     return fname;
+  else     
+      return ":/icons/" + name;
+}
 
 
 void rvln::view_use_theme()

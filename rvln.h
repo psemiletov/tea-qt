@@ -921,6 +921,10 @@ prefs window widgets
 
   void update_stylesheet (const QString &f);
   
+  QString theme_dir;
+  
+  QIcon get_theme_icon (const QString &name);
+  QString get_theme_icon_fname (const QString &name);
 
   void update_dyn_menus();
   void create_paths();

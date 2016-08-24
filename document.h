@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2015 by Peter Semiletov <tea@list.ru>                            *
+ *   2007-2016 by Peter Semiletov <tea@list.ru>                            *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -139,9 +139,7 @@ class CSyntaxHighlighter: public QSyntaxHighlighter
 {
 public:
  
-  //CSyntaxHighlighter (QTextDocument *parent): QSyntaxHighlighter (parent) {document = 0; casecare = true; wrap = true;};
   CSyntaxHighlighter (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
-  
  
   CDocument *document;
   bool casecare;
@@ -183,7 +181,7 @@ public:
 
   QVector <HighlightingRule> highlightingRules;
  
-   void load_from_xml (const QString &fname);
+  void load_from_xml (const QString &fname);
 };
 
 
@@ -210,16 +208,16 @@ public:
 
   QRegularExpression::PatternOptions pattern_opts;
 
-  
+  /*
   CDocument *document;
   bool casecare;
   bool wrap;
   
   QString exts;
   QString langs;
-    
-  QString cm_mult;
-  QString cm_single;
+    */
+//  QString cm_mult;
+//  QString cm_single;
     
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
 

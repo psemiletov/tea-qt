@@ -278,8 +278,7 @@ CFMan::CFMan (QWidget *parent): QTreeView (parent)
 
   header()->setSectionResizeMode (QHeaderView::ResizeToContents);
   header()->setSectionsClickable (true);
- 
-  
+   
 #else
 
   header()->setResizeMode (QHeaderView::ResizeToContents);

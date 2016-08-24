@@ -586,7 +586,7 @@ void rvln::init_styles()
   
   QApplication::setStyle (ps);
 
-  update_stylesheet (fname_stylesheet);
+//  update_stylesheet (fname_stylesheet);
 
 }
 
@@ -645,6 +645,10 @@ rvln::rvln()
        qApp->installTranslator (&myappTranslator);
       }
 
+  QString fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
+  
+  theme_dir = get_file_path (fname_stylesheet) + "/"; 
+    
     
   createActions();
   createMenus();
@@ -703,7 +707,7 @@ rvln::rvln()
  
   load_palette (fname_def_palette);
  
- // update_stylesheet (fname_stylesheet);
+  update_stylesheet (fname_stylesheet);
   documents->apply_settings();
 
  
@@ -7605,8 +7609,14 @@ void rvln::ed_comment()
   if (! d->highlighter)
      return;
     
+   qDebug() << "asadas 1";    
+   qDebug() << "d->highlighter->cm_mult " << d->highlighter->cm_mult;
+   qDebug() << "d->highlighter->single " << d->highlighter->cm_single;
+    
   if (d->highlighter->cm_mult.isNull() && d->highlighter->cm_single.isNull())
      return;    
+     
+  qDebug() << "asadas 2";   
      
   QString t = d->get_selected_text();   
   QString result;   
@@ -8694,7 +8704,7 @@ qDebug() << "update_stylesheet";
   QString cssfile = qstring_load (f);
 
   QString css_path = get_file_path (f) + "/"; 
-  theme_dir = css_path;
+  //theme_dir = css_path;
 
 
   cssfile = cssfile.replace ("./", css_path); 

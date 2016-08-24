@@ -26,6 +26,9 @@
     <file>icons/tea-icon-v3-03.png</file>
     <file>icons/labels.png</file>
 
+    <file>themes/Turbo/icons/edit-copy.png</file>
+    <file>themes/Turbo/icons/edit-copy-active.png</file>
+
 
     <file>translations/tea_ru.qm</file>
     <file>translations/tea_de.qm</file>

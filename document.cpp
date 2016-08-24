@@ -1127,10 +1127,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                             else
                             if (xml.attributes().value ("name").toString() == "cm_single")
                                cm_single = xml.readElementText().trimmed();
-                               
-                             qDebug() << "cm_mult: " << cm_mult;
-                            qDebug() << "cm_single: " << cm_single;   
-
                           }
 
                      }//item
@@ -1286,7 +1282,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                  else
                  if (attr_type == "mcomment-start")
                     {
-                     qDebug() << "attr_type == mcomment-start";
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
 
@@ -1301,17 +1296,12 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                  else
                  if (attr_type == "comment")
                     {
-                     qDebug() << "attr_type == comment";
-
                      if (xml.attributes().value ("name").toString() == "cm_mult")
                          cm_mult = xml.readElementText().trimmed();
                      else
                          if (xml.attributes().value ("name").toString() == "cm_single")
                             cm_single = xml.readElementText().trimmed();
-                               
-                           qDebug() << "cm_single:" << cm_single;
-                           qDebug() << "cm_mult:" << cm_mult;
-                     }
+                    }
                 }//item
 
        }//is start
@@ -1320,9 +1310,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
      qDebug() << "xml parse error";
 
   } //cycle
-  
-  qDebug() << "!!! commentStartExpression " << commentStartExpression;
-  
 }
 
 

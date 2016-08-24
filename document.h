@@ -207,17 +207,6 @@ public:
   QRegularExpression commentEndExpression;
 
   QRegularExpression::PatternOptions pattern_opts;
-
-  /*
-  CDocument *document;
-  bool casecare;
-  bool wrap;
-  
-  QString exts;
-  QString langs;
-    */
-//  QString cm_mult;
-//  QString cm_single;
     
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
 

@@ -1456,6 +1456,19 @@ void rvln::createMenus()
   menu_functions = menuBar()->addMenu (tr ("Functions"));
   menu_functions->setTearOffEnabled (true);
 
+/* 
+  menu_instr = menuBar()->addMenu (tr ("Instr"));
+  menu_instr->setTearOffEnabled (true);
+
+  add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
+*/
+
+  menu_instr = menu_functions->addMenu (tr ("Tools"));
+  menu_instr->setTearOffEnabled (true);
+  add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
+
+
+
 #if QT_VERSION >= 0x050000
 
   menu_fn_plugins = menu_functions->addMenu (tr ("Plugins"));
@@ -1624,13 +1637,7 @@ void rvln::createMenus()
 
   add_to_menu (menu_cal, tr ("Remove day record"), SLOT(cal_remove()));
   
-  
-  menu_instr = menuBar()->addMenu (tr ("Instr"));
-  menu_instr->setTearOffEnabled (true);
-
-  add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
-
-
+ 
   
   menu_programs = menuBar()->addMenu (tr ("Run"));
 
@@ -7609,14 +7616,8 @@ void rvln::ed_comment()
   if (! d->highlighter)
      return;
     
-   qDebug() << "asadas 1";    
-   qDebug() << "d->highlighter->cm_mult " << d->highlighter->cm_mult;
-   qDebug() << "d->highlighter->single " << d->highlighter->cm_single;
-    
   if (d->highlighter->cm_mult.isNull() && d->highlighter->cm_single.isNull())
      return;    
-     
-  qDebug() << "asadas 2";   
      
   QString t = d->get_selected_text();   
   QString result;   

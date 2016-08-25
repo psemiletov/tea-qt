@@ -1136,8 +1136,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                     else
                         if (attr_type == "comment")
                            {
-                           
-                           
                             if (xml.attributes().value ("name").toString() == "cm_mult")
                                cm_mult = xml.readElementText().trimmed();
                             else
@@ -1167,11 +1165,8 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
            while (index >= 0)
                  {
                   int length = m.capturedLength();
-                   
                   setFormat (index, length, rule.format);
-  
                   m = rule.pattern.match (text, index + length);
-
                   index = m.capturedStart();
                  }
           }
@@ -1272,36 +1267,32 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                    if (xml_format == 0)
-                    {
-                     QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
+                     if (xml_format == 0)
+                        {
+                         QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
 
-                     HighlightingRule rule;
+                         HighlightingRule rule;
 
-                     for (int i = 0; i < keywordPatterns.size(); i++)
-                          if (! keywordPatterns.at(i).isNull())
-                             {
-                              rule.pattern = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);
-                              rule.format = fmt;
-                              highlightingRules.append (rule);
-                             }
-                        }
-                     }
-                    else
-                      if (xml_format == 1)
-                         {
-                        HighlightingRule rule;
-                        rule.pattern = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
-                        rule.format = fmt;
-                        highlightingRules.append(rule);
+                         for (int i = 0; i < keywordPatterns.size(); i++)
+                             if (! keywordPatterns.at(i).isNull())
+                                {
+                                 rule.pattern = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);
+                                 rule.format = fmt;
+                                 highlightingRules.append (rule);
+                                }
+                          }
+                     else
+                         if (xml_format == 1)
+                            {
+                             HighlightingRule rule;
+                             rule.pattern = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
+                             rule.format = fmt;
+                             highlightingRules.append(rule);
                         
-                        if (! rule.pattern.isValid())
-                           qDebug() << "! valid " << rule.pattern.pattern();
-      
-                         }
-   
-                             
-                             
+                             if (! rule.pattern.isValid())
+                                qDebug() << "! valid " << rule.pattern.pattern();
+                            }
+                            
                      } //keywords
                  else
                  if (attr_type == "item")
@@ -1361,7 +1352,6 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
                  {
                   int length = rule.pattern.matchedLength();
                   setFormat (index, length, rule.format);
-
                   index = text.indexOf (rule.pattern, index + length);
                  }
            }
@@ -1390,7 +1380,6 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
              commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
 
          setFormat (startIndex, commentLength, multiLineCommentFormat);
-
          startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
         }
 }

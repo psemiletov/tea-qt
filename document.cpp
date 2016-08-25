@@ -523,8 +523,9 @@ QString CDocument::get_filename_at_cursor()
 
 CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent) 
 {
-  qDebug() << "CSyntaxHighlighter::CSyntaxHighlighter";
+  //qDebug() << "CSyntaxHighlighter::CSyntaxHighlighter";
   document = doc; 
+  xml_format = 0;
   //casecare = true; 
   //wrap = true;
 }
@@ -545,14 +546,12 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
                                                                             CSyntaxHighlighter (parent, doc, fname)
 {
-  qDebug() << "CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression";
+  //qDebug() << "CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression";
 
   document = doc;
   //casecare = true;
   //wrap = true;
   load_from_xml (fname);
-  
-  qDebug() << "555 wrap: " << wrap;
 }
 
 #endif
@@ -1051,6 +1050,10 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
                  if (attr_name == "options")
                     {
+                     QString s_xml_format = xml.attributes().value ("xml_format").toString();
+                     if (! s_xml_format.isNull() || ! s_xml_format.isEmpty())
+                        xml_format = s_xml_format.toInt();
+                    
                      QString s_wrap = xml.attributes().value ("wrap").toString();
                      if (! s_wrap.isNull() || ! s_wrap.isEmpty())
                         if (s_wrap == "0" || s_wrap == "false")
@@ -1067,26 +1070,39 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
                  if (attr_type == "keywords")
                     {
-//                     QString color = hash_get_val (document->holder->global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
 
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                     QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
+                     if (xml_format == 0)
+                        {
+                         QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
 
-                     HighlightingRule rule;
+                         HighlightingRule rule;
 
-                     for (int i = 0; i < keywordPatterns.size(); i++)
-                          if (! keywordPatterns.at(i).isNull())
-                             {
-                              rule.pattern = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
-                              rule.format = fmt;
-                              highlightingRules.append (rule);
+                         for (int i = 0; i < keywordPatterns.size(); i++)
+                              if (! keywordPatterns.at(i).isNull())
+                                 {
+                                  rule.pattern = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
+                                  rule.format = fmt;
+                                  highlightingRules.append (rule);
                               
-                              if (! rule.pattern.isValid())
-                                  qDebug() << "! valid " << rule.pattern.pattern();
-                              
+                                  if (! rule.pattern.isValid())
+                                     qDebug() << "! valid " << rule.pattern.pattern();
                              }
+                         }       
+                      else
+                      if (xml_format == 1)
+                         {
+                          HighlightingRule rule;
+                          rule.pattern = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
+                          rule.format = fmt;
+                          highlightingRules.append(rule);
+                        
+                          if (! rule.pattern.isValid())
+                             qDebug() << "! valid " << rule.pattern.pattern();
+                         }
+                             
                      } //keywords
                  else
                     if (attr_type == "item")
@@ -1256,6 +1272,8 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
+                    if (xml_format == 0)
+                    {
                      QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
 
                      HighlightingRule rule;
@@ -1267,6 +1285,23 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                               rule.format = fmt;
                               highlightingRules.append (rule);
                              }
+                        }
+                     }
+                    else
+                      if (xml_format == 1)
+                         {
+                        HighlightingRule rule;
+                        rule.pattern = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
+                        rule.format = fmt;
+                        highlightingRules.append(rule);
+                        
+                        if (! rule.pattern.isValid())
+                           qDebug() << "! valid " << rule.pattern.pattern();
+      
+                         }
+   
+                             
+                             
                      } //keywords
                  else
                  if (attr_type == "item")

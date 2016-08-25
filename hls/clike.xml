@@ -1,26 +1,18 @@
 <document exts="cpp;c;h;hh;cxx;hpp;cc" langs="c++;c">
 
-<item name="options" wrap="0"> 
+<item name="options" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\basm\b;\bauto\b;\bbreak\b;\bcase\b;
-\bcatch\b;\bclass\b;\bconst\b;\bconst_cast\b;
-\bcontinue\b;\bdefault\b;\bdelete\b;
-\bdo\b;\bdynamic_cast\b;\belse\b;\benum\b;
-\bexplicit\b;\bextern\b;\bfalse\b;\bfor\b;
-\bfriend\b;\bgoto\b;\bif\b;\binline\b;
-\bmutable\b;\bnamespace\b;\bnew\b;
-\boperator\b;\bprivate\b;\bprotected\b;
-\bpublic\b;\bregister\b;\breinterpret_cast\b;
-\breturn\b;\bsignals\b;\bsizeof\b;\bslots\b;
-\bstatic\b;\bstatic_cast\b;\bstruct\b;\bswitch\b;
-\btemplate\b;\bthis\b;\bthrow\b;\btrue\b;\bnoexcept\b;
-\btry\b;\btypedef\b;\btypeid\b;\btypename\b;
-\bunion\b;\busing\b;\bvirtual\b;\bvolatile\b;
-\bwhile\b;\bforeach\b;\bstatic_cast\b;\breinterpret_cast\b;\bdynamic_cast\b;\bconst_cast\b;\bnamespace\b;\bthrow\b;\bexport\b;\basm\b;\bcatch\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(asm|auto|break|case|catch|class|const|const_cast|
+continue|default|delete|do|dynamic_cast|else|enum|explicit|extern|false|for|friend|goto|if|inline|mutable|
+namespace|new|operator|private|protected|
+public|register|reinterpret_cast|return|signals|sizeof|slots|
+static|static_cast|struct|switch|template|this|throw|true|noexcept|try|typedef|typeid|typename|union|
+using|virtual|volatile|while|foreach|static_cast|reinterpret_cast|dynamic_cast|const_cast|namespace|
+throw|export|asm|catch)\b</item>
 
-<item name="types" type="keywords" color="type">\bbool\b;\bchar\b;\bdouble\b;
-\bfloat\b;\bint\b;\blong\b;\bshort\b;\bsigned\b;\bsize_t\b;\bunsigned\b;\bvoid\b;\bwchar_t\b</item>
+<item name="types" type="keywords" color="type">\b(bool|char|double|float|int|long|
+short|signed|size_t|unsigned|void|wchar_t)\b</item>
 
 <item name="class" type="item" color="class">\bQ[A-Za-z]+\b</item>
 

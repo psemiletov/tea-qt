@@ -145,6 +145,8 @@ public:
   bool casecare;
   bool wrap;
   
+  int xml_format;
+  
   QString exts;
   QString langs;
     

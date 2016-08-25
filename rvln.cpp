@@ -4020,14 +4020,14 @@ void rvln::search_replace_all()
       if (! d)
          return;
   
-      QString s;
-
+      QString s = d->textEdit->textCursor().selectedText();
+      
       if (menu_find_regexp->isChecked())
-         s = d->textEdit->toPlainText().replace (QRegExp (l[0]), l[1]);
+         s = s.replace (QRegExp (l[0]), l[1]);
       else
-          s = d->textEdit->toPlainText().replace (l[0], l[1], cs);
+          s = s.replace (l[0], l[1], cs);
   
-      d->textEdit->selectAll();
+      //d->textEdit->selectAll();
       d->textEdit->textCursor().insertText (s);
      }
   else

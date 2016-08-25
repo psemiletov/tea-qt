@@ -1,71 +1,14 @@
 <document exts="sh" langs="Bash">
 
-<item name="options" wrap="0"> 
+<item name="options" wrap="0" xml_format="1"> 
 </item>
 
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(until|while|for|if|elif|then|
+fi|case|esac|select|do|done|break|coproc|continue|exit|else|export|getopts|
+return|shift|test|builtin|caller|command|declare|enable|let|logout|mapfile|local|typeset|set|shopt)\b</item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\buntil\b;
-\bwhile\b;
-\bfor\b;
-\bif\b;
-\belif\b;
-\bthen\b;
-\bfi\b;
-\bcase\b;
-\besac\b;
-\bselect\b;
-\bdo\b;
-\bdone\b;
-\bbreak\b;
-\bcoproc\b;
-\bcontinue\b;
-\bexit\b;
-\belse\b;
-\bexport\b;
-\bgetopts\b;
-\breturn\b;
-\bshift\b;
-\btest\b;
-\bbuiltin\b;
-\bcaller\b;
-\bcommand\b;
-\bdeclare\b;
-\benable\b;
-\blet\b;
-\blogout\b;
-\bmapfile\b;
-\blocal\b;
-\btypeset\b;
-\bset\b;
-\bshopt\b</item>
-
-<item name="types" type="keywords" color="functions">
-\becho\b;
-\bread\b;
-\bmkdir\b;
-\bchown\b;
-\bcd\b;
-\beval\b;
-\bexec\b;
-\bhash\b;
-\bpwd\b;
-\breadonly\b;
-\btimes\b;
-\btrap\b;
-\bumask\b;
-\bunset\b;
-\balias\b;
-\bbind\b;
-\bhelp\b;
-\bprintf\b;
-\breadarray\b;
-\bsource\b;
-\btype\b;
-\bulimit\b;
-\bunalias\b;
-\brm\b;
-\brmdir\b</item>
-
+<item name="types" type="keywords" color="functions">\b(echo|read|mkdir|chown|cd|eval|
+exec|hash|pwd|readonly|times|trap|umask|unset|alias|bind|help|printf|readarray|source|type|ulimit|unalias|rm|mdir)\b</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">^#include</item>
 

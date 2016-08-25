@@ -1,23 +1,18 @@
 <document exts="cs" langs="C#">
 
-<item name="options" wrap="0"> 
-</item>
+<item name="options" wrap="0" xml_format="1"></item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\bas\b;\bbase\b;\bbreak\b;\bcase\b;\bcatch\b;\bchecked\b;\bclass\b;\bconst\b;\bcontinue\b;\bdefault\b;\bdelegate\b;\bdo\b;
-\belse\b;\benum\b;\bexplicit\b;\bextern\b;
-\bfalse\b;\bfinally\b;\bfixed\b;\bfor\b;
-\bforeach\b;\bgoto\b;\bif\b;\bimplicit\b;
-\bin\b;\binterface\b;\binternal\b;\bis\b;
-\block\b;\bnamespace\b;\bnull\b;\boperator\b;\bout\b;\boverride\b;\bparams\b;\bprivate\b;\bprotected\b;\bpublic\b;\breadonly\b;
-\bref\b;\breturn\b;\bsealed\b;\bsizeof\b;\bstackalloc\b;
-\bstatic\b;\bswitch\b;\bthis\b;\bthrow\b;\btrue\b;
-\btry\b;\btypeof\b;\bunchecked\b;\bunsafe\b;
-\busing\b;\bvirtual\b;\bvolatile\b;\bwhile\b;\bstruct\b;\bevent\b;\bnew\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(as|base||break|case|catch|checked|
+class|const|continue|default|delegate|do|else|enum|explicit|extern|
+false|finally|fixed|for|foreach|goto|if|implicit|in|interface|
+internal|is|lock|namespace|null|operator|out|override|params|
+private|protected|public|readonly|ref|return|sealed|sizeof|stackalloc|
+static|switch|this|throw|true|try|typeof|unchecked|unsafe|
+using|virtual|volatile|while|struct|event|new)\b</item>
 
-<item name="types" type="keywords" color="type">\bchar\b;\bbool\b;\bushort\b;
-\bulong\b;\bstring\b;\blong\b;\bbyte\b;
-\bshort\b;\bvoid\b;\bdouble\b;\bdecimal\b;\bint\b;
-\bsbyte\b;\bfloat\b;\bobject\b;\buint\b</item>
+<item name="types" type="keywords" color="type">\b(char|bool|ushort|
+ulong|string|long|byte|short|void|double|decimal|int|
+sbyte|float|bobject|buint)\b</item>
 
 <item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
 
@@ -25,9 +20,7 @@
 
 <item name="char" type="item" color="quotes">('[^']*')</item>
 
-
 <item name="single comment" type="item" color="single comment" fontstyle="italic">//[^\n]*</item>
-
 
 <item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">/\*</item>
 
@@ -35,6 +28,5 @@
 
 <item name="cm_mult" type="comment">/*%s*/</item>
 <item name="cm_single" type="comment">//%s</item>
-
 
 </document>

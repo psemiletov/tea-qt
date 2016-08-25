@@ -1,31 +1,18 @@
-<document exts="bas;bi" langs="BASIC">
+<document exts="bas;bi;vbs;vbe" langs="BASIC">
 
-<item name="options" casecare="0" wrap="0"> 
-</item>
+<item name="options" casecare="0" wrap="0" xml_format="1"></item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\band\b;\bandalso\b;\bas\b;\bbyref\b;\bcircle\b;
-\bcls\b;\bcolor\b;\bdeclare\b;\bdefint\b;
-\bdefsng\b;\bdefstr\b;\bdelete\b;\bdim\b;
-\bdo\b;\bdraw\b;\bdynamic\b;\bend\b;
-\benum\b;\beqv\b;\berase\b;\bexplicit\b;
-\bextern\b;\bfor\b;\bfunction\b;\bget\b;
-\bgetkey\b;\bimp\b;\binkey\b;\binput\b;
-\bline\b;\blocate\b;\bloop\b;\bmod\b;
-\bnew\b;\bnext\b;\bnot\b;\boption\b;
-\bor\b;\borelse\b;\bpeek\b;\bpoke\b;
-\bprint\b;\bprivate\b;\bput\b;\bredim\b;\breturn\b;
-\bscope\b;\bscreen\b;\bscreenres\b;\bshared\b;
-\bshl\b;\bshr\b;\bsleep\b;\bsub\b;\btype\b;
-\bunion\b;\buntil\b;\bvar\b;\bwend\b;\bwhile\b;
-\bwith\b;\bxor\b;\bconst\b;\bpublic\b;\bif\b;\bthen\b;\belse\b;\bcall\b;\bexit\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(and|andalso|as|byref|circle|
+ cls|color|declare|defint|defsng|defstr|delete|dim|do|draw|dynamic|end|enum|
+ eqv|erase|explicit|extern|for|function|get|getkey|imp|inkey|input|
+line|locate|loop|mod|new|next|not|option|or|orelse|peek|poke|print
+private|put|redim|return|scope|screen|screenres|shared|shl|
+shr|sleep|sub|type|union|until|var|wend|while|
+with|xor|const|public|if|then|else|call|exit)\b</item>
 
-<item name="types" type="keywords" color="type">
-\bbyte\b;\bdouble\b;\binteger\b;
-\blong\b;\blongint\b;\bpointer\b;
-\bptr\b;\bshort\b;\bsingle\b;
-\bstatic\b;\bstring\b;\bubyte\b;
-\buinteger\b;\bulong\b;\bulongint\b;
-\bunsigned\b;\bwstring\b;\bzstring\b</item>
+<item name="types" type="keywords" color="type">\b(byte|double|integer|
+long|longint|pointer|ptr|short|single|static|string|ubyte|
+uinteger|ulong|ulongint|unsigned|wstring|zstring)\b</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">^#include</item>
 
@@ -42,7 +29,5 @@
 <item name="mcomment-end" type="mcomment-end">\*/</item>
 
 <item name="cm_single" type="comment">' %s</item>
-
-
 
 </document>

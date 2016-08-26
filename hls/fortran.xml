@@ -1,30 +1,24 @@
 <document exts="f;for;f90;f95" langs="Fortran">
 
-<item name="options" casecare="0" wrap="0"> 
+<item name="options" casecare="0" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\bif\b;\bthen\b;\belse\b;\bend\b;\bcase\b;\bdo\b;\bwhile\b;\bselect\b;\bprogram\b;\bmodule\b;\bsubroutine\b;\breturn\b;\bfunction\b;\binterface\b;\bcall\b;\b.lt.\b;\b.le.\b;\b.eq.\b;\b.ne.\b;\b.gt.\b;\b.ge.\b;\b.not.\b;\b.and.\b;
-\b.or.\b;\b.eqv.\b;\b.neqv.\b;\btype\b;\bdefault\b;
-\bcycle\b;\bexit\b;\buse\b;\binclude\b;\brecursive\b;
-\bwhere\b;\belsewhere\b;\bcontains\b;\bstop\b;\bimplicit\b;\bcontinue\b;\bmodule\b;\benddo\b;\endif\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(if|then|else|end|case|do|while|select|
+program|module|subroutine|return|function|interface|call|.lt.|.le.|.eq.|.ne.|.gt.|.ge.|.not.|.and.|
+.or.|.eqv.|.neqv.|type|default|cycle|exit|use|include|recursive|
+where|elsewhere|contains|stop|implicit|continue|module|enddo|endif)\b</item>
 
-<item name="types" type="keywords" color="type">
-\binteger\b;\breal\b;\bcomplex\b;
-\blogical\b;\bcharacter\b;\bdata\b;\bdouble\b</item>
+<item name="types" type="keywords" color="type">\b(integer|real|complex|logical|
+character|data|double)\b</item>
 
-<item name="modifiers" type="keywords" color="modifiers" fontstyle="bold">
-\bparameter\b;\bpointer\b;\btarget\b;\ballocatable\b;
-\bdimension\b;\bpublic\b;\bprivate\b;\bintent\b;
-\boptional\b;\bsave\b;\bexternal\b;\bintrinsic\b</item>
-
+<item name="modifiers" type="keywords" color="modifiers" fontstyle="bold">\b(parameter|pointer|target|allocatable|
+dimension|public|private|intent|optional|save|external|intrinsic)\b</item>
 
 <item name="quotes" type="item" color="quotes">("[^\"]*")</item>
 
 <item name="char" type="item" color="quotes">('[^']*')</item>
 
-
 <item name="single comment" type="item" color="single comment" fontstyle="italic">![^\n]*</item>
-
 
 <item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">
 /\*

@@ -1506,7 +1506,13 @@ void rvln::createMenus()
 
   add_to_menu (tm, tr ("Sort case sensitively"), SLOT(fn_sort_casecare()));
   add_to_menu (tm, tr ("Sort case insensitively"), SLOT(fn_sort_casecareless()));
+
+  add_to_menu (tm, tr ("Sort case sensitively, with separator"), SLOT(fn_sort_casecare_sep()));
+  
+  
+  
   add_to_menu (tm, tr ("Flip a list"), SLOT(fn_flip_a_list()));
+  add_to_menu (tm, tr ("Flip a list with separator"), SLOT(fn_flip_a_list_sep()));
   
 
   tm = menu_functions->addMenu (tr ("Cells"));
@@ -3841,6 +3847,19 @@ void rvln::fn_sort_casecare()
 }
 
 
+void rvln::fn_sort_casecare_sep()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+  
+  d->textEdit->textCursor().insertText (qstringlist_process (
+                                        d->textEdit->textCursor().selectedText(),
+                                        fif_get_text(), QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP)); 
+}
+
+
+
 void rvln::mrkup_text_to_html()
 {
   CDocument *d = documents->get_current();
@@ -4103,6 +4122,19 @@ void rvln::fn_flip_a_list()
                                         d->textEdit->textCursor().selectedText(),
                                         fif_get_text(), 
                                         QSTRL_PROC_LIST_FLIP));
+}
+
+
+void rvln::fn_flip_a_list_sep()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+  
+  d->textEdit->textCursor().insertText (qstringlist_process (
+                                        d->textEdit->textCursor().selectedText(),
+                                        fif_get_text(), 
+                                        QSTRL_PROC_LIST_FLIP_SEP));
 }
 
 

@@ -348,13 +348,35 @@ int romanToDecimal (const char *roman)
 
 QString qstringlist_process (const QString &s, const QString &params, int mode)
 {
-  QStringList sl = s.split (QChar::ParagraphSeparator);
+  QStringList sl;
   QStringList l;
   QString result;
+  
+  if (mode != QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP && mode != QSTRL_PROC_LIST_FLIP_SEP)
+     sl = s.split (QChar::ParagraphSeparator);
 
   switch (mode)
          {
+          case QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP:
+                                                    {
+                                                     QStringList sl = s.split (params);
+                                                     sl.sort();
+                                                     result = sl.join (params);
+                                                     return result;
+                                                    };
+                                                    
+          case QSTRL_PROC_LIST_FLIP_SEP:  {
+                                           QStringList sl = s.split (params);
+                                           sl.sort();
+                                                     
+                                           foreach (QString t, sl)
+                                           l.prepend (t);
 
+                                           result = l.join (params);
+                                           return result;
+                                          };
+                                                                                                   
+         
           case QSTRL_PROC_FLT_WITH_SORTNOCASECARE:
                                                  {
                                                   QMap <QString, QString> map;

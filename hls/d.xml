@@ -2,12 +2,7 @@
 
 <item name="options" wrap="0" xml_format="1"></item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(alias|break|case|catch|class|delegate|do|else|enum|finally|for|foreach|function|if|import|new|private|return|
-static|super|switch|this|throw|try|typedef|
-while|auto|delete|struct|typeof|private|
-public|default|in|out|body|version|assert|continue|
-align|union|cast|volatile|module|bscope|template|
-is|const)\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(alias|align|assert|auto|body|break|case|cast|catch|class|const|continue|default|delegate|delete|do|else|enum|finally|for|foreach|function|if|import|in|is|module|new|out|private|private|public|return|scope|static|struct|super|switch|template|this|throw|try|typedef|typeof|union|version|volatile|while)\b</item>
 
 <item name="types" type="keywords" color="type">\b(bit|bool||byte|cdouble|cent|cfloat|char|creal|dchar|
 double|float|ifloat|ifoduble|int|ireal|long|real|short|ubyte|ucent|uint|ulong|ushort|void|wchar)\b</item>

@@ -528,6 +528,9 @@ main window callbacks
   void fn_sort_casecare();
   void fn_sort_casecareless();
 
+  void fn_sort_casecare_sep();
+  
+
   void fn_sort_latex_table_by_col_abc();
   void fn_table_swap_cells();
   void fn_table_delete_cells();
@@ -535,6 +538,9 @@ main window callbacks
       
   
   void fn_flip_a_list();
+  void fn_flip_a_list_sep();
+
+  
   void fn_insert_loremipsum();
   void fn_insert_template_html();
   void fn_run_script();

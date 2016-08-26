@@ -1,26 +1,16 @@
 <document exts="java" langs="Java">
 
-<item name="options" wrap="0"> 
-</item>
+<item name="options" wrap="0" xml_format="1"></item>
 
-<item name="types" type="types" color="type" fontstyle="bold">
-\bboolean\b;\bdouble\b;\bbyte\b;\bint\b;\bshort\b;\bchar\b;
-\bvoid\b;\blong\b;\bfloat\b;
-</item>
+<item name="types" type="types" color="type" fontstyle="bold">\b(boolean|double|byte|int|short|char|
+void|long|float)\b</item>
 
 	
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
-\babstract\b;\bcontinue\b;\bfor\b;\bnew\b;\bswitch\b;
-\bassert\b;\bdefault\b;\bif\b;\bpackage\b;\bsynchronized\b;
-\bdo\b;\bgoto\b;\bprivate\b;\bthis\b;
-\bbreak\b;\bimplements\b;\bprotected\b;\bthrow\b;
-\bbyte\b;\belse\b;\bimport\b;\bpublic\b;\bthrows\b;
-\bcase\b;\benum\b;\binstanceof\b;\breturn\b;\btransient\b;
-\bcatch\b;\bextends\b;\btry\b;
-\bfinal\b;\binterface\b;\bstatic\b;
-\bclass\b;\bfinally\b;\bstrictfp\b;\bvolatile\b;
-\bconst\b;\bnative\b;\bsuper\b;\bwhile\b;\btrue\b;\bfalse\b
-</item>
+\b(abstract|continue|for|new|switch|assert|default|if|package|synchronized|
+do|goto|private|this|break|implements|protected|throw|byte|else|import|
+public|throws|case|enum|instanceof|return|transient|catch|extends|try|
+final|interface|static|class|finally|strictfp|volatile|const|native|super|while|true|false)\b</item>
 
 <item name="functions" type="item" color="functions">\b[A-Za-z0-9_]+(?=\()</item>
 
@@ -33,7 +23,6 @@
 <item name="char" type="item" color="quotes">('[^']*')</item>
 
 <item name="single comment" type="item" color="single comment" fontstyle="italic">//[^\n]*</item>
-
 
 <item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">/\*</item>
 

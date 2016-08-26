@@ -2571,7 +2571,15 @@ void rvln::createOptions()
   page_interface->setLayout (page_interface_layout);
   page_interface->show();
 
-  tab_options->addTab (page_interface, tr ("Interface"));
+
+  QScrollArea *scra_interface = new QScrollArea;
+  scra_interface->setWidgetResizable (true);
+  scra_interface->setWidget (page_interface);
+
+  tab_options->addTab (scra_interface, tr ("Interface"));
+
+
+  //tab_options->addTab (page_interface, tr ("Interface"));
 
   //////////
   
@@ -2782,7 +2790,15 @@ void rvln::createOptions()
   page_common->setLayout (page_common_layout);
   page_common->show();
 
-  tab_options->addTab (page_common, tr ("Common"));
+
+  QScrollArea *scra_common = new QScrollArea;
+  scra_common->setWidgetResizable (true);
+  scra_common->setWidget (page_common);
+
+  tab_options->addTab (scra_common, tr ("Common"));
+
+//  tab_options->addTab (page_common, tr ("Common"));
+
 
   QWidget *page_functions = new QWidget (tab_options);
   QVBoxLayout *page_functions_layout = new QVBoxLayout;
@@ -2899,13 +2915,13 @@ void rvln::createOptions()
   page_functions->setLayout (page_functions_layout);
   page_functions->show();
 
-  //QScrollArea *scra_functions = new QScrollArea;
-  //scra_functions->setWidgetResizable (true);
-  //scra_functions->setWidget (page_functions);
+  QScrollArea *scra_functions = new QScrollArea;
+  scra_functions->setWidgetResizable (true);
+  scra_functions->setWidget (page_functions);
 
-  //tab_options->addTab (scra_functions, tr ("Functions"));
+  tab_options->addTab (scra_functions, tr ("Functions"));
 
-  tab_options->addTab (page_functions, tr ("Functions"));
+  //tab_options->addTab (page_functions, tr ("Functions"));
 
 /////////////
 
@@ -2980,10 +2996,14 @@ void rvln::createOptions()
 
   
   
+  QScrollArea *scra_images = new QScrollArea;
+  scra_images->setWidgetResizable (true);
+  scra_images->setWidget (page_images);
+
+  tab_options->addTab (scra_common, tr ("Images"));
+ 
   
-  
-  
-  tab_options->addTab (page_images, tr ("Images"));
+//  tab_options->addTab (page_images, tr ("Images"));
 ////////////////////////////
 
   QWidget *page_keyboard = new QWidget (tab_options);

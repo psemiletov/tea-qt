@@ -4,38 +4,11 @@
 </item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(and|break|do|else|
-elseif|end|false|for|function|if|in|local|nil|not|or|repeat|
-return|then|true|until|while)\b</item>
+elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\b</item>
 
-<item name="functions" type="keywords" color="functions">\b(assert|
-\bcollectgarbage\b;
-\bdofile\b;
-\berror\b;
-\b_G\b;
-\bgetenv\b;
-\bgetmetatable\b;
-\bipairs\b;
-\bload\b;
-\bloadfile\b;
-\bloadstring\b;
-\bnext\b;
-\bpairs\b;
-\bpcall\b;
-\bprint\b;
-\brawequal\b;
-\brawget\b;
-\brawset\b;
-\bselect\b;
-\bsetfenv\b;
-\bsetmetatable\b;
-\btonumber\b;
-\btostring\b;
-\btype\b;
-\bunpack\b;
-\b_VERSION\b;
-\bxpcall\b;
-\bmodule\b;
-\brequire\b</item>
+<item name="functions" type="keywords" color="functions">\b(assert|collectgarbage|dofile|error|
+_G|getenv|getmetatable|ipairs|load|loadfile|loadstring|next|pairs|pcall|print|rawequal|rawget|rawset|select|setfenv|setmetatable|tonumber|
+tostring|type|unpack|_VERSION|xpcall|module|require)\b</item>
 
 <item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
 

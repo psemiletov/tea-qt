@@ -1754,6 +1754,13 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
       event->accept();
       return;
      }
+  else
+  if (event->key() == Qt::Key_Insert)
+     {
+      setOverwriteMode (! overwriteMode());
+      event->accept();
+      return;
+     }   
   
   QPlainTextEdit::keyPressEvent (event);
 }

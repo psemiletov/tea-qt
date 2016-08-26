@@ -370,6 +370,8 @@ void rvln::update_bookmarks()
 
 void rvln::readSettings()
 {
+  qApp->setCursorFlashTime (settings->value ("cursor_blink_time", 1000).toInt());
+
   b_altmenu = settings->value ("b_altmenu", "0").toBool(); 
    
   int ui_tab_align = settings->value ("ui_tabs_align", "0").toInt();
@@ -2555,6 +2557,19 @@ void rvln::createOptions()
   cb_center_on_cursor = new QCheckBox (tr ("Cursor center on scroll"), tab_options);
   cb_center_on_cursor->setCheckState (Qt::CheckState (settings->value ("center_on_scroll", "2").toInt()));
   page_interface_layout->addWidget (cb_center_on_cursor);
+
+
+  spb_cursor_blink_time = new_spin_box (page_interface_layout,
+                                   tr ("Cursor blink time (msecs)"), 0, 10000,
+                                   settings->value ("cursor_blink_time", 1000).toInt());
+
+
+
+  spb_cursor_width= new_spin_box (page_interface_layout,
+                                   tr ("Cursor width"), 1, 3,
+                                   settings->value ("cursor_width", 1).toInt());
+
+
 
   cb_show_margin = new QCheckBox (tr ("Show margin at"), tab_options);
   cb_show_margin->setCheckState (Qt::CheckState (settings->value ("show_margin", "0").toInt()));
@@ -8448,6 +8463,11 @@ void rvln::leaving_tune()
   settings->setValue ("margin_pos", spb_margin_pos->value());
   settings->setValue ("b_preview", cb_auto_img_preview->checkState());
 
+  settings->setValue ("cursor_blink_time", spb_cursor_blink_time->value());
+  qApp->setCursorFlashTime (spb_cursor_blink_time->value());
+ 
+  settings->setValue ("cursor_width", spb_cursor_width->value());
+ 
   settings->setValue ("override_img_viewer", cb_override_img_viewer->checkState());
   
   settings->setValue ("override_locale", cb_override_locale->checkState());

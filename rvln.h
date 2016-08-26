@@ -892,6 +892,9 @@ prefs window widgets
   QLineEdit *ed_locale_override;
   QLineEdit *ed_img_viewer_override;
   
+  QSpinBox *spb_cursor_blink_time;
+  QSpinBox *spb_cursor_width;
+  
   CShortcutEntry *ent_shtcut;
   QListWidget *lv_menuitems;
 

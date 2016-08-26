@@ -936,6 +936,7 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   spaces_instead_of_tabs = true;
   
   //document()->setDefaultTextOption(QTextOption(Qt::AlignRight));
+  setCursorWidth (settings->value ("cursor_width", 1).toInt());
   
   connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
 }

@@ -556,6 +556,10 @@ main window callbacks
   void fn_filter_delete_after_sep();
 
   void fn_rm_formatting();
+  
+   void fn_rm_compress();
+ 
+  
   void fn_convert_quotes_angle();
   void fn_convert_quotes_curly();
   

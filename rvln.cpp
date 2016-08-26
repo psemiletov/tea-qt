@@ -1584,6 +1584,9 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Apply to each line"), SLOT(fn_apply_to_each_line()),"Alt+E");
   add_to_menu (tm, tr ("Remove formatting"), SLOT(fn_rm_formatting()));
   add_to_menu (tm, tr ("Remove formatting at each line"), SLOT(fn_rm_formatting_at_each_line()));
+  add_to_menu (tm, tr ("Compress"), SLOT(fn_rm_compress()));
+   
+  
   add_to_menu (tm, tr ("Remove trailing spaces"), SLOT(fn_rm_trailing_spaces()));
 
   add_to_menu (tm, tr ("Escape regexp"), SLOT(fn_escape()));
@@ -4728,6 +4731,22 @@ void rvln::fn_rm_formatting()
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().simplified());
+}
+
+
+void rvln::fn_rm_compress()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+   
+  QString s = d->textEdit->textCursor().selectedText();
+     
+  s = s.remove ('\n');   
+  s = s.remove ('\t');   
+  s = s.remove (' ');   
+  s = s.remove (QChar::ParagraphSeparator);   
+  d->textEdit->textCursor().insertText (s);
 }
 
 

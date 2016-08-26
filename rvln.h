@@ -87,6 +87,8 @@ public:
 };
 */
 
+
+
 class CMarkupPair: public QObject
 {
   Q_OBJECT
@@ -1074,6 +1076,7 @@ public:
 
   void saveState (QSessionManager &manager);
 };
+
 
 #if QT_VERSION >= 0x050000
 

@@ -18,7 +18,7 @@ SingleApplication::SingleApplication(int &argc, char *argv[], const QString uniq
 
 #ifndef Q_OS_OS2
 
-   qDebug() << "SingleApplication::SingleApplication";
+  // qDebug() << "SingleApplication::SingleApplication";
 
   sharedMemory.setKey(_uniqueKey);
   

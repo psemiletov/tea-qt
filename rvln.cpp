@@ -121,6 +121,23 @@ public:
 
 bool b_altmenu;
 
+int cursor_blink_time;
+
+#if QT_VERSION >= 0x050000
+
+class QStyleHints
+{
+public:
+	int cursorFlashTime() const;
+};
+
+int QStyleHints::cursorFlashTime() const
+{
+	//return 0;
+  return cursor_blink_time;	
+};
+
+#endif
 
 class MyProxyStyle: public QProxyStyle
 {
@@ -370,8 +387,12 @@ void rvln::update_bookmarks()
 
 void rvln::readSettings()
 {
-  qApp->setCursorFlashTime (settings->value ("cursor_blink_time", 1000).toInt());
 
+  cursor_blink_time = settings->value ("cursor_blink_time", 1000).toInt();
+
+  qApp->setCursorFlashTime (cursor_blink_time);
+  
+  
   b_altmenu = settings->value ("b_altmenu", "0").toBool(); 
    
   int ui_tab_align = settings->value ("ui_tabs_align", "0").toInt();
@@ -669,7 +690,7 @@ rvln::rvln()
 #if QT_VERSION >= 0x050000
 
   update_plugins();
-
+ 
 #endif
   
   update_programs();
@@ -8464,6 +8485,9 @@ void rvln::leaving_tune()
   settings->setValue ("b_preview", cb_auto_img_preview->checkState());
 
   settings->setValue ("cursor_blink_time", spb_cursor_blink_time->value());
+  
+  cursor_blink_time = spb_cursor_blink_time->value();
+  
   qApp->setCursorFlashTime (spb_cursor_blink_time->value());
  
   settings->setValue ("cursor_width", spb_cursor_width->value());

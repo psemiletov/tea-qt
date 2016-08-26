@@ -1,12 +1,9 @@
-// "single_application.h"
-
 /*
  * taken from http://www.qtcentre.org/wiki/index.php?title=SingleApplication
  * LGPL'ed source code
  * modified by Peter Semiletov
  * 
  */
-
 
 #ifndef SINGLE_APPLICATION_H
 #define SINGLE_APPLICATION_H
@@ -30,6 +27,8 @@ public:
 
         bool isRunning();
         bool sendMessage(const QString &message);
+
+        static int cursorFlashTime() {return 0;}; 
 
 public slots:
         void receiveMessage();

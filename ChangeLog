@@ -3,6 +3,11 @@
 + Tune - Images - Apply hard rotation by EXIF data
 + new themes and palettes
 + optional libpoppler support (see README) for text extraction from PDF
++ optional djvu text extractor
+
++ Tune - Interface - Cursor blink time (msecs), set to zero to turn blinking off
++ Tune - Interface - Cursor width
+* Tune pages are scrollable
 
 2016 summer
 + basic Markdown support

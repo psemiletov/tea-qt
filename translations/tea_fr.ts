@@ -1614,10 +1614,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Instr</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Font gallery</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1768,6 +1764,42 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>sum: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort case sensitively, with separator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flip a list with separator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cursor blink time (msecs)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cursor width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply hard rotation by EXIF data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>EXIF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use EXIF orientation at image viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

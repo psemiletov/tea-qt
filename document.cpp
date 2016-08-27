@@ -634,7 +634,8 @@ void document_holder::apply_settings_single (CDocument *d)
   d->textEdit->lineNumberArea->setFont (f);
 */
 
-  
+  d->textEdit->setCursorWidth (settings->value ("cursor_width", 1).toInt());
+ 
   d->textEdit->setCenterOnScroll (settings->value ("center_on_scroll", true).toBool());
   
   d->textEdit->use_hl_wrap = settings->value ("use_hl_wrap", true).toBool();
@@ -936,7 +937,7 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   spaces_instead_of_tabs = true;
   
   //document()->setDefaultTextOption(QTextOption(Qt::AlignRight));
-  setCursorWidth (settings->value ("cursor_width", 1).toInt());
+ // setCursorWidth (settings->value ("cursor_width", 1).toInt());
   
   connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
 }

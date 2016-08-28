@@ -47,6 +47,7 @@ code from qwriter:
 #include <QTabWidget>
 #include <QPlainTextEdit>
 #include <QSyntaxHighlighter>
+//#include <QDebug>
 
 #if QT_VERSION >= 0x050000
 
@@ -126,7 +127,17 @@ protected:
   void paintEvent(QPaintEvent *event);
   void keyPressEvent (QKeyEvent *event);    
   void resizeEvent(QResizeEvent *event);
+  
+  /*
+ bool event(QEvent *ev) {
+        if (ev->type() == QEvent::KeyboardLayoutChange) {
+            qDebug() << "kb layout changed";
+        } else {
+            return QWidget::event(ev);
+        }
 
+    }
+*/
 private slots:
 
   void updateLineNumberAreaWidth (int newBlockCount);

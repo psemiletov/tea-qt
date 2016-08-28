@@ -796,17 +796,6 @@ bool CTioRTF::load (const QString &fname)
 }
 
 
-
-
-/*
-
-<?xml version="1.0" encoding="windows-1252"?>
-<FictionBook xmlns:l="http://www.w3.org/1999/xlink" xmlns:xlink="http://www.w3.org/1999/xlink"
- xmlns="http://www.gribuser.ru/xml/fictionbook/2.0">
-
-
-*/
-
 #ifdef POPPLER_ENABLE
 
 
@@ -819,11 +808,8 @@ CTioPDF::CTioPDF()
 
 bool CTioPDF::load (const QString &fname)
 {
-  //QByteArray ba = file_load (fname);
-
-  //QString text;
-  
   Poppler::Document *d = Poppler::Document::load (fname);
+  
   if (! d || d->isLocked()) 
      {
       delete d;
@@ -839,24 +825,17 @@ bool CTioPDF::load (const QString &fname)
       
        QList<Poppler::TextBox*> tb = p->textList();
        
-       
        for (int j = 0; j < tb.size(); j++)
            {
-           
-                data += tb[j]->text();
-                //if (tb[j]->hasSpaceAfter())
-                data += " ";
+            data += tb[j]->text();
+            //if (tb[j]->hasSpaceAfter())
+            data += " ";
           
-                delete tb[j];
-                  
+            delete tb[j];
            }
       }
      
-     
-     
   delete d;
-         
-
   return true;
 }
 
@@ -877,37 +856,41 @@ ddjvu_context_t *ctx;
 ddjvu_document_t *doc;
 
 
-void
-handle(int wait)
+void handle (int wait)
 {
   const ddjvu_message_t *msg;
-  if (!ctx)
+
+  if (! ctx)
     return;
+    
   if (wait)
-    msg = ddjvu_message_wait(ctx);
-  while ((msg = ddjvu_message_peek(ctx)))
-    {
-      switch(msg->m_any.tag)
+     msg = ddjvu_message_wait (ctx);
+    
+  while ((msg = ddjvu_message_peek (ctx)))
         {
-        case DDJVU_ERROR:
-          fprintf(stderr,"djvutxt: %s\n", msg->m_error.message);
-          if (msg->m_error.filename)
-            fprintf(stderr,"djvutxt: '%s:%d'\n", 
-                    msg->m_error.filename, msg->m_error.lineno);
-          //exit(10);
-          return;
-        default:
-          break;
-        }
-      ddjvu_message_pop(ctx);
-    }
+         switch (msg->m_any.tag)
+                {
+                 case DDJVU_ERROR:
+                                   fprintf(stderr,"djvutxt: %s\n", msg->m_error.message);
+         
+                                   if (msg->m_error.filename)
+                                       fprintf (stderr,"djvutxt: '%s:%d'\n", 
+                                                msg->m_error.filename, msg->m_error.lineno);
+                                   //exit(10);
+                                   return;
+                                   
+                 default:
+                         break;
+                }
+                
+       ddjvu_message_pop(ctx);
+      }
 }
 
 
-void 
-die(const char *fmt, ...)
+void die (const char *fmt, ...)
 {
- return;
+  return;
 }
 
 
@@ -1042,11 +1025,6 @@ CTioDJVU::CTioDJVU()
 bool CTioDJVU::load (const QString &fname)
 {
 
-#if defined(_WIN32) && !defined(__CYGWIN32__)
-  _setmbcp(_MB_CP_OEM);
-#endif
-  
-   
   /* Create context and document */
   if (! (ctx = ddjvu_context_create("tea")))
      return false;

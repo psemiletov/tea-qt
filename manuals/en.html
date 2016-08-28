@@ -263,7 +263,7 @@ wolf
 
 <p>To replace the selected (i.e. text that been found) text with a new one, put the new value to the Famous input field and use the <b>Replace with</b> function. Thus, you can walk through the text using <b>Find next</b> and apply <b>Replace with</b> when you need. </p>
 
-<p>To replace all occurrences of a substring in the text, put a special command into the Famous input field:</p>
+<p>To replace all occurrences of a substring in the selected text, put a special command into the Famous input field:</p>
 
 <p>old value~new value</p>
 
@@ -459,6 +459,9 @@ sed 's/dog/cat/g' /tmp/xyz.xyz > $1</pre>
 
 <p><b>Sort  &gt;  Sort case sensitively</b> - sorts selected lines alphabetically and case sensitively.</p>
 
+<p><b>Sort  &gt;  Sort case sensitively, with separatot</b> - sorts substring those separated by the delimeter. Put the delimeter into the FIF, then use this function on the text. Thus, you can sort "three|four|one|two" with the "|" as the delimeter.</p>
+
+
 <p><b>Sort  &gt;  Flip a list</b> - reverses lines order. Was:</p>
 
 <p>Dog<br>
@@ -470,6 +473,8 @@ Cow</p>
 <p>Cow<br>
 Cat<br>
 Dog</p>
+
+<p><b>Sort  &gt;  Flip a list with separator</b> - reverses substrings order separated by the delimeter at FIF.</p>
 
 <p><b>Filter &gt; Remove duplicates</b> - useful when the string list has duplicated elements. Any duplicated item AFTER the original one will be removed. Can be slow on slow machines.</p>
 

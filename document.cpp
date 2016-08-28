@@ -2184,3 +2184,4 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
  
  * 
  */
+

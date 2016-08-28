@@ -2,12 +2,12 @@
 
 <item name="options" casecare="0" wrap="0" xml_format="1"></item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(and|andalso|as|byref|circle|
- cls|color|declare|defint|defsng|defstr|delete|dim|do|draw|dynamic|end|enum|
- eqv|erase|explicit|extern|for|function|get|getkey|imp|inkey|input|
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(and|andalso|as|byref|cast|circle|
+ cls|color|cptr|declare|defint|defsng|defstr|delete|dim|do|draw|dynamic|end|enum|
+ eqv|erase|explicit|extern|for|function|get|getkey|imp|inkey|input|is|
 line|locate|loop|mod|new|next|not|option|or|orelse|peek|poke|print
-private|put|redim|return|scope|screen|screenres|shared|shl|
-shr|sleep|sub|type|union|until|var|wend|while|
+private|procptr|put|redim|return|scope|screen|screenres|shared|shl|
+shr|sleep|strptr|sub|type|union|until|var|varptr|wend|while|
 with|xor|const|public|if|then|else|call|exit)\b</item>
 
 <item name="types" type="keywords" color="type">\b(byte|double|integer|

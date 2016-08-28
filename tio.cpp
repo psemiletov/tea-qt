@@ -856,163 +856,48 @@ ddjvu_context_t *ctx;
 ddjvu_document_t *doc;
 
 
-void handle (int wait)
+void djvumsg_handle()
 {
   const ddjvu_message_t *msg;
 
   if (! ctx)
     return;
     
-  if (wait)
-     msg = ddjvu_message_wait (ctx);
+  msg = ddjvu_message_wait (ctx);
     
   while ((msg = ddjvu_message_peek (ctx)))
         {
-         switch (msg->m_any.tag)
-                {
-                 case DDJVU_ERROR:
-                                   fprintf(stderr,"djvutxt: %s\n", msg->m_error.message);
-         
-                                   if (msg->m_error.filename)
-                                       fprintf (stderr,"djvutxt: '%s:%d'\n", 
-                                                msg->m_error.filename, msg->m_error.lineno);
-                                   //exit(10);
-                                   return;
-                                   
-                 default:
-                         break;
-                }
+         if (msg->m_any.tag == DDJVU_ERROR)
+            {
+             qDebug() << msg->m_error.message;              
+             qDebug() << msg->m_error.filename << ":" << msg->m_error.lineno;
+             return;
+            }
                 
-       ddjvu_message_pop(ctx);
-      }
+        ddjvu_message_pop(ctx);
+       }
 }
 
 
-void die (const char *fmt, ...)
-{
-  return;
-}
-
-
-void
-dopage(int pageno)
+void dopage (int pageno)
 {
   miniexp_t r = miniexp_nil;
+  
   const char *lvl = (detail) ? detail : "page";
-  while ((r = ddjvu_document_get_pagetext(doc,pageno-1,lvl))==miniexp_dummy)
-    handle(TRUE);
-    
-    /*
-  if (detail)
-    {
-      miniexp_io_t io;
-      miniexp_io_init(&io);
-#ifdef miniexp_io_print7bits
-      int flags = (escape) ? miniexp_io_print7bits : 0;
-      io.p_flags = &flags;
-#else
-      io.p_print7bits = &escape;
-#endif
-      miniexp_pprint_r(&io, r, 72);
-    }
-  else
-  */
-   if ((r = miniexp_nth(5, r)) && miniexp_stringp(r))
-    {
-      const char *s = miniexp_to_str(r); 
-     // if (! escape)
-        temp_data_s.append (s);
-     /* else
-        {
-          unsigned char c;
-          while ((c = *(unsigned char*)s++))
-            {
-              bool esc = false;
-              if (c == '\\' || c >= 0x7f)
-                esc = true; // non-ascii
-              if (c < 0x20 && !strchr("\013\035\037\012", c))
-                esc = true; // non-printable other than separators
-              if (esc)
-                //printf("\\%03o", c);
-                temp_data_s.append (' ');
-              else
-                //putc(c, stdout);
-                temp_data_s.append (c);
-            }
-        }*/
-      temp_data_s.append ('\n');  
-      //fputs("\n\f", stdout);
-    }
+  
+  while ((r = ddjvu_document_get_pagetext (doc, pageno/* - 1*/, lvl)) == miniexp_dummy)
+         djvumsg_handle();
+
+  if ((r = miniexp_nth (5, r)) && miniexp_stringp(r))
+     {
+      const char *s = miniexp_to_str (r); 
+      if (s)
+         {
+          temp_data_s.append (s);
+          temp_data_s.append ('\n');  
+         } 
+     }
 }
-
-
-void
-parse_pagespec(const char *s, int max_page, void (*dopage)(int))
-{
-  static const char *err = I18N("invalid page specification: %s");
-  int spec = 0;
-  int both = 1;
-  int start_page = 1;
-  int end_page = max_page;
-  int pageno;
-  char *p = (char*)s;
-  while (*p)
-    {
-      spec = 0;
-      while (*p==' ')
-        p += 1;
-      if (! *p)
-        break;
-      if (*p>='0' && *p<='9') {
-        end_page = strtol(p, &p, 10);
-        spec = 1;
-      } else if (*p=='$') {
-        spec = 1;
-        end_page = max_page;
-        p += 1;
-      } else if (both) {
-        end_page = 1;
-      } else {
-        end_page = max_page;
-      }
-      while (*p==' ')
-        p += 1;
-      if (both) {
-        start_page = end_page;
-        if (*p == '-') {
-          p += 1;
-          both = 0;
-          continue;
-        }
-      }
-      both = 1;
-      while (*p==' ')
-        p += 1;
-      if (*p && *p != ',')
-        die(i18n(err), s);
-      if (*p == ',')
-        p += 1;
-      if (! spec)
-        die(i18n(err), s);
-      if (end_page < 0)
-        end_page = 0;
-      if (start_page < 0)
-        start_page = 0;
-      if (end_page > max_page)
-        end_page = max_page;
-      if (start_page > max_page)
-        start_page = max_page;
-      if (start_page <= end_page)
-        for(pageno=start_page; pageno<=end_page; pageno++)
-          (*dopage)(pageno);
-      else
-        for(pageno=start_page; pageno>=end_page; pageno--)
-          (*dopage)(pageno);
-    }
-  if (! spec)
-    die(i18n(err), s);
-}
-
 
 
 CTioDJVU::CTioDJVU()
@@ -1025,29 +910,28 @@ CTioDJVU::CTioDJVU()
 bool CTioDJVU::load (const QString &fname)
 {
 
-  /* Create context and document */
   if (! (ctx = ddjvu_context_create("tea")))
      return false;
-//    die(i18n("Cannot create djvu context."));
+     
   if (! (doc = ddjvu_document_create_by_filename(ctx, fname.toUtf8().data(), TRUE)))
-    //die(i18n("Cannot open djvu document '%s'."), fname.toUtf8().data());
     return false;
 
     
   while (! ddjvu_document_decoding_done(doc))
-    handle(TRUE);
+        djvumsg_handle();
 
-  /* Process all pages */
-  int i = ddjvu_document_get_pagenum(doc);
-  parse_pagespec("1-$", i, dopage);
+  int n = ddjvu_document_get_pagenum (doc);
   
-  /* Close */
+  for (int i = 0; i < n; i++)
+      dopage (i);
+ 
+  
   if (doc)
     ddjvu_document_release(doc);
+    
   if (ctx)
     ddjvu_context_release(ctx);
 
-  
   data = temp_data_s;
   return true;
 }

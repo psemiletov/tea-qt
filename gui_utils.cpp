@@ -191,6 +191,31 @@ QComboBox* new_combobox (QBoxLayout *layout,
   return r;
 }
 
+QComboBox* new_combobox (QBoxLayout *layout,
+                         const QString &label,
+                         const QStringList &items,
+                         int index)
+{
+  QHBoxLayout *lt_h = new QHBoxLayout;
+  QLabel *l = new QLabel (label);
+
+  QComboBox *r = new QComboBox;
+
+  r->addItems (items);
+  r->setCurrentIndex (index);
+
+  //lt_h->addWidget (l, 1, Qt::AlignLeft);
+  //lt_h->addWidget (r);
+
+  lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
+  lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
+
+  layout->addLayout (lt_h);
+
+  return r;
+}
+
+
 /*
 CTextListWindow::CTextListWindow (const QString &title, const QString &label_text): QDialog (0) 
 {

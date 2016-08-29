@@ -2498,6 +2498,39 @@ void rvln::createOptions()
   page_interface_layout->addWidget (bt_add_user_font);
 
 
+  QStringList sl_tabs_align;
+
+  sl_tabs_align.append (tr ("Up"));
+  sl_tabs_align.append (tr ("Bottom"));
+  sl_tabs_align.append (tr ("Left"));
+  sl_tabs_align.append (tr ("Right"));
+
+  int ui_tab_align = settings->value ("ui_tabs_align", "3").toInt();
+  main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align ));
+
+
+  QComboBox *cmb_ui_tabs_align = new_combobox (page_interface_layout,
+                             tr ("GUI tabs align"),
+                             sl_tabs_align,
+                             ui_tab_align);
+
+  connect (cmb_ui_tabs_align, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_ui_tabs_currentIndexChanged (int)));
+
+
+  int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
+  tab_widget->setTabPosition (int_to_tabpos (docs_tab_align));
+  
+
+  QComboBox *cmb_docs_tabs_align = new_combobox (page_interface_layout,
+                             tr ("Documents tabs align"),
+                             sl_tabs_align,
+                             docs_tab_align);
+                             
+  connect (cmb_docs_tabs_align, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_docs_tabs_currentIndexChanged (int)));                             
+
+
   QStringList sl_icon_sizes;
   sl_icon_sizes << "16" << "24" << "32" << "48" << "64";
 
@@ -2655,8 +2688,11 @@ void rvln::createOptions()
 
   QHBoxLayout *hb_locovr = new QHBoxLayout;
     
-  hb_locovr->addWidget (cb_override_locale);
-  hb_locovr->addWidget (ed_locale_override);
+  //hb_locovr->addWidget (cb_override_locale);
+  //hb_locovr->addWidget (ed_locale_override);
+
+  hb_locovr->insertWidget (-1, cb_override_locale, 0, Qt::AlignLeft);
+  hb_locovr->insertWidget (-1, ed_locale_override, 1, Qt::AlignLeft);
 
   
   cb_override_img_viewer = new QCheckBox (tr ("Use external image viewer for F2"), tab_options);
@@ -2670,7 +2706,9 @@ void rvln::createOptions()
   hb_imgvovr->addWidget (cb_override_img_viewer);
   hb_imgvovr->addWidget (ed_img_viewer_override);
 
-  
+  hb_imgvovr->insertWidget (-1, cb_override_img_viewer, 0, Qt::AlignLeft);
+  hb_imgvovr->insertWidget (-1, ed_img_viewer_override, 1, Qt::AlignLeft);
+
   
   
 /*
@@ -2699,104 +2737,39 @@ void rvln::createOptions()
   cb_northern_hemisphere->setCheckState (Qt::CheckState (settings->value ("northern_hemisphere", "2").toInt()));
 
 
-  QHBoxLayout *hb_moon_phase_algo = new QHBoxLayout;
-  QLabel *l_moon_phase_algos = new QLabel (tr ("Moon phase algorithm"));
-
-  cmb_moon_phase_algos = new QComboBox;
-  cmb_moon_phase_algos->addItems (moon_phase_algos.values());
-
-  cmb_moon_phase_algos->setCurrentIndex (settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
+  page_common_layout->addWidget (cb_start_on_sunday);
+  page_common_layout->addWidget (cb_northern_hemisphere);
 
 
-  hb_moon_phase_algo->addWidget (l_moon_phase_algos);
-  hb_moon_phase_algo->addWidget (cmb_moon_phase_algos);
-
-  QHBoxLayout *hb_ui_tabs_align = new QHBoxLayout;
-
-  QLabel *l_tabs_align = new QLabel (tr ("UI tabs align"));
-
-  QStringList sl_tabs_align;
-
-  sl_tabs_align.append (tr ("Up"));
-  sl_tabs_align.append (tr ("Bottom"));
-  sl_tabs_align.append (tr ("Left"));
-  sl_tabs_align.append (tr ("Right"));
-
-  QComboBox *cmb_ui_tabs_align = new QComboBox;
-  cmb_ui_tabs_align->addItems (sl_tabs_align);
-
-  int ui_tab_align = settings->value ("ui_tabs_align", "3").toInt();
-  main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align ));
-
-  cmb_ui_tabs_align->setCurrentIndex (ui_tab_align);
-
-  connect (cmb_ui_tabs_align, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_ui_tabs_currentIndexChanged (int)));
+  cmb_moon_phase_algos = new_combobox (page_common_layout,
+                             tr ("Moon phase algorithm"),
+                             moon_phase_algos.values(),
+                             settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
+  
 
 
-  hb_ui_tabs_align->addWidget (l_tabs_align);
-  hb_ui_tabs_align->addWidget (cmb_ui_tabs_align);
+
+  cmb_cmdline_default_charset = new_combobox (page_common_layout,
+                             tr ("Charset for file open from command line"),
+                             sl_charsets,
+                             sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
+  
+  
+
+  cmb_zip_charset_in = new_combobox (page_common_layout,
+                             tr ("ZIP unpacking: file names charset"),
+                             sl_charsets,
+                             sl_charsets.indexOf (settings->value ("zip_charset_in", "UTF-8").toString()));
+  
 
 
-  QHBoxLayout *hb_docs_tabs_align = new QHBoxLayout;
-
-  l_tabs_align = new QLabel (tr ("Documents tabs align"));
-
-
-  QComboBox *cmb_docs_tabs_align = new QComboBox;
-  cmb_docs_tabs_align->addItems (sl_tabs_align);
-
-  connect (cmb_docs_tabs_align, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_docs_tabs_currentIndexChanged (int)));
-
-  int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
-  tab_widget->setTabPosition (int_to_tabpos (docs_tab_align));
-  cmb_docs_tabs_align->setCurrentIndex (docs_tab_align);
-
-
-  hb_docs_tabs_align->addWidget (l_tabs_align);
-  hb_docs_tabs_align->addWidget (cmb_docs_tabs_align);
-
-
-  QHBoxLayout *hb_cmb_cmdline_default_charset = new QHBoxLayout;
-
-  QLabel *zl = new QLabel (tr ("Charset for file open from command line"));
-  cmb_cmdline_default_charset = new QComboBox;
-  cmb_cmdline_default_charset->addItems (sl_charsets);
-
-  cmb_cmdline_default_charset->setCurrentIndex (sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
-
-  hb_cmb_cmdline_default_charset->addWidget (zl);
-  hb_cmb_cmdline_default_charset->addWidget (cmb_cmdline_default_charset);
+  cmb_zip_charset_out = new_combobox (page_common_layout,
+                             tr ("ZIP packing: file names charset"),
+                             sl_charsets,
+                             sl_charsets.indexOf (settings->value ("zip_charset_out", "UTF-8").toString()));
+  
 
   
-  QHBoxLayout *hb_zip_charset_in = new QHBoxLayout;
-
-  zl = new QLabel (tr ("ZIP unpacking: file names charset"));
-  cmb_zip_charset_in = new QComboBox;
-  cmb_zip_charset_in->addItems (sl_charsets);
-
-  cmb_zip_charset_in->setCurrentIndex (sl_charsets.indexOf (settings->value ("zip_charset_in", "UTF-8").toString()));
-
-  hb_zip_charset_in->addWidget (zl);
-  hb_zip_charset_in->addWidget (cmb_zip_charset_in);
-
-
-  QHBoxLayout *hb_zip_charset_out = new QHBoxLayout;
-
-  zl = new QLabel (tr ("ZIP packing: file names charset"));
-  cmb_zip_charset_out = new QComboBox;
-  cmb_zip_charset_out->addItems (sl_charsets);
-
-  cmb_zip_charset_out->setCurrentIndex (sl_charsets.indexOf (settings->value ("zip_charset_in", "UTF-8").toString()));
-
-  hb_zip_charset_out->addWidget (zl);
-  hb_zip_charset_out->addWidget (cmb_zip_charset_out);
-
-
-  page_common_layout->addLayout (hb_ui_tabs_align);
-  page_common_layout->addLayout (hb_docs_tabs_align);
-
   page_common_layout->addWidget (cb_altmenu);
   
 #if QT_VERSION >= 0x050000
@@ -2808,25 +2781,16 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_auto_img_preview);
   page_common_layout->addWidget (cb_session_restore);
   page_common_layout->addWidget (cb_use_trad_dialogs);
-  page_common_layout->addWidget (cb_start_on_sunday);
-  page_common_layout->addWidget (cb_northern_hemisphere);
-
-  page_common_layout->addLayout (hb_moon_phase_algo);
+  
+ // page_common_layout->addLayout (hb_moon_phase_algo);
 
 
   page_common_layout->addLayout (hb_locovr);
   page_common_layout->addLayout (hb_imgvovr);
-  
-  page_common_layout->addLayout (hb_cmb_cmdline_default_charset);
-  
-  page_common_layout->addLayout (hb_zip_charset_in);
-  page_common_layout->addLayout (hb_zip_charset_out);
-
+    
 
   page_common->setLayout (page_common_layout);
   page_common->show();
-
-
 
   QScrollArea *scra_common = new QScrollArea;
   scra_common->setWidgetResizable (true);
@@ -2969,7 +2933,9 @@ void rvln::createOptions()
 
   QGroupBox *gb_images = new QGroupBox (tr("Miscellaneous"));
   QVBoxLayout *vb_images = new QVBoxLayout;
-  gb_images->setLayout(vb_images);
+  vb_images->setAlignment (Qt::AlignTop);
+
+  gb_images->setLayout (vb_images);
 
 
   cmb_output_image_fmt = new_combobox (vb_images,
@@ -3008,6 +2974,7 @@ void rvln::createOptions()
 
   QGroupBox *gb_webgallery = new QGroupBox (tr ("Web gallery options"));
   QVBoxLayout *vb_webgal = new QVBoxLayout;
+  vb_webgal->setAlignment (Qt::AlignTop);
 
   ed_side_size = new_line_edit (vb_webgal, tr ("Size of the side"), settings->value ("ed_side_size", "110").toString());
   ed_link_options = new_line_edit (vb_webgal, tr ("Link options"), settings->value ("ed_link_options", "target=\"_blank\"").toString());
@@ -3026,13 +2993,11 @@ void rvln::createOptions()
   cb_zor_use_exif->setCheckState (Qt::CheckState (settings->value ("zor_use_exif_orientation", 0).toInt()));
   vb_exif->addWidget (cb_zor_use_exif);
       
-  
-  
+   
   page_images->setLayout (page_images_layout);
-  page_images->show();
+  //page_images->show();
 
-  
-  
+    
   QScrollArea *scra_images = new QScrollArea;
   scra_images->setWidgetResizable (true);
   scra_images->setWidget (page_images);
@@ -6412,157 +6377,6 @@ CStrIntPair::CStrIntPair (const QString &s, int i): QObject()
    string_value = s;
    int_value = i;
 }
-
-/*
-void rvln::create_markup_hash()
-{
-  CMarkupPair *p = new CMarkupPair;
-
-  p->tags_a["Docbook"] = "<emphasis role=\"bold\">";
-  p->tags_b["Docbook"] = "</emphasis>";
-
-  p->tags_a["LaTeX"] = "\\textbf{";
-  p->tags_b["LaTeX"] = "}";
-
-  p->tags_a["HTML"] = "<b>";
-  p->tags_b["HTML"] = "</b>";
-
-  p->tags_a["XHTML"] = "<b>";
-  p->tags_b["XHTML"] = "</b>";
-
-  p->tags_a["Lout"] = "@B{ ";
-  p->tags_b["Lout"] = " }";
-
-  p->tags_a["MediaWiki"] = "'''";
-  p->tags_b["MediaWiki"] = "'''";
-
-  p->tags_a["DokuWiki"] = "**";
-  p->tags_b["DokuWiki"] = "**";
-
-  
-  hs_markup.insert("bold", p);
-
-
-  p = new CMarkupPair;
-
-  p->tags_a["Docbook"] = "<emphasis>";
-  p->tags_b["Docbook"] = "</emphasis>";
-
-  p->tags_a["LaTeX"] = "\\textit{";
-  p->tags_b["LaTeX"] = "}";
-
-  p->tags_a["HTML"] = "<i>";
-  p->tags_b["HTML"] = "</i>";
-
-  p->tags_a["XHTML"] = "<i>";
-  p->tags_b["XHTML"] = "</i>";
-
-  p->tags_a["Lout"] = "@I{ ";
-  p->tags_b["Lout"] = " }";
-  
-
-  p->tags_a["MediaWiki"] = "''";
-  p->tags_b["MediaWiki"] = "''";
-
-  p->tags_a["DokuWiki"] = "//";
-  p->tags_b["DokuWiki"] = "//";
-
-
-
-  hs_markup.insert("italic", p);
-
-  
-  p = new CMarkupPair;
-
-  p->tags_a["Docbook"] = "<emphasis>";
-  p->tags_b["Docbook"] = "</emphasis>";
-
-  p->tags_a["LaTeX"] = "\\underline{";
-  p->tags_b["LaTeX"] = "}";
-
-  p->tags_a["HTML"] = "<u>";
-  p->tags_b["HTML"] = "</u>";
-
-  p->tags_a["XHTML"] = "<u>";
-  p->tags_b["XHTML"] = "</u>";
-
-  p->tags_a["Lout"] = "@Underline{ ";
-  p->tags_b["Lout"] = " }";
-    
-  p->tags_a["MediaWiki"] = "<u>";
-  p->tags_b["MediaWiki"] = "</u>";
-
-  p->tags_a["DokuWiki"] = "__";
-  p->tags_b["DokuWiki"] = "__";
-
-
-  hs_markup.insert("underline", p);
-
-
-  p = new CMarkupPair;
-
-  p->tags_a["Docbook"] = "<para>";
-  p->tags_b["Docbook"] = "</para>";
-
-  p->tags_a["HTML"] = "<p>";
-  p->tags_b["HTML"] = "</p>";
-
-  p->tags_a["XHTML"] = "<p>";
-  p->tags_b["XHTML"] = "</p>";
-
-  p->tags_a["Lout"] = "@PP";
-  p->tags_b["Lout"] = "";
-  
-  hs_markup.insert("para", p);
-
-
-  p = new CMarkupPair;
-
-  p->tags_a["Docbook"] = "<ulink url=\"\">";
-  p->tags_b["Docbook"] = "</ulink>";
-
-  p->tags_a["HTML"] = "<a href=\"\">";
-  p->tags_b["HTML"] = "</a>";
-
-  p->tags_a["XHTML"] = "<a href=\"\">";
-  p->tags_b["XHTML"] = "</a>";
-
-  p->tags_a["LaTeX"] = "\\href{}{";
-  p->tags_b["LaTeX"] = "}";
-
-  
-  hs_markup.insert("link", p);
-
-
-  p = new CMarkupPair;
-
-  p->tags_a["LaTeX"] = "\\newline";
-  p->tags_a["HTML"] = "<br>";
-  p->tags_a["XHTML"] = "<br />";
-  p->tags_a["Lout"] = "@LLP";
-  p->tags_a["MediaWiki"] = "<br />";
-  p->tags_a["DokuWiki"] = "\\\\ ";
-
-  hs_markup.insert ("newline", p);
-}
-*/
-/*
-  if (d->markup_mode == "LaTeX")
-      r = QString ("\\begin{%1}\n%2\\end{%1}").arg (a->text().toLower()).arg (d->textEdit->textCursor().selectedText());
-  //if (d->markup_mode == "MediaWiki")
-    // {
-//FIXME write code here
-     //}
-  else
-       {
-        r.append ("<p style=\"text-align:").append (
-                  a->text().toLower()).append (
-                  ";\">").append (
-                  d->textEdit->textCursor().selectedText()).append (
-                  "</p>");
-       }
-
-*/
 
 void rvln::create_markup_hash()
 {

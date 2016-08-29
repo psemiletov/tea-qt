@@ -62,4 +62,10 @@ QComboBox* new_combobox (QBoxLayout *layout,
                          const QString &def_value);
 
 
+QComboBox* new_combobox (QBoxLayout *layout,
+                         const QString &label,
+                         const QStringList &items,
+                         int index);
+
+
 #endif // GUI_UTILS_H

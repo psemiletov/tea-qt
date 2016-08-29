@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>CAboutWindow</name>
     <message>
-        <location filename="../rvln.cpp" line="4939"/>
+        <location filename="../rvln.cpp" line="4938"/>
         <source>Code</source>
         <translation>Код</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="4940"/>
+        <location filename="../rvln.cpp" line="4939"/>
         <source>Acknowledgements</source>
         <translation>Благодарности</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="4941"/>
+        <location filename="../rvln.cpp" line="4940"/>
         <source>Translations</source>
         <translation>Переводы</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="4942"/>
+        <location filename="../rvln.cpp" line="4941"/>
         <source>Packages</source>
         <translation>Пакеты</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="4950"/>
+        <location filename="../rvln.cpp" line="4949"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -32,7 +32,7 @@
 <context>
     <name>CDarkerWindow</name>
     <message>
-        <location filename="../rvln.cpp" line="8650"/>
+        <location filename="../rvln.cpp" line="8649"/>
         <source>Darker palette</source>
         <translation>Палитра темнее</translation>
     </message>
@@ -265,8 +265,8 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="1002"/>
         <location filename="../rvln.cpp" line="1133"/>
-        <location filename="../rvln.cpp" line="5797"/>
-        <location filename="../rvln.cpp" line="6269"/>
+        <location filename="../rvln.cpp" line="5796"/>
+        <location filename="../rvln.cpp" line="6268"/>
         <source>Charset</source>
         <translation>Кодировка</translation>
     </message>
@@ -282,7 +282,7 @@ Do you want to save your changes?</source>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1287"/>
-        <location filename="../rvln.cpp" line="5815"/>
+        <location filename="../rvln.cpp" line="5814"/>
         <source>Open</source>
         <translation>Открыть</translation>
     </message>
@@ -372,7 +372,7 @@ Do you want to save your changes?</source>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1479"/>
-        <location filename="../rvln.cpp" line="2958"/>
+        <location filename="../rvln.cpp" line="2957"/>
         <source>Functions</source>
         <translation>Функции</translation>
     </message>
@@ -452,17 +452,17 @@ Do you want to save your changes?</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3069"/>
+        <location filename="../rvln.cpp" line="3068"/>
         <source>Assign</source>
         <translation>Назначить</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3070"/>
+        <location filename="../rvln.cpp" line="3069"/>
         <source>Remove</source>
         <translation>Удалить привязку</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3084"/>
+        <location filename="../rvln.cpp" line="3083"/>
         <source>Keyboard</source>
         <translation>Клавиатура</translation>
     </message>
@@ -503,7 +503,7 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="1204"/>
         <location filename="../rvln.cpp" line="1688"/>
-        <location filename="../rvln.cpp" line="2843"/>
+        <location filename="../rvln.cpp" line="2842"/>
         <source>Labels</source>
         <translation>Метки</translation>
     </message>
@@ -678,7 +678,7 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="1489"/>
         <source>Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Инструменты</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1497"/>
@@ -733,7 +733,7 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="1533"/>
         <source>Sort case sensitively, with separator</source>
-        <translation type="unfinished"></translation>
+        <translation>Сортировать зависимо от регистра, по разделителю</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1537"/>
@@ -743,7 +743,7 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="1538"/>
         <source>Flip a list with separator</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевернуть список, размежеванный разделителями</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1541"/>
@@ -873,7 +873,7 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="1610"/>
         <source>Compress</source>
-        <translation type="unfinished"></translation>
+        <translation>Сжать</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1751"/>
@@ -891,48 +891,43 @@ Do you want to save your changes?</source>
         <translation>Иконка программы</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2584"/>
-        <source>Cursor blink time (msecs)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rvln.cpp" line="2590"/>
+        <location filename="../rvln.cpp" line="2589"/>
         <source>Cursor width</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина курсора</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2626"/>
+        <location filename="../rvln.cpp" line="2625"/>
         <source>Use Alt key to access main menu</source>
         <translation>Использовать клавишу Alt для доступа к главному меню</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2987"/>
+        <location filename="../rvln.cpp" line="2986"/>
         <source>Apply hard rotation by EXIF data</source>
-        <translation type="unfinished"></translation>
+        <translation>Применять вращение согласно данным EXIF</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3019"/>
+        <location filename="../rvln.cpp" line="3018"/>
         <source>EXIF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3024"/>
+        <location filename="../rvln.cpp" line="3023"/>
         <source>Use EXIF orientation at image viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать ориентацию из EXIF в смотрелке картинок</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5951"/>
+        <location filename="../rvln.cpp" line="5950"/>
         <source>It seems that %1 contains TEA plugin.
  Do you want to install it?</source>
         <translation>Кажется, что %1 содержит плагин для TEA. Установить его?</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8734"/>
+        <location filename="../rvln.cpp" line="8733"/>
         <source>put your notes (for this file) here and they will be saved automatically</source>
         <translation>пишите свои заметки (к этому файлу) здесь, и они будут автоматически сохранены</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="9600"/>
+        <location filename="../rvln.cpp" line="9599"/>
         <source>sum: %1</source>
         <translation>сумма: %1</translation>
     </message>
@@ -941,13 +936,13 @@ Do you want to save your changes?</source>
         <translation type="obsolete">пишите свои заметки к файлу здесь, и они будут автоматически сохранены</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8869"/>
-        <location filename="../rvln.cpp" line="8986"/>
+        <location filename="../rvln.cpp" line="8868"/>
+        <location filename="../rvln.cpp" line="8985"/>
         <source>There is no plugin file</source>
         <translation>Нет файла плагина</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8998"/>
+        <location filename="../rvln.cpp" line="8997"/>
         <source>&lt;b&gt;Error:&lt;/b&gt; </source>
         <translation>&lt;b&gt;Ошибка:&lt;/b&gt; </translation>
     </message>
@@ -956,12 +951,12 @@ Do you want to save your changes?</source>
         <translation type="obsolete">варианты</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8704"/>
+        <location filename="../rvln.cpp" line="8703"/>
         <source>Word length: </source>
         <translation>Длина слова:</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8705"/>
+        <location filename="../rvln.cpp" line="8704"/>
         <source>Number:</source>
         <translation>Количество:</translation>
     </message>
@@ -1050,141 +1045,141 @@ Do you want to save your changes?</source>
         <translation>Добавить пользовательский шрифт</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2639"/>
+        <location filename="../rvln.cpp" line="2638"/>
         <source>Old syntax hl engine (restart TEA to apply)</source>
         <translation>Старый движок подсветки синтаксиса (нужен перезапуск TEA)</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2662"/>
+        <location filename="../rvln.cpp" line="2661"/>
         <source>Use external image viewer for F2</source>
         <translation>Использовать внешнюю смотрелку картинок для F2</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2698"/>
+        <location filename="../rvln.cpp" line="2697"/>
         <source>Northern hemisphere</source>
         <translation>Северное полушарие</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2703"/>
+        <location filename="../rvln.cpp" line="2702"/>
         <source>Moon phase algorithm</source>
         <translation>Алгоритм фазы луны</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2716"/>
+        <location filename="../rvln.cpp" line="2715"/>
         <source>UI tabs align</source>
         <translation>Положение вкладок интерфейса</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2720"/>
+        <location filename="../rvln.cpp" line="2719"/>
         <source>Up</source>
         <translation>Вверху</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1405"/>
-        <location filename="../rvln.cpp" line="2723"/>
+        <location filename="../rvln.cpp" line="2722"/>
         <source>Right</source>
         <translation>Справа</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2946"/>
+        <location filename="../rvln.cpp" line="2945"/>
         <source>Fuzzy search factor</source>
         <translation>Коэффициент поиска по нечеткому условию</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3452"/>
+        <location filename="../rvln.cpp" line="3451"/>
         <source>snippet %1 is not exists</source>
         <translation>сниппет %1 не существует</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7230"/>
-        <location filename="../rvln.cpp" line="7255"/>
+        <location filename="../rvln.cpp" line="7229"/>
+        <location filename="../rvln.cpp" line="7254"/>
         <source>Open Directory</source>
         <translation>Открыть каталог</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8273"/>
+        <location filename="../rvln.cpp" line="8272"/>
         <source> is unpacked</source>
         <translation>распакованы</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8413"/>
+        <location filename="../rvln.cpp" line="8412"/>
         <source>Trigonometric 2</source>
         <translation>Тригонометрический 2</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8414"/>
+        <location filename="../rvln.cpp" line="8413"/>
         <source>Trigonometric 1</source>
         <translation>Тригонометрический 1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8415"/>
+        <location filename="../rvln.cpp" line="8414"/>
         <source>Conway</source>
         <translation>Конуэй</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8417"/>
+        <location filename="../rvln.cpp" line="8416"/>
         <source>Leueshkanov</source>
         <translation>Леушканов</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1404"/>
-        <location filename="../rvln.cpp" line="2722"/>
+        <location filename="../rvln.cpp" line="2721"/>
         <source>Left</source>
         <translation>Слева</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2743"/>
+        <location filename="../rvln.cpp" line="2742"/>
         <source>Documents tabs align</source>
         <translation>Положение вкладок документов</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2721"/>
+        <location filename="../rvln.cpp" line="2720"/>
         <source>Bottom</source>
         <translation>Снизу</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2775"/>
+        <location filename="../rvln.cpp" line="2774"/>
         <source>ZIP unpacking: file names charset</source>
         <translation>ZIP-распаковка: кодировка имен файлов</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2787"/>
+        <location filename="../rvln.cpp" line="2786"/>
         <source>ZIP packing: file names charset</source>
         <translation>ZIP-упаковка: кодировка имен файлов</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2847"/>
+        <location filename="../rvln.cpp" line="2846"/>
         <source>Label starts with: </source>
         <translation>Метка начинается с:</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2848"/>
+        <location filename="../rvln.cpp" line="2847"/>
         <source>Label ends with: </source>
         <translation>Метка завершается:</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3062"/>
+        <location filename="../rvln.cpp" line="3061"/>
         <source>Shortcut</source>
         <translation>Сочетание клавиш</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="4132"/>
-        <location filename="../rvln.cpp" line="7169"/>
+        <location filename="../rvln.cpp" line="4131"/>
+        <location filename="../rvln.cpp" line="7168"/>
         <source>%1 is processed and saved</source>
         <translation>%1 обработан и сохранен</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8038"/>
+        <location filename="../rvln.cpp" line="8037"/>
         <source>Select the file name first!</source>
         <translation>Выделите сначала имя файла!</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8128"/>
+        <location filename="../rvln.cpp" line="8127"/>
         <source>Select font</source>
         <translation>Выберите шрифт</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8129"/>
+        <location filename="../rvln.cpp" line="8128"/>
         <source>Fonts (*.ttf *.otf)</source>
         <translation>Шрифты (*.ttf *.otf)</translation>
     </message>
@@ -1239,60 +1234,60 @@ Do you want to save your changes?</source>
         <translation>Удалить данные о дне</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2694"/>
+        <location filename="../rvln.cpp" line="2693"/>
         <source>Start week on Sunday</source>
         <translation>Неделя начинается в воскресенье</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2942"/>
-        <location filename="../rvln.cpp" line="2969"/>
+        <location filename="../rvln.cpp" line="2941"/>
+        <location filename="../rvln.cpp" line="2968"/>
         <source>Miscellaneous</source>
         <translation>Разное</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6187"/>
+        <location filename="../rvln.cpp" line="6186"/>
         <source>End of line: </source>
         <translation>Конец строки: </translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7493"/>
+        <location filename="../rvln.cpp" line="7492"/>
         <source>Getting files list...</source>
         <translation>Получение списка файлов...</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7499"/>
+        <location filename="../rvln.cpp" line="7498"/>
         <source>Searching...</source>
         <translation>Ищу...</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7522"/>
+        <location filename="../rvln.cpp" line="7521"/>
         <source>cannot open %1 because of: %2</source>
         <translation>Не могу открыть %1, ибо %2</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7538"/>
+        <location filename="../rvln.cpp" line="7537"/>
         <source>Search results</source>
         <translation>Итоги поиска</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1201"/>
         <location filename="../rvln.cpp" line="1807"/>
-        <location filename="../rvln.cpp" line="7538"/>
+        <location filename="../rvln.cpp" line="7537"/>
         <source>Files</source>
         <translation>Файлы</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7584"/>
+        <location filename="../rvln.cpp" line="7583"/>
         <source>new_profile</source>
         <translation>новый профиль</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7673"/>
+        <location filename="../rvln.cpp" line="7672"/>
         <source>There are %1 lines at %2 files</source>
         <translation>%1 строк в %2 файлах</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7799"/>
+        <location filename="../rvln.cpp" line="7798"/>
         <source>Enter your daily notes here.
 To use time-based reminders, specify the time signature in 24-hour format [hh:mm], i.e.:
 [06:00]good morning!
@@ -1303,7 +1298,7 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
 [20:10]выйти за хлебом, когда всё закрыто</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7807"/>
+        <location filename="../rvln.cpp" line="7806"/>
         <source>Enter your daily notes here.</source>
         <translation>Можете вписать тут свои заметки.</translation>
     </message>
@@ -1343,38 +1338,38 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation>Размер иконок</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2860"/>
+        <location filename="../rvln.cpp" line="2859"/>
         <source>Date format</source>
         <translation>Формат даты</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2861"/>
+        <location filename="../rvln.cpp" line="2860"/>
         <source>Time format</source>
         <translation>Формат времени</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3424"/>
+        <location filename="../rvln.cpp" line="3423"/>
         <source>learn</source>
         <translation>узнать</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="7842"/>
+        <location filename="../rvln.cpp" line="7841"/>
         <source>dates</source>
         <translation>даты</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8223"/>
+        <location filename="../rvln.cpp" line="8222"/>
         <source>%1 kbytes %2 &lt;br&gt;</source>
         <translation>%1 килобайт %2 &lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8228"/>
+        <location filename="../rvln.cpp" line="8227"/>
         <source>Total size = %1 kbytes in %2 files&lt;br&gt;</source>
         <translation>Общий вес = %1 килобайт в %2 файлах&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1155"/>
-        <location filename="../rvln.cpp" line="5045"/>
+        <location filename="../rvln.cpp" line="5044"/>
         <source>%1 already exists
 Do you want to overwrite?</source>
         <translation>%1 уже существует
@@ -1396,12 +1391,12 @@ Do you want to overwrite?</source>
         <translation>Отображать положение курсора</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3846"/>
+        <location filename="../rvln.cpp" line="3845"/>
         <source>%1 - saved</source>
         <translation>%1 - сохранён</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3848"/>
+        <location filename="../rvln.cpp" line="3847"/>
         <source>Cannot save %1</source>
         <translation>Не могу сохранить %1</translation>
     </message>
@@ -1491,14 +1486,14 @@ Do you want to overwrite?</source>
         <translation>Удалить форматирование</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="4673"/>
+        <location filename="../rvln.cpp" line="4672"/>
         <source>#external programs list. example:
 opera=opera %s</source>
         <translation>#список внешних программ. пример:
 opera=opera %s</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="8209"/>
+        <location filename="../rvln.cpp" line="8208"/>
         <source>%1 is not found&lt;br&gt;</source>
         <translation>%1 не найден&lt;br&gt;</translation>
     </message>
@@ -1538,54 +1533,54 @@ opera=opera %s</translation>
         <translation>Новости</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5767"/>
+        <location filename="../rvln.cpp" line="5766"/>
         <source>Home</source>
         <translation>Домой</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5770"/>
+        <location filename="../rvln.cpp" line="5769"/>
         <source>Refresh</source>
         <translation>Освежить</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5818"/>
+        <location filename="../rvln.cpp" line="5817"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2691"/>
+        <location filename="../rvln.cpp" line="2690"/>
         <source>Use traditional File Save/Open dialogs</source>
         <translation>Использовать традиционные окна Открыть/Сохранить</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5158"/>
+        <location filename="../rvln.cpp" line="5157"/>
         <source>templates</source>
         <translation>шаблоны</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5159"/>
+        <location filename="../rvln.cpp" line="5158"/>
         <source>snippets</source>
         <translation>сниппеты</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5160"/>
+        <location filename="../rvln.cpp" line="5159"/>
         <source>scripts</source>
         <translation>скрипты</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6090"/>
+        <location filename="../rvln.cpp" line="6089"/>
         <source>Are you sure to delete
 %1?</source>
         <translation>Вы уверены, что хотите удалить
 %1?</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5753"/>
+        <location filename="../rvln.cpp" line="5752"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5764"/>
+        <location filename="../rvln.cpp" line="5763"/>
         <source>Go</source>
         <translation>Перейти</translation>
     </message>
@@ -1599,7 +1594,7 @@ opera=opera %s</translation>
         <translation type="obsolete">Кавычки в кавычки ёлочкой</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2650"/>
+        <location filename="../rvln.cpp" line="2649"/>
         <source>Override locale</source>
         <translation>Перекрыть локаль</translation>
     </message>
@@ -1624,17 +1619,17 @@ opera=opera %s</translation>
         <translation>Поверх других окон</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2647"/>
+        <location filename="../rvln.cpp" line="2646"/>
         <source>Restore the last session on start-up</source>
         <translation>Загружать последнюю сессию при запуске</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2834"/>
+        <location filename="../rvln.cpp" line="2833"/>
         <source>Common</source>
         <translation>Общие</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="4019"/>
+        <location filename="../rvln.cpp" line="4018"/>
         <source>chars: %1&lt;br&gt;chars without spaces: %2&lt;br&gt;lines: %3&lt;br&gt;author&apos;s sheets: %4</source>
         <translation>символов: %1&lt;br&gt;символов без пробелов: %2&lt;br&gt;строк: %3&lt;br&gt;авторских листов: %4</translation>
     </message>
@@ -1664,7 +1659,7 @@ opera=opera %s</translation>
         <translation>Подсвечивать парные скобки</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5734"/>
+        <location filename="../rvln.cpp" line="5733"/>
         <source>&lt;span style=&quot;%1&quot;&gt;COLOR SAMPLE&lt;/span&gt;</source>
         <translation>&lt;span style=&quot;%1&quot;&gt;ОБРАЗЕЦ ЦВЕТА&lt;/span&gt;</translation>
     </message>
@@ -1729,13 +1724,13 @@ opera=opera %s</translation>
         <translation>Обновить текущий каталог</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2595"/>
+        <location filename="../rvln.cpp" line="2594"/>
         <source>Show margin at</source>
         <translation>Показывать границу на</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1727"/>
-        <location filename="../rvln.cpp" line="3039"/>
+        <location filename="../rvln.cpp" line="3038"/>
         <source>Images</source>
         <translation>Картинки</translation>
     </message>
@@ -1770,90 +1765,90 @@ opera=opera %s</translation>
         <translation>Показывать номера строк</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3008"/>
+        <location filename="../rvln.cpp" line="3007"/>
         <source>Web gallery options</source>
         <translation>Настройки веб-галереи</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3011"/>
+        <location filename="../rvln.cpp" line="3010"/>
         <source>Size of the side</source>
         <translation>Размер стороны</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3012"/>
+        <location filename="../rvln.cpp" line="3011"/>
         <source>Link options</source>
         <translation>Настройки ссылки</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3013"/>
+        <location filename="../rvln.cpp" line="3012"/>
         <source>Columns per row</source>
         <translation>Столбцов в ряду</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2855"/>
+        <location filename="../rvln.cpp" line="2854"/>
         <source>Date and time</source>
         <translation>Дата и время</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2870"/>
+        <location filename="../rvln.cpp" line="2869"/>
         <source>Spell checking</source>
         <translation>Проверка правописания</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2877"/>
+        <location filename="../rvln.cpp" line="2876"/>
         <source>Spell checker engine</source>
         <translation>Движок проверки правописания</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2887"/>
+        <location filename="../rvln.cpp" line="2886"/>
         <source>Hunspell dictionaries directory</source>
         <translation>Каталог со словарями для Hunspell</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2893"/>
-        <location filename="../rvln.cpp" line="2918"/>
+        <location filename="../rvln.cpp" line="2892"/>
+        <location filename="../rvln.cpp" line="2917"/>
         <source>Select</source>
         <translation>Выбрать</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3514"/>
+        <location filename="../rvln.cpp" line="3513"/>
         <source>Print document</source>
         <translation>Печатать документ</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3647"/>
+        <location filename="../rvln.cpp" line="3646"/>
         <source>elapsed milliseconds: %1</source>
         <translation>прошло миллисекунд: %1</translation>
+    </message>
+    <message>
+        <location filename="../rvln.cpp" line="5229"/>
+        <location filename="../rvln.cpp" line="5399"/>
+        <location filename="../rvln.cpp" line="6058"/>
+        <location filename="../rvln.cpp" line="7581"/>
+        <source>Enter the name</source>
+        <translation>Введите имя</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="5230"/>
         <location filename="../rvln.cpp" line="5400"/>
         <location filename="../rvln.cpp" line="6059"/>
+        <location filename="../rvln.cpp" line="6976"/>
         <location filename="../rvln.cpp" line="7582"/>
-        <source>Enter the name</source>
-        <translation>Введите имя</translation>
-    </message>
-    <message>
-        <location filename="../rvln.cpp" line="5231"/>
-        <location filename="../rvln.cpp" line="5401"/>
-        <location filename="../rvln.cpp" line="6060"/>
-        <location filename="../rvln.cpp" line="6977"/>
-        <location filename="../rvln.cpp" line="7583"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5232"/>
+        <location filename="../rvln.cpp" line="5231"/>
         <source>new_directory</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5771"/>
+        <location filename="../rvln.cpp" line="5770"/>
         <source>Operations</source>
         <translation>Действия</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6061"/>
+        <location filename="../rvln.cpp" line="6060"/>
         <source>new</source>
         <translation>новый</translation>
     </message>
@@ -1863,29 +1858,29 @@ opera=opera %s</translation>
         <translation>Полные сведения</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="4668"/>
+        <location filename="../rvln.cpp" line="4667"/>
         <source>#external programs list. example:
 opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</source>
         <translation>#список внешних программ. вот пример:
 opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6206"/>
+        <location filename="../rvln.cpp" line="6205"/>
         <source>file name: %1</source>
         <translation>имя файла: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6207"/>
+        <location filename="../rvln.cpp" line="6206"/>
         <source>size: %1 kbytes</source>
         <translation>размер: %1 kbytes</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6208"/>
+        <location filename="../rvln.cpp" line="6207"/>
         <source>created: %1</source>
         <translation>создан: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6209"/>
+        <location filename="../rvln.cpp" line="6208"/>
         <source>modified: %1</source>
         <translation>изменен: %1</translation>
     </message>
@@ -1901,12 +1896,12 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1309"/>
-        <location filename="../rvln.cpp" line="6269"/>
+        <location filename="../rvln.cpp" line="6268"/>
         <source>Reload with encoding</source>
         <translation>Перечитать в кодировке</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3431"/>
+        <location filename="../rvln.cpp" line="3430"/>
         <source>you can put here notes, etc</source>
         <translation>вы можете заносить сюда всякие заметки</translation>
     </message>
@@ -1916,27 +1911,27 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
         <translation>Анализ</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6381"/>
+        <location filename="../rvln.cpp" line="6380"/>
         <source>total / unique: %1</source>
         <translation>всего / уникальных: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6382"/>
+        <location filename="../rvln.cpp" line="6381"/>
         <source>words unique: %1</source>
         <translation>слов, не считая повторы: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6383"/>
+        <location filename="../rvln.cpp" line="6382"/>
         <source>words total: %1</source>
         <translation>слов всего: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6384"/>
+        <location filename="../rvln.cpp" line="6383"/>
         <source>text analysis of: %1</source>
         <translation>анализ текста для: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6385"/>
+        <location filename="../rvln.cpp" line="6384"/>
         <source>UNITAZ: UNIverlsal Text AnalyZer</source>
         <translation>УНИТАЗ: УНИверсальный Текстовый АналиЗатор</translation>
     </message>
@@ -1966,16 +1961,16 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
         <translation>ладить</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="3569"/>
-        <location filename="../rvln.cpp" line="6337"/>
-        <location filename="../rvln.cpp" line="6843"/>
-        <location filename="../rvln.cpp" line="7359"/>
-        <location filename="../rvln.cpp" line="7504"/>
+        <location filename="../rvln.cpp" line="3568"/>
+        <location filename="../rvln.cpp" line="6336"/>
+        <location filename="../rvln.cpp" line="6842"/>
+        <location filename="../rvln.cpp" line="7358"/>
+        <location filename="../rvln.cpp" line="7503"/>
         <source>%p% completed</source>
         <translation>%p% выполнено</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5863"/>
+        <location filename="../rvln.cpp" line="5862"/>
         <source>&lt;b&gt;Bookmarks&lt;/b&gt;</source>
         <translation>&lt;b&gt;Закладки&lt;/b&gt;</translation>
     </message>
@@ -2005,27 +2000,27 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
         <translation>Подсчитать вхождение подстроки (регэксп)</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6135"/>
+        <location filename="../rvln.cpp" line="6134"/>
         <source>MD4 checksum for %1 is %2</source>
         <translation>Проверочная сумма MD4 для %1 такова: %2</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6151"/>
+        <location filename="../rvln.cpp" line="6150"/>
         <source>SHA1 checksum for %1 is %2</source>
         <translation>Проверочная сумма SHA1 для %1 такова: %2</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6380"/>
+        <location filename="../rvln.cpp" line="6379"/>
         <source>total to unique per cent diff: %1</source>
         <translation>всего к уникальным, проценты: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6697"/>
+        <location filename="../rvln.cpp" line="6696"/>
         <source>%1 number of occurrences of %2 is found</source>
         <translation>%1 вхождений %2 найдено</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6119"/>
+        <location filename="../rvln.cpp" line="6118"/>
         <source>MD5 checksum for %1 is %2</source>
         <translation>Проверочная сумма MD5 для %1 такова: %2</translation>
     </message>
@@ -2104,53 +2099,58 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
         <translation>Курсор по центру при прокрутке</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2615"/>
+        <location filename="../rvln.cpp" line="2584"/>
+        <source>Cursor blink time (msecs, zero is OFF)</source>
+        <translation>Время мигания курсора (мс, ноль - выключить)</translation>
+    </message>
+    <message>
+        <location filename="../rvln.cpp" line="2614"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2763"/>
+        <location filename="../rvln.cpp" line="2762"/>
         <source>Charset for file open from command line</source>
         <translation>Кодировка для открытия файла из командной строки</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2912"/>
+        <location filename="../rvln.cpp" line="2911"/>
         <source>Aspell directory</source>
         <translation>Папка Aspell</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2975"/>
+        <location filename="../rvln.cpp" line="2974"/>
         <source>Image conversion output format</source>
         <translation>Выходной формат преобразованных картинок</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2979"/>
-        <location filename="../rvln.cpp" line="2992"/>
+        <location filename="../rvln.cpp" line="2978"/>
+        <location filename="../rvln.cpp" line="2991"/>
         <source>Scale images with bilinear filtering</source>
         <translation>Масштабировать картинки с билинейным фильтром</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2984"/>
+        <location filename="../rvln.cpp" line="2983"/>
         <source>Output images quality</source>
         <translation>Выходное качество картинок</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2997"/>
+        <location filename="../rvln.cpp" line="2996"/>
         <source>Zip directory with processed images</source>
         <translation>Упаковать каталог с преобразованными картинками</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5161"/>
+        <location filename="../rvln.cpp" line="5160"/>
         <source>tables</source>
         <translation>таблицы</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5402"/>
+        <location filename="../rvln.cpp" line="5401"/>
         <source>new_session</source>
         <translation>новая сессия</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5908"/>
+        <location filename="../rvln.cpp" line="5907"/>
         <source>manage</source>
         <translation>зырить</translation>
     </message>
@@ -2160,12 +2160,12 @@ Do you want to install it?</source>
         <translation type="obsolete">Кажется, что %1 содержит плагин для TEA\nВы хотите установить его?</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6976"/>
+        <location filename="../rvln.cpp" line="6975"/>
         <source>Enter the archive name</source>
         <translation>Введите имя архива</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6978"/>
+        <location filename="../rvln.cpp" line="6977"/>
         <source>new_archive</source>
         <translation>new_archive</translation>
     </message>
@@ -2195,7 +2195,7 @@ Do you want to install it?</source>
         <translation>Автоматический отступ</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="2644"/>
+        <location filename="../rvln.cpp" line="2643"/>
         <source>Automatic preview images at file manager</source>
         <translation>Авто-показ картинок в файловом приказчике</translation>
     </message>
@@ -2215,22 +2215,22 @@ Do you want to install it?</source>
         <translation>Сортировать без учёта регистра</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6215"/>
+        <location filename="../rvln.cpp" line="6214"/>
         <source>bits per sample: %1</source>
         <translation>разрядность: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6216"/>
+        <location filename="../rvln.cpp" line="6215"/>
         <source>number of channels: %1</source>
         <translation>количество каналов: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6217"/>
+        <location filename="../rvln.cpp" line="6216"/>
         <source>sample rate: %1</source>
         <translation>частота оцифровки: %1</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="6219"/>
+        <location filename="../rvln.cpp" line="6218"/>
         <source>RMS for all channels: %1 dB</source>
         <translation>RMS для всех каналов: %1 dB</translation>
     </message>
@@ -2245,7 +2245,7 @@ Do you want to install it?</source>
         <translation>Режим подсветки</translation>
     </message>
     <message>
-        <location filename="../rvln.cpp" line="5162"/>
+        <location filename="../rvln.cpp" line="5161"/>
         <source>configs</source>
         <translation>конфиги</translation>
     </message>

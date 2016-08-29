@@ -2486,7 +2486,7 @@ void rvln::createOptions()
   lt_h->addWidget (cmb_font_name);
   lt_h->addWidget (spb_font_size);
 
-  page_interface_layout->addLayout (lt_h);
+  page_interface_layout->addLayout (lt_h, 1);
 
   lt_h = new QHBoxLayout;
 
@@ -2581,12 +2581,11 @@ void rvln::createOptions()
 
 
   spb_cursor_blink_time = new_spin_box (page_interface_layout,
-                                   tr ("Cursor blink time (msecs)"), 0, 10000,
+                                   tr ("Cursor blink time (msecs, zero is OFF)"), 0, 10000,
                                    settings->value ("cursor_blink_time", 1000).toInt());
 
 
-
-  spb_cursor_width= new_spin_box (page_interface_layout,
+  spb_cursor_width = new_spin_box (page_interface_layout,
                                    tr ("Cursor width"), 1, 3,
                                    settings->value ("cursor_width", 1).toInt());
 
@@ -2599,8 +2598,10 @@ void rvln::createOptions()
   spb_margin_pos->setValue (settings->value ("margin_pos", 72).toInt());
    
   QHBoxLayout *lt_margin = new QHBoxLayout;
-  lt_margin->addWidget (cb_show_margin);
-  lt_margin->addWidget (spb_margin_pos);
+    
+  lt_margin->insertWidget (-1, cb_show_margin, 0, Qt::AlignLeft);
+  lt_margin->insertWidget (-1, spb_margin_pos, 1, Qt::AlignLeft);
+
 
   page_interface_layout->addLayout (lt_margin);
   
@@ -2631,8 +2632,7 @@ void rvln::createOptions()
   
   connect (cb_altmenu, SIGNAL(stateChanged (int)),
            this, SLOT(cb_altmenu_stateChanged (int)));
- 
-  
+   
   
 #if QT_VERSION >= 0x050000
     
@@ -2698,7 +2698,7 @@ void rvln::createOptions()
   cb_northern_hemisphere = new QCheckBox (tr ("Northern hemisphere"), this);
   cb_northern_hemisphere->setCheckState (Qt::CheckState (settings->value ("northern_hemisphere", "2").toInt()));
 
-//
+
   QHBoxLayout *hb_moon_phase_algo = new QHBoxLayout;
   QLabel *l_moon_phase_algos = new QLabel (tr ("Moon phase algorithm"));
 
@@ -2827,13 +2827,14 @@ void rvln::createOptions()
   page_common->show();
 
 
+
   QScrollArea *scra_common = new QScrollArea;
   scra_common->setWidgetResizable (true);
   scra_common->setWidget (page_common);
 
   tab_options->addTab (scra_common, tr ("Common"));
 
-//  tab_options->addTab (page_common, tr ("Common"));
+  //tab_options->addTab (page_common, tr ("Common"));
 
 
   QWidget *page_functions = new QWidget (tab_options);
@@ -3036,7 +3037,7 @@ void rvln::createOptions()
   scra_images->setWidgetResizable (true);
   scra_images->setWidget (page_images);
 
-  tab_options->addTab (scra_common, tr ("Images"));
+  tab_options->addTab (scra_images, tr ("Images"));
  
   
 //  tab_options->addTab (page_images, tr ("Images"));

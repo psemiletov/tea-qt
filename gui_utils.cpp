@@ -129,8 +129,12 @@ QLineEdit* new_line_edit (QBoxLayout *layout, const QString &label, const QStrin
   QLineEdit *r = new QLineEdit;
   r->setText (def_value);
 
-  lt_h->addWidget (l);
-  lt_h ->addWidget (r);
+  //lt_h->addWidget (l);
+  //lt_h ->addWidget (r);
+  
+  lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
+  lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
+
 
   layout->addLayout (lt_h);
 
@@ -149,10 +153,15 @@ QSpinBox* new_spin_box (QBoxLayout *layout, const QString &label, int min, int m
   r->setRange (min, max);
   r->setValue (value);
 
-  lt_h->addWidget (l);
-  lt_h ->addWidget (r);
+ // lt_h->addWidget (l, 1);
+ // lt_h ->addWidget (r);
+ 
+ 
+  lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
+  lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
 
-  layout->addLayout (lt_h);
+
+  layout->addLayout (lt_h, 1);
 
   return r;
 }
@@ -171,11 +180,14 @@ QComboBox* new_combobox (QBoxLayout *layout,
   r->addItems (items);
   r->setCurrentIndex (r->findText (def_value));
 
-  lt_h->addWidget (l);
-  lt_h->addWidget (r);
+  //lt_h->addWidget (l, 1, Qt::AlignLeft);
+  //lt_h->addWidget (r);
+
+  lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
+  lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
 
   layout->addLayout (lt_h);
-
+  
   return r;
 }
 

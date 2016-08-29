@@ -1783,10 +1783,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cursor blink time (msecs)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cursor width</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1800,6 +1796,10 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Use EXIF orientation at image viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cursor blink time (msecs, zero is OFF)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

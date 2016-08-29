@@ -10,7 +10,7 @@ private|procptr|put|redim|return|scope|screen|screenres|shared|shl|
 shr|sleep|strptr|sub|type|union|until|var|varptr|wend|while|
 with|xor|const|public|if|then|else|call|exit)\b</item>
 
-<item name="types" type="keywords" color="type">\b(byte|double|integer|
+<item name="types" type="keywords" color="type">\b(byte|double|integer|const|
 long|longint|pointer|ptr|short|single|static|string|ubyte|
 uinteger|ulong|ulongint|unsigned|wstring|zstring)\b</item>
 

@@ -1706,10 +1706,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cursor blink time (msecs)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cursor width</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1723,6 +1719,10 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Use EXIF orientation at image viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cursor blink time (msecs, zero is OFF)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

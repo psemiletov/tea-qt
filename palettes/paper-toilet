@@ -22,3 +22,5 @@ modifiers=#55557f
 brackets=yellow
 margin_color=gray
 linenums_bg=#e4e4e4
+backgroundmark=blue
+foregroundmark=red

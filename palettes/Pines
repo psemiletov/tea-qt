@@ -19,3 +19,5 @@ modifiers=#e6eaff
 brackets=#ff5500
 label=#ffaa7f
 linenums_bg=#002b00
+backgroundmark=red
+foregroundmark=black

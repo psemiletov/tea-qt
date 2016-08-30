@@ -621,6 +621,7 @@ main window callbacks
 #endif
 
   void search_mark_all();
+  void search_unmark();
 
 
   void search_in_files_results_dclicked (QListWidgetItem *item);

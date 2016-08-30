@@ -18,3 +18,5 @@ tags=#eee4f5
 modifiers=#f3ffff
 linenums_bg=#3e4348
 brackets=#55aaff
+backgroundmark=red
+foregroundmark=white

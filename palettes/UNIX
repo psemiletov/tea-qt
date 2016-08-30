@@ -17,3 +17,5 @@ modifiers=white
 brackets=#ffaa00
 label=#ff007f
 linenums_bg=#0a0d4b
+backgroundmark=red
+foregroundmark=white

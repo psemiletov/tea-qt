@@ -1440,9 +1440,6 @@ void rvln::createMenus()
   add_to_menu (menu_search, tr ("Find next"), SLOT(search_find_next()),"F3");
   add_to_menu (menu_search, tr ("Find previous"), SLOT(search_find_prev()),"Ctrl+F3");
   
-  add_to_menu (menu_search, tr ("Mark all"), SLOT(search_mark_all()));
-    
-
   menu_search->addSeparator();
 
   add_to_menu (menu_search, tr ("Find in files"), SLOT(search_in_files()));
@@ -1453,6 +1450,11 @@ void rvln::createMenus()
   add_to_menu (menu_search, tr ("Replace all"), SLOT(search_replace_all()));
   add_to_menu (menu_search, tr ("Replace all in opened files"), SLOT(search_replace_all_at_ofiles()));
 
+  menu_search->addSeparator();
+  
+  add_to_menu (menu_search, tr ("Mark all"), SLOT(search_mark_all()));
+  add_to_menu (menu_search, tr ("Unmark"), SLOT(search_unmark()));
+  
   menu_search->addSeparator();
   
   
@@ -9464,7 +9466,34 @@ void rvln::ed_paste_from_charset()
 }
 */
 
+void rvln::search_unmark()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
 
+  int darker_val = settings->value ("darker_val", 100).toInt();
+ 
+  QString text_color = hash_get_val (global_palette, "text", "black");
+  QString back_color = hash_get_val (global_palette, "background", "white");
+
+
+  QString t_text_color = QColor (text_color).darker(darker_val).name(); 
+  QString t_back_color = QColor (back_color).darker(darker_val).name(); 
+
+  
+  QTextCursor cr;
+
+     
+  d->textEdit->selectAll();
+     
+          QTextCharFormat f =  d->textEdit->currentCharFormat();
+          f.setBackground (QColor (t_back_color));
+          f.setForeground (QColor (t_text_color));
+  d->textEdit->mergeCurrentCharFormat (f);
+  
+  d->textEdit->textCursor().clearSelection();
+}
 
 void rvln::search_mark_all()
 {

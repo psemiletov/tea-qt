@@ -117,6 +117,7 @@ CONFIG += warn_on \
 QT += core
 QT += gui
 QT += network
+#QT += svg
 
 greaterThan(QT_MAJOR_VERSION, 4) {
        QT += widgets

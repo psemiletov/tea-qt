@@ -1,4 +1,4 @@
- /***************************************************************************
+/***************************************************************************
  *   2007-2016 by Peter Semiletov                            *
  *   tea@list.ru                                             *
 
@@ -56,6 +56,9 @@ started at 08 November 2007
 #include <QScrollArea>
 
 #include <QXmlStreamReader>
+
+//#include <QtSvg>
+
 
 //#include <QWidgetAction>
 
@@ -1436,6 +1439,9 @@ void rvln::createMenus()
   add_to_menu (menu_search, tr ("Find"), SLOT(search_find()));
   add_to_menu (menu_search, tr ("Find next"), SLOT(search_find_next()),"F3");
   add_to_menu (menu_search, tr ("Find previous"), SLOT(search_find_prev()),"Ctrl+F3");
+  
+  add_to_menu (menu_search, tr ("Mark all"), SLOT(search_mark_all()));
+    
 
   menu_search->addSeparator();
 
@@ -2906,7 +2912,10 @@ void rvln::createOptions()
 
   QGroupBox *gb_func_misc = new QGroupBox (tr ("Miscellaneous"));
   QVBoxLayout *vb_func_misc = new QVBoxLayout;
+  vb_func_misc->setAlignment (Qt::AlignTop);
+  
   gb_func_misc->setLayout (vb_func_misc);
+  
 
   spb_fuzzy_q = new_spin_box (vb_func_misc, tr ("Fuzzy search factor"), 10, 100, settings->value ("fuzzy_q", "60").toInt());
 
@@ -3576,9 +3585,7 @@ void rvln::fn_spell_check()
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
         }
-        
-        
-        
+                      
            
      if (! stext.isNull() || ! stext.isEmpty())
      if (! spellchecker->check (cr.selectedText()))
@@ -8653,6 +8660,9 @@ qDebug() << "update_stylesheet";
 
 QIcon rvln::get_theme_icon (const QString &name)
 {
+  //if (file_get_ext (fname) == "svg")
+
+
   QString fname = theme_dir + "icons/" + name;
   
   if (file_exists (fname))
@@ -8660,6 +8670,7 @@ QIcon rvln::get_theme_icon (const QString &name)
   else     
       return QIcon (":/icons/" + name);
 }
+
 
 QString rvln::get_theme_icon_fname (const QString &name)
 {
@@ -9452,3 +9463,96 @@ void rvln::ed_paste_from_charset()
 
 }
 */
+
+
+
+void rvln::search_mark_all()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+ 
+  QString text_color = hash_get_val (global_palette, "text", "black");
+  QString back_color = hash_get_val (global_palette, "background", "white");
+
+
+  QString t_text_color = QColor (text_color).darker(darker_val).name(); 
+  QString t_back_color = QColor (back_color).darker(darker_val).name(); 
+
+  bool cont_search = true;
+  
+  QTextCursor cr;
+
+  int from = 0;
+  int pos_save = d->textEdit->textCursor().position();
+     
+  d->textEdit->selectAll();
+     
+          QTextCharFormat f =  d->textEdit->currentCharFormat();
+          f.setBackground (QColor (t_back_color));
+          f.setForeground (QColor (t_text_color));
+  d->textEdit->mergeCurrentCharFormat (f);
+  
+  d->textEdit->textCursor().clearSelection();
+
+      
+  if (settings->value ("find_from_cursor", "1").toBool())
+      from = d->textEdit->textCursor().position();
+   else
+          from = 0;
+
+
+      d->text_to_search = fif_get_text();
+
+      while (cont_search)
+      {
+      if (menu_find_regexp->isChecked())
+         cr = d->textEdit->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+      else
+          if (menu_find_fuzzy->isChecked())
+             {
+              int pos = str_fuzzy_search (d->textEdit->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
+              if (pos != -1)
+                 {
+                  from = pos + d->text_to_search.length() - 1;
+                  //set selection:
+                  cr = d->textEdit->textCursor();
+                  cr.setPosition (pos, QTextCursor::MoveAnchor);
+                  cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
+
+                  if (! cr.isNull())
+                      d->textEdit->setTextCursor (cr);
+
+                 }
+                else cont_search = false; 
+              //return;
+             }
+      else //normal search
+          cr = d->textEdit->document()->find (d->text_to_search, from, get_search_options());
+
+
+
+      if (! cr.isNull())  
+         {
+          d->textEdit->setTextCursor (cr);
+          QTextCharFormat f = cr.blockCharFormat();
+          f.setBackground (QColor (hash_get_val (global_palette, "backgroundmark", "red")));
+          f.setForeground (QColor (hash_get_val (global_palette, "foregroundmark", "blue")));
+
+          cr.mergeCharFormat (f);
+         } 
+      else 
+           //log->log(tr ("not found!"));
+          cont_search = false; 
+          
+       from = d->textEdit->textCursor().position();   
+      
+     }
+
+   d->textEdit->document()->setModified (false);
+
+  d->textEdit->textCursor().setPosition (pos_save, QTextCursor::MoveAnchor);
+  
+}

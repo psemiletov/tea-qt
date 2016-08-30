@@ -212,7 +212,6 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 {
   qDebug() << "CHunspellChecker::CHunspellChecker - start";
 
-
   initialized = false;
 
   dict_dir = path;
@@ -246,7 +245,6 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
   fname_userdict = "\\\\?\\" + fname_userdict;
 
 #endif
-
 
 
 //qDebug() << fname_aff;

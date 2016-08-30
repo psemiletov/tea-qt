@@ -620,6 +620,9 @@ main window callbacks
 
 #endif
 
+  void scale_image();
+
+
   void search_mark_all();
   void search_unmark();
 

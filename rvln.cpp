@@ -814,7 +814,7 @@ rvln::rvln()
   
   setAcceptDrops (true);
   
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>site 1: http://semiletov.org/tea<br>site 2: http://tea.ourproject.org<br>site 3 (development): https://github.com/psemiletov/tea-qt<br>read the Manual under the <i>Learn</i> tab!").arg (QString (VERSION_NUMBER)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Learn</i> tab!").arg (QString (VERSION_NUMBER)));
 
   
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
@@ -1497,8 +1497,9 @@ void rvln::createMenus()
   menu_instr = menu_functions->addMenu (tr ("Tools"));
   menu_instr->setTearOffEnabled (true);
   add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
+  add_to_menu (menu_instr, tr ("Scale image"), SLOT(convert_image()));
 
-
+  
 
 #if QT_VERSION >= 0x050000
 
@@ -9495,6 +9496,7 @@ void rvln::search_unmark()
   d->textEdit->textCursor().clearSelection();
 }
 
+
 void rvln::search_mark_all()
 {
   CDocument *d = documents->get_current();
@@ -9505,8 +9507,6 @@ void rvln::search_mark_all()
  
   QString text_color = hash_get_val (global_palette, "text", "black");
   QString back_color = hash_get_val (global_palette, "background", "white");
-
-
   QString t_text_color = QColor (text_color).darker(darker_val).name(); 
   QString t_back_color = QColor (back_color).darker(darker_val).name(); 
 
@@ -9514,28 +9514,27 @@ void rvln::search_mark_all()
   
   QTextCursor cr;
 
-  int from = 0;
   int pos_save = d->textEdit->textCursor().position();
      
   d->textEdit->selectAll();
      
-          QTextCharFormat f =  d->textEdit->currentCharFormat();
-          f.setBackground (QColor (t_back_color));
-          f.setForeground (QColor (t_text_color));
+  QTextCharFormat f = d->textEdit->currentCharFormat();
+  f.setBackground (QColor (t_back_color));
+  f.setForeground (QColor (t_text_color));
   d->textEdit->mergeCurrentCharFormat (f);
   
   d->textEdit->textCursor().clearSelection();
 
+  int from;
       
   if (settings->value ("find_from_cursor", "1").toBool())
       from = d->textEdit->textCursor().position();
-   else
-          from = 0;
+  else
+      from = 0;
 
+  d->text_to_search = fif_get_text();
 
-      d->text_to_search = fif_get_text();
-
-      while (cont_search)
+  while (cont_search)
       {
       if (menu_find_regexp->isChecked())
          cr = d->textEdit->document()->find (QRegExp (d->text_to_search), from, get_search_options());
@@ -9555,8 +9554,8 @@ void rvln::search_mark_all()
                       d->textEdit->setTextCursor (cr);
 
                  }
-                else cont_search = false; 
-              //return;
+                else 
+                cont_search = false; 
              }
       else //normal search
           cr = d->textEdit->document()->find (d->text_to_search, from, get_search_options());
@@ -9573,7 +9572,6 @@ void rvln::search_mark_all()
           cr.mergeCharFormat (f);
          } 
       else 
-           //log->log(tr ("not found!"));
           cont_search = false; 
           
        from = d->textEdit->textCursor().position();   
@@ -9582,6 +9580,100 @@ void rvln::search_mark_all()
 
    d->textEdit->document()->setModified (false);
 
-  d->textEdit->textCursor().setPosition (pos_save, QTextCursor::MoveAnchor);
+  d->goto_pos (pos_save);
+}
+
+
+
+
+void rvln::scale_image()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString fname = d->get_filename_at_cursor();
+
+  if (fname.isEmpty())
+     return;
+
+  if (! is_image (fname))
+     return;
+     
+  QString t = fif_get_text();
+  if (t.indexOf ("~") == -1)   
+     return;
+     
+  QFileInfo fi (fname);  
+     
+  QStringList params = t.split ("~");
   
+  QString fnameout= params[0].replace ("%fname", fi.fileName());
+  fnameout = fi.absolutePath() + "/" + fnameout;
+
+  qDebug() << fnameout;
+  
+  bool scale_by_side = true;
+  
+  if (params[1].indexOf("%") != -1)   
+     scale_by_side = false;
+     
+  int side;
+  int percent;
+  
+  if (scale_by_side)   
+     side = params[1].toInt();
+  else   
+      {
+       params[1].chop (1);
+       percent = params[1].toInt();
+      }
+
+  Qt::TransformationMode transformMode = Qt::FastTransformation;
+  if (settings->value ("img_filter", 0).toBool())
+     transformMode = Qt::SmoothTransformation;
+ 
+  int quality = settings->value ("img_quality", "-1").toInt();
+
+  QImage source (fname);
+  if (source.isNull())
+     return;
+                  
+ if (settings->value ("cb_exif_rotate", 0).toInt()) 
+    {
+     int exif_orientation = get_exif_orientation (fname);
+                      
+     QTransform transform;
+     qreal angle = 0;
+      
+     if (exif_orientation == 3)
+        angle = 180;
+     else    
+     if (exif_orientation == 6)
+        angle = 90;
+     else   
+     if (exif_orientation == 8)
+        angle = 270;
+      
+     if (angle != 0)
+        {
+         transform.rotate (angle);
+         source = source.transformed (transform);
+        }
+     }
+
+                  
+    QImage dest;
+    
+    if (scale_by_side)
+       dest = image_scale_by (source, true, side, transformMode);
+    else   
+        dest = image_scale_by (source, false, percent, transformMode);
+
+    QString fmt (settings->value ("output_image_fmt", "jpg").toString());
+
+    fnameout = change_file_ext (fnameout, fmt);
+
+    if (! dest.save (fnameout, fmt.toLatin1().constData(), quality))
+        qDebug() << "Cannot save " << fnameout;
 }

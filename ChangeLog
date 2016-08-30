@@ -8,6 +8,7 @@
 + Tune - Interface - Cursor blink time (msecs), set to zero to turn blinking off
 + Tune - Interface - Cursor width
 * Tune pages are scrollable
++ Functions - Tools - Scale image //s-%fname~50%
 
 2016 summer
 + basic Markdown support

@@ -292,7 +292,6 @@ wolf
 
 <p>At the last, <b>Replace all in opened files</b> works as the <b>Replace all</b>, but in the scope of all opened files.</p>
 
-
 <p><b>Search in files</b> - searches the text given at FIF within all text files, starting from the current directory at the built-in file manager (the <b>Manage</b> tab), and deeper into the subdirectories.  For a text encoding, TEA uses the charset that is selected at the charset list on the <b>Manage</b> tab.</p>
 
 <p>Actually, TEA searches not in the ALL files. For the central processing unit, there is no difference between text files or mp3, or images. Programs must know the difference, but how? And why it is so important to identify the text file? If the program cannot do that, it will search the text in all files - images, sounds, videos, etc.. Too much time! Thus, TEA must know the difference. So TEA presumes that text files is the files with extensions those TEA recognizes for syntax highlighting. Also, TEA know that text files are txt, odt, kwd, docx and other formats those TEA support. Finally, TEA know about some definitely text files those have names such as README, ChangeLog, etc.
@@ -300,14 +299,33 @@ wolf
 
 <p>So, TEA cannot search in all other files and currently there is no way to define custom file-name mask or something like that.</p>
 
+<p><b>Mark all found/Unmark</b> - colorize or uncolorize all search results at the text. This function can produce incorrent text color settings when using View - Darker, until you restart TEA or open and work with another file.
+</p>
+
 <br>
 <a name="mni_functions"></a>
 <h3>Functions</h3>
 
 <p>To use text-processing functions, you need to select some text first. Some functions (such as <b>Text statistics</b>) can work with a whole text if no fragment is selected. Also there are some special cases when TEA can treat the current word as a selection when there is no text is actually selected. For example, it is a behavior of <b>UPCASE</b> and <b>lowcase</b> functions. But such behavior is a rare exception from the rule.</p>
 
-<p>Some functions takes the parameter that you must place into the Famous input field. For example, the function <b>Remove lines &lt; N size</b> gets N value from the Famous input field, so first you type the value,  then call a function. There are no default values.
+<p>Some functions takes the parameter that you must place into the Famous Input Field (FIF, the input entry at the bottom of the main window). For example, the function <b>Remove lines &lt; N size</b> gets N value from the Famous input field, so first you type the value,  then call a function. There are no default values.
 </p>
+
+<p><b>Functions &gt; Tools  &gt; Scale image</b> - scales the image. At the text, select the image file name or set the cursor on it. Put into the FIF parameters of the scaling. Apply this function.</p>
+
+<p>The format of parameters is: filename~new size</p>
+
+<p>Filename is the output filename. It can be "hardcoded" (i.e. something like "out.jpg") or contain macros: %basename (the file name without extension), %ext (extension). Thus, the full source file name is %basename.%ext. If you don't want to overwrite the source file, you can use some prefix or suffix to alter the file name:</p>
+
+<p><i>foo-%basename-bar.%ext~1024</i></p>
+
+<p>In this example, the output image file name shall be prefixed with "foo-", and suffixed "with -bar".</p>
+
+<p>The second parameter is the new size. It can be in pixels or percents (just add "%" after the value):</p>
+
+<p><i>foo-%basename.%ext~1024</i></p>
+<p><i>foo-%basename.%ext~50%</i></p>
+
 
 <p><b>Cells</b> submenu is used for all table-like data processing. It can be LaTeX tables, CSV-data, etc. In all cases you need to define (at FIF) the column separator to tell TEA how to parse the strings.</p>
 
@@ -674,7 +692,7 @@ Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i
 
 <p>opera="C:\Program Files\Opera\opera.exe" "%s"</p>
 
-<p>Some more precise macros are available: %fbasename, %ffilename, %fext, %fdir. This allows to use the parts of the path. Thus, if we have the full path "/mnt/foo/bar.txt", %fdir = "/mnt/foo", %fbasename = "bar", %ffilename = "bar.txt", %fext = "txt". So the full path at the command line can be presented in the following way: %fdir/%fbasename.%fext
+<p>Some more precise macros are available: %basename, %filename, %ext, %dir. This allows to use the parts of the path. Thus, if we have the full path "/mnt/foo/bar.txt", %dir = "/mnt/foo", %basename = "bar", %filename = "bar.txt", %fext = "txt". So the full path at the command line can be presented in the following way: %dir/%basename.%ext
 </p>
 
 <p>To open the <b>current selected file</b> or <b>file at cursor</b> at the text (as by F2, but with external program) use %i macro.</p>

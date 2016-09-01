@@ -1506,10 +1506,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>UI tabs align</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Up</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1755,10 +1751,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;site 1: http://semiletov.org/tea&lt;br&gt;site 2: http://tea.ourproject.org&lt;br&gt;site 3 (development): https://github.com/psemiletov/tea-qt&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sum by last column</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1800,6 +1792,26 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Cursor blink time (msecs, zero is OFF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scale image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GUI tabs align</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mark all found</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

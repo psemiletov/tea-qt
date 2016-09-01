@@ -1452,7 +1452,7 @@ void rvln::createMenus()
 
   menu_search->addSeparator();
   
-  add_to_menu (menu_search, tr ("Mark all"), SLOT(search_mark_all()));
+  add_to_menu (menu_search, tr ("Mark all found"), SLOT(search_mark_all()));
   add_to_menu (menu_search, tr ("Unmark"), SLOT(search_unmark()));
   
   menu_search->addSeparator();
@@ -1497,7 +1497,7 @@ void rvln::createMenus()
   menu_instr = menu_functions->addMenu (tr ("Tools"));
   menu_instr->setTearOffEnabled (true);
   add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
-  add_to_menu (menu_instr, tr ("Scale image"), SLOT(convert_image()));
+  add_to_menu (menu_instr, tr ("Scale image"), SLOT(scale_image()));
 
   
 
@@ -4682,10 +4682,10 @@ void rvln::file_open_program()
      
       command = command.replace ("%s", d->file_name);
       
-      command = command.replace ("%fbasename", fi.baseName());
-      command = command.replace ("%ffilename", fi.fileName());
-      command = command.replace ("%fext", fi.suffix());
-      command = command.replace ("%fdir", fi.canonicalPath());
+      command = command.replace ("%basename", fi.baseName());
+      command = command.replace ("%filename", fi.fileName());
+      command = command.replace ("%ext", fi.suffix());
+      command = command.replace ("%dir", fi.canonicalPath());
 
       QString fname = d->get_filename_at_cursor();
       if (! fname.isEmpty())
@@ -9584,21 +9584,23 @@ void rvln::search_mark_all()
 }
 
 
-
-
 void rvln::scale_image()
 {
+  qDebug() << "1";  
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
 
   QString fname = d->get_filename_at_cursor();
 
+
   if (fname.isEmpty())
      return;
 
   if (! is_image (fname))
      return;
+    
      
   QString t = fif_get_text();
   if (t.indexOf ("~") == -1)   
@@ -9608,10 +9610,15 @@ void rvln::scale_image()
      
   QStringList params = t.split ("~");
   
-  QString fnameout= params[0].replace ("%fname", fi.fileName());
+  if (params.size() < 2)
+     return;
+ 
+  QString fnameout = params[0].replace ("%filename", fi.fileName());
+  fnameout = fnameout.replace ("%basename", fi.baseName());
+  fnameout = fnameout.replace ("%ext", fi.suffix());
   fnameout = fi.absolutePath() + "/" + fnameout;
-
-  qDebug() << fnameout;
+  
+ // qDebug() << fnameout;
   
   bool scale_by_side = true;
   

@@ -8,7 +8,10 @@
 + Tune - Interface - Cursor blink time (msecs), set to zero to turn blinking off
 + Tune - Interface - Cursor width
 * Tune pages are scrollable
-+ Functions - Tools - Scale image //s-%fname~50%
++ Functions - Tools - Scale image
+* %fext, %ffilename, %fdir, %fbasename macros are %ext, %filename, %dir, %basename now
++ Search - Mark all found
++ Search - Unmark
 
 2016 summer
 + basic Markdown support

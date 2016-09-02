@@ -1,14 +1,14 @@
 <document exts="py" langs="Python">
 
-<item name="options" wrap="0"> 
+<item name="options" wrap="0" xml_format="1"> 
 </item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
-\band\b; \bdel\b; \bfor\b; \bis\b; \braise\b; \bassert\b; \belif\b; \bfrom\b; \blambda\b; \breturn\b; \bbreak\b; \belse\b; \bglobal\b; \bnot\b; \btry\b; \bclass\b; \bexcept\b; \bif\b; \bor\b; \bwhile\b; \bcontinue\b; \bexec\b; \bimport\b; \bpass\b; \byield\b; \bdef\b; \bfinally\b; \bin\b; \bprint\b;</item>
+\b(and|del|for|is|raise|assert|elif|from|lambda|return|break|else|global|not|try|class|except|if|or|while|continue|exec|import|pass|yield|def|finally|in|print)\b</item>
 
 
 <item name="functions" type="keywords" color="functions">
-\babs\b;\bdivmod\b;\binput\b;\bopen\b;\bstaticmethod\b;\ball\b;\benumerate\b;\bint\b;\bord\b;\bstr\b;\bany\b;\beval\b;\bisinstance\b;\bpow\b;\bsum\b;\bbasestring\b;\bexecfile\b;\bissubclass\b;\bsuper\b;\bbin\b;\bfile\b;\biter\b; \bproperty\b;\btuple\b;\bbool\b;\bfilter\b;\blen\b; \brange\b;\btype\b;\bbytearray\b;\bfloat\b;\blist\b; \braw_input\b;\bunichr\b;\bcallable\b;\bformat\b; \blocals\b;\breduce\b;\bunicode\b;\bchr\b; \bfrozenset\b;\blong\b;\breload\b;\bvars\b; \bclassmethod\b;\bgetattr\b;\bmap\b;\brepr\b; \bxrange\b;\bcmp\b;\bglobals\b;\bmax\b; \breversed\b;\bzip\b;\bcompile\b;\bhasattr\b; \bmemoryview\b;\bround\b;\b__import__\b; \bcomplex\b;\bhash\b;\bmin\b;\bset\b;\bapply\b; \bdelattr\b;\bhelp\b;\bnext\b;\bsetattr\b;\bbuffer\b; \bdict\b;\bhex\b;\bobject\b;\bslice\b;\bcoerce\b; \bdir\b;\bid\b;\boct\b;\bsorted\b;\bintern\b;</item>
+\b(abs|divmod|input|open|staticmethod|all|enumerate|int|ord|str|any|eval|isinstance|pow|sum|basestring|execfile|issubclass|super|bin|file|iter|property|tuple|bool|filter|len|range|type|bytearray|float|list|raw_input|unichr|callable|format|locals|reduce|unicode|chr|frozenset|long|reload|vars|classmethod|getattr|map|repr|xrange|cmp|globals|max|reversed|zip|compile|hasattr|memoryview|round|__import__|complex|hash|min|set|apply|delattr|help|next|setattr|buffer|dict|hex|object|slice|coerce|dir|id|oct|sorted|intern)\b</item>
 
 <item name="operator" type="item" color="operator" fontstyle="bold">[=\+\*\/\(\)\[]|]</item>
 

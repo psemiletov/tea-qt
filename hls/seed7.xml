@@ -1,25 +1,24 @@
 <document exts="sd7" langs="Seed7">
 
-<item name="options" wrap="0"> 
+<item name="options" wrap="0" xml_format="1"> 
 </item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
-\baction\b;\band\b;\barray\b;\battr\b;
-\bbegin\b;\bcase\b;\bcategory\b;\bconst\b;
-\bconv\b;\bcross\b;\bdigits\b;\bdiv\b;
-\bdo\b;\bdownto\b;\belse\b;\belsif\b;
-\bend\b;\bfor\b;\bfound\b;\bhash\b;
-\bif\b;\bin\b;\binout\b;\bis\b;\blocal\b;\bloop\b;\blpad\b;\blpad0\b;\bmdiv\b;\bmod\b;\bnot\b;
-\bof\b;\botherwise\b;\bparse\b;\brange\b;\bref\b;
-\brem\b;\brepeat\b;\bresult\b;\brpad\b;\bsearch\b;
-\bset\b;\bstruct\b;\bsystem\b;\bthen\b;\bto\b;
-\buntil\b;\bvar\b;\bwhen\b;\bwhile\b</item>
+\b(action|and|array|attr|
+begin|case|category|const|
+conv|cross|digits|div|
+do|downto|else|elsif|
+end|for|found|hash|
+if|in|inout|is|local|loop|lpad|lpad0|mdiv|mod|not|
+of|otherwise|parse|range|ref|
+rem|repeat|result|rpad|search|
+set|struct|system|then|to|
+until|var|when|while)\b</item>
 
 
-<item name="types" type="keywords" color="type">\bbiginteger\b;\bbigrational\b;\bboolean\b;\bchar\b;\bcolor\b;\bcomplex\b;\bduration\b;\bexpr\b;\bfile\b;\bfloat\b;
-\bfunc\b;\binteger\b;\bobject\b;\bproc\b;\brational\b;
-\bstring\b;\btext\b;\btime\b;\bvoid\b</item>
-
+<item name="types" type="keywords" color="type">\b(biginteger|bigrational|boolean|char|color|complex|duration|expr|file|float|
+func|integer|object|proc|rational|
+string|text|time|void)\b</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">.*include.*"</item>
 

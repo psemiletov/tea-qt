@@ -1,64 +1,9 @@
 <document exts="pl;pm" langs="Perl">
 
-<item name="options" wrap="0"></item>
+<item name="options" wrap="0" xml_format="1"></item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\bif\b;
-\bmy\b;
-\bsub\b;
-\bdie\b;
-\buse\b;
-\brequire \b;
-\bunless\b;
-\bwhile\b;
-\buntil\b;
-\bforeach\b;
-\bprint\b;
-\blength\b;
-\bdo\b;
-\bnext\b;
-\blast\b;
-\bundef\b;
-\belsif\b;
-\bopen\b;
-\bredo\b;
-\bcontinue\b;
-\bchomp\b;
-\beof\b;
-\bclose\b;
-\breset\b;
-\blast\b;
-\bdefined\b;
-\bwhen\b;
-\bsplit\b;
-\bgiven\b;
-\bsay\b;
-\bexists\b;
-\bgoto\b;
-\bwarn\b;
-\beval\b;
-\breturn\b;
-\bwantarray\b;
-\bsplit\b;
-\blocal\b;
-\bshift\b;
-\bpush\b;
-\bpop\b;
-\bgrep\b;
-\bscalar\b;
-\bchdir\b;
-\bclosedir\b;
-\bglob\b;
-\breadline\b;
-\bimport\b;
-\bunimport\b;
-\bsystem\b;
-\bjoin\b;
-\bstat\b;
-\bgetpwnam\b;
-\bprintf\b;
-\bwait\b;
-\bwaitpid\b;
-\bsyscall\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(if|
+\bmy|sub|die|use|require|unless|while|until|foreach|print|length|do|next|last|undef|elsif|open|redo|continue|chomp|eof|close|reset|last|defined|when|split|given|say|exists|goto|warn|eval|return|wantarray|split|local|shift|push|pop|grep|scalar|chdir|closedir|glob|readline|import|unimport|system|join|stat|getpwnam|printf|wait|waitpid|syscall)\b</item>
 
 
 <item name="quotes" type="item" color="quotes">("[^\"]*")</item>

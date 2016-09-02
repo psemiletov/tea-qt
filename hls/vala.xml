@@ -1,90 +1,14 @@
 <document exts="vala" langs="Vala">
 
-<item name="options" wrap="0"> 
+<item name="options" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\bif\b;
-\belse\b;
-\bswitch\b;
-\bcase\b;
-\bdefault\b;
-\bbreak\b;
-\bcontinue\b;
-\breturn\b;
-\byield\b;
-\bfor\b;
-\bforeach\b;
-\bin\b;
-\bdo\b;
-\bwhile\b;
-\btry\b;
-\bcatch\b;
-\bfinally\b;
-\bthrow\b;
-\block\b;
-\busing\b;
-\btrue\b;
-\bfalse\b;
-\bnull\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(if|else|switch|case|default|break|continue|return|yield|for|foreach|in|do|while|try|catch|finally|throw|lock|using|true|false|null)\b</item>
 
-<item name="types" type="keywords" color="modifiers">\bnamespace\b;
-\binterface\b;
-\bclass\b;
-\bstruct\b;
-\benum\b;
-\bdelegate\b;
-\bsignal\b;
-\berrordomain\b;
-\bconstruct\b;
-\bget\b;
-\bset\b;
-\bvalue\b;
-\bbase\b;
-\bconst\b;
-\bstatic\b;
-\bvar\b;
-\bdynamic\b;
-\bweak\b;
-\bunowned\b;
-\bvirtual\b;
-\babstract\b;
-\boverride\b;
-\bpublic\b;
-\bprotected\b;
-\bprivate\b;
-\bextern\b;
-\bthrows\b;
-\brequires\b;
-\bensures\b;
-\byields\b;
-\bout\b;
-\bref</item>
+<item name="types" type="keywords" color="modifiers">\bnamespace|interface|class|struct|enum|delegate|signal|errordomain|construct|get|set|value|base|const|static|var|dynamic|weak|unowned|virtual|abstract|override|public|protected|private|extern|throws|requires|ensures|yields|out|ref)\b</item>
 
 
-<item name="types" type="keywords" color="type">\bchar\b;
-\buchar\b;
-\bshort\b;
-\bushort\b;
-\bint\b;
-\buint\b;
-\blong\b;
-\bulong\b;
-\bsize_t\b;
-\bssize_t\b;
-\bint8\b;
-\buint8\b;
-\bint16\b;
-\buint16\b;
-\bint32\b;
-\buint32\b;
-\bint64\b;
-\buint64\b;
-\bunichar\b;
-\bbool\b;
-\bfloat\b;
-\bdouble\b;
-\bstring\b;
-\bvoid\b</item>
+<item name="types" type="keywords" color="type">\b(char|uchar|short|ushort|int|uint|long|ulong|size_t|ssize_t|int8|uint8|int16|uint16|int32|uint32|int64|uint64|unichar|bool|float|double|string|void)\b</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">
 ^#include
@@ -110,6 +34,5 @@
 
 <item name="cm_mult" type="comment">/*%s*/</item>
 <item name="cm_single" type="comment">//%s</item>
-
 
 </document>

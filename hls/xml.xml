@@ -1,6 +1,6 @@
 <document exts="htm;html;xml;xhtml;ts;osm;xsl" langs="HTML;XHTML;XML">
 
-<item name="options" wrap="1"></item>
+<item name="options" wrap="1" xml_format="1"></item>
 
 <item name="tags" type="keywords" color="tags" fontstyle="bold">&lt;(?:"[^"]*"['"]*|'[^']*'['"]*|[^'">])+&gt;</item>
 

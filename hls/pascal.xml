@@ -1,45 +1,18 @@
 <document exts="pp;pas;dpr" langs="Pascal">
 
-<item name="options" casecare="0" wrap="0"> 
+<item name="options" casecare="0" wrap="0" xml_format="1"> 
 </item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
-\babsolute\b;\belse\b;\bnil\b;\bset\b;
-\band\b;\bend\b;\bnot\b;\bshl\b;
-\barray\b;\bfile\b;\bobject\b;\bshr\b;
-\basm\b;\bfor\b;\bof\b;\bstring\b;
-\bbegin\b;\bfunction\b;\bon\b;\bthen\b;
-\bbreak\b;\bgoto\b;\boperator\b;\bto\b;
-\bcase\b;\bif\b;\bor\b;\btype\b;
-\bconst\b;\bimplementation\b;\bpacked\b;\bunit\b;
-\bconstructor\b;\bin\b;\bprocedure\b;\buntil\b;
-\bcontinue\b;\binherited\b;\bprogram\b;\buses\b;
-\bdestructor\b;\binline\b;\brecord\b;\bvar\b;
-\bdiv\b;\binterface\b;\breintroduce\b;\bwhile\b;
-\bdo\b;\blabel\b;\brepeat\b;\bwith\b;
-\bdownto\b;\bmod\b;\bself\b;\bxor\b;
-\bas\b;\bfinalization\b;\blibrary\b;\braise\b;
-\bclass\b;\bfinally\b;\bon\b;\bthreadvar\b;
-\bexcept\b;\binitialization\b;\bout\b;\btry\b;
-\bexports\b;\bis\b;\bproperty\b;
-\bdispose\b;\bfalse\b;\btrue\b;
-\bexit\b;\bnew\b
-</item>
+\b(absolute|else|nil|set|and|end|not|shl|array|file|object|shr|asm|for|of|string|begin|function|on|then|break|goto|operator|to|case|if|or|type|const|implementation|packed|unit|constructor|in|procedure|until|continue|inherited|program|uses|destructor|inline|record|var|div|interface|reintroduce|while|do|label|repeat|with|downto|mod|self|xor|as|finalization|library|raise|class|finally|on|threadvar|except|initialization|out|try|exports|is|property|dispose|false|true|exit|new)\b</item>
 
 <item name="modifiers" type="keywords" color="modifiers" fontstyle="bold">
-\bexternal\b;\bnostackframe\b;\bread\b;
-\babstract\b;\bfar\b;\boldfpccall\b;\bregister\b;
-\balias\b;\bfar16\b;\boverride\b;\bsafecall\b;
-\bassembler\b;\bforward\b;\bpascal\b;\bsoftfloat\b;
-\bcdecl\b;\bindex\b;\bprivate\b;\bstdcall\b;
-\bcppdecl\b;\blocal\b;\bprotected\b;\bvirtual\b;
-\bdefault\b;\bname\b;\bpublic\b;\bwrite\b;
-\bexport\b;\bnear\b;\bpublished\b
+\b(external|nostackframe|read|abstract|far|oldfpccall|register|alias|far16|override|safecall|assembler|forward|pascal|softfloat|cdecl|index|private|stdcall|cppdecl|local|protected|virtual|default|name|public|write|export|near|published)\b
 </item>
 
 <item name="types" type="keywords" color="type">
-\binteger\b;\bshortint\b;\bsmallint\b;\blongint\b;
-\blongword\b;\bint64\b;\bbyte\b;\bword\b;\bcardinal\b;\bqword\b;\bboolean\b;\bbytebool\b;\blongbool\b;\bchar \b;\breal\b;\bsingle\b;\bdouble\b;\bextended\b;\bcomp\b;\bcurrency\b;\bansistring\b;\bstring\b;\bwidechar\b;\bpchar\b</item>
+\b(integer|shortint|smallint|longint|
+longword|int64|byte|word|cardinal|qword|boolean|bytebool|longbool|char |real|single|double|extended|comp|currency|ansistring|string|widechar|pchar)\b</item>
 
 <item name="label" type="item" color="label" fontstyle="bold">^[a-zA-Z_][a-zA-Z0-9_]*\:</item>
 

@@ -1,9 +1,9 @@
 <document exts="po" langs="gettext">
 
-<item name="options" wrap="1"> 
+<item name="options" wrap="1" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\bmsgid\b;\bmsgstr\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(msgid|msgstr)\b</item>
 
 <item name="quotes" type="item" color="quotes">("[^\"]*")</item>
 

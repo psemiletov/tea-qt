@@ -1,76 +1,10 @@
 <document exts="php" langs="PHP">
 
-<item name="options" wrap="0"> 
+<item name="options" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\babstract\b;
-\band\b;
-\barray\b;
-\bas\b;
-\bbreak\b;
-\bcase\b;
-\bcatch\b;
-\bcfunction\b;
-\bclass\b;
-\bclone\b;
-\bconst\b;
-\bcontinue\b;
-\bdeclare\b;
-\bdefault\b;
-\bdo\b;
-\belse\b;
-\belseif\b;
-\benddeclare\b;
-\bendfor\b;
-\bendforeach\b;
-\bendif\b;
-\bendswitch\b;
-\bendwhile\b;
-\bextends\b;
-\bfalse\b;
-\bfinal\b;
-\bfor\b;
-\bforeach\b;
-\bfunction\b;
-\bglobal\b;
-\bgoto\b;
-\bif\b;
-\bimplements\b;
-\binterface\b;
-\binstanceof\b;
-\bnamespace\b;
-\bnew\b;
-\bor\b;
-\bold_function\b;
-\bor\b;
-\bprivate\b;
-\bprotected\b;
-\bpublic\b;
-\bstatic\b;
-\bswitch\b;
-\bthrow\b;
-\btry\b;
-\btrue\b;
-\buse\b;
-\bvar\b;
-\bwhile\b;
-\bxor\b;
-\bdie\b;
-\becho\b;
-\bempty\b;
-\bexit\b;
-\beval\b;
-\binclude\b;
-\binclude_once\b;
-\bisset\b;
-\blist\b;
-\brequire\b;
-\brequire_once\b;
-\breturn\b;
-\bprint\b;
-\bunset\b;
-\bself\b;
-\bparent\b
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\babstract|
+\b(and|array|as|break|case|catch|cfunction|class|clone|const|continue|declare|default|do|else|elseif|enddeclare|endfor|endforeach|endif|endswitch|endwhile|extends|false|final|for|foreach|function|global|goto|if|implements|interface|instanceof|namespace|new|or|old_function|or|private|protected|public|static|switch|throw|try|true|use|var|while|xor|die|echo|empty|exit|eval|include|include_once|isset|list|require|require_once|return|print|unset|self|parent)\b
 </item>
 
 <item name="variables" type="keywords" color="type" fontstyle="bold">

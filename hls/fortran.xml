@@ -3,10 +3,7 @@
 <item name="options" casecare="0" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(if|then|else|end|case|do|while|select|
-program|module|subroutine|return|function|interface|call|.lt.|.le.|.eq.|.ne.|.gt.|.ge.|.not.|.and.|
-.or.|.eqv.|.neqv.|type|default|cycle|exit|use|include|recursive|
-where|elsewhere|contains|stop|implicit|continue|module|enddo|endif)\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(if|then|else|end|case|do|while|select|program|module|subroutine|return|function|interface|call|.lt.|.le.|.eq.|.ne.|.gt.|.ge.|.not.|.and.|.or.|.eqv.|.neqv.|type|default|cycle|exit|use|include|recursive|where|elsewhere|contains|stop|implicit|continue|module|enddo|endif)\b</item>
 
 <item name="types" type="keywords" color="type">\b(integer|real|complex|logical|
 character|data|double)\b</item>

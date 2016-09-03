@@ -1762,6 +1762,7 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
        
       if (btst[3] == 1 || btst[6] == 1) //LALT or LWIN
          {
+          int visible_lines;
 
           if (btst[6] == 1)
              m = QTextCursor::KeepAnchor;
@@ -1789,12 +1790,13 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
                                  return;
                                  
                    case Qt::Key_C:
-                                  int visible_lines = height() / fontMetrics().height();
+                                  visible_lines = height() / fontMetrics().height();
                                   cr.movePosition (QTextCursor::Down, m, visible_lines);
                                   setTextCursor (cr);
                                   return;               
-                   case Qt::Key_e:
-                                  int visible_lines = height() / fontMetrics().height();
+                                  
+                   case Qt::Key_E:
+                                  visible_lines = height() / fontMetrics().height();
                                   cr.movePosition (QTextCursor::Up, m, visible_lines);
                                   setTextCursor (cr);
                                   return;               

@@ -13,8 +13,11 @@
 * %fext, %ffilename, %fdir, %fbasename macros are %ext, %filename, %dir, %basename now
 + Search - Mark all found
 + Search - Unmark
-- Alt-S hardcoded
+- Alt-S, Alt-E hardcoded
 + Tune::Common - Use Left Alt + WASD as additional cursor keys
+   LALT + WASD = cursor movement
+   LALT + E, C = page up/down
+   LWIN and the same keys = select text
 
 2016 summer
 + basic Markdown support

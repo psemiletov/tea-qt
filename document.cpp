@@ -1787,6 +1787,18 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
                                  cr.movePosition (QTextCursor::Right, m);
                                  setTextCursor (cr);
                                  return;
+                                 
+                   case Qt::Key_C:
+                                  int visible_lines = height() / fontMetrics().height();
+                                  cr.movePosition (QTextCursor::Down, m, visible_lines);
+                                  setTextCursor (cr);
+                                  return;               
+                   case Qt::Key_e:
+                                  int visible_lines = height() / fontMetrics().height();
+                                  cr.movePosition (QTextCursor::Up, m, visible_lines);
+                                  setTextCursor (cr);
+                                  return;               
+                                     
                  }
       
        }

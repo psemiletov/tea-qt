@@ -1414,7 +1414,7 @@ void rvln::createMenus()
 
   add_to_menu (menu_markup, tr ("Link"), SLOT(mrkup_link()), "Alt+L");
   add_to_menu (menu_markup, tr ("Paragraph"), SLOT(mrkup_para()), "Alt+P");
-  add_to_menu (menu_markup, tr ("Color"), SLOT(mrkup_color()), "Alt+C");
+  add_to_menu (menu_markup, tr ("Color"), SLOT(mrkup_color()));
 
   add_to_menu (menu_markup, tr ("Break line"), SLOT(mrkup_br()), "Ctrl+Return");
   add_to_menu (menu_markup, tr ("Non-breaking space"), SLOT(mrkup_nbsp()), "Ctrl+Space");

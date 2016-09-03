@@ -1735,9 +1735,19 @@ void CTEAEdit::un_indent()
   setTextCursor (cur);
 }
 
+#define SK_A 38
+#define SK_D 40
+#define SK_W 25
+#define SK_S 39
+
+#define SK_E 26
+#define SK_C 54
+
 
 void CTEAEdit::keyPressEvent (QKeyEvent *event)
 {
+ // qDebug() << event->nativeScanCode() ; 
+
  // qDebug() << int_to_binary (event->nativeModifiers());
   // std::bitset<32> btst (event->nativeModifiers());
    
@@ -1767,35 +1777,35 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
           if (btst[6] == 1)
              m = QTextCursor::KeepAnchor;
 
-          switch (event->key())
+          switch (event->nativeScanCode())
                  {
-                  case Qt::Key_W:
+                  case SK_W:
                                  cr.movePosition (QTextCursor::Up, m);
                                  setTextCursor (cr);
                                  return;
 
-                  case Qt::Key_S:
+                  case SK_S:
                                  cr.movePosition (QTextCursor::Down, m);
                                  setTextCursor (cr);
                                  return;
 
-                  case Qt::Key_A:
+                  case SK_A:
                                  cr.movePosition (QTextCursor::Left, m);
                                  setTextCursor (cr);
                                  return;
 
-                  case Qt::Key_D:
+                  case SK_D:
                                  cr.movePosition (QTextCursor::Right, m);
                                  setTextCursor (cr);
                                  return;
                                  
-                   case Qt::Key_C:
+                   case SK_E:
                                   visible_lines = height() / fontMetrics().height();
                                   cr.movePosition (QTextCursor::Down, m, visible_lines);
                                   setTextCursor (cr);
                                   return;               
                                   
-                   case Qt::Key_E:
+                   case SK_C:
                                   visible_lines = height() / fontMetrics().height();
                                   cr.movePosition (QTextCursor::Up, m, visible_lines);
                                   setTextCursor (cr);

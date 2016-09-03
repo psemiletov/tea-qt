@@ -391,7 +391,7 @@ void rvln::update_bookmarks()
 void rvln::readSettings()
 {
 
-  cursor_blink_time = settings->value ("cursor_blink_time", 1000).toInt();
+  cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
 
   qApp->setCursorFlashTime (cursor_blink_time);
   
@@ -1302,7 +1302,7 @@ void rvln::createMenus()
   tm->setTearOffEnabled (true);
 
   add_to_menu (tm, tr ("Save .bak"), SLOT(file_save_bak()), "Ctrl+B");
-  add_to_menu (tm, tr ("Save timestamped version"), SLOT(file_save_version()), "Alt+S");
+  add_to_menu (tm, tr ("Save timestamped version"), SLOT(file_save_version()));
   add_to_menu (tm, tr ("Save session"), SLOT(session_save_as()));
 
   fileMenu->addSeparator();
@@ -2624,12 +2624,12 @@ void rvln::createOptions()
 
   spb_cursor_blink_time = new_spin_box (page_interface_layout,
                                    tr ("Cursor blink time (msecs, zero is OFF)"), 0, 10000,
-                                   settings->value ("cursor_blink_time", 1000).toInt());
+                                   settings->value ("cursor_blink_time", 0).toInt());
 
 
   spb_cursor_width = new_spin_box (page_interface_layout,
-                                   tr ("Cursor width"), 1, 3,
-                                   settings->value ("cursor_width", 1).toInt());
+                                   tr ("Cursor width"), 1, 5,
+                                   settings->value ("cursor_width", 2).toInt());
 
 
 
@@ -2675,6 +2675,10 @@ void rvln::createOptions()
   connect (cb_altmenu, SIGNAL(stateChanged (int)),
            this, SLOT(cb_altmenu_stateChanged (int)));
    
+  
+  cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
+  cb_wasd->setCheckState (Qt::CheckState (settings->value ("wasd", "0").toInt()));
+ 
   
 #if QT_VERSION >= 0x050000
     
@@ -2780,6 +2784,10 @@ void rvln::createOptions()
 
   
   page_common_layout->addWidget (cb_altmenu);
+  page_common_layout->addWidget (cb_wasd);
+  
+  
+  
   
 #if QT_VERSION >= 0x050000
   
@@ -8280,6 +8288,9 @@ void rvln::leaving_tune()
 
   settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
 
+
+  settings->setValue ("wasd", cb_wasd->checkState());
+  
   
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
   //settings->setValue ("right_to_left", cb_right_to_left->checkState());

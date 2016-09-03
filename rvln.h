@@ -918,6 +918,7 @@ prefs window widgets
   QSplitter *spl_fman;
 
   QCheckBox *cb_altmenu;
+  QCheckBox *cb_wasd;
   
 
   QCheckBox *cb_auto_img_preview;

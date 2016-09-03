@@ -43,6 +43,8 @@ code from qwriter:
 #include "utils.h"
 #include "gui_utils.h"
 
+#include "textproc.h"
+
 #include <QSettings>
 #include <QLabel>
 #include <QPainter>
@@ -51,6 +53,8 @@ code from qwriter:
 #include <QDir>
 #include <QXmlStreamReader>
 #include <QMimeData>
+
+#include <bitset>
 
 #if QT_VERSION >= 0x050000
 
@@ -634,7 +638,7 @@ void document_holder::apply_settings_single (CDocument *d)
   d->textEdit->lineNumberArea->setFont (f);
 */
 
-  d->textEdit->setCursorWidth (settings->value ("cursor_width", 1).toInt());
+  d->textEdit->setCursorWidth (settings->value ("cursor_width", 2).toInt());
  
   d->textEdit->setCenterOnScroll (settings->value ("center_on_scroll", true).toBool());
   
@@ -1734,6 +1738,61 @@ void CTEAEdit::un_indent()
 
 void CTEAEdit::keyPressEvent (QKeyEvent *event)
 {
+ // qDebug() << int_to_binary (event->nativeModifiers());
+  
+   /*
+   for (std::size_t i = 0; i < btst.size(); ++i) {
+        qDebug() << "btst[" << i << "]: " << btst[i];
+    }
+   */
+   //LSHIFT = 0
+//LCTRL = 2
+//LALT = 3
+  
+  if (settings->value ("wasd", "0").toInt())
+     {
+         std::bitset<32> btst (event->nativeModifiers());
+
+  if (btst[3] == 1)
+  //if (event->nativeModifiers() == 4) //left Ctrl
+     {
+     
+     
+    //  qDebug() << "LALT";
+
+      QTextCursor cr = textCursor();
+      
+      QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
+      if (btst[0] == 1)
+         m = QTextCursor::KeepAnchor;
+       
+      switch (event->key())
+             {
+              case Qt::Key_W:
+                        cr.movePosition (QTextCursor::Up, m);
+                        setTextCursor (cr);
+                        return;
+
+              case Qt::Key_S:
+                        cr.movePosition (QTextCursor::Down, m);
+                        setTextCursor (cr);
+                        return;
+
+              case Qt::Key_A:
+                        cr.movePosition (QTextCursor::Left, m);
+                        setTextCursor (cr);
+                        return;
+
+              case Qt::Key_D:
+                        cr.movePosition (QTextCursor::Right, m);
+                        setTextCursor (cr);
+                        return;
+             
+             }
+      
+     }
+    } 
+
   if (auto_indent)
      if (event->key() == Qt::Key_Return)
         {

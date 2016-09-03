@@ -2,6 +2,7 @@
 + Tune - Images - Use EXIF orientation at image viewer
 + Tune - Images - Apply hard rotation by EXIF data
 + new themes and palettes
++ new hls file format
 + optional libpoppler support (see README) for text extraction from PDF
 + optional djvu text extractor
 
@@ -12,6 +13,8 @@
 * %fext, %ffilename, %fdir, %fbasename macros are %ext, %filename, %dir, %basename now
 + Search - Mark all found
 + Search - Unmark
+- Alt-S hardcoded
++ Tune::Common - Use Left Alt + WASD as additional cursor keys
 
 2016 summer
 + basic Markdown support

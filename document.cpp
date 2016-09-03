@@ -1753,15 +1753,19 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
   if (settings->value ("wasd", "0").toInt())
      {
       std::bitset<32> btst (event->nativeModifiers());
+      QTextCursor cr = textCursor();
 
-      if (btst[3] == 1) //LALT
-         {
-          QTextCursor cr = textCursor();
-          QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
+      QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
 
-          if (btst[0] == 1)
-             m = QTextCursor::KeepAnchor;
+// if (btst[0] == 1)
+         //    m = QTextCursor::KeepAnchor;
        
+      if (btst[3] == 1 || btst[6] == 1) //LALT or LWIN
+         {
+
+          if (btst[6] == 1)
+             m = QTextCursor::KeepAnchor;
+
           switch (event->key())
                  {
                   case Qt::Key_W:
@@ -1786,41 +1790,6 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
                  }
       
        }
-      
-      if (btst[6] == 1) //LWIN
-         {
-          QTextCursor cr = textCursor();
-          QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
-
-          if (btst[0] == 1)
-             m = QTextCursor::KeepAnchor;
-       
-          switch (event->key())
-                 {
-                  case Qt::Key_W:
-                                 cr.movePosition (QTextCursor::Up, m);
-                                 setTextCursor (cr);
-                                 return;
-
-                  case Qt::Key_S:
-                                 cr.movePosition (QTextCursor::Down, m);
-                                 setTextCursor (cr);
-                                 return;
-
-                  case Qt::Key_A:
-                                 cr.movePosition (QTextCursor::WordLeft, m);
-                                 setTextCursor (cr);
-                                 return;
-
-                  case Qt::Key_D:
-                                 cr.movePosition (QTextCursor::NextWord, m);
-                                 setTextCursor (cr);
-                                 return;
-                 }
-      
-       }
-       
-       
     } 
 
   if (auto_indent)

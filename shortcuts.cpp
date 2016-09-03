@@ -56,7 +56,7 @@ QString mod_to_string (Qt::KeyboardModifiers k)
 
 QString keycode_to_string (int k)
 {
-//  return QKeySequence(k).toString();
+//  return QKeySequence(k).toString(QKeySequence::NativeText);
 
   QString s;
 

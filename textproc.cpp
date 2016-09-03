@@ -38,6 +38,8 @@ some code is taken from Scribus::util.cpp:
 #include <QString>
 #include <QMap>
 
+//#include <bitset>
+
 #include "textproc.h"
 #include "utils.h"
 
@@ -493,6 +495,13 @@ QString int_to_binary (int n)
   return result;
 }
 
+/*
+QString int_to_binary (int n)
+{
+  std::bitset<sizeof (int)> bt (n);  
+  return QString::fromStdString (bt.to_string<char,std::string::traits_type,std::string::allocator_type>());
+}
+*/
 
 unsigned int bin_to_decimal (const QString &s)
 {

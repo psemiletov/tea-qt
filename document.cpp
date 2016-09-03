@@ -1739,7 +1739,8 @@ void CTEAEdit::un_indent()
 void CTEAEdit::keyPressEvent (QKeyEvent *event)
 {
  // qDebug() << int_to_binary (event->nativeModifiers());
-  
+  // std::bitset<32> btst (event->nativeModifiers());
+   
    /*
    for (std::size_t i = 0; i < btst.size(); ++i) {
         qDebug() << "btst[" << i << "]: " << btst[i];
@@ -1748,49 +1749,78 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
    //LSHIFT = 0
 //LCTRL = 2
 //LALT = 3
-  
+  //LWIN = 6
   if (settings->value ("wasd", "0").toInt())
      {
-         std::bitset<32> btst (event->nativeModifiers());
+      std::bitset<32> btst (event->nativeModifiers());
 
-  if (btst[3] == 1)
-  //if (event->nativeModifiers() == 4) //left Ctrl
-     {
-     
-     
-    //  qDebug() << "LALT";
+      if (btst[3] == 1) //LALT
+         {
+          QTextCursor cr = textCursor();
+          QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
 
-      QTextCursor cr = textCursor();
-      
-      QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
-      if (btst[0] == 1)
-         m = QTextCursor::KeepAnchor;
+          if (btst[0] == 1)
+             m = QTextCursor::KeepAnchor;
        
-      switch (event->key())
-             {
-              case Qt::Key_W:
-                        cr.movePosition (QTextCursor::Up, m);
-                        setTextCursor (cr);
-                        return;
+          switch (event->key())
+                 {
+                  case Qt::Key_W:
+                                 cr.movePosition (QTextCursor::Up, m);
+                                 setTextCursor (cr);
+                                 return;
 
-              case Qt::Key_S:
-                        cr.movePosition (QTextCursor::Down, m);
-                        setTextCursor (cr);
-                        return;
+                  case Qt::Key_S:
+                                 cr.movePosition (QTextCursor::Down, m);
+                                 setTextCursor (cr);
+                                 return;
 
-              case Qt::Key_A:
-                        cr.movePosition (QTextCursor::Left, m);
-                        setTextCursor (cr);
-                        return;
+                  case Qt::Key_A:
+                                 cr.movePosition (QTextCursor::Left, m);
+                                 setTextCursor (cr);
+                                 return;
 
-              case Qt::Key_D:
-                        cr.movePosition (QTextCursor::Right, m);
-                        setTextCursor (cr);
-                        return;
-             
-             }
+                  case Qt::Key_D:
+                                 cr.movePosition (QTextCursor::Right, m);
+                                 setTextCursor (cr);
+                                 return;
+                 }
       
-     }
+       }
+      
+      if (btst[6] == 1) //LWIN
+         {
+          QTextCursor cr = textCursor();
+          QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
+
+          if (btst[0] == 1)
+             m = QTextCursor::KeepAnchor;
+       
+          switch (event->key())
+                 {
+                  case Qt::Key_W:
+                                 cr.movePosition (QTextCursor::Up, m);
+                                 setTextCursor (cr);
+                                 return;
+
+                  case Qt::Key_S:
+                                 cr.movePosition (QTextCursor::Down, m);
+                                 setTextCursor (cr);
+                                 return;
+
+                  case Qt::Key_A:
+                                 cr.movePosition (QTextCursor::WordLeft, m);
+                                 setTextCursor (cr);
+                                 return;
+
+                  case Qt::Key_D:
+                                 cr.movePosition (QTextCursor::NextWord, m);
+                                 setTextCursor (cr);
+                                 return;
+                 }
+      
+       }
+       
+       
     } 
 
   if (auto_indent)

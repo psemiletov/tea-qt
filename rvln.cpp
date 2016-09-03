@@ -2404,7 +2404,7 @@ void rvln::pb_assign_hotkey_clicked()
 }
 
 
-void rvln::pb_remove_hotkey_clicked ()
+void rvln::pb_remove_hotkey_clicked()
 {
   if (! lv_menuitems->currentItem())
      return;

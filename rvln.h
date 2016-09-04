@@ -736,6 +736,8 @@ main window callbacks
   void cal_add_months();
   void cal_add_years();
 
+  void recentoff();
+  
 
 /*************************
 prefs window callbacks
@@ -872,6 +874,8 @@ main window widgets
   QAction *menu_find_case;
   QAction *menu_find_regexp;
   QAction *menu_find_fuzzy;
+
+  QAction *menu_recent_off;
 
   QWidget *w_right;
   QLineEdit *ed_fman_fname;
@@ -1035,6 +1039,9 @@ prefs window widgets
   void fman_convert_images (bool by_side, int value);
  
   Q_INVOKABLE QString fif_get_text();
+  
+  
+  
   
   void fn_filter_delete_by_sep (bool mode);
 

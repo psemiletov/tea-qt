@@ -67,6 +67,7 @@ QHash <QString, QString> global_palette;
 QSettings *settings;
 QMenu *current_files_menu;
 
+bool b_recent_off;
 
 void CDocument::update_status()
 {
@@ -724,6 +725,9 @@ void document_holder::apply_settings()
 
 void document_holder::add_to_recent (CDocument *d)
 {
+  if (b_recent_off)
+     return;
+
   if (! file_exists (d->file_name))
      return;
 

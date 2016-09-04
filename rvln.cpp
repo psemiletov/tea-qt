@@ -181,6 +181,7 @@ extern QSettings *settings;
 extern QMenu *current_files_menu;
 extern QHash <QString, QString> global_palette;
 
+extern bool b_recent_off;
 
 rvln *mainWindow;  
 
@@ -620,6 +621,8 @@ void rvln::init_styles()
 rvln::rvln()
 {
   ui_update = true;
+
+  b_recent_off = false;
 
   lv_menuitems = NULL;
   fm_entry_mode = FM_ENTRY_MODE_NONE;
@@ -1332,6 +1335,9 @@ void rvln::createMenus()
   add_to_menu (menu_file_configs, tr ("Programs list"), SLOT(file_open_programs_file()));
 
   fileMenu->addSeparator();
+
+  menu_recent_off = add_to_menu (fileMenu, tr ("Temporary off add to recent"), SLOT(recentoff()));
+  menu_recent_off->setCheckable (true);
 
   add_to_menu (fileMenu, tr ("Print"), SLOT(file_print()));
   add_to_menu (fileMenu, tr ("Close current"), SLOT(close_current()), "Ctrl+W");
@@ -6710,8 +6716,8 @@ void rvln::fman_convert_images (bool by_side, int value)
       
                      if (angle != 0)
                         {
-                        transform.rotate (angle);
-                        source = source.transformed (transform);
+                         transform.rotate (angle);
+                         source = source.transformed (transform);
                         }
                     }
 
@@ -9597,8 +9603,6 @@ void rvln::search_mark_all()
 
 void rvln::scale_image()
 {
-  qDebug() << "1";  
-
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -9694,4 +9698,11 @@ void rvln::scale_image()
 
     if (! dest.save (fnameout, fmt.toLatin1().constData(), quality))
         qDebug() << "Cannot save " << fnameout;
+}
+
+
+void rvln::recentoff()
+{
+  b_recent_off = ! b_recent_off;
+  menu_recent_off->setChecked (b_recent_off);
 }

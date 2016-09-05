@@ -3141,6 +3141,14 @@ void rvln::open_at_cursor()
         }
       else
           {
+           if (file_get_ext (fname) == "gif")
+              {
+               CGIFWindow *w = new CGIFWindow;
+               w->load_image (fname);
+               return; 
+              }
+           else
+           {            
            if (! img_viewer->window_full.isVisible())
               {
                img_viewer->window_full.show();
@@ -3149,6 +3157,7 @@ void rvln::open_at_cursor()
       
            img_viewer->set_image_full (fname);
            return;
+           }
           }
       }
 
@@ -6844,6 +6853,14 @@ void rvln::fman_preview_image()
   
   if (is_image (fname))
      {
+      if (file_get_ext (fname) == "gif")
+              {
+              qDebug() << "aaaa";
+               CGIFWindow *w = new CGIFWindow;
+               w->load_image (fname);
+               return; 
+              }
+     
       img_viewer->window_full.show();
       img_viewer->set_image_full (fname);
      }

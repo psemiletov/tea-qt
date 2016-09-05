@@ -397,7 +397,7 @@ void CZORWindow::load_image (const QString &fname)
   bool orientation_portrait = false; 
   
   int exif_orientation = get_exif_orientation (fname);
-  qDebug() << "exif_orientation: " << exif_orientation;
+ // qDebug() << "exif_orientation: " << exif_orientation;
   
   if (settings->value ("zor_use_exif_orientation", 0).toInt())
   if (exif_orientation == 6 || exif_orientation == 8)
@@ -472,5 +472,58 @@ void CZORWindow::keyPressEvent (QKeyEvent * event)
       close();
      }
 
+  event->accept();
+}
+
+
+
+void CGIFWindow::keyPressEvent (QKeyEvent * event)
+{
+  if (event->key() == Qt::Key_Escape)
+     {
+      event->accept();
+      close();
+     }
+
+  event->accept();
+}
+
+
+void CGIFWindow::load_image (const QString &fname)
+{
+  if (! file_exists (fname))
+     return;
+     
+  if (movie)
+     delete movie;   
+     
+  movie = new QMovie (fname);
+  setMovie (movie);
+  
+  movie->jumpToFrame (0);  
+  resize (movie->currentImage().size()); 
+  
+  show();
+  
+  movie->start(); 
+}
+
+
+CGIFWindow::CGIFWindow (QWidget *parent): QLabel (parent)
+{
+  movie = 0;
+}
+
+
+CGIFWindow::~CGIFWindow()
+{
+  if (movie)
+    delete movie;
+}
+
+
+
+void CGIFWindow::closeEvent (QCloseEvent *event)
+{
   event->accept();
 }

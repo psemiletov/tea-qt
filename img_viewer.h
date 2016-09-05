@@ -6,6 +6,29 @@
 #include <QWidget>
 #include <QFileInfoList>
 #include <QLabel>
+#include <QMovie>
+
+class CGIFWindow: public QLabel
+{
+    Q_OBJECT
+    
+public:
+
+  QMovie *movie;
+  
+  CGIFWindow (QWidget *parent = 0);
+  ~CGIFWindow();
+
+
+  void load_image (const QString &fname);
+
+  //void paintEvent (QPaintEvent *event);
+//  void resizeEvent (QResizeEvent *event);
+  void keyPressEvent ( QKeyEvent * event);
+
+  void closeEvent (QCloseEvent *event);
+
+};
 
 
 class CZORWindow : public QWidget

@@ -26,7 +26,10 @@
 <a href="#mni_nav">Nav</a><br>
 <a href="#mni_fm">Fm</a><br>
 <a href="#mni_view">View</a><br>
+<a href="#mni_view">View</a><br>
 <a href="#mni_prefs">Preferences</a><br>
+<a href="#mni_keyb">Keyboard</a><br>
+
 <a href="#mni_notes">Notes</a><br>
 <a href="#mni_author">Other author's projects</a><br>
 
@@ -177,6 +180,8 @@
 <p><b>Bookmarks</b> - this menu is similar to <b>Recent files</b>, but the files list is updating by you, not by TEA. To add a current file to this list, use <b>Edit bookmarks &gt; Add to bookmarks</b> function. If the bookmarks list already contains the adding file, its record will be updated with new position and charset values. To delete the bookmark, open the bookmarks list from the <b>File &gt; Configs</b> menu, delete the needed line and save the list in a usual way. The wrong bookmark can be temporary disabling with the "#" prefix. To search wrong paths and disable such bookmarks automatically, use <b>Edit bookmarks &gt; Find obsolete paths</b> function.</p>
 
 <p><b>File actions</b> submenu. From this menu you can do some magical things. <b>Set UNIX end of line</b>, <b>Set Windows end of line</b>, <b>Set traditional Mac end of line</b> - those functions allow you to override the file's end of line (EOL). When you save the file, the choosed EOL will be applied. To check the file's EOL, select a file at the built-in file manager and use <b>Fm &gt; File information &gt; Full info</b>.</p>
+
+<p><b>Do not add to recent</b> - temporary disable the recent files list update. This function is useful if you need to open many files and do not want to overwrite your recent files list. So use "do not add" before close "unwanted" files, work with them, close, then switch "do not add" off to bring the normal recent list functionality.</p>
 
 
 <p><b>Exit</b> - closes TEA. To reduce the annoyance, TEA doesn't ask to confirm it. And another thing related to confirmations - TEA automatically proposes to save the modified existing files only. I.e. if you close (with TEA or by Ctrl-W) the modified new,  nonamed file, TEA silently will close it.</p>
@@ -801,6 +806,27 @@ The input dialog box will be provided. Then, walk through your directories. Sele
 <p><b>Word wrap</b> - use word wrapping globally for all documents, including new ones.</p>
 
 <p><b>Use wrap setting from highlighting module</b> on the <b>Interface</b> page means that the word wrap settings will be taken from the syntax highlighting modules, not from the global <b>Word wrap</b> option. Some modules has word wrapping turned on, and some turned off. For example, for C++ the word wrap setting is on. For the plain text or for the HTML - is off.</p>
+
+<br>
+<a name="mni_keyb"></a>
+<h3>Keyboard</h3>
+
+
+<p>In addition to the standard (see below) keyboard operation TEA supports left-handed cursor operations those can be enabled at <b>Tune - Common - Use Left Alt WASD</b>.</p>
+
+<p>When enabled, use Left Alt plus WASD for cursor movement, Left Alt plus E and C for page up/down. Use Left Win key with WASDEC to select the text.</p>
+
+<p>And here is the standard key bindings:</p>
+<p>
+Backspace - deletes the character before the cursor.<br>
+Delete - Deletes the character after the cursor.<br>
+Ctrl-Cor Ins- copy.<br>
+Ctrl-V or Shift-V - paste.<br>
+Ctrl-X or Shift-Del - cut.<br>
+Ctrl-Z/Y - undo/redo.<br>
+Ctrl-K -	deletes to the end of the line.<br>
+Ctrl-cursor left/right - previous/next word.</p>
+
 
 <br>
 <a name="mni_notes"></a>

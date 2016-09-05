@@ -1737,5 +1737,13 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <source>Mark all found</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Do not add to recent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Left Alt + WASD as additional cursor keys</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

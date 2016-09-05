@@ -1814,5 +1814,13 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <source>Mark all found</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Do not add to recent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Left Alt + WASD as additional cursor keys</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

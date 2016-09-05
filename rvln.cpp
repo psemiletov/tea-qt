@@ -1336,7 +1336,7 @@ void rvln::createMenus()
 
   fileMenu->addSeparator();
 
-  menu_recent_off = add_to_menu (fileMenu, tr ("Temporary off add to recent"), SLOT(recentoff()));
+  menu_recent_off = add_to_menu (fileMenu, tr ("Do not add to recent"), SLOT(recentoff()));
   menu_recent_off->setCheckable (true);
 
   add_to_menu (fileMenu, tr ("Print"), SLOT(file_print()));

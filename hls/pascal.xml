@@ -4,15 +4,14 @@
 </item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
-\b(absolute|else|nil|set|and|end|not|shl|array|file|object|shr|asm|for|of|string|begin|function|on|then|break|goto|operator|to|case|if|or|type|const|implementation|packed|unit|constructor|in|procedure|until|continue|inherited|program|uses|destructor|inline|record|var|div|interface|reintroduce|while|do|label|repeat|with|downto|mod|self|xor|as|finalization|library|raise|class|finally|on|threadvar|except|initialization|out|try|exports|is|property|dispose|false|true|exit|new)\b</item>
+\b(absolute|and|array|as|asm|begin|break|case|class|const|constructor|continue|destructor|dispose|div|do|downto|else|end|except|exit|exports|false|file|finalization|finally|for|function|goto|if|implementation|in|inherited|initialization|inline|interface|is|label|library|mod|new|nil|not|object|of|on|on|operator|or|out|packed|procedure|program|property|raise|record|reintroduce|repeat|self|set|shl|shr|string|then|threadvar|to|true|try|type|unit|until|uses|var|while|with|xor)\b</item>
 
 <item name="modifiers" type="keywords" color="modifiers" fontstyle="bold">
-\b(external|nostackframe|read|abstract|far|oldfpccall|register|alias|far16|override|safecall|assembler|forward|pascal|softfloat|cdecl|index|private|stdcall|cppdecl|local|protected|virtual|default|name|public|write|export|near|published)\b
+\b(abstract|alias|assembler|cdecl|cppdecl|default|export|external|far|far16|forward|index|local|name|near|nostackframe|oldfpccall|override|pascal|private|protected|public|published|read|register|safecall|softfloat|stdcall|virtual|write)\b
 </item>
 
 <item name="types" type="keywords" color="type">
-\b(integer|shortint|smallint|longint|
-longword|int64|byte|word|cardinal|qword|boolean|bytebool|longbool|char |real|single|double|extended|comp|currency|ansistring|string|widechar|pchar)\b</item>
+\b(ansistring|boolean|byte|bytebool|cardinal|char|comp|currency|double|extended|int64|integer|longbool|longint|longword|pchar|qword|real|shortint|single|smallint|string|widechar|word)\b</item>
 
 <item name="label" type="item" color="label" fontstyle="bold">^[a-zA-Z_][a-zA-Z0-9_]*\:</item>
 
@@ -29,7 +28,7 @@ longword|int64|byte|word|cardinal|qword|boolean|bytebool|longbool|char |real|sin
 <item name="mcomment-end" type="mcomment-end">\}</item>
 
 <item name="cm_mult" type="comment">{%s}</item>
-<item name="cm_single" type="comment">//%s</item>
 
+<item name="cm_single" type="comment">//%s</item>
 
 </document>

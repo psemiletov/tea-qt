@@ -2,9 +2,7 @@
 
 <item name="options" wrap="0" xml_format="1"></item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(if|
-\bmy|sub|die|use|require|unless|while|until|foreach|print|length|do|next|last|undef|elsif|open|redo|continue|chomp|eof|close|reset|last|defined|when|split|given|say|exists|goto|warn|eval|return|wantarray|split|local|shift|push|pop|grep|scalar|chdir|closedir|glob|readline|import|unimport|system|join|stat|getpwnam|printf|wait|waitpid|syscall)\b</item>
-
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(\bmy|chdir|chomp|close|closedir|continue|defined|die|do|elsif|eof|eval|exists|foreach|getpwnam|given|glob|goto|grep|if|import|join|last|last|length|local|next|open|pop|print|printf|push|readline|redo|require|reset|return|say|scalar|shift|split|split|stat|sub|syscall|system|undef|unimport|unless|until|use|wait|waitpid|wantarray|warn|when|while)\b</item>
 
 <item name="quotes" type="item" color="quotes">("[^\"]*")</item>
 

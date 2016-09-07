@@ -4,7 +4,7 @@
 </item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
-\b(if|else|for|while|repeat|next|break|tapply|apply|lapply|for|switch|UseMethod|NextMethod|function|in|TRUE|FALSE|NULL|Inf|NaN|NA|NA_integer_|NA_real_|NA_complex_|NA_character_)\b</item>
+\b(FALSE|Inf|NA|NA_character_|NA_complex_|NA_integer_|NA_real_|NULL|NaN|NextMethod|TRUE|UseMethod|apply|break|else|for|for|function|if|in|lapply|next|repeat|switch|tapply|while)\b</item>
 
 <item name="keywords2" type="keywords" color="keywords" fontstyle="bold">
 \b(array|complex|matrix|library)\b

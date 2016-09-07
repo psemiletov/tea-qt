@@ -3,12 +3,9 @@
 <item name="options" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(and|break|do|else|
-elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\b</item>
 
-<item name="functions" type="keywords" color="functions">\b(assert|collectgarbage|dofile|error|
-_G|getenv|getmetatable|ipairs|load|loadfile|loadstring|next|pairs|pcall|print|rawequal|rawget|rawset|select|setfenv|setmetatable|tonumber|
-tostring|type|unpack|_VERSION|xpcall|module|require)\b</item>
+<item name="functions" type="keywords" color="functions">\b(_G|_VERSION|assert|collectgarbage|dofile|error|getenv|getmetatable|ipairs|load|loadfile|loadstring|module|next|pairs|pcall|print|rawequal|rawget|rawset|require|select|setfenv|setmetatable|tonumber|tostring|type|unpack|xpcall)\b</item>
 
 <item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
 
@@ -23,7 +20,7 @@ tostring|type|unpack|_VERSION|xpcall|module|require)\b</item>
 <item name="mcomment-end" type="mcomment-end">--\]\]</item>
 
 <item name="cm_mult" type="comment">--[[%s--]]</item>
-<item name="cm_single" type="comment">--%s</item>
 
+<item name="cm_single" type="comment">--%s</item>
 
 </document>

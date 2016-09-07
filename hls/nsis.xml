@@ -3,16 +3,11 @@
 <item name="options" casecare="0" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(abort|break|call|case|default|do|else|endif|endswitch|endwhile|file|for|function|functionend|goto|if|insttype|loopuntil|name|name|next|outfile|page|pageex|pageexend|section|sectionend|sectiongroup|sectionin|switch|var|while|requestexecutionlevel|crccheck|setcompressor|showinstdetails|showuninstdetails|outfile|requestexecutionlevel|installdir|setoutpath|setshellvarcontext|writeuninstaller|writeregstr|createdirectory|sectionend)\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(abort|break|call|case|crccheck|createdirectory|default|do|else|endif|endswitch|endwhile|file|for|function|functionend|goto|if|installdir|insttype|loopuntil|name|name|next|outfile|outfile|page|pageex|pageexend|requestexecutionlevel|requestexecutionlevel|section|sectionend|sectionend|sectiongroup|sectionin|setcompressor|setoutpath|setshellvarcontext|showinstdetails|showuninstdetails|switch|var|while|writeregstr|writeuninstaller)\b</item>
 
-<item name="instattrs" type="keywords" color="keywords">\b(addbrandingimage|allowrootdirinstall|autoclosewindow|bgfont|bggradient|brandingtext|caption|changeui|checkbitmap|completedtext|componenttext|
-crccheck|detailsbuttontext|dirtext|
-dirvar|dirverify|fileerrortext|icon|
-installbuttontext|installcolors|installdir|
-installdirregkey)\b</item>
+<item name="instattrs" type="keywords" color="keywords">\b(addbrandingimage|allowrootdirinstall|autoclosewindow|bgfont|bggradient|brandingtext|caption|changeui|checkbitmap|completedtext|componenttext|crccheck|detailsbuttontext|dirtext|dirvar|dirverify|fileerrortext|icon|installbuttontext|installcolors|installdir|installdirregkey)\b</item>
 
 <item name="funx" type="keywords" color="functions" fontstyle="bold">\b(createshortcut|delete|deleteregkey|detailprint|dialog|findwindow|getdlgitem|intcmp|intop|messagebox|readregstr|rmdir|sectiongettext|sendmessage|setctlcolors|strcpy)\b</item>
-
 
 <item name="quotes" type="item" color="quotes">("[^\"]*")</item>
 
@@ -27,6 +22,5 @@ installdirregkey)\b</item>
 <item name="mcomment-end" type="mcomment-end">\*/</item>
 
 <item name="cm_single" type="comment">;%s</item>
-
 
 </document>

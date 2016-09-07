@@ -4,11 +4,11 @@
 </item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
-\b(and|del|for|is|raise|assert|elif|from|lambda|return|break|else|global|not|try|class|except|if|or|while|continue|exec|import|pass|yield|def|finally|in|print)\b</item>
+\b(and|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|not|or|pass|print|raise|return|try|while|yield)\b</item>
 
 
 <item name="functions" type="keywords" color="functions">
-\b(abs|divmod|input|open|staticmethod|all|enumerate|int|ord|str|any|eval|isinstance|pow|sum|basestring|execfile|issubclass|super|bin|file|iter|property|tuple|bool|filter|len|range|type|bytearray|float|list|raw_input|unichr|callable|format|locals|reduce|unicode|chr|frozenset|long|reload|vars|classmethod|getattr|map|repr|xrange|cmp|globals|max|reversed|zip|compile|hasattr|memoryview|round|__import__|complex|hash|min|set|apply|delattr|help|next|setattr|buffer|dict|hex|object|slice|coerce|dir|id|oct|sorted|intern)\b</item>
+\b(__import__|abs|all|any|apply|basestring|bin|bool|buffer|bytearray|callable|chr|classmethod|cmp|coerce|compile|complex|delattr|dict|dir|divmod|enumerate|eval|execfile|file|filter|float|format|frozenset|getattr|globals|hasattr|hash|help|hex|id|input|int|intern|isinstance|issubclass|iter|len|list|locals|long|map|max|memoryview|min|next|object|oct|open|ord|pow|property|range|raw_input|reduce|reload|repr|reversed|round|set|setattr|slice|sorted|staticmethod|str|sum|super|tuple|type|unichr|unicode|vars|xrange|zip)\b</item>
 
 <item name="operator" type="item" color="operator" fontstyle="bold">[=\+\*\/\(\)\[]|]</item>
 
@@ -23,6 +23,7 @@
 <item name="mcomment-end" type="mcomment-end">"""</item>
 
 <item name="cm_mult" type="comment">"""%s\n"""</item>
+
 <item name="cm_single" type="comment">#/%s</item>
 
 </document>

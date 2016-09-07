@@ -2,15 +2,11 @@
 
 <item name="options" wrap="0" xml_format="1"></item>
 
-<item name="types" type="types" color="type" fontstyle="bold">\b(boolean|double|byte|int|short|char|
-void|long|float)\b</item>
+<item name="types" type="types" color="type" fontstyle="bold">\b(boolean|byte|char|double|float|int|long|short|void)\b</item>
 
 	
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
-\b(abstract|continue|for|new|switch|assert|default|if|package|synchronized|
-do|goto|private|this|break|implements|protected|throw|byte|else|import|
-public|throws|case|enum|instanceof|return|transient|catch|extends|try|
-final|interface|static|class|finally|strictfp|volatile|const|native|super|while|true|false)\b</item>
+\b(abstract|assert|break|byte|case|catch|class|const|continue|default|do|else|enum|extends|false|final|finally|for|goto|if|implements|import|instanceof|interface|native|new|package|private|protected|public|return|static|strictfp|super|switch|synchronized|this|throw|throws|transient|true|try|volatile|while)\b</item>
 
 <item name="functions" type="item" color="functions">\b[A-Za-z0-9_]+(?=\()</item>
 
@@ -29,6 +25,7 @@ final|interface|static|class|finally|strictfp|volatile|const|native|super|while|
 <item name="mcomment-end" type="mcomment-end">\*/</item>
 
 <item name="cm_mult" type="comment">/*%s*/</item>
+
 <item name="cm_single" type="comment">//%s</item>
 
 </document>

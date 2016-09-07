@@ -8,7 +8,6 @@
 
 <item name="char" type="item" color="quotes">('[^']*')</item>
 
-
 <item name="single comment" type="item" color="single comment" fontstyle="italic">#[^\n]*</item>
 
 <item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">/\*</item>

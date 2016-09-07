@@ -361,6 +361,9 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
          {
           case QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP:
                                                     {
+                                                     if (s.indexOf (params) == -1)
+                                                        return s;
+                                                        
                                                      QStringList sl = s.split (params);
                                                      sl.sort();
                                                      result = sl.join (params);
@@ -368,6 +371,9 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                                     };
                                                     
           case QSTRL_PROC_LIST_FLIP_SEP:  {
+                                           if (s.indexOf (params) == -1)
+                                              return s;
+        
                                            QStringList sl = s.split (params);
                                            sl.sort();
                                                      

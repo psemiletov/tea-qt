@@ -184,6 +184,8 @@ public:
   QQmlEngine *qml_engine;
 
 #endif
+
+  QAction *last_action;
   
   int fm_entry_mode; 
 
@@ -377,9 +379,13 @@ protected:
 
 public slots:
 
+
+
 /*************************
 main window callbacks
 *************************/
+
+  void repeat();
 
   void receiveMessage(const QString &msg);
   

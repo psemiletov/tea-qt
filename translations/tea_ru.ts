@@ -922,7 +922,7 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="2685"/>
         <source>Use Left Alt + WASD as additional cursor keys</source>
-        <translation>Использовать левыый Alt - WASD как доп. курсорные</translation>
+        <translation>Использовать левый Alt - WASD как доп. курсорные</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="2980"/>

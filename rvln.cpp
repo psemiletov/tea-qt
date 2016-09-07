@@ -621,6 +621,8 @@ void rvln::init_styles()
 rvln::rvln()
 {
   ui_update = true;
+  
+  last_action = 0;
 
   b_recent_off = false;
 
@@ -926,6 +928,7 @@ void rvln::closeEvent (QCloseEvent *event)
 
 void rvln::newFile()
 {
+  last_action = qobject_cast<QAction *>(sender());
   documents->create_new();
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
@@ -933,6 +936,8 @@ void rvln::newFile()
 
 void rvln::open()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   if (! settings->value ("use_trad_dialogs", "0").toBool())
      {
       CDocument *d = documents->get_current();
@@ -1048,6 +1053,8 @@ void rvln::open()
 
 bool rvln::save()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return false;
@@ -1075,6 +1082,8 @@ bool rvln::save()
 
 bool rvln::saveAs()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return false;
@@ -1188,6 +1197,8 @@ bool rvln::saveAs()
 
 void rvln::about()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CAboutWindow *a = new CAboutWindow();
   a->move (x() + 20, y() + 20);
   a->show();
@@ -1493,13 +1504,8 @@ void rvln::createMenus()
   menu_functions = menuBar()->addMenu (tr ("Functions"));
   menu_functions->setTearOffEnabled (true);
 
-/* 
-  menu_instr = menuBar()->addMenu (tr ("Instr"));
-  menu_instr->setTearOffEnabled (true);
-
-  add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
-*/
-
+  add_to_menu (menu_functions, tr ("Repeat last"), SLOT(repeat()));
+  
   menu_instr = menu_functions->addMenu (tr ("Tools"));
   menu_instr->setTearOffEnabled (true);
   add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
@@ -1863,12 +1869,16 @@ void rvln::pageChanged (int index)
 
 void rvln::close_current()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   documents->close_current();
 }
 
 
 void rvln::ed_copy()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
       CDocument *d = documents->get_current();
@@ -1883,6 +1893,8 @@ void rvln::ed_copy()
 
 void rvln::ed_cut()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->cut();
@@ -1891,6 +1903,8 @@ void rvln::ed_cut()
 
 void rvln::ed_paste()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->paste();
@@ -1899,6 +1913,8 @@ void rvln::ed_paste()
 
 void rvln::ed_undo()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->undo();
@@ -1907,6 +1923,8 @@ void rvln::ed_undo()
 
 void rvln::ed_redo()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->redo();
@@ -1915,6 +1933,8 @@ void rvln::ed_redo()
 
 void rvln::ed_clear()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->clear();
@@ -1923,6 +1943,8 @@ void rvln::ed_clear()
 
 void rvln::upCase()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().toUpper());
@@ -1931,6 +1953,8 @@ void rvln::upCase()
 
 void rvln::dnCase()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
       d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().toLower());
@@ -1939,22 +1963,13 @@ void rvln::dnCase()
 
 void rvln::remove_formatting()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().simplified());
 }
 
-/*
-void rvln::mrkup_bold()
-{
-  CDocument *d = documents->get_current();
-  if (d)
-      d->textEdit->textCursor().insertText (hs_markup["bold"]->tags_a[d->markup_mode] +
-                                            d->textEdit->textCursor().selectedText() +
-                                            hs_markup["bold"]->tags_b[d->markup_mode]
-                                           );
-}
-*/
 
 void rvln::markup_text (const QString &mode)
 {
@@ -1979,122 +1994,79 @@ void rvln::markup_text (const QString &mode)
   
 void rvln::mrkup_align_center()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("align_center");
 }
   
 
 void rvln::mrkup_align_left()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("align_left");
 }
 
 
 void rvln::mrkup_align_right()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("align_right");
 }
 
 
 void rvln::mrkup_align_justify()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("align_justify");
 }
 
   
 void rvln::mrkup_bold()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   markup_text ("bold");
 }
 
 
 void rvln::mrkup_italic()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("italic");
 }
 
 
 void rvln::mrkup_underline()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("underline");
 }
 
 
 void rvln::mrkup_para()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("para");
 }
 
 
 void rvln::mrkup_link()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("link");
 }
 
 
 void rvln::mrkup_br()
 {
+  last_action = qobject_cast<QAction *>(sender());
   markup_text ("newline");
 }
 
 
-/*
-void rvln::mrkup_italic()
-{
-  CDocument *d = documents->get_current();
-  if (d)
-     d->textEdit->textCursor().insertText (hs_markup["italic"]->tags_a[d->markup_mode] +
-                                           d->textEdit->textCursor().selectedText() +
-                                           hs_markup["italic"]->tags_b[d->markup_mode]
-                                          );
-}
-*/
-/*
-void rvln::mrkup_underline()
-{
-  CDocument *d = documents->get_current();
-  if (d)
-     d->textEdit->textCursor().insertText (hs_markup["underline"]->tags_a[d->markup_mode] +
-                                           d->textEdit->textCursor().selectedText() +
-                                           hs_markup["underline"]->tags_b[d->markup_mode]
-                                          );
-}
-*/
-/*
-void rvln::mrkup_para()
-{
-  CDocument *d = documents->get_current();
-  if (d)
-     d->textEdit->textCursor().insertText (hs_markup["para"]->tags_a[d->markup_mode] +
-                                           d->textEdit->textCursor().selectedText() +
-                                           hs_markup["para"]->tags_b[d->markup_mode]
-                                          );
-}
-
-
-void rvln::mrkup_link()
-{
-  CDocument *d = documents->get_current();
-  if (d)
-     d->textEdit->textCursor().insertText (hs_markup["link"]->tags_a[d->markup_mode] +
-                                           d->textEdit->textCursor().selectedText() +
-                                           hs_markup["link"]->tags_b[d->markup_mode]
-                                          );
-}
-*/
-/*
-void rvln::mrkup_br()
-{
-  CDocument *d = documents->get_current();
-  if (d)
-     d->textEdit->textCursor().insertText (hs_markup["newline"]->tags_a[d->markup_mode] +
-                                           d->textEdit->textCursor().selectedText() +
-                                           hs_markup["newline"]->tags_b[d->markup_mode]
-                                          );
-}
-*/
-
 void rvln::mrkup_nbsp()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText ("&nbsp;");
@@ -2117,6 +2089,8 @@ QTextDocument::FindFlags rvln::get_search_options()
 
 void rvln::search_find()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
       CDocument *d = documents->get_current();
@@ -2134,13 +2108,7 @@ void rvln::search_find()
           from = d->textEdit->textCursor().position();
       else
           from = 0;
-
          
-      //if (d->text_to_search == fiftxt)
-      //from = d->textEdit->textCursor().position();
-      //else
-      //    from = 0;
-
       d->text_to_search = fiftxt;
 
       if (menu_find_regexp->isChecked())
@@ -2235,6 +2203,8 @@ void rvln::fman_find_prev()
 
 void rvln::search_find_next()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
       CDocument *d = documents->get_current();
@@ -2312,16 +2282,16 @@ void rvln::search_find_prev()
 
 void rvln::opt_shortcuts_find()
 {
-   int from = 0;
+  int from = 0;
 
-   QString fiftxt = fif_get_text();
+  QString fiftxt = fif_get_text();
 
-   if  (opt_shortcuts_string_to_find == fiftxt)
-       from = lv_menuitems->currentRow();
+  if (opt_shortcuts_string_to_find == fiftxt)
+      from = lv_menuitems->currentRow();
 
-   opt_shortcuts_string_to_find = fiftxt;
+  opt_shortcuts_string_to_find = fiftxt;
     
-   if (from == -1)
+  if (from == -1)
       from = 0;
 
   int index = shortcuts->captions.indexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
@@ -2359,6 +2329,8 @@ void rvln::opt_shortcuts_find_prev()
 
 void rvln::file_save_bak()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -2375,6 +2347,8 @@ void rvln::file_save_bak()
 
 void rvln::markup_ins_image()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3194,6 +3168,8 @@ void rvln::open_at_cursor()
 
 void rvln::toggle_wrap()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3207,6 +3183,8 @@ void rvln::toggle_wrap()
 
 void rvln::view_preview_in_bro()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3219,6 +3197,8 @@ void rvln::view_preview_in_bro()
 
 void rvln::nav_save_pos()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->position = d->textEdit->textCursor().position();
@@ -3227,6 +3207,8 @@ void rvln::nav_save_pos()
 
 void rvln::nav_goto_pos()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3254,23 +3236,21 @@ void rvln::slot_app_fontname_changed (const QString &text)
 void rvln::slot_app_font_size_changed (int i)
 {
   settings->setValue("app_font_size", i);
-//  updateFonts();
   update_stylesheet (fname_stylesheet);
-
 }
 
 
 void rvln::slot_font_size_changed (int i)
 {
   settings->setValue("editor_font_size", i);
-//  updateFonts();
   update_stylesheet (fname_stylesheet);
-
 }
 
 
 void rvln::mrkup_color()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3294,6 +3274,8 @@ void rvln::mrkup_color()
 
 void rvln::nav_goto_line()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3428,6 +3410,8 @@ void rvln::createManual()
 
 void rvln::file_crapbook()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   if (! QFile::exists (fname_crapbook))
       qstring_save (fname_crapbook, tr ("you can put here notes, etc"));
 
@@ -3437,6 +3421,8 @@ void rvln::file_crapbook()
 
 void rvln::fn_apply_to_each_line()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3476,6 +3462,8 @@ void rvln::fn_apply_to_each_line()
 
 void rvln::fn_filter_with_regexp()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3489,6 +3477,8 @@ void rvln::fn_filter_with_regexp()
 
 void rvln::fn_reverse()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3503,6 +3493,7 @@ void rvln::fn_reverse()
 
 void rvln::file_print()
 {
+  last_action = qobject_cast<QAction *>(sender());
 
 #ifdef PRINTER_ENABLE
 
@@ -3528,6 +3519,8 @@ void rvln::file_print()
 
 void rvln::file_last_opened()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   if (documents->recent_files.size() > 0)
      {
       documents->open_file_triplex (documents->recent_files[0]);
@@ -3542,6 +3535,8 @@ void rvln::file_last_opened()
 
 void rvln::fn_change_spell_lang()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *Act = qobject_cast<QAction *>(sender());
   settings->setValue ("spell_lang", Act->text());
   spellchecker->change_lang (Act->text());
@@ -3558,6 +3553,8 @@ void rvln::create_spellcheck_menu()
 
 void rvln::fn_spell_check()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3649,6 +3646,8 @@ void rvln::fn_spell_check()
 
 void rvln::fn_spell_add_to_dict()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3664,6 +3663,8 @@ void rvln::fn_spell_add_to_dict()
 
 void rvln::fn_remove_from_dict()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3679,6 +3680,8 @@ void rvln::fn_remove_from_dict()
 
 void rvln::fn_spell_suggest_callback()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3703,6 +3706,8 @@ void rvln::fn_spell_suggest_callback()
 
 void rvln::fn_spell_suggest()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3725,6 +3730,8 @@ void rvln::fn_spell_suggest()
 
 void rvln::file_open_bookmark()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
   documents->open_file_triplex (a->text());
   main_tab_widget->setCurrentIndex (idx_tab_edit); 
@@ -3733,6 +3740,8 @@ void rvln::file_open_bookmark()
 
 void rvln::file_add_to_bookmarks()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3765,6 +3774,8 @@ void rvln::file_add_to_bookmarks()
 
 void rvln::file_use_template()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
 
   QString txt = qstring_load (a->data().toString());
@@ -3777,6 +3788,8 @@ void rvln::file_use_template()
 
 void rvln::file_use_snippet()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3816,6 +3829,8 @@ void rvln::update_snippets()
 
 void rvln::file_save_version()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3877,6 +3892,8 @@ void rvln::dropEvent (QDropEvent *event)
 
 void rvln::fn_evaluate()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3895,6 +3912,8 @@ void rvln::fn_evaluate()
 
 void rvln::fn_sort_casecare()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3907,6 +3926,8 @@ void rvln::fn_sort_casecare()
 
 void rvln::fn_sort_casecare_sep()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3920,6 +3941,8 @@ void rvln::fn_sort_casecare_sep()
 
 void rvln::mrkup_text_to_html()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -3980,6 +4003,8 @@ void rvln::mrkup_text_to_html()
 
 void rvln::fn_text_stat()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4027,6 +4052,8 @@ void rvln::fn_text_stat()
 
 void rvln::fn_antispam_email()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4044,6 +4071,8 @@ void rvln::fn_antispam_email()
 
 void rvln::search_replace_with()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4054,6 +4083,8 @@ void rvln::search_replace_with()
 
 void rvln::search_replace_all_at_ofiles()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QStringList l = fif_get_text().split ("~");
   if (l.size() < 2)
      return;
@@ -4083,6 +4114,8 @@ void rvln::search_replace_all_at_ofiles()
 
 void rvln::search_replace_all()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   Qt::CaseSensitivity cs = Qt::CaseInsensitive;
   if (menu_find_case->isChecked())
      cs = Qt::CaseSensitive;
@@ -4172,6 +4205,8 @@ void rvln::add_to_last_used_charsets (const QString &s)
 
 void rvln::fn_flip_a_list()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4185,6 +4220,8 @@ void rvln::fn_flip_a_list()
 
 void rvln::fn_flip_a_list_sep()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4213,6 +4250,8 @@ QString str_to_entities (const QString &s)
 
 void rvln::mrkup_tags_to_entities()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (str_to_entities (d->textEdit->textCursor().selectedText()));
@@ -4223,6 +4262,8 @@ void rvln::mrkup_tags_to_entities()
 
 void rvln::fn_insert_loremipsum()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (qstring_load (":/text-data/lorem-ipsum"));
@@ -4231,6 +4272,8 @@ void rvln::fn_insert_loremipsum()
 
 void rvln::mrkup_mode_choosed()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
   markup_mode = a->text();
   documents->markup_mode = markup_mode;
@@ -4243,6 +4286,8 @@ void rvln::mrkup_mode_choosed()
 
 void rvln::mrkup_header()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4269,6 +4314,8 @@ void rvln::mrkup_header()
 
 void rvln::mrkup_align()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4298,6 +4345,8 @@ void rvln::mrkup_align()
 
 void rvln::nav_goto_right_tab()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4311,6 +4360,8 @@ void rvln::nav_goto_right_tab()
 
 void rvln::nav_goto_left_tab()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4324,6 +4375,8 @@ void rvln::nav_goto_left_tab()
 
 void rvln::fn_filter_rm_less_than()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4337,6 +4390,8 @@ void rvln::fn_filter_rm_less_than()
 
 void rvln::fn_filter_rm_greater_than()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4350,6 +4405,8 @@ void rvln::fn_filter_rm_greater_than()
 
 void rvln::fn_filter_rm_duplicates()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4363,6 +4420,8 @@ void rvln::fn_filter_rm_duplicates()
 
 void rvln::fn_filter_rm_empty()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4376,6 +4435,8 @@ void rvln::fn_filter_rm_empty()
 
 void rvln::fn_extract_words()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4436,6 +4497,8 @@ QString toggle_fname_header_source (const QString &fileName)
 
 void rvln::nav_toggle_hs()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4488,6 +4551,8 @@ QString morse_to_lang (const QString &s, const QString &lang)
 
 void rvln::fn_morse_from_en()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (morse_from_lang (d->textEdit->textCursor().selectedText().toUpper(), "en"));
@@ -4496,6 +4561,8 @@ void rvln::fn_morse_from_en()
 
 void rvln::fn_morse_to_en()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (morse_to_lang (d->textEdit->textCursor().selectedText(), "en"));
@@ -4504,6 +4571,8 @@ void rvln::fn_morse_to_en()
 
 void rvln::fn_morse_from_ru()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (morse_from_lang (d->textEdit->textCursor().selectedText().toUpper(), "ru"));
@@ -4512,6 +4581,8 @@ void rvln::fn_morse_from_ru()
 
 void rvln::fn_morse_to_ru()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (morse_to_lang (d->textEdit->textCursor().selectedText(), "ru"));
@@ -4520,12 +4591,16 @@ void rvln::fn_morse_to_ru()
 
 void rvln::nav_focus_to_fif()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   fif->setFocus (Qt::OtherFocusReason);
 }
 
 
 void rvln::nav_focus_to_editor()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->setFocus (Qt::OtherFocusReason);
@@ -4534,6 +4609,8 @@ void rvln::nav_focus_to_editor()
 
 void rvln::edit_copy_current_fname()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      QApplication::clipboard()->setText (d->file_name);
@@ -4542,6 +4619,8 @@ void rvln::edit_copy_current_fname()
 
 void rvln::fn_insert_date()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (QDate::currentDate ().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
@@ -4550,6 +4629,8 @@ void rvln::fn_insert_date()
 
 void rvln::fn_insert_time()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (QTime::currentTime ().toString (settings->value("time_format", "hh:mm:ss").toString()));
@@ -4558,6 +4639,8 @@ void rvln::fn_insert_time()
 
 void rvln::fn_rm_formatting_at_each_line()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4609,28 +4692,29 @@ int get_arab_num(std::string rom_str)
 
 void rvln::fn_number_arabic_to_roman()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (arabicToRoman (d->textEdit->textCursor().selectedText().toUInt()));
-     
-   
 }
 
 
 void rvln::fn_number_roman_to_arabic()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      //d->textEdit->textCursor().insertText (QString::number(romanToDecimal (d->textEdit->textCursor().selectedText().toUpper().toUtf8().data())));
      d->textEdit->textCursor().insertText (QString::number(get_arab_num (d->textEdit->textCursor().selectedText().toUpper().toStdString())));
-     
-          
-
 }
 
 
 void rvln::help_show_gpl()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->open_file (":/COPYING", "UTF-8");
   if (d)
      d->textEdit->setReadOnly (true);
@@ -4655,12 +4739,16 @@ void rvln::update_dyn_menus()
 
 void rvln::file_open_bookmarks_file()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   documents->open_file (fname_bookmarks, "UTF-8");
 }
 
 
 void rvln::file_open_programs_file()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
   if (! file_exists (fname_programs))
@@ -4690,6 +4778,8 @@ void rvln::process_readyReadStandardOutput()
 
 void rvln::file_open_program()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4749,6 +4839,8 @@ void rvln::update_programs()
 
 void rvln::fn_insert_template_html()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (qstring_load (":/text-data/template-html"));
@@ -4757,6 +4849,8 @@ void rvln::fn_insert_template_html()
 
 void rvln::fn_insert_template_html5()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (qstring_load (":/text-data/template-html5"));
@@ -4765,6 +4859,8 @@ void rvln::fn_insert_template_html5()
 
 void rvln::view_hide_error_marks()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4783,6 +4879,8 @@ void rvln::view_hide_error_marks()
 
 void rvln::fn_rm_formatting()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().simplified());
@@ -4791,6 +4889,8 @@ void rvln::fn_rm_formatting()
 
 void rvln::fn_rm_compress()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4807,12 +4907,16 @@ void rvln::fn_rm_compress()
 
 void rvln::view_toggle_fs()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   setWindowState(windowState() ^ Qt::WindowFullScreen);
 }
 
 
 void rvln::help_show_news()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QString fname = ":/NEWS";
   if (QLocale::system().name().left(2) == "ru")
      fname = ":/NEWS-RU";
@@ -4825,6 +4929,8 @@ void rvln::help_show_news()
 
 void rvln::help_show_changelog()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->open_file (":/ChangeLog", "UTF-8");
   if (d)
      d->textEdit->setReadOnly (true);
@@ -4833,6 +4939,8 @@ void rvln::help_show_changelog()
 
 void rvln::help_show_todo()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->open_file (":/TODO", "UTF-8");
   if (d)
      d->textEdit->setReadOnly (true);
@@ -4981,6 +5089,8 @@ void rvln::update_scripts()
 
 void rvln::fn_run_script()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -5068,6 +5178,8 @@ void rvln::cb_button_saves_as()
 
 void rvln::fman_home()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
   fman->nav ("c:/");
@@ -5260,6 +5372,8 @@ void rvln::fn_convert_quotes_angle()
 
 void rvln::fn_convert_quotes_curly()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -5276,6 +5390,8 @@ void rvln::fn_convert_quotes_curly()
 
 void rvln::fn_convert_quotes_tex_curly()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -5292,6 +5408,8 @@ void rvln::fn_convert_quotes_tex_curly()
 
 void rvln::fn_convert_quotes_tex_angle_01()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -5308,6 +5426,8 @@ void rvln::fn_convert_quotes_tex_angle_01()
 
 void rvln::fn_convert_quotes_tex_angle_02()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -5325,6 +5445,8 @@ void rvln::fn_convert_quotes_tex_angle_02()
 
 void rvln::fn_enum()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -5364,6 +5486,8 @@ void rvln::fn_enum()
 
 void rvln::view_stay_on_top()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   Qt::WindowFlags flags = windowFlags();
   flags ^= Qt::WindowStaysOnTopHint;
   setWindowFlags (flags );
@@ -5385,6 +5509,8 @@ void rvln::update_sessions()
 
 void rvln::file_open_session()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
   documents->load_from_session (a->data().toString());
 }
@@ -5392,6 +5518,8 @@ void rvln::file_open_session()
 
 void rvln::session_save_as()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   if (documents->list.size() < 0)
      return;
 
@@ -5584,6 +5712,8 @@ void rvln::load_palette (const QString &fileName)
 
 void rvln::file_use_palette()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
   QString fname (dir_palettes);
   fname.append ("/").append (a->text());
@@ -6224,6 +6354,8 @@ void rvln::fm_full_info()
 
 void rvln::file_reload()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -6265,6 +6397,8 @@ void rvln::file_reload_enc_itemDoubleClicked (QListWidgetItem *item)
 
 void rvln::file_reload_enc()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CTextListWnd *w = new CTextListWnd (tr ("Reload with encoding"), tr ("Charset"));
 
   if (sl_last_used_charsets.size () > 0)
@@ -6357,7 +6491,7 @@ void rvln::run_unitaz (int mode)
            pb_status->setValue (c++);
           }
 
-  QStringList l;
+//  QStringList l;
   QList <CStrIntPair*> uwords;
 
   foreach (QString s, h.keys())
@@ -6395,12 +6529,16 @@ void rvln::run_unitaz (int mode)
 
 void rvln::fn_get_words_count()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   run_unitaz (0);
 }
 
 
 void rvln::fn_unitaz_abc()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   run_unitaz (1);
 }
 
@@ -6548,12 +6686,16 @@ void rvln::count_substring (bool use_regexp)
 
 void rvln::fn_count()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   count_substring (false);
 }
 
 
 void rvln::fn_count_rx()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   count_substring (true);
 }
 
@@ -6565,7 +6707,6 @@ void rvln::read_search_options()
   menu_find_regexp->setChecked (settings->value ("find_regexp", "0").toBool());
   menu_find_fuzzy->setChecked (settings->value ("find_fuzzy", "0").toBool());
   menu_find_from_cursor->setChecked (settings->value ("find_from_cursor", "1").toBool());
-
 }
 
 
@@ -6576,7 +6717,6 @@ void rvln::write_search_options()
   settings->setValue ("find_regexp", menu_find_regexp->isChecked());
   settings->setValue ("find_fuzzy", menu_find_fuzzy->isChecked());
   settings->setValue ("find_from_cursor", menu_find_from_cursor->isChecked());
-
 }
 
 
@@ -6638,6 +6778,8 @@ QString rvln::fif_get_text()
 
 void rvln::fn_rm_trailing_spaces()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -6763,6 +6905,8 @@ void rvln::fman_convert_images (bool by_side, int value)
 
 void rvln::fman_img_conv_by_side()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   int side = fif_get_text().toInt();
   if (side == 0)
      return;
@@ -6773,6 +6917,8 @@ void rvln::fman_img_conv_by_side()
 
 void rvln::fman_img_conv_by_percent()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   int percent = fif_get_text().toInt();
   if (percent == 0)
      return;
@@ -6783,6 +6929,8 @@ void rvln::fman_img_conv_by_percent()
 
 void rvln::fn_escape()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -6794,6 +6942,8 @@ void rvln::fn_escape()
 
 void rvln::fman_add_to_zip()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
 
@@ -6819,6 +6969,8 @@ void rvln::fman_add_to_zip()
 
 void rvln::fman_create_zip()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   bool ok;
    
   QString name = QInputDialog::getText (this, tr ("Enter the archive name"),
@@ -6847,6 +6999,8 @@ void rvln::fman_save_zip()
 
 void rvln::fman_preview_image()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QString fname = fman->get_sel_fname();
   if (fname.isNull() || fname.isEmpty())
      return;
@@ -6869,6 +7023,8 @@ void rvln::fman_preview_image()
 
 void rvln::ed_indent()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -6879,6 +7035,8 @@ void rvln::ed_indent()
 
 void rvln::ed_unindent()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -6889,7 +7047,8 @@ void rvln::ed_unindent()
 
 void rvln::fn_sort_casecareless()
 {
- 
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -6903,7 +7062,6 @@ void rvln::fn_sort_casecareless()
 
 void rvln::fman_fname_entry_confirm()
 {
-
   if (fm_entry_mode == FM_ENTRY_MODE_OPEN)
      fman_open();     
    
@@ -6927,6 +7085,8 @@ void rvln::update_view_hls()
 
 void rvln::file_use_hl()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
@@ -6939,6 +7099,8 @@ void rvln::file_use_hl()
 
 void rvln::fn_strip_html_tags()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -6959,6 +7121,8 @@ void rvln::fn_strip_html_tags()
 
 void rvln::fn_number_decimal_to_binary()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (int_to_binary (d->textEdit->textCursor().selectedText().toInt()));
@@ -6967,6 +7131,8 @@ void rvln::fn_number_decimal_to_binary()
 
 void rvln::fn_number_flip_bits()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (!d)
      return;
@@ -6987,6 +7153,8 @@ void rvln::fn_number_flip_bits()
 
 void rvln::fn_use_table()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
 
   if (main_tab_widget->currentIndex() == idx_tab_edit)
@@ -7042,6 +7210,8 @@ void rvln::update_tables()
 
 void rvln::fn_binary_to_decimal()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (QString::number (bin_to_decimal (d->textEdit->textCursor().selectedText())));
@@ -7180,18 +7350,24 @@ void rvln::fn_filter_delete_by_sep (bool mode)
 
 void rvln::fn_filter_delete_before_sep()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   fn_filter_delete_by_sep (true);
 }
 
 
 void rvln::fn_filter_delete_after_sep()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   fn_filter_delete_by_sep (false);
 }
 
 
 void rvln::fman_mk_gallery()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -7292,6 +7468,8 @@ void rvln::fman_mk_gallery()
 
 void rvln::indent_by_first_line()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -7337,6 +7515,8 @@ void rvln::search_in_files_results_dclicked (QListWidgetItem *item)
 
 void rvln::search_in_files()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QStringList lresult;
   QString charset = cb_fman_codecs->currentText();
   QString path = fman->dir.path();
@@ -7405,6 +7585,8 @@ void rvln::search_in_files()
 
 void rvln::view_use_profile()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
   QSettings s (a->data().toString(), QSettings::IniFormat);
 
@@ -7434,6 +7616,8 @@ void rvln::view_use_profile()
 
 void rvln::profile_save_as()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   bool ok;
   QString name = QInputDialog::getText (this, tr ("Enter the name"),
                                               tr ("Name:"), QLineEdit::Normal,
@@ -7497,18 +7681,24 @@ void rvln::fman_items_select_by_regexp (bool mode)
 
 void rvln::fman_select_by_regexp()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   fman_items_select_by_regexp (true);
 }
 
 
 void rvln::fman_deselect_by_regexp()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   fman_items_select_by_regexp (false);
 }
 
 
 void rvln::fman_count_lines_in_selected_files()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QString ft = fif_get_text();
   if (ft.isEmpty()) 
       return;  
@@ -7532,6 +7722,8 @@ void rvln::fman_count_lines_in_selected_files()
 
 void rvln::set_eol_unix()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (!d)
      return;
@@ -7542,6 +7734,8 @@ void rvln::set_eol_unix()
 
 void rvln::set_eol_win()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (!d)
      return;
@@ -7552,6 +7746,8 @@ void rvln::set_eol_win()
 
 void rvln::set_eol_mac()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (!d)
      return;
@@ -7572,6 +7768,8 @@ void rvln::guess_enc()
 
 void rvln::ed_comment()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -7638,8 +7836,6 @@ void rvln::calendar_clicked (const QDate &date)
      QString s = qstring_load (fname);
      log->log (s);
     }
-
-
 }
 
 
@@ -7956,6 +8152,8 @@ void rvln::update_labels_list()
 
 void rvln::select_label()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *Act = qobject_cast<QAction *>(sender());
   //qDebug() << Act->text();
 
@@ -8016,6 +8214,8 @@ void rvln::load_userfonts()
 
 void rvln::fn_insert_cpp()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (qstring_load (":/text-data/tpl_cpp.cpp"));
@@ -8024,6 +8224,8 @@ void rvln::fn_insert_cpp()
 
 void rvln::fn_insert_c()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (qstring_load (":/text-data/tpl_c.c"));
@@ -8038,6 +8240,8 @@ inline bool CFSizeFNameLessThan (CFSizeFName *v1, CFSizeFName *v2)
 
 void rvln::mrkup_document_weight()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -8102,8 +8306,9 @@ void rvln::fman_unpack_zip()
 
 void rvln::fman_unpack_zip()
 {
-   CZipper z;
+  last_action = qobject_cast<QAction *>(sender());
 
+  CZipper z;
  
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
@@ -8134,6 +8339,8 @@ void rvln::fman_unpack_zip()
 
 void rvln::fman_zip_info()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QString fn = fman->get_sel_fname();
   if (fn.isNull() || fn.isEmpty())
      return;
@@ -8213,6 +8420,8 @@ void rvln::clipboard_dataChanged()
 
 void rvln::fn_remove_by_regexp()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -8225,12 +8434,16 @@ void rvln::fn_remove_by_regexp()
 
 void rvln::capture_clipboard_to_storage_file()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   capture_to_storage_file = ! capture_to_storage_file;
 }
 
 
 void rvln::set_as_storage_file()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -8241,6 +8454,8 @@ void rvln::set_as_storage_file()
 
 void rvln::copy_to_storage_file()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *dsource = documents->get_current();
   if (! dsource)
      return;
@@ -8302,7 +8517,7 @@ void rvln::cal_gen_mooncal()
 
 void rvln::leaving_tune()
 {
-  qDebug() << "Leaving Tune";
+//  qDebug() << "Leaving Tune";
 
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
@@ -8489,6 +8704,8 @@ void rvln::search_from_cursor_mode()
 
 void rvln::instr_font_gallery()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CFontBox *fb = new CFontBox; 
   fb->show(); 
 }
@@ -8536,6 +8753,8 @@ void CDarkerWindow::slot_valueChanged (int value)
 
 void rvln::darker()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDarkerWindow *wd = new CDarkerWindow; 
   wd->show(); 
 }
@@ -8543,6 +8762,8 @@ void rvln::darker()
 
 void rvln::fn_stat_words_lengths()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -8580,6 +8801,8 @@ void rvln::fn_stat_words_lengths()
 
 void rvln::file_notes()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -8722,6 +8945,8 @@ QString rvln::get_theme_icon_fname (const QString &name)
 
 void rvln::view_use_theme()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   QAction *a = qobject_cast<QAction *>(sender());
   QString css_fname = a->data().toString() + "/" + "stylesheet.css";
   
@@ -8738,9 +8963,7 @@ void rvln::view_use_theme()
   fname_stylesheet = css_fname;
 
   settings->setValue ("fname_stylesheet", fname_stylesheet);
-      
 }
-
 
 
 bool has_css_file (const QString &path)
@@ -8832,6 +9055,8 @@ void rvln::update_themes()
 
 void rvln::fn_use_plugin()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   if (! qml_engine)
      qDebug() << "! qml_engine";
  
@@ -9044,6 +9269,8 @@ bool latex_table_sort_fn (const QStringList &l1, const QStringList &l2)
  
 void rvln::fn_sort_latex_table_by_col_abc()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -9104,6 +9331,8 @@ void rvln::fn_sort_latex_table_by_col_abc()
 
 void rvln::fn_table_swap_cells()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
       return;
@@ -9162,6 +9391,8 @@ void rvln::fn_table_swap_cells()
 
 void rvln::fn_table_delete_cells()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
       return;
@@ -9224,6 +9455,8 @@ void rvln::fn_table_delete_cells()
 
 void rvln::fn_table_copy_cells()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
       return;
@@ -9434,6 +9667,8 @@ void rvln::test()
 
 void rvln::fn_sum_by_last_col()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
       return;
@@ -9503,6 +9738,8 @@ void rvln::ed_paste_from_charset()
 
 void rvln::search_unmark()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -9533,6 +9770,8 @@ void rvln::search_unmark()
 
 void rvln::search_mark_all()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -9620,6 +9859,8 @@ void rvln::search_mark_all()
 
 void rvln::scale_image()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -9730,6 +9971,15 @@ void rvln::scale_image()
 
 void rvln::recentoff()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   b_recent_off = ! b_recent_off;
   menu_recent_off->setChecked (b_recent_off);
+}
+
+
+void rvln::repeat()
+{
+  if (last_action)
+      last_action->trigger();
 }

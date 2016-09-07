@@ -7,9 +7,7 @@
 \b(action|and|array|attr|begin|case|category|const|conv|cross|digits|div|do|downto|else|elsif|end|for|found|hash|if|in|inout|is|local|loop|lpad|lpad0|mdiv|mod|not|of|otherwise|parse|range|ref|rem|repeat|result|rpad|search|set|struct|system|then|to|until|var|when|while)\b</item>
 
 
-<item name="types" type="keywords" color="type">\b(biginteger|bigrational|boolean|char|color|complex|duration|expr|file|float|
-func|integer|object|proc|rational|
-string|text|time|void)\b</item>
+<item name="types" type="keywords" color="type">\b(biginteger|bigrational|boolean|char|color|complex|duration|expr|file|float|func|integer|object|proc|rational|string|text|time|void)\b</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">.*include.*"</item>
 
@@ -28,6 +26,7 @@ string|text|time|void)\b</item>
 </item>
 
 <item name="cm_mult" type="comment">(* %s *)</item>
+
 <item name="cm_single" type="comment">#%s</item>
 
 

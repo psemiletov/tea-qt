@@ -11,6 +11,7 @@
 <item name="mcomment-end" type="mcomment-end">--&gt;</item>
 
 <item name="cm_mult" type="comment">&lt;!-- %s --&gt;</item>
+
 <item name="cm_single" type="comment">&lt;!-- %s --&gt;</item>
 
 </document>

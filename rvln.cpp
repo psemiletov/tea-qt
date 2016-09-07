@@ -9644,7 +9644,7 @@ void rvln::scale_image()
   
   if (params.size() < 2)
      {
-      log->log (tr("Incorrect parameters at FIF");
+      log->log (tr("Incorrect parameters at FIF"));
       return;
      } 
 

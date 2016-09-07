@@ -9643,13 +9643,18 @@ void rvln::scale_image()
   QStringList params = t.split ("~");
   
   if (params.size() < 2)
-     return;
+     {
+      log->log (tr("Incorrect parameters at FIF");
+      return;
+     } 
+
  
   QString fnameout = params[0].replace ("%filename", fi.fileName());
   fnameout = fnameout.replace ("%basename", fi.baseName());
   fnameout = fnameout.replace ("%ext", fi.suffix());
   fnameout = fi.absolutePath() + "/" + fnameout;
-  
+
+    
  // qDebug() << fnameout;
   
   bool scale_by_side = true;
@@ -9677,6 +9682,7 @@ void rvln::scale_image()
   QImage source (fname);
   if (source.isNull())
      return;
+                 
                   
  if (settings->value ("cb_exif_rotate", 0).toInt()) 
     {
@@ -9715,6 +9721,10 @@ void rvln::scale_image()
 
     if (! dest.save (fnameout, fmt.toLatin1().constData(), quality))
         qDebug() << "Cannot save " << fnameout;
+    else
+        log->log (tr("Saved: %1").arg (fnameout));    
+        
+  //    qDebug() << fnameout;     
 }
 
 

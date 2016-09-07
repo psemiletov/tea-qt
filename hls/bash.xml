@@ -3,12 +3,9 @@
 <item name="options" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(until|while|for|if|elif|then|
-fi|case|esac|select|do|done|break|coproc|continue|exit|else|export|getopts|
-return|shift|test|builtin|caller|command|declare|enable|let|logout|mapfile|local|typeset|set|shopt)\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(break|builtin|caller|case|command|continue|coproc|declare|do|done|elif|else|enable|esac|exit|export|fi|for|getopts|if|let|local|logout|mapfile|return|select|set|shift|shopt|test|then|typeset|until|while)\b</item>
 
-<item name="types" type="keywords" color="functions">\b(echo|read|mkdir|chown|cd|eval|
-exec|hash|pwd|readonly|times|trap|umask|unset|alias|bind|help|printf|readarray|source|type|ulimit|unalias|rm|mdir)\b</item>
+<item name="types" type="keywords" color="functions">\b(alias|bind|cd|chown|echo|eval|exec|hash|help|mdir|mkdir|printf|pwd|read|readarray|readonly|rm|source|times|trap|type|ulimit|umask|unalias|unset)\b</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">^#include</item>
 

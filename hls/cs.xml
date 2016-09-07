@@ -2,17 +2,9 @@
 
 <item name="options" wrap="0" xml_format="1"></item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(as|base||break|case|catch|checked|
-class|const|continue|default|delegate|do|else|enum|explicit|extern|
-false|finally|fixed|for|foreach|goto|if|implicit|in|interface|
-internal|is|lock|namespace|null|operator|out|override|params|
-private|protected|public|readonly|ref|return|sealed|sizeof|stackalloc|
-static|switch|this|throw|true|try|typeof|unchecked|unsafe|
-using|virtual|volatile|while|struct|event|new)\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(|as|base|break|case|catch|checked|class|const|continue|default|delegate|do|else|enum|event|explicit|extern|false|finally|fixed|for|foreach|goto|if|implicit|in|interface|internal|is|lock|namespace|new|null|operator|out|override|params|private|protected|public|readonly|ref|return|sealed|sizeof|stackalloc|static|struct|switch|this|throw|true|try|typeof|unchecked|unsafe|using|virtual|volatile|while)\b</item>
 
-<item name="types" type="keywords" color="type">\b(char|bool|ushort|
-ulong|string|long|byte|short|void|double|decimal|int|
-sbyte|float|bobject|buint)\b</item>
+<item name="types" type="keywords" color="type">\b(bool|byte|char|decimal|double|float|int|long|object|sbyte|short|string|uint|ulong|ushort|void)\b</item>
 
 <item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
 
@@ -27,6 +19,7 @@ sbyte|float|bobject|buint)\b</item>
 <item name="mcomment-end" type="mcomment-end">\*/</item>
 
 <item name="cm_mult" type="comment">/*%s*/</item>
+
 <item name="cm_single" type="comment">//%s</item>
 
 </document>

@@ -1822,5 +1822,17 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <source>Use Left Alt + WASD as additional cursor keys</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Repeat last</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incorrect parameters at FIF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saved: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

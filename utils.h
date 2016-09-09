@@ -91,4 +91,8 @@ inline QString get_file_path (const QString &fileName)
   return QFileInfo (fileName).absolutePath();
 }
 
+
+QStringList bytearray_to_stringlist (QList<QByteArray> a);
+
+
 #endif

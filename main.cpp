@@ -63,9 +63,8 @@ int main (int argc, char *argv[])
        
        return 0;
      }
-  
-  
-  //rvln *mainWindow = new rvln();
+
+
   mainWindow = new rvln();
 
   QObject::connect(&app, SIGNAL(messageAvailable(QString)), mainWindow, SLOT(receiveMessage(QString)));

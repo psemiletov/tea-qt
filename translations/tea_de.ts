@@ -1745,5 +1745,17 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <source>Use Left Alt + WASD as additional cursor keys</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Repeat last</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incorrect parameters at FIF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saved: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

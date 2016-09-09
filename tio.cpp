@@ -43,10 +43,6 @@ DJVU read code taken fromdvutxt.c:
 //C- | TO ANY WARRANTY OF NON-INFRINGEMENT, OR ANY IMPLIED WARRANTY OF
 //C- | MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 //C- +------------------------------------------------------------------
-
-
-
-
 */
 
 #include "tio.h"
@@ -69,25 +65,15 @@ DJVU read code taken fromdvutxt.c:
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdarg.h>
 #include <string.h>
 #include <locale.h>
 #include <fcntl.h>
 #include <errno.h>
 
-#if defined(_WIN32) && !defined(__CYGWIN32__)
-# include <mbctype.h>
-#endif
 
 #include "libdjvu/miniexp.h"
 #include "libdjvu/ddjvuapi.h"
 
-
-/* Some day we'll redo i18n right. */
-#ifndef i18n
-# define i18n(x) (x)
-# define I18N(x) (x)
-#endif
 
 
 #endif

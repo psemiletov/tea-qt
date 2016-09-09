@@ -33,8 +33,9 @@ started at 08 November 2007
 #include "logmemo.h"
 #include "tzipper.h"
 #include "wavinfo.h"
-#include <math.h>
 #include "exif.h"
+
+#include <math.h>
 
 
 #include <QMimeData>
@@ -131,14 +132,15 @@ int cursor_blink_time;
 class QStyleHints
 {
 public:
-	int cursorFlashTime() const;
+	int cursorFlashTime() const; 
 };
+
 
 int QStyleHints::cursorFlashTime() const
 {
-	//return 0;
   return cursor_blink_time;	
-};
+}
+
 
 #endif
 
@@ -206,14 +208,6 @@ enum {
      };
 
 
-QStringList bytearray_to_stringlist (QList<QByteArray> a)
-{
-  QStringList r;
-  foreach (QByteArray i, a)
-          r.append (i.data());
-
-  return r;
-}
 
 
 //for the further compat.
@@ -874,53 +868,14 @@ void rvln::closeEvent (QCloseEvent *event)
 
   delete shortcuts;
   
-  /*
-  foreach (CMarkupPair *p, hs_markup)
-          delete p;*/
-
-
- // qDebug() << "hs_markup.size = " << hs_markup.size();
 
   QList<CMarkupPair *> l = hs_markup.values();
   
-  //qDebug() << "l.size = " << l.size();
 
   foreach (CMarkupPair *p, l)
          {
-          //qDebug() << "1";
-          //if (p)
           p->deleteLater();
-          
          } 
-  
-  
-  /*
-  QList <QString> hs_markup_keys = hs_markup.keys();
-  
-  foreach (QString key, hs_markup_keys)
-          {
-           CMarkupPair *p = hs_markup.take (key);  
-           //delete p;
-           p = 0;
-          }
-  */
-  
-  //QHash <QString, CMarkupPair* >::iterator it = hs_markup.begin();
-/*  
-  QHash <QString, void* >::iterator it = hs_markup.begin();
-
-  
- // auto it = m_Hash.begin(); // in C++11
-  while (it != hs_markup.end()) 
-        {
-         //delete it.value();
-         it = hs_markup.erase(it);
-        }
-  */
-
-//   qDeleteAll (hs_markup);
-  // hs_markup.clear();
-//  qDebug() << "eee";        
 
   event->accept();
 }

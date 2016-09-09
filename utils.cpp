@@ -197,21 +197,6 @@ QByteArray file_load (const QString &fileName)
   return b;
 }
 
-/*
-
-QString change_file_ext (const QString &s, const QString &ext)
-{
-  int i = s.lastIndexOf (".");
-  if (i == -1)
-      return s;
-
-  QString r (s);
-  r.truncate (++i);
-  r.append (ext);
-  return r;
-}
-*/
-
 
 QString change_file_ext (const QString &s, const QString &ext)
 {
@@ -226,6 +211,7 @@ QString change_file_ext (const QString &s, const QString &ext)
   r.append (ext);
   return r;
 }
+
 
 bool file_is_writable (const QString &fname)
 {
@@ -336,4 +322,14 @@ bool char_is_shit (const QChar &c)
      return true;
   
   return false;
+}
+
+
+QStringList bytearray_to_stringlist (QList<QByteArray> a)
+{
+  QStringList r;
+  foreach (QByteArray i, a)
+          r.append (i.data());
+
+  return r;
 }

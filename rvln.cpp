@@ -1746,7 +1746,7 @@ void rvln::createMenus()
   add_to_menu (menu_view, tr ("Darker"), SLOT(darker()));
   add_to_menu (menu_view, tr ("Preview with default browser"), SLOT(view_preview_in_bro()));
 
-  helpMenu = menuBar()->addMenu (tr ("Help"));
+  helpMenu = menuBar()->addMenu ("?");
   helpMenu->setTearOffEnabled (true);
 
   helpMenu->addAction (aboutAct);

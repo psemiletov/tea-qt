@@ -27,7 +27,7 @@ useclang - TEA will be compiled with Clang.
 noaspell - disable the Aspell (if you have it installed, but  do not want to compile TEA with Aspell support)
 nohunpell - disable Hunspell for TEA.
 usepoppler - use libpoppler-qt5 for PDF text layer import. DISABLED by default
-usedjvu - use libdjvulibre to read DJVU files text (read only)
+usedjvu - use libdjvulibre to read DJVU files text (read only). DISABLED by default
 
 If you have installed both Qt4  and Qt5, use the qmake from Qt4 or Qt5 to configure TEA with exact version of QT. The common solution is to make symlink to qmake from Qt5 and name it qmake5, then use qmake5 instead of the usual qmake.
 
@@ -58,7 +58,7 @@ sudo make install
 
 ===DEPENDENCIES===
 
-Qt 4.6+ or Qt 5+. Optional: libaspell, libhunspell-1.2
+Qt 4.6+ or Qt 5+. Optional: libaspell, libhunspell-1.2, libpoppler-qt5, libdjvulibre
 Debian/Ubuntu users need to install zlib1g-dev, and, optionally: libaspell-dev, libhunspell-dev packages
 
 If there the context menus are not localized, install the 

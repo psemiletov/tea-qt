@@ -1,16 +1,65 @@
 =====NEWS ABOUT TEA====
-TEA 42.0.0, August 2016
+TEA 43.0.0, September 9 2016
 ---------------------------------------
-http://semiletov.org/tea
-http://tea.ourproject.org
-https://github.com/psemiletov/tea-qt
+http://semiletov.org/tea - official size #1
+http://tea.ourproject.org - official size #1
+https://github.com/psemiletov/tea-qt - development
+https://vk.com/teaeditor - VK-community
 ---------------------------------------
   
-  Hi. This release contains misc. fixes and new functions.
-  Command lines at Run menu now can use the separated file path parts (macros %fbasename, %ffilename, %fext, %fdir).
-  The markup mode has the basic Markdown support.
-  English manual fixes by Dr. Tobias Quathamer.
-  Many code fixes.
+   Hello. The biggest update ever.
+
+   0. Infrastructure
+
+   The new TEA community at VK: https://vk.com/teaeditor
+
+
+   1. Files format support. 
+
+   By optional use of libpoppler-qt5 and libdjvulibre, now TEA can open PDF and DJVU, as the text (if files contain it). By default such functionality is disabled. To enable, use qmake parameters: qmake "CONFIG+=usepoppler CONFIG+=usedjvu"
+
+  The build-in image viewer now support the GIF-animation.
+
+
+   2. GUI changes. 
+
+   The "Tune" preferences pages has been placed into the scrollable areas, so TEA becomes more usable with small display resolution or window size.
+
+   The text cursor now bold and static, without blinking. Tune it at "Tune - Interface".
+
+   Some options is moved from one page to another.
+
+   "Instr" menu - renamed to "Tools" and moved to "Functions".
+
+   Some new built-in GUI themes and palettes has been added. The GUI themes engine now can load icon sets, but there are no new icons on that time.
+
+   Hardcoded hotkeys Alt-S, Alt-E has been removed.
+
+   "Tune - Common - Use Left Alt + WASD as additional cursor keys" - enables the additional cursor keys. E, C - PageUp/Down. The same keys with Left Win - to select the text.
+
+
+   3. New functions and options.
+
+   "Functions - Repeat last" - calls the last used menu item.
+
+  "Functions - Tools - Scale image" - scales the image (which filename is under cursor or selected at the text) with parameters. You can quickly resize the image and save it with the different name without all those many windows and confirmations, just by one command.
+
+  "Tune - Images" now has the EXIF-orientation related options. In a few words - TEA can handle EXIF-orientation and apply the orientation when converting.
+
+   "Functions - Text - Compress" - removes all whitespaces from the selection.
+
+ "Functions - Sort - Flip a list with separator", "Sort case sensitively, with separator" - sorts the separated words within the string, i.e. you can sort something like that: "carrot|apple|grass" with "|" as the word delimeter.
+
+   "Search - Mark all found/unmark" - search and mark all found substring.
+
+   "File - Do not add to recent" - temporary do not update the recent list.
+
+
+   4. Inner changes.
+
+   The syntax highlighting engine has been partially rewritten, so TEA use the new syntax hl file format. The compatibility with the old format is preserved.
+
+ %fext, %ffilename, %fdir, %fbasename macros are %ext, %filename, %dir, %basename now.
 
    If you want to support TEA via donation, better support the Ukrainian dog shelter Lyubas House - http://www.ukraineanimalrescue.org/#!lyubas-house/cxfj/. There are lot of dogs with disabilities, and they need help more than TEA.
 

@@ -824,7 +824,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Help</source>
-        <translation>Hilfe</translation>
+        <translation type="obsolete">Hilfe</translation>
     </message>
     <message>
         <source>NEWS</source>

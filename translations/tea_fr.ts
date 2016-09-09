@@ -844,7 +844,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation>Aide</translation>
+        <translation type="obsolete">Aide</translation>
     </message>
     <message>
         <source>NEWS</source>

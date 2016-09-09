@@ -1,10 +1,10 @@
-2016 aug
+2016 aug-sept //for more see github stats
 + Tune - Images - Use EXIF orientation at image viewer
 + Tune - Images - Apply hard rotation by EXIF data
 + new themes and palettes
 + new hls file format
 + optional libpoppler support (see README) for text extraction from PDF
-+ optional djvu text extractor
++ optional DJVU text extractor
 
 + Tune - Interface - Cursor blink time (msecs), set to zero to turn blinking off
 + Tune - Interface - Cursor width
@@ -18,6 +18,16 @@
    LALT + WASD = cursor movement
    LALT + E, C = page up/down
    LWIN and the same keys = select text
++ Functions - Repeat last
+* all hls updated to the new format
+	
++ GIF animation support on the image preview
++ File - Do not add to recent
++ prefs UI redesign
++ Functions - Text - Compress //removes all whitespaces from selection
++ Functions - Sort - Flip a list with separator, Sort case sensitively, with separator
+* Instr menu renamed to Tools and moved into Functions
++ initial themed icons support
 
 2016 summer
 + basic Markdown support

@@ -45,6 +45,8 @@ code from qwriter:
 
 #include "textproc.h"
 
+
+
 #include <QSettings>
 #include <QLabel>
 #include <QPainter>
@@ -55,6 +57,7 @@ code from qwriter:
 #include <QMimeData>
 
 #include <bitset>
+#include <algorithm>
 
 #if QT_VERSION >= 0x050000
 
@@ -1744,6 +1747,7 @@ void CTEAEdit::un_indent()
   setTextCursor (cur);
 }
 
+
 #define SK_A 38
 #define SK_D 40
 #define SK_W 25
@@ -2082,19 +2086,70 @@ void CTEAEdit::braceHighlight()
 
 void CTEAEdit::update_rect_sel()
 {
-  /*
-  
-  1. set cursor to the line of rect_sel_start.y
-  2. in cycle, to rect_sel_end.y 
-     select all between rect_sel_start.x and rect_sel_end.x
-  
-  
-  */
+  qDebug() << "CTEAEdit::update_rect_sel()  -1";
+ 
+  QTextEdit::ExtraSelection rect_selection;
 
- // extraSelections.clear;
+  extraSelections.clear();
   
-  //extraSelections.append (rect_selection);
-  //setExtraSelections (extraSelections);
+  
+  int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
+  int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
+  int ydiff = y2 - y1;
+  
+  
+  
+  int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
+  int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
+  int xdiff = x2 - x1;
+  
+ 
+
+  QTextCursor cursor = textCursor();
+  
+  cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
+  cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
+     
+  
+  for (int y = y1; y <= y2; y++)
+      {
+       qDebug() << "y:" << y;
+       
+       //cursor.movePosition (QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+       
+       //if (y == y1)
+          cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1);
+    //   else   
+      //    cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1 + 1);
+              
+       int sel_len = xdiff;
+       
+       QTextBlock b = document()->findBlockByNumber (y); 
+       
+       if ((b.text().length() - x1) < xdiff)
+          sel_len = b.text().length() - x1;
+       
+       
+       //if (b.text().length() < (xdiff + x1))
+         // sel_len = xdiff - b.text().length();
+          
+       cursor.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, sel_len);
+              
+       rect_selection.cursor = cursor;
+       rect_selection.format.setBackground (brackets_color);
+       extraSelections.append (rect_selection);
+  
+       cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+      }
+
+  setExtraSelections (extraSelections);
+ 
+  qDebug() << "ydiff: " << ydiff;
+  qDebug() << "y1:" << y1;
+  qDebug() << "y2:" << y2;
+  qDebug() << "x1:" << x1;
+  qDebug() << "x2:" << x2;
+  
 }
   
 
@@ -2105,8 +2160,6 @@ bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
   //else
     return true;
 }
-
-
 
 
 void CTEAEdit::insertFromMimeData (const QMimeData *source)

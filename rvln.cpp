@@ -1324,6 +1324,11 @@ void rvln::createMenus()
 
   editMenu->addSeparator();
 
+  add_to_menu (editMenu, tr ("Block start"), SLOT(ed_block_start()));
+  add_to_menu (editMenu, tr ("Block end"), SLOT(ed_block_end()));
+
+  editMenu->addSeparator();
+
   add_to_menu (editMenu, tr ("Copy current file name"), SLOT(edit_copy_current_fname()));
 
   editMenu->addSeparator();
@@ -9937,4 +9942,41 @@ void rvln::repeat()
 {
   if (last_action)
       last_action->trigger();
+}
+
+
+void rvln::ed_block_start()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+  
+  int x = d->textEdit->textCursor().position() - d->textEdit->textCursor().block().position();
+  int y = d->textEdit->textCursor().block().blockNumber();
+  
+  
+  d->textEdit->rect_sel_start.setX (x);
+  d->textEdit->rect_sel_start.setY (y);
+  
+  d->textEdit->update_rect_sel();
+}
+
+
+void rvln::ed_block_end()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+  
+  int x = d->textEdit->textCursor().position() - d->textEdit->textCursor().block().position();
+  int y = d->textEdit->textCursor().block().blockNumber();
+  
+  d->textEdit->rect_sel_end.setX (x);
+  d->textEdit->rect_sel_end.setY (y);
+  
+  d->textEdit->update_rect_sel();
 }

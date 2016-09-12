@@ -81,8 +81,7 @@ public:
   QPoint rect_sel_start;
   QPoint rect_sel_end;
  
- // QTextEdit::ExtraSelection rect_selection;
-
+ 
 
   CDocument *doc;
 

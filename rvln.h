@@ -495,6 +495,10 @@ main window callbacks
   void about();
   void close_current();
 
+  void ed_block_start();
+  void ed_block_end();
+  
+
   void ed_copy();
   void ed_paste();
   void ed_cut();

@@ -77,9 +77,10 @@ void CDocument::update_status()
       return;
      }
 
-  QTextBlock block = textEdit->document()->begin();
-  int cursor_offset = textEdit->textCursor().position();
-  
+//  QTextBlock block = textEdit->document()->begin();
+//  int cursor_offset = textEdit->textCursor().position();
+ 
+ /* 
   int off = 0;
   int y = 1;
 
@@ -91,6 +92,9 @@ void CDocument::update_status()
         }
 
   int x = cursor_offset - off + 1;
+*/
+  int x = textEdit->textCursor().position() - textEdit->textCursor().block().position() + 1;
+  int y = textEdit->textCursor().block().blockNumber() + 1;
 
   holder->l_status_bar->setText (QString ("%1:%2 %3").arg (
                                  QString::number (y)).arg (
@@ -1621,6 +1625,7 @@ void CDocument::insert_image (const QString &full_path)
   textEdit->textCursor().insertText (get_insert_image (file_name, full_path, markup_mode));
 }
 
+
 void CTEAEdit::calc_auto_indent()
 {
   QTextCursor cur = textCursor();
@@ -1945,8 +1950,8 @@ void CTEAEdit::resizeEvent (QResizeEvent *e)
 void CTEAEdit::braceHighlight()
 {
   extraSelections.clear();
-  setExtraSelections(extraSelections);
-  selection.format.setBackground(brackets_color);
+  setExtraSelections (extraSelections);
+  selection.format.setBackground (brackets_color);
 
   QTextDocument *doc = document();
   QTextCursor cursor = textCursor();
@@ -2075,6 +2080,24 @@ void CTEAEdit::braceHighlight()
 }
 
 
+void CTEAEdit::update_rect_sel()
+{
+  /*
+  
+  1. set cursor to the line of rect_sel_start.y
+  2. in cycle, to rect_sel_end.y 
+     select all between rect_sel_start.x and rect_sel_end.x
+  
+  
+  */
+
+ // extraSelections.clear;
+  
+  //extraSelections.append (rect_selection);
+  //setExtraSelections (extraSelections);
+}
+  
+
 bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
 {
 //  if (source->hasFormat ("text/uri-list"))
@@ -2082,6 +2105,8 @@ bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
   //else
     return true;
 }
+
+
 
 
 void CTEAEdit::insertFromMimeData (const QMimeData *source)

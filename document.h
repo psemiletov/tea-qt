@@ -42,6 +42,8 @@ code from qwriter:
 #include "todo.h"
 
 
+#include <QPoint>
+
 #include <QStatusBar>
 #include <QMainWindow>
 #include <QTabWidget>
@@ -65,13 +67,22 @@ class CTEAEdit: public QPlainTextEdit
 {
   Q_OBJECT
 
-private:
-    
+   
+
+public:
+
   QString indent_val;  
   QList <QTextEdit::ExtraSelection> extraSelections;
   QTextEdit::ExtraSelection selection;
 
-public:
+  
+  //rect selection
+
+  QPoint rect_sel_start;
+  QPoint rect_sel_end;
+ 
+ // QTextEdit::ExtraSelection rect_selection;
+
 
   CDocument *doc;
 
@@ -113,6 +124,8 @@ public:
   void un_indent();
   void calc_auto_indent();
   void setup_brace_width();
+
+  void update_rect_sel();
 
   void braceHighlight();
   

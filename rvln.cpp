@@ -1820,7 +1820,7 @@ void rvln::pageChanged (int index)
   if (! d)
      return;
 
-  d->update_title();
+  d->update_title (settings->value ("full_path_at_window_title", 1).toBool());
   d->update_status();
 
   update_labels_menu();
@@ -2584,8 +2584,11 @@ void rvln::createOptions()
   lt_margin->insertWidget (-1, cb_show_margin, 0, Qt::AlignLeft);
   lt_margin->insertWidget (-1, spb_margin_pos, 1, Qt::AlignLeft);
 
-
   page_interface_layout->addLayout (lt_margin);
+
+  cb_full_path_at_window_title = new QCheckBox (tr ("Show full path at window title"), tab_options);
+  cb_full_path_at_window_title->setCheckState (Qt::CheckState (settings->value ("full_path_at_window_title", "2").toInt()));
+  page_interface_layout->addWidget (cb_full_path_at_window_title);
   
   page_interface->setLayout (page_interface_layout);
   page_interface->show();
@@ -8488,6 +8491,7 @@ void rvln::leaving_tune()
 
 
   settings->setValue ("wasd", cb_wasd->checkState());
+  settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
   
   
   settings->setValue ("word_wrap", cb_wordwrap->checkState());

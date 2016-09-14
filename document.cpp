@@ -203,7 +203,7 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
 
   holder->log->log (tr ("%1 is saved").arg (file_name));
 
-  update_title();
+  update_title (settings->value ("full_path_at_window_title", 1).toBool());
   update_status();
 
   textEdit->document()->setModified (false);
@@ -355,7 +355,7 @@ CDocument* document_holder::create_new()
   tab_widget->setCurrentIndex (tab_widget->indexOf (doc->tab_page));
   apply_settings_single (doc);
 
-  doc->update_title();
+  doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
   doc->update_status();
   
   update_current_files_menu();
@@ -403,7 +403,7 @@ CDocument* document_holder::open_file (const QString &fileName, const QString &c
   CDocument *doc = create_new();
   doc->open_file (fileName, codec);
   doc->update_status();
-  doc->update_title();
+  doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
   tab_widget->setCurrentIndex (tab_widget->indexOf (doc->tab_page));
   
@@ -667,12 +667,7 @@ void document_holder::apply_settings_single (CDocument *d)
   else
      d->textEdit->document()->setDefaultTextOption (QTextOption (Qt::AlignLeft));
     
-    /*
-  if (settings->value ("word_wrap", "2").toInt() == 2)
-     d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
-  else
-      d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
-*/
+ 
   d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
@@ -2096,8 +2091,7 @@ void CTEAEdit::update_rect_sel()
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   int ydiff = y2 - y1;
-  
-  
+   
   
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());

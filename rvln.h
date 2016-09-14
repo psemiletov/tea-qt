@@ -349,6 +349,10 @@ public:
 
   QSpinBox *spb_tab_sp_width;
   QCheckBox *cb_center_on_cursor;
+  
+  QCheckBox *cb_full_path_at_window_title;
+  
+  
   QCheckBox *cb_use_trad_dialogs;
   QCheckBox *cb_start_on_sunday;
   QCheckBox *cb_northern_hemisphere;

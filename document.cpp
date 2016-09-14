@@ -928,6 +928,8 @@ void CTEAEdit::setup_brace_width()
 
 CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 {
+  rect_sel_reset();
+
   highlightCurrentLine = false;
   setup_brace_width();
   
@@ -2083,6 +2085,9 @@ void CTEAEdit::update_rect_sel()
 {
   qDebug() << "CTEAEdit::update_rect_sel()  -1";
  
+  if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
+     return; 
+ 
   QTextEdit::ExtraSelection rect_selection;
 
   extraSelections.clear();
@@ -2096,25 +2101,17 @@ void CTEAEdit::update_rect_sel()
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
   int xdiff = x2 - x1;
-  
  
 
   QTextCursor cursor = textCursor();
   
   cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
-     
   
   for (int y = y1; y <= y2; y++)
       {
-       qDebug() << "y:" << y;
-       
-       //cursor.movePosition (QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-       
-       //if (y == y1)
-          cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1);
-    //   else   
-      //    cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1 + 1);
+//       qDebug() << "y:" << y;
+       cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1);
               
        int sel_len = xdiff;
        
@@ -2122,10 +2119,6 @@ void CTEAEdit::update_rect_sel()
        
        if ((b.text().length() - x1) < xdiff)
           sel_len = b.text().length() - x1;
-       
-       
-       //if (b.text().length() < (xdiff + x1))
-         // sel_len = xdiff - b.text().length();
           
        cursor.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, sel_len);
               
@@ -2137,12 +2130,14 @@ void CTEAEdit::update_rect_sel()
       }
 
   setExtraSelections (extraSelections);
- 
+ /*
   qDebug() << "ydiff: " << ydiff;
   qDebug() << "y1:" << y1;
   qDebug() << "y2:" << y2;
   qDebug() << "x1:" << x1;
   qDebug() << "x2:" << x2;
+  */
+  qDebug() << get_rect_sel();
   
 }
   
@@ -2261,6 +2256,49 @@ void document_holder::update_current_files_menu()
   create_menu_from_list (this, current_files_menu, current_files, SLOT(open_current()));
 }
 
+
+void CTEAEdit::rect_sel_reset()
+{
+  rect_sel_start.setX (-1);
+  rect_sel_start.setY (-1);
+  rect_sel_end.setX (-1);
+  rect_sel_end.setY (-1);
+}
+
+
+QString CTEAEdit::get_rect_sel()
+{
+  QString result;
+
+  int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
+  int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
+  int ydiff = y2 - y1;
+  
+  int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
+  int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
+  int xdiff = x2 - x1;
+ 
+
+  for (int y = y1; y <= y2; y++)
+      {
+//       qDebug() << "y:" << y;
+              
+       int sel_len = xdiff;
+       
+       QTextBlock b = document()->findBlockByNumber (y); 
+       
+       if ((b.text().length() - x1) < xdiff)
+          sel_len = b.text().length() - x1;
+          
+       QString t = b.text();   
+       //qDebug() << t;
+       result += t.mid (x1, xdiff);
+       if (y != y2)
+          result += '\n';   
+      }
+
+  return result;
+}
 
 
 /*

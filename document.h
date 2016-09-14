@@ -124,7 +124,10 @@ public:
   void calc_auto_indent();
   void setup_brace_width();
 
+  void rect_sel_reset();
   void update_rect_sel();
+  
+  QString get_rect_sel();
 
   void braceHighlight();
   

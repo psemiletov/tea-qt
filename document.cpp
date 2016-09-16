@@ -71,6 +71,7 @@ QSettings *settings;
 QMenu *current_files_menu;
 
 bool b_recent_off;
+bool b_destroying_all;
 
 void CDocument::update_status()
 {
@@ -335,6 +336,8 @@ void document_holder::reload_recent_list (void)
 
 document_holder::~document_holder()
 {
+  b_destroying_all = true;
+
   while (! list.isEmpty())
         delete list.takeFirst();
 
@@ -2141,6 +2144,57 @@ void CTEAEdit::update_rect_sel()
   
 }
   
+  
+void CTEAEdit::rect_sel_replace (const QString &s)
+{
+/*
+
+1. Определить с какой строки начинаем вставку
+2. Определить как вставляемый текст перекрывает старый. Если строк в старом меньше (или конец файла), 
+добавляем в выходной буфер строки.
+3. Составляем выходной буфер из строк старого и нового.
+4. Заменяем старый текст на выходной буфер.
+
+*/
+
+  int y = textCursor().block().blockNumber();
+  int x = textCursor().position() - textCursor().block().position();
+ 
+  int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
+  int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
+  int ydiff = y2 - y1;
+   
+  
+  int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
+  int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
+  int xdiff = x2 - x1;
+  
+  int how_many_copy_from_source = ydiff;
+  
+  int lines_to_end = blockCount() - y;
+  
+  if (ydiff > lines_to_end)
+     how_many_copy_from_source = lines_to_end;
+     
+  QStringList sl_source;
+  
+  
+  for (int line = y1; y <= y2; y++)
+      {
+       //int sel_len = xdiff;
+       
+       QTextBlock b = document()->findBlockByNumber (line); 
+       
+       //if ((b.text().length() - x1) < xdiff)
+         // sel_len = b.text().length() - x1;
+          
+       sl_source.append (b.text());   
+          
+      }  
+  
+  
+}
+    
 
 bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
 {

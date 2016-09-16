@@ -136,7 +136,7 @@ Voulez-vous sauvegardez vos changements ?</translation>
     <name>rvln</name>
     <message>
         <source>edit</source>
-        <translation>modifier</translation>
+        <translation type="obsolete">modifier</translation>
     </message>
     <message>
         <source>&lt;b&gt;TEA %1 @ http://tea-editor.sourceforge.net&lt;/b&gt;&lt;br&gt;by Peter Semiletov (peter.semiletov@gmail.com)&lt;br&gt;read the Manual under the &lt;i&gt;learn&lt;/i&gt; tab!</source>
@@ -864,7 +864,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>tune</source>
-        <translation>régler</translation>
+        <translation type="obsolete">régler</translation>
     </message>
     <message>
         <source>Editor font</source>
@@ -996,7 +996,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>learn</source>
-        <translation>apprendre</translation>
+        <translation type="obsolete">apprendre</translation>
     </message>
     <message>
         <source>you can put here notes, etc</source>
@@ -1115,7 +1115,7 @@ opera=opera %s</source>
     </message>
     <message>
         <source>manage</source>
-        <translation>gérer</translation>
+        <translation type="obsolete">gérer</translation>
     </message>
     <message>
         <source>new</source>
@@ -1795,10 +1795,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unmark</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1832,6 +1828,38 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Saved: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Block start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Block end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show full path at window title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -184,6 +184,7 @@ extern QMenu *current_files_menu;
 extern QHash <QString, QString> global_palette;
 
 extern bool b_recent_off;
+extern bool b_destroying_all;
 
 rvln *mainWindow;  
 
@@ -515,7 +516,7 @@ void rvln::create_main_widget()
 
   mainSplitter->setStretchFactor (1, 1);
 
-  idx_tab_edit = main_tab_widget->addTab (tab_widget, tr ("edit"));
+  idx_tab_edit = main_tab_widget->addTab (tab_widget, tr ("editor"));
   setCentralWidget (main_widget);
 
   //tab_widget->resize (tab_widget->width(), width() - 100);
@@ -615,6 +616,8 @@ void rvln::init_styles()
 rvln::rvln()
 {
   ui_update = true;
+  
+  b_destroying_all = false;
   
   last_action = 0;
 
@@ -813,7 +816,7 @@ rvln::rvln()
   
   setAcceptDrops (true);
   
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Learn</i> tab!").arg (QString (VERSION_NUMBER)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (VERSION_NUMBER)));
 
   
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
@@ -1324,9 +1327,10 @@ void rvln::createMenus()
 
   editMenu->addSeparator();
 
+/*
   add_to_menu (editMenu, tr ("Block start"), SLOT(ed_block_start()));
   add_to_menu (editMenu, tr ("Block end"), SLOT(ed_block_end()));
-
+*/
   editMenu->addSeparator();
 
   add_to_menu (editMenu, tr ("Copy current file name"), SLOT(edit_copy_current_fname()));
@@ -1813,6 +1817,9 @@ rvln::~rvln()
 
 void rvln::pageChanged (int index)
 {
+  if (b_destroying_all)
+      return;
+
   if (index == -1)
       return;  
 
@@ -2370,7 +2377,7 @@ void rvln::createOptions()
 {
   tab_options = new QTabWidget;
 
-  idx_tab_tune = main_tab_widget->addTab (tab_options, tr ("tune"));
+  idx_tab_tune = main_tab_widget->addTab (tab_options, tr ("options"));
   
   QWidget *page_interface = new QWidget (tab_options);
   page_interface->setObjectName ("page_interface");
@@ -3367,7 +3374,7 @@ void rvln::createManual()
 
   wd_man->setLayout (lv_t);
 
-  idx_tab_learn = main_tab_widget->addTab (wd_man, tr ("learn"));
+  idx_tab_learn = main_tab_widget->addTab (wd_man, tr ("manual"));
 }
 
 
@@ -5997,7 +6004,7 @@ void rvln::createFman()
 
   fman_home();
   
-  idx_tab_fman = main_tab_widget->addTab (wd_fman, tr ("manage"));
+  idx_tab_fman = main_tab_widget->addTab (wd_fman, tr ("files"));
 }
 
 
@@ -9852,10 +9859,11 @@ void rvln::scale_image()
       log->log (tr("Incorrect parameters at FIF"));
       return;
      } 
-
  
   QString fnameout = params[0].replace ("%filename", fi.fileName());
   fnameout = fnameout.replace ("%basename", fi.baseName());
+  fnameout = fnameout.replace ("%s", fname);
+
   fnameout = fnameout.replace ("%ext", fi.suffix());
   fnameout = fi.absolutePath() + "/" + fnameout;
 

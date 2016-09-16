@@ -125,6 +125,8 @@ public:
   void setup_brace_width();
 
   void rect_sel_reset();
+  void rect_sel_replace (const QString &s);
+  
   void update_rect_sel();
   
   QString get_rect_sel();

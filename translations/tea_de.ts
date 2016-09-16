@@ -130,10 +130,6 @@ Do you want to save your changes?</source>
 <context>
     <name>rvln</name>
     <message>
-        <source>edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Charset</source>
         <translation>Zeichensatz</translation>
     </message>
@@ -843,10 +839,6 @@ Do you want to overwrite?</source>
         <translation>%1 wurde gespeichert</translation>
     </message>
     <message>
-        <source>tune</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Editor font</source>
         <translation>Schriftart für Editor</translation>
     </message>
@@ -975,10 +967,6 @@ Do you want to overwrite?</source>
         <translation>Tastatur</translation>
     </message>
     <message>
-        <source>learn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>you can put here notes, etc</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1087,10 +1075,6 @@ opera=opera %s</source>
     <message>
         <source>&lt;b&gt;Bookmarks&lt;/b&gt;</source>
         <translation>&lt;b&gt;Lesezeichen&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>manage</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>new</source>
@@ -1718,10 +1702,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unmark</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1755,6 +1735,38 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Saved: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Block start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Block end</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show full path at window title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>manual</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

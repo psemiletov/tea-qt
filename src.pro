@@ -16,10 +16,8 @@ USE_HUNSPELL = true
 USE_PRINTER = true
 
 
-#PREFIX = /usr/local/bin
-
 isEmpty(PREFIX) {
-PREFIX = /usr/local/bin
+PREFIX = /usr/local
 }
 
 
@@ -129,14 +127,8 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 #QT += blah blah blah
    }
 
-TARGET = bin/tea
-#target.path = /usr/local/bin
-
-#isEmpty(PREFIX) {
-#PREFIX = /usr/local/bin
-#   }
-
-target.path = $$PREFIX
+TARGET = tea
+target.path = $$PREFIX/bin
 
 INSTALLS += target
 RESOURCES += rlvn.qrc
@@ -213,7 +205,7 @@ exists("/usr/include/hunspell/hunspell.hxx") {
 
 usepoppler{
 system(pkg-config --exists poppler-qt5) {
-    message ("DJVU enabled")
+    message ("Poppler enabled")
         PKGCONFIG += poppler-qt5
             DEFINES += POPPLER_ENABLE
         }

@@ -10,16 +10,18 @@ DEFINES += 'VERSION_NUMBER=\'"43.1.0"\''
 DEFINES += NOCRYPT \
           NOUNCRYPT
 
-USE_POPPLER = false
 USE_ASPELL = true
 USE_HUNSPELL = true
 USE_PRINTER = true
 
 
 isEmpty(PREFIX) {
-PREFIX = /usr/local
+PREFIX = /usr/local/bin
 }
 
+
+TARGET = bin/tea
+target.path = $$PREFIX
 
 nohunspell{
 USE_HUNSPELL = false
@@ -127,8 +129,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 #QT += blah blah blah
    }
 
-TARGET = tea
-target.path = $$PREFIX/bin
 
 INSTALLS += target
 RESOURCES += rlvn.qrc
@@ -201,8 +201,6 @@ exists("/usr/include/hunspell/hunspell.hxx") {
                 }
 
 
-#contains(USE_POPPLER,true){
-
 usepoppler{
 system(pkg-config --exists poppler-qt5) {
     message ("Poppler enabled")
@@ -220,8 +218,8 @@ system(pkg-config --exists ddjvuapi) {
         }
 }
 
-
 }
+
 
 
 

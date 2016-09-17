@@ -1,3 +1,9 @@
+2016 sept - 43.1.0
+* Fixes to the manuals
+* segfault (43.0.0 affected) on exit fixed
+* Russian translation update
+* some new options
+
 2016 aug-sept //for more see github stats
 + Tune - Images - Use EXIF orientation at image viewer
 + Tune - Images - Apply hard rotation by EXIF data

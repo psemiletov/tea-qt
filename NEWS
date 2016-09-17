@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 43.0.0, September 9 2016
+TEA 43.1.0, September 9 2016
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -7,6 +7,12 @@ https://github.com/psemiletov/tea-qt - development
 https://vk.com/teaeditor - VK-community
 ---------------------------------------
   
+   About 43.1.0:
+
+   The fresh bug (of 43.0.0) with the segfault on exit - fixed. The manual updates and fixes, the tabs on the right were renemed (Tune = Options, Browse = Files, Learn = Manual, Edit = Editor). Some new options under the hood. Stay tuned.
+
+   About 43.0.0:
+
    Hello. The biggest update ever.
 
    0. Infrastructure

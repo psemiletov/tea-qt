@@ -166,7 +166,7 @@ DISTFILES += ChangeLog \
     themes/Turbo/stylesheet.css \
     themes/Turbo/icons/* \
     themes/Vegan/stylesheet.css \
-    themes/Ягодная/stylesheet.css 
+    themes/Yagodnaya/stylesheet.css 
 
 
 unix:  {

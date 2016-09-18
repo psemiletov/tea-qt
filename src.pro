@@ -226,6 +226,66 @@ system(pkg-config --exists ddjvuapi) {
 
 win32: {
 
+greaterThan(QT_MAJOR_VERSION, 4) {
+
+       LIBS += zlib1.dll
+
+        contains(USE_ASPELL,true)
+                 {
+                  exists ("C:\\Qt\\Qt5.3.1\\Tools\\mingw482_32\\include\\aspell.h")
+                         {
+                          message ("ASpell enabled")
+                          LIBS += -laspell-15
+                          DEFINES += ASPELL_ENABLE
+                          DEFINES += SPELLCHECK_ENABLE
+                          }
+                  }
+
+
+        contains(USE_HUNSPELL,true)
+                 {
+                  exists ("C:\\Qt\\Qt5.3.1\\Tools\\mingw482_32\\include\\hunspell\\hunspell.hxx")
+                         {
+
+                          message ("hunspell enabled")
+
+
+                          LIBS += c:\dev\hunspell-mingw-master\lib\hunspell.dll
+
+
+                          DEFINES += HUNSPELL_ENABLE
+                          DEFINES += SPELLCHECK_ENABLE
+                         }
+                }
+
+  } else {
+   LIBS += zlib1.dll
+
+        contains(USE_ASPELL,true)
+                 {
+                  exists ("C:\\MinGw\\include\\aspell.h")
+                         {
+                          message ("ASpell enabled")
+                          LIBS += -laspell-15
+                          DEFINES += ASPELL_ENABLE
+                          DEFINES += SPELLCHECK_ENABLE
+                          }
+                  }
+
+
+        contains(USE_HUNSPELL,true)
+                 {
+                  exists ("C:\\MinGw\\include\\hunspell\\hunspell.hxx")
+                         {
+                          message ("hunspell enabled")
+                          LIBS += libhunspell.dll
+                          DEFINES += HUNSPELL_ENABLE
+                          DEFINES += SPELLCHECK_ENABLE
+                         }
+                }
+}
+
+
         LIBS += zlib1.dll
 
         contains(USE_ASPELL,true)
@@ -255,25 +315,42 @@ win32: {
 
 
 os2: {
+
+usepoppler{
+exists("C:/usr/include/poppler/qt4/poppler-qt4.h") {
+     message ("DJVU enabled")
+         PKGCONFIG += poppler-qt4
+             DEFINES += POPPLER_ENABLE
+}
+}
+
+
+usedjvu{
+exists("C:/usr/include/libdjvu/ddjvuapi.h") {
+exists("C:/usr/include/libdjvu/miniexp.h") {
+     message ("djvu enabled")
+         PKGCONFIG += ddjvuapi
+             DEFINES += DJVU_ENABLE
+}
+}
+}
+
 contains(USE_ASPELL,true){
-exists("q:/usr/include/aspell.h") {
-     message ("ASpell enabled")
-     LIBS += -laspell
-     DEFINES += ASPELL_ENABLE
-     DEFINES += SPELLCHECK_ENABLE
+exists("c:/usr/include/aspell.h") {
+      message ("ASpell enabled")
+      LIBS += -laspell_dll
+      DEFINES += ASPELL_ENABLE
+      DEFINES += SPELLCHECK_ENABLE
 contains(USE_HUNSPELL,true)
 }
 }
 
-{
-exists("q:/usr/include/hunspell/hunspell.hxx") {
-     message ("hunspell enabled")
-     LIBS += -lhunspell-1.3
-     PKGCONFIG += hunspell
-     DEFINES += HUNSPELL_ENABLE
-     DEFINES += SPELLCHECK_ENABLE
-}
-}
 
+exists("c:/extras/include/hunspell/hunspell.hxx") {
+      message ("hunspell enabled")
+      LIBS += -lhunspell-1.4
+      PKGCONFIG += hunspell
+      DEFINES += HUNSPELL_ENABLE
+      DEFINES += SPELLCHECK_ENABLE
 }
-
+}

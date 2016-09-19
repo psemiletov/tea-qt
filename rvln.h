@@ -75,19 +75,6 @@
 #endif
 
 
-/*
-class CMarkupPair: public QObject
-{
-  Q_OBJECT
-
-public:
-
-  QHash <QString, QString> tags_a;
-  QHash <QString, QString> tags_b;
-};
-*/
-
-
 
 class CMarkupPair: public QObject
 {

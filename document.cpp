@@ -743,7 +743,7 @@ void document_holder::add_to_recent (CDocument *d)
   s += QString ("%1").arg (d->textEdit->textCursor().position());
 
   recent_files.prepend (s);
-  if (recent_files.size() > 13)
+  if (recent_files.size() > settings->value ("recent_list.max_items", 21).toInt())
      recent_files.removeLast();
 }
 

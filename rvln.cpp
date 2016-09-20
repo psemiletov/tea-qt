@@ -185,6 +185,8 @@ extern QHash <QString, QString> global_palette;
 
 extern bool b_recent_off;
 extern bool b_destroying_all;
+extern int recent_list_max_items;
+
 
 rvln *mainWindow;  
 
@@ -391,6 +393,8 @@ void rvln::readSettings()
 
   qApp->setCursorFlashTime (cursor_blink_time);
   
+  recent_list_max_items = settings->value ("recent_list.max_items", 21).toInt();
+
   
   b_altmenu = settings->value ("b_altmenu", "0").toBool(); 
    
@@ -1327,10 +1331,10 @@ void rvln::createMenus()
 
   editMenu->addSeparator();
 
-/*
+
   add_to_menu (editMenu, tr ("Block start"), SLOT(ed_block_start()));
   add_to_menu (editMenu, tr ("Block end"), SLOT(ed_block_end()));
-*/
+
   editMenu->addSeparator();
 
   add_to_menu (editMenu, tr ("Copy current file name"), SLOT(edit_copy_current_fname()));

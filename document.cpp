@@ -70,6 +70,8 @@ QHash <QString, QString> global_palette;
 QSettings *settings;
 QMenu *current_files_menu;
 
+int recent_list_max_items;
+
 bool b_recent_off;
 bool b_destroying_all;
 
@@ -743,7 +745,8 @@ void document_holder::add_to_recent (CDocument *d)
   s += QString ("%1").arg (d->textEdit->textCursor().position());
 
   recent_files.prepend (s);
-  if (recent_files.size() > settings->value ("recent_list.max_items", 21).toInt())
+//  if (recent_files.size() > settings->value ("recent_list.max_items", 21).toInt())
+  if (recent_files.size() > recent_list_max_items)
      recent_files.removeLast();
 }
 

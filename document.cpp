@@ -2108,6 +2108,7 @@ void CTEAEdit::update_rect_sel()
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
   int xdiff = x2 - x1;
  
+  int correction = 0;
 
   QTextCursor cursor = textCursor();
   
@@ -2117,15 +2118,26 @@ void CTEAEdit::update_rect_sel()
   for (int y = y1; y <= y2; y++)
       {
 //       qDebug() << "y:" << y;
-       cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1);
-              
-       int sel_len = xdiff;
        
        QTextBlock b = document()->findBlockByNumber (y); 
        
+       qDebug() << "b.text().length(): " << b.text().length();
+       qDebug() << "x1: " << x1;
+       
+       if (b.text().length() == 0)
+          {
+           //cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+           correction++;
+           continue;
+          } 
+       
+       int sel_len = xdiff;
+       
        if ((b.text().length() - x1) < xdiff)
           sel_len = b.text().length() - x1;
-          
+   
+       cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1 + correction);
+
        cursor.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, sel_len);
               
        rect_selection.cursor = cursor;
@@ -2133,6 +2145,10 @@ void CTEAEdit::update_rect_sel()
        extraSelections.append (rect_selection);
   
        cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+       
+       if (b.text().length() != 0)
+          correction = 0;
+       
       }
 
   setExtraSelections (extraSelections);

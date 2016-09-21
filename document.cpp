@@ -2211,7 +2211,41 @@ void CTEAEdit::rect_sel_replace (const QString &s)
           
       }  
   
+  QStringList sl_insert = s.split ("\n");
   
+  QStringList sl_dest;
+  
+  for (int line = 0; line < sl_insert.size(); line++)
+      { 
+       QString t;
+       
+       if (line >= sl_source.size())
+          {
+           t = sl_insert [line];
+           sl_dest.append (t);
+           continue;  
+          }
+  
+       t = sl_source[line].left (x1);
+       t += sl_insert [line];
+       t += sl_source[line].mid (x2);
+  
+       sl_dest.append (t);
+      }
+
+  QString new_text = sl_dest.join ('\n');
+
+//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
+  
+  //QTextCursor cursor = textCursor();
+  
+  textCursor().movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
+  textCursor().movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
+  textCursor().movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, y2);
+  
+  textCursor().insertText (new_text);
+       
+      
 }
     
 

@@ -46,7 +46,8 @@ code from qwriter:
 #include "textproc.h"
 
 
-
+#include <QApplication>
+#include <QClipboard>
 #include <QSettings>
 #include <QLabel>
 #include <QPainter>
@@ -2087,6 +2088,17 @@ void CTEAEdit::braceHighlight()
 }
 
 
+
+bool CTEAEdit::has_rect_selection()
+{
+ if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
+     return false; 
+     
+ return true;    
+}
+  
+
+
 void CTEAEdit::update_rect_sel()
 {
   qDebug() << "CTEAEdit::update_rect_sel()  -1";
@@ -2121,8 +2133,8 @@ void CTEAEdit::update_rect_sel()
        
        QTextBlock b = document()->findBlockByNumber (y); 
        
-       qDebug() << "b.text().length(): " << b.text().length();
-       qDebug() << "x1: " << x1;
+   //    qDebug() << "b.text().length(): " << b.text().length();
+     //  qDebug() << "x1: " << x1;
        
        if (b.text().length() == 0)
           {
@@ -2159,7 +2171,7 @@ void CTEAEdit::update_rect_sel()
   qDebug() << "x1:" << x1;
   qDebug() << "x2:" << x2;
   */
-  qDebug() << get_rect_sel();
+ // qDebug() << get_rect_sel();
   
 }
   
@@ -2176,8 +2188,8 @@ void CTEAEdit::rect_sel_replace (const QString &s)
 
 */
 
-  int y = textCursor().block().blockNumber();
-  int x = textCursor().position() - textCursor().block().position();
+ // int y = textCursor().block().blockNumber();
+ // int x = textCursor().position() - textCursor().block().position();
  
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
@@ -2190,25 +2202,17 @@ void CTEAEdit::rect_sel_replace (const QString &s)
   
   int how_many_copy_from_source = ydiff;
   
-  int lines_to_end = blockCount() - y;
+  int lines_to_end = blockCount() - y1;
   
   if (ydiff > lines_to_end)
      how_many_copy_from_source = lines_to_end;
      
   QStringList sl_source;
   
-  
-  for (int line = y1; y <= y2; y++)
+  for (int line = y1; line <= y2; line++)
       {
-       //int sel_len = xdiff;
-       
        QTextBlock b = document()->findBlockByNumber (line); 
-       
-       //if ((b.text().length() - x1) < xdiff)
-         // sel_len = b.text().length() - x1;
-          
        sl_source.append (b.text());   
-          
       }  
   
   QStringList sl_insert = s.split ("\n");
@@ -2234,18 +2238,22 @@ void CTEAEdit::rect_sel_replace (const QString &s)
       }
 
   QString new_text = sl_dest.join ('\n');
+  //new_text += "\n";
 
 //теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
   
-  //QTextCursor cursor = textCursor();
+  QTextCursor cursor = textCursor();
   
-  textCursor().movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
-  textCursor().movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
-  textCursor().movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, y2);
+  cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
+  cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
+  cursor.movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, ydiff);
+  cursor.movePosition (QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+  
+  cursor.removeSelectedText();
   
   textCursor().insertText (new_text);
-       
-      
+  
+  qDebug() << new_text;
 }
     
 
@@ -2256,6 +2264,20 @@ bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
   //else
     return true;
 }
+
+
+QMimeData* CTEAEdit::createMimeDataFromSelection()
+{
+  qDebug() << "CTEAEdit::createMimeDataFromSelection()";
+  if (has_rect_selection())
+     {
+      QMimeData *md = new QMimeData;
+      md->setText (get_rect_sel());
+      return md;
+     }
+
+  return QPlainTextEdit::createMimeDataFromSelection();   
+} 
 
 
 void CTEAEdit::insertFromMimeData (const QMimeData *source)
@@ -2323,34 +2345,11 @@ void document_holder::open_current()
 {
   QAction *act = qobject_cast<QAction *>(sender());
 
-  //QStringList current_files; 
- 
-/* foreach (CDocument *d, list)
-         current_files.prepend (d->file_name);
-  
-  int i = current_files.indexOf (act->text());
-  if (i == -1)
-     return;
-*/
- // open_file_triplex (current_files[i]);
- 
   CDocument *d = get_document_by_fname (act->text());
   if (d)
       tab_widget->setCurrentIndex (tab_widget->indexOf (d->tab_page));
- 
- 
-//  update_current_files_menu();
 }
 
-/*
-void document_holder::add_to_current_files (CDocument *d)
-{
-  
-  recent_files.prepend (d->file_name);
-  //if (recent_files.size() > 13)
-     //recent_files.removeLast();
-}
-*/
 
 void document_holder::update_current_files_menu()
 {
@@ -2407,6 +2406,22 @@ QString CTEAEdit::get_rect_sel()
   return result;
 }
 
+
+void CTEAEdit::rect_sel_cut()
+{
+}
+
+/*
+void CTEAEdit::copy()
+{
+  qDebug() << "CTEAEdit::copy()";
+  
+  if (has_rect_selection())
+     QApplication::clipboard()->setText (get_rect_sel());   
+  else   
+      QPlainTextEdit::copy();
+}
+*/
 
 /*
  * 

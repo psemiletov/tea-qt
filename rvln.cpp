@@ -493,6 +493,8 @@ void rvln::create_main_widget()
   QHBoxLayout *lt_fte = new QHBoxLayout;
   v_box->addLayout (lt_fte);
 
+  
+
   QToolButton *bt_find = new QToolButton (this);
   QToolButton *bt_prev = new QToolButton (this);
   QToolButton *bt_next = new QToolButton (this);
@@ -512,8 +514,7 @@ void rvln::create_main_widget()
  
   lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
   lt_fte->addWidget (cmb_fif, 1);
-
-  //lt_fte->addWidget (cmb_fif);
+  
   lt_fte->addWidget (bt_find);
   lt_fte->addWidget (bt_prev);
   lt_fte->addWidget (bt_next);
@@ -1334,6 +1335,10 @@ void rvln::createMenus()
 
   add_to_menu (editMenu, tr ("Block start"), SLOT(ed_block_start()));
   add_to_menu (editMenu, tr ("Block end"), SLOT(ed_block_end()));
+  add_to_menu (editMenu, tr ("Copy block"), SLOT(ed_block_copy()));
+  add_to_menu (editMenu, tr ("Paste block"), SLOT(ed_block_paste()));
+  
+  
 
   editMenu->addSeparator();
 
@@ -9995,4 +10000,37 @@ void rvln::ed_block_end()
   d->textEdit->rect_sel_end.setY (y);
   
   d->textEdit->update_rect_sel();
+}
+
+
+void rvln::ed_block_copy()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! d->textEdit->has_rect_selection())
+     return;
+     
+  QApplication::clipboard()->setText (d->textEdit->get_rect_sel());   
+}
+
+
+void rvln::ed_block_paste()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  //if (! d->textEdit->has_rect_selection())
+    // return;
+
+  d->textEdit->rect_sel_replace (QApplication::clipboard()->text());
+
+     
+  //QApplication::clipboard()->setText (d->textEdit->get_rect_sel());   
 }

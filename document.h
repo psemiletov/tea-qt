@@ -131,15 +131,24 @@ public:
   
   QString get_rect_sel();
 
+  void rect_sel_cut();
+
+
   void braceHighlight();
   
   void lineNumberAreaPaintEvent(QPaintEvent *event);
   int lineNumberAreaWidth();
 
+
+  Q_INVOKABLE bool has_rect_selection();
+  
+
 protected:
 
   bool canInsertFromMimeData (const QMimeData *source);
   void insertFromMimeData (const QMimeData *source);
+  
+  QMimeData* createMimeDataFromSelection(); 
 
   void paintEvent(QPaintEvent *event);
   void keyPressEvent (QKeyEvent *event);    
@@ -155,11 +164,14 @@ protected:
 
     }
 */
-private slots:
+public slots:
 
   void updateLineNumberAreaWidth (int newBlockCount);
   void cb_cursorPositionChanged();
   void updateLineNumberArea (const QRect &, int);
+  
+ // void copy();
+  
 };
 
 
@@ -298,6 +310,7 @@ public:
   Q_INVOKABLE QString get_triplex();
   Q_INVOKABLE void update_status();
   Q_INVOKABLE void update_title (bool fullname = true);
+
 
   Q_INVOKABLE void update_labels();
 };

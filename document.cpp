@@ -2409,8 +2409,63 @@ QString CTEAEdit::get_rect_sel()
 
 void CTEAEdit::rect_sel_cut()
 {
-}
+  int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
+  int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
+  int ydiff = y2 - y1;
+   
+  
+  int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
+  int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
+  int xdiff = x2 - x1;
+  
+  int how_many_copy_from_source = ydiff;
+  
+  int lines_to_end = blockCount() - y1;
+  
+  if (ydiff > lines_to_end)
+     how_many_copy_from_source = lines_to_end;
+     
+  QStringList sl_source;
+  
+  for (int line = y1; line <= y2; line++)
+      {
+       QTextBlock b = document()->findBlockByNumber (line); 
+       sl_source.append (b.text());   
+      }  
+  
+  QStringList sl_dest;
+  QStringList sl_copy;
+  
+  for (int line = 0; line < sl_source.size(); line++)
+      { 
+       QString t;
 
+       t = sl_source[line].left (x1);
+       t += sl_source[line].mid (x2);
+       sl_dest.append (t);
+       
+       sl_copy.append (sl_source[line].mid (x1, x2 - x1));
+      }
+
+  QString new_text = sl_dest.join ('\n');
+  //new_text += "\n";
+
+//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
+  
+  QTextCursor cursor = textCursor();
+  
+  cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
+  cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
+  cursor.movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, ydiff);
+  cursor.movePosition (QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+  
+  cursor.removeSelectedText();
+ 
+  textCursor().insertText (new_text); //need double undo to undo
+    
+  QApplication::clipboard()->setText (sl_copy.join ('\n'));
+  
+}
 /*
 void CTEAEdit::copy()
 {

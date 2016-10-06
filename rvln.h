@@ -490,6 +490,7 @@ main window callbacks
   void ed_block_end();
   void ed_block_copy();
   void ed_block_paste();
+  void ed_block_cut();
   
 
   void ed_copy();

@@ -1337,6 +1337,7 @@ void rvln::createMenus()
   add_to_menu (editMenu, tr ("Block end"), SLOT(ed_block_end()));
   add_to_menu (editMenu, tr ("Copy block"), SLOT(ed_block_copy()));
   add_to_menu (editMenu, tr ("Paste block"), SLOT(ed_block_paste()));
+  add_to_menu (editMenu, tr ("Cut block"), SLOT(ed_block_cut()));
   
   
 
@@ -10030,6 +10031,24 @@ void rvln::ed_block_paste()
     // return;
 
   d->textEdit->rect_sel_replace (QApplication::clipboard()->text());
+
+     
+  //QApplication::clipboard()->setText (d->textEdit->get_rect_sel());   
+}
+
+
+void rvln::ed_block_cut()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  //if (! d->textEdit->has_rect_selection())
+    // return;
+
+  d->textEdit->rect_sel_cut();
 
      
   //QApplication::clipboard()->setText (d->textEdit->get_rect_sel());   

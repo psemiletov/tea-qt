@@ -2459,9 +2459,13 @@ void CTEAEdit::rect_sel_cut()
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, ydiff);
   cursor.movePosition (QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
   
+  cursor.beginEditBlock();
+  
   cursor.removeSelectedText();
  
-  textCursor().insertText (new_text); //need double undo to undo
+  cursor.insertText (new_text); //need double undo to undo
+
+  cursor.endEditBlock();
     
   QApplication::clipboard()->setText (sl_copy.join ('\n'));
   

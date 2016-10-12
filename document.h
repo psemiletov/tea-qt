@@ -66,8 +66,7 @@ class CDocument;
 class CTEAEdit: public QPlainTextEdit
 {
   Q_OBJECT
-
-   
+  
 
 public:
 
@@ -81,8 +80,6 @@ public:
   QPoint rect_sel_start;
   QPoint rect_sel_end;
  
- 
-
   CDocument *doc;
 
   QColor currentLineColor;
@@ -90,6 +87,10 @@ public:
   QColor margin_color;
   QColor linenums_bg;
   QColor text_color;
+
+  QColor sel_text_color;
+  QColor sel_back_color;
+
 
   QWidget *lineNumberArea;
 
@@ -131,7 +132,7 @@ public:
   
   QString get_rect_sel();
 
-  void rect_sel_cut();
+  void rect_sel_cut (bool just_del = false);
 
 
   void braceHighlight();

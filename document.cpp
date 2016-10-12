@@ -645,6 +645,9 @@ void document_holder::apply_settings_single (CDocument *d)
 
   int darker_val = settings->value ("darker_val", 100).toInt();
 
+ 
+
+
 /*  
   f.fromString (settings->value ("editor_font_name", "Monospace").toString());
   f.setPointSize (settings->value ("editor_font_size", "12").toInt());
@@ -659,6 +662,15 @@ void document_holder::apply_settings_single (CDocument *d)
   d->textEdit->use_hl_wrap = settings->value ("use_hl_wrap", true).toBool();
   
   d->textEdit->wrap = settings->value ("word_wrap", true).toBool();
+    
+     
+  QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
+  QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
+
+    
+  d->textEdit->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
+  d->textEdit->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
+
     
   if (! d->textEdit->use_hl_wrap)
      {
@@ -936,7 +948,7 @@ void CTEAEdit::setup_brace_width()
 CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 {
   rect_sel_reset();
-
+  
   highlightCurrentLine = false;
   setup_brace_width();
   
@@ -957,6 +969,16 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   
   //document()->setDefaultTextOption(QTextOption(Qt::AlignRight));
  // setCursorWidth (settings->value ("cursor_width", 1).toInt());
+  
+  
+  QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
+  QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
+  sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
+  
   
   connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
 }
@@ -2088,7 +2110,6 @@ void CTEAEdit::braceHighlight()
 }
 
 
-
 bool CTEAEdit::has_rect_selection()
 {
  if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
@@ -2096,8 +2117,7 @@ bool CTEAEdit::has_rect_selection()
      
  return true;    
 }
-  
-
+ 
 
 void CTEAEdit::update_rect_sel()
 {
@@ -2109,8 +2129,7 @@ void CTEAEdit::update_rect_sel()
   QTextEdit::ExtraSelection rect_selection;
 
   extraSelections.clear();
-  
-  
+    
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   int ydiff = y2 - y1;
@@ -2153,12 +2172,16 @@ void CTEAEdit::update_rect_sel()
        cursor.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, sel_len);
               
        rect_selection.cursor = cursor;
-       rect_selection.format.setBackground (brackets_color);
-       extraSelections.append (rect_selection);
+      // rect_selection.format.setBackground (brackets_color);
+      rect_selection.format.setBackground (sel_back_color);
+      rect_selection.format.setForeground (sel_text_color);
+      
+      
+      extraSelections.append (rect_selection);
   
-       cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+      cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
        
-       if (b.text().length() != 0)
+      if (b.text().length() != 0)
           correction = 0;
        
       }
@@ -2407,7 +2430,7 @@ QString CTEAEdit::get_rect_sel()
 }
 
 
-void CTEAEdit::rect_sel_cut()
+void CTEAEdit::rect_sel_cut (bool just_del)
 {
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
@@ -2448,7 +2471,6 @@ void CTEAEdit::rect_sel_cut()
       }
 
   QString new_text = sl_dest.join ('\n');
-  //new_text += "\n";
 
 //теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
   
@@ -2463,12 +2485,12 @@ void CTEAEdit::rect_sel_cut()
   
   cursor.removeSelectedText();
  
-  cursor.insertText (new_text); //need double undo to undo
+  cursor.insertText (new_text);
 
   cursor.endEditBlock();
-    
-  QApplication::clipboard()->setText (sl_copy.join ('\n'));
   
+  if (! just_del)  
+     QApplication::clipboard()->setText (sl_copy.join ('\n'));
 }
 /*
 void CTEAEdit::copy()

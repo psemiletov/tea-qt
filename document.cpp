@@ -849,7 +849,8 @@ void CTEAEdit::cb_cursorPositionChanged()
      doc->update_status();
      
   if (hl_brackets)   
-     braceHighlight();   
+     //braceHighlight();   
+     update_ext_selections();
 }
 
 
@@ -953,6 +954,9 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   setup_brace_width();
   
   lineNumberArea = new CLineNumberArea (this);
+
+  connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
+  
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
   connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
   updateLineNumberAreaWidth (0);
@@ -1979,9 +1983,10 @@ void CTEAEdit::resizeEvent (QResizeEvent *e)
 
 void CTEAEdit::braceHighlight()
 {
-  extraSelections.clear();
-  setExtraSelections (extraSelections);
-  selection.format.setBackground (brackets_color);
+  //extraSelections.clear();
+  //setExtraSelections (extraSelections);
+  
+  brace_selection.format.setBackground (brackets_color);
 
   QTextDocument *doc = document();
   QTextCursor cursor = textCursor();
@@ -2052,10 +2057,10 @@ void CTEAEdit::braceHighlight()
       QTextCursor cursor2 = doc->find (openBrace, cursor);
       if (cursor2.isNull()) 
          {
-          selection.cursor = cursor;
-          extraSelections.append (selection);
-          selection.cursor = cursor1;
-          extraSelections.append (selection);
+          brace_selection.cursor = cursor;
+          extraSelections.append (brace_selection);
+          brace_selection.cursor = cursor1;
+          extraSelections.append (brace_selection);
           setExtraSelections (extraSelections);
          } 
       else 
@@ -2068,10 +2073,10 @@ void CTEAEdit::braceHighlight()
                       break;
                  }
                 
-           selection.cursor = cursor;
-           extraSelections.append (selection);
-           selection.cursor = cursor1;
-           extraSelections.append (selection);
+           brace_selection.cursor = cursor;
+           extraSelections.append (brace_selection);
+           brace_selection.cursor = cursor1;
+           extraSelections.append (brace_selection);
            setExtraSelections (extraSelections);
           }
        } 
@@ -2083,10 +2088,10 @@ void CTEAEdit::braceHighlight()
             QTextCursor cursor2 = doc->find (closeBrace, cursor, QTextDocument::FindBackward);
             if (cursor2.isNull()) 
                {
-                selection.cursor = cursor;
-                extraSelections.append (selection);
-                selection.cursor = cursor1;
-                extraSelections.append (selection);
+                brace_selection.cursor = cursor;
+                extraSelections.append (brace_selection);
+                brace_selection.cursor = cursor1;
+                extraSelections.append (brace_selection);
                 setExtraSelections (extraSelections);
                }
             else 
@@ -2099,10 +2104,10 @@ void CTEAEdit::braceHighlight()
                            break;
                        }
                        
-                 selection.cursor = cursor;
-                 extraSelections.append (selection);
-                 selection.cursor = cursor1;
-                 extraSelections.append (selection);
+                 brace_selection.cursor = cursor;
+                 extraSelections.append (brace_selection);
+                 brace_selection.cursor = cursor1;
+                 extraSelections.append (brace_selection);
                  setExtraSelections (extraSelections);
                 }
              }
@@ -2121,7 +2126,87 @@ bool CTEAEdit::has_rect_selection()
 
 void CTEAEdit::update_rect_sel()
 {
-  qDebug() << "CTEAEdit::update_rect_sel()  -1";
+ // qDebug() << "CTEAEdit::update_rect_sel()  -1";
+ 
+  if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
+     return; 
+ 
+  QTextEdit::ExtraSelection rect_selection;
+
+  //extraSelections.clear();
+    
+  int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
+  int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
+  int ydiff = y2 - y1;
+   
+  
+  int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
+  int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
+  int xdiff = x2 - x1;
+ 
+  int correction = 0;
+
+  QTextCursor cursor = textCursor();
+  
+  cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
+  cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
+  
+  for (int y = y1; y <= y2; y++)
+      {
+//       qDebug() << "y:" << y;
+       
+       QTextBlock b = document()->findBlockByNumber (y); 
+       
+   //    qDebug() << "b.text().length(): " << b.text().length();
+     //  qDebug() << "x1: " << x1;
+       
+       if (b.text().length() == 0)
+          {
+           //cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+           correction++;
+           continue;
+          } 
+       
+       int sel_len = xdiff;
+       
+       if ((b.text().length() - x1) < xdiff)
+          sel_len = b.text().length() - x1;
+   
+       cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1 + correction);
+
+       cursor.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, sel_len);
+              
+       rect_selection.cursor = cursor;
+      // rect_selection.format.setBackground (brackets_color);
+      rect_selection.format.setBackground (sel_back_color);
+      rect_selection.format.setForeground (sel_text_color);
+      
+      
+      extraSelections.append (rect_selection);
+  
+      cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+       
+      if (b.text().length() != 0)
+          correction = 0;
+       
+      }
+
+  setExtraSelections (extraSelections);
+ /*
+  qDebug() << "ydiff: " << ydiff;
+  qDebug() << "y1:" << y1;
+  qDebug() << "y2:" << y2;
+  qDebug() << "x1:" << x1;
+  qDebug() << "x2:" << x2;
+  */
+ // qDebug() << get_rect_sel();
+  
+}
+
+
+void CTEAEdit::update_rect_sel2()
+{
+ // qDebug() << "CTEAEdit::update_rect_sel()  -1";
  
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
      return; 
@@ -2492,6 +2577,39 @@ void CTEAEdit::rect_sel_cut (bool just_del)
   if (! just_del)  
      QApplication::clipboard()->setText (sl_copy.join ('\n'));
 }
+
+
+void CTEAEdit::update_ext_selections()
+{
+  extraSelections.clear();
+  setExtraSelections (extraSelections);
+  update_rect_sel();
+  braceHighlight();     
+}
+  
+
+void CTEAEdit::slot_selectionChanged()
+{
+ // rect_sel_start.setX (-1);
+//  rect_sel_end.setX (-1);
+//  update_ext_selections();
+  //qDebug() << "111";
+
+  QTextCursor cursor = this->textCursor();
+//  qDebug() << cursor.selectionStart();
+ // qDebug() << cursor.selectionEnd();
+  
+  if (cursor.selectionStart() != cursor.selectionEnd())
+     {
+      rect_sel_start.setX (-1);
+      rect_sel_end.setX (-1);
+      update_ext_selections();
+     } 
+
+  
+}
+
+
 /*
 void CTEAEdit::copy()
 {

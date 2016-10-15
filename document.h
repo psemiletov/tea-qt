@@ -72,7 +72,7 @@ public:
 
   QString indent_val;  
   QList <QTextEdit::ExtraSelection> extraSelections;
-  QTextEdit::ExtraSelection selection;
+  QTextEdit::ExtraSelection brace_selection;
 
   
   //rect selection
@@ -128,7 +128,11 @@ public:
   void rect_sel_reset();
   void rect_sel_replace (const QString &s);
   
+  void update_ext_selections();
+  
+  
   void update_rect_sel();
+  void update_rect_sel2();
   
   QString get_rect_sel();
 
@@ -170,6 +174,8 @@ public slots:
   void updateLineNumberAreaWidth (int newBlockCount);
   void cb_cursorPositionChanged();
   void updateLineNumberArea (const QRect &, int);
+  
+  void slot_selectionChanged();
   
  // void copy();
   

@@ -9982,7 +9982,7 @@ void rvln::ed_block_start()
   d->textEdit->rect_sel_start.setX (x);
   d->textEdit->rect_sel_start.setY (y);
   
-  d->textEdit->update_rect_sel();
+  d->textEdit->update_ext_selections();
 }
 
 
@@ -10000,7 +10000,7 @@ void rvln::ed_block_end()
   d->textEdit->rect_sel_end.setX (x);
   d->textEdit->rect_sel_end.setY (y);
   
-  d->textEdit->update_rect_sel();
+  d->textEdit->update_ext_selections();
 }
 
 

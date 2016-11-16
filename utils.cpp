@@ -316,10 +316,24 @@ bool char_is_shit (const QChar &c)
   
   if (c == 0xfeff00bb)
        return false;*/
+  if (c.isNull())
+     return false;
 
-  
- if (! c.isNull() && ! c.isLetter())
+
+  if (c == '\"')
      return true;
+
+  if (c.unicode() == 187) //'»')
+     return true;
+
+  if (c == '\\')
+     return true;
+  
+  if (! c.isLetter())
+     return true;
+ 
+ //if (! c.isNull() && ! c.isLetter())
+   //  return true;
   
   return false;
 }

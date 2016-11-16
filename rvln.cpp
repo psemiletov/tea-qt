@@ -1924,7 +1924,8 @@ void rvln::upCase()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().toUpper());
+      d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().toUpper());
+     
 }
 
 
@@ -3531,6 +3532,21 @@ void rvln::create_spellcheck_menu()
 }
 
 
+bool ends_with_evilchar (const QString &s)
+{
+  if (s.endsWith ("\""))
+     return true;
+
+  if (s.endsWith ("»"))
+     return true;
+
+  if (s.endsWith ("\\"))
+     return true;
+  
+  return false;
+}
+
+
 void rvln::fn_spell_check()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -3582,13 +3598,15 @@ void rvln::fn_spell_check()
 
      QString stext = cr.selectedText();
 
-//     if (! stext.isNull() && stext.endsWith ("\""))
-     if ((! stext.isNull() && stext.endsWith ("\"")) || (! stext.isNull() && stext.endsWith ("»")))
+//     if ((! stext.isNull() && stext.endsWith ("\"")) || (! stext.isNull() && stext.endsWith ("»")))
+  
+  
+  /*   if ((! stext.isNull() && ends_with_evilchar (stext)))
         {
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
         }
-                      
+    */                  
            
      if (! stext.isNull() || ! stext.isEmpty())
      if (! spellchecker->check (cr.selectedText()))
@@ -9366,7 +9384,6 @@ void rvln::fn_table_swap_cells()
   t = sl_temp.join ("\n");
   
   d->textEdit->textCursor().insertText (t);
-
 }
 
 
@@ -10027,12 +10044,8 @@ void rvln::ed_block_paste()
   if (! d)
      return;
 
-  //if (! d->textEdit->has_rect_selection())
-    // return;
-
   d->textEdit->rect_sel_replace (QApplication::clipboard()->text());
-
-     
+   
   //QApplication::clipboard()->setText (d->textEdit->get_rect_sel());   
 }
 

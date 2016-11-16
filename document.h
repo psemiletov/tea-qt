@@ -125,14 +125,17 @@ public:
   void calc_auto_indent();
   void setup_brace_width();
 
+  void text_insert (const QString &s);
+
   void rect_sel_reset();
-  void rect_sel_replace (const QString &s);
+  void rect_sel_replace (const QString &s, bool insert = false);
+  //void rect_sel_insert (const QString &s);
+  
   
   void update_ext_selections();
   
   
   void update_rect_sel();
-  void update_rect_sel2();
   
   QString get_rect_sel();
 

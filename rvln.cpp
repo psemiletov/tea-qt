@@ -2181,7 +2181,7 @@ void rvln::fman_find_prev()
 
 void rvln::search_find_next()
 {
-  last_action = qobject_cast<QAction *>(sender());
+//  last_action = qobject_cast<QAction *>(sender());
 
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
@@ -3594,19 +3594,14 @@ void rvln::fn_spell_check()
               }
 
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-     c = text.at (cr.position());
-
+          
      QString stext = cr.selectedText();
-
-//     if ((! stext.isNull() && stext.endsWith ("\"")) || (! stext.isNull() && stext.endsWith ("»")))
-  
-  
-  /*   if ((! stext.isNull() && ends_with_evilchar (stext)))
+     if ((! stext.isNull() && ends_with_evilchar (stext)))
         {
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
         }
-    */                  
+                      
            
      if (! stext.isNull() || ! stext.isEmpty())
      if (! spellchecker->check (cr.selectedText()))
@@ -3651,7 +3646,7 @@ void rvln::fn_spell_add_to_dict()
      return;
 
   QTextCursor cr = d->textEdit->textCursor();
-  cr.select (QTextCursor::WordUnderCursor);
+  cr.select (QTextCursor::WordUnderCursor); //плохо работает
   QString s = cr.selectedText();
 
   if (! s.isEmpty() || ! s.isNull())
@@ -5354,6 +5349,8 @@ void rvln::fman_create_dir()
 
 void rvln::fn_convert_quotes_angle()
 {
+  last_action = qobject_cast<QAction *>(sender());
+
   CDocument *d = documents->get_current();
   if (! d)
      return;

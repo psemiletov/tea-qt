@@ -10112,9 +10112,9 @@ void rvln::fman_zeropad()
                newfpath.append ("/").append (newname);
                newfpath.append (ext);
                
-               //QFile::rename (fname, newfpath);
+               QFile::rename (fname, newfpath);
                
-               qDebug() << newfpath;
+               //qDebug() << newfpath;
               }
           }  
  

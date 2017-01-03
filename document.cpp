@@ -2595,10 +2595,10 @@ void CTEAEdit::slot_selectionChanged()
 }
 
 
-void CTEAEdit::text_insert (const QString &s)
+void CTEAEdit::text_replace (const QString &s)
 {
   if (has_rect_selection())
-     rect_sel_replace (s, true); //НЕ, ЭТО ТУПО ВСЁ, НАДО ПРОДУМАТЬ ЛУЧШЕ!!!
+     rect_sel_replace (s, false);
   else
       textCursor().insertText (s);
 }

@@ -401,6 +401,9 @@ main window callbacks
   void fman_refresh();
   void fman_rename();
   void fman_delete();
+  void fman_zeropad();
+
+  
   void fman_drives_changed (const QString & path);
   void fman_current_file_changed (const QString &full_path, const QString &just_name);
   void fman_file_activated (const QString &full_path);

@@ -1694,7 +1694,9 @@ void rvln::createMenus()
 
   add_to_menu (menu_fm_file_ops, tr ("Create new directory"), SLOT(fman_create_dir()));
   add_to_menu (menu_fm_file_ops, tr ("Rename"), SLOT(fman_rename()));
+  add_to_menu (menu_fm_file_ops, tr ("Zero pad file names"), SLOT(fman_zeropad()));
   add_to_menu (menu_fm_file_ops, tr ("Delete file"), SLOT(fman_delete()));
+
 
   menu_fm_file_infos = menu_fm->addMenu (tr ("File information"));
   menu_fm_file_infos->setTearOffEnabled (true);
@@ -1925,7 +1927,10 @@ void rvln::upCase()
   CDocument *d = documents->get_current();
   if (d)
       d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().toUpper());
+      //d->textEdit->text_replace (d->textEdit->textCursor().selectedText().toUpper());
      
+     
+ //void CTEAEdit::text_replace (const QString &s)    
 }
 
 
@@ -7831,6 +7836,10 @@ void rvln::calendar_clicked (const QDate &date)
      QString s = qstring_load (fname);
      log->log (s);
     }
+    
+ // int jd = date.toJulianDay(); 
+  //qDebug() << "day: " << jd;
+  
 }
 
 
@@ -10062,4 +10071,55 @@ void rvln::ed_block_cut()
 
      
   //QApplication::clipboard()->setText (d->textEdit->get_rect_sel());   
+}
+
+
+void rvln::fman_zeropad()
+{
+  QString fiftxt = fif_get_text();
+  int finalsize = fiftxt.toInt();
+  if (finalsize < 1)
+     finalsize = 10;
+
+  QStringList sl = fman->get_sel_fnames();   
+  
+  if (sl.size() < 1)
+     return; 
+  
+  foreach (QString fname, sl)
+          {
+           QFileInfo fi (fname);
+           if (fi.exists() && fi.isWritable())
+              {
+               //int countzeroes = fi.baseName().count('0');
+               
+               //int zeroes_to_add = zeroes - countzeroes;
+               int zeroes_to_add = finalsize - fi.baseName().length();
+                                             
+               QString newname = fi.fileName();
+               QString ext = file_get_ext (fname);
+
+               
+               newname.remove(QRegExp("[a-zA-Z\\s]"));
+               
+               
+               QString pad = "0";
+               pad = pad.repeated (zeroes_to_add);
+               
+               newname = pad + newname;
+                
+               QString newfpath (fi.path());
+               newfpath.append ("/").append (newname);
+               newfpath.append (ext);
+               
+               //QFile::rename (fname, newfpath);
+               
+               qDebug() << newfpath;
+              }
+          }  
+ 
+  update_dyn_menus();
+  fman->refresh();
+
+
 }

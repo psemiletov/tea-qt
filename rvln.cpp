@@ -8416,8 +8416,22 @@ void rvln::clipboard_dataChanged()
   if (ddest)
      {
       QString t = QApplication::clipboard()->text();
-      ddest->textEdit->textCursor().insertText (t);
-      ddest->textEdit->textCursor().insertText ("\n");
+      
+      QString tpl = "%s\n";
+      
+      QString ftemplate = dir_config.append ("/cliptpl.txt");
+      if (file_exists (ftemplate))
+         tpl = qstring_load (ftemplate);
+         
+//      qDebug() << tpl;   
+    
+      tpl = tpl.replace ("%time", QTime::currentTime().toString (settings->value("time_format", "hh:mm:ss").toString()));
+      tpl = tpl.replace ("%date", QDate::currentDate().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
+      
+      QString text_to_insert = tpl.replace ("%s", t);
+      
+      ddest->textEdit->textCursor().insertText (text_to_insert);
+      //ddest->textEdit->textCursor().insertText ("\n");
      }
 }
 

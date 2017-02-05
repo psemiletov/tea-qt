@@ -220,6 +220,18 @@
 
 <p><b>Storage files</b> - you can use some file as a "storage" file to copy text directly to it from different sources. <b>Set as storage file</b> chooses the current opened file as the storage file. Then, if ypu want copy and paste some text into that file, just use <b>Copy to storage file</b>. Also you can capture the system's clipboard for the text and put it to the storage using <b>Start/stop capture clipboard to storage file</b>. You may has just one storage file per session. When you close the storage file, all further pasting to it will be disabled until you not set a storage file again.</p>
 
+<p>To control the text that inserts to the storage you can use the template file called <i>cliptpl.txt</i> at the TEA config directory. Just create such file with the some makros, for example:
+</p>
+
+<pre>
+---
+%date
+%time
+%s
+---
+</pre>
+
+Here is: %s - the text from the clipboard, %date - current date, %time - current time.
 
 <br>
 <a name="mni_markup"></a>

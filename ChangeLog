@@ -1,3 +1,6 @@
+2017 feb
++ cliptpl.txt to format clipboard pieces captured to the storage file 
+
 2016 sept - 43.1.0
 * Fixes to the manuals
 * segfault (43.0.0 affected) on exit fixed

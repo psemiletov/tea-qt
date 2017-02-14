@@ -1695,6 +1695,8 @@ void rvln::createMenus()
   add_to_menu (menu_fm_file_ops, tr ("Create new directory"), SLOT(fman_create_dir()));
   add_to_menu (menu_fm_file_ops, tr ("Rename"), SLOT(fman_rename()));
   add_to_menu (menu_fm_file_ops, tr ("Zero pad file names"), SLOT(fman_zeropad()));
+ // add_to_menu (menu_fm_file_ops, tr ("Delete N first chars at file names"), SLOT(fman_del_n_first_chars()));
+  
   add_to_menu (menu_fm_file_ops, tr ("Delete file"), SLOT(fman_delete()));
 
 
@@ -10099,9 +10101,11 @@ void rvln::fman_zeropad()
   
   if (sl.size() < 1)
      return; 
-  
-  foreach (QString fname, sl)
+
+  for (int i = 0; i < sl.size(); i++) 
+  //foreach (QString fname, sl)
           {
+           QString fname = sl[i];
            QFileInfo fi (fname);
            if (fi.exists() && fi.isWritable())
               {
@@ -10116,6 +10120,8 @@ void rvln::fman_zeropad()
                
                newname.remove(QRegExp("[a-zA-Z\\s]"));
                
+               if (newname.isEmpty() || newname.isNull())
+                  continue;
                
                QString pad = "0";
                pad = pad.repeated (zeroes_to_add);
@@ -10137,3 +10143,43 @@ void rvln::fman_zeropad()
 
 
 }
+
+/*
+void rvln::fman_del_n_first_chars()
+{
+  QString fiftxt = fif_get_text();
+  int todel = fiftxt.toInt();
+  if (todel < 1)
+     todel = 1;
+
+  QStringList sl = fman->get_sel_fnames();   
+  
+  if (sl.size() < 1)
+     return; 
+  
+  foreach (QString fname, sl)
+          {
+           QFileInfo fi (fname);
+           if (fi.exists() && fi.isWritable())
+              {
+               QString newname = fi.fileName();
+               QString ext = file_get_ext (fname);
+
+               newname = newname.mid (todel - 1);
+                
+               QString newfpath (fi.path());
+               newfpath.append ("/").append (newname);
+               newfpath.append (ext);
+               
+               qDebug() << "ext:" << ext;
+               
+               //QFile::rename (fname, newfpath);
+               
+               //qDebug() << newfpath;
+              }
+          }  
+ 
+  update_dyn_menus();
+  fman->refresh();
+}
+*/

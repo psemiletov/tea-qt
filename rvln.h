@@ -402,6 +402,7 @@ main window callbacks
   void fman_rename();
   void fman_delete();
   void fman_zeropad();
+  //void fman_del_n_first_chars();
 
   
   void fman_drives_changed (const QString & path);

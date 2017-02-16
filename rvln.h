@@ -402,7 +402,9 @@ main window callbacks
   void fman_rename();
   void fman_delete();
   void fman_zeropad();
-  //void fman_del_n_first_chars();
+  void fman_del_n_first_chars();
+  void fman_multreplace();
+  void fman_apply_template();
 
   
   void fman_drives_changed (const QString & path);
@@ -844,6 +846,8 @@ main window widgets
 
   QMenu *menu_fm;
   QMenu *menu_fm_file_ops;
+  QMenu *menu_fm_multi_rename;
+
   QMenu *menu_fm_file_infos;
   QMenu *menu_fm_img_conv;
   QMenu *menu_fm_zip;

@@ -1,5 +1,10 @@
 2017 feb
 + cliptpl.txt to format clipboard pieces captured to the storage file 
++ Fm - Multi-rename
+                   + Zero pad file names
+                   + Delete N first chars at file names
+                   + Replace in file names
+                   + Apply template
 
 2016 sept - 43.1.0
 * Fixes to the manuals

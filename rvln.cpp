@@ -1689,14 +1689,19 @@ void rvln::createMenus()
   menu_fm = menuBar()->addMenu (tr ("Fm"));
   menu_fm->setTearOffEnabled (true);
 
+  menu_fm_multi_rename = menu_fm->addMenu (tr ("Multi-rename"));
+  menu_fm_multi_rename->setTearOffEnabled (true);
+
+  add_to_menu (menu_fm_multi_rename, tr ("Zero pad file names"), SLOT(fman_zeropad()));
+  add_to_menu (menu_fm_multi_rename, tr ("Delete N first chars at file names"), SLOT(fman_del_n_first_chars()));
+  add_to_menu (menu_fm_multi_rename, tr ("Replace in file names"), SLOT(fman_multreplace()));
+  add_to_menu (menu_fm_multi_rename, tr ("Apply template"), SLOT(fman_apply_template()));
+
   menu_fm_file_ops = menu_fm->addMenu (tr ("File operations"));
   menu_fm_file_ops->setTearOffEnabled (true);
 
   add_to_menu (menu_fm_file_ops, tr ("Create new directory"), SLOT(fman_create_dir()));
   add_to_menu (menu_fm_file_ops, tr ("Rename"), SLOT(fman_rename()));
-  add_to_menu (menu_fm_file_ops, tr ("Zero pad file names"), SLOT(fman_zeropad()));
- // add_to_menu (menu_fm_file_ops, tr ("Delete N first chars at file names"), SLOT(fman_del_n_first_chars()));
-  
   add_to_menu (menu_fm_file_ops, tr ("Delete file"), SLOT(fman_delete()));
 
 
@@ -10114,9 +10119,8 @@ void rvln::fman_zeropad()
                //int zeroes_to_add = zeroes - countzeroes;
                int zeroes_to_add = finalsize - fi.baseName().length();
                                              
-               QString newname = fi.fileName();
+               QString newname = fi.baseName();
                QString ext = file_get_ext (fname);
-
                
                newname.remove(QRegExp("[a-zA-Z\\s]"));
                
@@ -10140,11 +10144,9 @@ void rvln::fman_zeropad()
  
   update_dyn_menus();
   fman->refresh();
-
-
 }
 
-/*
+
 void rvln::fman_del_n_first_chars()
 {
   QString fiftxt = fif_get_text();
@@ -10162,24 +10164,91 @@ void rvln::fman_del_n_first_chars()
            QFileInfo fi (fname);
            if (fi.exists() && fi.isWritable())
               {
-               QString newname = fi.fileName();
+               QString newname = fi.baseName();
                QString ext = file_get_ext (fname);
-
-               newname = newname.mid (todel - 1);
-                
-               QString newfpath (fi.path());
-               newfpath.append ("/").append (newname);
-               newfpath.append (ext);
+                              
+               newname = newname.mid (todel);
                
-               qDebug() << "ext:" << ext;
-               
-               //QFile::rename (fname, newfpath);
-               
-               //qDebug() << newfpath;
+               if (newname.size() > (ext.size() + 1))
+                  {
+                   QString newfpath (fi.path());
+                   newfpath.append ("/").append (newname);
+                   QFile::rename (fname, newfpath);
+                  }
               }
           }  
  
   update_dyn_menus();
   fman->refresh();
 }
-*/
+
+
+void rvln::fman_multreplace()
+{
+  //QString fiftxt = fif_get_text();
+  
+  QStringList l = fif_get_text().split ("~");
+  if (l.size() < 2)
+     return;
+
+  QStringList sl = fman->get_sel_fnames();   
+  
+  if (sl.size() < 1)
+     return; 
+  
+  foreach (QString fname, sl)
+          {
+           QFileInfo fi (fname);
+           if (fi.exists() && fi.isWritable())
+              {
+               QString newname = fi.fileName();
+    //           QString ext = file_get_ext (fname);
+               
+               newname = newname.replace (l[0], l[1]);
+               
+               QString newfpath (fi.path());
+               newfpath.append ("/").append (newname);
+               QFile::rename (fname, newfpath);
+               //   qDebug() << newfpath;
+              }    
+          }  
+ 
+  update_dyn_menus();
+  fman->refresh();
+}
+
+
+
+
+void rvln::fman_apply_template()
+{
+  QString fiftxt = fif_get_text();
+  
+  QStringList sl = fman->get_sel_fnames();   
+  
+  if (sl.size() < 1)
+     return; 
+  
+  foreach (QString fname, sl)
+          {
+           QFileInfo fi (fname);
+           if (fi.exists() && fi.isWritable())
+              {
+               QString ext = file_get_ext (fname);
+               QString newname = fiftxt; 
+               newname = newname.replace ("%filename", fi.fileName()); 
+               newname = newname.replace ("%ext", ext); 
+               newname = newname.replace ("%basename", fi.baseName()); 
+             
+               
+               QString newfpath (fi.path());
+               newfpath.append ("/").append (newname);
+               //QFile::rename (fname, newfpath);
+                  qDebug() << newfpath;
+              }    
+          }  
+ 
+  update_dyn_menus();
+  fman->refresh();
+}
+

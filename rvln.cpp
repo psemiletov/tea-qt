@@ -1569,6 +1569,9 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Enumerate"), SLOT(fn_enum()));
   add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
 
+  add_to_menu (tm, tr ("fn_number_dms2dc"), SLOT(fn_number_dms2dc()));
+
+
 
 
 
@@ -10164,12 +10167,12 @@ void rvln::fman_del_n_first_chars()
            QFileInfo fi (fname);
            if (fi.exists() && fi.isWritable())
               {
-               QString newname = fi.baseName();
+               QString newname = fi.fileName();
                QString ext = file_get_ext (fname);
                               
                newname = newname.mid (todel);
                
-               if (newname.size() > (ext.size() + 1))
+             //  if (newname.size() > (ext.size() + 1))
                   {
                    QString newfpath (fi.path());
                    newfpath.append ("/").append (newname);
@@ -10218,8 +10221,6 @@ void rvln::fman_multreplace()
 }
 
 
-
-
 void rvln::fman_apply_template()
 {
   QString fiftxt = fif_get_text();
@@ -10243,8 +10244,8 @@ void rvln::fman_apply_template()
                
                QString newfpath (fi.path());
                newfpath.append ("/").append (newname);
-               //QFile::rename (fname, newfpath);
-                  qDebug() << newfpath;
+               QFile::rename (fname, newfpath);
+               //   qDebug() << newfpath;
               }    
           }  
  
@@ -10252,3 +10253,65 @@ void rvln::fman_apply_template()
   fman->refresh();
 }
 
+
+//UTF-16BE, UTF-32BE 	 	
+//′
+#define UQS 8242 	
+//″
+#define UQD 8243 //0x00B3 
+//°
+#define UQDG 176
+
+//degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
+//to
+//decimal degrees: 40.446° N 79.982° W
+void rvln::fn_number_dms2dc()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+  
+  QString t = d->textEdit->textCursor().selectedText();
+  t = t.remove (" ");
+  
+  t = t.replace ('\'', QChar (UQS));
+  t = t.replace ('"', QChar (UQD));
+  
+  QStringList l = t.split ('N');
+  
+  QString latitude = l[0];
+  QString longtitude = l[1];
+  
+  //qDebug() << latitude.indexOf(QChar (0x00B0));
+   
+  int iqdg = latitude.indexOf(QChar (UQDG));
+  int iqs = latitude.indexOf(QChar (UQS));
+  int iqd = latitude.indexOf(QChar (UQD));
+  
+  qDebug() << "iqdg : " << iqdg;
+  qDebug() << "iqs : " << iqs;
+  qDebug() << "iqd : " << iqd;
+ 
+   
+  QString degrees1 = latitude.left (iqdg);
+  QString minutes1 = latitude.mid (iqdg + 1, iqs - iqdg - 1);
+  QString seconds1 = latitude.mid (iqs + 1, iqd - iqs - 1);
+
+  qDebug() << "degrees1 : " << degrees1;
+  qDebug() << "minutes1 : " << minutes1;
+  qDebug() << "seconds1 : " << seconds1;
+
+  //decimal_degrees = degrees + minutes/60 + seconds / 3600 
+  double decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
+  
+  QString decimal_degrees_N = QString::number (decimal_degrees, 'g', 5);
+ 
+  qDebug() << "decimal_degrees " << decimal_degrees; 
+ 
+  qDebug() << "decimal_degrees_N " << decimal_degrees_N; 
+
+//     d->textEdit->textCursor().insertText (int_to_binary (d->textEdit->textCursor().selectedText().toInt()));
+}

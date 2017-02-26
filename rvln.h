@@ -559,6 +559,9 @@ main window callbacks
   void cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus);
   void fn_number_arabic_to_roman();
   void fn_number_roman_to_arabic();
+  
+  void fn_number_dms2dc();
+  
   void fn_filter_rm_less_than();
   void fn_filter_rm_greater_than();
   void fn_filter_rm_duplicates();

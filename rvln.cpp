@@ -10137,6 +10137,7 @@ void rvln::fman_zeropad()
                 
                QString newfpath (fi.path());
                newfpath.append ("/").append (newname);
+               newfpath.append (".");
                newfpath.append (ext);
                
                QFile::rename (fname, newfpath);
@@ -10177,6 +10178,8 @@ void rvln::fman_del_n_first_chars()
                    QString newfpath (fi.path());
                    newfpath.append ("/").append (newname);
                    QFile::rename (fname, newfpath);
+                   
+                   //qDebug() << newfpath;
                   }
               }
           }  

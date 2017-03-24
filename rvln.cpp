@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2016 by Peter Semiletov                            *
+ *   2007-2017 by Peter Semiletov                            *
  *   tea@list.ru                                             *
 
 started at 08 November 2007
@@ -10272,6 +10272,96 @@ void rvln::fn_number_dms2dc()
 {
   last_action = qobject_cast<QAction *>(sender());
 
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+  
+  QString t = d->textEdit->textCursor().selectedText();
+  t = t.remove (" ");
+  
+  t = t.replace ('\'', QChar (UQS));
+  t = t.replace ('"', QChar (UQD));
+  
+  QChar north_or_south = ('N');
+  if (t.contains ('S'))
+     north_or_south = 'S';
+  
+  QChar east_or_west = ('E');
+  if (t.contains ('W'))
+     east_or_west = 'W';
+    
+  QStringList l = t.split (north_or_south);
+  
+  QString latitude = l[0];
+  QString longtitude = l[1];
+
+  qDebug() << "latitude " << latitude; 
+  
+  qDebug() << "longtitude " << longtitude; 
+ 
+  int iqdg = latitude.indexOf(QChar (UQDG));
+  int iqs = latitude.indexOf(QChar (UQS));
+  int iqd = latitude.indexOf(QChar (UQD));
+  
+/*  qDebug() << "iqdg : " << iqdg;
+  qDebug() << "iqs : " << iqs;
+  qDebug() << "iqd : " << iqd;
+  */ 
+  QString degrees1 = latitude.left (iqdg);
+  QString minutes1 = latitude.mid (iqdg + 1, iqs - iqdg - 1);
+  QString seconds1 = latitude.mid (iqs + 1, iqd - iqs - 1);
+
+/*
+  qDebug() << "degrees1 : " << degrees1;
+  qDebug() << "minutes1 : " << minutes1;
+  qDebug() << "seconds1 : " << seconds1;
+*/
+  double lat_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
+  QString lat_decimal_degrees_N = QString::number (lat_decimal_degrees, 'f', 3) + QChar (UQDG) + north_or_south;
+  
+  iqdg = longtitude.indexOf (QChar (UQDG));
+  iqs = longtitude.indexOf (QChar (UQS));
+  iqd = longtitude.indexOf (QChar (UQD));
+ 
+   qDebug() << "iqdg : " << iqdg;
+  qDebug() << "iqs : " << iqs;
+  qDebug() << "iqd : " << iqd;
+ 
+ 
+  degrees1 = longtitude.left (iqdg);
+  minutes1 = longtitude.mid (iqdg + 1, iqs - iqdg - 1);
+  seconds1 = longtitude.mid (iqs + 1, iqd - iqs - 1);
+ 
+  double longt_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
+  
+  QString longt_decimal_degrees_N = QString::number (longt_decimal_degrees, 'f', 3) + QChar (UQDG) + east_or_west;
+ 
+ 
+  log->log (lat_decimal_degrees_N + " " + longt_decimal_degrees_N);
+//  qDebug() << "decimal_degrees " << decimal_degrees; 
+//  qDebug() << "decimal_degrees_N " << decimal_degrees_N; 
+
+//     d->textEdit->textCursor().insertText (int_to_binary (d->textEdit->textCursor().selectedText().toInt()));
+}
+
+
+//degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
+//to
+//degrees decimal minutes: 40° 26.767′ N 79° 58.933′ W
+
+/*
+
+degrees = floor (decimal_degrees)
+
+minutes = floor (60 * (decimal_degrees - degrees))
+
+seconds = 3600 * (decimal_degrees - degrees) - 60 * minites
+
+*/
+
+void rvln::fn_number_dms2ddm()
+{
+  last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -10283,38 +10373,64 @@ void rvln::fn_number_dms2dc()
   t = t.replace ('\'', QChar (UQS));
   t = t.replace ('"', QChar (UQD));
   
-  QStringList l = t.split ('N');
+  QChar north_or_south = ('N');
+  if (t.contains ('S'))
+     north_or_south = 'S';
+  
+  QChar east_or_west = ('E');
+  if (t.contains ('W'))
+     east_or_west = 'W';
+    
+  QStringList l = t.split (north_or_south);
   
   QString latitude = l[0];
   QString longtitude = l[1];
+
+  qDebug() << "latitude " << latitude; 
   
-  //qDebug() << latitude.indexOf(QChar (0x00B0));
-   
+  qDebug() << "longtitude " << longtitude; 
+ 
   int iqdg = latitude.indexOf(QChar (UQDG));
   int iqs = latitude.indexOf(QChar (UQS));
   int iqd = latitude.indexOf(QChar (UQD));
   
-  qDebug() << "iqdg : " << iqdg;
+/*  qDebug() << "iqdg : " << iqdg;
   qDebug() << "iqs : " << iqs;
   qDebug() << "iqd : " << iqd;
- 
-   
+  */ 
   QString degrees1 = latitude.left (iqdg);
   QString minutes1 = latitude.mid (iqdg + 1, iqs - iqdg - 1);
   QString seconds1 = latitude.mid (iqs + 1, iqd - iqs - 1);
 
+/*
   qDebug() << "degrees1 : " << degrees1;
   qDebug() << "minutes1 : " << minutes1;
   qDebug() << "seconds1 : " << seconds1;
-
-  //decimal_degrees = degrees + minutes/60 + seconds / 3600 
-  double decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
+*/
+  double lat_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
+  QString lat_decimal_degrees_N = QString::number (lat_decimal_degrees, 'f', 3) + QChar (UQDG) + north_or_south;
   
-  QString decimal_degrees_N = QString::number (decimal_degrees, 'g', 5);
+  iqdg = longtitude.indexOf (QChar (UQDG));
+  iqs = longtitude.indexOf (QChar (UQS));
+  iqd = longtitude.indexOf (QChar (UQD));
  
-  qDebug() << "decimal_degrees " << decimal_degrees; 
+   qDebug() << "iqdg : " << iqdg;
+  qDebug() << "iqs : " << iqs;
+  qDebug() << "iqd : " << iqd;
  
-  qDebug() << "decimal_degrees_N " << decimal_degrees_N; 
+ 
+  degrees1 = longtitude.left (iqdg);
+  minutes1 = longtitude.mid (iqdg + 1, iqs - iqdg - 1);
+  seconds1 = longtitude.mid (iqs + 1, iqd - iqs - 1);
+ 
+  double longt_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
+  
+  QString longt_decimal_degrees_N = QString::number (longt_decimal_degrees, 'f', 3) + QChar (UQDG) + east_or_west;
+ 
+ 
+  log->log (lat_decimal_degrees_N + " " + longt_decimal_degrees_N);
+//  qDebug() << "decimal_degrees " << decimal_degrees; 
+//  qDebug() << "decimal_degrees_N " << decimal_degrees_N; 
 
 //     d->textEdit->textCursor().insertText (int_to_binary (d->textEdit->textCursor().selectedText().toInt()));
 }

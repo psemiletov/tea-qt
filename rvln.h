@@ -561,6 +561,8 @@ main window callbacks
   void fn_number_roman_to_arabic();
   
   void fn_number_dms2dc();
+  void fn_number_dms2ddm();
+
   
   void fn_filter_rm_less_than();
   void fn_filter_rm_greater_than();

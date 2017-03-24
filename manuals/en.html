@@ -732,6 +732,17 @@ Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i
 
 <p>For some function such as <b>MD5 checksum</b>, select the file first, and then apply the function.</p>
 
+<p><b>Fm &gt; Multi-rename</b> submenu helps to flexibly rename file names. All those functions uses the parameter from FIF.</p> 
+
+<p><b>Fm &gt; Multi-rename &gt; Zero pad file names</b> - prepend zeroes to each selected filename. Set the number of zeroes at FIF. This function is useful when you have many "numbered" file names those cannot be sorted properly. This function also removes all non-digit characters from file names.</p> 
+
+<p><b>Fm &gt; Multi-rename &gt; Delete N first chars at file names</b> - N is a number from FIF. Deletes N first characters from each selected file name.</p> 
+
+<p><b>Fm &gt; Multi-rename &gt; Replace in file names</b> - replaces the substing at each selected file name. FIF format: <i>old~new</i>.</p> 
+
+<p><b>Fm &gt; Multi-rename &gt; Apply template</b> - apply the template to each selected file name. Available macros with parts of the original file name: %filename (= filename.ext), %ext (= ext), %basename ( = filename). For example, you need to rename 01.jpeg, 02.jpeg to 01.jpg, 02.jpg. So the template must be: <i>%basename.jpg</i>
+</p> 
+
 <p><b>Fm &gt; Select by regexp/Deselect by regexp</b> - use this functions to select or deselect files by regexp pattern. For example, to select all txt-files at the current dir, put the following regexps into the FIF:"<i>.*\.txt$</i>" (without quotes!)
 then, use <b>Select by regexp</b>. Then you can press Open button to open all selected files.</p>
 

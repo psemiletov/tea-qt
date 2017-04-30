@@ -48,6 +48,7 @@ useclang{
 
 
 
+
 SOURCES += rvln.cpp \
     main.cpp \
     todo.cpp \
@@ -73,6 +74,7 @@ SOURCES += rvln.cpp \
     unzip.c \
     zip.c \
     single_application.cpp \
+    single_application_shared.cpp \
     exif.cpp
 
 HEADERS += rvln.h \
@@ -102,8 +104,8 @@ HEADERS += rvln.h \
     unzip.h \
     zip.h \
     single_application.h \
+    single_application_shared.h \
     exif.h
-
 
 
 TEMPLATE = app
@@ -225,6 +227,9 @@ system(pkg-config --exists ddjvuapi) {
 
 
 win32: {
+
+    msvc:LIBS += Advapi32.lib
+    gcc:LIBS += -lAdvapi32
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 

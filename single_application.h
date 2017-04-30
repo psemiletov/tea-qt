@@ -5,8 +5,8 @@
  * 
  */
 
-#ifndef SINGLE_APPLICATION_H
-#define SINGLE_APPLICATION_H
+#ifndef SINGLE_APP_H
+#define SINGLE_APP_H
 
 #include <QApplication>
 
@@ -49,5 +49,5 @@ private:
 
         static const int timeout = 1000;
 };
-#endif // SINGLE_APPLICATION_H
+#endif // SINGLE_APP_H
 

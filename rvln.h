@@ -380,6 +380,8 @@ main window callbacks
 
   void receiveMessage(const QString &msg);
   
+  void receiveMessageShared(const QStringList& msg);
+        
   void view_use_theme();
 
 
@@ -1096,6 +1098,7 @@ prefs window widgets
   
 };
 
+/*
 
 class CApplication: public QApplication
 {
@@ -1108,7 +1111,7 @@ public:
 
   void saveState (QSessionManager &manager);
 };
-
+*/
 
 #if QT_VERSION >= 0x050000
 

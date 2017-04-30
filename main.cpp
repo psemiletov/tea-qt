@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyleft 2007-2014 by Peter Semiletov <tea@list.ru>                   *
+ *   Copyleft 2007-2017 by Peter Semiletov <tea@list.ru>                   *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,7 +25,7 @@
 #include "rvln.h"
 
 #include "single_application.h"
-
+#include "single_application_shared.h"
 
 extern rvln *mainWindow; 
 
@@ -36,21 +36,19 @@ int main (int argc, char *argv[])
    
 #if defined(Q_OS_OS2)
 
-  CApplication app (argc, argv);
+  QApplication app (argc, argv);
   qApp->setApplicationName ("TEA");
-  
-  //rvln mw;
-
-  //mw.show();
-  
+    
   mainWindow = new rvln();
   mainWindow->show();
 
   return app.exec();
   
-#else
+#endif
   
   //Q_INIT_RESOURCE (rlvn);
+
+#if defined(Q_OS_WIN)
   
   CSingleApplication app (argc, argv, "tea unique id 1977");
   
@@ -60,19 +58,38 @@ int main (int argc, char *argv[])
        if (argc > 1)
           for (int i = 1; i < argc; i++) 
                app.sendMessage (QString(argv[i]));
-       
        return 0;
      }
 
+#endif
 
+
+#if defined(Q_OS_UNIX)
+
+ CSingleApplicationShared app (argc, argv, "tea unique id 1977");
+ 
+ if (app.alreadyExists())
+    {
+     if (argc > 1)
+        for (int i = 1; i < argc; i++) 
+             app.sendMessage (QString(argv[i]));
+             
+     return 0;
+    }
+#endif     
+     
   mainWindow = new rvln();
 
-  QObject::connect(&app, SIGNAL(messageAvailable(QString)), mainWindow, SLOT(receiveMessage(QString)));
-  
-  mainWindow->show();
+#if defined(Q_OS_WIN)
+ QObject::connect(&app, SIGNAL(messageAvailable(QString)), mainWindow, SLOT(receiveMessage(QString)));
+#endif
 
+#if defined(Q_OS_UNIX)
+ QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), mainWindow, SLOT(receiveMessageShared(QStringList)));
+#endif
+   
+  mainWindow->show();
   
   return app.exec();   
   
-#endif  
 }

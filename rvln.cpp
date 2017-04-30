@@ -4175,12 +4175,12 @@ void rvln::search_replace_all()
         }
 }
 
-
+/*
 void CApplication::saveState (QSessionManager &manager)
 {
   manager.setRestartHint (QSessionManager::RestartIfRunning);
 }
-
+*/
 
 void rvln::update_charsets()
 {
@@ -10428,3 +10428,12 @@ void rvln::fn_number_dd2dms()
 */
 //     d->textEdit->textCursor().insertText (int_to_binary (d->textEdit->textCursor().selectedText().toInt()));
 }
+
+
+void rvln::receiveMessageShared(const QStringList &msg)
+{
+   qDebug() << "receiveMessageShared";
+   for (int i = 0; i < msg.size(); i++)
+       //qDebug() << msg[i];
+      CDocument *d = documents->open_file (msg[i], "UTF-8"); 
+}  

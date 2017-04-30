@@ -19,11 +19,11 @@
 
 #include <QLocalServer>
 
-class SingleApplication : public QApplication
+class CSingleApplication : public QApplication
 {
         Q_OBJECT
 public:
-        SingleApplication (int &argc, char *argv[], const QString uniqueKey);
+        CSingleApplication (int &argc, char *argv[], const QString uniqueKey);
 
         bool isRunning();
         bool sendMessage(const QString &message);

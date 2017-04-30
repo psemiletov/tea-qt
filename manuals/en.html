@@ -734,7 +734,21 @@ Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i
 
 <p><b>Fm &gt; Multi-rename</b> submenu helps to flexibly rename file names. All those functions uses the parameter from FIF.</p> 
 
-<p><b>Fm &gt; Multi-rename &gt; Zero pad file names</b> - prepend zeroes to each selected filename. Set the number of zeroes at FIF. This function is useful when you have many "numbered" file names those cannot be sorted properly. This function also removes all non-digit characters from file names.</p> 
+<p><b>Fm &gt; Multi-rename &gt; Zero pad file names</b> - prepend zeroes to each selected filename that has the numbering as the part of file name. For example: page1, page100. Such files cannot be sorted properly.</p> 
+
+<p>So set the filename length at FIF. Files will be numbered correctly, but with the removal of all non-digit characters. Example:</p> 
+
+<p>We have files:<br>
+page1.txt<br>
+page100.txt
+</p>
+
+<p>Put 5 to the FIF, apply the function.</p>
+
+<p>Now we have:<br>
+00001.txt<br>
+00100.txt
+</p>
 
 <p><b>Fm &gt; Multi-rename &gt; Delete N first chars at file names</b> - N is a number from FIF. Deletes N first characters from each selected file name.</p> 
 

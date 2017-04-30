@@ -13,7 +13,7 @@
 
 #include "single_application.h"
 
-SingleApplication::SingleApplication(int &argc, char *argv[], const QString uniqueKey) : QApplication(argc, argv), _uniqueKey(uniqueKey)
+CSingleApplication::CSingleApplication(int &argc, char *argv[], const QString uniqueKey) : QApplication(argc, argv), _uniqueKey(uniqueKey)
 {
 
 #ifndef Q_OS_OS2
@@ -46,7 +46,7 @@ SingleApplication::SingleApplication(int &argc, char *argv[], const QString uniq
 
 // public slots.
 
-void SingleApplication::receiveMessage()
+void CSingleApplication::receiveMessage()
 {
   QLocalSocket *localSocket = localServer->nextPendingConnection();
   if (localSocket == 0)
@@ -68,13 +68,13 @@ void SingleApplication::receiveMessage()
 
 // public functions.
 
-bool SingleApplication::isRunning()
+bool CSingleApplication::isRunning()
 {
   return _isRunning;
 }
 
 
-bool SingleApplication::sendMessage(const QString &message)
+bool CSingleApplication::sendMessage(const QString &message)
 {
   if (! _isRunning)
      return false;
@@ -102,4 +102,3 @@ bool SingleApplication::sendMessage(const QString &message)
   localSocket.disconnectFromServer();
   return true;
 }
-

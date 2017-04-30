@@ -52,7 +52,7 @@ int main (int argc, char *argv[])
   
   //Q_INIT_RESOURCE (rlvn);
   
-  SingleApplication app (argc, argv, "tea unique id 1977");
+  CSingleApplication app (argc, argv, "tea unique id 1977");
   
   if (app.isRunning())
      {

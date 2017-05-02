@@ -1769,5 +1769,45 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Copy block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paste block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cut block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>deg min sec &gt; dec degrees</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dec degrees &gt; deg min sec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multi-rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zero pad file names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete N first chars at file names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Replace in file names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply template</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

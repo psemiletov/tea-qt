@@ -1569,8 +1569,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Enumerate"), SLOT(fn_enum()));
   add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
 
-  add_to_menu (tm, tr ("fn_number_dms2dc"), SLOT(fn_number_dms2dc()));
-  add_to_menu (tm, tr ("fn_number_dd2dms"), SLOT(fn_number_dd2dms()));
+  add_to_menu (tm, tr ("deg min sec > dec degrees"), SLOT(fn_number_dms2dc()));
+  add_to_menu (tm, tr ("dec degrees > deg min sec"), SLOT(fn_number_dd2dms()));
 
 
 
@@ -10385,20 +10385,32 @@ void rvln::fn_number_dd2dms()
   
   QString latitude = l[0];
   QString longtitude = l[1].remove(QRegExp("[a-zA-Z\\s]"));
-               
 
-  qDebug() << "latitude " << latitude; 
-  qDebug() << "longtitude " << longtitude; 
+//  qDebug() << "latitude " << latitude; 
+//  qDebug() << "longtitude " << longtitude; 
  
   double degrees = floor (latitude.toDouble());
   double minutes = floor (60 * (latitude.toDouble() - degrees));
   double seconds = round (3600 * (latitude.toDouble() - degrees) - 60 * minutes);
 
+  //qDebug() << "degrees : " << degrees;
+  //qDebug() << "minutes : " << minutes;
+  //qDebug() << "seconds : " << seconds;
+
+  double degrees2 = floor (longtitude.toDouble());
+  double minutes2 = floor (60 * (longtitude.toDouble() - degrees2));
+  double seconds2 = round (3600 * (longtitude.toDouble() - degrees2) - 60 * minutes2);
 
 
-  qDebug() << "degrees : " << degrees;
-  qDebug() << "minutes : " << minutes;
-  qDebug() << "seconds : " << seconds;
+  QString result = QString::number (degrees) + QChar (UQDG) + QString::number (minutes) + QChar (UQS) + 
+                   QString::number (seconds) + QChar (UQD) + 
+                   north_or_south + " " +
+                   QString::number (degrees2) + QChar (UQDG) + QString::number (minutes2)
+                    + QChar (UQS) + QString::number (seconds2) + QChar (UQD) +
+                   east_or_west;
+
+  log->log (result);
+
   
 /*
   double lat_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
@@ -10430,10 +10442,9 @@ void rvln::fn_number_dd2dms()
 }
 
 
+
 void rvln::receiveMessageShared(const QStringList &msg)
 {
-   qDebug() << "receiveMessageShared";
-   for (int i = 0; i < msg.size(); i++)
-       //qDebug() << msg[i];
+  for (int i = 0; i < msg.size(); i++)
       CDocument *d = documents->open_file (msg[i], "UTF-8"); 
 }  

@@ -8,16 +8,12 @@
 #ifndef SINGLE_APP_SHARED_H
 #define SINGLE_APP_SHARED_H
 
+#ifndef Q_OS_OS2
+
 #include <QApplication>
 #include <QSharedMemory>
 #include <QStringList>
-
-#ifndef Q_OS_OS2
 #include <QSharedMemory>
-#endif
-
-
-
 #include <QLocalServer>
 
 class CSingleApplicationShared : public QApplication
@@ -46,5 +42,8 @@ private:
         bool bAlreadyExists;
         QSharedMemory sharedMemory;
 };
+
+#endif //if not def OS/2
+
 #endif // SINGLE_APP_SHARED_H
 

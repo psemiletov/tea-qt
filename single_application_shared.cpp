@@ -8,6 +8,8 @@
  * 
  */
 
+#ifndef Q_OS_OS2
+
 #include <QTimer>
 #include <QByteArray>
  
@@ -95,3 +97,5 @@ bool CSingleApplicationShared::sendMessage(const QString &message)
  
     return true;
 }
+
+#endif

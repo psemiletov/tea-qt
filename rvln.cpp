@@ -10447,4 +10447,8 @@ void rvln::receiveMessageShared(const QStringList &msg)
 {
   for (int i = 0; i < msg.size(); i++)
       CDocument *d = documents->open_file (msg[i], "UTF-8"); 
+      
+  show();
+  activateWindow();
+  raise();
 }  

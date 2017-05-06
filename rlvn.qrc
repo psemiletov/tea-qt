@@ -67,6 +67,7 @@
     <file>palettes/Berry</file>
     <file>palettes/Turbo90</file>
 
+    <file>hls/awk.xml</file>
     <file>hls/xml.xml</file>
     <file>hls/clike.xml</file>
     <file>hls/po.xml</file>

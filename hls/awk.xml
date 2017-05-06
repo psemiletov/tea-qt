@@ -7,8 +7,7 @@
 
 <item name="variables" type="keywords" color="keywords" fontstyle="bold">\b(ARGIND|ARGC|ARGV|BINMODE|ENVIRON|ERRNO|FILENAME|FIELDWIDTHS|FS|FNR|IGNORECASE|IF|LINT|PROCINFO|TEXTDOMAIN|NF|NR|OFMT|OFS|ORS|RLENGTH|RS|RSTART|SUBSEP)\b</item>
 
-
-<item name="functions" type="keywords" color="functions">\b(print|printf)\b</item>
+<item name="functions" type="keywords" color="functions">\b(print|printf|atan2|cos|exp|int|log|rand|sin|sqrt|srand|asort|asorti|gsub|index|length|match|split|sprintf|strtonum|sub|substr|tolower|toupper|systime|mktime|strftime|and|compl|lshift|rshift|or|xor|close|delete|exit|fflush|getline|next|nextfile|return|system)\b</item>
 
 <item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
 
@@ -16,14 +15,14 @@
 
 <item name="char" type="item" color="quotes">('[^']*')</item>
 
-<item name="single comment" type="item" color="single comment" fontstyle="italic">--[^\n]*</item>
+<item name="single comment" type="item" color="single comment" fontstyle="italic">#.*</item>
 
-<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">--\[\[</item>
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">/\*</item>
 
-<item name="mcomment-end" type="mcomment-end">--\]\]</item>
+<item name="mcomment-end" type="mcomment-end">\*/</item>
 
-<item name="cm_mult" type="comment">--[[%s--]]</item>
+<item name="cm_mult" type="comment">#%s</item>
 
-<item name="cm_single" type="comment">--%s</item>
+<item name="cm_single" type="comment">#%s</item>
 
 </document>

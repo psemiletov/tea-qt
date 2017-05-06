@@ -223,13 +223,7 @@ system(pkg-config --exists ddjvuapi) {
 }
 
 
-
-
-
 win32: {
-
-    msvc:LIBS += Advapi32.lib
-    gcc:LIBS += -lAdvapi32
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 

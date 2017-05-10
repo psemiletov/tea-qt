@@ -1,3 +1,9 @@
+2017 may
+
+* IMPORTANT changes for qmake pro file. The PREFIX for qmake now NOT CONTAINS "bin", i.e. by default was "usr/local/bin", but
+  now is "/usr/local".
+  TEA now installs tea.desktop file to $$PREFIX/share/applications, and tea binary to $$PREFIX/bin
+
 2017 april
 + coords translation tool
 * single application mode megafix

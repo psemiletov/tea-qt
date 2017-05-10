@@ -15,13 +15,23 @@ USE_HUNSPELL = true
 USE_PRINTER = true
 
 
+win32,os2:{
 isEmpty(PREFIX) {
 PREFIX = /usr/local/bin
 }
 
+TARGET = bin/tea
+target.path = $$PREFIX}
+else:{
+isEmpty(PREFIX) {
+PREFIX = /usr/local
+}
 
 TARGET = bin/tea
-target.path = $$PREFIX
+target.path = $$PREFIX/bin
+desktop.path=$$PREFIX/share/applications
+desktop.files=desktop/tea.desktop
+}
 
 nohunspell{
 USE_HUNSPELL = false
@@ -132,7 +142,8 @@ greaterThan(QT_MAJOR_VERSION, 4) {
    }
 
 
-INSTALLS += target
+INSTALLS += target desktop
+
 RESOURCES += rlvn.qrc
 TRANSLATIONS = translations/tea_ru.ts \
                translations/tea_de.ts \
@@ -152,6 +163,7 @@ DISTFILES += ChangeLog \
     palettes/* \
     encsign/* \
     images/* \
+    desktop/* \
     manuals/en.html \
     manuals/ru.html \
     manuals/plugins/readme-en.txt \
@@ -168,7 +180,7 @@ DISTFILES += ChangeLog \
     themes/Turbo/stylesheet.css \
     themes/Turbo/icons/* \
     themes/Vegan/stylesheet.css \
-    themes/Yagodnaya/stylesheet.css 
+    themes/Yagodnaya/stylesheet.css
 
 
 unix:  {

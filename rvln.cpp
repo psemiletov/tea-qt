@@ -10452,3 +10452,30 @@ void rvln::receiveMessageShared(const QStringList &msg)
   activateWindow();
   raise();
 }  
+
+
+void rvln::slot_commitDataRequest(QSessionManager &m) 
+{
+  QString fname (dir_sessions);
+  fname.append ("/").append ("shutdownsession");
+  documents->save_to_session (fname);
+}
+
+void rvln::app_commit_data()
+{
+  QString fname (dir_sessions);
+  fname.append ("/").append ("shutdownsession");
+  documents->save_to_session (fname);
+
+  //QString get_triplex();
+
+/*
+ if (documents->recent_files.size() > 0)
+     {
+      documents->open_file_triplex (documents->recent_files[0]);
+      documents->recent_files.removeAt (0);
+      documents->update_recent_menu();
+      main_tab_widget->setCurrentIndex (idx_tab_edit); 
+     }  
+*/
+}

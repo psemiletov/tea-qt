@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2016 by Peter Semiletov <tea@list.ru>                            *
+ *   2007-2017 by Peter Semiletov <tea@list.ru>                            *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

@@ -15,6 +15,7 @@
 #include <QStringList>
 #include <QSharedMemory>
 #include <QLocalServer>
+#include <QSessionManager>
 
 class CSingleApplicationShared : public QApplication
 {
@@ -32,11 +33,17 @@ public:
         }
 
         bool sendMessage(const QString &message);
+        
+        
+        void commitData(QSessionManager & manager);
+        void saveState(QSessionManager &sessionManager);
+        
 public slots:
         void checkForMessage();
  
 signals:
         void messageAvailable(const QStringList& messages);
+        void signal_commit_data();
  
 private:
         bool bAlreadyExists;

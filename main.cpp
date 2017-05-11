@@ -86,6 +86,9 @@ int main (int argc, char *argv[])
 
 #if defined(Q_OS_UNIX)
  QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), mainWindow, SLOT(receiveMessageShared(QStringList)));
+// QObject::connect(&app, SIGNAL(signal_commit_data()), mainWindow, SLOT(app_commit_data()));
+// QObject::connect(&app, SIGNAL(commitDataRequest(QSessionManager & )), mainWindow, SLOT(slot_commitDataRequest(QSessionManager & )));
+
 #endif
    
   mainWindow->show();

@@ -98,4 +98,16 @@ bool CSingleApplicationShared::sendMessage(const QString &message)
     return true;
 }
 
+void CSingleApplicationShared::commitData (QSessionManager & manager)
+{
+  emit signal_commit_data();
+}
+
+
+void CSingleApplicationShared::saveState(QSessionManager &sessionManager)
+{
+  emit signal_commit_data();
+}
+
+
 #endif

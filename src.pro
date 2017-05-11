@@ -23,6 +23,15 @@ PREFIX = /usr/local/bin
 TARGET = bin/tea
 target.path = $$PREFIX}
 else:{
+
+#old PREFIX compatibility hack
+message($$replace(PREFIX, bin,))
+message ($$PREFIX)
+PREFIX = $$replace(PREFIX, bin,)
+message ($$PREFIX)
+#
+
+
 isEmpty(PREFIX) {
 PREFIX = /usr/local
 }

@@ -915,7 +915,7 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="1700"/>
         <source>Delete N first chars at file names</source>
-        <translation>Удалить первые N символом из имен</translation>
+        <translation type="unfinished">Удалить первые N символов из имен</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1701"/>

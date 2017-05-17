@@ -12,6 +12,7 @@
 
 #include <QTimer>
 #include <QByteArray>
+#include <QMessageBox>
  
 #include "single_application_shared.h"
  
@@ -96,17 +97,6 @@ bool CSingleApplicationShared::sendMessage(const QString &message)
     sharedMemory.unlock();
  
     return true;
-}
-
-void CSingleApplicationShared::commitData (QSessionManager & manager)
-{
-  emit signal_commit_data();
-}
-
-
-void CSingleApplicationShared::saveState(QSessionManager &sessionManager)
-{
-  emit signal_commit_data();
 }
 
 

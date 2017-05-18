@@ -1,6 +1,6 @@
 /***************************************************************************
  *   2007-2016 by Peter Semiletov                                          *
- *   tea@list.ru                                                           *
+ *   peter.semiletov@gmail.com                                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -403,6 +403,7 @@ CDocument* document_holder::open_file (const QString &fileName, const QString &c
   if (d)
      {
       tab_widget->setCurrentIndex (tab_widget->indexOf (d->tab_page));
+      d->reload (codec);
       return d;
      }
 

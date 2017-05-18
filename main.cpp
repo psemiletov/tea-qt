@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyleft 2007-2017 by Peter Semiletov <tea@list.ru>                   *
+ *   Copyleft 2007-2017 by Peter Semiletov <peter.semiletov@gmail.com>     *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -25,7 +25,10 @@
 #include "rvln.h"
 
 #include "single_application.h"
+
+#ifndef Q_OS_OS2
 #include "single_application_shared.h"
+#endif
 
 extern rvln *mainWindow; 
 
@@ -76,6 +79,7 @@ int main (int argc, char *argv[])
              
      return 0;
     }
+    
 #endif     
      
   mainWindow = new rvln();
@@ -94,5 +98,4 @@ int main (int argc, char *argv[])
   mainWindow->show();
   
   return app.exec();   
-  
 }

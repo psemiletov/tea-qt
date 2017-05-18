@@ -1,6 +1,6 @@
 /***************************************************************************
- *   2007-2017 by Peter Semiletov                            *
- *   tea@list.ru                                             *
+ *   2007-2017 by Peter Semiletov                                          *
+ *   peter.semiletov@gmail.com                                             *
 
 started at 08 November 2007
  *                                                                         *

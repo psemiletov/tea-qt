@@ -388,7 +388,6 @@ void rvln::update_bookmarks()
 
 void rvln::readSettings()
 {
-
   cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
 
   qApp->setCursorFlashTime (cursor_blink_time);
@@ -505,7 +504,6 @@ void rvln::create_main_widget()
   connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
   connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
 
- 
   bt_find->setIcon (get_theme_icon ("search_find.png"));
 
 

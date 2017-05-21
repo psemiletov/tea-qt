@@ -1,7 +1,6 @@
 #ifndef TZIPPER_H
 #define TZIPPER_H
 
-//#include <QtCore>
 
 #include <QObject>
 #include <QFileInfo>

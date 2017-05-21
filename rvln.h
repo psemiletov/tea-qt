@@ -1,5 +1,5 @@
 /**************************************************************************
- *   Copyright (C) 2007-2012 by Peter Semiletov                            *
+ *   2007-2017 by Peter Semiletov                            *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -1102,20 +1102,6 @@ prefs window widgets
   
 };
 
-/*
-
-class CApplication: public QApplication
-{
-  Q_OBJECT
-
-public:
-
-  CApplication (int &argc, char **argv): QApplication (argc, argv)
-               {;}
-
-  void saveState (QSessionManager &manager);
-};
-*/
 
 #if QT_VERSION >= 0x050000
 
@@ -1133,7 +1119,6 @@ public:
 
 protected:
 
-//  void closeEvent (QCloseEvent *event);
   bool event (QEvent *event);
 
   

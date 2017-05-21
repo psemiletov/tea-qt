@@ -183,7 +183,6 @@ Qt::Saturday	6
 Qt::Sunday 
     
    */
-  
 }
 
 

@@ -1,8 +1,6 @@
 #ifndef TODO_H
 #define TODO_H
 
-//#include <QtGui>
-
 #include <QObject>
 #include <QDate>
 #include <QTimer>
@@ -11,7 +9,6 @@
 #include <QTextEdit>
 #include <QString>
 #include <QMessageBox>
-
 
 
 class CTodo: public QObject

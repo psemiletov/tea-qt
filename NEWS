@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 43.1.0, September 9 2016
+TEA 44.0.0, May 2017
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -7,65 +7,31 @@ https://github.com/psemiletov/tea-qt - development
 https://vk.com/teaeditor - VK-community
 ---------------------------------------
   
-   About 43.1.0:
+   NOTE FOR PACKAGE MAINTAINERS: from v. 44, TEA qmake project file uses new installation PREFIX format, without the trailing "bin". I.e., the default PREFIX was: "/usr/local/bin", now it is "/usr/local", and qmake-project file adds "bin" internally.
+   To preserve the compatibility with older stuff, TEA qmake project file as usual can accept PREFIX with "bin" at the end, end shorts it internally.
+   So, for newly-written package config use prefixes like "/usr/share", not "/usr/share/bin". But old prefixes are also valid.
+   To pass the prefix, use
 
-   The fresh bug (of 43.0.0) with the segfault on exit - fixed. The manual updates and fixes, the tabs on the right were renemed (Tune = Options, Browse = Files, Learn = Manual, Edit = Editor). Some new options under the hood. Stay tuned.
+qmake PREFIX=your_path
 
-   About 43.0.0:
+  By the way, "qmake install" now installs tea.desktop file to $$PREFIX/share/applications, and tea binary to $$PREFIX/bin. tea.desktop allow file managers such as Krusader or Nautilus to show TEA at "Open with" context menu.
 
-   Hello. The biggest update ever.
+   And now for something completely different...
 
-   0. Infrastructure
+   TEA 44 has a long-awaited block selection mode (see the Edit section at the Manual). Due to TEA architecture vertical selections are almost obsolete and can be used just for Cut/Copy/Paste, you cannot use the text processing functions with them.
+   cliptpl.txt file can be used to format clipboard pieces captured at the storage file (See the Manual about the storage files).
+   New menu "Fm - Multi-rename" with several functions for flexibly renaming of the selected files. There are: Zero pad file names, Delete N first chars at file names, Replace in file names, Apply template.
+   "Functions - Math" menu has two new items, "deg min sec > dec degrees" and "dec degrees > deg min sec" to convert geographical coordinates between formats.
+   The big changes at TEA single-application mode, i.e. when TEA runned from the command line opens all files at tabs, not in the multiply instances (TEA windows). In the past, this mode works well with KDE only. Now it works with any desktop environment and OS, excluding OS/2.
+   And another news - here is my new public domain music album "Konetc Detstva" ("The End Of Childhood"), written completely at Linux/Ardour:
 
-   The new TEA community at VK: https://vk.com/teaeditor
+Youtube preview: https://youtu.be/gmR4-vKMLVs
 
+Full album in ZIP with MP3: http://semiletov.org/music/ps/05/packs/semiletov-konec-detstva-mp3.zip
 
-   1. Files format support. 
+Full album in ZIP with OGG: http://semiletov.org/music/ps/05/packs/semiletov-konec-detstva-ogg.zip
 
-   By optional use of libpoppler-qt5 and libdjvulibre, now TEA can open PDF and DJVU, as the text (if files contain it). By default such functionality is disabled. To enable, use qmake parameters: qmake "CONFIG+=usepoppler CONFIG+=usedjvu"
-
-  The build-in image viewer now support the GIF-animation.
-
-
-   2. GUI changes. 
-
-   The "Tune" preferences pages has been placed into the scrollable areas, so TEA becomes more usable with small display resolution or window size.
-
-   The text cursor now bold and static, without blinking. Tune it at "Tune - Interface".
-
-   Some options is moved from one page to another.
-
-   "Instr" menu - renamed to "Tools" and moved to "Functions".
-
-   Some new built-in GUI themes and palettes has been added. The GUI themes engine now can load icon sets, but there are no new icons on that time.
-
-   Hardcoded hotkeys Alt-S, Alt-E has been removed.
-
-   "Tune - Common - Use Left Alt + WASD as additional cursor keys" - enables the additional cursor keys. E, C - PageUp/Down. The same keys with Left Win - to select the text.
-
-
-   3. New functions and options.
-
-   "Functions - Repeat last" - calls the last used menu item.
-
-  "Functions - Tools - Scale image" - scales the image (which filename is under cursor or selected at the text) with parameters. You can quickly resize the image and save it with the different name without all those many windows and confirmations, just by one command.
-
-  "Tune - Images" now has the EXIF-orientation related options. In a few words - TEA can handle EXIF-orientation and apply the orientation when converting.
-
-   "Functions - Text - Compress" - removes all whitespaces from the selection.
-
- "Functions - Sort - Flip a list with separator", "Sort case sensitively, with separator" - sorts the separated words within the string, i.e. you can sort something like that: "carrot|apple|grass" with "|" as the word delimeter.
-
-   "Search - Mark all found/unmark" - search and mark all found substring.
-
-   "File - Do not add to recent" - temporary do not update the recent list.
-
-
-   4. Inner changes.
-
-   The syntax highlighting engine has been partially rewritten, so TEA use the new syntax hl file format. The compatibility with the old format is preserved.
-
- %fext, %ffilename, %fdir, %fbasename macros are %ext, %filename, %dir, %basename now.
+Full album in ZIP with FLAC: http://semiletov.org/music/ps/05/packs/semiletov-konec-detstva-flac.zip
 
    If you want to support TEA via donation, better support the Ukrainian dog shelter Lyubas House - http://www.ukraineanimalrescue.org/#!lyubas-house/cxfj/. There are lot of dogs with disabilities, and they need help more than TEA.
 

@@ -1,7 +1,7 @@
-VERSION = 43.1.0
+VERSION = 44.0.0
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"43.1.0"\''
+DEFINES += 'VERSION_NUMBER=\'"44.0.0"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -15,32 +15,48 @@ USE_HUNSPELL = true
 USE_PRINTER = true
 
 
-win32,os2:{
+win32:{
+
 isEmpty(PREFIX) {
 PREFIX = /usr/local/bin
 }
 
 TARGET = bin/tea
-target.path = $$PREFIX}
-else:{
+target.path = $$PREFIX
+}
 
-#old PREFIX compatibility hack
-message($$replace(PREFIX, bin,))
-message ($$PREFIX)
-PREFIX = $$replace(PREFIX, bin,)
-message ($$PREFIX)
-#
 
+os2:{
+
+isEmpty(PREFIX) {
+PREFIX = /usr/local/bin
+}
+
+TARGET = bin/tea
+target.path = $$PREFIX
+}
+
+
+unix:{
 
 isEmpty(PREFIX) {
 PREFIX = /usr/local
 }
+
+#old PREFIX compatibility hack
+#message($$replace(PREFIX, bin,))
+#message ($$PREFIX)
+PREFIX = $$replace(PREFIX, bin,)
+#message ($$PREFIX)
+#
+
 
 TARGET = bin/tea
 target.path = $$PREFIX/bin
 desktop.path=$$PREFIX/share/applications
 desktop.files=desktop/tea.desktop
 }
+
 
 nohunspell{
 USE_HUNSPELL = false
@@ -193,7 +209,7 @@ DISTFILES += ChangeLog \
 
 
 unix:  {
-       	LIBS += -lz
+        LIBS += -lz
 
 
 #omp{
@@ -215,7 +231,7 @@ exists("/usr/include/aspell.h") {
 
 
 contains(USE_HUNSPELL,true){
-exists("/usr/include/hunspell/hunspell.hxx") { 
+exists("/usr/include/hunspell/hunspell.hxx") {
     message ("hunspell enabled")
         PKGCONFIG += hunspell
             DEFINES += HUNSPELL_ENABLE
@@ -248,6 +264,9 @@ win32: {
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 
+
+       message ("QT > 4")
+
        LIBS += zlib1.dll
 
         contains(USE_ASPELL,true)
@@ -271,6 +290,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 
                           LIBS += c:\dev\hunspell-mingw-master\lib\hunspell.dll
+                      #     LIBS += libhunspell.dll
 
 
                           DEFINES += HUNSPELL_ENABLE
@@ -304,33 +324,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                          }
                 }
 }
-
-
-        LIBS += zlib1.dll
-
-        contains(USE_ASPELL,true)
-                 {
-                  exists ("C:\\MinGw\\include\\aspell.h") 
-                         { 
-                          message ("ASpell enabled")
-                          LIBS += -laspell-15
-                          DEFINES += ASPELL_ENABLE
-                          DEFINES += SPELLCHECK_ENABLE
-                          }
-                  }
-
-
-        contains(USE_HUNSPELL,true)
-                 {
-                  exists ("C:\\MinGw\\include\\hunspell\\hunspell.hxx") 
-                         {
-                          message ("hunspell enabled")
-                          LIBS += libhunspell.dll
-                          DEFINES += HUNSPELL_ENABLE
-                          DEFINES += SPELLCHECK_ENABLE
-                         }
-                }
-       }
+}
 
 
 

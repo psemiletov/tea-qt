@@ -8,7 +8,7 @@ https://vk.com/teaeditor - VK-community
 ---------------------------------------
   
    NOTE FOR PACKAGE MAINTAINERS: from v. 44, TEA qmake project file uses new installation PREFIX format, without the trailing "bin". I.e., the default PREFIX was: "/usr/local/bin", now it is "/usr/local", and qmake-project file adds "bin" internally.
-   To preserve the compatibility with older stuff, TEA qmake project file as usual can accept PREFIX with "bin" at the end, end shorts it internally.
+   To preserve the compatibility with older stuff, TEA qmake project file as usual can accept PREFIX with "bin" at the end, and then shorten it internally.
    So, for newly-written package config use prefixes like "/usr/share", not "/usr/share/bin". But old prefixes are also valid.
    To pass the prefix, use
 

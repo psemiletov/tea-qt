@@ -2271,7 +2271,7 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
        sl_dest.append (t);
       }
 
-  QString new_text = sl_dest.join ('\n');
+  QString new_text = sl_dest.join ("\n");
   //new_text += "\n";
 
 //теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
@@ -2340,7 +2340,7 @@ void CTEAEdit::rect_sel_insert (const QString &s)
        sl_dest.append (t);
       }
 
-  QString new_text = sl_dest.join ('\n');
+  QString new_text = sl_dest.join ("\n");
   //new_text += "\n";
 
 //теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
@@ -2550,7 +2550,7 @@ void CTEAEdit::rect_sel_cut (bool just_del)
        sl_copy.append (sl_source[line].mid (x1, x2 - x1));
       }
 
-  QString new_text = sl_dest.join ('\n');
+  QString new_text = sl_dest.join ("\n");
 
 //теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
   

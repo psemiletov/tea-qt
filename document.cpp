@@ -2570,7 +2570,7 @@ void CTEAEdit::rect_sel_cut (bool just_del)
   cursor.endEditBlock();
   
   if (! just_del)  
-     QApplication::clipboard()->setText (sl_copy.join ('\n'));
+     QApplication::clipboard()->setText (sl_copy.join ("\n"));
 }
 
 

@@ -54,9 +54,11 @@ DJVU read code taken fromdvutxt.c:
 #include <QDebug>
 
 #ifdef POPPLER_ENABLE
-
+#if QT_VERSION >= 0x050000
 #include <poppler-qt5.h>
-
+#else
+#include <poppler-qt4.h>
+#endif
 #endif
 
 
@@ -70,11 +72,8 @@ DJVU read code taken fromdvutxt.c:
 #include <fcntl.h>
 #include <errno.h>
 
-
 #include "libdjvu/miniexp.h"
 #include "libdjvu/ddjvuapi.h"
-
-
 
 #endif
 

@@ -55,6 +55,9 @@ TARGET = bin/tea
 target.path = $$PREFIX/bin
 desktop.path=$$PREFIX/share/applications
 desktop.files=desktop/tea.desktop
+
+icon128.path = $$PREFIX/share/icons/hicolor/128x128/apps/
+icon128.files += icons/tea-icon-v3-03.png
 }
 
 
@@ -167,7 +170,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
    }
 
 
-INSTALLS += target desktop
+INSTALLS += target desktop icon128
 
 RESOURCES += rlvn.qrc
 TRANSLATIONS = translations/tea_ru.ts \

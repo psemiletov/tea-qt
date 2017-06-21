@@ -57,6 +57,7 @@ started at 08 November 2007
 #include <QScrollArea>
 
 #include <QXmlStreamReader>
+//#include <QUrl>
 
 //#include <QtSvg>
 
@@ -8982,7 +8983,7 @@ void rvln::view_use_theme()
   
   if (! file_exists (css_fname))
      {
-      log->log (tr ("There is no plugin file"));
+      log->log (tr ("There is no stylesheet file"));
       return;
     }
 
@@ -9092,9 +9093,8 @@ void rvln::fn_use_plugin()
   
   QString qml_fname = a->data().toString() + "/" + "main.qml";
   
-  //QString qml_fname = a->data().toString();
   
-    //qDebug() << qml_fname;
+   qDebug() << "qml_fname " << qml_fname;
   
   
   if (! file_exists (qml_fname))

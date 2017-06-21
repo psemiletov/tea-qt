@@ -1,8 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=TEA
-Comment=TEA text editor
-Exec=tea %u
 Terminal=false
 Type=Application
 Icon=application-x-executable
@@ -10,3 +8,9 @@ Categories=Application;Utility;TextEditor;
 StartupNotify=false
 MimeType=text/plain;
 NoDisplay=false
+Version=1.1
+Keywords=text editor;text;editor;
+Keywords[de]=Texteditor;Text;Editor;
+Comment=Text editor with hundreds of functions
+Comment[de]=Texteditor mit hunderten Funktionen
+Exec=tea %U

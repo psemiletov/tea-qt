@@ -94,10 +94,13 @@ CSpellchecker::~CSpellchecker()
 
 void CSpellchecker::add_to_user_dict (const QString &word)
 {
-  if (! initialized )
+  if (! initialized)
+     return;
+     
+  if (! speller)
      return;
   
-  if (word.isEmpty() || ! speller)
+  if (word.isEmpty())
      return;
 
   QByteArray bw = word.toUtf8();
@@ -169,8 +172,12 @@ bool CSpellchecker::check (const QString &word)
 {
   if (! initialized)
       return false;
+  
+  if (! speller)
+      return false;
+  
    
-  if (word.isEmpty() || ! speller)
+  if (word.isEmpty())
      return false;
 
    return aspell_speller_check (speller, word.toUtf8().data(), -1);

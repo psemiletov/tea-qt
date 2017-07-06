@@ -201,7 +201,7 @@ QList <CPluginListItem *> plugins_list;
 
 #endif
 
-QFontDatabase *font_database;
+//QFontDatabase *font_database;
 document_holder *documents;
 
 
@@ -269,8 +269,8 @@ void rvln::create_paths()
   if (! dr.exists())
      dr.mkpath (dir_config);
 
-  fname_userfonts.append (dir_config).append ("/userfonts.txt");
-  hs_path["fname_userfonts"] = fname_userfonts;
+ // fname_userfonts.append (dir_config).append ("/userfonts.txt");
+  //hs_path["fname_userfonts"] = fname_userfonts;
   
   fname_crapbook.append (dir_config).append ("/crapbook.txt");
   hs_path["fname_crapbook"] = fname_crapbook;
@@ -644,10 +644,10 @@ rvln::rvln()
 
   capture_to_storage_file = false;
 
-  font_database = new QFontDatabase();
+ // font_database = new QFontDatabase();
 
   create_paths();
-  load_userfonts();
+ // load_userfonts();
   
   QString sfilename = dir_config + "/tea.conf";
   settings = new QSettings (sfilename, QSettings::IniFormat);
@@ -858,7 +858,6 @@ void rvln::closeEvent (QCloseEvent *event)
   qstring_save (fname_fif, sl_fif_history.join ("\n"));
 
   delete documents;
-  //delete log;
   delete img_viewer;
   
 #if QT_VERSION >= 0x050000
@@ -875,10 +874,8 @@ void rvln::closeEvent (QCloseEvent *event)
 
   delete shortcuts;
   
-
   QList<CMarkupPair *> l = hs_markup.values();
   
-
   foreach (CMarkupPair *p, l)
          {
           p->deleteLater();
@@ -2091,12 +2088,9 @@ void rvln::search_find()
         return;
 
       QTextCursor cr;
-
       int from = 0;
-
       QString fiftxt = fif_get_text();
-      
-      
+            
       if (settings->value ("find_from_cursor", "1").toBool())
           from = d->textEdit->textCursor().position();
       else
@@ -2120,7 +2114,6 @@ void rvln::search_find()
 
                   if (! cr.isNull())
                       d->textEdit->setTextCursor (cr);
-
                  }
               return;
              }
@@ -2460,8 +2453,8 @@ void rvln::createOptions()
   connect (cmb_app_font_name, SIGNAL(currentIndexChanged ( const QString & )),
            this, SLOT(slot_app_fontname_changed(const QString & )));
 
-  QPushButton *bt_add_user_font = new QPushButton (tr ("Add user font"), this);
-  connect (bt_add_user_font, SIGNAL(clicked()), this, SLOT(add_user_font()));
+ // QPushButton *bt_add_user_font = new QPushButton (tr ("Add user font"), this);
+  //connect (bt_add_user_font, SIGNAL(clicked()), this, SLOT(add_user_font()));
 
 
   lt_h->addWidget (l_font);
@@ -2477,7 +2470,7 @@ void rvln::createOptions()
   lt_h->addWidget (spb_app_font_size);
 
   page_interface_layout->addLayout (lt_h);
-  page_interface_layout->addWidget (bt_add_user_font);
+//  page_interface_layout->addWidget (bt_add_user_font);
 
 
   QStringList sl_tabs_align;
@@ -3611,14 +3604,14 @@ void rvln::fn_spell_check()
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
           
      QString stext = cr.selectedText();
-     if ((! stext.isNull() && ends_with_evilchar (stext)))
+     if ((! stext.isEmpty() && ends_with_evilchar (stext)))
         {
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
         }
                       
            
-     if (! stext.isNull() || ! stext.isEmpty())
+     if (! stext.isEmpty())
      if (! spellchecker->check (cr.selectedText()))
         {
          f = cr.blockCharFormat();
@@ -3664,7 +3657,7 @@ void rvln::fn_spell_add_to_dict()
   cr.select (QTextCursor::WordUnderCursor); //плохо работает
   QString s = cr.selectedText();
 
-  if (! s.isEmpty() || ! s.isNull())
+  if (! s.isEmpty())
      spellchecker->add_to_user_dict (s);
 }
 
@@ -3989,7 +3982,7 @@ void rvln::mrkup_text_to_html()
           {
            QString t = s.simplified();
 
-           if (t.isNull() || t.isEmpty())
+           if (t.isEmpty())
               {
                if (d->markup_mode == "HTML")
                   result += "<br>\n";
@@ -4529,7 +4522,7 @@ QString morse_from_lang (const QString &s, const QString &lang)
   for (int i = 0; i < c; i++)
       {
        QString t = h.value (QString (x[i]));
-       if (! t.isNull() || ! t.isEmpty())
+       if (! t.isEmpty())
           result.append (t).append (" ");
       }
 
@@ -4549,7 +4542,7 @@ QString morse_to_lang (const QString &s, const QString &lang)
   for (int i = 0; i < c; i++)
       {
        QString t = h.key (sl[i]);
-       if (! t.isNull() || ! t.isEmpty())
+       if (! t.isEmpty())
           result.append (t);
       }
 
@@ -4794,7 +4787,7 @@ void rvln::file_open_program()
 
   QAction *a = qobject_cast<QAction *>(sender());
   QString command = programs.value(a->text());
-  if (command.isNull() || command.isEmpty())
+  if (command.isEmpty())
      return;
 
   if (main_tab_widget->currentIndex() == idx_tab_edit)
@@ -5073,7 +5066,7 @@ void rvln::cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus)
      return;
 
   QString s = qstring_load (fname_tempfile);
-  if (! s.isNull() || ! s.isEmpty())
+  if (! s.isEmpty())
      d->textEdit->textCursor().insertText(s);
 
   QFile f (fname_tempfile);
@@ -5215,7 +5208,7 @@ void rvln::fman_del_bmk()
      return;
 
   QString s = lv_places->item(i)->text();
-  if (s.isNull() || s.isEmpty())
+  if (s.isEmpty())
      return;
 
   i = sl_places_bmx.indexOf (s);
@@ -5296,7 +5289,7 @@ void rvln::fman_open()
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
 
-  if (! f.isNull() || ! f.isEmpty())
+  if (! f.isEmpty())
   if (f[0] == '/')
      {
       CDocument *d = documents->open_file (f, cb_fman_codecs->currentText());
@@ -5577,7 +5570,7 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
             if (tag_name == "singleLineComment")
                {
                 QString t = xml.attributes().value ("color").toString();
-                if (! t.isNull() || ! t.isEmpty())
+                if (! t.isEmpty())
                      result.insert ("single comment", t);
                }
          
@@ -5585,7 +5578,7 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
             if (tag_name == "class")
                {
                 QString t = xml.attributes().value ("color").toString();
-                if (! t.isNull() || ! t.isEmpty())
+                if (! t.isEmpty())
                    {
                     result.insert ("class", t);
                     result.insert ("type", t);
@@ -5596,34 +5589,31 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
          if (tag_name == "operator")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                      result.insert ("operator", t);
             }
-
          
          
          if (tag_name == "string")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                  result.insert ("quotes", t);
             }
-
          
          
          if (tag_name == "multiLineComment")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                  result.insert ("mcomment-start", t);
             }
-
          
-         
+                  
          if (tag_name == "foreground")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                  {
                   result.insert ("text", t);
                   result.insert ("functions", t);
@@ -5640,7 +5630,7 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
          if (tag_name == "background")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                 { 
                  result.insert ("background", t);
                  result.insert ("linenums_bg", t);
@@ -5651,10 +5641,9 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
          if (tag_name == "selectionForeground")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                 result.insert ("sel-text", t);
             }
-
          
          
          if (tag_name == "selectionBackground")
@@ -8189,7 +8178,7 @@ void rvln::select_label()
      d->textEdit->setTextCursor (cr);
 }
 
-
+/*
 void rvln::add_user_font()
 {
   QString fontfname = QFileDialog::getOpenFileName (this,
@@ -8204,10 +8193,11 @@ void rvln::add_user_font()
 
   sl.append (fontfname);
   qstring_save (fname_userfonts, sl.join("\n").trimmed());
-  load_userfonts();
+  //load_userfonts();
 }
+*/
 
-
+/*
 void rvln::load_userfonts()
 {
   font_database->removeAllApplicationFonts();
@@ -8221,10 +8211,12 @@ void rvln::load_userfonts()
 
   for (int i = 0; i < sl.count(); i++)
       {
-       userfont_ids.append (font_database->addApplicationFont (sl[i]));
+       qDebug() << "FONT: " << sl[i];
+       if (file_exists (sl[i]))
+          userfont_ids.append (font_database->addApplicationFont (sl[i]));
       }
 }
-
+*/
 
 void rvln::fn_insert_cpp()
 {
@@ -9261,7 +9253,6 @@ void rvln::plugins_done()
        plugins_list[i]->window->close();
          
       }   
- 
  
   delete qml_engine;
 }

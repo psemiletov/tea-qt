@@ -48,7 +48,6 @@ int main (int argc, char *argv[])
   return app.exec();
   
 #endif
-  
   //Q_INIT_RESOURCE (rlvn);
 
 #if defined(Q_OS_WIN)
@@ -82,18 +81,26 @@ int main (int argc, char *argv[])
     
 #endif     
      
+
   mainWindow = new rvln();
+
+
 
 #if defined(Q_OS_WIN)
  QObject::connect(&app, SIGNAL(messageAvailable(QString)), mainWindow, SLOT(receiveMessage(QString)));
 #endif
 
+
 #if defined(Q_OS_UNIX)
+
  QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), mainWindow, SLOT(receiveMessageShared(QStringList)));
+
+
 // QObject::connect(&app, SIGNAL(signal_commit_data()), mainWindow, SLOT(app_commit_data()));
 // QObject::connect(&app, SIGNAL(commitDataRequest(QSessionManager & )), mainWindow, SLOT(slot_commitDataRequest(QSessionManager & )));
 
 #endif
+
    
   mainWindow->show();
   

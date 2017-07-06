@@ -183,12 +183,10 @@ public:
 
   CLogMemo *log;
   
-  //QSystemTrayIcon tray_icon;
-  
+ 
   CShortcuts *shortcuts;
   CFMan *fman;
   CImgViewer *img_viewer;
-//  document_holder *documents;
 
 #ifdef SPELLCHECK_ENABLE
 
@@ -289,8 +287,8 @@ public:
   QString fname_def_palette;
   QString fname_hls_cache;
 
-  QString fname_userfonts;
-  QList <int> userfont_ids;
+ // QString fname_userfonts;
+  //QList <int> userfont_ids;
 
 
   QString fname_fif;
@@ -321,8 +319,6 @@ public:
 
   QSpinBox *spb_fuzzy_q;
 
-  //QToolButton *tb_current_list;
-  
   QLineEdit *ed_label_end;
   QLineEdit *ed_label_start;
 
@@ -720,7 +716,7 @@ main window callbacks
   void fn_use_table();
 
   void calendar_currentPageChanged (int year, int month);
-  void add_user_font();
+ //void add_user_font();
 
 
   void man_find_find();
@@ -1089,7 +1085,7 @@ prefs window widgets
   void idx_tab_learn_activate();
 
   
-  void load_userfonts();
+ // void load_userfonts();
   
 #if QT_VERSION >= 0x050000
   

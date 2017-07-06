@@ -372,7 +372,7 @@ CDocument* document_holder::create_new()
 
 CDocument* document_holder::get_document_by_fname (const QString &fileName)
 {
-  if (fileName.isNull() || fileName.isEmpty())
+  if (fileName.isEmpty())
      return NULL;
 
   foreach (CDocument *d, list)
@@ -585,20 +585,20 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   else
       ext = theext;
 
-  if (ext.isNull() || ext.isEmpty())
-    {
-     QFileInfo fi (file_name);
-     ext = fnameswoexts[fi.fileName()];
-    }
+  if (ext.isEmpty())
+     {
+      QFileInfo fi (file_name);
+      ext = fnameswoexts[fi.fileName()];
+     }
 
-  if (ext.isNull() || ext.isEmpty())
+  if (ext.isEmpty())
      return;
 
   QString fname = holder->hls.value (ext);
   
   //qDebug() << "hl fname is " << fname;
   
-  if (fname.isNull() || fname.isEmpty())
+  if (fname.isEmpty())
      return;
 
   if (highlighter)
@@ -1015,13 +1015,13 @@ QStringList CDocument::get_words()
 
      QString stext = cr.selectedText();
 
-     if (! stext.isNull() && stext.endsWith ("\""))
+     if (! stext.isEmpty() && stext.endsWith ("\""))
         {
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
         }  
            
-     if (! stext.isNull() || ! stext.isEmpty())
+     if (! stext.isEmpty())
         result.append (stext);     
     }
   while (cr.movePosition (QTextCursor::NextWord));
@@ -1035,7 +1035,7 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
   QTextCharFormat tformat;
   tformat.setForeground (QBrush (QColor (color).darker (darker_val)));
 
-  if (fontstyle.isNull() || fontstyle.isEmpty())
+  if (fontstyle.isEmpty())
      return tformat; 
 
   if (fontstyle.contains ("bold"))
@@ -1099,16 +1099,16 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                  if (attr_name == "options")
                     {
                      QString s_xml_format = xml.attributes().value ("xml_format").toString();
-                     if (! s_xml_format.isNull() || ! s_xml_format.isEmpty())
+                     if (! s_xml_format.isEmpty())
                         xml_format = s_xml_format.toInt();
                     
                      QString s_wrap = xml.attributes().value ("wrap").toString();
-                     if (! s_wrap.isNull() || ! s_wrap.isEmpty())
+                     if (! s_wrap.isEmpty())
                         if (s_wrap == "0" || s_wrap == "false")
                            wrap = false;
                         
                      QString s_casecare = xml.attributes().value ("casecare").toString();
-                     if (! s_casecare.isNull() || ! s_casecare.isEmpty())
+                     if (! s_casecare.isEmpty())
                         if (s_casecare == "0" || s_casecare == "false")
                            casecare = false;
                         
@@ -1129,7 +1129,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                          HighlightingRule rule;
 
                          for (int i = 0; i < keywordPatterns.size(); i++)
-                              if (! keywordPatterns.at(i).isNull())
+                              if (! keywordPatterns.at(i).isEmpty())
                                  {
                                   rule.pattern = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
                                   rule.format = fmt;
@@ -1297,12 +1297,12 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                  if (attr_name == "options")
                     {
                      QString s_wrap = xml.attributes().value ("wrap").toString();
-                     if (! s_wrap.isNull() || ! s_wrap.isEmpty())
+                     if (! s_wrap.isEmpty())
                         if (s_wrap == "0" || s_wrap == "false")
                            wrap = false;
 
                      QString s_casecare = xml.attributes().value ("casecare").toString();
-                     if (! s_casecare.isNull() || ! s_casecare.isEmpty())
+                     if (! s_casecare.isEmpty())
                         if (s_casecare == "0" || s_casecare == "false")
                            casecare = false;
                         
@@ -1322,7 +1322,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                          HighlightingRule rule;
 
                          for (int i = 0; i < keywordPatterns.size(); i++)
-                             if (! keywordPatterns.at(i).isNull())
+                             if (! keywordPatterns.at(i).isEmpty())
                                 {
                                  rule.pattern = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);
                                  rule.format = fmt;
@@ -1499,7 +1499,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
             if (tag_name == "singleLineComment")
                {
                 QString t = xml.attributes().value ("color").toString();
-                if (! t.isNull() || ! t.isEmpty())
+                if (! t.isEmpty())
                      result.insert ("single comment", t);
                }
          
@@ -1507,7 +1507,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
             if (tag_name == "class")
                {
                 QString t = xml.attributes().value ("color").toString();
-                if (! t.isNull() || ! t.isEmpty())
+                if (! t.isEmpty())
                    {
                     result.insert ("class", t);
                     result.insert ("type", t);
@@ -1518,7 +1518,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "operator")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                      result.insert ("operator", t);
             }
 
@@ -1527,7 +1527,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "string")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                  result.insert ("quotes", t);
             }
 
@@ -1536,7 +1536,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "multiLineComment")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                  result.insert ("mcomment-start", t);
             }
 
@@ -1545,7 +1545,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "foreground")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                  {
                   result.insert ("text", t);
                   result.insert ("functions", t);
@@ -1562,7 +1562,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "background")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                 { 
                  result.insert ("background", t);
                  result.insert ("linenums_bg", t);
@@ -1573,7 +1573,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "selectionForeground")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                 result.insert ("sel-text", t);
             }
 
@@ -1582,7 +1582,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "selectionBackground")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                result.insert ("sel-background", t);
             }
 
@@ -1590,7 +1590,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "keyword")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                 {
                  result.insert ("keywords", t);
                 result.insert ("tags", t);
@@ -1602,7 +1602,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
        	 if (tag_name == "currentLine")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                 result.insert ("cur_line_color", t);
             }
 
@@ -1610,7 +1610,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
          if (tag_name == "bracket")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                  result.insert ("brackets", t);
              }
              
@@ -2138,7 +2138,7 @@ void CTEAEdit::update_rect_sel()
     
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
-  int ydiff = y2 - y1;
+  //int ydiff = y2 - y1;
    
   
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
@@ -2490,18 +2490,17 @@ QString CTEAEdit::get_rect_sel()
 
   for (int y = y1; y <= y2; y++)
       {
-//       qDebug() << "y:" << y;
-              
-       int sel_len = xdiff;
+       //int sel_len = xdiff;
        
        QTextBlock b = document()->findBlockByNumber (y); 
        
-       if ((b.text().length() - x1) < xdiff)
-          sel_len = b.text().length() - x1;
+       //if ((b.text().length() - x1) < xdiff)
+         // sel_len = b.text().length() - x1;
           
        QString t = b.text();   
-       //qDebug() << t;
+
        result += t.mid (x1, xdiff);
+       
        if (y != y2)
           result += '\n';   
       }
@@ -2519,7 +2518,7 @@ void CTEAEdit::rect_sel_cut (bool just_del)
   
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
-  int xdiff = x2 - x1;
+  //int xdiff = x2 - x1;
   
   int how_many_copy_from_source = ydiff;
   

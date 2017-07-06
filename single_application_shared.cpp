@@ -19,11 +19,14 @@ CSingleApplicationShared::CSingleApplicationShared(int &argc, char *argv[], cons
 {
 #ifndef Q_OS_OS2
 
+    qDebug() << "CSingleApplicationShared::CSingleApplicationShared";
+   
+
     sharedMemory.setKey(uniqueKey);
  
     // when  can create it only if it doesn't exist
     if (sharedMemory.create(5000))
-    {
+       {
         sharedMemory.lock();
         *(char*)sharedMemory.data() = '\0';
         sharedMemory.unlock();
@@ -34,7 +37,7 @@ CSingleApplicationShared::CSingleApplicationShared(int &argc, char *argv[], cons
         QTimer *timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(checkForMessage()));
         timer->start(200);
-    }
+       }
     // it exits, so we can attach it?!
     else if (sharedMemory.attach()){
         bAlreadyExists = true;
@@ -103,6 +106,5 @@ bool CSingleApplicationShared::sendMessage(const QString &message)
     sharedMemory.unlock();
 #endif 
     return true;
-    
 }
 

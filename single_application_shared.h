@@ -23,15 +23,23 @@ class CSingleApplicationShared: public QApplication
         Q_OBJECT
 public:
         CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey);
+           
+        ~CSingleApplicationShared() {qDebug() << "~CSingleApplicationShared";};  
 
-        static int cursorFlashTime() {return 0;}; 
+        static int cursorFlashTime() 
+               {
+                return 0;
+               } 
         
-         bool alreadyExists() const{
-            return bAlreadyExists;
-        }
-        bool isMasterApp() const{
-            return !alreadyExists();
-        }
+        bool alreadyExists() const
+             {
+              return bAlreadyExists;
+              }
+        
+        bool isMasterApp() const
+             {
+              return !alreadyExists();
+              }
 
         bool sendMessage(const QString &message);
         
@@ -45,6 +53,7 @@ signals:
  
 private:
         bool bAlreadyExists;
+        
 #ifndef Q_OS_OS2
         
         QSharedMemory sharedMemory;

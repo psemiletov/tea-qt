@@ -5649,7 +5649,7 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
          if (tag_name == "selectionBackground")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                result.insert ("sel-background", t);
             }
 
@@ -5657,10 +5657,10 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
          if (tag_name == "keyword")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                 {
                  result.insert ("keywords", t);
-                result.insert ("tags", t);
+                 result.insert ("tags", t);
                 }
              }
 
@@ -5669,7 +5669,7 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
        	 if (tag_name == "currentLine")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                 result.insert ("cur_line_color", t);
             }
 
@@ -5677,7 +5677,7 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
          if (tag_name == "bracket")
             {
              QString t = xml.attributes().value ("color").toString();
-             if (! t.isNull() || ! t.isEmpty())
+             if (! t.isEmpty())
                  result.insert ("brackets", t);
              }
              
@@ -5820,7 +5820,7 @@ void rvln::update_hls (bool force)
 
            QString buffer = qstring_load (fname);
            QString exts = string_between (buffer, "exts=\"", "\"");
-           if (! exts.isNull() || ! exts.isEmpty())
+           if (! exts.isEmpty())
               {
                QStringList l = exts.split (";");
                for (int i = 0; i < l.size(); i++)
@@ -6176,7 +6176,7 @@ void rvln::fman_current_file_changed (const QString &full_path, const QString &j
 void rvln::fman_rename()
 {
   QString fname = fman->get_sel_fname();
-  if (fname.isNull() || fname.isEmpty())
+  if (fname.isEmpty())
      return;
   
   QFileInfo fi (fname);
@@ -6205,7 +6205,7 @@ void rvln::fman_rename()
 void rvln::fman_delete()
 {
   QString fname = fman->get_sel_fname();
-  if (fname.isNull() || fname.isEmpty())
+  if (fname.isEmpty())
      return;
 
   int i = fman->get_sel_index();
@@ -6946,7 +6946,7 @@ void rvln::fman_add_to_zip()
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
 
-  if (! f.isNull() || ! f.isEmpty())
+  if (! f.isEmpty())
   if (f[0] == '/')
      {
       fman->zipper.files_list.append (f);
@@ -7001,7 +7001,7 @@ void rvln::fman_preview_image()
   last_action = qobject_cast<QAction *>(sender());
 
   QString fname = fman->get_sel_fname();
-  if (fname.isNull() || fname.isEmpty())
+  if (fname.isEmpty())
      return;
   
   if (is_image (fname))
@@ -7776,7 +7776,7 @@ void rvln::ed_comment()
   if (! d->highlighter)
      return;
     
-  if (d->highlighter->cm_mult.isNull() && d->highlighter->cm_single.isNull())
+  if (d->highlighter->cm_mult.isEmpty() && d->highlighter->cm_single.isEmpty())
      return;    
      
   QString t = d->get_selected_text();   
@@ -8301,7 +8301,7 @@ void rvln::mrkup_document_weight()
 void rvln::fman_unpack_zip()
 {
   QString fn = fman->get_sel_fname();
-  if (fn.isNull() || fn.isEmpty())
+  if (fn.isEmpty())
      return;
 
   CZipper z;
@@ -8319,7 +8319,7 @@ void rvln::fman_unpack_zip()
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
 
-  if (! f.isNull() || ! f.isEmpty())
+  if (! f.isEmpty())
   if (f[0] == '/')
      {
       z.unzip (f, fman->dir.path());
@@ -8348,7 +8348,7 @@ void rvln::fman_zip_info()
   last_action = qobject_cast<QAction *>(sender());
 
   QString fn = fman->get_sel_fname();
-  if (fn.isNull() || fn.isEmpty())
+  if (fn.isEmpty())
      return;
 
   CZipper z;
@@ -9269,7 +9269,7 @@ CPluginListItem::CPluginListItem (const QString &plid, CQQuickWindow *wnd)
 
 void rvln::receiveMessage (const QString &msg)
 {
-  if (msg.isNull() || msg.isEmpty()) 
+  if (msg.isEmpty()) 
      return;
      
   //qDebug() << msg;
@@ -9323,12 +9323,12 @@ void rvln::fn_sort_latex_table_by_col_abc()
   
   foreach (QString v, sl_temp)  
           {
-	       if (! v.isNull() || ! v.isEmpty())
-	         {
-              QStringList sl_parsed = v.split (sep);
-              if (latex_table_sort_col + 1 <= sl_parsed.size())
+	   if (! v.isEmpty())
+	      {
+               QStringList sl_parsed = v.split (sep);
+               if (latex_table_sort_col + 1 <= sl_parsed.size())
             	   output.append (sl_parsed);
-	         }
+	      }
           }
   
  
@@ -9382,15 +9382,15 @@ void rvln::fn_table_swap_cells()
   
   foreach (QString v, sl_temp)  
           {
-	       if (! v.isNull() || ! v.isEmpty())
-	         {
+	  if (! v.isEmpty())
+	     {
               QStringList sl_parsed = v.split (sep);
               if (imax + 1 <= sl_parsed.size())
                  {
             	  sl_parsed.swap (col1, col2);	 
                   output.append (sl_parsed);
                  }
-	         }
+	     }
           }
      
   sl_temp.clear();    
@@ -9445,15 +9445,15 @@ void rvln::fn_table_delete_cells()
   
   foreach (QString v, sl_temp)  
           {
-	       if (! v.isNull() || ! v.isEmpty())
-	         {
-              QStringList sl_parsed = v.split (sep);
-              if (col1 + 1 <= sl_parsed.size())
-                 {
-            	  sl_parsed.removeAt (col1);	 
-                  output.append (sl_parsed);
-                 }
-	         }
+	   if (! v.isEmpty())
+	      {
+               QStringList sl_parsed = v.split (sep);
+               if (col1 + 1 <= sl_parsed.size())
+                  {
+            	   sl_parsed.removeAt (col1);	 
+                   output.append (sl_parsed);
+                  }
+	      }
           }
    
   
@@ -9461,7 +9461,6 @@ void rvln::fn_table_delete_cells()
   
   for (int i = 0; i < output.size(); i++)
       {
-	  
        sl_temp.append (output[i].join (sep));
       }
   
@@ -9504,32 +9503,32 @@ void rvln::fn_table_copy_cells()
   QStringList sl_temp = t.split (QChar::ParagraphSeparator); 
     
   QList <QStringList> output;  
+  
   if (col2 > 0)
   foreach (QString v, sl_temp)  
           {
-	       if (! v.isNull() || ! v.isEmpty())
-	         {
-              QStringList sl_parsed = v.split (sep);
-              if (col2 + 1 <= sl_parsed.size())
-                 {
-            	  QStringList tl = sl_parsed.mid (col1, col2 - col1 + 1); 
-            	  
-                  output.append (tl);
-                 }
-	         }
+	   if (! v.isEmpty())
+	      {
+               QStringList sl_parsed = v.split (sep);
+               if (col2 + 1 <= sl_parsed.size())
+                  {
+                   QStringList tl = sl_parsed.mid (col1, col2 - col1 + 1); 
+                   output.append (tl);
+                  }
+              }
           }
   else
-	  foreach (QString v, sl_temp)  
-	          {
-	  	       if (! v.isNull() || ! v.isEmpty())
-	  	          {
-	               QStringList sl_parsed = v.split (sep);
-	               if (col1 + 1 <= sl_parsed.size())
-	                  {
-	                   QStringList tl = sl_parsed.mid (col1, 1); 
-	              	   output.append (tl);
-	                  }
-	  	          }
+      foreach (QString v, sl_temp)  
+	      {
+	       if (! v.isEmpty())
+	  	  {
+	           QStringList sl_parsed = v.split (sep);
+	           if (col1 + 1 <= sl_parsed.size())
+	              {
+	               QStringList tl = sl_parsed.mid (col1, 1); 
+	               output.append (tl);
+	               }
+	  	   }
                }
   
   sl_temp.clear();    
@@ -9843,14 +9842,12 @@ void rvln::search_mark_all()
 
                   if (! cr.isNull())
                       d->textEdit->setTextCursor (cr);
-
                  }
-                else 
-                cont_search = false; 
+              else 
+                  cont_search = false; 
              }
       else //normal search
           cr = d->textEdit->document()->find (d->text_to_search, from, get_search_options());
-
 
 
       if (! cr.isNull())  
@@ -9980,7 +9977,7 @@ void rvln::scale_image()
     fnameout = change_file_ext (fnameout, fmt);
 
     if (! dest.save (fnameout, fmt.toLatin1().constData(), quality))
-        qDebug() << "Cannot save " << fnameout;
+        log->log (tr("Cannot save: %1").arg (fnameout));    
     else
         log->log (tr("Saved: %1").arg (fnameout));    
         
@@ -10117,7 +10114,7 @@ void rvln::fman_zeropad()
                
                newname.remove(QRegExp("[a-zA-Z\\s]"));
                
-               if (newname.isEmpty() || newname.isNull())
+               if (newname.isEmpty())
                   continue;
                
                QString pad = "0";
@@ -10442,13 +10439,14 @@ void rvln::receiveMessageShared(const QStringList &msg)
   raise();
 }  
 
-
-void rvln::slot_commitDataRequest(QSessionManager &m) 
+/*
+void rvln::slot_commitDataRequest (QSessionManager &m) 
 {
   QString fname (dir_sessions);
   fname.append ("/").append ("shutdownsession");
   documents->save_to_session (fname);
 }
+
 
 void rvln::app_commit_data()
 {
@@ -10458,13 +10456,14 @@ void rvln::app_commit_data()
 
   //QString get_triplex();
 
-/*
- if (documents->recent_files.size() > 0)
-     {
-      documents->open_file_triplex (documents->recent_files[0]);
-      documents->recent_files.removeAt (0);
-      documents->update_recent_menu();
-      main_tab_widget->setCurrentIndex (idx_tab_edit); 
-     }  
-*/
+
+ //if (documents->recent_files.size() > 0)
+   //  {
+     // documents->open_file_triplex (documents->recent_files[0]);
+      //documents->recent_files.removeAt (0);
+      //documents->update_recent_menu();
+      //main_tab_widget->setCurrentIndex (idx_tab_edit); 
+     //}  
+
 }
+*/

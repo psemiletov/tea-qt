@@ -16,7 +16,7 @@ Peter Semiletov
 
 bool file_exists (const QString &fileName)
 {
-  if (fileName.isNull() || fileName.isEmpty())
+  if (fileName.isEmpty())
      return false;
 
   return QFile::exists (fileName);
@@ -67,7 +67,7 @@ QStringList read_dir_entries (const QString &path)
 
 QString file_get_ext (const QString &file_name)
 {
-  if (file_name.isNull() || file_name.isEmpty())
+  if (file_name.isEmpty())
       return QString();
 
   int i = file_name.lastIndexOf (".");
@@ -155,7 +155,7 @@ QString hash_get_val (QHash<QString, QString> &h,
                       const QString &def_val)
 {
   QString result = h.value (key);
-  if (result.isNull() || result.isEmpty())
+  if (result.isEmpty())
      {
       result = def_val;
       h.insert (key, def_val);

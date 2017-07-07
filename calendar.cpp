@@ -5,7 +5,8 @@ this code is Public Domain
 
 #include "utils.h"
 #include "calendar.h"
-#include "math.h"
+#include <math.h>
+
 
 #include <QDateTime>
 #include <QDate>

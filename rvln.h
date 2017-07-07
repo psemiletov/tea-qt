@@ -51,7 +51,7 @@
 #include <QTextBrowser>
 #include <QTranslator>
 #include <QProcess>
-#include <QSessionManager>
+//#include <QSessionManager>
 //#include <QSystemTrayIcon>
 
 
@@ -372,9 +372,9 @@ public slots:
 main window callbacks
 *************************/
 
-  void app_commit_data();
+ // void app_commit_data();
 
-  void slot_commitDataRequest(QSessionManager &m); 
+ // void slot_commitDataRequest(QSessionManager &m); 
 
   void repeat();
 

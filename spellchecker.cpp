@@ -94,10 +94,7 @@ CSpellchecker::~CSpellchecker()
 
 void CSpellchecker::add_to_user_dict (const QString &word)
 {
-  if (! initialized)
-     return;
-     
-  if (! speller)
+  if (! initialized || ! speller)
      return;
   
   if (word.isEmpty())
@@ -120,6 +117,9 @@ void CSpellchecker::change_lang (const QString &lang)
 {
   if (! spell_config)
      return;
+     
+  if (lang.isEmpty())
+     return;   
 
   aspell_config_replace (spell_config, "lang", lang.toUtf8().data());
   aspell_config_replace (spell_config, "encoding", "UTF-8");
@@ -170,12 +170,8 @@ QStringList CSpellchecker::get_speller_modules_list()
 
 bool CSpellchecker::check (const QString &word)
 {
-  if (! initialized)
+  if (! initialized || ! speller)
       return false;
-  
-  if (! speller)
-      return false;
-  
    
   if (word.isEmpty())
      return false;
@@ -366,7 +362,7 @@ void CHunspellChecker::change_lang (const QString &lang)
 
 void CHunspellChecker::add_to_user_dict (const QString &word)
 {
-  if (! initialized)
+  if (! initialized || word.isEmpty())
      return;
 
   QTextCodec *codec = QTextCodec::codecForName (encoding);
@@ -390,7 +386,7 @@ bool CHunspellChecker::check (const QString &word)
 
 void CHunspellChecker::remove_from_user_dict (const QString &word)
 {
-  if (! initialized)
+  if (! initialized || word.isEmpty())
       return;
 
   QTextCodec *codec = QTextCodec::codecForName (encoding);
@@ -430,6 +426,9 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 
   QStringList sl;
 
+  if (word.isEmpty())
+     return sl;
+
   QTextCodec *codec = QTextCodec::codecForName (encoding);
   QByteArray es = codec->fromUnicode (word);
 
@@ -446,4 +445,3 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 }
 
 #endif 
-

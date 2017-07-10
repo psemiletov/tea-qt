@@ -11,6 +11,7 @@ using namespace std;
 
 class CItem
 {
+
 public:
 
   char op;
@@ -61,34 +62,32 @@ double calculate (string expression)
   do 
     {
      for (int i = end_pos; i >= 0; i--)
-	 {
-	  if (expression[i] == '(')
-	     {
-	      start_pos = i;
-	      break;
-	     }
-	  }
+         {
+          if (expression[i] == '(')
+             {
+              start_pos = i;
+              break;
+             }
+         }
      
      //end_pos = expression.find (")"); 
      string s_temp_value = expression.substr (start_pos + 1, end_pos - start_pos - 1); 
-	 
+ 
      //cout << "start_pos = " << start_pos << " end pos = " << end_pos << endl;    
      //cout << "s_temp_value = " << s_temp_value << endl;    
-	 
+ 
      double f_temp_value = calculate (s_temp_value);
-	 
+ 
      std::ostringstream float_stream;
      float_stream << f_temp_value;
      string temp_s (float_stream.str());
      
      //cout << "temp_s = " << temp_s << endl;
-	 
+ 
      expression = expression.replace (start_pos + 1, end_pos - start_pos - 1, temp_s);
-	 
-     }
-   while (end_pos == string::npos);        
-
-       
+    }
+  while (end_pos == string::npos);        
+     
        
 //parse expression to list:
 
@@ -138,43 +137,42 @@ double calculate (string expression)
 
  // int c = 0;
 
-  do  {
-       CItem current = *p;
+  do {
+      CItem current = *p;
 
-       list<CItem>::iterator t = p;
-       t++;
+      list<CItem>::iterator t = p;
+      t++;
 
-        CItem next = *t;
+      CItem next = *t;
 
-        if (current.op == '*' || current.op == '/')
-           {
-
-            if (current.op == '*')
-               {
-                next.val = current.val * next.val;             
-                *t = next;
-               }
-            else    
-                if (current.op == '/') 
-                   {
-                    next.val = current.val / next.val;             
-                    *t = next; 
-                   }
-
-             p = items.erase (p);
+      if (current.op == '*' || current.op == '/')
+         {
               
-             continue;
-            }
+          if (current.op == '*')
+             {
+              next.val = current.val * next.val;             
+              *t = next;
+             }
+          else    
+              if (current.op == '/') 
+                 {
+                  next.val = current.val / next.val;             
+                  *t = next; 
+                 }
 
-         p++;
-        }
-        while (p != items.end());
+          p = items.erase (p);
+            
+          continue;
+         }
+
+      p++;
+     }
+  while (p != items.end());
 
 //складываем и вычитаем
 
   p = items.begin();
 
-//  c = 0;
 
   do {
       CItem current = *p;
@@ -205,7 +203,7 @@ double calculate (string expression)
 
          p++;
         }
-        while (p != items.end());
+  while (p != items.end());
 
   list<CItem>::iterator start = items.begin();
   CItem item = *start;

@@ -3604,12 +3604,11 @@ void rvln::fn_spell_check()
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
           
      QString stext = cr.selectedText();
-     if ((! stext.isEmpty() && ends_with_evilchar (stext)))
+     if (! stext.isEmpty() && ends_with_evilchar (stext))
         {
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
         }
-                      
            
      if (! stext.isEmpty())
      if (! spellchecker->check (cr.selectedText()))

@@ -186,9 +186,9 @@ unsigned Get32u(const void * Long, int MotorolaOrder){
 
 
 // Evaluate number, be it int, rational, or float from directory.
-double ConvertAnyFormat(const void * ValuePtr, int Format, int MotorolaOrder){
-    double Value;
-     Value = 0;
+double ConvertAnyFormat(const void * ValuePtr, int Format, int MotorolaOrder)
+{
+    double Value = 0.0;
 
      switch(Format){
          case FMT_SBYTE:     Value = *(signed char *)ValuePtr;  break;

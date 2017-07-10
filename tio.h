@@ -122,7 +122,6 @@ public:
 };
 
 
-
 class CTioFB2: public CTioReadOnly
 {
   Q_OBJECT

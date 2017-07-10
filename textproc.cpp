@@ -518,7 +518,7 @@ unsigned int bin_to_decimal (const QString &s)
 
   table[0] = 1;
 
-  for (int i = 1; i < 32; i++)
+  for (int i = 1; i < 31; i++)
       {
        c *= 2;
        table[i] = c;

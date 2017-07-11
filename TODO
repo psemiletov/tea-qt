@@ -1,4 +1,4 @@
-при повторении последней функции, сендер-то становиться от пункта меню "повторить"
+при повторении последней функции, сендер-то становится от пункта меню "повторить"
 
 избранное для ЗПВ
 
@@ -32,7 +32,6 @@ ctags support
 make max recent items user-modified
 hl for gas, Lisp
 units conversion
-PDF text reader
 add function to update hls cache manually
 unicode table window
 split document panel

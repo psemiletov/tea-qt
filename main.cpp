@@ -36,6 +36,8 @@ int main (int argc, char *argv[])
 {
 // Q_INIT_RESOURCE (rlvn);
    
+ # qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+
    
 #if defined(Q_OS_OS2)
 

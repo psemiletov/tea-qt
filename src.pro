@@ -164,7 +164,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
        QT += printsupport
        QT += qml
        QT += quick
-
+      # QTPLUGIN += qtvirtualkeyboardplugin
    } else {
 #QT += blah blah blah
    }

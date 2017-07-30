@@ -1,5 +1,6 @@
 2017 july
 - User loaded external fonts //causes segfault on Qt 5.6
+* other fixes
 
 
 2017 may

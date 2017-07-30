@@ -333,6 +333,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 os2: {
 
+
 usepoppler{
 exists("C:/usr/include/poppler/qt4/poppler-qt4.h") {
      message ("DJVU enabled")

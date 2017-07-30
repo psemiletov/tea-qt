@@ -1,4 +1,4 @@
-при повторении последней функции, сендер-то становится от пункта меню "повторить"
+при повторении последней функции, сендер-ту становится от пункта меню "повторить"
 
 избранное для ЗПВ
 
@@ -26,7 +26,7 @@ remember wrap setting //add to the triplex field
 Highlight all search results
 gradient colorization in palettes
 "entity to text" function
-autoscroll //useful for musicians. define the speed in bpm?
+autoscroll //useful for musicians or youtube bloggers. define the speed in bpm?
 numbers into words
 ctags support
 make max recent items user-modified

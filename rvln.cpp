@@ -5780,8 +5780,8 @@ void rvln::update_hls (bool force)
 {
   documents->hls.clear();
 
-  QStringList l1 = read_dir_entries (":/hls");
-  l1 << read_dir_entries (dir_hls);
+  QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
+  l1 << read_dir_entries (dir_hls);  //read custom hls modules
   QString newlist = l1.join("\n").trimmed();
 
   QString fname_hls_flist (dir_config);
@@ -5790,7 +5790,7 @@ void rvln::update_hls (bool force)
   if (force)
      {
       QFile::remove (fname_hls_flist);
-      qDebug() << "new version, hls cache is updated";
+      qDebug() << "new version, hls cache must be updated";
      }
 
   if (! file_exists (fname_hls_flist))
@@ -5811,14 +5811,20 @@ void rvln::update_hls (bool force)
   
   if (! file_exists (fname_hls_cache))
      {
+      //make and save hls_cache
+     
       for (int i = 0; i < l1.size(); i++)
           {
            QString fname = ":/hls/" + l1[i];
+           
+           //check is fname built-in or not
+           
            if (! file_exists (fname))
               fname = dir_hls + "/" + l1[i];
 
            QString buffer = qstring_load (fname);
            QString exts = string_between (buffer, "exts=\"", "\"");
+           
            if (! exts.isEmpty())
               {
                QStringList l = exts.split (";");
@@ -5829,8 +5835,9 @@ void rvln::update_hls (bool force)
 
       qstring_save (fname_hls_cache, hash_keyval_to_string (documents->hls));
      }
-  else
-      documents->hls = hash_load_keyval (fname_hls_cache);
+  //else
+
+  documents->hls = hash_load_keyval (fname_hls_cache);
 }
 
 

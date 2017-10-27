@@ -25,7 +25,7 @@
 #include <QTextCursor>
 
 
-CLogMemo::CLogMemo ( QWidget * parent): QPlainTextEdit (parent)
+CLogMemo::CLogMemo (QWidget * parent): QPlainTextEdit (parent)
    
 //CLogMemo::CLogMemo (QPlainTextEdit *m)
 {
@@ -46,7 +46,6 @@ CLogMemo::CLogMemo ( QWidget * parent): QPlainTextEdit (parent)
   
   setTextInteractionFlags (Qt::LinksAccessibleByMouse | Qt::TextSelectableByMouse | 
                                  Qt::TextSelectableByKeyboard);
-
 }
 
 
@@ -67,7 +66,7 @@ void CLogMemo::log (const QString &text)
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
   memo->setTextCursor (cr);*/
    
-   QTextCursor cr = textCursor();
+  QTextCursor cr = textCursor();
   cr.movePosition (QTextCursor::Start);
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
   setTextCursor (cr);

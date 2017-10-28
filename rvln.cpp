@@ -5835,8 +5835,7 @@ void rvln::update_hls (bool force)
 
       qstring_save (fname_hls_cache, hash_keyval_to_string (documents->hls));
      }
-  //else
-
+  else
   documents->hls = hash_load_keyval (fname_hls_cache);
 }
 

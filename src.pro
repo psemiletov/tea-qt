@@ -53,11 +53,24 @@ PREFIX = $$replace(PREFIX, bin,)
 
 TARGET = bin/tea
 target.path = $$PREFIX/bin
-desktop.path=$$PREFIX/share/applications
-desktop.files=desktop/tea.desktop
+desktop.path = $$PREFIX/share/applications
+desktop.files = desktop/tea.desktop
 
 icon128.path = $$PREFIX/share/icons/hicolor/128x128/apps/
-icon128.files += icons/tea-icon-v3-03.png
+icon128.files += icons/128/tea.png
+
+icon64.path = $$PREFIX/share/icons/hicolor/64x64/apps/
+icon64.files += icons/64/tea.png
+
+icon48.path = $$PREFIX/share/icons/hicolor/48x48/apps/
+icon48.files += icons/48/tea.png
+
+icon32.path = $$PREFIX/share/icons/hicolor/32x32/apps/
+icon32.files += icons/32/tea.png
+
+iconsvg.path = $$PREFIX/share/icons/hicolor/scalable/apps/
+iconsvg.files += icons/svg/tea.svg
+
 }
 
 
@@ -164,13 +177,22 @@ greaterThan(QT_MAJOR_VERSION, 4) {
        QT += printsupport
        QT += qml
        QT += quick
-      # QTPLUGIN += qtvirtualkeyboardplugin
+       DEFINES += USE_QML_STUFF
    } else {
 #QT += blah blah blah
    }
 
 
-INSTALLS += target desktop icon128
+noqml{
+       QT -= qml
+       QT -= quick
+       DEFINES -= USE_QML_STUFF
+       message ("QML stuff is off")
+}
+
+   
+   
+INSTALLS += target desktop icon128 icon64 icon48 icon32 iconsvg
 
 RESOURCES += rlvn.qrc
 TRANSLATIONS = translations/tea_ru.ts \
@@ -178,7 +200,8 @@ TRANSLATIONS = translations/tea_ru.ts \
                translations/tea_fr.ts
 
 
-DISTFILES += ChangeLog \
+DISTFILES += tea.spec \
+    ChangeLog \
     COPYING \
     README \
     NEWS \
@@ -187,11 +210,13 @@ DISTFILES += ChangeLog \
     TODO \
     INSTALL \
     hls/* \
-    icons/* \
+#    icons/* \
     palettes/* \
     encsign/* \
     images/* \
     desktop/* \
+    text-data/* \
+    translations/* \
     manuals/en.html \
     manuals/ru.html \
     manuals/plugins/readme-en.txt \
@@ -199,8 +224,6 @@ DISTFILES += ChangeLog \
     manuals/plugins/examples/run-and-close/main.qml \
     manuals/plugins/examples/settings-via-qmap/main.qml \
     manuals/plugins/examples/use-fif/main.qml \
-    text-data/* \
-    translations/* \
     themes/Cotton/stylesheet.css \
     themes/Plum/stylesheet.css \
     themes/Smaragd/stylesheet.css \
@@ -208,7 +231,39 @@ DISTFILES += ChangeLog \
     themes/Turbo/stylesheet.css \
     themes/Turbo/icons/* \
     themes/Vegan/stylesheet.css \
-    themes/Yagodnaya/stylesheet.css
+    themes/Yagodnaya/stylesheet.css \
+    icons/32/tea.png \
+    icons/48/tea.png \
+    icons/64/tea.png \
+    icons/128/tea.png \
+    icons/svg/tea.svg \
+    icons/create-dir.png \
+    icons/create-dir.png \
+    icons/current-list.png \
+    icons/edit-copy-active.png \
+    icons/edit-copy.png \
+    icons/edit-cut-active.png \
+    icons/edit-cut.png \
+    icons/edit-paste-active.png \
+    icons/edit-paste.png \
+icons/file-new.png \ 
+icons/file-open-active.png \
+icons/file-open.png \
+icons/file-save-active.png \
+icons/file-save-as.png \
+icons/file-save.png \ 
+icons/fn-spell-check.png \
+icons/go.png \
+icons/home.png \
+icons/labels.png \
+icons/refresh.png \
+icons/search_find.png \
+icons/tea_icon_v2.png \
+icons/tea-icon-v3-01.png \
+icons/tea-icon-v3-02.png \
+icons/tea-icon-v3-03.png
+    
+
 
 
 unix:  {

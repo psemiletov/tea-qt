@@ -56,11 +56,10 @@
 
 
 //QML stuff
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
 
 #include <QQmlEngine>
 #include <QQuickWindow>
-//#include <QJSEngine>
 
 #endif
 
@@ -166,10 +165,9 @@ public:
   rvln();
   ~rvln();
   
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
 
   QQmlEngine *qml_engine;
-
 #endif
 
   QAction *last_action;
@@ -783,10 +781,9 @@ prefs window callbacks
   void slot_style_currentIndexChanged (const QString &text);
 
   
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
   
   void fn_use_plugin();
-
 #endif
   
 public:
@@ -833,11 +830,10 @@ main window widgets
   QMenu *menu_fn_scripts;
   
   
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
   
   QMenu *menu_fn_plugins;
-
-#endif  
+#endif
 
   QMenu *menu_view_themes;
 
@@ -1006,7 +1002,7 @@ prefs window widgets
   void update_palettes();
   void update_view_hls();
   
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
     
   void update_plugins();
 
@@ -1087,7 +1083,8 @@ prefs window widgets
   
  // void load_userfonts();
   
-#if QT_VERSION >= 0x050000
+//#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
   
   void plugins_init();
   void plugins_done();
@@ -1099,7 +1096,7 @@ prefs window widgets
 };
 
 
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
 
 class CQQuickWindow: public QQuickWindow
 {

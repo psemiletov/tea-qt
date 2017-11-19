@@ -77,12 +77,11 @@ started at 08 November 2007
 
 //QML stuff
 
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
 
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQuickItem>
-
 #include <QQuickView>
 
 #endif
@@ -109,8 +108,7 @@ started at 08 November 2007
 #include "fontbox.h"
 
 
-#if QT_VERSION >= 0x050000
-
+#ifdef USE_QML_STUFF
 class CPluginListItem: public QObject
 {
 public:
@@ -120,7 +118,6 @@ public:
  
   CPluginListItem (const QString &plid, CQQuickWindow *wnd);
 };
-
 #endif
 
 
@@ -195,10 +192,8 @@ rvln *mainWindow;
 QVariantMap hs_path;
 
 
-#if QT_VERSION >= 0x050000
-
+#ifdef USE_QML_STUFF
 QList <CPluginListItem *> plugins_list;
-
 #endif
 
 //QFontDatabase *font_database;
@@ -696,7 +691,7 @@ rvln::rvln()
   update_sessions();
   update_scripts();
  
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
 
   update_plugins();
  
@@ -812,7 +807,7 @@ rvln::rvln()
   connect (clipboard , SIGNAL(dataChanged()), this, SLOT(clipboard_dataChanged()));
 
   
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
   
   plugins_init();
 
@@ -860,7 +855,7 @@ void rvln::closeEvent (QCloseEvent *event)
   delete documents;
   delete img_viewer;
   
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
   
   plugins_done();
   
@@ -1483,7 +1478,7 @@ void rvln::createMenus()
 
   
 
-#if QT_VERSION >= 0x050000
+#ifdef USE_QML_STUFF
 
   menu_fn_plugins = menu_functions->addMenu (tr ("Plugins"));
   
@@ -6093,10 +6088,8 @@ void rvln::fman_file_activated (const QString &full_path)
              qDebug() << "! unzip";
 
 
-#if QT_VERSION >= 0x050000
-
+#ifdef USE_QML_STUFF
            update_plugins();
-
 #endif
           
          }
@@ -9076,8 +9069,7 @@ void rvln::update_themes()
 }
 
 
-#if QT_VERSION >= 0x050000
-
+#ifdef USE_QML_STUFF
 
 void rvln::fn_use_plugin()
 {
@@ -9214,6 +9206,7 @@ void create_menu_from_plugins (QObject *handler,
 
 void rvln::update_plugins()
 {
+#ifdef USE_QML_STUFF
   menu_fn_plugins->clear();
   
   create_menu_from_plugins (this,
@@ -9221,12 +9214,13 @@ void rvln::update_plugins()
                             dir_plugins,
                             SLOT (fn_use_plugin())
                             );
-  
+#endif  
 }
 
 
 void rvln::plugins_init()
 {
+#ifdef USE_QML_STUFF
   qDebug() << "rvln::plugins_init()";
 
   qml_engine = new QQmlEngine;
@@ -9244,11 +9238,13 @@ void rvln::plugins_init()
   qml_engine->rootContext()->setContextProperty("tea", this); 
   qml_engine->rootContext()->setContextProperty("settings", settings); 
   qml_engine->rootContext()->setContextProperty("hs_path", hs_path); 
+#endif  
 }
 
 
 void rvln::plugins_done()
 {
+#ifdef USE_QML_STUFF
  qDebug() << "rvln::plugins_done()";
 //закрыть все плагины из списка (при созд. плагина добавляем указатель в список)
 //и потом 
@@ -9260,6 +9256,7 @@ void rvln::plugins_done()
       }   
  
   delete qml_engine;
+#endif  
 }
 
 

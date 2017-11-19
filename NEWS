@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 44.1.0, July 2017
+TEA 44.1.1, November 2017
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -7,10 +7,11 @@ https://github.com/psemiletov/tea-qt - development
 https://vk.com/teaeditor - VK-community
 ---------------------------------------
   
-   This release fixes many bugs. 
+   This release fixes the desktop file and icons stuff (I hope it had not broke distros packages specs too much). Also you can build tea without QML using new option: 
 
+qmake "CONFIG+=noqml"
 
-   If you want to support TEA via donation, better support the Ukrainian dog shelter Lyubas House - http://www.ukraineanimalrescue.org/#!lyubas-house/cxfj/. There are lot of dogs with disabilities, and they need help more than TEA.
+   It slightly reduces the memory footprint and useful for some purposes.
 
    Stay tuned.
    Peter Semiletov

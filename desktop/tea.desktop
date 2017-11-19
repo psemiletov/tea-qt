@@ -1,10 +1,10 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=TEA
 Terminal=false
 Type=Application
 Icon=tea
-Categories=Application;Utility;TextEditor;
+Exec=tea %U
+Categories=Utility;TextEditor;
 StartupNotify=false
 MimeType=text/plain;
 NoDisplay=false
@@ -13,4 +13,3 @@ Keywords=text editor;text;editor;
 Keywords[de]=Texteditor;Text;Editor;
 Comment=Text editor with hundreds of functions
 Comment[de]=Texteditor mit hunderten Funktionen
-Exec=tea %U

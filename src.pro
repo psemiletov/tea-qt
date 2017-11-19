@@ -1,7 +1,7 @@
-VERSION = 44.1.0
+VERSION = 44.1.1
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"44.1.0"\''
+DEFINES += 'VERSION_NUMBER=\'"44.1.1"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -200,8 +200,7 @@ TRANSLATIONS = translations/tea_ru.ts \
                translations/tea_fr.ts
 
 
-DISTFILES += tea.spec \
-    ChangeLog \
+DISTFILES += ChangeLog \
     COPYING \
     README \
     NEWS \

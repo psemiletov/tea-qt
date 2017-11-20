@@ -14,7 +14,6 @@ USE_ASPELL = true
 USE_HUNSPELL = true
 USE_PRINTER = true
 
-
 win32:{
 
 isEmpty(PREFIX) {
@@ -53,6 +52,7 @@ PREFIX = $$replace(PREFIX, bin,)
 
 TARGET = bin/tea
 target.path = $$PREFIX/bin
+
 desktop.path = $$PREFIX/share/applications
 desktop.files = desktop/tea.desktop
 

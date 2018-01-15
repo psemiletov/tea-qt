@@ -177,6 +177,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
        QT += printsupport
        QT += qml
        QT += quick
+#       QT += gamepad
        DEFINES += USE_QML_STUFF
    } else {
 #QT += blah blah blah

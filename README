@@ -28,7 +28,7 @@ noaspell - disable the Aspell (if you have it installed, but  do not want to com
 nohunpell - disable Hunspell for TEA.
 usepoppler - use libpoppler-qt5 or qt4 for PDF text layer import. DISABLED by default
 usedjvu - use libdjvulibre to read DJVU files text (read only). DISABLED by default
-noprinter
+noprinter - disable printing support
 
 If you have installed both Qt4  and Qt5, use the qmake from Qt4 or Qt5 to configure TEA with exact version of QT. The common solution is to make symlink to qmake from Qt5 and name it qmake5, then use qmake5 instead of the usual qmake.
 

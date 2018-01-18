@@ -794,7 +794,7 @@ CDocument* document_holder::open_file_triplex (const QString &triplex)
   if (d)
      d->goto_pos (sl[2].toInt());
 
-  if (sl.size() >= 3)
+  if (sl.size() >= 4)
     {
      if (sl[3] == "1")
          d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);

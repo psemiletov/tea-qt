@@ -306,8 +306,8 @@ void CDocument::create_new()
   textEdit->doc = this;
 
   textEdit->currentLineColor = QColor (hash_get_val (global_palette, 
-                                             "cur_line_color", 
-                                             "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
+                                      "cur_line_color", 
+                                      "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
 
   highlighter = NULL;
 
@@ -488,33 +488,32 @@ QString CDocument::get_filename_at_cursor()
       if (end == -1)
          return x;
 
-     int start = s.lastIndexOf ("{", pos);
-     if (start == -1)
-        return x;
+      int start = s.lastIndexOf ("{", pos);
+      if (start == -1)
+         return x;
 
-     x = s.mid (start + 1, end - (start + 1));
+      x = s.mid (start + 1, end - (start + 1));
      
-     QFileInfo inf (file_name);
-     QDir cur_dir (inf.absolutePath());
+      QFileInfo inf (file_name);
+      QDir cur_dir (inf.absolutePath());
          
-     QString result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
-     if (file_exists (result))
+      QString result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
+      if (file_exists (result))
          return result;
+     
+      int i = x.lastIndexOf ("/");
+      if (i < 0)
+         i = x.lastIndexOf ("\\");
+     
+      if (i < 0)
+         return QString();
 
+      x = x.mid (i + 1);   
      
-     int i = x.lastIndexOf ("/");
-     if (i < 0)
-        i = x.lastIndexOf ("\\");
-     
-     if (i < 0)
-        return QString();
-
-     x = x.mid (i + 1);   
-     
-     result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
-     //qDebug() << "in cur dir: " << result;
-     return result;
-    }
+      result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
+      //qDebug() << "in cur dir: " << result;
+      return result;
+     }
   else
  //   if (markup_mode == "HTML")
    //fallback to HTML markup 
@@ -619,8 +618,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   
 #endif  
 
-  qDebug() << "highlighter->wrap: " << highlighter->wrap;
-
+//  qDebug() << "highlighter->wrap: " << highlighter->wrap;
   
   if (textEdit->use_hl_wrap)
      {
@@ -629,8 +627,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
        else
           textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
      }
-  
-  qDebug() << "textEdit->use_hl_wrap: " << textEdit->use_hl_wrap;
+
 }
 
 
@@ -644,14 +641,10 @@ void CDocument::goto_pos (int pos)
 
 void document_holder::apply_settings_single (CDocument *d)
 {
-  //QFont f;
-
   int darker_val = settings->value ("darker_val", 100).toInt();
 
- 
-
-
 /*  
+  QFont f;
   f.fromString (settings->value ("editor_font_name", "Monospace").toString());
   f.setPointSize (settings->value ("editor_font_size", "12").toInt());
   d->textEdit->setFont (f);
@@ -659,17 +652,12 @@ void document_holder::apply_settings_single (CDocument *d)
 */
 
   d->textEdit->setCursorWidth (settings->value ("cursor_width", 2).toInt());
- 
   d->textEdit->setCenterOnScroll (settings->value ("center_on_scroll", true).toBool());
-  
   d->textEdit->use_hl_wrap = settings->value ("use_hl_wrap", true).toBool();
-  
   d->textEdit->wrap = settings->value ("word_wrap", true).toBool();
     
-     
   QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
   QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
-
     
   d->textEdit->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
   d->textEdit->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
@@ -716,12 +704,12 @@ void document_holder::apply_settings_single (CDocument *d)
   d->textEdit->text_color = QColor (t_text_color);
 
   QString back_color = hash_get_val (global_palette, "background", "white");
-  //QString sel_back_color = hash_get_val (global_palette, "sel-background", "black");
-  //QString sel_text_color = hash_get_val (global_palette, "sel-text", "white");
 
   d->textEdit->margin_color = QColor (hash_get_val (global_palette, "margin_color", text_color)).darker(darker_val);
   d->textEdit->linenums_bg = QColor (hash_get_val (global_palette, "linenums_bg", back_color)).darker(darker_val);
-  
+
+  //QString sel_back_color = hash_get_val (global_palette, "sel-background", "black");
+  //QString sel_text_color = hash_get_val (global_palette, "sel-text", "white");
   //QString t_back_color = QColor (back_color).darker(darker_val).name(); 
   //QString t_sel_text_color = QColor (sel_text_color).darker(darker_val).name(); 
   //QString t_sel_back_color = QColor (sel_back_color).darker(darker_val).name(); 
@@ -760,6 +748,15 @@ void document_holder::add_to_recent (CDocument *d)
   s += ",";
   s += QString ("%1").arg (d->textEdit->textCursor().position());
 
+  s += ",";
+
+  if (d->textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
+     s+="0";
+  else 
+      s+="1";
+
+//  qDebug() << s; 
+
   recent_files.prepend (s);
 //  if (recent_files.size() > settings->value ("recent_list.max_items", 21).toInt())
   if (recent_files.size() > recent_list_max_items)
@@ -797,6 +794,14 @@ CDocument* document_holder::open_file_triplex (const QString &triplex)
   if (d)
      d->goto_pos (sl[2].toInt());
 
+  if (sl.size() >= 3)
+    {
+     if (sl[3] == "1")
+         d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
+     else    
+          d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
+    }
+
   return d;
 }
 
@@ -807,7 +812,14 @@ QString CDocument::get_triplex()
   s += ",";
   s += charset;
   s += ",";
-  s += QString::number (textEdit->textCursor().position()); 
+  s += QString::number (textEdit->textCursor().position());
+  s += ",";
+
+  if (textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
+     s+="0";
+  else 
+      s+="1";
+
   return s;
 }
 

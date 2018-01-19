@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2017 by Peter Semiletov <peter.semiletov@gmail.com>                            *
+ *   2007-2018 by Peter Semiletov <peter.semiletov@gmail.com>                            *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

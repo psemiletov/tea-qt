@@ -7250,7 +7250,7 @@ void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
 
 void rvln::pb_choose_hunspell_path_clicked()
 {
-  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/",
+  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/usr/share/hunspell",
                                                     QFileDialog::ShowDirsOnly |
                                                 QFileDialog::DontResolveSymlinks);
   if (! path.isEmpty())

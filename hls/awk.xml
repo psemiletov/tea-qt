@@ -3,7 +3,7 @@
 <item name="options" wrap="0" xml_format="1"> 
 </item>
 
-<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(BEGIN|END|if|for|in|else|while|do|break|continue|exit)\b</item>
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(BEGIN|END|if|for|function|in|else|while|do|break|continue|exit)\b</item>
 
 <item name="variables" type="keywords" color="keywords" fontstyle="bold">\b(ARGIND|ARGC|ARGV|BINMODE|ENVIRON|ERRNO|FILENAME|FIELDWIDTHS|FS|FNR|IGNORECASE|IF|LINT|PROCINFO|TEXTDOMAIN|NF|NR|OFMT|OFS|ORS|RLENGTH|RS|RSTART|SUBSEP)\b</item>
 

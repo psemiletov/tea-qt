@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2017 by Peter Semiletov                                          *
+ *   2007-2018 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
 
 started at 08 November 2007
@@ -487,7 +487,6 @@ void rvln::create_main_widget()
   
   QHBoxLayout *lt_fte = new QHBoxLayout;
   v_box->addLayout (lt_fte);
-
   
 
   QToolButton *bt_find = new QToolButton (this);
@@ -823,10 +822,10 @@ rvln::rvln()
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
   
   qApp->setWindowIcon (QIcon (icon_fname));
-
   
   //tray_icon.setIcon (QIcon(":/icons/tea_icon_v2.png"));
   //tray_icon.show();
+ 
   
   idx_tab_edit_activate();
 }
@@ -1968,13 +1967,12 @@ void rvln::markup_text (const QString &mode)
   
   if (! p)
      return;
-  
+     
   QString t = p->pattern[d->markup_mode];
- 
+   
   if (t.isEmpty())
      return;
- 
-  
+
   d->textEdit->textCursor().insertText (t.replace ("%s", d->textEdit->textCursor().selectedText()));
 }
   
@@ -6565,13 +6563,6 @@ void rvln::create_markup_hash()
 
   p = new CMarkupPair;
 
-  p->pattern["LaTeX"] = "\\begin{center}%s\\end{center}";
-  p->pattern["HTML"] = "<p style=\"text-align:center;\">%s</p>";
-  p->pattern["XHTML"] = "<p style=\"text-align:center;\">%s</p>";
-   
-  hs_markup.insert ("align_center", p);
-
-
   p->pattern["HTML"] = "<p style=\"text-align:justify;\">%s</p>";
   p->pattern["XHTML"] = "<p style=\"text-align:justify;\">%s</p>";
    
@@ -6584,7 +6575,15 @@ void rvln::create_markup_hash()
   p->pattern["XHTML"] = "<p style=\"text-align:left;\">%s</p>";
    
   hs_markup.insert ("align_left", p);
+
+  p = new CMarkupPair;
   
+  p->pattern["LaTeX"] = "\\begin{center}%s\\end{center}";
+  p->pattern["HTML"] = "<p style=\"text-align:center;\">%s</p>";
+  p->pattern["XHTML"] = "<p style=\"text-align:center;\">%s</p>";
+   
+  hs_markup.insert ("align_center", p);
+
   p = new CMarkupPair;
 
   p->pattern["LaTeX"] = "\\begin{flushright}%s\\end{flushright}";

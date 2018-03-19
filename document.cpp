@@ -306,8 +306,8 @@ void CDocument::create_new()
   textEdit->doc = this;
 
   textEdit->currentLineColor = QColor (hash_get_val (global_palette, 
-                                      "cur_line_color", 
-                                      "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
+                                       "cur_line_color", 
+                                       "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
 
   highlighter = NULL;
 
@@ -964,7 +964,7 @@ void CTEAEdit::setup_brace_width()
 CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 {
   rect_sel_reset();
-  
+    
   highlightCurrentLine = false;
   setup_brace_width();
   

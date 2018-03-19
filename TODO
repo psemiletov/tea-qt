@@ -12,7 +12,7 @@ filesToolbar странно меняет размер иконки
 спеллчекер плохо работает с кавычками елочкой
 вставка картинки как base64?
 в сборке Qt5, шорткаты с Alt стали языко-зависимыми
-Ada, JS hl
+CSound, Ada, JS, gas, List hl
 массовая перекодировка выделенных файлов. окно ИЗ - В
 вытащить меню таблиц мультизамен в режим фприказчика, проверить обработку
 batch-обработка картинок: обрезка, масштабирование, поворот, зеркало?
@@ -27,7 +27,6 @@ autoscroll //useful for musicians or youtube bloggers. define the speed in bpm?
 numbers into words
 ctags support
 make max recent items user-modified
-hl for gas, Lisp
 units conversion
 add function to update hls cache manually
 unicode table window
@@ -40,7 +39,6 @@ parse the compiler output, goto the error by clicking at logmemo
 goto start/end of the code block
 PalmDOC (pdb) read-only support? http://wiki.mobileread.com/wiki/PalmDOC, http://www.hotpaw.com/rhn/palm/pdb.txt
 epub support
-CSound hl
 gz file save?
 select code block
 

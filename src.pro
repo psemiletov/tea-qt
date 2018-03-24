@@ -172,6 +172,8 @@ QT += gui
 QT += network
 #QT += svg
 
+CONFIG-=qml_debug
+
 greaterThan(QT_MAJOR_VERSION, 4) {
        QT += widgets
        QT += printsupport

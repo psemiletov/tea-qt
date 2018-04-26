@@ -574,8 +574,9 @@ main window callbacks
 
   void fn_rm_formatting();
   
-   void fn_rm_compress();
+  void fn_rm_compress();
  
+  void text_compare_two_strings();
   
   void fn_convert_quotes_angle();
   void fn_convert_quotes_curly();

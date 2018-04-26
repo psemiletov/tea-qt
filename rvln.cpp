@@ -57,12 +57,7 @@ started at 08 November 2007
 #include <QScrollArea>
 
 #include <QXmlStreamReader>
-//#include <QUrl>
 
-//#include <QtSvg>
-
-
-//#include <QWidgetAction>
 
 #include <QDebug>
 
@@ -205,8 +200,6 @@ enum {
       FM_ENTRY_MODE_OPEN,
       FM_ENTRY_MODE_SAVE
      };
-
-
 
 
 //for the further compat.
@@ -1606,6 +1599,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Escape regexp"), SLOT(fn_escape()));
 
   add_to_menu (tm, tr ("Reverse"), SLOT(fn_reverse()));
+  add_to_menu (tm, tr ("Compare two strings"), SLOT(text_compare_two_strings()));
+  
   
   tm = menu_functions->addMenu (tr ("Quotes"));
   tm->setTearOffEnabled (true);
@@ -9207,7 +9202,6 @@ void create_menu_from_plugins (QObject *handler,
 
 void rvln::update_plugins()
 {
-#ifdef USE_QML_STUFF
   menu_fn_plugins->clear();
   
   create_menu_from_plugins (this,
@@ -9215,13 +9209,12 @@ void rvln::update_plugins()
                             dir_plugins,
                             SLOT (fn_use_plugin())
                             );
-#endif  
 }
 
 
 void rvln::plugins_init()
 {
-#ifdef USE_QML_STUFF
+   
   qDebug() << "rvln::plugins_init()";
 
   qml_engine = new QQmlEngine;
@@ -9231,33 +9224,28 @@ void rvln::plugins_init()
   qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CDocument");
   qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CLogMemo");
   qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CTEAEdit");
-
-  
-  
+ 
   qml_engine->rootContext()->setContextProperty("documents", documents); 
   qml_engine->rootContext()->setContextProperty("log", log); 
   qml_engine->rootContext()->setContextProperty("tea", this); 
   qml_engine->rootContext()->setContextProperty("settings", settings); 
   qml_engine->rootContext()->setContextProperty("hs_path", hs_path); 
-#endif  
+  
 }
 
 
 void rvln::plugins_done()
 {
-#ifdef USE_QML_STUFF
+    
  qDebug() << "rvln::plugins_done()";
 //закрыть все плагины из списка (при созд. плагина добавляем указатель в список)
 //и потом 
  
   for (int i = 0; i < plugins_list.size(); ++i) 
-      {
        plugins_list[i]->window->close();
-         
-      }   
  
   delete qml_engine;
-#endif  
+  
 }
 
 
@@ -10442,6 +10430,33 @@ void rvln::receiveMessageShared(const QStringList &msg)
   raise();
 }  
 
+
+void rvln::text_compare_two_strings()
+{
+  last_action = qobject_cast<QAction *>(sender());
+ 
+  QStringList l = fif_get_text().split ("~");
+  if (l.size() < 2)
+     return;
+
+  if (l[0].size() < l[1].size())
+     return;
+
+  QString s;
+  
+
+  for (int i = 0; i < l[0].size(); i++)
+      {
+       if (l[0][i] == l[1][i])
+          s = QString::number (i + 1) + ": " + l[0][i] + " == " + l[1][i];
+       else   
+           s = QString::number (i + 1) + ": " + l[0][i] + " != " + l[1][i];
+
+       log->log (s);
+      } 
+}
+
+
 /*
 void rvln::slot_commitDataRequest (QSessionManager &m) 
 {
@@ -10470,3 +10485,5 @@ void rvln::app_commit_data()
 
 }
 */
+
+

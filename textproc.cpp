@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2017 by Peter Semiletov                                          *
+ *   2007-2018 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,8 +38,6 @@ some code is taken from Scribus::util.cpp:
 #include <QString>
 #include <QMap>
 
-//#include <bitset>
-
 #include "textproc.h"
 #include "utils.h"
 
@@ -57,20 +55,20 @@ int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_p
   for (int i = start_pos; i < end_pos; i++)
       {
        if (jump)
-	      break;
+          break;
 
        counter = 0;
        for (int j = 0; j < text_to_find.length(); j++)
            {
             if (s[i + j] == text_to_find[j])
-  	           counter++;
+  	       counter++;
 
             if (get_percent ((double)text_to_find.length(), (double)counter) >= q)
-	          {
-	           result = i;
-		       jump = true;
-	           break;
-	           }
+	       {
+	        result = i;
+	        jump = true;
+	        break;
+	       }
            }
       }
 

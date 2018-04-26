@@ -38,7 +38,7 @@ public:
 //  QPlainTextEdit *memo;
   //CLogMemo (QPlainTextEdit *m);
 
-  CLogMemo ( QWidget * parent = 0);
+  CLogMemo (QWidget *parent = 0);
 
 //public slots:
 

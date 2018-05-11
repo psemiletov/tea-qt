@@ -37,7 +37,7 @@ If you have installed both Qt4  and Qt5, use the qmake from Qt4 or Qt5 to config
 
 Snippet for Ubuntu users (Qt5 build) - run this from Terminal at the TEA source directory (unpacked):
 
-sudo apt-get install g++ 
+sudo apt-get install g++ pkg-config
 sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev
 sudo apt-get install qt5-default qttools5-dev-tools
 sudo apt-get install libqt5qml5 libqt5quick5 qtdeclarative5-dev
@@ -48,7 +48,7 @@ sudo make install
 
 Snippet for Ubuntu users (Qt4 build):
 
-sudo apt-get install g++ 
+sudo apt-get install g++ pkg-config
 sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev
 sudo apt-get install libqt4-dev qt4-dev-tools
 qmake

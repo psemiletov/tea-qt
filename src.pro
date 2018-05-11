@@ -298,16 +298,17 @@ exists("/usr/include/aspell.h") {
 }
 
 
+
 contains(USE_HUNSPELL,true){
-exists("/usr/include/hunspell/hunspell.hxx") {
-    message ("hunspell enabled")
+system(pkg-config --exists hunspell) {
+message ("hunspell enabled")
         PKGCONFIG += hunspell
             DEFINES += HUNSPELL_ENABLE
                 DEFINES += SPELLCHECK_ENABLE
                 }
                 }
 
-
+                
 usepoppler{
 system(pkg-config --exists poppler-qt5) {
     message ("Poppler enabled")

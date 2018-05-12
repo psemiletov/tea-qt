@@ -8400,6 +8400,7 @@ void rvln::cmb_docs_tabs_currentIndexChanged (int i)
 void rvln::cal_set_to_current()
 {
   calendar->showToday();
+  calendar->setSelectedDate (QDate::currentDate());
 }
 
 

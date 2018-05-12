@@ -399,8 +399,8 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
           case QSTRL_PROC_FLT_REMOVE_EMPTY:
                                            {
                                             foreach (QString s, sl)
-                                            if (! s.isEmpty())
-                                               l.append (s);
+                                                    if (! s.isEmpty())
+                                                       l.append (s);
                                             break;
                                            };
 
@@ -408,8 +408,8 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
           case QSTRL_PROC_FLT_REMOVE_DUPS:
                                           {
                                            foreach (QString s, sl)
-                                           if (! l.contains (s))
-                                               l.append (s);
+                                                    if (! l.contains (s))
+                                                        l.append (s);
                                            break;
                                           };
 
@@ -490,7 +490,7 @@ QString int_to_binary (int n)
        if (n & (1 << i))
            result.append ("1");
        else
-          result.append ("0");
+           result.append ("0");
 
        if (i % 4 == 0)
           result.append (" ");

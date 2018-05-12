@@ -257,101 +257,98 @@ void rvln::create_paths()
   if (! dr.exists())
      dr.mkpath (dir_config);
 
- // fname_userfonts.append (dir_config).append ("/userfonts.txt");
-  //hs_path["fname_userfonts"] = fname_userfonts;
   
-  fname_crapbook.append (dir_config).append ("/crapbook.txt");
+  fname_crapbook = dir_config + "/crapbook.txt";
   hs_path["fname_crapbook"] = fname_crapbook;
   
-  fname_hls_cache.append (dir_config).append ("/hls_cache");
+  fname_hls_cache = dir_config + "/hls_cache";
   hs_path["fname_hls_cache"] = fname_hls_cache;
   
-  fname_fif.append (dir_config).append ("/fif");
+  fname_fif = dir_config + "/fif";
   hs_path["fname_fif"] = fname_fif;
   
-  fname_bookmarks.append (dir_config).append ("/tea_bmx");
+  fname_bookmarks = dir_config + "/tea_bmx";
   hs_path["fname_bookmarks"] = fname_bookmarks;
   
-  fname_programs.append (dir_config).append ("/programs");
+  fname_programs + dir_config + "/programs";
   hs_path["fname_programs"] = fname_programs;
   
-  fname_places_bookmarks.append (dir_config).append ("/places_bookmarks");
+  fname_places_bookmarks = dir_config + "/places_bookmarks";
   hs_path["fname_places_bookmarks"] = fname_places_bookmarks;
   
-  fname_tempfile.append (QDir::tempPath()).append ("/tea.tmp");
+  fname_tempfile = QDir::tempPath() + "/tea.tmp";
   hs_path["fname_tempfile"] = fname_tempfile;
   
-  fname_tempparamfile.append (QDir::tempPath()).append ("/teaparam.tmp");
+  fname_tempparamfile = QDir::tempPath() + "/teaparam.tmp";
   hs_path["fname_tempparamfile"] = fname_tempparamfile;
   
-  dir_tables.append (dir_config).append ("/tables");
+  dir_tables = dir_config + "/tables";
 
   dr.setPath (dir_tables);
   if (! dr.exists())
      dr.mkpath (dir_tables);
 
-  dir_user_dict.append (dir_config).append ("/dictionaries");
+  dir_user_dict = dir_config + "/dictionaries";
 
   dr.setPath (dir_user_dict);
   if (! dr.exists())
      dr.mkpath (dir_user_dict);
 
-  dir_plugins.append (dir_config).append ("/plugins");
+  dir_plugins = dir_config + "/plugins";
 
   dr.setPath (dir_plugins);
   if (! dr.exists())
      dr.mkpath (dir_plugins);
   
-  dir_profiles.append (dir_config).append ("/profiles");
+  dir_profiles = dir_config + "/profiles";
 
   dr.setPath (dir_profiles);
   if (! dr.exists())
      dr.mkpath (dir_profiles);
 
-  dir_templates.append (dir_config).append ("/templates");
+  dir_templates = dir_config + "/templates";
 
   dr.setPath (dir_templates);
   if (! dr.exists())
      dr.mkpath (dir_templates);
 
-  dir_snippets.append (dir_config).append ("/snippets");
+  dir_snippets = dir_config + "/snippets";
 
   dr.setPath (dir_snippets);
   if (! dr.exists())
      dr.mkpath (dir_snippets);
 
-  dir_scripts.append (dir_config).append ("/scripts");
+  dir_scripts = dir_config + "/scripts";
 
   dr.setPath (dir_scripts);
   if (! dr.exists())
      dr.mkpath (dir_scripts);
 
-  dir_days.append (dir_config).append ("/days");
+  dir_days = dir_config + "/days";
 
   dr.setPath (dir_days);
   if (! dr.exists())
      dr.mkpath (dir_days);
 
-  dir_sessions.append (dir_config).append ("/sessions");
+  dir_sessions = dir_config + "/sessions";
 
   dr.setPath (dir_sessions);
   if (! dr.exists())
      dr.mkpath (dir_sessions);
 
-  dir_themes.append (dir_config).append ("/themes");
+  dir_themes = dir_config + "/themes";
 
   dr.setPath (dir_themes);
   if (! dr.exists())
      dr.mkpath (dir_themes);
 
-
-  dir_hls.append (dir_config).append ("/hls");
+  dir_hls = dir_config + "/hls";
 
   dr.setPath (dir_hls);
   if (! dr.exists())
      dr.mkpath (dir_hls);
 
-  dir_palettes.append (dir_config).append ("/palettes");
+  dir_palettes = dir_config + "/palettes";
 
   dr.setPath (dir_palettes);
   if (! dr.exists())
@@ -716,7 +713,7 @@ rvln::rvln()
   documents->parent_wnd = this;
   documents->tab_widget = tab_widget;
   documents->recent_menu = menu_file_recent;
-  documents->recent_list_fname.append (dir_config).append ("/tea_recent");
+  documents->recent_list_fname = dir_config + "/tea_recent";
   documents->reload_recent_list();
   documents->update_recent_menu();
   documents->log = log;
@@ -742,7 +739,7 @@ rvln::rvln()
 #endif  
   
   shortcuts = new CShortcuts (this);
-  shortcuts->fname.append (dir_config).append ("/shortcuts");
+  shortcuts->fname = dir_config + "/shortcuts";
   shortcuts->load_from_file (shortcuts->fname);
 
   sl_fif_history = qstring_load (fname_fif).split ("\n");
@@ -3356,7 +3353,7 @@ void rvln::createManual()
      }
 
   QString filename (":/manuals/");
-  filename.append (loc).append (".html");
+  filename = filename + loc + ".html";
   
   if (! file_exists (filename))
       filename = ":/manuals/en.html";
@@ -3979,7 +3976,7 @@ void rvln::mrkup_text_to_html()
                    result += "<br />\n";
                }
            else
-               result.append ("<p class=\"p1\">").append (s).append ("</p>\n");
+               result = "<p class=\"p1\">" + s + "</p>\n";
           }
 
   result += "</body>\n</html>";
@@ -4053,7 +4050,7 @@ void rvln::fn_antispam_email()
 
   int c = s.size();
   for (int i = 0; i < c; i++)
-      result.append ("&#").append (QString::number(s.at(i).unicode())).append(";");
+      result = "&#" + QString::number(s.at(i).unicode()) + ";";
 
   d->textEdit->textCursor().insertText (result);
 }
@@ -4322,11 +4319,11 @@ void rvln::mrkup_align()
      //}
   else
        {
-        r.append ("<p style=\"text-align:").append (
-                  a->text().toLower()).append (
-                  ";\">").append (
-                  d->textEdit->textCursor().selectedText()).append (
-                  "</p>");
+        r = "<p style=\"text-align:" + 
+             a->text().toLower() + 
+             ";\">" + 
+              d->textEdit->textCursor().selectedText() +
+             "</p>";
        }
 
   d->textEdit->textCursor().insertText (r);
@@ -5455,12 +5452,15 @@ void rvln::fn_enum()
 
   if (params.size() > 0)
      step = params[0].toInt();
-
+  
   if (params.size() > 1)
      pad = params[1].toInt();
 
   if (params.size() > 2)
      prefix = params[2];
+
+  if (step == 0)
+     step = 1;
 
   for (int c = 0; c <= end; c++)
       {
@@ -5469,7 +5469,7 @@ void rvln::fn_enum()
        if (pad != 0)
           n = n.rightJustified (pad, '0');
 
-       result.append (n).append (prefix).append (source.at(c)).append ('\n');
+       result = result + n + prefix +  source.at(c) + '\n';
       }
 
   d->textEdit->textCursor().insertText (result);
@@ -6034,13 +6034,11 @@ void rvln::createFman()
 
 void rvln::fman_file_activated (const QString &full_path)
 {
- 
   if (file_get_ext (full_path) == ("zip"))
      {
       //check if plugin:
 
  //      qDebug() << "full path = " << full_path;
-      
 //       qDebug() << "1";
        
       CZipper z;
@@ -6084,27 +6082,19 @@ void rvln::fman_file_activated (const QString &full_path)
 
 
 #ifdef USE_QML_STUFF
-           update_plugins();
+          update_plugins();
 #endif
           
          }
       else   
           //fman_zip_info();
       {
-    //   qDebug() << "4";
-         
        for (int i = 0; i < sl.size(); i++)
-         sl[i] = sl[i].append ("<br>");
+         sl[i] = sl[i] + "<br>";
       
        log->log (sl.join("\n"));
-
-       
       }
-       
-      
-      //log->log (s);      
-      
-      //fman_zip_info();
+
       return; 
      }
  
@@ -8172,45 +8162,6 @@ void rvln::select_label()
      d->textEdit->setTextCursor (cr);
 }
 
-/*
-void rvln::add_user_font()
-{
-  QString fontfname = QFileDialog::getOpenFileName (this,
-                        tr ("Select font"), "",
-                        tr("Fonts (*.ttf *.otf)"));
-
-
-  QStringList sl;
-
-  if (file_exists (fname_userfonts))
-     sl = qstring_load (fname_userfonts).split ("\n");
-
-  sl.append (fontfname);
-  qstring_save (fname_userfonts, sl.join("\n").trimmed());
-  //load_userfonts();
-}
-*/
-
-/*
-void rvln::load_userfonts()
-{
-  font_database->removeAllApplicationFonts();
-
-  userfont_ids.clear();
-
-  if (! file_exists (fname_userfonts))
-     return;
-
-  QStringList sl = qstring_load (fname_userfonts).split ("\n");
-
-  for (int i = 0; i < sl.count(); i++)
-      {
-       qDebug() << "FONT: " << sl[i];
-       if (file_exists (sl[i]))
-          userfont_ids.append (font_database->addApplicationFont (sl[i]));
-      }
-}
-*/
 
 void rvln::fn_insert_cpp()
 {
@@ -8416,11 +8367,11 @@ void rvln::clipboard_dataChanged()
       
       QString tpl = "%s\n";
       
-      QString ftemplate = dir_config.append ("/cliptpl.txt");
+      QString ftemplate = dir_config + "/cliptpl.txt";
       if (file_exists (ftemplate))
          tpl = qstring_load (ftemplate);
          
-//      qDebug() << tpl;   
+      qDebug() << tpl;   
     
       tpl = tpl.replace ("%time", QTime::currentTime().toString (settings->value("time_format", "hh:mm:ss").toString()));
       tpl = tpl.replace ("%date", QDate::currentDate().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
@@ -8428,7 +8379,6 @@ void rvln::clipboard_dataChanged()
       QString text_to_insert = tpl.replace ("%s", t);
       
       ddest->textEdit->textCursor().insertText (text_to_insert);
-      //ddest->textEdit->textCursor().insertText ("\n");
      }
 }
 
@@ -9389,7 +9339,6 @@ void rvln::fn_table_swap_cells()
   
   for (int i = 0; i < output.size(); i++)
       {
-	  
        sl_temp.append (output[i].join (sep));
       }
   
@@ -10148,18 +10097,11 @@ void rvln::fman_del_n_first_chars()
            if (fi.exists() && fi.isWritable())
               {
                QString newname = fi.fileName();
-               //QString ext = file_get_ext (fname);
-                              
                newname = newname.mid (todel);
                
-             //  if (newname.size() > (ext.size() + 1))
-                  {
-                   QString newfpath (fi.path());
-                   newfpath.append ("/").append (newname);
-                   QFile::rename (fname, newfpath);
-                   
-                   //qDebug() << newfpath;
-                  }
+               QString newfpath (fi.path());
+               newfpath.append ("/").append (newname);
+               QFile::rename (fname, newfpath);
               }
           }  
  
@@ -10187,14 +10129,11 @@ void rvln::fman_multreplace()
            if (fi.exists() && fi.isWritable())
               {
                QString newname = fi.fileName();
-    //           QString ext = file_get_ext (fname);
-               
                newname = newname.replace (l[0], l[1]);
                
                QString newfpath (fi.path());
                newfpath.append ("/").append (newname);
                QFile::rename (fname, newfpath);
-               //   qDebug() << newfpath;
               }    
           }  
  
@@ -10222,12 +10161,10 @@ void rvln::fman_apply_template()
                newname = newname.replace ("%filename", fi.fileName()); 
                newname = newname.replace ("%ext", ext); 
                newname = newname.replace ("%basename", fi.baseName()); 
-             
                
                QString newfpath (fi.path());
                newfpath.append ("/").append (newname);
                QFile::rename (fname, newfpath);
-               //   qDebug() << newfpath;
               }    
           }  
  
@@ -10456,35 +10393,3 @@ void rvln::text_compare_two_strings()
        log->log (s);
       } 
 }
-
-
-/*
-void rvln::slot_commitDataRequest (QSessionManager &m) 
-{
-  QString fname (dir_sessions);
-  fname.append ("/").append ("shutdownsession");
-  documents->save_to_session (fname);
-}
-
-
-void rvln::app_commit_data()
-{
-  QString fname (dir_sessions);
-  fname.append ("/").append ("shutdownsession");
-  documents->save_to_session (fname);
-
-  //QString get_triplex();
-
-
- //if (documents->recent_files.size() > 0)
-   //  {
-     // documents->open_file_triplex (documents->recent_files[0]);
-      //documents->recent_files.removeAt (0);
-      //documents->update_recent_menu();
-      //main_tab_widget->setCurrentIndex (idx_tab_edit); 
-     //}  
-
-}
-*/
-
-

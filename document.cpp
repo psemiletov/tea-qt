@@ -954,7 +954,6 @@ void CTEAEdit::paintEvent (QPaintEvent *event)
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 */
   QPlainTextEdit::paintEvent (event);
-
 }
 
 
@@ -962,51 +961,6 @@ void CTEAEdit::setup_brace_width()
 {
   QFontMetrics *fm = new QFontMetrics (font());
   brace_width = fm->averageCharWidth();
-}
-
-
-
-
-void CTEAEdit::handleQGameControllerAxisEvent(QGameControllerAxisEvent* event)
-{
-//    qDebug("handleQGameControllerAxisEvent");
-    uint axis = event->axis();
-    
-    //QList<QSlider*> sliders = slidersMap.value(event->controllerId());
-    //Q_ASSERT(axis < sliders.count());
-    //QSlider *bar = sliders.at(axis);
-    //bar->setValue(event->value()*1000);
-    
-    qDebug() << "axis";
-    
-    delete event;   //QGameControllerEvents unlike QEvents are not deleted automatically.
-}
-
-
-void CTEAEdit::handleQGameControllerButtonEvent(QGameControllerButtonEvent* event)
-{
-//    qDebug("handleQGameControllerButtonEvent");
-    uint button = event->button();
-    
-    qDebug() << "button";
-    
-    
-    //QList<QLabel*> buttonLabels = buttonLabelsMap.value(event->controllerId());
-    //Q_ASSERT(button < buttonLabels.count());
-    //QLabel *label = buttonLabels.at(button);
-
-/*
-    if (event->pressed())
-        label->setText(QString ("%1: <b><font color=green>D</font></b>").arg(button));
-    else
-        label->setText(QString ("%1: <b><font color=grey>U</font></b>").arg(button));
-  */      
-
-    if (event->pressed())
-       qDebug() << button;
-
-        
-    delete event;   //QGameControllerEvents unlike QEvents are not deleted automatically.
 }
 
 
@@ -1047,23 +1001,7 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
   sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
   
-  
   connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
-  
-  /*
-  QGameController *gameController;
-  gameController = new QGameController(0, this);
-  if (gameController->isValid())
-     {
-       connect(gameController, SIGNAL(gameControllerAxisEvent(QGameControllerAxisEvent*)), this, SLOT(handleQGameControllerAxisEvent(QGameControllerAxisEvent*)));
-       connect(gameController, SIGNAL(gameControllerButtonEvent(QGameControllerButtonEvent*)), this, SLOT(handleQGameControllerButtonEvent(QGameControllerButtonEvent*)));
-     }
-  
-   QTimer *timer = new QTimer(this);
-            timer->setInterval(100);
-            connect(timer, SIGNAL(timeout()), gameController, SLOT(readGameController()));
-            timer->start();
-  */
 }
 
 
@@ -1071,6 +1009,7 @@ document_holder::document_holder()
 {
   timer = new QTimer (this);
   timer->setInterval (100);
+#if defined(Q_OS_UNIX)
 
   gameController = new QGameController (0, this);
 
@@ -1084,6 +1023,7 @@ document_holder::document_holder()
       if (settings->value ("use_joystick", "0").toInt())
          timer->start();   
      }
+#endif     
 }
 
 
@@ -2701,6 +2641,7 @@ void CTEAEdit::text_replace (const QString &s)
       textCursor().insertText (s);
 }
 
+#if defined(Q_OS_UNIX)
 
 void document_holder::handleQGameControllerAxisEvent(QGameControllerAxisEvent* event)
 {
@@ -2771,7 +2712,7 @@ void document_holder::handleQGameControllerButtonEvent(QGameControllerButtonEven
         
     delete event;   //QGameControllerEvents unlike QEvents are not deleted automatically.
 }
-
+#endif
 
 /*
 void CTEAEdit::copy()

@@ -169,7 +169,7 @@ HEADERS += rvln.h \
   
 
     
-include(gamecontroller.pri)    
+#include(gamecontroller.pri)    
 
 TEMPLATE = app
 

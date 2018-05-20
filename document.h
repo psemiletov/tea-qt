@@ -57,8 +57,9 @@ code from qwriter:
 
 #endif
 
-
+#if defined(Q_OS_UNIX)
 #include "qgamecontroller.h"
+#endif
 
 class LineNumberArea;
 class document_holder;
@@ -182,8 +183,6 @@ public slots:
   
   void slot_selectionChanged();
   
-  void handleQGameControllerAxisEvent(QGameControllerAxisEvent *event);
-  void handleQGameControllerButtonEvent(QGameControllerButtonEvent *event);  
  // void copy();
   
 };
@@ -360,8 +359,10 @@ public:
   QMenu *recent_menu;
   QStringList recent_files;
   QString recent_list_fname;
-  
+ 
+#if defined(Q_OS_UNIX)
   QGameController *gameController;
+#endif 
   QTimer *timer; 
   
 
@@ -400,9 +401,11 @@ public slots:
   void open_recent();
   void open_current();
   
+#if defined(Q_OS_UNIX)
+  
   void handleQGameControllerAxisEvent(QGameControllerAxisEvent *event);
   void handleQGameControllerButtonEvent(QGameControllerButtonEvent *event);  
- 
+#endif 
 };
 
 

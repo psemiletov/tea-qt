@@ -2378,6 +2378,7 @@ void rvln::cb_altmenu_stateChanged (int state)
   settings->setValue ("b_altmenu", b_altmenu);
 }
 
+#if defined(Q_OS_UNIX)
 
 void rvln::cb_use_joystick_stateChanged (int state)
 {
@@ -2396,7 +2397,7 @@ void rvln::cb_use_joystick_stateChanged (int state)
       
   qDebug() << "cb_use_joystick_stateChanged (int state)";   
 }
-
+#endif
 
 void rvln::createOptions()
 {
@@ -2653,12 +2654,13 @@ void rvln::createOptions()
   cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
   cb_wasd->setCheckState (Qt::CheckState (settings->value ("wasd", "0").toInt()));
    
+#if defined(Q_OS_UNIX)
    
   cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
   cb_use_joystick->setCheckState (Qt::CheckState (settings->value ("use_joystick", "0").toInt()));
   connect (cb_use_joystick, SIGNAL(stateChanged (int)),
            this, SLOT(cb_use_joystick_stateChanged (int)));
-  
+#endif  
   
 #if QT_VERSION >= 0x050000
     
@@ -2762,7 +2764,10 @@ void rvln::createOptions()
   
   page_common_layout->addWidget (cb_altmenu);
   page_common_layout->addWidget (cb_wasd);
+  
+#if defined(Q_OS_UNIX)
   page_common_layout->addWidget (cb_use_joystick);
+#endif
   
 #if QT_VERSION >= 0x050000
   
@@ -8512,8 +8517,11 @@ void rvln::leaving_tune()
 
 
   settings->setValue ("wasd", cb_wasd->checkState());
-  settings->setValue ("use_joystick", cb_use_joystick->checkState());
   
+#if defined(Q_OS_UNIX)
+  settings->setValue ("use_joystick", cb_use_joystick->checkState());
+#endif  
+
   settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
   
   

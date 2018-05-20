@@ -2379,6 +2379,25 @@ void rvln::cb_altmenu_stateChanged (int state)
 }
 
 
+void rvln::cb_use_joystick_stateChanged (int state)
+{
+  bool b;
+  if (state == Qt::Unchecked)
+      b = false;
+  else 
+      b = true;
+  
+  settings->setValue ("use_joystick", b);
+  
+  if (b)
+     documents->timer->start (100);
+  else
+      documents->timer->stop();
+      
+  qDebug() << "cb_use_joystick_stateChanged (int state)";   
+}
+
+
 void rvln::createOptions()
 {
   tab_options = new QTabWidget;
@@ -2631,10 +2650,15 @@ void rvln::createOptions()
   connect (cb_altmenu, SIGNAL(stateChanged (int)),
            this, SLOT(cb_altmenu_stateChanged (int)));
    
-  
   cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
   cb_wasd->setCheckState (Qt::CheckState (settings->value ("wasd", "0").toInt()));
- 
+   
+   
+  cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
+  cb_use_joystick->setCheckState (Qt::CheckState (settings->value ("use_joystick", "0").toInt()));
+  connect (cb_use_joystick, SIGNAL(stateChanged (int)),
+           this, SLOT(cb_use_joystick_stateChanged (int)));
+  
   
 #if QT_VERSION >= 0x050000
     
@@ -2678,8 +2702,6 @@ void rvln::createOptions()
   hb_imgvovr->insertWidget (-1, cb_override_img_viewer, 0, Qt::AlignLeft);
   hb_imgvovr->insertWidget (-1, ed_img_viewer_override, 1, Qt::AlignLeft);
 
-  
-  
 /*
   QStringList sl_ui_langs;
   sl_ui_langs << "en" << "ru" << "de" << "fr";
@@ -2700,7 +2722,6 @@ void rvln::createOptions()
 
   cb_start_on_sunday = new QCheckBox (tr ("Start week on Sunday"), tab_options);
   cb_start_on_sunday->setCheckState (Qt::CheckState (settings->value ("start_week_on_sunday", "0").toInt()));
-
 
   cb_northern_hemisphere = new QCheckBox (tr ("Northern hemisphere"), this);
   cb_northern_hemisphere->setCheckState (Qt::CheckState (settings->value ("northern_hemisphere", "2").toInt()));
@@ -2741,9 +2762,7 @@ void rvln::createOptions()
   
   page_common_layout->addWidget (cb_altmenu);
   page_common_layout->addWidget (cb_wasd);
-  
-  
-  
+  page_common_layout->addWidget (cb_use_joystick);
   
 #if QT_VERSION >= 0x050000
   
@@ -8493,6 +8512,8 @@ void rvln::leaving_tune()
 
 
   settings->setValue ("wasd", cb_wasd->checkState());
+  settings->setValue ("use_joystick", cb_use_joystick->checkState());
+  
   settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
   
   

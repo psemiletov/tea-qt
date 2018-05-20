@@ -126,7 +126,11 @@ SOURCES += rvln.cpp \
     zip.c \
     single_application.cpp \
     single_application_shared.cpp \
-    exif.cpp
+    exif.cpp \
+    qgamecontroller_linux.cpp \
+#    qgamecontroller_win.cpp \
+    qgamecontroller.cpp
+    
 
 HEADERS += rvln.h \
     todo.h \
@@ -156,8 +160,16 @@ HEADERS += rvln.h \
     zip.h \
     single_application.h \
     single_application_shared.h \
-    exif.h
+    exif.h \
+  qgamecontroller_linux_p.h \
+  qgamecontroller_p.h \ 
+#qgamecontroller_win_p.h \
+  qgamecontroller-global.h \
+  qgamecontroller.h
+  
 
+    
+include(gamecontroller.pri)    
 
 TEMPLATE = app
 

@@ -57,6 +57,10 @@ code from qwriter:
 #include <QXmlStreamReader>
 #include <QMimeData>
 
+//new
+#include <QTimer>
+
+
 //#include <QtGamepad>
 
 #include <bitset>
@@ -961,6 +965,51 @@ void CTEAEdit::setup_brace_width()
 }
 
 
+
+
+void CTEAEdit::handleQGameControllerAxisEvent(QGameControllerAxisEvent* event)
+{
+//    qDebug("handleQGameControllerAxisEvent");
+    uint axis = event->axis();
+    
+    //QList<QSlider*> sliders = slidersMap.value(event->controllerId());
+    //Q_ASSERT(axis < sliders.count());
+    //QSlider *bar = sliders.at(axis);
+    //bar->setValue(event->value()*1000);
+    
+    qDebug() << "axis";
+    
+    delete event;   //QGameControllerEvents unlike QEvents are not deleted automatically.
+}
+
+
+void CTEAEdit::handleQGameControllerButtonEvent(QGameControllerButtonEvent* event)
+{
+//    qDebug("handleQGameControllerButtonEvent");
+    uint button = event->button();
+    
+    qDebug() << "button";
+    
+    
+    //QList<QLabel*> buttonLabels = buttonLabelsMap.value(event->controllerId());
+    //Q_ASSERT(button < buttonLabels.count());
+    //QLabel *label = buttonLabels.at(button);
+
+/*
+    if (event->pressed())
+        label->setText(QString ("%1: <b><font color=green>D</font></b>").arg(button));
+    else
+        label->setText(QString ("%1: <b><font color=grey>U</font></b>").arg(button));
+  */      
+
+    if (event->pressed())
+       qDebug() << button;
+
+        
+    delete event;   //QGameControllerEvents unlike QEvents are not deleted automatically.
+}
+
+
 CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 {
   rect_sel_reset();
@@ -1000,6 +1049,41 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   
   
   connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
+  
+  /*
+  QGameController *gameController;
+  gameController = new QGameController(0, this);
+  if (gameController->isValid())
+     {
+       connect(gameController, SIGNAL(gameControllerAxisEvent(QGameControllerAxisEvent*)), this, SLOT(handleQGameControllerAxisEvent(QGameControllerAxisEvent*)));
+       connect(gameController, SIGNAL(gameControllerButtonEvent(QGameControllerButtonEvent*)), this, SLOT(handleQGameControllerButtonEvent(QGameControllerButtonEvent*)));
+     }
+  
+   QTimer *timer = new QTimer(this);
+            timer->setInterval(100);
+            connect(timer, SIGNAL(timeout()), gameController, SLOT(readGameController()));
+            timer->start();
+  */
+}
+
+
+document_holder::document_holder()
+{
+  timer = new QTimer (this);
+  timer->setInterval (100);
+
+  gameController = new QGameController (0, this);
+
+  if (gameController->isValid())
+     {
+      connect(gameController, SIGNAL(gameControllerAxisEvent(QGameControllerAxisEvent*)), this, SLOT(handleQGameControllerAxisEvent(QGameControllerAxisEvent*)));
+      connect(gameController, SIGNAL(gameControllerButtonEvent(QGameControllerButtonEvent*)), this, SLOT(handleQGameControllerButtonEvent(QGameControllerButtonEvent*)));
+     
+      connect(timer, SIGNAL(timeout()), gameController, SLOT(readGameController()));
+  
+      if (settings->value ("use_joystick", "0").toInt())
+         timer->start();   
+     }
 }
 
 
@@ -2617,6 +2701,76 @@ void CTEAEdit::text_replace (const QString &s)
       textCursor().insertText (s);
 }
 
+
+void document_holder::handleQGameControllerAxisEvent(QGameControllerAxisEvent* event)
+{
+  
+//    qDebug("handleQGameControllerAxisEvent");
+    uint axis = event->axis();
+    
+    //QList<QSlider*> sliders = slidersMap.value(event->controllerId());
+    //Q_ASSERT(axis < sliders.count());
+    //QSlider *bar = sliders.at(axis);
+    //bar->setValue(event->value()*1000);
+    
+    qDebug() << "axis:" << axis;
+    qDebug() << "value:" << event->value();
+    
+    CDocument *d = get_current();
+    if (d)
+       {
+        if (event->value() < 0) //up
+           {
+            QTextCursor cr = d->textEdit->textCursor();
+         //   cr.setPosition (pos, QTextCursor::MoveAnchor);
+            cr.movePosition (QTextCursor::Up, QTextCursor::MoveAnchor);
+
+            if (! cr.isNull())
+                d->textEdit->setTextCursor (cr);
+                
+           }
+        if (event->value() > 0) //down
+           {
+            QTextCursor cr = d->textEdit->textCursor();
+           // cr.setPosition (pos, QTextCursor::MoveAnchor);
+            cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor);
+
+            if (! cr.isNull())
+                d->textEdit->setTextCursor (cr);
+           }
+           
+        
+       }
+    
+    delete event;   //QGameControllerEvents unlike QEvents are not deleted automatically.
+}
+
+
+void document_holder::handleQGameControllerButtonEvent(QGameControllerButtonEvent* event)
+{
+//    qDebug("handleQGameControllerButtonEvent");
+    uint button = event->button();
+    
+    qDebug() << "button";
+    
+    
+    //QList<QLabel*> buttonLabels = buttonLabelsMap.value(event->controllerId());
+    //Q_ASSERT(button < buttonLabels.count());
+    //QLabel *label = buttonLabels.at(button);
+
+/*
+    if (event->pressed())
+        label->setText(QString ("%1: <b><font color=green>D</font></b>").arg(button));
+    else
+        label->setText(QString ("%1: <b><font color=grey>U</font></b>").arg(button));
+  */      
+
+    if (event->pressed())
+       qDebug() << button;
+
+        
+    delete event;   //QGameControllerEvents unlike QEvents are not deleted automatically.
+}
 
 
 /*

@@ -558,7 +558,6 @@ void rvln::setup_spellcheckers()
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", "/usr/share/hunspell").toString(), dir_user_dict);
 
 #endif
-
   
  create_spellcheck_menu();
 }
@@ -2737,22 +2736,18 @@ void rvln::createOptions()
                              tr ("Moon phase algorithm"),
                              moon_phase_algos.values(),
                              settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
-  
-
 
 
   cmb_cmdline_default_charset = new_combobox (page_common_layout,
                              tr ("Charset for file open from command line"),
                              sl_charsets,
                              sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
-  
-  
+
 
   cmb_zip_charset_in = new_combobox (page_common_layout,
                              tr ("ZIP unpacking: file names charset"),
                              sl_charsets,
                              sl_charsets.indexOf (settings->value ("zip_charset_in", "UTF-8").toString()));
-  
 
 
   cmb_zip_charset_out = new_combobox (page_common_layout,
@@ -2766,8 +2761,11 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_wasd);
   
 #if defined(Q_OS_UNIX)
+
   page_common_layout->addWidget (cb_use_joystick);
+
 #endif
+
   
 #if QT_VERSION >= 0x050000
   
@@ -2811,7 +2809,6 @@ void rvln::createOptions()
 
 
   page_functions_layout->addWidget (gb_labels);
-
 
 
   QGroupBox *gb_datetime = new QGroupBox (tr ("Date and time"));

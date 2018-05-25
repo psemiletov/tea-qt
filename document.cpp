@@ -351,6 +351,13 @@ document_holder::~document_holder()
         delete list.takeFirst();
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
+  
+  
+#if defined(Q_OS_UNIX)
+ 
+ delete joystick;
+
+#endif
 }
 
 
@@ -1011,14 +1018,21 @@ document_holder::document_holder()
   timer->setInterval (100);
 #if defined(Q_OS_UNIX)
 
-  gameController = new QGameController (0, this);
+//  gameController = new QGameController (0);
+  joystick = new CJoystick (0, this);
 
-  if (gameController->isValid())
+  if (joystick->valid)
+
+//  if (gameController->isValid())
      {
-      connect(gameController, SIGNAL(gameControllerAxisEvent(QGameControllerAxisEvent*)), this, SLOT(handleQGameControllerAxisEvent(QGameControllerAxisEvent*)));
-      connect(gameController, SIGNAL(gameControllerButtonEvent(QGameControllerButtonEvent*)), this, SLOT(handleQGameControllerButtonEvent(QGameControllerButtonEvent*)));
+      
+//      connect(gameController, SIGNAL(gameControllerAxisEvent(QGameControllerAxisEvent*)), this, SLOT(handleQGameControllerAxisEvent(QGameControllerAxisEvent*)));
+//      connect(gameController, SIGNAL(gameControllerButtonEvent(QGameControllerButtonEvent*)), this, SLOT(handleQGameControllerButtonEvent(QGameControllerButtonEvent*)));
      
-      connect(timer, SIGNAL(timeout()), gameController, SLOT(readGameController()));
+     // connect(timer, SIGNAL(timeout()), gameController, SLOT(readGameController()));
+  
+   connect(timer, SIGNAL(timeout()), joystick, SLOT(read_joystick()));
+  
   
       if (settings->value ("use_joystick", "0").toInt())
          timer->start();   
@@ -2642,12 +2656,12 @@ void CTEAEdit::text_replace (const QString &s)
 }
 
 #if defined(Q_OS_UNIX)
-
+/*
 void document_holder::handleQGameControllerAxisEvent(QGameControllerAxisEvent* event)
 {
   
 //    qDebug("handleQGameControllerAxisEvent");
-    uint axis = event->axis();
+    uint axis = event->axis;
     
     //QList<QSlider*> sliders = slidersMap.value(event->controllerId());
     //Q_ASSERT(axis < sliders.count());
@@ -2655,31 +2669,47 @@ void document_holder::handleQGameControllerAxisEvent(QGameControllerAxisEvent* e
     //bar->setValue(event->value()*1000);
     
     qDebug() << "axis:" << axis;
-    qDebug() << "value:" << event->value();
+    qDebug() << "value:" << event->value;
     
     CDocument *d = get_current();
     if (d)
        {
-        if (event->value() < 0) //up
+        if (axis == 1 && event->value < 0) //up
            {
             QTextCursor cr = d->textEdit->textCursor();
-         //   cr.setPosition (pos, QTextCursor::MoveAnchor);
             cr.movePosition (QTextCursor::Up, QTextCursor::MoveAnchor);
 
             if (! cr.isNull())
                 d->textEdit->setTextCursor (cr);
                 
            }
-        if (event->value() > 0) //down
+           
+        if (axis == 1 && event->value > 0) //down
            {
             QTextCursor cr = d->textEdit->textCursor();
-           // cr.setPosition (pos, QTextCursor::MoveAnchor);
             cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor);
 
             if (! cr.isNull())
                 d->textEdit->setTextCursor (cr);
            }
+
+        if (axis == 0 && event->value < 0) //left
+           {
+            QTextCursor cr = d->textEdit->textCursor();
+            cr.movePosition (QTextCursor::Left, QTextCursor::MoveAnchor);
+
+            if (! cr.isNull())
+                d->textEdit->setTextCursor (cr);
+           }
            
+        if (axis == 0 && event->value > 0) //right
+           {
+            QTextCursor cr = d->textEdit->textCursor();
+            cr.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor);
+
+            if (! cr.isNull())
+                d->textEdit->setTextCursor (cr);
+           }
         
        }
     
@@ -2690,7 +2720,7 @@ void document_holder::handleQGameControllerAxisEvent(QGameControllerAxisEvent* e
 void document_holder::handleQGameControllerButtonEvent(QGameControllerButtonEvent* event)
 {
 //    qDebug("handleQGameControllerButtonEvent");
-    uint button = event->button();
+    uint button = event->button;
     
     qDebug() << "button";
     
@@ -2699,19 +2729,15 @@ void document_holder::handleQGameControllerButtonEvent(QGameControllerButtonEven
     //Q_ASSERT(button < buttonLabels.count());
     //QLabel *label = buttonLabels.at(button);
 
-/*
-    if (event->pressed())
-        label->setText(QString ("%1: <b><font color=green>D</font></b>").arg(button));
-    else
-        label->setText(QString ("%1: <b><font color=grey>U</font></b>").arg(button));
-  */      
 
-    if (event->pressed())
+    if (event->pressed)
        qDebug() << button;
 
         
     delete event;   //QGameControllerEvents unlike QEvents are not deleted automatically.
 }
+*/
+
 #endif
 
 /*
@@ -2806,3 +2832,69 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
  * 
  */
 
+bool document_holder::event (QEvent *ev)
+{
+	switch(static_cast<int>(ev->type()))
+	{
+	   
+		//case J_EVENT_AXIS:
+		case evtJoystickAxis:
+		
+			CJoystickAxisEvent* custom_event = reinterpret_cast<CJoystickAxisEvent*>(ev);
+			// do stuff with custom_event->my_data
+			handle_joystick_event (custom_event);
+//		   qDebug() << "CJoystickAxisEvent";	
+			
+		 break;
+	};
+	
+	return QObject::event(ev);
+
+}
+
+
+void document_holder::handle_joystick_event (CJoystickAxisEvent *event)
+{
+
+    CDocument *d = get_current();
+    if (d)
+       {
+        if (event->axis == 1 && event->value < 0) //up
+           {
+            QTextCursor cr = d->textEdit->textCursor();
+            cr.movePosition (QTextCursor::Up, QTextCursor::MoveAnchor);
+
+            if (! cr.isNull())
+                d->textEdit->setTextCursor (cr);
+                
+           }
+           
+        if (event->axis == 1 && event->value > 0) //down
+           {
+            QTextCursor cr = d->textEdit->textCursor();
+            cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor);
+
+            if (! cr.isNull())
+                d->textEdit->setTextCursor (cr);
+           }
+
+        if (event->axis == 0 && event->value < 0) //left
+           {
+            QTextCursor cr = d->textEdit->textCursor();
+            cr.movePosition (QTextCursor::Left, QTextCursor::MoveAnchor);
+
+            if (! cr.isNull())
+                d->textEdit->setTextCursor (cr);
+           }
+           
+        if (event->axis == 0 && event->value > 0) //right
+           {
+            QTextCursor cr = d->textEdit->textCursor();
+            cr.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor);
+
+            if (! cr.isNull())
+                d->textEdit->setTextCursor (cr);
+           }
+        
+       }
+}    

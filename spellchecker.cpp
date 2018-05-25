@@ -270,7 +270,7 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
       speller->add_dic (fname_userdict.toUtf8().data());
       user_words = qstring_load (fname_userdict, encoding).split ("\n");
       user_words.removeFirst();
-     } 
+     }
 
 
   initialized = true;

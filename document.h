@@ -52,13 +52,13 @@ code from qwriter:
 //#include <QDebug>
 
 #if QT_VERSION >= 0x050000
-
 #include <QRegularExpression>
-
 #endif
 
 #if defined(Q_OS_UNIX)
-#include "qgamecontroller.h"
+//#include "qgamecontroller.h"
+#include "myjoystick.h"
+
 #endif
 
 class LineNumberArea;
@@ -175,6 +175,12 @@ protected:
 
     }
 */
+
+  //bool event (QEvent *ev);
+  
+
+
+
 public slots:
 
   void updateLineNumberAreaWidth (int newBlockCount);
@@ -361,10 +367,15 @@ public:
   QString recent_list_fname;
  
 #if defined(Q_OS_UNIX)
-  QGameController *gameController;
+  //QGameController *gameController;
+  CJoystick *joystick;
+
 #endif 
   QTimer *timer; 
   
+  bool event (QEvent *ev);
+  void handle_joystick_event (CJoystickAxisEvent *ev);
+
 
   document_holder();
   ~document_holder();
@@ -402,9 +413,8 @@ public slots:
   void open_current();
   
 #if defined(Q_OS_UNIX)
-  
-  void handleQGameControllerAxisEvent(QGameControllerAxisEvent *event);
-  void handleQGameControllerButtonEvent(QGameControllerButtonEvent *event);  
+  //void handleQGameControllerAxisEvent(QGameControllerAxisEvent *event);
+  //void handleQGameControllerButtonEvent(QGameControllerButtonEvent *event);  
 #endif 
 };
 
@@ -432,7 +442,6 @@ protected:
       }
 
 };
-
   
 
 #endif

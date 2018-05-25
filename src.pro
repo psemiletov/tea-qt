@@ -127,10 +127,10 @@ SOURCES += rvln.cpp \
     single_application.cpp \
     single_application_shared.cpp \
     exif.cpp \
-    qgamecontroller_linux.cpp \
-#    qgamecontroller_win.cpp \
-    qgamecontroller.cpp
-    
+    myjoystick.cpp
+#    qgamecontroller_linux.cpp \
+#    qgamecontroller.cpp
+
 
 HEADERS += rvln.h \
     todo.h \
@@ -161,11 +161,10 @@ HEADERS += rvln.h \
     single_application.h \
     single_application_shared.h \
     exif.h \
-  qgamecontroller_linux_p.h \
-  qgamecontroller_p.h \ 
-#qgamecontroller_win_p.h \
-  qgamecontroller-global.h \
-  qgamecontroller.h
+    myjoystick.h
+#  qgamecontroller_linux_p.h \
+#  qgamecontroller_p.h \ 
+#qgamecontroller.h
   
 
     

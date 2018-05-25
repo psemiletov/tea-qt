@@ -32,6 +32,10 @@
 #include <QDir>
 #include <QRegExp>
 
+#ifndef H_DEPRECATED
+#include <string>
+#include <vector>
+#endif
 
 
 #ifdef ASPELL_ENABLE
@@ -324,9 +328,9 @@ void CHunspellChecker::change_lang (const QString &lang)
   QString fname_dict = dict_dir + QDir::separator() + lng + ".dic";
   QString fname_userdict = user_dir + QDir::separator() + lng + ".dic";
 
- fname_aff = fname_aff.replace ("/", "\\");
- fname_dict = fname_dict.replace ("/", "\\");
- fname_userdict = fname_userdict.replace ("/", "\\");
+  fname_aff = fname_aff.replace ("/", "\\");
+  fname_dict = fname_dict.replace ("/", "\\");
+  fname_userdict = fname_userdict.replace ("/", "\\");
 
 
 #else
@@ -377,10 +381,14 @@ bool CHunspellChecker::check (const QString &word)
   if (! initialized)
       return false;
 
-  QTextCodec *codec = QTextCodec::codecForName (encoding);
-  QByteArray es = codec->fromUnicode (word);
+ QTextCodec *codec = QTextCodec::codecForName (encoding);
+ QByteArray es = codec->fromUnicode (word);
  
+#ifndef H_DEPRECATED
   return speller->spell (es.data());
+#else  
+  return speller->spell (QString(es).toStdString());
+#endif
 }
 
 
@@ -432,6 +440,7 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
   QTextCodec *codec = QTextCodec::codecForName (encoding);
   QByteArray es = codec->fromUnicode (word);
 
+#ifndef H_DEPRECATED
   char **slst;
     
   int size = speller->suggest(&slst, es.data());
@@ -440,8 +449,17 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
       sl.append (codec->toUnicode (slst[i]));
    
   speller->free_list (&slst, size);
+#else
+
+ std::vector<std::string> suglist = speller->suggest (QString(es).toStdString());
+
+ sl.reserve(suglist.size());
+ std::copy(vector.begin(), vector.end(), std::back_inserter(myList));
+
+#endif
   
   return sl;
 }
+
 
 #endif 

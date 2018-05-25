@@ -9885,8 +9885,8 @@ void rvln::scale_image()
   if (params[1].indexOf("%") != -1)   
      scale_by_side = false;
      
-  int side;
-  int percent;
+  int side = 800;
+  int percent = 100;
   
   if (scale_by_side)   
      side = params[1].toInt();

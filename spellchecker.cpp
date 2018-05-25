@@ -451,10 +451,23 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
   speller->free_list (&slst, size);
 #else
 
- std::vector<std::string> suglist = speller->suggest (QString(es).toStdString());
 
- sl.reserve(suglist.size());
- std::copy(vector.begin(), vector.end(), std::back_inserter(myList));
+
+  std::vector<std::string> suglist = speller->suggest (QString(es).toStdString());
+
+
+//  QList <QString> l;
+  sl.reserve (suglist.size());
+  for (size_t i = 0, sz = suglist.size(); i < sz; ++i)
+      sl.append (QString::fromStdString (suglist[i]));        
+
+//  QList <QString> l = QList <QString>::fromVector(QVector <QString>::fromStdVector (suglist));
+
+// l.reserve(suglist.size());
+// std::copy(std::vector.begin(), std::vector.end(), std::back_inserter(l));
+
+
+ 
 
 #endif
   

@@ -9240,7 +9240,6 @@ void rvln::receiveMessage (const QString &msg)
   if (msg.isEmpty()) 
      return;
      
-  //qDebug() << msg;
   CDocument *d = documents->open_file (msg, "UTF-8"); 
 }
 

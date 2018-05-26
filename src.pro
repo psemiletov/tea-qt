@@ -128,8 +128,6 @@ SOURCES += rvln.cpp \
     single_application_shared.cpp \
     exif.cpp \
     myjoystick.cpp
-#    qgamecontroller_linux.cpp \
-#    qgamecontroller.cpp
 
 
 HEADERS += rvln.h \
@@ -162,13 +160,8 @@ HEADERS += rvln.h \
     single_application_shared.h \
     exif.h \
     myjoystick.h
-#  qgamecontroller_linux_p.h \
-#  qgamecontroller_p.h \ 
-#qgamecontroller.h
   
 
-    
-#include(gamecontroller.pri)    
 
 TEMPLATE = app
 
@@ -195,10 +188,7 @@ noprinter{
        QT -= printsupport
 }
 
-
-
-#       QT += gamepad
-       DEFINES += USE_QML_STUFF
+    DEFINES += USE_QML_STUFF
    } else {
 #QT += blah blah blah
    }
@@ -216,6 +206,10 @@ noqml{
    
 INSTALLS += target desktop icon128 icon64 icon48 icon32 iconsvg
 
+nodesktop{
+INSTALLS -= desktop icon128 icon64 icon48 icon32 iconsvg
+}
+
 RESOURCES += rlvn.qrc
 TRANSLATIONS = translations/tea_ru.ts \
                translations/tea_de.ts \
@@ -231,7 +225,6 @@ DISTFILES += ChangeLog \
     TODO \
     INSTALL \
     hls/* \
-#    icons/* \
     palettes/* \
     encsign/* \
     images/* \

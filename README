@@ -23,6 +23,7 @@ qmake "CONFIG+=useclang CONFIG+=noaspell"
 
 You can use some values:
 
+nodesktop - do not install desktop files and icons
 useclang - TEA will be compiled with Clang.
 noaspell - disable the Aspell (if you have it installed, but  do not want to compile TEA with Aspell support)
 nohunspell - disable Hunspell for TEA.

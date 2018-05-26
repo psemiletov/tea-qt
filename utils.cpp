@@ -22,6 +22,12 @@ bool file_exists (const QString &fileName)
   return QFile::exists (fileName);
 }
 
+bool dir_exists (const QString &path)
+{
+  QDir d (path);
+  return d.exists();
+}
+
 
 QString qstring_load (const QString &fileName, const char *enc)
 {

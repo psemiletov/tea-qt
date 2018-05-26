@@ -40,6 +40,7 @@ QString hash_get_val (QHash<QString, QString> &h, const QString &key, const QStr
 
 QString file_get_ext (const QString &file_name);
 
+bool dir_exists (const QString &path);
 bool file_exists (const QString &fileName);
 void qstring_list_print (const QStringList &l);
 

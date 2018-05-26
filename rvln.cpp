@@ -270,7 +270,7 @@ void rvln::create_paths()
   fname_bookmarks = dir_config + "/tea_bmx";
   hs_path["fname_bookmarks"] = fname_bookmarks;
   
-  fname_programs + dir_config + "/programs";
+  fname_programs = dir_config + "/programs";
   hs_path["fname_programs"] = fname_programs;
   
   fname_places_bookmarks = dir_config + "/places_bookmarks";

@@ -230,10 +230,12 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
   QString fname_aff = path + QDir::separator() + lng + ".aff";
   QString fname_dict = path + QDir::separator() + lng + ".dic";
   QString fname_userdict = user_path + QDir::separator() + lng + ".dic";
+  QString fname_userdict_pure; 
 
   fname_aff = fname_aff.replace ("/", "\\");
   fname_dict = fname_dict.replace ("/", "\\");
   fname_userdict = fname_userdict.replace ("/", "\\");
+  fname_userdict_pure = fname_userdict;
 
 #else
 
@@ -256,22 +258,32 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 //qDebug() << fname_dict;
 //qDebug() << fname_userdict;
 
+  if (dir_exists (dict_dir)) 
+     initialized = true;
+
   speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
   encoding = speller->get_dic_encoding();
+
+#if defined(Q_OS_UNIX)
   
+  if (initialized)
   if (file_exists (fname_userdict))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
       user_words = qstring_load (fname_userdict, encoding).split ("\n");
       user_words.removeFirst();
      }
+#else
 
-  initialized = true;
+  if (initialized)
+  if (file_exists (fname_userdict_pure))
+     {
+      speller->add_dic (fname_userdict.toUtf8().data());
+      user_words = qstring_load (fname_userdict, encoding).split ("\n");
+      user_words.removeFirst();
+     }
 
-//  if (file_exists (fname_dict))
-  //    initialized = true;
-//  else
-  //    qDebug() << "Hunspell engine is not initilized with a proper dictionary file " << fname_dict;
+#endif
 
   qDebug() << "CHunspellChecker::CHunspellChecker - end";
 }
@@ -305,50 +317,54 @@ void CHunspellChecker::change_lang (const QString &lang)
   delete speller;
 
   initialized = false;
-
   lng = lang;
-
   user_words.clear(); 
+
+  if (dir_exists (dict_dir)) 
+     initialized = true;
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
   QString fname_aff = dict_dir + QDir::separator() + lng + ".aff";
   QString fname_dict = dict_dir + QDir::separator() + lng + ".dic";
   QString fname_userdict = user_dir + QDir::separator() + lng + ".dic";
+  QString fname_userdict_pure;
 
   fname_aff = fname_aff.replace ("/", "\\");
   fname_dict = fname_dict.replace ("/", "\\");
   fname_userdict = fname_userdict.replace ("/", "\\");
-
-
+  fname_userdict_pure = fname_userdict;
+  
 #else
 
   QString fname_aff = dict_dir + QDir::separator() + lng + ".aff";
   QString fname_dict = dict_dir + QDir::separator() + lng + ".dic";
   QString fname_userdict = user_dir + QDir::separator() + lng + ".dic";
 
-
 #endif
 
   speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
   encoding = speller->get_dic_encoding();
 
+#if defined(Q_OS_UNIX)
+
+  if (initialized)
   if (file_exists (fname_userdict))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
       user_words = qstring_load (fname_userdict, encoding).split ("\n");  
       user_words.removeFirst(); //зачем я это закомментировал раньше?
-     } 
-
-  initialized = true;
-
-//  qDebug() << "encoding: " << QString (encoding);
-/*  if (file_exists (fname_dict))
-      initialized = true;
-  else
-      qDebug() << "Hunspell engine is not initilized with a proper dictionary file " << fname_dict;
-
-  qDebug() << "restarting hunspell with " << fname_aff << " " << fname_dict;*/
+     }
+#else
+  if (initialized)
+  if (file_exists (fname_userdict_pure))
+     {
+      speller->add_dic (fname_userdict.toUtf8().data());
+      user_words = qstring_load (fname_userdict, encoding).split ("\n");  
+      user_words.removeFirst(); //зачем я это закомментировал раньше?
+     }
+     
+#endif     
 }
 
 
@@ -420,12 +436,10 @@ QStringList CHunspellChecker::get_speller_modules_list()
 
 QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 {
-//  if (! initialized)
-  //   return QStringList();
 
   QStringList sl;
 
-  if (word.isEmpty())
+  if (! initialized || word.isEmpty())
      return sl;
 
   QTextCodec *codec = QTextCodec::codecForName (encoding);
@@ -440,30 +454,18 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
       sl.append (codec->toUnicode (slst[i]));
    
   speller->free_list (&slst, size);
+
 #else
-
-
 
   std::vector<std::string> suglist = speller->suggest (QString(es).toStdString());
 
-
-//  QList <QString> l;
   sl.reserve (suglist.size());
   for (size_t i = 0, sz = suglist.size(); i < sz; ++i)
       sl.append (QString::fromStdString (suglist[i]));        
-
-//  QList <QString> l = QList <QString>::fromVector(QVector <QString>::fromStdVector (suglist));
-
-// l.reserve(suglist.size());
-// std::copy(std::vector.begin(), std::vector.end(), std::back_inserter(l));
-
-
- 
 
 #endif
   
   return sl;
 }
-
 
 #endif 

@@ -67,6 +67,8 @@ public:
     void process_event (js_event e);
 #endif
 
+public slots:
+
   void read_joystick();
 };
 

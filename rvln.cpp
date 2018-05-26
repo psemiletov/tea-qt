@@ -554,7 +554,6 @@ void rvln::setup_spellcheckers()
   
 #ifdef HUNSPELL_ENABLE
    if (cur_spellchecker == "Hunspell")
-//      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", /*QDir::homePath()).toString(), dir_user_dict);
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", "/usr/share/hunspell").toString(), dir_user_dict);
 
 #endif

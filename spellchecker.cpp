@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2017 by Peter Semiletov                                          *
+ *   2007-2018 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -225,7 +225,6 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
   user_dir = user_path; 
   lng = lang;
 
-
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
   QString fname_aff = path + QDir::separator() + lng + ".aff";
@@ -253,21 +252,12 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 
 #endif
 
-
 //qDebug() << fname_aff;
 //qDebug() << fname_dict;
 //qDebug() << fname_userdict;
 
-
   speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
   encoding = speller->get_dic_encoding();
-
-
-//    const char *c_aff = fname_aff.toLocal8Bit().constData();
-  //  const char *c_dict = fname_dict.toLocal8Bit().constData();
-
-//    speller = new Hunspell (c_aff, c_dict);
-
   
   if (file_exists (fname_userdict))
      {
@@ -275,7 +265,6 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
       user_words = qstring_load (fname_userdict, encoding).split ("\n");
       user_words.removeFirst();
      }
-
 
   initialized = true;
 
@@ -285,7 +274,6 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
   //    qDebug() << "Hunspell engine is not initilized with a proper dictionary file " << fname_dict;
 
   qDebug() << "CHunspellChecker::CHunspellChecker - end";
-
 }
 
 
@@ -408,10 +396,13 @@ void CHunspellChecker::remove_from_user_dict (const QString &word)
 
 QStringList CHunspellChecker::get_speller_modules_list()
 {
+  QStringList sl;
+  
   QDir dir (dict_dir);
+  if (! dir.exists())
+     return sl;
 
   QStringList filters;
-  QStringList sl;
   
   filters << "*.dic";
   

@@ -37,29 +37,25 @@ code from qwriter:
 #define DOCUMENT_H
 
 
-#include "logmemo.h"
-#include "tio.h"
-#include "todo.h"
-
-
 #include <QPoint>
-
 #include <QStatusBar>
 #include <QMainWindow>
 #include <QTabWidget>
 #include <QPlainTextEdit>
 #include <QSyntaxHighlighter>
-//#include <QDebug>
 
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
 #endif
 
 #if defined(Q_OS_UNIX)
-//#include "qgamecontroller.h"
 #include "myjoystick.h"
-
 #endif
+
+#include "logmemo.h"
+#include "tio.h"
+#include "todo.h"
+
 
 class LineNumberArea;
 class document_holder;
@@ -70,18 +66,14 @@ class CTEAEdit: public QPlainTextEdit
 {
   Q_OBJECT
   
-
 public:
 
   QString indent_val;  
   QList <QTextEdit::ExtraSelection> extraSelections;
   QTextEdit::ExtraSelection brace_selection;
-
   
-  //rect selection
-
-  QPoint rect_sel_start;
-  QPoint rect_sel_end;
+  QPoint rect_sel_start; //rect selection
+  QPoint rect_sel_end;   //rect selection
  
   CDocument *doc;
 
@@ -110,7 +102,7 @@ public:
   int tab_sp_width; //in spaces
   int brace_width; //in pixels
   int margin_pos; //in chars
-  int margin_x; //in pixels
+  int margin_x;  //in pixels
 
 
   CTEAEdit (QWidget *parent = 0);
@@ -132,24 +124,15 @@ public:
 
   void rect_sel_reset();
   void rect_sel_replace (const QString &s, bool insert = false);
-  //void rect_sel_insert (const QString &s);
-  
-  
   void update_ext_selections();
-  
-  
   void update_rect_sel();
-  
   QString get_rect_sel();
-
   void rect_sel_cut (bool just_del = false);
-
 
   void braceHighlight();
   
   void lineNumberAreaPaintEvent(QPaintEvent *event);
   int lineNumberAreaWidth();
-
 
   Q_INVOKABLE bool has_rect_selection();
   
@@ -165,22 +148,6 @@ protected:
   void keyPressEvent (QKeyEvent *event);    
   void resizeEvent(QResizeEvent *event);
   
-  /*
- bool event(QEvent *ev) {
-        if (ev->type() == QEvent::KeyboardLayoutChange) {
-            qDebug() << "kb layout changed";
-        } else {
-            return QWidget::event(ev);
-        }
-
-    }
-*/
-
-  //bool event (QEvent *ev);
-  
-
-
-
 public slots:
 
   void updateLineNumberAreaWidth (int newBlockCount);
@@ -188,9 +155,6 @@ public slots:
   void updateLineNumberArea (const QRect &, int);
   
   void slot_selectionChanged();
-  
- // void copy();
-  
 };
 
 
@@ -329,8 +293,6 @@ public:
   Q_INVOKABLE QString get_triplex();
   Q_INVOKABLE void update_status();
   Q_INVOKABLE void update_title (bool fullname = true);
-
-
   Q_INVOKABLE void update_labels();
 };
 
@@ -345,7 +307,6 @@ public:
 
   QString fname_current_session;
 
- // QHash <QString, QString> palette;
   QHash <QString, QString> hls;
 
   QLabel *l_status_bar;
@@ -367,55 +328,42 @@ public:
   QString recent_list_fname;
  
 #if defined(Q_OS_UNIX)
-  //QGameController *gameController;
   CJoystick *joystick;
-
 #endif 
+
   QTimer *timer; 
   
-  bool event (QEvent *ev);
-  void handle_joystick_event (CJoystickAxisEvent *ev);
-
 
   document_holder();
   ~document_holder();
+
+  bool event (QEvent *ev);
+  void handle_joystick_event (CJoystickAxisEvent *ev);
+  
+  void reload_recent_list();
+  void add_to_recent (CDocument *d);
+  void update_recent_menu();
+  void update_current_files_menu();
 
   Q_INVOKABLE CDocument* create_new();
   Q_INVOKABLE CDocument* open_file (const QString &fileName, const QString &codec);
   Q_INVOKABLE CDocument* open_file_triplex (const QString &triplex);
   Q_INVOKABLE CDocument* get_document_by_fname (const QString &fileName);
-
-  void reload_recent_list();
-
+  Q_INVOKABLE CDocument* get_current();
+  Q_INVOKABLE void close_by_idx (int i);
+  Q_INVOKABLE void close_current();
+  
   Q_INVOKABLE void save_to_session (const QString &fileName);
   Q_INVOKABLE void load_from_session (const QString &fileName);
   
-  //QHash <QString, QString> load_eclipse_theme_xml (const QString &fname);
-
- //void load_palette (const QString &fileName);
-
-  void close_by_idx (int i);
-  Q_INVOKABLE void close_current();
   Q_INVOKABLE void apply_settings();
   Q_INVOKABLE void apply_settings_single (CDocument *d);
-
-  void add_to_recent (CDocument *d);
-  void update_recent_menu();
-
-  void update_current_files_menu();
-
-  Q_INVOKABLE CDocument* get_current();
- 
 
 public slots:
  
   void open_recent();
   void open_current();
-  
-#if defined(Q_OS_UNIX)
-  //void handleQGameControllerAxisEvent(QGameControllerAxisEvent *event);
-  //void handleQGameControllerButtonEvent(QGameControllerButtonEvent *event);  
-#endif 
+ 
 };
 
 
@@ -423,22 +371,19 @@ class CLineNumberArea: public QWidget
 {
 public:
 
-  CTEAEdit *codeEditor;
+  CTEAEdit *code_editor;
 
-  CLineNumberArea (CTEAEdit *editor = 0): QWidget (editor)
-                 {
-                  codeEditor = editor;
-                 }
+  CLineNumberArea (CTEAEdit *editor = 0): QWidget (editor), code_editor (editor) {}
 
   QSize sizeHint() const {
-                          return QSize(codeEditor->lineNumberAreaWidth(), 0);
+                          return QSize(code_editor->lineNumberAreaWidth(), 0);
                          }
 
 protected:
 
   void paintEvent (QPaintEvent *event)
       {
-       codeEditor->lineNumberAreaPaintEvent (event);
+       code_editor->lineNumberAreaPaintEvent (event);
       }
 
 };

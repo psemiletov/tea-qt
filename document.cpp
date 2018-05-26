@@ -38,14 +38,6 @@ code from qwriter:
 *   kossne@mail.ru                                                        *
 */
 
-
-#include "document.h"
-#include "utils.h"
-#include "gui_utils.h"
-
-#include "textproc.h"
-
-
 #include <QApplication>
 #include <QClipboard>
 #include <QSettings>
@@ -56,31 +48,28 @@ code from qwriter:
 #include <QDir>
 #include <QXmlStreamReader>
 #include <QMimeData>
-
-//new
 #include <QTimer>
 
-
-//#include <QtGamepad>
+#if QT_VERSION >= 0x050000
+#include <QRegularExpression>
+#endif
 
 #include <bitset>
 #include <algorithm>
 
-#if QT_VERSION >= 0x050000
-
-#include <QRegularExpression>
-
-#endif
+#include "document.h"
+#include "utils.h"
+#include "gui_utils.h"
+#include "textproc.h"
 
 
 QHash <QString, QString> global_palette;
 QSettings *settings;
 QMenu *current_files_menu;
-
 int recent_list_max_items;
-
 bool b_recent_off;
 bool b_destroying_all;
+
 
 void CDocument::update_status()
 {
@@ -89,23 +78,7 @@ void CDocument::update_status()
       holder->l_status_bar->setText (charset);
       return;
      }
-
-//  QTextBlock block = textEdit->document()->begin();
-//  int cursor_offset = textEdit->textCursor().position();
  
- /* 
-  int off = 0;
-  int y = 1;
-
-  while (cursor_offset >= (off + block.length()))
-        {
-         off += block.length();
-         block = block.next();
-         y++;
-        }
-
-  int x = cursor_offset - off + 1;
-*/
   int x = textEdit->textCursor().position() - textEdit->textCursor().block().position() + 1;
   int y = textEdit->textCursor().block().blockNumber() + 1;
 
@@ -242,26 +215,11 @@ CDocument::CDocument (QObject *parent): QObject (parent)
 
   eol = "\r\n";
 
-//  qDebug() << "defined(Q_OS_WIN) || defined(Q_OS_OS2)";
-
 #elif defined(Q_OS_UNIX)
 
   eol = "\n";
-/*
-#elif defined(Q_OS_MAC)
 
-  eol = "\r";
-*/
 #endif
-
-  //qDebug() << "CDocument()";
-/*
-  if (eol == "\n")
-    qDebug() << "LF";
-  if (eol == "\r\n")
-    qDebug() << "CRLF";
-  if (eol == "\r")
-    qDebug() << "CR";*/
 }
 
 

@@ -84,19 +84,15 @@ started at 08 November 2007
 //end
 
 #ifdef PRINTER_ENABLE
-
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QAbstractPrintDialog>
-
 #endif
 
 
 
 #ifdef SPELLCHECKER_ENABLE
-
 #include "spellchecker.h"
-
 #endif
 
 
@@ -527,8 +523,10 @@ void rvln::setup_spellcheckers()
 #endif
 
   cur_spellchecker = settings->value ("cur_spellchecker", "Hunspell").toString();
-  if (! spellcheckers.contains (cur_spellchecker))
-     cur_spellchecker = spellcheckers[0]; 
+  
+  if (spellcheckers.size() > 0)
+     if (! spellcheckers.contains (cur_spellchecker))
+         cur_spellchecker = spellcheckers[0]; 
 
   
 #ifdef ASPELL_ENABLE

@@ -19,7 +19,7 @@ make install
 
 To make some source configuration, use CONFIG variable at qmake command line parameter. For example:
 
-qmake "CONFIG+=useclang CONFIG+=noaspell"
+qmake "CONFIG+=useclang" "CONFIG+=noaspell"
 
 You can use some values:
 

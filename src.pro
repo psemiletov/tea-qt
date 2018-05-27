@@ -202,7 +202,12 @@ noqml{
        message ("QML stuff is off")
 }
 
-   
+
+nosingleapp{
+       DEFINES += NO_SINGLE_APP
+       message ("No single application mode")
+}
+
    
 INSTALLS += target desktop icon128 icon64 icon48 icon32 iconsvg
 

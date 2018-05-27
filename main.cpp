@@ -34,12 +34,8 @@ extern rvln *mainWindow;
 
 int main (int argc, char *argv[])
 {
-// Q_INIT_RESOURCE (rlvn);
    
- // qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-
-   
-#if defined(Q_OS_OS2)
+#if defined(Q_OS_OS2) || defined (NO_SINGLE_APP)
 
   QApplication app (argc, argv);
   qApp->setApplicationName ("TEA");
@@ -50,25 +46,22 @@ int main (int argc, char *argv[])
   return app.exec();
   
 #endif
-  //Q_INIT_RESOURCE (rlvn);
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) && ! defined (NO_SINGLE_APP)
   
   CSingleApplication app (argc, argv, "tea unique id 1977");
   
   if (app.isRunning())
      {
-       
-       if (argc > 1)
-          for (int i = 1; i < argc; i++) 
-               app.sendMessage (QString(argv[i]));
+      if (argc > 1)
+         for (int i = 1; i < argc; i++) 
+              app.sendMessage (QString(argv[i]));
        return 0;
      }
 
 #endif
 
-
-#if defined(Q_OS_UNIX)
+#if defined(Q_OS_UNIX) && ! defined (NO_SINGLE_APP)
 
  CSingleApplicationShared app (argc, argv, "tea unique id 1977");
  
@@ -82,10 +75,9 @@ int main (int argc, char *argv[])
     }
     
 #endif     
-     
+    
 
   mainWindow = new rvln();
-
 
 #if defined(Q_OS_WIN)
  QObject::connect(&app, SIGNAL(messageAvailable(QString)), mainWindow, SLOT(receiveMessage(QString)));

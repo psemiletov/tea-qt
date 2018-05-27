@@ -10,12 +10,9 @@
 
 #include <QApplication>
 
-
 #ifndef Q_OS_OS2
 #include <QSharedMemory>
 #endif
-
-
 
 #include <QLocalServer>
 
@@ -49,5 +46,6 @@ private:
 
         static const int timeout = 1000;
 };
+
 #endif // SINGLE_APP_H
 

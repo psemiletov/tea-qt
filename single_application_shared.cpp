@@ -20,7 +20,6 @@ CSingleApplicationShared::CSingleApplicationShared(int &argc, char *argv[], cons
 #ifndef Q_OS_OS2
 
     qDebug() << "CSingleApplicationShared::CSingleApplicationShared";
-   
 
     sharedMemory.setKey(uniqueKey);
  
@@ -74,7 +73,7 @@ void CSingleApplicationShared::checkForMessage()
     *(char*)sharedMemory.data() = '\0';
     sharedMemory.unlock();
  
-    if(arguments.size()) emit messageAvailable( arguments );
+    if (arguments.size()) emit messageAvailable (arguments);
 #endif    
 }
  
@@ -107,4 +106,3 @@ bool CSingleApplicationShared::sendMessage(const QString &message)
 #endif 
     return true;
 }
-

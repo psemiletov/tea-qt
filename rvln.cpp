@@ -749,10 +749,8 @@ rvln::rvln()
   
   updateFonts();
  
-
   //update_stylesheet (fname_stylesheet);
   
-
   dir_last = settings->value ("dir_last", QDir::homePath()).toString();
   b_preview = settings->value ("b_preview", false).toBool(); 
   
@@ -811,8 +809,7 @@ rvln::rvln()
   
   //tray_icon.setIcon (QIcon(":/icons/tea_icon_v2.png"));
   //tray_icon.show();
- 
-  
+   
   idx_tab_edit_activate();
 }
 

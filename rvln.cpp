@@ -723,11 +723,12 @@ rvln::rvln()
  
   update_stylesheet (fname_stylesheet);
   documents->apply_settings();
-
  
   documents->todo.load_dayfile();
 
-  update_hls();
+  //update_hls();
+  update_hls_noncached();
+  
   update_view_hls();
 
 #ifdef SPELLCHECK_ENABLE
@@ -748,8 +749,6 @@ rvln::rvln()
   createManual();
   
   updateFonts();
- 
-  //update_stylesheet (fname_stylesheet);
   
   dir_last = settings->value ("dir_last", QDir::homePath()).toString();
   b_preview = settings->value ("b_preview", false).toBool(); 
@@ -771,7 +770,7 @@ rvln::rvln()
   QString vn = settings->value ("VERSION_NUMBER", "").toString();
   if (vn.isEmpty() || vn != QString (VERSION_NUMBER))
      {
-      update_hls (true);
+      //update_hls (true);
       help_show_news();
      }
 
@@ -790,12 +789,9 @@ rvln::rvln()
 
   QClipboard *clipboard = QApplication::clipboard();
   connect (clipboard , SIGNAL(dataChanged()), this, SLOT(clipboard_dataChanged()));
-
   
 #ifdef USE_QML_STUFF
-  
   plugins_init();
-
 #endif
   
   setAcceptDrops (true);
@@ -5781,16 +5777,56 @@ void rvln::update_palettes()
 }
 
 
+void rvln::update_hls_noncached()
+{
+  qDebug() << "update_hls_noncached()";
+  
+  QTime tm;
+  tm.start();
+
+  documents->hls.clear();
+
+  QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
+  l1 << read_dir_entries (dir_hls);  //read custom hls modules
+
+  for (int i = 0; i < l1.size(); i++)
+      {
+       QString fname = ":/hls/" + l1[i];
+           
+       //check is fname built-in or not
+           
+       if (! file_exists (fname))
+          fname = dir_hls + "/" + l1[i];
+
+       QString buffer = qstring_load (fname);
+       QString exts = string_between (buffer, "exts=\"", "\"");
+           
+       if (! exts.isEmpty())
+          {
+           QStringList l = exts.split (";");
+           for (int i = 0; i < l.size(); i++)
+               documents->hls.insert (l[i], fname);
+           }
+      }
+  
+  qDebug("Time elapsed: %d ms", tm.elapsed());
+}
+
+
+//весь этот механизм отключен и требует изучения
+/*
 void rvln::update_hls (bool force)
 {
+  QTime tm;
+  tm.start();
+
   documents->hls.clear();
 
   QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
   l1 << read_dir_entries (dir_hls);  //read custom hls modules
   QString newlist = l1.join("\n").trimmed();
 
-  QString fname_hls_flist (dir_config);
-  fname_hls_flist.append ("/fname_hls_flist");
+  QString fname_hls_flist = dir_config + "/fname_hls_flist";
 
   if (force)
      {
@@ -5842,8 +5878,10 @@ void rvln::update_hls (bool force)
      }
   else
   documents->hls = hash_load_keyval (fname_hls_cache);
+  
+  qDebug("Time elapsed: %d ms", tm.elapsed());
 }
-
+*/
 
 void rvln::mrkup_preview_color()
 {
@@ -8807,11 +8845,11 @@ void rvln::file_notes()
 
 void rvln::update_stylesheet (const QString &f)
 {
-qDebug() << "update_stylesheet";
+//  qDebug() << "update_stylesheet";
+
 //Update paletted
 
   int darker_val = settings->value ("darker_val", 100).toInt();
-
 
   QFontInfo fi = QFontInfo (qApp->font());
 
@@ -8881,34 +8919,26 @@ qDebug() << "update_stylesheet";
 
   stylesheet += css_fif;
 
-
 //Update themed
-
 
   QString cssfile = qstring_load (f);
 
   QString css_path = get_file_path (f) + "/"; 
   //theme_dir = css_path;
 
-
   cssfile = cssfile.replace ("./", css_path); 
-
   cssfile += stylesheet;
-  
 
   qApp->setStyleSheet ("");
   qApp->setStyleSheet (cssfile);
   
   //qDebug() << "css_path " << css_path;
-
 }
 
 
 QIcon rvln::get_theme_icon (const QString &name)
 {
   //if (file_get_ext (fname) == "svg")
-
-
   QString fname = theme_dir + "icons/" + name;
   
   if (file_exists (fname))
@@ -8999,26 +9029,12 @@ void create_menu_from_themes (QObject *handler,
                  }
              }
          }
-             
 }
 
 
 void rvln::update_themes()
 {
   menu_view_themes->clear();
-  
-/*
-  menu_view_palettes->clear();
-
-  QStringList l1 = read_dir_entries (dir_palettes);
-  QStringList l2 = read_dir_entries (":/palettes");
-  l1 += l2;
-
-  create_menu_from_list (this, menu_view_palettes,
-                         l1,
-                         SLOT (file_use_palette()));
-
-*/
  
   create_menu_from_themes (this,
                             menu_view_themes,

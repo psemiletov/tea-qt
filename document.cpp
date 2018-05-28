@@ -760,8 +760,11 @@ CDocument* document_holder::open_file_triplex (const QString &triplex)
      return NULL;
 
   CDocument *d = open_file (sl[0], sl[1]);
-  if (d)
-     d->goto_pos (sl[2].toInt());
+  if (! d)
+     return NULL;
+  
+  //if (d)
+  d->goto_pos (sl[2].toInt());
 
   if (sl.size() >= 4)
     {

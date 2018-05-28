@@ -1016,7 +1016,8 @@ prefs window widgets
 
 
   
-  void update_hls (bool force = false);
+  //void update_hls (bool force = false);
+  void update_hls_noncached();
 
   void update_tables();
   void update_scripts();

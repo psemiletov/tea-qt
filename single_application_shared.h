@@ -34,7 +34,7 @@ public:
         bool alreadyExists() const
              {
               return bAlreadyExists;
-              }
+             }
         
         bool isMasterApp() const
              {

@@ -257,8 +257,10 @@ void rvln::create_paths()
   fname_crapbook = dir_config + "/crapbook.txt";
   hs_path["fname_crapbook"] = fname_crapbook;
   
+  /*
   fname_hls_cache = dir_config + "/hls_cache";
   hs_path["fname_hls_cache"] = fname_hls_cache;
+  */
   
   fname_fif = dir_config + "/fif";
   hs_path["fname_fif"] = fname_fif;

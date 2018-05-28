@@ -566,9 +566,9 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
   QString fname = holder->hls.value (ext);
   
-  //qDebug() << "hl fname is " << fname;
+  qDebug() << "hl fname is " << fname;
   
-  if (fname.isEmpty())
+  if (fname.isEmpty() || ! file_exists (fname))
      return;
 
   if (highlighter)
@@ -1064,6 +1064,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
  qDebug() << "CSyntaxHighlighterQRegularExpression::load_from_xml ";
 
+  
   wrap = true;
   casecare = true;
 
@@ -1074,11 +1075,15 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
   
   pattern_opts = 0;
   
+  if (! file_exists (fname))
+     return;
+
+  
   QString temp = qstring_load (fname);
   QXmlStreamReader xml (temp);
 
   
-   while (! xml.atEnd())
+  while (! xml.atEnd())
         {
          xml.readNext();
 
@@ -1272,6 +1277,10 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
   langs = "default";
 
   cs = Qt::CaseSensitive;
+  
+  if (! file_exists (fname))
+     return;
+
   
   QString temp = qstring_load (fname);
   QXmlStreamReader xml (temp);

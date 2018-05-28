@@ -283,7 +283,7 @@ public:
   QString dir_days;
 
   QString fname_def_palette;
-  QString fname_hls_cache;
+//  QString fname_hls_cache;
 
  // QString fname_userfonts;
   //QList <int> userfont_ids;

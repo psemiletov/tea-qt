@@ -5800,7 +5800,9 @@ void rvln::update_hls_noncached()
        if (! file_exists (fname))
           fname = dir_hls + "/" + l1[i];
 
-       QString buffer = qstring_load (fname);
+       //QString buffer = qstring_load (fname);
+       QString buffer = qstring_load_first_line (fname);
+       
        QString exts = string_between (buffer, "exts=\"", "\"");
            
        if (! exts.isEmpty())
@@ -5931,7 +5933,6 @@ void rvln::createFman()
   QLabel *l_t = new QLabel (tr ("Name"));
   ed_fman_fname = new QLineEdit;
   connect (ed_fman_fname, SIGNAL(returnPressed()), this, SLOT(fman_fname_entry_confirm()));
-
   
   ed_fman_path = new QLineEdit;
   connect (ed_fman_path, SIGNAL(returnPressed()), this, SLOT(fman_naventry_confirm()));
@@ -5954,7 +5955,6 @@ void rvln::createFman()
   tb_fman_dir->addAction (act_fman_refresh);
   tb_fman_dir->addAction (act_fman_ops);
 
-//#if defined(Q_WS_WIN) || defined(Q_OS_OS2)
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
   cb_fman_drives = new QComboBox;

@@ -43,6 +43,20 @@ QString qstring_load (const QString &fileName, const char *enc)
 }
 
 
+QString qstring_load_first_line (const QString &fileName)
+{
+  QFile file (fileName);
+
+  if (! file.open (QFile::ReadOnly | QFile::Text))
+     return QString();
+
+  QTextStream in(&file);
+  //in.setCodec (enc);
+
+  return in.readLine();
+}
+
+
 void qstring_list_print (const QStringList &l)
 {
   foreach (QString s, l)

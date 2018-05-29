@@ -46,6 +46,8 @@ void qstring_list_print (const QStringList &l);
 
 bool qstring_save (const QString &fileName, const QString &data, const char *enc = "UTF-8");
 QString qstring_load (const QString &fileName, const char *enc = "UTF-8");
+QString qstring_load_first_line (const QString &fileName);
+
 
 QStringList read_dir_entries (const QString &path);
 QHash<QString, QString> hash_load (const QString &fname);

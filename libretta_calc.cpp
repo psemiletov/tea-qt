@@ -98,7 +98,7 @@ double calculate (string expression)
 
   size_t stop_size = expression.length() - 1;
   
-  for (int i = 0; i < expression.length(); i++)
+  for (size_t i = 0; i < expression.length(); i++)
       {
        char t = expression[i];
 
@@ -209,4 +209,4 @@ double calculate (string expression)
   CItem item = *start;
 
   return item.val;
-};
+}

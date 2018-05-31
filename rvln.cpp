@@ -188,7 +188,7 @@ QList <CPluginListItem *> plugins_list;
 #endif
 
 //QFontDatabase *font_database;
-document_holder *documents;
+CDox *documents;
 
 
 enum {
@@ -707,7 +707,7 @@ rvln::rvln()
   
   read_search_options();
   
-  documents = new document_holder();
+  documents = new CDox();
   documents->parent_wnd = this;
   documents->tab_widget = tab_widget;
   documents->recent_menu = menu_file_recent;

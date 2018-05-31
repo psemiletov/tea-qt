@@ -19,6 +19,7 @@ public:
 };
 
 
+//FIXME: переписать под хэш?
 class CCharsetMagic: public QObject
 {
   Q_OBJECT
@@ -182,6 +183,7 @@ class CTioHandler: public QObject
 public:
 
   QList <CTio *> list;
+
   CTioPlainText *default_handler;
 
   CTioHandler();

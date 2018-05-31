@@ -3,16 +3,16 @@ this code is Public Domain
 */
 
 
-#include "utils.h"
-#include "calendar.h"
 #include <math.h>
-
 
 #include <QDateTime>
 #include <QDate>
 #include <QPainter>
 #include <QTextCharFormat>
 #include <QDebug>
+
+#include "utils.h"
+#include "calendar.h"
 
 
 inline int tropical_year (int year)
@@ -56,7 +56,7 @@ int moon_phase_trig2 (int year, int month, int day)
   if (r == 0)
      r = 30;
   
- return r;
+  return r;
 }
 
 
@@ -85,6 +85,7 @@ int moon_phase_conway (int year, int month, int day)
 {
   int r = year % 100;
   r %= 19;
+  
   if (r > 9)
      r -= 19;
 
@@ -161,8 +162,7 @@ CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): Q
   moon_mode = false;
   moon_tiles.load (":/images/moon-phases.png");
   northern_hemisphere = true;
-  
-  
+    
   //setHeaderTextFormat (const QTextCharFormat & format);
   
   QTextCharFormat tformat;
@@ -194,20 +194,19 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
          has_image = false;
 
       //вычисляем ряд и колонку
-
-     
+    
 
       int cursorOffset = moon_day;
 
       int off = 0;
+  
      /* int row = 0;
-
       while (cursorOffset >= (off + 8))
             {
              off += 7;
              row++;
             }
-*/
+     */
 
     int row = moon_day / 7;
     if ((moon_day % 7 == 0) && (row != 0))
@@ -231,47 +230,48 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
 
     //вычисляем, откуда копировать
 
-      int pad = 3;
+    int pad = 3;
+  
+    int x = (col - 1) * 73 + (pad * col) - pad;
+    int y = row * 73 + (pad * row);
 
-      int x = (col - 1) * 73 + (pad * col) - pad;
-      int y = row * 73 + (pad * row);
+    QRect r (x, y, 66, 73);
 
-      QRect r (x, y, 66, 73);
+    QImage tile = moon_tiles.copy (r);
 
-      QImage tile = moon_tiles.copy (r);
+    QColor bg_color (Qt::black);
 
-      QColor bg_color (Qt::black);
-
-      painter->fillRect (rect, bg_color);
+    painter->fillRect (rect, bg_color);
 
 
-      if (has_image)
-         {
-          if (northern_hemisphere)
-             painter->drawImage (rect.x(), rect.y(), tile);
-          else
-              painter->drawImage (rect.x(), rect.y(), tile.mirrored (true, false));
-         }
+    if (has_image)
+       {
+        if (northern_hemisphere)
+            painter->drawImage (rect.x(), rect.y(), tile);
+        else
+            painter->drawImage (rect.x(), rect.y(), tile.mirrored (true, false));
+       }
 
-      painter->setPen (QPen (Qt::yellow));
+    painter->setPen (QPen (Qt::yellow));
 
-      QTextCharFormat tcf = dateTextFormat (date);
-      if (tcf.fontStrikeOut())
-          painter->setPen (QPen (Qt::magenta));
-      else
-      if (tcf.fontUnderline())
-          painter->setPen (QPen (Qt::red));
+    QTextCharFormat tcf = dateTextFormat (date);
+   
+    if (tcf.fontStrikeOut())
+       painter->setPen (QPen (Qt::magenta));
+    else
+        if (tcf.fontUnderline())
+           painter->setPen (QPen (Qt::red));
 
-      painter->drawText (QPoint (rect.x() + 5, rect.y() + fsize.height()), date.toString("dd") + " / " + QString::number (moon_day));
+    painter->drawText (QPoint (rect.x() + 5, rect.y() + fsize.height()), date.toString("dd") + " / " + QString::number (moon_day));
 
-      if (selectedDate() == date)
-         {
-          QPen dpen (Qt::yellow);
-          dpen.setWidth (5);
-          painter->setPen (dpen);
-          painter->drawRect (rect);
-         }
-    }
+    if (selectedDate() == date)
+       {
+        QPen dpen (Qt::yellow);
+        dpen.setWidth (5);
+        painter->setPen (dpen);
+        painter->drawRect (rect);
+       }
+   }
  else
      QCalendarWidget::paintCell (painter, rect, date);
 }

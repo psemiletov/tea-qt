@@ -58,7 +58,7 @@ code from qwriter:
 
 
 class LineNumberArea;
-class document_holder;
+class CDox;
 class CDocument;
 
 
@@ -75,9 +75,9 @@ public:
   QPoint rect_sel_start; //rect selection
   QPoint rect_sel_end;   //rect selection
  
-  CDocument *doc;
+  CDocument *doc; //uplink
 
-  QColor currentLineColor;
+  QColor current_line_color;
   QColor brackets_color;
   QColor margin_color;
   QColor linenums_bg;
@@ -85,7 +85,6 @@ public:
 
   QColor sel_text_color;
   QColor sel_back_color;
-
 
   QWidget *lineNumberArea;
 
@@ -107,8 +106,6 @@ public:
 
   CTEAEdit (QWidget *parent = 0);
 
-  void setCurrentLineColor (const QColor &newColor);
-  void set_brackets_color (const QColor &newColor);
   void set_show_linenums (bool enable);
   void set_show_margin (bool enable);
   void set_margin_pos (int mp);
@@ -258,7 +255,7 @@ public:
   
   QString eol;
   
-  document_holder *holder;
+  CDox *holder;
   CSyntaxHighlighter *highlighter;
   CTEAEdit *textEdit;
 
@@ -297,7 +294,7 @@ public:
 };
 
 
-class document_holder: public QObject
+class CDox: public QObject
 {
   Q_OBJECT
 
@@ -334,11 +331,15 @@ public:
   QTimer *timer; 
   
 
-  document_holder();
-  ~document_holder();
+  CDox();
+  ~CDox();
+
+#if defined(Q_OS_UNIX)
 
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
+
+#endif 
   
   void reload_recent_list();
   void add_to_recent (CDocument *d);

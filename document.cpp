@@ -38,6 +38,10 @@ code from qwriter:
 *   kossne@mail.ru                                                        *
 */
 
+#include <bitset>
+#include <algorithm>
+
+
 #include <QApplication>
 #include <QClipboard>
 #include <QSettings>
@@ -50,12 +54,10 @@ code from qwriter:
 #include <QMimeData>
 #include <QTimer>
 
+
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
 #endif
-
-#include <bitset>
-#include <algorithm>
 
 #include "document.h"
 #include "utils.h"
@@ -146,8 +148,9 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
   while (i.hasNext())
         {
          QStringList lt = i.next().split(",");
-         if (lt.size() > 0 && lt[0] == file_name) 
-            i.remove();
+         if (lt.size() > 0)
+             if (lt[0] == file_name) 
+                i.remove();
         }
        
   return true;
@@ -241,8 +244,7 @@ CDocument::~CDocument()
          save_with_name (file_name, charset);
      }
 
-  if (! file_name.startsWith (holder->dir_config))
-  if (! file_name.endsWith (".notes")) 
+  if (! file_name.startsWith (holder->dir_config) && ! file_name.endsWith (".notes")) 
      {
       holder->add_to_recent (this);
       holder->update_recent_menu();
@@ -267,9 +269,9 @@ void CDocument::create_new()
 
   textEdit->doc = this;
 
-  textEdit->currentLineColor = QColor (hash_get_val (global_palette, 
-                                       "cur_line_color", 
-                                       "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
+  textEdit->current_line_color = QColor (hash_get_val (global_palette, 
+                                         "cur_line_color", 
+                                         "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
 
   highlighter = NULL;
 
@@ -292,7 +294,7 @@ void CDocument::set_tab_caption (const QString &fileName)
 }
 
 
-void document_holder::reload_recent_list (void)
+void CDox::reload_recent_list (void)
 {
   if (! file_exists (recent_list_fname))
      return;
@@ -301,7 +303,7 @@ void document_holder::reload_recent_list (void)
 }
 
 
-document_holder::~document_holder()
+CDox::~CDox()
 {
   b_destroying_all = true;
 
@@ -312,14 +314,12 @@ document_holder::~document_holder()
   
   
 #if defined(Q_OS_UNIX)
- 
- delete joystick;
-
+  delete joystick;
 #endif
 }
 
 
-CDocument* document_holder::create_new()
+CDocument* CDox::create_new()
 {
   CDocument *doc = new CDocument;
 
@@ -341,7 +341,7 @@ CDocument* document_holder::create_new()
 }
 
 
-CDocument* document_holder::get_document_by_fname (const QString &fileName)
+CDocument* CDox::get_document_by_fname (const QString &fileName)
 {
   if (fileName.isEmpty())
      return NULL;
@@ -354,7 +354,7 @@ CDocument* document_holder::get_document_by_fname (const QString &fileName)
 }
 
 
-CDocument* document_holder::open_file (const QString &fileName, const QString &codec)
+CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 {
   if (! file_exists (fileName))
      return NULL;
@@ -391,7 +391,7 @@ CDocument* document_holder::open_file (const QString &fileName, const QString &c
 }
 
 
-void document_holder::close_by_idx (int i)
+void CDox::close_by_idx (int i)
 {
   if (i < 0)
      return;
@@ -404,13 +404,13 @@ void document_holder::close_by_idx (int i)
 }
 
 
-void document_holder::close_current()
+void CDox::close_current()
 {
   close_by_idx (tab_widget->currentIndex());
 }
 
 
-CDocument* document_holder::get_current()
+CDocument* CDox::get_current()
 {
   int i = tab_widget->currentIndex();
   if (i < 0)
@@ -435,15 +435,15 @@ bool CDocument::save_with_name_plain (const QString &fileName)
   return true;
 }
 
-
+/*
 QString CDocument::get_filename_at_cursor()
 {
   if (textEdit->textCursor().hasSelection())
-    {
-     QFileInfo nf (file_name);
-     QDir cd (nf.absolutePath());
-     return cd.cleanPath (cd.absoluteFilePath(textEdit->textCursor().selectedText()));
-    }
+     {
+      QFileInfo nf (file_name);
+      QDir cd (nf.absolutePath());
+      return cd.cleanPath (cd.absoluteFilePath(textEdit->textCursor().selectedText()));
+     }
 
   QString s = textEdit->toPlainText();
 
@@ -488,6 +488,82 @@ QString CDocument::get_filename_at_cursor()
    //fallback to HTML markup 
      {
       int pos = textEdit->textCursor().position();
+
+      int end = s.indexOf ("\"", pos);
+      if (end == -1)
+         return x;
+
+      int start = s.lastIndexOf ("\"", pos);
+      if (start == -1)
+         return x;
+
+      x = s.mid (start + 1, end - (start + 1));
+
+      if (x.startsWith("#"))
+         return x;
+
+      QFileInfo inf (file_name);
+      QDir cur_dir (inf.absolutePath());
+
+      return cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
+     }
+}
+*/
+
+QString CDocument::get_filename_at_cursor()
+{
+  if (textEdit->textCursor().hasSelection())
+     {
+      QFileInfo nf (file_name);
+      QDir cd (nf.absolutePath());
+      return cd.cleanPath (cd.absoluteFilePath(textEdit->textCursor().selectedText()));
+     }
+
+  QString s = textEdit->textCursor().block().text();
+  if (s.isEmpty())
+     return QString ("");
+
+  QString x;
+
+  if (markup_mode == "LaTeX")
+     {
+      int pos = textEdit->textCursor().positionInBlock();
+
+      int end = s.indexOf ("}", pos);
+      if (end == -1)
+         return x;
+
+      int start = s.lastIndexOf ("{", pos);
+      if (start == -1)
+         return x;
+
+      x = s.mid (start + 1, end - (start + 1));
+     
+      QFileInfo inf (file_name);
+      QDir cur_dir (inf.absolutePath());
+         
+      QString result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
+      if (file_exists (result))
+         return result;
+     
+      int i = x.lastIndexOf ("/");
+      if (i < 0)
+         i = x.lastIndexOf ("\\");
+     
+      if (i < 0)
+         return QString();
+
+      x = x.mid (i + 1);   
+     
+      result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
+      //qDebug() << "in cur dir: " << result;
+      return result;
+     }
+  else
+ //   if (markup_mode == "HTML")
+   //fallback to HTML markup 
+     {
+      int pos = textEdit->textCursor().positionInBlock();
 
       int end = s.indexOf ("\"", pos);
       if (end == -1)
@@ -608,7 +684,7 @@ void CDocument::goto_pos (int pos)
 }
 
 
-void document_holder::apply_settings_single (CDocument *d)
+void CDox::apply_settings_single (CDocument *d)
 {
   int darker_val = settings->value ("darker_val", 100).toInt();
 
@@ -661,7 +737,7 @@ void document_holder::apply_settings_single (CDocument *d)
   d->textEdit->highlightCurrentLine = settings->value ("additional_hl", false).toBool();
   d->textEdit->hl_brackets = settings->value ("hl_brackets", false).toBool();
 
-  d->textEdit->currentLineColor = QColor (hash_get_val (global_palette, "cur_line_color", "#EEF6FF")).darker (darker_val);
+  d->textEdit->current_line_color = QColor (hash_get_val (global_palette, "cur_line_color", "#EEF6FF")).darker (darker_val);
   d->textEdit->brackets_color = QColor (hash_get_val (global_palette, "brackets", "yellow")).darker (darker_val);
   
   d->cursor_xy_visible = settings->value ("cursor_xy_visible", "2").toBool();
@@ -696,14 +772,14 @@ void document_holder::apply_settings_single (CDocument *d)
 }
 
 
-void document_holder::apply_settings()
+void CDox::apply_settings()
 {
   foreach (CDocument *d, list)
           apply_settings_single (d);
 }
 
 
-void document_holder::add_to_recent (CDocument *d)
+void CDox::add_to_recent (CDocument *d)
 {
   if (b_recent_off)
      return;
@@ -733,14 +809,14 @@ void document_holder::add_to_recent (CDocument *d)
 }
 
 
-void document_holder::update_recent_menu()
+void CDox::update_recent_menu()
 {
   recent_menu->clear();
   create_menu_from_list (this, recent_menu, recent_files, SLOT(open_recent()));
 }
 
 
-void document_holder::open_recent()
+void CDox::open_recent()
 {
   QAction *act = qobject_cast<QAction *>(sender());
 
@@ -753,7 +829,7 @@ void document_holder::open_recent()
 }
 
 
-CDocument* document_holder::open_file_triplex (const QString &triplex)
+CDocument* CDox::open_file_triplex (const QString &triplex)
 {
   QStringList sl = triplex.split (",");
   if (sl.size() < 3)
@@ -763,7 +839,6 @@ CDocument* document_holder::open_file_triplex (const QString &triplex)
   if (! d)
      return NULL;
   
-  //if (d)
   d->goto_pos (sl[2].toInt());
 
   if (sl.size() >= 4)
@@ -841,20 +916,6 @@ void CTEAEdit::cb_cursorPositionChanged()
 }
 
 
-void CTEAEdit::setCurrentLineColor (const QColor &newColor)
-{
-  currentLineColor = newColor;
-  emit repaint();
-}
-
-
-void CTEAEdit::set_brackets_color (const QColor &newColor)
-{
-  brackets_color = newColor;
-  emit repaint();
-}
-
-
 void CTEAEdit::set_hl_cur_line (bool enable)
 {
   highlightCurrentLine = enable;
@@ -903,7 +964,7 @@ void CTEAEdit::paintEvent (QPaintEvent *event)
           QRect r = cursorRect();
           r.setX (0);
           r.setWidth (viewport()->width());
-          painter.fillRect (r, QBrush (currentLineColor));
+          painter.fillRect (r, QBrush (current_line_color));
          }
 
       if (draw_margin)
@@ -973,12 +1034,13 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 }
 
 
-document_holder::document_holder()
+CDox::CDox()
 {
   timer = new QTimer (this);
   timer->setInterval (100);
 
 #if defined(Q_OS_UNIX)
+
   joystick = new CJoystick (0, this);
 
   if (joystick->initialized)
@@ -1154,7 +1216,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                           HighlightingRule rule;
                           rule.pattern = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
                           rule.format = fmt;
-                          highlightingRules.append(rule);
+                          highlightingRules.append (rule);
                         
                           if (! rule.pattern.isValid())
                              qDebug() << "! valid " << rule.pattern.pattern();
@@ -1290,7 +1352,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
          xml.readNext();
 
          QString tag_name = xml.name().toString().toLower();
-
 
          if (xml.isStartElement())
             if (tag_name == "document")
@@ -1447,7 +1508,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 
 
 
-void document_holder::save_to_session (const QString &fileName)
+void CDox::save_to_session (const QString &fileName)
 {
   if (list.size() < 0)
      return;
@@ -1465,7 +1526,7 @@ void document_holder::save_to_session (const QString &fileName)
 }
 
 
-void document_holder::load_from_session (const QString &fileName)
+void CDox::load_from_session (const QString &fileName)
 {
   if (! file_exists (fileName))
      return;
@@ -1482,7 +1543,7 @@ void document_holder::load_from_session (const QString &fileName)
 }
 
 /*
-QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString &fname)
+QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
 {
   QHash <QString, QString> result;
  
@@ -1641,7 +1702,7 @@ QHash <QString, QString> document_holder::load_eclipse_theme_xml (const QString 
 }
 */
 /*
-void document_holder::load_global_palette (const QString &fileName)
+void CDox::load_global_palette (const QString &fileName)
 {
   if (! file_exists (fileName))
       return;
@@ -1825,9 +1886,6 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
       QTextCursor cr = textCursor();
 
       QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
-
-// if (btst[0] == 1)
-  //    m = QTextCursor::KeepAnchor;
        
       if (btst[3] == 1 || btst[6] == 1) //LALT or LWIN
          {
@@ -1874,6 +1932,8 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
       
        }
     } 
+
+
 
   if (auto_indent)
      if (event->key() == Qt::Key_Return)
@@ -2243,7 +2303,7 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
   
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
-  int xdiff = x2 - x1;
+  //int xdiff = x2 - x1;
   
   int how_many_copy_from_source = ydiff;
   
@@ -2459,7 +2519,7 @@ void CDocument::update_labels()
 }
 
 //////////////////////////////////////////
-void document_holder::open_current()
+void CDox::open_current()
 {
   QAction *act = qobject_cast<QAction *>(sender());
 
@@ -2469,7 +2529,7 @@ void document_holder::open_current()
 }
 
 
-void document_holder::update_current_files_menu()
+void CDox::update_current_files_menu()
 {
  QStringList current_files; 
  
@@ -2496,7 +2556,7 @@ QString CTEAEdit::get_rect_sel()
 
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
-  int ydiff = y2 - y1;
+  //int ydiff = y2 - y1;
   
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
@@ -2535,7 +2595,7 @@ void CTEAEdit::rect_sel_cut (bool just_del)
   
 //  int how_many_copy_from_source = ydiff;
   
-  int lines_to_end = blockCount() - y1;
+  //int lines_to_end = blockCount() - y1;
   
 //  if (ydiff > lines_to_end)
   //   how_many_copy_from_source = lines_to_end;
@@ -2708,7 +2768,7 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
  * 
  */
 
-bool document_holder::event (QEvent *ev)
+bool CDox::event (QEvent *ev)
 {
 
 #if defined(Q_OS_UNIX)
@@ -2740,7 +2800,7 @@ bool document_holder::event (QEvent *ev)
 }
 
 
-void document_holder::handle_joystick_event (CJoystickAxisEvent *event)
+void CDox::handle_joystick_event (CJoystickAxisEvent *event)
 {
 
     CDocument *d = get_current();

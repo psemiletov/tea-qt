@@ -155,6 +155,7 @@ bool CTioPlainText::save (const QString &fname)
 CTioHandler::CTioHandler()
 {
   default_handler = new CTioPlainText;
+  
   list.append (default_handler);
   list.append (new CTioGzip);
   list.append (new CTioXMLZipped);
@@ -279,7 +280,6 @@ bool CTioABW::load (const QString &fname)
 
 bool CTioODTSpecial::load (const QString &fname)
 {
-
   data.clear();
   
   CZipper zipper;
@@ -423,8 +423,10 @@ CCharsetMagic::CCharsetMagic()
   
   foreach (QString fn, fnames)
           {
-           QString fname (":/encsign");
-           fname.append ("/").append (fn);
+           QString fname = ":/encsign";
+           fname.append ("/"); 
+           fname.append (fn); 
+           
            QByteArray a = file_load (fname);     
            QList<QByteArray> bsl = a.split ('\n'); 
   
@@ -499,6 +501,8 @@ bool CTioFB2::load (const QString &fname)
   data.clear();
 
   QByteArray ba = file_load (fname);
+  if (ba.isEmpty())
+     return false;
 
   //read encoding:
 
@@ -507,65 +511,64 @@ bool CTioFB2::load (const QString &fname)
   if (enc.isEmpty())
      enc = "UTF-8";
 
-   QTextCodec *codec = QTextCodec::codecForName (enc.toLatin1().data());
-   QString temp = codec->toUnicode (ba);
+  QTextCodec *codec = QTextCodec::codecForName (enc.toLatin1().data());
+  QString temp = codec->toUnicode (ba);
 
-   QString ts = "p";
+  QString ts = "p";
 
-   QXmlStreamReader xml (temp);
+  QXmlStreamReader xml (temp);
 
-   bool tt = false;
-   bool title = false;
-   bool section = false;
+  bool tt = false;
+  bool title = false;
+  bool section = false;
 
-   while (! xml.atEnd())
-         {
-          xml.readNext();
+  while (! xml.atEnd())
+        {
+         xml.readNext();
 
-          QString tag_name = xml.qualifiedName().toString().toLower();
+         QString tag_name = xml.qualifiedName().toString().toLower();
 
-           if (xml.isStartElement())
-              {
-               if (tag_name == ts)
-                  tt = true;
+         if (xml.isStartElement())
+            {
+             if (tag_name == ts)
+                tt = true;
 
-               if (tag_name == "title")
-                  title = true;
+             if (tag_name == "title")
+                title = true;
 
-               if (tag_name == "section")
-                  section = true;
+             if (tag_name == "section")
+                section = true;
+            }
 
-              }
-
-           if (xml.isEndElement())
-              {
-               if (tag_name == ts)
+         if (xml.isEndElement())
+            {
+             if (tag_name == ts)
                  tt = false;
 
-               if (tag_name == "title")
-                 {
-                  title = false;
-                  data.append("\n");
-                 }
+             if (tag_name == "title")
+                {
+                 title = false;
+                 data.append("\n");
+                }
 
-               if (tag_name == "section")
-                 {
-                  section = false;
-                  data.append("\n");
-                 }
-              }
+             if (tag_name == "section")
+                {
+                 section = false;
+                 data.append("\n");
+                }
+             }
 
-           if (tt && xml.isCharacters())
-              {
-               QString s = xml.text().toString();
-               if (! s.isEmpty())
-                 {
-                  data.append ("   ");
-                  data.append (s);
-                  data.append("\n");
-                 }
-               }
-          }
+         if (tt && xml.isCharacters())
+            {
+             QString s = xml.text().toString();
+             if (! s.isEmpty())
+                {
+                 data.append ("   ");
+                 data.append (s);
+                 data.append("\n");
+                }
+            }
+        }
 
   if (xml.hasError())
     qDebug() << "xml parse error";
@@ -863,10 +866,10 @@ void dopage (int pageno)
   
   const char *lvl = (detail) ? detail : "page";
   
-  while ((r = ddjvu_document_get_pagetext (doc, pageno/* - 1*/, lvl)) == miniexp_dummy)
+  while ((r = ddjvu_document_get_pagetext (doc, pageno, lvl)) == miniexp_dummy)
          djvumsg_handle();
 
-  if ((r = miniexp_nth (5, r)) && miniexp_stringp(r))
+  if ((r = miniexp_nth (5, r)) && miniexp_stringp (r))
      {
       const char *s = miniexp_to_str (r); 
       if (s)
@@ -887,16 +890,16 @@ CTioDJVU::CTioDJVU()
 
 bool CTioDJVU::load (const QString &fname)
 {
-
-  if (! (ctx = ddjvu_context_create("tea")))
+  if (! (ctx = ddjvu_context_create ("tea")))
      return false;
      
-  if (! (doc = ddjvu_document_create_by_filename(ctx, fname.toUtf8().data(), TRUE)))
-    return false;
+  if (! (doc = ddjvu_document_create_by_filename (ctx, fname.toUtf8().data(), TRUE)))
+     return false;
 
     
-  while (! ddjvu_document_decoding_done(doc))
+  while (! ddjvu_document_decoding_done (doc))
         djvumsg_handle();
+
 
   int n = ddjvu_document_get_pagenum (doc);
   

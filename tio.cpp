@@ -319,7 +319,6 @@ bool CTioODTSpecial::load (const QString &fname)
              if (tag_name.startsWith ("text") && tag_name != "text:span")
                 tt = true;
             }
-      
          
          if (xml.isCharacters() && tt)
             {
@@ -402,7 +401,7 @@ bool CTioXMLZipped::load (const QString &fname)
              QString s = xml.text().toString();
              if (! s.isEmpty())
                {
-                data.append (xml.text().toString());
+                data.append (s);
                 data.append("\n");
                }
              }

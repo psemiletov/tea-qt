@@ -81,9 +81,6 @@ DJVU read code taken fromdvutxt.c:
 
 bool CTioPlainText::load (const QString &fname)
 {
-
- //qDebug() << "EOL detection - start";
-
   QFile feol_detector (fname);
 
   if (! feol_detector.open (QFile::ReadOnly))
@@ -112,9 +109,8 @@ bool CTioPlainText::load (const QString &fname)
      qDebug() << "CRLF";
    if (eol == "\r")
      qDebug() << "CR";
-
-  qDebug() << "EOL detection - end";
 */
+
   feol_detector.close();
 
   QFile file (fname);
@@ -178,7 +174,6 @@ CTioHandler::CTioHandler()
   list.append (new CTioDJVU);
     
 #endif    
-
 }
 
 
@@ -228,7 +223,7 @@ bool CTioGzip::load (const QString &fname)
 
 bool CTioReadOnly::save (const QString &fname)
 {
-  error_string = tr ("saving of this format is not supported");
+  error_string = tr ("Saving for this format is not supported");
   return false;
 }
 
@@ -268,11 +263,11 @@ bool CTioABW::load (const QString &fname)
             {
              QString s = xml.text().toString();
              if (! s.isEmpty())
-               {
-                data.append (xml.text().toString());
-                data.append("\n");
-               }
-             }
+                {
+                 data.append (s);
+                 data.append("\n");
+                }
+            }
         }
 
    if (xml.hasError())

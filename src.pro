@@ -93,10 +93,9 @@ message ("Printer OFF")
 useclang{
     message ("Clang enabled")
     QMAKE_CC=clang
-    QMAKE_CXX=clang
+    QMAKE_CXX=clang++
     QMAKE_CXXFLAGS += -std=c++11
 }
-
 
 
 

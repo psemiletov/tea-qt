@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR" sourcelanguage="en">
+<TS version="2.1" language="fr_FR" sourcelanguage="en">
 <context>
     <name>CAboutWindow</name>
     <message>
@@ -1494,10 +1494,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add user font</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Northern hemisphere</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1563,14 +1559,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Select the file name first!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select font</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fonts (*.ttf *.otf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1900,6 +1888,22 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Apply template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compare two strings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use joystick as cursor keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is no stylesheet file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot save: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

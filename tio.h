@@ -8,8 +8,6 @@
 #include <QString>
 #include <QStringList>
 
-//try http://qt-project.org/doc/qt-5.0/qtcore/qxmlstreamreader.html for qt5
-
 
 class CSignaturesList: public QObject
 {
@@ -175,7 +173,6 @@ public:
 };
 
 #endif
-
 
 
 class CTioHandler: public QObject

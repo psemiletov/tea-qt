@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE" sourcelanguage="en">
+<TS version="2.1" language="de_DE" sourcelanguage="en">
 <context>
     <name>CAboutWindow</name>
     <message>
@@ -1353,23 +1353,11 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add user font</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Label starts with: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Label ends with: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select font</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fonts (*.ttf *.otf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1807,6 +1795,22 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Apply template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compare two strings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use joystick as cursor keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is no stylesheet file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot save: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

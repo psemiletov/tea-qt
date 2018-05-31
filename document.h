@@ -305,7 +305,8 @@ public:
   QString fname_current_session;
 
   QHash <QString, QString> hls;
-
+  QHash <QString, QString> markup_modes;
+  
   QLabel *l_status_bar;
   QString dir_config;
 

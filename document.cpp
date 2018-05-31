@@ -312,7 +312,6 @@ CDox::~CDox()
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
   
-  
 #if defined(Q_OS_UNIX)
   delete joystick;
 #endif
@@ -560,39 +559,34 @@ QString CDocument::get_filename_at_cursor()
       return result;
      }
   else
- //   if (markup_mode == "HTML")
-   //fallback to HTML markup 
-     {
-      int pos = textEdit->textCursor().positionInBlock();
-
-      int end = s.indexOf ("\"", pos);
-      if (end == -1)
+      {
+       int pos = textEdit->textCursor().positionInBlock();
+ 
+       int end = s.indexOf ("\"", pos);
+       if (end == -1)
          return x;
 
-      int start = s.lastIndexOf ("\"", pos);
-      if (start == -1)
-         return x;
+       int start = s.lastIndexOf ("\"", pos);
+       if (start == -1)
+          return x;
 
-      x = s.mid (start + 1, end - (start + 1));
+       x = s.mid (start + 1, end - (start + 1));
 
-      if (x.startsWith("#"))
-         return x;
+       if (x.startsWith("#"))
+          return x;
 
-      QFileInfo inf (file_name);
-      QDir cur_dir (inf.absolutePath());
+       QFileInfo inf (file_name);
+       QDir cur_dir (inf.absolutePath());
 
-      return cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
-     }
+       return cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
+      }
 }
 
 
 CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent) 
 {
-  //qDebug() << "CSyntaxHighlighter::CSyntaxHighlighter";
   document = doc; 
   xml_format = 0;
-  //casecare = true; 
-  //wrap = true;
 }
 
 
@@ -612,10 +606,7 @@ CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTex
                                                                             CSyntaxHighlighter (parent, doc, fname)
 {
   //qDebug() << "CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression";
-
   document = doc;
-  //casecare = true;
-  //wrap = true;
   load_from_xml (fname);
 }
 
@@ -642,7 +633,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
   QString fname = holder->hls.value (ext);
   
-  qDebug() << "hl fname is " << fname;
+//  qDebug() << "hl fname is " << fname;
   
   if (fname.isEmpty() || ! file_exists (fname))
      return;
@@ -791,16 +782,14 @@ void CDox::add_to_recent (CDocument *d)
   s += ",";
   s += d->charset;
   s += ",";
-  s += QString ("%1").arg (d->textEdit->textCursor().position());
-
+  //s += QString ("%1").arg (d->textEdit->textCursor().position());
+  s += QString::number (d->textEdit->textCursor().position());
   s += ",";
 
   if (d->textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
      s+="0";
   else 
       s+="1";
-
-//  qDebug() << s; 
 
   recent_files.prepend (s);
 //  if (recent_files.size() > settings->value ("recent_list.max_items", 21).toInt())
@@ -842,12 +831,12 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
   d->goto_pos (sl[2].toInt());
 
   if (sl.size() >= 4)
-    {
-     if (sl[3] == "1")
+     {
+      if (sl[3] == "1")
          d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
-     else    
+      else    
           d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
-    }
+     }
 
   return d;
 }
@@ -876,7 +865,12 @@ void CDocument::set_markup_mode()
   markup_mode = holder->markup_mode;
 
   QString e = file_get_ext (file_name);
+  QString t = holder->markup_modes[e];
+  
+  if (! t.isEmpty())
+     markup_mode = t;
 
+/*
   if (e == "htm" || e == "html")
     markup_mode = "HTML";
   else
@@ -899,7 +893,7 @@ void CDocument::set_markup_mode()
     markup_mode = "MediaWiki";
   else
   if (e == "md" || e == "markdown")
-  markup_mode = "Markdown";  
+     markup_mode = "Markdown";  */
 }
 
 
@@ -1036,6 +1030,17 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 
 CDox::CDox()
 {
+  markup_modes.insert ("htm", "HTML");
+  markup_modes.insert ("html", "HTML");
+  markup_modes.insert ("xhtml", "XHTML");
+  markup_modes.insert ("xml", "Docbook");
+  markup_modes.insert ("tex", "LaTeX");
+  markup_modes.insert ("lout", "Lout");
+  markup_modes.insert ("dokuwiki", "DokuWiki");
+  markup_modes.insert ("mediawiki", "MediaWiki");
+  markup_modes.insert ("md", "Markdown");
+  markup_modes.insert ("markdown", "Markdown");
+  
   timer = new QTimer (this);
   timer->setInterval (100);
 

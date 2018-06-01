@@ -88,7 +88,7 @@ public:
 
   QWidget *lineNumberArea;
 
-  bool highlightCurrentLine;
+  bool highlight_current_line;
   bool hl_brackets;
   bool draw_margin;
   bool draw_linenums;

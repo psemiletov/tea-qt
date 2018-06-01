@@ -9682,17 +9682,22 @@ void rvln::fn_sum_by_last_col()
   
   for (int i = 0; i < l.size(); i++)
       {
+       if (l[i].startsWith ("//") ||  l[i].startsWith ("#") || l[i].startsWith (";"))
+          continue;
+
        QStringList t = l[i].split (" ");
        if (t.size() > 0)
           {
            //qDebug() << t[t.size() - 1];
-           sum += t[t.size() - 1].toDouble();
+           //sum += t[t.size() - 1].toDouble();
+           QString s = t[t.size() - 1];
+           std::string utf8_text = s.toUtf8().constData();
+           double f = calculate (utf8_text);
+           sum += f; 
           }
       }
     
   log->log (tr ("sum: %1").arg (sum));
-
-      
 }      
 
 /*

@@ -725,7 +725,7 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->set_margin_pos (settings->value ("margin_pos", 72).toInt());
   
   
-  d->textEdit->highlightCurrentLine = settings->value ("additional_hl", false).toBool();
+  d->textEdit->highlight_current_line = settings->value ("additional_hl", false).toBool();
   d->textEdit->hl_brackets = settings->value ("hl_brackets", false).toBool();
 
   d->textEdit->current_line_color = QColor (hash_get_val (global_palette, "cur_line_color", "#EEF6FF")).darker (darker_val);
@@ -912,7 +912,7 @@ void CTEAEdit::cb_cursorPositionChanged()
 
 void CTEAEdit::set_hl_cur_line (bool enable)
 {
-  highlightCurrentLine = enable;
+  highlight_current_line = enable;
   emit repaint();
 }
 
@@ -949,11 +949,11 @@ void CTEAEdit::set_margin_pos (int mp)
 
 void CTEAEdit::paintEvent (QPaintEvent *event)
 {
-  if (draw_margin || highlightCurrentLine)
+  if (draw_margin || highlight_current_line)
      {
       QPainter painter (viewport());
 
-      if (highlightCurrentLine)
+      if (highlight_current_line)
          {
           QRect r = cursorRect();
           r.setX (0);
@@ -991,7 +991,7 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 {
   rect_sel_reset();
     
-  highlightCurrentLine = false;
+  highlight_current_line = false;
   setup_brace_width();
   
   lineNumberArea = new CLineNumberArea (this);

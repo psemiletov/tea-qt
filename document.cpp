@@ -844,6 +844,9 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
 
 QString CDocument::get_triplex()
 {
+  if (! file_exists (file_name))
+     return QString ("");
+  
   QString s (file_name);
   s += ",";
   s += charset;
@@ -1533,7 +1536,6 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 }
 
 
-
 void CDox::save_to_session (const QString &fileName)
 {
   if (list.size() < 0)
@@ -1544,8 +1546,12 @@ void CDox::save_to_session (const QString &fileName)
 
   foreach (CDocument *d, list)
           {
-           l += d->get_triplex();
-           l += "\n";
+           QString t = d->get_triplex();
+           if (! t.isEmpty())
+               {
+                l += t;
+                l += "\n";
+               } 
           }
   
   qstring_save (fileName, l.trimmed());

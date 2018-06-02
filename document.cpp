@@ -1199,13 +1199,14 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                          for (int i = 0; i < keywordPatterns.size(); i++)
                               if (! keywordPatterns.at(i).isEmpty())
                                  {
-                                  HighlightingRule rule;
-                                  rule.pattern = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
+                                  QRegularExpression rg = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
                                   
-                                  if (! rule.pattern.isValid())
-                                     qDebug() << "! valid " << rule.pattern.pattern();
+                                  if (! rg.isValid())
+                                     qDebug() << "! valid " << rg.pattern();
                                   else  
                                       {
+                                       HighlightingRule rule;
+                                       rule.pattern = rg;
                                        rule.format = fmt;
                                        highlightingRules.append (rule);
                                       }
@@ -1215,12 +1216,14 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                       if (xml_format == 1)
                          {
                           HighlightingRule rule;
-                          rule.pattern = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
+                          QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
 
-                          if (! rule.pattern.isValid())
-                             qDebug() << "! valid " << rule.pattern.pattern();
+                          if (! rg.isValid())
+                             qDebug() << "! valid " << rg.pattern();
                           else
-                              {          
+                              {        
+                               HighlightingRule rule;
+                               rule.pattern = rg;  
                                rule.format = fmt;
                                highlightingRules.append (rule); 
                               }
@@ -1233,14 +1236,15 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                         QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                         QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                        HighlightingRule rule;
-                        rule.pattern = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
-                        if (! rule.pattern.isValid())
-                           qDebug() << "! valid " << rule.pattern.pattern();
+                        QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
+                        if (! rg.isValid())
+                           qDebug() << "! valid " << rg.pattern();
                         else    
                             {
+                             HighlightingRule rule;
+                             rule.pattern = rg;  
                              rule.format = fmt;
-                             highlightingRules.append(rule);
+                             highlightingRules.append (rule);
                             }              
                        }
                     else
@@ -1357,16 +1361,21 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
          xml.readNext();
 
          QString tag_name = xml.name().toString().toLower();
-
+/*
          if (xml.isStartElement())
             if (tag_name == "document")
                 {
                  exts = xml.attributes().value ("exts").toString();
                  langs = xml.attributes().value ("langs").toString();
                 }
-
+*/
          if (xml.isStartElement())
             {
+             if (tag_name == "document")
+                {
+                 exts = xml.attributes().value ("exts").toString();
+                 langs = xml.attributes().value ("langs").toString();
+                }
 
              if (tag_name == "item")
                 {
@@ -1398,26 +1407,34 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                         {
                          QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
 
-                         HighlightingRule rule;
-
+                         
                          for (int i = 0; i < keywordPatterns.size(); i++)
                              if (! keywordPatterns.at(i).isEmpty())
                                 {
-                                 rule.pattern = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);
-                                 rule.format = fmt;
-                                 highlightingRules.append (rule);
+                                 QRegExp rg = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);;
+                                 if (rg.isValid())
+                                    {
+                                     HighlightingRule rule;
+                                     rule.pattern = rg; 
+                                     rule.format = fmt;
+                                     highlightingRules.append (rule);
+                                    }
                                 }
                           }
                      else
                          if (xml_format == 1)
                             {
-                             HighlightingRule rule;
-                             rule.pattern = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
-                             rule.format = fmt;
-                             highlightingRules.append(rule);
+                             QRegExp rg = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
                         
-                             if (! rule.pattern.isValid())
-                                qDebug() << "! valid " << rule.pattern.pattern();
+                             if (! rg.isValid())
+                                qDebug() << "! valid " << rg.pattern();
+                             else
+                                 {
+                                  HighlightingRule rule;
+                                  rule.pattern = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
+                                  rule.format = fmt;
+                                  highlightingRules.append(rule);
+                                 }   
                             }
                             
                      } //keywords
@@ -1426,11 +1443,15 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                     {
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                     HighlightingRule rule;
-                     rule.pattern = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
-                     rule.format = fmt;
-                     highlightingRules.append(rule);
+                   
+                     QRegExp rg = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
+                     if (rg.isValid())
+                        {
+                         HighlightingRule rule;
+                         rule.pattern = rg;
+                         rule.format = fmt;
+                         highlightingRules.append (rule);
+                        } 
                     }
                  else
                  if (attr_type == "mcomment-start")

@@ -1153,10 +1153,10 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
             {
             
              if (tag_name == "document")
-               {
-                exts = xml.attributes().value ("exts").toString();
-                langs = xml.attributes().value ("langs").toString();
-               }
+                {
+                 exts = xml.attributes().value ("exts").toString();
+                 langs = xml.attributes().value ("langs").toString();
+                }
             
 
              if (tag_name == "item")
@@ -1181,7 +1181,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                            casecare = false;
                         
                      if (! casecare) 
-                       pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;                    
+                        pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;                    
                      }
 
                  if (attr_type == "keywords")
@@ -1190,33 +1190,40 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                     if (xml_format == 0)
+                     if (xml_format == 0) //old and ugly format
                         {
                          QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
 
-                         HighlightingRule rule;
+                         //HighlightingRule rule;
 
                          for (int i = 0; i < keywordPatterns.size(); i++)
                               if (! keywordPatterns.at(i).isEmpty())
                                  {
+                                  HighlightingRule rule;
                                   rule.pattern = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
-                                  rule.format = fmt;
-                                  highlightingRules.append (rule);
-                              
+                                  
                                   if (! rule.pattern.isValid())
                                      qDebug() << "! valid " << rule.pattern.pattern();
-                             }
+                                  else  
+                                      {
+                                       rule.format = fmt;
+                                       highlightingRules.append (rule);
+                                      }
+                                  }
                          }       
                       else
                       if (xml_format == 1)
                          {
                           HighlightingRule rule;
                           rule.pattern = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
-                          rule.format = fmt;
-                          highlightingRules.append (rule);
-                        
+
                           if (! rule.pattern.isValid())
                              qDebug() << "! valid " << rule.pattern.pattern();
+                          else
+                              {          
+                               rule.format = fmt;
+                               highlightingRules.append (rule); 
+                              }
                          }
                              
                      } //keywords
@@ -1228,12 +1235,13 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
                         HighlightingRule rule;
                         rule.pattern = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
-                        rule.format = fmt;
-                        highlightingRules.append(rule);
-                        
                         if (! rule.pattern.isValid())
                            qDebug() << "! valid " << rule.pattern.pattern();
-
+                        else    
+                            {
+                             rule.format = fmt;
+                             highlightingRules.append(rule);
+                            }              
                        }
                     else
                         if (attr_type == "mcomment-start")

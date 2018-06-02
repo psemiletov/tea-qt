@@ -515,7 +515,7 @@ QString CDocument::get_filename_at_cursor()
      {
       QFileInfo nf (file_name);
       QDir cd (nf.absolutePath());
-      return cd.cleanPath (cd.absoluteFilePath(textEdit->textCursor().selectedText()));
+      return cd.cleanPath (cd.absoluteFilePath (textEdit->textCursor().selectedText()));
      }
 
   QString s = textEdit->textCursor().block().text();
@@ -660,7 +660,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
      {
       if (highlighter->wrap)
          textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
-       else
+      else
           textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
      }
 
@@ -905,7 +905,6 @@ void CTEAEdit::cb_cursorPositionChanged()
      doc->update_status();
      
   if (hl_brackets)   
-     //braceHighlight();   
      update_ext_selections();
 }
 
@@ -970,12 +969,6 @@ void CTEAEdit::paintEvent (QPaintEvent *event)
          }
      }
 
-  /*
-      QStyleOption opt;
-    opt.init(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-*/
   QPlainTextEdit::paintEvent (event);
 }
 
@@ -1011,10 +1004,6 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   wrap = true;
   tab_sp_width = 8;
   spaces_instead_of_tabs = true;
-  
-  //document()->setDefaultTextOption(QTextOption(Qt::AlignRight));
- // setCursorWidth (settings->value ("cursor_width", 1).toInt());
-  
   
   QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
   QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
@@ -1055,6 +1044,7 @@ CDox::CDox()
       if (settings->value ("use_joystick", "0").toInt())
          timer->start();   
      }
+     
 #endif     
 
 }
@@ -1074,8 +1064,8 @@ QStringList CDocument::get_words()
   do
     {
      QChar c = text[cr.position()];
-     if (char_is_shit (c))
-         while (char_is_shit (c))
+     if (char_is_bad (c))
+         while (char_is_bad (c))
                {
                 cr.movePosition (QTextCursor::NextCharacter);
                 c = text[cr.position()];
@@ -1129,26 +1119,21 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 
 void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
- qDebug() << "CSyntaxHighlighterQRegularExpression::load_from_xml ";
-
+// qDebug() << "CSyntaxHighlighterQRegularExpression::load_from_xml ";
   
   wrap = true;
   casecare = true;
-
   exts = "default";
   langs = "default";
-  
-  int darker_val = settings->value ("darker_val", 100).toInt();
-  
   pattern_opts = 0;
   
+  int darker_val = settings->value ("darker_val", 100).toInt();
+    
   if (! file_exists (fname))
      return;
-
   
   QString temp = qstring_load (fname);
   QXmlStreamReader xml (temp);
-
   
   while (! xml.atEnd())
         {
@@ -1156,16 +1141,23 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
          QString tag_name = xml.name().toString().toLower();
 
-
+/*
          if (xml.isStartElement())
             if (tag_name == "document")
-                {
-                 exts = xml.attributes().value ("exts").toString();
-                 langs = xml.attributes().value ("langs").toString();
-                }
-
+               {
+                exts = xml.attributes().value ("exts").toString();
+                langs = xml.attributes().value ("langs").toString();
+               }
+*/
          if (xml.isStartElement())
             {
+            
+             if (tag_name == "document")
+               {
+                exts = xml.attributes().value ("exts").toString();
+                langs = xml.attributes().value ("langs").toString();
+               }
+            
 
              if (tag_name == "item")
                 {

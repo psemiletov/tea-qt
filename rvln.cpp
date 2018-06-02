@@ -3594,8 +3594,8 @@ void rvln::fn_spell_check()
   //      qApp->processEvents();
         
      QChar c = text.at (cr.position());
-     if (char_is_shit (c))
-        while (char_is_shit (c))
+     if (char_is_bad (c))
+        while (char_is_bad (c))
               {
                cr.movePosition (QTextCursor::NextCharacter);
                c = text.at (cr.position());

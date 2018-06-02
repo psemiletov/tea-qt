@@ -62,7 +62,7 @@ QByteArray file_load (const QString &fileName);
 QString change_file_ext (const QString &s, const QString &ext);
 QString get_insert_image (const QString &file_name, const QString &full_path, const QString &markup_mode);
 
-bool char_is_shit (const QChar &c);
+bool char_is_bad (const QChar &c);
 
 
 inline int get_value (int total, int perc)

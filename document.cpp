@@ -239,8 +239,8 @@ CDocument::~CDocument()
       if (QMessageBox::warning (0, "TEA",
                                 tr ("%1 has been modified.\n"
                                 "Do you want to save your changes?").arg (file_name),
-                                QMessageBox::Ok | QMessageBox::Default,
-                                QMessageBox::Cancel | QMessageBox::Escape) == QMessageBox::Ok)
+                                QMessageBox::Yes | QMessageBox::Default,
+                                QMessageBox::No | QMessageBox::Escape) == QMessageBox::Yes)
          save_with_name (file_name, charset);
      }
 
@@ -1564,8 +1564,7 @@ void CDox::load_from_session (const QString &fileName)
      return;
 
   QStringList l = qstring_load (fileName).split ("\n");
-  int c = l.size();
-  if (c < 0)
+  if (l.size() < 0)
      return;
 
   foreach (QString t, l)  
@@ -1766,6 +1765,7 @@ void CDocument::insert_image (const QString &full_path)
 }
 
 
+//если строка пустая - пофиг, а надо бы смотреть тогда строку выше
 void CTEAEdit::calc_auto_indent()
 {
   QTextCursor cur = textCursor();
@@ -1783,10 +1783,10 @@ void CTEAEdit::calc_auto_indent()
      {
       for (int i = 0; i < len; i++)
           if (! s.at(i).isSpace())
-            {
-             aindent = i; 
-             break;
-            }
+             {
+              aindent = i; 
+              break;
+             }
      }
   else   
      {
@@ -1800,8 +1800,7 @@ void CTEAEdit::calc_auto_indent()
            
 
   if (aindent != 0)
-     //indent_val = indent_val.fill (' ', aindent);
-    indent_val = indent_val.fill (t, aindent);
+     indent_val = indent_val.fill (t, aindent);
   else 
       indent_val.clear();
 }
@@ -1929,52 +1928,49 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
           switch (event->nativeScanCode())
                  {
                   case SK_W:
-                                 cr.movePosition (QTextCursor::Up, m);
-                                 setTextCursor (cr);
-                                 return;
+                            cr.movePosition (QTextCursor::Up, m);
+                            setTextCursor (cr);
+                            return;
 
                   case SK_S:
-                                 cr.movePosition (QTextCursor::Down, m);
-                                 setTextCursor (cr);
-                                 return;
+                            cr.movePosition (QTextCursor::Down, m);
+                            setTextCursor (cr);
+                            return;
 
                   case SK_A:
-                                 cr.movePosition (QTextCursor::Left, m);
-                                 setTextCursor (cr);
-                                 return;
+                            cr.movePosition (QTextCursor::Left, m);
+                            setTextCursor (cr);
+                            return;
 
                   case SK_D:
-                                 cr.movePosition (QTextCursor::Right, m);
-                                 setTextCursor (cr);
-                                 return;
+                            cr.movePosition (QTextCursor::Right, m);
+                            setTextCursor (cr);
+                            return;
                                  
-                   case SK_E:
-                                  visible_lines = height() / fontMetrics().height();
-                                  cr.movePosition (QTextCursor::Down, m, visible_lines);
-                                  setTextCursor (cr);
-                                  return;               
+                  case SK_E:
+                            visible_lines = height() / fontMetrics().height();
+                            cr.movePosition (QTextCursor::Down, m, visible_lines);
+                            setTextCursor (cr);
+                            return;               
                                   
-                   case SK_C:
-                                  visible_lines = height() / fontMetrics().height();
-                                  cr.movePosition (QTextCursor::Up, m, visible_lines);
-                                  setTextCursor (cr);
-                                  return;               
-                                     
-                 }
+                  case SK_C:
+                            visible_lines = height() / fontMetrics().height();
+                            cr.movePosition (QTextCursor::Up, m, visible_lines);
+                            setTextCursor (cr);
+                            return;               
+                }
       
        }
     } 
 
 
-
-  if (auto_indent)
-     if (event->key() == Qt::Key_Return)
-        {
-         calc_auto_indent();
-         QPlainTextEdit::keyPressEvent (event);
-         textCursor().insertText (indent_val);
-         return;
-        }
+  if (auto_indent && event->key() == Qt::Key_Return)
+     {
+      calc_auto_indent();
+      QPlainTextEdit::keyPressEvent (event);
+      textCursor().insertText (indent_val);
+      return;
+     }
    
   if (event->key() == Qt::Key_Tab)
      {
@@ -2071,7 +2067,7 @@ void CTEAEdit::lineNumberAreaPaintEvent (QPaintEvent *event)
                  painter.setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
                  painter.drawEllipse(5, top + (fontMetrics().height()/4), fontMetrics().height()/2, fontMetrics().height()/2);
                 }*/
-              }
+             }
 
          block = block.next();
          top = bottom;
@@ -2127,8 +2123,8 @@ void CTEAEdit::braceHighlight()
            cursor = beforeCursor;
            brace = cursor.selectedText();
           }
-        else 
-            return;
+       else 
+           return;
        }
 
   QString openBrace;
@@ -2246,8 +2242,7 @@ void CTEAEdit::update_rect_sel()
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   //int ydiff = y2 - y1;
-   
-  
+     
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
   int xdiff = x2 - x1;
@@ -2285,17 +2280,16 @@ void CTEAEdit::update_rect_sel()
        cursor.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, sel_len);
               
        rect_selection.cursor = cursor;
-      // rect_selection.format.setBackground (brackets_color);
-      rect_selection.format.setBackground (sel_back_color);
-      rect_selection.format.setForeground (sel_text_color);
+       // rect_selection.format.setBackground (brackets_color);
+       rect_selection.format.setBackground (sel_back_color);
+       rect_selection.format.setForeground (sel_text_color);
       
-      
-      extraSelections.append (rect_selection);
+       extraSelections.append (rect_selection);
   
-      cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
+       cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
        
-      if (b.text().length() != 0)
-          correction = 0;
+       if (b.text().length() != 0)
+           correction = 0;
        
       }
 
@@ -2308,7 +2302,6 @@ void CTEAEdit::update_rect_sel()
   qDebug() << "x2:" << x2;
   */
  // qDebug() << get_rect_sel();
-  
 }
 
 
@@ -2478,7 +2471,6 @@ bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
 
 QMimeData* CTEAEdit::createMimeDataFromSelection()
 {
-  qDebug() << "CTEAEdit::createMimeDataFromSelection()";
   if (has_rect_selection())
      {
       QMimeData *md = new QMimeData;
@@ -2500,18 +2492,18 @@ void CTEAEdit::insertFromMimeData (const QMimeData *source)
       b_ins_plain_text = true;
 
   if (b_ins_plain_text)
-    {
-     QPlainTextEdit::insertFromMimeData (source);
-     return;
-    }
+     {
+      QPlainTextEdit::insertFromMimeData (source);
+      return;
+     }
 
   foreach (QUrl u, source->urls())
-         {
-          fName = u.toLocalFile();
-          info.setFile(fName);
-          if (info.isFile())
-             doc->holder->open_file (fName, "UTF-8");
-         }
+          {
+           fName = u.toLocalFile();
+           info.setFile(fName);
+           if (info.isFile())
+              doc->holder->open_file (fName, "UTF-8");
+          }
 }
 
 
@@ -2546,11 +2538,11 @@ void CDocument::update_labels()
 {
   labels.clear();
   labels = text_get_bookmarks (textEdit->toPlainText(),
-                                        settings->value ("label_start", "[?").toString(),
-                                        settings->value ("label_end", "?]").toString());
+                               settings->value ("label_start", "[?").toString(),
+                               settings->value ("label_end", "?]").toString());
 }
 
-//////////////////////////////////////////
+
 void CDox::open_current()
 {
   QAction *act = qobject_cast<QAction *>(sender());
@@ -2566,7 +2558,7 @@ void CDox::update_current_files_menu()
  QStringList current_files; 
  
   foreach (CDocument *d, list)
-         current_files.prepend (d->file_name);
+          current_files.prepend (d->file_name);
  
   current_files_menu->clear();
   create_menu_from_list (this, current_files_menu, current_files, SLOT(open_current()));
@@ -2791,20 +2783,13 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
          else
             startIndex = commentStartExpression.indexIn (text, startIndex + commentLength);
         }
-        
-      
 }
-
- 
- 
- * 
- */
-
-bool CDox::event (QEvent *ev)
-{
+*/
 
 #if defined(Q_OS_UNIX)
 
+bool CDox::event (QEvent *ev)
+{
 
   if (static_cast<int>(ev->type() == evtJoystickAxis))
      {
@@ -2813,20 +2798,6 @@ bool CDox::event (QEvent *ev)
       custom_event->accept();
       return true;
      }
-
-/*
-	switch(static_cast<int>(ev->type()))
-	{
-		case evtJoystickAxis:
-		
-			CJoystickAxisEvent* custom_event = reinterpret_cast<CJoystickAxisEvent*>(ev);
-			handle_joystick_event (custom_event);
-			
-		 break;
-	};
-	*/
-	
-#endif
 	
   return QObject::event(ev);
 }
@@ -2834,46 +2805,33 @@ bool CDox::event (QEvent *ev)
 
 void CDox::handle_joystick_event (CJoystickAxisEvent *event)
 {
+  CDocument *d = get_current();
 
-    CDocument *d = get_current();
-    if (d)
-       {
-        if (event->axis == 1 && event->value < 0) //up
-           {
-            QTextCursor cr = d->textEdit->textCursor();
-            cr.movePosition (QTextCursor::Up, QTextCursor::MoveAnchor);
+  if (! d)
+     return;
 
-            if (! cr.isNull())
-                d->textEdit->setTextCursor (cr);
-                
-           }
+  QTextCursor cr = d->textEdit->textCursor();
+  if (cr.isNull())
+     return;
+     
+  QTextCursor::MoveOperation mo = QTextCursor::NoMove;   
+     
+  if (event->axis == 1 && event->value < 0) //up
+     mo = QTextCursor::Up;
            
-        if (event->axis == 1 && event->value > 0) //down
-           {
-            QTextCursor cr = d->textEdit->textCursor();
-            cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor);
-
-            if (! cr.isNull())
-                d->textEdit->setTextCursor (cr);
-           }
-
-        if (event->axis == 0 && event->value < 0) //left
-           {
-            QTextCursor cr = d->textEdit->textCursor();
-            cr.movePosition (QTextCursor::Left, QTextCursor::MoveAnchor);
-
-            if (! cr.isNull())
-                d->textEdit->setTextCursor (cr);
-           }
+  if (event->axis == 1 && event->value > 0) //down
+     mo = QTextCursor::Down;
+     
+  if (event->axis == 0 && event->value < 0) //left
+     mo = QTextCursor::Left; 
            
-        if (event->axis == 0 && event->value > 0) //right
-           {
-            QTextCursor cr = d->textEdit->textCursor();
-            cr.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor);
-
-            if (! cr.isNull())
-                d->textEdit->setTextCursor (cr);
-           }
-        
-       }
+  if (event->axis == 0 && event->value > 0) //right
+     mo = QTextCursor::Right;
+           
+  if (mo != QTextCursor::NoMove)         
+     {
+      cr.movePosition (mo, QTextCursor::MoveAnchor);
+      d->textEdit->setTextCursor (cr);
+     } 
 }    
+#endif

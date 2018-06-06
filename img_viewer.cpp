@@ -3,24 +3,18 @@ this code is Public Domain
 */
 
 
-
 #include <QDebug>
-
 #include <QApplication>
 #include <QPainter>
-
 #include <QDesktopWidget>
-
 #include <QVBoxLayout>
 #include <QCryptographicHash>
 #include <QDir>
 #include <QImageReader>
 #include <QKeyEvent>
-
 #include <QSettings>
 
 #include "img_viewer.h"
-
 #include "exif.h"
 #include "utils.h"
 
@@ -310,8 +304,6 @@ void CViewerWindow::show_image_from_clipboard()
 */
 
 
-
-
 void CZORWindow::closeEvent (QCloseEvent *event)
 {
   event->accept();
@@ -350,6 +342,7 @@ CZORWindow::CZORWindow (QWidget *parent): QWidget (parent)
   //addAction(quitAction);
 }
 
+
 CZORWindow::~CZORWindow()
 {
   //qDebug() << "~CZORWindow()";
@@ -387,12 +380,11 @@ void CZORWindow::load_image (const QString &fname)
      return;
 
  // qDebug() << "CZORWindow::load_image " << fname;
-  
-  fname_image = fname;
  
   if (! source_image.load (fname))
      qDebug() << "cannot load " << fname;
-     
+
+  fname_image = fname;
   
   bool orientation_portrait = false; 
   
@@ -400,13 +392,13 @@ void CZORWindow::load_image (const QString &fname)
  // qDebug() << "exif_orientation: " << exif_orientation;
   
   if (settings->value ("zor_use_exif_orientation", 0).toInt())
-  if (exif_orientation == 6 || exif_orientation == 8)
-     orientation_portrait = true;
+      if (exif_orientation == 6 || exif_orientation == 8)
+          orientation_portrait = true;
   
   bool need_to_scale = false;
   
   if (source_image.size().height() > source_image.size().height())
-    orientation_portrait = true;
+     orientation_portrait = true;
   
   if (source_image.size().height() > 600 || source_image.size().width() > 800)
      need_to_scale = true;

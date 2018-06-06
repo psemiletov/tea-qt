@@ -26,7 +26,6 @@ CFontBox::CFontBox (QWidget *parent): QWidget (parent)
   
   h_box->addWidget (cf);
   h_box->addWidget (spb_font_size);
-  
   h_box->addWidget (&edit);
   
   edit.setPlainText (tr("Example string"));
@@ -34,8 +33,8 @@ CFontBox::CFontBox (QWidget *parent): QWidget (parent)
   connect (cf, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(slot_fontname_changed(const QString &)));
 
-  setWindowTitle (tr("Font gallery"));  
-  setAttribute(Qt::WA_DeleteOnClose, true);
+  setWindowTitle (tr ("Font gallery"));  
+  setAttribute (Qt::WA_DeleteOnClose, true);
 }
 
 

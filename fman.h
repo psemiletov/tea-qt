@@ -1,5 +1,5 @@
  /**************************************************************************
- *   2007-2017 by Peter Semiletov                                          *
+ *   2007-2018 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -71,9 +71,7 @@ public slots:
   void refresh();
   void dir_up();
   void cb_fman_currentChanged (const QModelIndex &current, const QModelIndex &previous);
-
-  void header_view_sortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
-
+  void header_view_sortIndicatorChanged (int logicalIndex, Qt::SortOrder order);
   
 signals:
 
@@ -81,14 +79,11 @@ signals:
  void dir_changed (const QString &path);
  void current_file_changed (const QString &path, const QString &just_name);
 
-
 protected:
 
   void mouseMoveEvent (QMouseEvent *event);
   void keyPressEvent (QKeyEvent *event);
-
-  void drawRow (QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+  void drawRow (QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
-
 
 #endif

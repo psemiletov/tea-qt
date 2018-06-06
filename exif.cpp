@@ -1,7 +1,6 @@
 #include <stdlib.h>
 
 #include <QtGlobal>
-#include <QFile>
 #include <QList>
 #include <QDebug>
 #include <QByteArray>
@@ -9,15 +8,7 @@
 #include "exif.h"
 
 
-/*
-Exif::Exif(){
-}
-
-Exif::~Exif(){
-}
-*/
-
-rint8u readByte(QFile &file)
+rint8u readByte (QFile &file)
 {
   char a;
   file.getChar (&a);
@@ -31,12 +22,10 @@ rint8u readByte(QFile &file)
 int Exif::readJpegSections(QFile &file, int *Orientation)
 {
   QByteArray *data;
-  rint8u a = readByte(file);
+  rint8u a = readByte (file);
 
   if (a != 0xff)
-     {
       return -1;
-     }
   else
       {
        rint8u b = readByte (file);
@@ -49,7 +38,7 @@ int Exif::readJpegSections(QFile &file, int *Orientation)
        {
         int itemlen;
         int prev;
-        rint8u  marker = 0;
+        rint8u marker = 0;
         rint8u ll, lh;
 
         prev = 0;
@@ -80,59 +69,61 @@ int Exif::readJpegSections(QFile &file, int *Orientation)
         switch (marker)
                {
                 case M_SOS:   // stop before hitting compressed data
-                             return 0;
+                           return 0;
 
-            case M_EOI:   // in case it's a tables-only JPEG stream
-                return -1;
+                case M_EOI:   // in case it's a tables-only JPEG stream
+                           return -1;
 
-            case M_COM: // Comment section
-                delete(data);
+                case M_COM: // Comment section
+                            delete (data);
+                            break;
+
+                case M_JFIF:
+                            // Regular jpegs always have this tag, exif images have the exif
+                            // marker instead, althogh ACDsee will write images with both markers.
+                            // this program will re-create this marker on absence of exif marker.
+                            // hence no need to keep the copy from the file.
+                            if (itemlen >= 16){ // if Jfif header not too short
+                                               // skipped
+                                              }
+
+                            delete (data);
+                            break;
+
+                case M_EXIF:
+                             // There can be different section using the same marker.
+                           if (data->left(4) == "Exif")
+                              {
+                               processEXIF(data, itemlen, Orientation);
+                               break;
+                              }
+                            // Oterwise, discard this section.
+                           delete (data);
+                           break;
+
+                case M_IPTC:
+                             delete (data);
+                             break;
+/*
+                case M_SOF0:
+                case M_SOF1:
+                case M_SOF2:
+                case M_SOF3:
+                case M_SOF5:
+                case M_SOF6:
+                case M_SOF7:
+                case M_SOF9:
+                case M_SOF10:
+                case M_SOF11:
+                case M_SOF13:
+                case M_SOF14:
+                case M_SOF15:
+                        //process_SOFn(Data, marker);*/
                 break;
-
-           case M_JFIF:
-                // Regular jpegs always have this tag, exif images have the exif
-                // marker instead, althogh ACDsee will write images with both markers.
-                // this program will re-create this marker on absence of exif marker.
-                // hence no need to keep the copy from the file.
-                if (itemlen >= 16){ // if Jfif header not too short
-                    // skipped
-                }
-
-                delete(data);
-                break;
-
-            case M_EXIF:
-                // There can be different section using the same marker.
-                if(data->left(4) == "Exif"){
-                    processEXIF(data, itemlen, Orientation);
-                    break;
-                }
-                // Oterwise, discard this section.
-                delete(data);
-                break;
-
-            case M_IPTC:
-                delete(data);
-                break;
-
-            case M_SOF0:
-                    case M_SOF1:
-                    case M_SOF2:
-                    case M_SOF3:
-                    case M_SOF5:
-                    case M_SOF6:
-                    case M_SOF7:
-                    case M_SOF9:
-                    case M_SOF10:
-                    case M_SOF11:
-                    case M_SOF13:
-                    case M_SOF14:
-                    case M_SOF15:
-                        //process_SOFn(Data, marker);
-                        break;
+                
             default:
-                        // Skip any other sections.
-                        break;
+                    // Skip any other sections.
+                    break;
 
         } // switch
 
@@ -389,5 +380,3 @@ int get_exif_orientation (const QString &fname)
      
   return o;    
 }
-
-

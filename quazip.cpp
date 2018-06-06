@@ -33,12 +33,12 @@ QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
 ----
 modified by Peter Semiletov
  */
-
-#include "quazip.h"
  
 
 #include <QFile>
 #include <QDebug>
+
+#include "quazip.h"
 
 
 QuaZip::QuaZip():
@@ -51,16 +51,16 @@ QuaZip::QuaZip():
 
 
 QuaZip::QuaZip (const QString& zipName, const QString &fnamecodec):
-               commentCodec (QTextCodec::codecForLocale()),
-               zipName (zipName),
-               mode(mdNotOpen),
-               hasCurrentFile_f (false),
-               zipError(UNZ_OK)
-{
- if (fnamecodec.isEmpty())
-    fileNameCodec = QTextCodec::codecForName ("UTF-8");
- else
-    fileNameCodec = QTextCodec::codecForName (fnamecodec.toLatin1());
+                commentCodec (QTextCodec::codecForLocale()),
+                zipName (zipName),
+                mode (mdNotOpen),
+                hasCurrentFile_f (false),
+                zipError (UNZ_OK)
+{ 
+  if (fnamecodec.isEmpty())
+     fileNameCodec = QTextCodec::codecForName ("UTF-8");
+  else
+      fileNameCodec = QTextCodec::codecForName (fnamecodec.toLatin1());
 }
 
 
@@ -117,10 +117,10 @@ bool QuaZip::open (Mode mode, zlib_filefunc_def *ioApi)
                        zipError = UNZ_OPENERROR;
                        return false;
                        }
-       default:
-               qWarning ("QuaZip::open(): unknown mode: %d", (int) mode);
-               return false;
-               break;
+        default:
+                qWarning ("QuaZip::open(): unknown mode: %d", (int) mode);
+                return false;
+                break;
       }
 }
 
@@ -246,14 +246,14 @@ bool QuaZip::setCurrentFile (const QString &fileName, CaseSensitivity cs)
   bool sens;
 
   if (cs == csDefault)
-    {
+     {
      
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-     sens = false;
+      sens = false;
 #else
-     sens = true;
+      sens = true;
 #endif
-    }
+     }
   else
       sens = cs == csSensitive;
 
@@ -278,9 +278,9 @@ bool QuaZip::setCurrentFile (const QString &fileName, CaseSensitivity cs)
            if (current == fileName)
                break;
           }
-      else
+       else
            if (current.toLower() == lower)
-               break;
+              break;
       }
 
  

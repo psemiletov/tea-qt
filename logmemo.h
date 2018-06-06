@@ -21,12 +21,9 @@
 #ifndef LOGMEMO_H
 #define LOGMEMO_H
 
-//#include <QtGui>
-
 #include <QObject>
 #include <QPlainTextEdit>
 #include <QString>
-
 
 
 class CLogMemo: public QPlainTextEdit
@@ -35,13 +32,7 @@ class CLogMemo: public QPlainTextEdit
 
 public:
 
-//  QPlainTextEdit *memo;
-  //CLogMemo (QPlainTextEdit *m);
-
   CLogMemo (QWidget *parent = 0);
-
-//public slots:
-
   
   void log (const QString &text);
 };

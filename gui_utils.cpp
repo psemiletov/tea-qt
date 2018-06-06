@@ -2,21 +2,19 @@
 this code is Public Domain
 */
 
-
-#include "gui_utils.h"
-#include "utils.h"
-
 #include <QDir>
 #include <QFileInfoList>
 #include <QFileInfo>
-
 #include <QLabel>
-
 #include <QPushButton>
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
 #include <QListWidgetItem>
+
+#include "gui_utils.h"
+#include "utils.h"
+
 
 void create_menu_from_list (QObject *handler,
                             QMenu *menu,
@@ -28,7 +26,7 @@ void create_menu_from_list (QObject *handler,
 
   foreach (QString s, list)
           {
-           if (! s.startsWith("#"))
+           if (! s.startsWith ("#"))
               {
                QAction *act = new QAction (s, menu->parentWidget());
                handler->connect (act, SIGNAL(triggered()), handler, method);
@@ -45,7 +43,11 @@ void create_menu_from_dir (QObject *handler,
                            )
 {
   menu->setTearOffEnabled (true);
+  
   QDir d (dir);
+  if (! d.exists())
+     return;
+  
   QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::AllEntries,
                                           QDir::DirsFirst | QDir::IgnoreCase |
                                           QDir::LocaleAware | QDir::Name);
@@ -76,7 +78,11 @@ void create_menu_from_dir_dir (QObject *handler,
                                )
 {
   menu->setTearOffEnabled (true);
+  
   QDir d (dir);
+  if (! d.exists())
+     return;
+  
   QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
                                           QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
 
@@ -98,6 +104,9 @@ QImage image_scale_by (const QImage &source,
                        int value,
                        Qt::TransformationMode mode)
 {
+  if (source.isNull())
+     return source;
+  
   bool horisontal = (source.width() > source.height());
 
   int width;
@@ -125,10 +134,10 @@ QLineEdit* new_line_edit (QBoxLayout *layout, const QString &label, const QStrin
 {
   QHBoxLayout *lt_h = new QHBoxLayout;
   QLabel *l = new QLabel (label);
-
   QLineEdit *r = new QLineEdit;
+  
   r->setText (def_value);
-
+  
   lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
   lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
 
@@ -142,20 +151,14 @@ QSpinBox* new_spin_box (QBoxLayout *layout, const QString &label, int min, int m
 {
   QHBoxLayout *lt_h = new QHBoxLayout;
   QLabel *l = new QLabel (label);
-
   QSpinBox *r = new QSpinBox;
 
   r->setSingleStep (step);
   r->setRange (min, max);
   r->setValue (value);
 
- // lt_h->addWidget (l, 1);
- // lt_h ->addWidget (r);
- 
- 
   lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
   lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
-
 
   layout->addLayout (lt_h, 1);
 
@@ -170,14 +173,10 @@ QComboBox* new_combobox (QBoxLayout *layout,
 {
   QHBoxLayout *lt_h = new QHBoxLayout;
   QLabel *l = new QLabel (label);
-
   QComboBox *r = new QComboBox;
 
   r->addItems (items);
   r->setCurrentIndex (r->findText (def_value));
-
-  //lt_h->addWidget (l, 1, Qt::AlignLeft);
-  //lt_h->addWidget (r);
 
   lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
   lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
@@ -187,6 +186,7 @@ QComboBox* new_combobox (QBoxLayout *layout,
   return r;
 }
 
+
 QComboBox* new_combobox (QBoxLayout *layout,
                          const QString &label,
                          const QStringList &items,
@@ -194,14 +194,10 @@ QComboBox* new_combobox (QBoxLayout *layout,
 {
   QHBoxLayout *lt_h = new QHBoxLayout;
   QLabel *l = new QLabel (label);
-
   QComboBox *r = new QComboBox;
 
   r->addItems (items);
   r->setCurrentIndex (index);
-
-  //lt_h->addWidget (l, 1, Qt::AlignLeft);
-  //lt_h->addWidget (r);
 
   lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
   lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);

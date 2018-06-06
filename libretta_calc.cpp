@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include <locale>
 
+
 using namespace std;
 
 class CItem
@@ -41,7 +42,6 @@ double calculate (string expression)
       sep_find = ",";
   else
       sep_find = ".";
-       
 
   size_t position = expression.find (sep_find); 
 
@@ -59,34 +59,34 @@ double calculate (string expression)
     
   size_t start_pos = 0;
   if (end_pos != string::npos)
-  do 
-    {
-     for (int i = end_pos; i >= 0; i--)
-         {
-          if (expression[i] == '(')
+      do 
+        {
+         for (size_t i = end_pos; i >= 0; i--)
              {
-              start_pos = i;
-              break;
+              if (expression[i] == '(')
+                 {
+                  start_pos = i;
+                  break;
+                 }
              }
-         }
      
-     //end_pos = expression.find (")"); 
-     string s_temp_value = expression.substr (start_pos + 1, end_pos - start_pos - 1); 
+         //end_pos = expression.find (")"); 
+         string s_temp_value = expression.substr (start_pos + 1, end_pos - start_pos - 1); 
  
-     //cout << "start_pos = " << start_pos << " end pos = " << end_pos << endl;    
-     //cout << "s_temp_value = " << s_temp_value << endl;    
+        //cout << "start_pos = " << start_pos << " end pos = " << end_pos << endl;    
+        //cout << "s_temp_value = " << s_temp_value << endl;    
  
-     double f_temp_value = calculate (s_temp_value);
+        double f_temp_value = calculate (s_temp_value);
  
-     std::ostringstream float_stream;
-     float_stream << f_temp_value;
-     string temp_s (float_stream.str());
+        std::ostringstream float_stream;
+        float_stream << f_temp_value;
+        string temp_s (float_stream.str());
      
-     //cout << "temp_s = " << temp_s << endl;
+        //cout << "temp_s = " << temp_s << endl;
  
-     expression = expression.replace (start_pos + 1, end_pos - start_pos - 1, temp_s);
-    }
-  while (end_pos == string::npos);        
+        expression = expression.replace (start_pos + 1, end_pos - start_pos - 1, temp_s);
+       }
+     while (end_pos == string::npos);        
      
        
 //parse expression to list:
@@ -135,8 +135,6 @@ double calculate (string expression)
 
   list<CItem>::iterator p = items.begin();
 
- // int c = 0;
-
   do {
       CItem current = *p;
 
@@ -172,7 +170,6 @@ double calculate (string expression)
 //складываем и вычитаем
 
   p = items.begin();
-
 
   do {
       CItem current = *p;

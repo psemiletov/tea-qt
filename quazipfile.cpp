@@ -147,11 +147,11 @@ void QuaZipFile::setZip (QuaZip *zip)
 void QuaZipFile::setFileName (const QString &fileName, QuaZip::CaseSensitivity cs)
 {
   if (! zip)
-    {
-     qWarning("QuaZipFile::setFileName(): call setZipName() first");
-     return;
-    }
-
+     {
+      qWarning("QuaZipFile::setFileName(): call setZipName() first");
+      return;
+     }
+ 
   if (! internal)
      {
       qWarning("QuaZipFile::setFileName(): should not be used when not using internal QuaZip");

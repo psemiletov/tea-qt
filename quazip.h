@@ -86,19 +86,22 @@ QuaZIP as long as you respect either GPL or LGPL for QuaZIP code.
  * it?
  **/
 class QuaZip {
-  public:
+  
+public:
     /// Useful constants.
-    enum Constants {
-      MAX_FILE_NAME_LENGTH=256 /**< Maximum file name length. Taken from
+  enum Constants 
+      {
+       MAX_FILE_NAME_LENGTH = 256 /**< Maximum file name length. Taken from
                                  \c UNZ_MAXFILENAMEINZIP constant in
                                  unzip.c. */
-    };
-    /// Open mode of the ZIP file.
-    enum Mode {
-      mdNotOpen, ///< ZIP file is not open. This is the initial mode.
-      mdUnzip, ///< ZIP file is open for reading files inside it.
-      mdCreate, ///< ZIP file was created with open() call.
-      mdAppend, /**< ZIP file was opened in append mode. This refers to
+      };
+  
+  /// Open mode of the ZIP file.
+  enum Mode {
+             mdNotOpen, ///< ZIP file is not open. This is the initial mode.
+             mdUnzip, ///< ZIP file is open for reading files inside it.
+             mdCreate, ///< ZIP file was created with open() call.
+             mdAppend, /**< ZIP file was opened in append mode. This refers to
                   * \c APPEND_STATUS_CREATEAFTER mode in ZIP/UNZIP package
                   * and means that zip is appended to some existing file
                   * what is useful when that file contains
@@ -106,8 +109,8 @@ class QuaZip {
                   * you whant to use to add files to the existing ZIP
                   * archive.
                   **/
-      mdAdd ///< ZIP file was opened for adding files in the archive.
-    };
+             mdAdd ///< ZIP file was opened for adding files in the archive.
+            };
     /// Case sensitivity for the file names.
     /** This is what you specify when accessing files in the archive.
      * Works perfectly fine with any characters thanks to Qt's great
@@ -115,35 +118,44 @@ class QuaZip {
      * only US-ASCII characters was supported.
      **/
     enum CaseSensitivity {
-      csDefault=0, ///< Default for platform. Case sensitive for UNIX, not for Windows.
-      csSensitive=1, ///< Case sensitive.
-      csInsensitive=2 ///< Case insensitive.
-    };
-  private:
-    QTextCodec *fileNameCodec, *commentCodec;
-    QString zipName;
-    QString comment;
-    Mode mode;
-    union {
-      unzFile unzFile_f;
-      zipFile zipFile_f;
-    };
-    bool hasCurrentFile_f;
-    int zipError;
-    // not (and will not be) implemented
-    QuaZip(const QuaZip& that);
-    // not (and will not be) implemented
-    QuaZip& operator=(const QuaZip& that);
-  public:
+                          csDefault = 0, ///< Default for platform. Case sensitive for UNIX, not for Windows.
+                          csSensitive = 1, ///< Case sensitive.
+                          csInsensitive = 2 ///< Case insensitive.
+                         };
+                         
+private:
+
+  QTextCodec *fileNameCodec, *commentCodec;
+  QString zipName;
+  QString comment;
+  
+  Mode mode;
+  
+  union {
+         unzFile unzFile_f;
+         zipFile zipFile_f;
+        };
+        
+  bool hasCurrentFile_f;
+  int zipError;
+  // not (and will not be) implemented
+  
+  
+  QuaZip (const QuaZip& that);
+  // not (and will not be) implemented
+  QuaZip& operator=(const QuaZip& that);
+  
+public:
     /// Constructs QuaZip object.
     /** Call setName() before opening constructed object. */
-    QuaZip();
+  QuaZip();
+  
     /// Constructs QuaZip object associated with ZIP file \a zipName.
-    QuaZip (const QString &zipName, const QString &fnamecodec);
+  QuaZip (const QString &zipName, const QString &fnamecodec);
 
     /// Destroys QuaZip object.
     /** Calls close() if necessary. */
-    ~QuaZip();
+  ~QuaZip();
     /// Opens ZIP file.
     /** Argument \a ioApi specifies IO function set for ZIP/UNZIP
      * package to use. See unzip.h, zip.h and ioapi.h for details. By
@@ -171,37 +183,38 @@ class QuaZip {
      * UNZ_ERROROPEN and getZipError() will return it if the open call
      * of the ZIP/UNZIP API returns \c NULL.
      **/
-    bool open (Mode mode, zlib_filefunc_def *ioApi = NULL);
+  bool open (Mode mode, zlib_filefunc_def *ioApi = NULL);
     /// Closes ZIP file.
     /** Call getZipError() to determine if the close was successful. */
-    void close();
+  void close();
     /// Sets the codec used to encode/decode file names inside archive.
     /** This is necessary to access files in the ZIP archive created
      * under Windows with non-latin characters in file names. For
      * example, file names with cyrillic letters will be in \c IBM866
      * encoding.
      **/
-    void setFileNameCodec (QTextCodec *fileNameCodec)
+  void setFileNameCodec (QTextCodec *fileNameCodec)
                         {this->fileNameCodec = fileNameCodec;}
     /// Sets the codec used to encode/decode file names inside archive.
     /** \overload
      * Equivalent to calling setFileNameCodec(QTextCodec::codecForName(codecName));
      **/
-    void setFileNameCodec(const char *fileNameCodecName)
-    {fileNameCodec=QTextCodec::codecForName(fileNameCodecName);}
+  void setFileNameCodec(const char *fileNameCodecName)
+      {
+       fileNameCodec=QTextCodec::codecForName(fileNameCodecName);
+      }
+      
     /// Returns the codec used to encode/decode comments inside archive.
-    QTextCodec* getFileNameCodec()const {return fileNameCodec;}
+  QTextCodec* getFileNameCodec()const {return fileNameCodec;}
     /// Sets the codec used to encode/decode comments inside archive.
     /** This codec defaults to locale codec, which is probably ok.
      **/
-    void setCommentCodec(QTextCodec *commentCodec)
-    {this->commentCodec=commentCodec;}
+  void setCommentCodec(QTextCodec *commentCodec) {this->commentCodec=commentCodec;}
     /// Sets the codec used to encode/decode comments inside archive.
     /** \overload
      * Equivalent to calling setCommentCodec(QTextCodec::codecForName(codecName));
      **/
-    void setCommentCodec(const char *commentCodecName)
-    {commentCodec=QTextCodec::codecForName(commentCodecName);}
+  void setCommentCodec(const char *commentCodecName) {commentCodec=QTextCodec::codecForName(commentCodecName);}
     /// Returns the codec used to encode/decode comments inside archive.
     QTextCodec* getCommentCodec()const {return commentCodec;}
     /// Returns the name of the ZIP file.

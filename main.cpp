@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyleft 2007-2017 by Peter Semiletov <peter.semiletov@gmail.com>     *
+ *   Copyleft 2007-2018 by Peter Semiletov <peter.semiletov@gmail.com>     *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,12 +23,12 @@
 #include <QDebug>
 
 #include "rvln.h"
-
 #include "single_application.h"
 
 #ifndef Q_OS_OS2
 #include "single_application_shared.h"
 #endif
+
 
 extern rvln *mainWindow; 
 
@@ -85,12 +85,9 @@ int main (int argc, char *argv[])
 
 
 #if defined(Q_OS_UNIX)
-
  QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), mainWindow, SLOT(receiveMessageShared(QStringList)));
-
 // QObject::connect(&app, SIGNAL(signal_commit_data()), mainWindow, SLOT(app_commit_data()));
 // QObject::connect(&app, SIGNAL(commitDataRequest(QSessionManager & )), mainWindow, SLOT(slot_commitDataRequest(QSessionManager & )));
-
 #endif
 
    

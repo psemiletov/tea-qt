@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2017 by Peter Semiletov                                          *
+ *   2007-2018 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,54 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-
-#include "logmemo.h"
-
 #include <QTime>
 #include <QTextCursor>
 
+#include "logmemo.h"
 
-CLogMemo::CLogMemo (QWidget * parent): QPlainTextEdit (parent)
-   
-//CLogMemo::CLogMemo (QPlainTextEdit *m)
+
+CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 {
-//  memo = m;
   
   setObjectName ("logmemo");
-  /*
-  memo->setFocusPolicy (Qt::ClickFocus);
-  memo->setUndoRedoEnabled (false);
-  memo->setReadOnly (true);
-  
-  memo->setTextInteractionFlags (Qt::LinksAccessibleByMouse | Qt::TextSelectableByMouse | 
-                                 Qt::TextSelectableByKeyboard);*/
   
   setFocusPolicy (Qt::ClickFocus);
   setUndoRedoEnabled (false);
   setReadOnly (true);
   
   setTextInteractionFlags (Qt::LinksAccessibleByMouse | Qt::TextSelectableByMouse | 
-                                 Qt::TextSelectableByKeyboard);
+                           Qt::TextSelectableByKeyboard);
 }
 
 
 void CLogMemo::log (const QString &text)
 {
-   /*
-  QTextCursor cr = memo->textCursor();
-  cr.movePosition (QTextCursor::Start);
-  cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
-  memo->setTextCursor (cr);
-
-  QTime t = QTime::currentTime();
-
-  memo->textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + text + "<br>");
-
-  cr = memo->textCursor();
-  cr.movePosition (QTextCursor::Start);
-  cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
-  memo->setTextCursor (cr);*/
-   
   QTextCursor cr = textCursor();
   cr.movePosition (QTextCursor::Start);
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);

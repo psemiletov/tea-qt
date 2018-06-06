@@ -3,18 +3,17 @@
 #ifndef MYJOYSTICK_H
 #define MYJOYSTICK_H
 
+#include <QObject>
+
+#if defined(Q_OS_UNIX)
+
 #include <iostream>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-
-#include <QObject>
-#include <QEvent>
-
-
-#if defined(Q_OS_UNIX)
 #include <linux/joystick.h>
-#endif
+
+#include <QEvent>
 
 
 const QEvent::Type evtJoystickAxis = QEvent::Type(QEvent::User + 1);
@@ -45,7 +44,7 @@ public:
 
 class CJoystick: public QObject
 {
-  Q_OBJECT
+Q_OBJECT
     
 public:
 
@@ -63,13 +62,13 @@ public:
   CJoystick (uint idn, QObject *upper_link);
   ~CJoystick(); 
     
-#if defined(Q_OS_UNIX)
-    void process_event (js_event e);
-#endif
+   void process_event (js_event e);
 
 public slots:
 
   void read_joystick();
 };
+
+#endif
 
 #endif

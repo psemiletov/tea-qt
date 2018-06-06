@@ -11,8 +11,8 @@ Q_OBJECT
  
 public slots:
  
-   void slot_fontname_changed (const QString &text);
-   void slot_font_size_changed (int i);
+  void slot_fontname_changed (const QString &text);
+  void slot_font_size_changed (int i);
    
 public:
 
@@ -21,6 +21,5 @@ public:
  CFontBox (QWidget *parent = 0); 
  
 };
-
 
 #endif

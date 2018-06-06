@@ -1,15 +1,14 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
 
-
 #include <QCalendarWidget>
 
 
 class CCalendarWidget: public QCalendarWidget
 {
-  Q_OBJECT
+Q_OBJECT
 
-  public:
+public:
 
   QImage moon_tiles;
   QString dir_days;
@@ -41,6 +40,5 @@ int moon_phase_simple (int year, int month, int day);
 int moon_phase_conway (int year, int month, int day);
 int moon_phase_trig1 (int year, int month, int day);
 int moon_phase_leueshkanov (int year, int month, int day);
-
 
 #endif // CALENDAR_H

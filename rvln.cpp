@@ -22,19 +22,6 @@ started at 08 November 2007
 
 
 
-
-#include "rvln.h"
-
-#include "utils.h"
-#include "gui_utils.h"
-#include "libretta_calc.h"
-
-#include "textproc.h"
-#include "logmemo.h"
-#include "tzipper.h"
-#include "wavinfo.h"
-#include "exif.h"
-
 #include <math.h>
 
 
@@ -53,24 +40,16 @@ started at 08 November 2007
 #include <QColorDialog>
 #include <QTextCodec>
 #include <QMimeData>
-
 #include <QScrollArea>
-
 #include <QXmlStreamReader>
-
-
 #include <QDebug>
-
-
 #include <QPainter>
 #include <QInputDialog>
 #include <QSettings>
 #include <QLibraryInfo>
 #include <QCryptographicHash>
-
 #include <QProxyStyle>
 
-//QML stuff
 
 #ifdef USE_QML_STUFF
 
@@ -81,14 +60,26 @@ started at 08 November 2007
 
 #endif
 
-//end
 
 #ifdef PRINTER_ENABLE
+
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QAbstractPrintDialog>
+
 #endif
 
+
+#include "rvln.h"
+#include "utils.h"
+#include "gui_utils.h"
+#include "libretta_calc.h"
+#include "textproc.h"
+#include "logmemo.h"
+#include "tzipper.h"
+#include "wavinfo.h"
+#include "exif.h"
+#include "fontbox.h"
 
 
 #ifdef SPELLCHECKER_ENABLE
@@ -96,7 +87,8 @@ started at 08 November 2007
 #endif
 
 
-#include "fontbox.h"
+bool b_altmenu;
+int cursor_blink_time;
 
 
 #ifdef USE_QML_STUFF
@@ -112,44 +104,36 @@ public:
 #endif
 
 
-bool b_altmenu;
-
-int cursor_blink_time;
 
 #if QT_VERSION >= 0x050000
-
 class QStyleHints
 {
 public:
-	int cursorFlashTime() const; 
+  int cursorFlashTime() const 
+     {
+      return cursor_blink_time;	
+     } 
+
 };
-
-
-int QStyleHints::cursorFlashTime() const
-{
-  return cursor_blink_time;	
-}
-
-
 #endif
+
 
 class MyProxyStyle: public QProxyStyle
 {
 public:
-     int styleHint(StyleHint hint, const QStyleOption *option = 0,
-                   const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const {
+  int styleHint (StyleHint hint, const QStyleOption *option = 0,
+                 const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const 
+                {
+                 if (hint == QStyle::SH_ItemView_ActivateItemOnSingleClick)
+                    return 0;
          
-             if (hint == QStyle::SH_ItemView_ActivateItemOnSingleClick)
-                 return 0;
-         
-             if (! b_altmenu && hint == QStyle::SH_MenuBar_AltKeyNavigation)
-                 return 0;
+                 if (! b_altmenu && hint == QStyle::SH_MenuBar_AltKeyNavigation)
+                    return 0;
                   
-         return QProxyStyle::styleHint(hint, option, widget, returnData);
-     }
+                 return QProxyStyle::styleHint (hint, option, widget, returnData);
+                }
      
-   MyProxyStyle (QStyle * style = 0);
-     
+   MyProxyStyle (QStyle *style = 0);
 };
 
 
@@ -162,33 +146,25 @@ public:
 
   CFSizeFName (qint64 sz, const QString &fn):
                size (sz),
-               fname (fn)
-               {
-               }
+               fname (fn) {}
 };
 
-
-extern QSettings *settings;
-extern QMenu *current_files_menu;
-extern QHash <QString, QString> global_palette;
-
-extern bool b_recent_off;
-extern bool b_destroying_all;
-extern int recent_list_max_items;
-
-
-rvln *mainWindow;  
-
-
-QVariantMap hs_path;
 
 
 #ifdef USE_QML_STUFF
 QList <CPluginListItem *> plugins_list;
 #endif
 
-//QFontDatabase *font_database;
+extern QSettings *settings;
+extern QMenu *current_files_menu;
+extern QHash <QString, QString> global_palette;
+extern bool b_recent_off;
+extern bool b_destroying_all;
+extern int recent_list_max_items;
+
+rvln *mainWindow;  
 CDox *documents;
+QVariantMap hs_path;
 
 
 enum {
@@ -256,11 +232,6 @@ void rvln::create_paths()
   
   fname_crapbook = dir_config + "/crapbook.txt";
   hs_path["fname_crapbook"] = fname_crapbook;
-  
-  /*
-  fname_hls_cache = dir_config + "/hls_cache";
-  hs_path["fname_hls_cache"] = fname_hls_cache;
-  */
   
   fname_fif = dir_config + "/fif";
   hs_path["fname_fif"] = fname_fif;
@@ -377,7 +348,6 @@ void rvln::readSettings()
   qApp->setCursorFlashTime (cursor_blink_time);
   
   recent_list_max_items = settings->value ("recent_list.max_items", 21).toInt();
-
   
   b_altmenu = settings->value ("b_altmenu", "0").toBool(); 
    
@@ -597,7 +567,6 @@ void rvln::init_styles()
   QApplication::setStyle (ps);
 
 //  update_stylesheet (fname_stylesheet);
-
 }
 
 
@@ -628,10 +597,7 @@ rvln::rvln()
 
   capture_to_storage_file = false;
 
- // font_database = new QFontDatabase();
-
   create_paths();
- // load_userfonts();
   
   QString sfilename = dir_config + "/tea.conf";
   settings = new QSettings (sfilename, QSettings::IniFormat);
@@ -661,6 +627,7 @@ rvln::rvln()
        qApp->installTranslator (&myappTranslator);
       }
 
+
   QString fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
   
   theme_dir = get_file_path (fname_stylesheet) + "/"; 
@@ -681,9 +648,7 @@ rvln::rvln()
   update_scripts();
  
 #ifdef USE_QML_STUFF
-
   update_plugins();
- 
 #endif
   
   update_programs();
@@ -730,7 +695,6 @@ rvln::rvln()
 
   //update_hls();
   update_hls_noncached();
-  
   update_view_hls();
 
 #ifdef SPELLCHECK_ENABLE
@@ -797,12 +761,11 @@ rvln::rvln()
 #endif
   
   setAcceptDrops (true);
-  
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (VERSION_NUMBER)));
 
   
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (VERSION_NUMBER)));
+ 
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
-  
   qApp->setWindowIcon (QIcon (icon_fname));
   
   //tray_icon.setIcon (QIcon(":/icons/tea_icon_v2.png"));
@@ -817,15 +780,13 @@ void rvln::closeEvent (QCloseEvent *event)
   if (main_tab_widget->currentIndex() == idx_tab_tune)
      leaving_tune();
 
-  QString fname (dir_config);
-  fname.append ("/last_used_charsets");
+  QString fname  = dir_config + "/last_used_charsets";
 
   qstring_save (fname, sl_last_used_charsets.join ("\n").trimmed());
 
   if (settings->value("session_restore", false).toBool())
      {
-      QString fname_session (dir_sessions);
-      fname_session.append ("/def-session-777");
+      QString fname_session = dir_sessions + "/def-session-777";
       documents->save_to_session (fname_session);
      }
 
@@ -838,15 +799,11 @@ void rvln::closeEvent (QCloseEvent *event)
   delete img_viewer;
   
 #ifdef USE_QML_STUFF
-  
   plugins_done();
-  
 #endif  
 
 #ifdef SPELLCHECK_ENABLE
-
   delete spellchecker;
-
 #endif
 
   delete shortcuts;
@@ -9203,7 +9160,6 @@ void rvln::update_plugins()
 
 void rvln::plugins_init()
 {
-   
   qDebug() << "rvln::plugins_init()";
 
   qml_engine = new QQmlEngine;
@@ -9219,7 +9175,6 @@ void rvln::plugins_init()
   qml_engine->rootContext()->setContextProperty("tea", this); 
   qml_engine->rootContext()->setContextProperty("settings", settings); 
   qml_engine->rootContext()->setContextProperty("hs_path", hs_path); 
-  
 }
 
 

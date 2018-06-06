@@ -95,8 +95,8 @@ int moon_phase_conway (int year, int month, int day)
      r += 2;
 
   r -= ((year < 2000) ? 4 : 8.3);
-
   r = (int) floor (r + 0.5) % 30;
+  
   return (r < 0) ? r + 30 : r;
 }
 
@@ -155,6 +155,38 @@ int moon_phase_trig1 (int year, int month, int day)
 }
 
 
+int moon_phase_by_algo (int v, int year, int month, int day)
+{
+  int r = 0;
+
+  switch (v)
+         {
+          case MOON_PHASE_TRIG2:
+                                r = moon_phase_trig2 (year, month, day);
+                                break;
+
+          case MOON_PHASE_TRIG1:
+                                r = moon_phase_trig1 (year, month, day);
+                                break;
+
+          case MOON_PHASE_CONWAY:
+                                 r = moon_phase_conway (year, month, day);
+                                 break;
+
+          case MOON_PHASE_LEUESHKANOV:
+                                      r = moon_phase_leueshkanov (year, month, day);
+                                      break;
+
+          case MOON_PHASE_SIMPLE:
+                                 r = moon_phase_simple (year, month, day);
+                                 break;
+
+         };
+
+  return r;
+}
+
+
 CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): QCalendarWidget (parent)
 {
   dir_days = a_dir_days;
@@ -194,10 +226,7 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
          has_image = false;
 
       //вычисляем ряд и колонку
-    
-
       int cursorOffset = moon_day;
-
       int off = 0;
   
      /* int row = 0;
@@ -208,19 +237,19 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
             }
      */
 
-    int row = moon_day / 7;
-    if ((moon_day % 7 == 0) && (row != 0))
+      int row = moon_day / 7;
+  
+      if ((moon_day % 7 == 0) && (row != 0))
        row--;
-
-    int col = cursorOffset - off;
+ 
+      int col = cursorOffset - off;
 
  //    qDebug() << "moon day: " << moon_day << "| date:" << date.toString("dd") << " | row = " << row << " col = " << col;
 
+      int trow = moon_day / 7;
     
-    int trow = moon_day / 7;
-    
-    if ((moon_day % 7 == 0) && (trow != 0))
-       trow--;
+      if ((moon_day % 7 == 0) && (trow != 0))
+          trow--;
     /*
     qDebug() << "moon day = " << moon_day;
     qDebug() << "moon_day / 7 = " << (double) moon_day / 7;
@@ -230,48 +259,47 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
 
     //вычисляем, откуда копировать
 
-    int pad = 3;
+      int pad = 3;
   
-    int x = (col - 1) * 73 + (pad * col) - pad;
-    int y = row * 73 + (pad * row);
+      int x = (col - 1) * 73 + (pad * col) - pad;
+      int y = row * 73 + (pad * row);
 
-    QRect r (x, y, 66, 73);
+      QRect r (x, y, 66, 73);
 
-    QImage tile = moon_tiles.copy (r);
+      QImage tile = moon_tiles.copy (r);
 
-    QColor bg_color (Qt::black);
+      QColor bg_color (Qt::black);
 
-    painter->fillRect (rect, bg_color);
+      painter->fillRect (rect, bg_color);
 
+      if (has_image)
+         {
+          if (northern_hemisphere)
+             painter->drawImage (rect.x(), rect.y(), tile);
+          else
+              painter->drawImage (rect.x(), rect.y(), tile.mirrored (true, false));
+         }
 
-    if (has_image)
-       {
-        if (northern_hemisphere)
-            painter->drawImage (rect.x(), rect.y(), tile);
-        else
-            painter->drawImage (rect.x(), rect.y(), tile.mirrored (true, false));
-       }
+      painter->setPen (QPen (Qt::yellow));
 
-    painter->setPen (QPen (Qt::yellow));
-
-    QTextCharFormat tcf = dateTextFormat (date);
+      QTextCharFormat tcf = dateTextFormat (date);
    
-    if (tcf.fontStrikeOut())
-       painter->setPen (QPen (Qt::magenta));
-    else
-        if (tcf.fontUnderline())
-           painter->setPen (QPen (Qt::red));
+      if (tcf.fontStrikeOut())
+         painter->setPen (QPen (Qt::magenta));
+      else
+          if (tcf.fontUnderline())
+              painter->setPen (QPen (Qt::red));
 
-    painter->drawText (QPoint (rect.x() + 5, rect.y() + fsize.height()), date.toString("dd") + " / " + QString::number (moon_day));
+      painter->drawText (QPoint (rect.x() + 5, rect.y() + fsize.height()), date.toString("dd") + " / " + QString::number (moon_day));
 
-    if (selectedDate() == date)
-       {
-        QPen dpen (Qt::yellow);
-        dpen.setWidth (5);
-        painter->setPen (dpen);
-        painter->drawRect (rect);
-       }
-   }
+      if (selectedDate() == date)
+         {
+          QPen dpen (Qt::yellow);
+          dpen.setWidth (5);
+          painter->setPen (dpen);
+          painter->drawRect (rect);
+         } 
+      }
  else
      QCalendarWidget::paintCell (painter, rect, date);
 }
@@ -280,36 +308,4 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
 void CCalendarWidget::do_update()
 {
   updateCells();
-}
-
-
-int moon_phase_by_algo (int v, int year, int month, int day)
-{
-  int r = 0;
-
-  switch (v)
-         {
-          case MOON_PHASE_TRIG2:
-                                r = moon_phase_trig2 (year, month, day);
-                                break;
-
-          case MOON_PHASE_TRIG1:
-                                r = moon_phase_trig1 (year, month, day);
-                                break;
-
-          case MOON_PHASE_CONWAY:
-                                 r = moon_phase_conway (year, month, day);
-                                 break;
-
-          case MOON_PHASE_LEUESHKANOV:
-                                      r = moon_phase_leueshkanov (year, month, day);
-                                      break;
-
-          case MOON_PHASE_SIMPLE:
-                                 r = moon_phase_simple (year, month, day);
-                                 break;
-
-         };
-
-  return r;
 }

@@ -1,5 +1,5 @@
 /**************************************************************************
- *   2007-2017 by Peter Semiletov                            *
+ *   2007-2018 by Peter Semiletov                            *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,26 +23,11 @@
 #define RVLN_H
 
 
-#include "document.h"
-#include "fman.h"
-#include "calendar.h"
-#include "shortcuts.h"
-#include "img_viewer.h"
-
-
-#ifdef SPELLCHECK_ENABLE
-
-#include "spellchecker.h"
-
-#endif
-
-
 #include <QListWidget>
 #include <QComboBox>
 #include <QProgressBar>
 #include <QCheckBox>
 #include <QSpinBox>
-//#include <QToolButton>
 #include <QFontComboBox>
 #include <QSessionManager>
 #include <QApplication>
@@ -51,33 +36,34 @@
 #include <QTextBrowser>
 #include <QTranslator>
 #include <QProcess>
-//#include <QSessionManager>
-//#include <QSystemTrayIcon>
 
 
-//QML stuff
 #ifdef USE_QML_STUFF
-
 #include <QQmlEngine>
 #include <QQuickWindow>
-
 #endif
-
-//
-
 
 
 #ifdef PRINTER_ENABLE
-
 #include <QPrinter>
-
 #endif
 
+
+#include "document.h"
+#include "fman.h"
+#include "calendar.h"
+#include "shortcuts.h"
+#include "img_viewer.h"
+
+
+#ifdef SPELLCHECK_ENABLE
+#include "spellchecker.h"
+#endif
 
 
 class CMarkupPair: public QObject
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
 
@@ -85,10 +71,9 @@ public:
 };
 
 
-
 class CStrIntPair: public QObject
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
 
@@ -101,7 +86,7 @@ public:
 
 class CDarkerWindow: public QWidget
 {
-  Q_OBJECT
+Q_OBJECT
 
   QSlider *slider;
   
@@ -122,11 +107,11 @@ public slots:
 
 class CAboutWindow: public QWidget
 {
-  Q_OBJECT
-
-  QLabel *logo;
+Q_OBJECT
   
 public:
+
+  QLabel *logo;
 
   CAboutWindow();
 
@@ -142,7 +127,7 @@ public slots:
 
 class CTextListWnd: public QWidget
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
 
@@ -158,7 +143,7 @@ protected:
 
 class rvln: public QMainWindow
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
 
@@ -166,11 +151,16 @@ public:
   ~rvln();
   
 #ifdef USE_QML_STUFF
-
   QQmlEngine *qml_engine;
 #endif
+  
+  
+  QStringList sl_places_bmx;
+  QStringList sl_urls;
+  QStringList sl_charsets;
+  QStringList sl_last_used_charsets;
+  QStringList sl_fif_history;
 
-  QAction *last_action;
   
   int fm_entry_mode; 
 
@@ -180,7 +170,8 @@ public:
   bool portable_mode;
 
   CLogMemo *log;
-  
+  QAction *last_action;
+ 
  
   CShortcuts *shortcuts;
   CFMan *fman;
@@ -195,9 +186,7 @@ public:
 #endif
 
 
-  QHash <int, QString> moon_phase_algos;
-  void create_moon_phase_algos();
-
+  
   int icon_size;
 
   bool b_preview;
@@ -208,47 +197,33 @@ public:
   int idx_tab_tune;
   int idx_tab_fman;
   int idx_tab_learn;
-  
   int idx_tab_keyboard;
-
-
   int idx_prev;
-  
+ 
   int fman_find_idx;
   QList <QStandardItem *> l_fman_find;
   
   bool ui_update;
+
   QString fname_storage_file;
+  QString fname_stylesheet; 
+  QString man_search_value;
+  QString markup_mode;
 
   QHash <QString, CMarkupPair*> hs_markup;
-
-  QToolBar *tb_fman_dir;
-  QLabel *l_fman_preview;
- 
-  QStringList sl_places_bmx;
-  QStringList sl_urls;
-  QStringList sl_charsets;
-  QStringList sl_last_used_charsets;
-  QStringList sl_fif_history;
-
   QHash <QString, QString> programs;
   QHash <QString, QString> places_bookmarks;
+  QHash <int, QString> moon_phase_algos;
 
+ 
+  
   QTranslator myappTranslator;
   QTranslator qtTranslator;
 
   QDir dir_lv;
 
-  QComboBox *cmb_fif;
-  
+ 
 
-  //QString stylesheet; 
-  QString fname_stylesheet; 
-
-
-  QString man_search_value;
-
-  QString markup_mode;
 
 #ifdef PRINTER_ENABLE
 
@@ -283,10 +258,6 @@ public:
   QString dir_days;
 
   QString fname_def_palette;
-//  QString fname_hls_cache;
-
- // QString fname_userfonts;
-  //QList <int> userfont_ids;
 
 
   QString fname_fif;
@@ -299,6 +270,14 @@ public:
   QString fname_crapbook;
   QString fname_tempfile;
   QString fname_tempparamfile;
+
+
+
+  QComboBox *cmb_fif;
+
+  QToolBar *tb_fman_dir;
+  QLabel *l_fman_preview;
+
 
   QLabel *l_status;
   QProgressBar *pb_status;
@@ -377,9 +356,9 @@ main window callbacks
 
   void repeat();
 
-  void receiveMessage(const QString &msg);
+  void receiveMessage (const QString &msg);
   
-  void receiveMessageShared(const QStringList& msg);
+  void receiveMessageShared (const QStringList& msg);
         
   void view_use_theme();
 
@@ -630,7 +609,7 @@ main window callbacks
 #ifdef ASPELL_ENABLE
 
 #if defined(Q_OS_WIN) || defined (Q_OS_OS2)
-   void pb_choose_aspell_path_clicked();
+  void pb_choose_aspell_path_clicked();
 #endif
 
 #endif
@@ -786,7 +765,6 @@ prefs window callbacks
 
   
 #ifdef USE_QML_STUFF
-  
   void fn_use_plugin();
 #endif
   
@@ -798,7 +776,6 @@ main window widgets
 
   QSplitter *mainSplitter;
   QTextBrowser *man;
- // QPlainTextEdit *log_memo;
   QString charset;
 
   QTabWidget *main_tab_widget;
@@ -817,7 +794,6 @@ main window widgets
 
 
   QMenu *menu_file_edit_bookmarks;
-
   QMenu *menu_file_configs;
   QMenu *menu_file_sessions;
   QMenu *menu_file_actions;
@@ -835,7 +811,6 @@ main window widgets
   
   
 #ifdef USE_QML_STUFF
-  
   QMenu *menu_fn_plugins;
 #endif
 
@@ -979,10 +954,8 @@ prefs window widgets
 
 
 #ifdef SPELLCHECK_ENABLE
-
   void setup_spellcheckers();
   void create_spellcheck_menu();
-
 #endif
 
   void init_styles();
@@ -1007,9 +980,7 @@ prefs window widgets
   void update_view_hls();
   
 #ifdef USE_QML_STUFF
-    
   void update_plugins();
-
 #endif
   
   void update_themes();
@@ -1049,6 +1020,9 @@ prefs window widgets
 
   void run_unitaz (int mode);
  
+  void create_moon_phase_algos();
+
+ 
  QHash <QString, QString> load_eclipse_theme_xml (const QString &fname);
 
   void load_palette (const QString &fileName);
@@ -1078,22 +1052,17 @@ prefs window widgets
   void opt_shortcuts_find_next();
   void opt_shortcuts_find_prev();
 
-
   void idx_tab_edit_activate();
   void idx_tab_calendar_activate();
   void idx_tab_tune_activate();
   void idx_tab_fman_activate();
   void idx_tab_learn_activate();
 
+ 
   
- // void load_userfonts();
-  
-//#if QT_VERSION >= 0x050000
 #ifdef USE_QML_STUFF
-  
   void plugins_init();
   void plugins_done();
-  
 #endif  
 
   void markup_text (const QString &mode);
@@ -1105,20 +1074,17 @@ prefs window widgets
 
 class CQQuickWindow: public QQuickWindow
 {
-   Q_OBJECT
+Q_OBJECT
    
 public:
- 
- 
- CQQuickWindow(QWindow * parent = 0): QQuickWindow (parent)
-   {;}
- 
- QString id;
 
+  QString id;
+ 
+  CQQuickWindow (QWindow * parent = 0): QQuickWindow (parent) {}
+ 
 protected:
 
   bool event (QEvent *event);
-
   
 };
 

@@ -2,6 +2,8 @@
 
 #include "myjoystick.h"
 
+#if defined(Q_OS_UNIX)
+
 #include <QDebug>
 #include <QApplication>
 
@@ -14,8 +16,6 @@ CJoystick::~CJoystick()
 
 CJoystick::CJoystick (uint idn, QObject *upper_link)
 {
-#if defined(Q_OS_UNIX)
-
   receiver = upper_link;
   id = idn;
   initialized = false;
@@ -26,7 +26,7 @@ CJoystick::CJoystick (uint idn, QObject *upper_link)
  
   if (( fd = open (filename.toUtf8().data(), O_NONBLOCK)) == -1)
      {
-      qDebug() << "Couldn't open " << filename;
+      qDebug() << "Cannot open " << filename;
       return;
      }
     
@@ -45,13 +45,10 @@ CJoystick::CJoystick (uint idn, QObject *upper_link)
   description = jname;
     
   read_joystick();
-#endif    
 }
 
 void CJoystick::read_joystick()
 {
-#if defined(Q_OS_UNIX)
-
   if (! initialized)
      return;
     
@@ -67,14 +64,11 @@ void CJoystick::read_joystick()
       qDebug() << "Joystick read error";
       initialized = false;
      }
-     
-#endif
 }
 
-#if defined(Q_OS_UNIX)
+
 void CJoystick::process_event (js_event e)
 {
-
   if (e.type & JS_EVENT_BUTTON)
      {
       CJoystickButtonEvent *event = new CJoystickButtonEvent (evtJoystickButton);
@@ -82,12 +76,12 @@ void CJoystick::process_event (js_event e)
       event->button = e.number; //pressed button number
       event->pressed = e.value; //1 if pressed
       
-      QApplication::postEvent(receiver, reinterpret_cast<QEvent*>(event));
+      QApplication::postEvent (receiver, reinterpret_cast<QEvent*>(event));
      } 
   else 
   if (e.type & JS_EVENT_AXIS) 
      {
-      CJoystickAxisEvent *event=new CJoystickAxisEvent (evtJoystickAxis);
+      CJoystickAxisEvent *event = new CJoystickAxisEvent (evtJoystickAxis);
       
       event->axis = e.number;
       event->value = e.value;
@@ -95,4 +89,5 @@ void CJoystick::process_event (js_event e)
       QApplication::postEvent(receiver, reinterpret_cast<QEvent*>(event));
     }
 }
+
 #endif    

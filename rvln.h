@@ -407,7 +407,12 @@ main window callbacks
   void pageChanged (int index);
   void tab_options_pageChanged (int index);
 
+#ifdef PRINTER_ENABLE
+
   void file_print();
+
+#endif
+
 
   void newFile();
   void open();

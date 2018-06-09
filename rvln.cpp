@@ -881,7 +881,6 @@ void rvln::open()
   foreach (QString v, volumes2)
           sidebarUrls.append (QUrl::fromLocalFile ("/media/" + v));
 
-
 #endif
 
   dialog.setSidebarUrls (sidebarUrls);
@@ -1000,19 +999,18 @@ bool rvln::saveAs()
   QSize size = settings->value ("dialog_size", QSize (width(), height())).toSize();
   dialog.resize (size);
 
-  dialog.setFilter(QDir::AllEntries | QDir::Hidden);
+  dialog.setFilter (QDir::AllEntries | QDir::Hidden);
   dialog.setOption (QFileDialog::DontUseNativeDialog, true);
 
   QList<QUrl> sidebarUrls = dialog.sidebarUrls();
   QList<QUrl> sidebarUrls_old = dialog.sidebarUrls();
 
-  sidebarUrls.append(QUrl::fromLocalFile(dir_templates));
-  sidebarUrls.append(QUrl::fromLocalFile(dir_snippets));
-  sidebarUrls.append(QUrl::fromLocalFile(dir_sessions));
-  sidebarUrls.append(QUrl::fromLocalFile(dir_scripts));
-  sidebarUrls.append(QUrl::fromLocalFile(dir_tables));
-  //sidebarUrls.append(QUrl::fromLocalFile(dir_variants));
-
+  sidebarUrls.append (QUrl::fromLocalFile(dir_templates));
+  sidebarUrls.append (QUrl::fromLocalFile(dir_snippets));
+  sidebarUrls.append (QUrl::fromLocalFile(dir_sessions));
+  sidebarUrls.append (QUrl::fromLocalFile(dir_scripts));
+  sidebarUrls.append (QUrl::fromLocalFile(dir_tables));
+  
 #ifdef Q_OS_LINUX
 
   QDir volDir ("/mnt");
@@ -1243,7 +1241,10 @@ void rvln::createMenus()
   menu_recent_off = add_to_menu (fileMenu, tr ("Do not add to recent"), SLOT(recentoff()));
   menu_recent_off->setCheckable (true);
 
+#ifdef PRINTER_ENABLE
   add_to_menu (fileMenu, tr ("Print"), SLOT(file_print()));
+#endif
+  
   add_to_menu (fileMenu, tr ("Close current"), SLOT(close_current()), "Ctrl+W");
 
   fileMenu->addAction (exitAct);
@@ -1318,6 +1319,7 @@ void rvln::createMenus()
 
   tm = menu_markup->addMenu (tr ("Align"));
   tm->setTearOffEnabled (true);
+  
 /*
   create_menu_from_list (this, tm,
                          QString ("Center Left Right Justify").split (" "),
@@ -1415,12 +1417,9 @@ void rvln::createMenus()
   add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
   add_to_menu (menu_instr, tr ("Scale image"), SLOT(scale_image()));
 
-  
 
 #ifdef USE_QML_STUFF
-
   menu_fn_plugins = menu_functions->addMenu (tr ("Plugins"));
-  
 #endif  
   
   menu_fn_snippets = menu_functions->addMenu (tr ("Snippets"));
@@ -1501,8 +1500,6 @@ void rvln::createMenus()
 
   add_to_menu (tm, tr ("deg min sec > dec degrees"), SLOT(fn_number_dms2dc()));
   add_to_menu (tm, tr ("dec degrees > deg min sec"), SLOT(fn_number_dd2dms()));
-
-
 
 
 
@@ -1745,7 +1742,7 @@ void rvln::createToolBars()
   editToolBar->addAction (act_labels);
   
   filesToolBar = addToolBar (tr ("Files"));
-  filesToolBar->setObjectName("filesToolBar");
+  filesToolBar->setObjectName ("filesToolBar");
 
   filesToolBar->setIconSize (QSize (icon_size, icon_size));
       
@@ -1805,11 +1802,11 @@ void rvln::ed_copy()
      {
       CDocument *d = documents->get_current();
       if (d)
-         d->textEdit->copy();
+          d->textEdit->copy();
      }
   else
       if (main_tab_widget->currentIndex() == idx_tab_learn)      
-         man->copy();
+          man->copy();
 }
 
 
@@ -1819,7 +1816,7 @@ void rvln::ed_cut()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->cut();
+      d->textEdit->cut();
 }
 
 
@@ -1829,7 +1826,7 @@ void rvln::ed_paste()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->paste();
+      d->textEdit->paste();
 }
 
 
@@ -1839,7 +1836,7 @@ void rvln::ed_undo()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->undo();
+      d->textEdit->undo();
 }
 
 
@@ -1849,7 +1846,7 @@ void rvln::ed_redo()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->redo();
+      d->textEdit->redo();
 }
 
 
@@ -1859,7 +1856,7 @@ void rvln::ed_clear()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->clear();
+      d->textEdit->clear();
 }
 
 
@@ -1870,10 +1867,6 @@ void rvln::upCase()
   CDocument *d = documents->get_current();
   if (d)
       d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().toUpper());
-      //d->textEdit->text_replace (d->textEdit->textCursor().selectedText().toUpper());
-     
-     
- //void CTEAEdit::text_replace (const QString &s)    
 }
 
 
@@ -1910,10 +1903,8 @@ void rvln::markup_text (const QString &mode)
      
   QString t = p->pattern[d->markup_mode];
    
-  if (t.isEmpty())
-     return;
-
-  d->textEdit->textCursor().insertText (t.replace ("%s", d->textEdit->textCursor().selectedText()));
+  if (! t.isEmpty())
+      d->textEdit->textCursor().insertText (t.replace ("%s", d->textEdit->textCursor().selectedText()));
 }
   
   
@@ -2023,15 +2014,13 @@ void rvln::search_find()
         return;
 
       QTextCursor cr;
+      
       int from = 0;
-      QString fiftxt = fif_get_text();
             
       if (settings->value ("find_from_cursor", "1").toBool())
           from = d->textEdit->textCursor().position();
-      else
-          from = 0;
          
-      d->text_to_search = fiftxt;
+      d->text_to_search = fif_get_text();
 
       if (menu_find_regexp->isChecked())
          cr = d->textEdit->document()->find (QRegExp (d->text_to_search), from, get_search_options());
@@ -2059,7 +2048,6 @@ void rvln::search_find()
           d->textEdit->setTextCursor (cr);
       else 
            log->log(tr ("not found!"));
-      
      }
   else
   if (main_tab_widget->currentIndex() == idx_tab_learn)
@@ -2256,11 +2244,10 @@ void rvln::file_save_bak()
   if (! d)
      return;
 
-  if (! file_exists(d->file_name))
+  if (! file_exists (d->file_name))
      return;
   
-  QString fname (d->file_name);
-  fname.append (".bak");
+  QString fname  = d->file_name + ".bak";
   d->save_with_name_plain (fname);
   log->log (tr ("%1 is saved").arg (fname));
 }
@@ -2321,7 +2308,7 @@ void rvln::cb_altmenu_stateChanged (int state)
   if (state == Qt::Unchecked)
       b_altmenu = false;
   else 
-       b_altmenu = true;
+      b_altmenu = true;
   
   settings->setValue ("b_altmenu", b_altmenu);
 }
@@ -2342,10 +2329,10 @@ void rvln::cb_use_joystick_stateChanged (int state)
      documents->timer->start (100);
   else
       documents->timer->stop();
-      
-  qDebug() << "cb_use_joystick_stateChanged (int state)";   
 }
+
 #endif
+
 
 void rvln::createOptions()
 {
@@ -2407,9 +2394,6 @@ void rvln::createOptions()
 
   connect (cmb_app_font_name, SIGNAL(currentIndexChanged ( const QString & )),
            this, SLOT(slot_app_fontname_changed(const QString & )));
-
- // QPushButton *bt_add_user_font = new QPushButton (tr ("Add user font"), this);
-  //connect (bt_add_user_font, SIGNAL(clicked()), this, SLOT(add_user_font()));
 
 
   lt_h->addWidget (l_font);
@@ -2795,7 +2779,8 @@ void rvln::createOptions()
   l_t = new QLabel (tr ("Hunspell dictionaries directory"));
 
   ed_spellcheck_path = new QLineEdit (this);
-  ed_spellcheck_path->setText (settings->value ("hunspell_dic_path", QDir::homePath ()).toString());
+  
+  ed_spellcheck_path->setText (settings->value ("hunspell_dic_path", "/usr/share/hunspell").toString());/*QDir::homePath ()).toString()*/
   ed_spellcheck_path->setReadOnly (true);
 
   QPushButton *pb_choose_path = new QPushButton (tr ("Select"), this);
@@ -2812,7 +2797,6 @@ void rvln::createOptions()
 
 
 #ifdef ASPELL_ENABLE
-
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
@@ -2842,7 +2826,6 @@ void rvln::createOptions()
 
 
   page_functions_layout->addWidget (gb_spell);
-
 
 #endif
 
@@ -3002,15 +2985,11 @@ void rvln::createOptions()
 
 void rvln::opt_update_keyb()
 {
-//  qDebug() << "opt_update_keyb()";
-
   if (! lv_menuitems)
      return;
 
   lv_menuitems->clear();
-
   shortcuts->captions_iterate();
-
   lv_menuitems->addItems (shortcuts->captions);
 }
 
@@ -3026,7 +3005,6 @@ void rvln::slot_style_currentIndexChanged (const QString &text)
   */
   
   MyProxyStyle *ps = new MyProxyStyle (QStyleFactory::create (text));
-  
   QApplication::setStyle (ps);
 
   settings->setValue ("ui_style", text);
@@ -3058,7 +3036,7 @@ void rvln::open_at_cursor()
           command = command.replace ("%s", fname);
           QProcess::startDetached (command);
           return;
-        }
+         }
       else
           {
            if (file_get_ext (fname) == "gif")
@@ -3068,28 +3046,19 @@ void rvln::open_at_cursor()
                return; 
               }
            else
-           {            
-           if (! img_viewer->window_full.isVisible())
-              {
-               img_viewer->window_full.show();
-               activateWindow();
-              }
-      
-           img_viewer->set_image_full (fname);
-           return;
-           }
+               {            
+                if (! img_viewer->window_full.isVisible())
+                   {
+                    img_viewer->window_full.show();
+                    activateWindow();
+                   }
+     
+                img_viewer->set_image_full (fname);
+                return;
+               }
           }
       }
-
-     /*
-  if (fname.startsWith ("#"))
-     {
-      fname.remove (0, 1);
-      fname.prepend ("name=\"");
-      d->textEdit->find (fname);
-      return;
-     }
-*/
+     
      
   if (fname.startsWith ("#"))
      {
@@ -3287,7 +3256,7 @@ void rvln::man_find_find()
 
   if (man_search_value == fiftxt)
       man->find (fiftxt);
-   else
+  else
       man->find (fiftxt, 0);
 
   man_search_value = fiftxt;
@@ -3437,11 +3406,10 @@ void rvln::fn_reverse()
 }
 
 
+#ifdef PRINTER_ENABLE
 void rvln::file_print()
 {
   last_action = qobject_cast<QAction *>(sender());
-
-#ifdef PRINTER_ENABLE
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -3458,9 +3426,8 @@ void rvln::file_print()
       return;
 
   d->textEdit->print (&printer);
-
-#endif
 }
+#endif
 
 
 void rvln::file_last_opened()
@@ -3497,7 +3464,7 @@ void rvln::create_spellcheck_menu()
 }
 
 
-bool ends_with_evilchar (const QString &s)
+bool ends_with_badchar (const QString &s)
 {
   if (s.endsWith ("\""))
      return true;
@@ -3561,7 +3528,7 @@ void rvln::fn_spell_check()
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
           
      QString stext = cr.selectedText();
-     if (! stext.isEmpty() && ends_with_evilchar (stext))
+     if (! stext.isEmpty() && ends_with_badchar (stext))
         {
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
@@ -3643,8 +3610,8 @@ void rvln::fn_spell_suggest_callback()
   if (! d)
      return;
 
-  QAction *Act = qobject_cast<QAction *>(sender());
-  QString new_text = Act->text();
+  QAction *act = qobject_cast<QAction *>(sender());
+  QString new_text = act->text();
 
   QTextCursor cr = d->textEdit->textCursor();
 
@@ -3679,7 +3646,7 @@ void rvln::fn_spell_suggest()
 
   QMenu *m = new QMenu (this);
   create_menu_from_list (this, m, l, SLOT (fn_spell_suggest_callback()));
-  m->popup (mapToGlobal(d->textEdit->cursorRect().topLeft()));
+  m->popup (mapToGlobal (d->textEdit->cursorRect().topLeft()));
 }
 
 #endif
@@ -3769,7 +3736,7 @@ void rvln::update_templates()
                         menu_file_templates,
                         dir_templates,
                         SLOT (file_use_template())
-                        );
+                       );
 }
 
 
@@ -3777,9 +3744,9 @@ void rvln::update_snippets()
 {
    menu_fn_snippets->clear();
    create_menu_from_dir (this,
-                        menu_fn_snippets,
-                        dir_snippets,
-                        SLOT (file_use_snippet())
+                         menu_fn_snippets,
+                         dir_snippets,
+                         SLOT (file_use_snippet())
                         );
 }
 
@@ -3829,11 +3796,11 @@ void rvln::dragEnterEvent (QDragEnterEvent *event)
 
 void rvln::dropEvent (QDropEvent *event)
 {
-  QString fName;
-  QFileInfo info;
-  
   if (! event->mimeData()->hasUrls())
      return;
+
+  QString fName;
+  QFileInfo info;
      
   foreach (QUrl u, event->mimeData()->urls())     
           {
@@ -3841,7 +3808,7 @@ void rvln::dropEvent (QDropEvent *event)
            info.setFile (fName);
            if (info.isFile())
                documents->open_file (fName, cb_fman_codecs->currentText());
-           }
+          }
               
  event->accept();
 }
@@ -3893,7 +3860,6 @@ void rvln::fn_sort_casecare_sep()
                                         d->textEdit->textCursor().selectedText(),
                                         fif_get_text(), QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP)); 
 }
-
 
 
 void rvln::mrkup_text_to_html()
@@ -3966,9 +3932,9 @@ void rvln::fn_text_stat()
   if (! d)
      return;
 
-  QString s;
-
   bool b_sel = d->textEdit->textCursor().hasSelection();
+
+  QString s;
   
   if (b_sel)
      s = d->textEdit->textCursor().selectedText();
@@ -3981,7 +3947,7 @@ void rvln::fn_text_stat()
 
   for (int i = 0; i < c; ++ i)
       {
-       QChar ch = s.at(i);
+       QChar ch = s.at (i);
 
        if (ch.isLetterOrNumber() || ch.isPunct())
           purechars++;
@@ -3992,8 +3958,8 @@ void rvln::fn_text_stat()
               lines++;
           }
        else
-          if (ch == QChar::ParagraphSeparator)
-             lines++;
+           if (ch == QChar::ParagraphSeparator)
+              lines++;
       }
 
 
@@ -4018,9 +3984,8 @@ void rvln::fn_antispam_email()
   QString s = d->textEdit->textCursor().selectedText();
   QString result;
 
-  int c = s.size();
-  for (int i = 0; i < c; i++)
-      result = "&#" + QString::number(s.at(i).unicode()) + ";";
+  for (int i = 0; i < s.size(); i++)
+      result = "&#" + QString::number (s.at (i).unicode()) + ";";
 
   d->textEdit->textCursor().insertText (result);
 }
@@ -4094,12 +4059,11 @@ void rvln::search_replace_all()
       else
           s = s.replace (l[0], l[1], cs);
   
-      //d->textEdit->selectAll();
       d->textEdit->textCursor().insertText (s);
      }
   else
       if (main_tab_widget->currentIndex() == idx_tab_fman)
-        {
+         {
           QStringList sl = fman->get_sel_fnames();
 
           if (sl.size() < 1)
@@ -4108,18 +4072,18 @@ void rvln::search_replace_all()
           char *charset = cb_fman_codecs->currentText().toLatin1().data();
 
           foreach (QString fname, sl)
-                 {
-                  QString f = qstring_load (fname, charset);
-                  QString r;
+                  {
+                   QString f = qstring_load (fname, charset);
+                   QString r;
 
-                  if (menu_find_regexp->isChecked())
-                     r = f.replace (QRegExp (l[0]), l[1]);
-                  else
-                      r = f.replace (l[0], l[1], cs);
+                   if (menu_find_regexp->isChecked())
+                      r = f.replace (QRegExp (l[0]), l[1]);
+                   else
+                       r = f.replace (l[0], l[1], cs);
 
-                  qstring_save (fname, r, charset);
-                  log->log (tr ("%1 is processed and saved").arg (fname));
-                 }
+                   qstring_save (fname, r, charset);
+                   log->log (tr ("%1 is processed and saved").arg (fname));
+                  }
         }
 }
 
@@ -4132,8 +4096,7 @@ void CApplication::saveState (QSessionManager &manager)
 
 void rvln::update_charsets()
 {
-  QString fname (dir_config);
-  fname.append ("/last_used_charsets");
+  QString fname  = dir_config + "/last_used_charsets";
 
   if (! file_exists (fname))
      qstring_save (fname, "UTF-8");
@@ -4258,7 +4221,7 @@ void rvln::mrkup_header()
       QString t;
       int n = a->text().toLower()[1].digitValue();
       t.fill ('#', n);
-      t = t + " " + d->textEdit->textCursor().selectedText();
+      r = t + " " + d->textEdit->textCursor().selectedText();
      }
   else
   r = QString ("<%1>%2</%1>").arg (
@@ -4288,13 +4251,11 @@ void rvln::mrkup_align()
 //FIXME write code here
      //}
   else
-       {
-        r = "<p style=\"text-align:" + 
-             a->text().toLower() + 
-             ";\">" + 
-              d->textEdit->textCursor().selectedText() +
-             "</p>";
-       }
+       r = "<p style=\"text-align:" + 
+            a->text().toLower() + 
+            ";\">" + 
+             d->textEdit->textCursor().selectedText() +
+            "</p>";
 
   d->textEdit->textCursor().insertText (r);
 }

@@ -92,6 +92,9 @@ void CDocument::update_status()
 
 void CDocument::update_title (bool fullname)
 {
+  if (! holder->parent_wnd)
+     return;
+     
   QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
 
   if (fullname)
@@ -182,6 +185,8 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
       return false;
      }
 
+if (! b_destroying_all)
+ {
   charset = tio->charset;
   file_name = fileName;
 
@@ -195,7 +200,7 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
   textEdit->document()->setModified (false);
   
   holder->update_current_files_menu();
-
+ }
   return true;
 }
 

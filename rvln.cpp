@@ -4376,37 +4376,37 @@ QString toggle_fname_header_source (const QString &fileName)
   if (ext == "c" || ext == "cpp" || ext == "cxx" || ext == "cc" || ext == "c++")
      {
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".h"))
-        return f.absolutePath() + "/" + f.baseName () + ".h";
+         return f.absolutePath() + "/" + f.baseName () + ".h";
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".hxx"))
-        return f.absolutePath() + "/" + f.baseName () + ".hxx";
+         return f.absolutePath() + "/" + f.baseName () + ".hxx";
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".h++"))
-        return f.absolutePath() + "/" + f.baseName () + ".h++";
+         return f.absolutePath() + "/" + f.baseName () + ".h++";
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".hh"))
-        return f.absolutePath() + "/" + f.baseName () + ".hh";
+         return f.absolutePath() + "/" + f.baseName () + ".hh";
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".hpp"))
-        return f.absolutePath() + "/" + f.baseName () + ".hpp";
+         return f.absolutePath() + "/" + f.baseName () + ".hpp";
      }
   else
   if (ext == "h" || ext == "h++" || ext == "hxx" || ext == "hh" || ext == "hpp")
      {
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".c"))
-        return f.absolutePath() + "/" + f.baseName () + ".c";
+         return f.absolutePath() + "/" + f.baseName () + ".c";
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".cpp"))
-        return f.absolutePath() + "/" + f.baseName () + ".cpp";
+         return f.absolutePath() + "/" + f.baseName () + ".cpp";
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".cxx"))
-        return f.absolutePath() + "/" + f.baseName () + ".cxx";
+         return f.absolutePath() + "/" + f.baseName () + ".cxx";
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".c++"))
-        return f.absolutePath() + "/" + f.baseName () + ".c++";
+         return f.absolutePath() + "/" + f.baseName () + ".c++";
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".cc"))
-        return f.absolutePath() + "/" + f.baseName () + ".cc";
+         return f.absolutePath() + "/" + f.baseName () + ".cc";
      }
 
   return fileName;
@@ -4568,45 +4568,47 @@ void rvln::fn_rm_formatting_at_each_line()
 
 
 //from http://www.cyberforum.ru/cpp-beginners/thread125615.html
-int get_arab_num(std::string rom_str)
+int get_arab_num (std::string rom_str)
 {
-    int res = 0;
-    for(size_t i = 0; i < rom_str.length(); ++i)
-    {
-        switch(rom_str[i])
-        {
-        case 'M': 
-            res += 1000;
-            break;
-        case 'D': 
-            res += 500;
-            break;
-        case 'C':
-            i + 1 < rom_str.length() 
-                    &&  (rom_str[i + 1] == 'D' 
-                         || rom_str[i + 1] == 'M') ? res -= 100 : res += 100;            
-            break;
-        case 'L': 
-            res += 50;
-            break;
-        case 'X': 
-            i + 1 < rom_str.length() 
-                    &&  (rom_str[i + 1] == 'L' 
-                         || rom_str[i + 1] == 'C') ? res -= 10 : res += 10;            
-            break;
-        case 'V': 
-            res += 5;
-            break;
-        case 'I': 
-            i + 1 < rom_str.length() 
-                    &&  (rom_str[i + 1] == 'V' 
-                         || rom_str[i + 1] == 'X') ? res -= 1 : res += 1;            
-            break;
+  int res = 0;
+    
+  for (size_t i = 0; i < rom_str.length(); ++i)
+      {
+       switch (rom_str[i])
+              {
+               case 'M': 
+                        res += 1000;
+                        break;
+               case 'D': 
+                        res += 500;
+                        break;
+               case 'C':
+                        i + 1 < rom_str.length() && (rom_str[i + 1] == 'D' 
+                        || rom_str[i + 1] == 'M') ? res -= 100 : res += 100;            
+                        break;
+               case 'L': 
+                        res += 50;
+                        break;
+               case 'X': 
+                        i + 1 < rom_str.length() 
+                        &&  (rom_str[i + 1] == 'L' 
+                        || rom_str[i + 1] == 'C') ? res -= 10 : res += 10;            
+                        break;
+               case 'V': 
+                        res += 5;
+                        break;
+               case 'I': 
+                        i + 1 < rom_str.length() 
+                        &&  (rom_str[i + 1] == 'V' 
+                        || rom_str[i + 1] == 'X') ? res -= 1 : res += 1;            
+                        break;
  
-        }//switch
-    }//for
-    return res;
+                }//switch
+       }//for
+       
+  return res;
 }
+
 
 void rvln::fn_number_arabic_to_roman()
 {
@@ -4624,7 +4626,6 @@ void rvln::fn_number_roman_to_arabic()
 
   CDocument *d = documents->get_current();
   if (d)
-     //d->textEdit->textCursor().insertText (QString::number(romanToDecimal (d->textEdit->textCursor().selectedText().toUpper().toUtf8().data())));
      d->textEdit->textCursor().insertText (QString::number(get_arab_num (d->textEdit->textCursor().selectedText().toUpper().toStdString())));
 }
 
@@ -4646,8 +4647,6 @@ void rvln::update_dyn_menus()
   update_scripts();
   update_palettes();
   update_themes();
-
-  //opt_update_keyb();
   update_view_hls();
   update_tables();
   update_profiles();
@@ -4709,10 +4708,12 @@ void rvln::file_open_program()
 
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
+      if (! file_exists (d->file_name))
+         return;   
+
       QFileInfo fi (d->file_name);
      
       command = command.replace ("%s", d->file_name);
-      
       command = command.replace ("%basename", fi.baseName());
       command = command.replace ("%filename", fi.fileName());
       command = command.replace ("%ext", fi.suffix());
@@ -4729,7 +4730,7 @@ void rvln::file_open_program()
   QProcess *process  = new QProcess (this);
   
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
-  process->setProcessChannelMode(QProcess::MergedChannels) ;
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
   
   process->start (command, QIODevice::ReadWrite);
 }
@@ -4869,8 +4870,6 @@ void CAboutWindow::closeEvent (QCloseEvent *event)
 {
   event->accept();
 }
-
-
 
 
 void CAboutWindow::update_image()
@@ -5175,7 +5174,6 @@ void rvln::fman_places_itemActivated (QListWidgetItem *item)
       return;
      }
   
-  
   fman->nav (item->text());
 }
 
@@ -5183,6 +5181,7 @@ void rvln::fman_places_itemActivated (QListWidgetItem *item)
 void rvln::update_places_bookmarks()
 {
   lv_places->clear();
+
   QStringList sl_items;
   sl_items << tr ("templates");
   sl_items << tr ("snippets");
@@ -5360,7 +5359,6 @@ void rvln::fn_convert_quotes_tex_angle_02()
 
   d->textEdit->textCursor().insertText (dest);
 }
-
 
 
 void rvln::fn_enum()

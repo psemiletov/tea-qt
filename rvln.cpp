@@ -3104,8 +3104,7 @@ void rvln::view_preview_in_bro()
   if (! d)
      return;
 
-  QString cm ("file:///");
-  cm.append (d->file_name);
+  QString cm  = "file:///" + d->file_name;
   QDesktopServices::openUrl (cm);
 }
 
@@ -3349,9 +3348,9 @@ void rvln::fn_apply_to_each_line()
      {
       QString fname = dir_snippets + QDir::separator() + t;
 
-      if (file_exists (fname))
+      if (! file_exists (fname))
          {
-          log->log (tr("snippet %1 is not exists").arg (fname));
+          log->log (tr ("snippet %1 is not exists").arg (fname));
           return;
          }
 

@@ -3398,10 +3398,9 @@ void rvln::fn_reverse()
      return;
 
   QString s = d->textEdit->textCursor().selectedText();
-  if (s.isEmpty())
-     return;
   
-  d->textEdit->textCursor().insertText (string_reverse (s));
+  if (! s.isEmpty())
+      d->textEdit->textCursor().insertText (string_reverse (s));
 }
 
 
@@ -3881,7 +3880,7 @@ void rvln::mrkup_text_to_html()
   if (d->markup_mode == "HTML")
      result += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
   else
-     result += "<!DOCTYPE html PUBLIC \"-//W3C//DTD  1.0 Transitional//EN\" \"http://www.w3.org/TR/1/DTD/1-transitional.dtd\">\n";
+      result += "<!DOCTYPE html PUBLIC \"-//W3C//DTD  1.0 Transitional//EN\" \"http://www.w3.org/TR/1/DTD/1-transitional.dtd\">\n";
 
   result += "<html>\n"
             "<head>\n"
@@ -4223,9 +4222,9 @@ void rvln::mrkup_header()
       r = t + " " + d->textEdit->textCursor().selectedText();
      }
   else
-  r = QString ("<%1>%2</%1>").arg (
-               a->text().toLower()).arg (
-               d->textEdit->textCursor().selectedText());
+      r = QString ("<%1>%2</%1>").arg (
+                   a->text().toLower()).arg (
+                   d->textEdit->textCursor().selectedText());
                        
   d->textEdit->textCursor().insertText (r);
 }
@@ -4250,11 +4249,11 @@ void rvln::mrkup_align()
 //FIXME write code here
      //}
   else
-       r = "<p style=\"text-align:" + 
-            a->text().toLower() + 
-            ";\">" + 
-             d->textEdit->textCursor().selectedText() +
-            "</p>";
+      r = "<p style=\"text-align:" + 
+           a->text().toLower() + 
+           ";\">" + 
+            d->textEdit->textCursor().selectedText() +
+           "</p>";
 
   d->textEdit->textCursor().insertText (r);
 }
@@ -5450,8 +5449,7 @@ void rvln::session_save_as()
   if (! ok || name.isEmpty())
      return;
 
-  QString fname (dir_sessions);
-  fname.append ("/").append (name);
+  QString fname = dir_sessions + "/" + name;
   documents->save_to_session (fname);
   update_sessions();
 }
@@ -5464,7 +5462,7 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
   QString temp = qstring_load (fname);
   QXmlStreamReader xml (temp);
 
-   while (! xml.atEnd())
+  while (! xml.atEnd())
         {
          xml.readNext();
 
@@ -5472,23 +5470,20 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
          
          if (xml.isStartElement())
             {
-
-            if (tag_name == "colorTheme")
-             {
-                  
+             if (tag_name == "colorTheme")
+                {
                  log->log (xml.attributes().value ("id").toString());
                  log->log (xml.attributes().value ("name").toString());
                  log->log (xml.attributes().value ("modified").toString());
                  log->log (xml.attributes().value ("author").toString());
                  log->log (xml.attributes().value ("website").toString());
                 }
-
          
             if (tag_name == "singleLineComment")
                {
                 QString t = xml.attributes().value ("color").toString();
                 if (! t.isEmpty())
-                     result.insert ("single comment", t);
+                   result.insert ("single comment", t);
                }
          
 
@@ -5503,95 +5498,95 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
                }
 
          
-         if (tag_name == "operator")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                     result.insert ("operator", t);
-            }
+            if (tag_name == "operator")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   result.insert ("operator", t);
+               }
          
          
-         if (tag_name == "string")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                 result.insert ("quotes", t);
-            }
+            if (tag_name == "string")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   result.insert ("quotes", t);
+               }
          
          
-         if (tag_name == "multiLineComment")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                 result.insert ("mcomment-start", t);
-            }
+            if (tag_name == "multiLineComment")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   result.insert ("mcomment-start", t);
+               }
          
                   
-         if (tag_name == "foreground")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                 {
-                  result.insert ("text", t);
-                  result.insert ("functions", t);
-                  result.insert ("modifiers", t);
-                  result.insert ("margin_color", t);
-                  result.insert ("digits", t);
-                  result.insert ("digits-float", t);
-                  result.insert ("label", t);
-                  result.insert ("include", t);
-                  result.insert ("preproc", t);
-                 }
+            if (tag_name == "foreground")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   {
+                    result.insert ("text", t);
+                    result.insert ("functions", t);
+                    result.insert ("modifiers", t);
+                    result.insert ("margin_color", t);
+                    result.insert ("digits", t);
+                    result.insert ("digits-float", t);
+                    result.insert ("label", t);
+                    result.insert ("include", t);
+                    result.insert ("preproc", t);
+                   }
+               }
+
+            if (tag_name == "background")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   { 
+                    result.insert ("background", t);
+                    result.insert ("linenums_bg", t);
+                   }
+               }
+         
+           
+           if (tag_name == "selectionForeground")
+              {
+               QString t = xml.attributes().value ("color").toString();
+               if (! t.isEmpty())
+                  result.insert ("sel-text", t);
+              }
+         
+         
+           if (tag_name == "selectionBackground")
+              {
+               QString t = xml.attributes().value ("color").toString();
+               if (! t.isEmpty())
+                 result.insert ("sel-background", t);
+              }
+
+         
+           if (tag_name == "keyword")
+              {
+               QString t = xml.attributes().value ("color").toString();
+               if (! t.isEmpty())
+                  {
+                   result.insert ("keywords", t);
+                   result.insert ("tags", t);
+                  }
+              }
+
+        	 
+        	 
+          if (tag_name == "currentLine")
+             {
+              QString t = xml.attributes().value ("color").toString();
+              if (! t.isEmpty())
+                 result.insert ("cur_line_color", t);
              }
 
-         if (tag_name == "background")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                { 
-                 result.insert ("background", t);
-                 result.insert ("linenums_bg", t);
-                }
-            }
-         
-         
-         if (tag_name == "selectionForeground")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                result.insert ("sel-text", t);
-            }
-         
-         
-         if (tag_name == "selectionBackground")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-               result.insert ("sel-background", t);
-            }
-
-         
-         if (tag_name == "keyword")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                {
-                 result.insert ("keywords", t);
-                 result.insert ("tags", t);
-                }
-             }
-
         	 
-        	 
-       	 if (tag_name == "currentLine")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                result.insert ("cur_line_color", t);
-            }
-
-        	 
-         if (tag_name == "bracket")
+          if (tag_name == "bracket")
             {
              QString t = xml.attributes().value ("color").toString();
              if (! t.isEmpty())
@@ -5600,15 +5595,15 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
              
         }//is start
 
-  if (xml.hasError())
+   if (xml.hasError())
      qDebug() << "xml parse error";
 
   } //cycle
   
 
-   result.insert ("error", "red");
+  result.insert ("error", "red");
    
-   return result; 
+  return result; 
 }
 
 
@@ -5631,8 +5626,7 @@ void rvln::file_use_palette()
   last_action = qobject_cast<QAction *>(sender());
 
   QAction *a = qobject_cast<QAction *>(sender());
-  QString fname (dir_palettes);
-  fname.append ("/").append (a->text());
+  QString fname = dir_palettes + "/" + a->text();
 
   if (! file_exists (fname))
      fname = ":/palettes/" + a->text();
@@ -5663,18 +5657,18 @@ void rvln::update_logmemo_palette()
   QString t_sel_back_color = QColor (sel_back_color).darker(darker_val).name(); 
   
   QString sheet = QString ("QPlainTextEdit { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}").arg (
-                            t_text_color).arg (
-                            t_back_color).arg (
-                            t_sel_text_color).arg (
-                            t_sel_back_color);
+                           t_text_color).arg (
+                           t_back_color).arg (
+                           t_sel_text_color).arg (
+                           t_sel_back_color);
 
   log->setStyleSheet (sheet);
 
   sheet = QString ("QLineEdit { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}").arg (
-                            t_text_color).arg (
-                            t_back_color).arg (
-                            t_sel_text_color).arg (
-                            t_sel_back_color);
+                   t_text_color).arg (
+                   t_back_color).arg (
+                   t_sel_text_color).arg (
+                   t_sel_back_color);
 
   fif->setStyleSheet (sheet);
 }
@@ -5696,10 +5690,8 @@ void rvln::update_palettes()
 
 void rvln::update_hls_noncached()
 {
-  qDebug() << "update_hls_noncached()";
-  
-  QTime tm;
-  tm.start();
+//  QTime tm;
+//  tm.start();
 
   documents->hls.clear();
 
@@ -5728,7 +5720,7 @@ void rvln::update_hls_noncached()
            }
       }
   
-  qDebug("Time elapsed: %d ms", tm.elapsed());
+//  qDebug("Time elapsed: %d ms", tm.elapsed());
 }
 
 
@@ -5813,7 +5805,7 @@ void rvln::mrkup_preview_color()
   
   QString color = d->textEdit->textCursor().selectedText();
 
-  if (QColor::colorNames().indexOf (color) == - 1)
+  if (QColor::colorNames().indexOf (color) == -1)
      {
       color = color.remove (";");
       if (! color.startsWith ("#"))
@@ -6007,23 +5999,13 @@ void rvln::fman_file_activated (const QString &full_path)
   if (file_get_ext (full_path) == ("zip"))
      {
       //check if plugin:
-
- //      qDebug() << "full path = " << full_path;
-//       qDebug() << "1";
        
       CZipper z;
-      
-      //QString fname = full_path;
 
       QStringList sl = z.unzip_list (full_path);
       
-//      qDebug() << "sl.size = " << sl.size();
-      
-      
       bool is_plugin = false;
       
-//      qDebug() << "2";
-             
       for (int i = 0; i < sl.size(); i++)
           {
            if (sl[i].endsWith("main.qml"))
@@ -6032,9 +6014,6 @@ void rvln::fman_file_activated (const QString &full_path)
               break;
              }
           }
-      
-  //    qDebug() << "3";
-       
       
       if (is_plugin)
          {
@@ -6054,30 +6033,31 @@ void rvln::fman_file_activated (const QString &full_path)
 #ifdef USE_QML_STUFF
           update_plugins();
 #endif
-          
+
          }
       else   
-          //fman_zip_info();
-      {
-       for (int i = 0; i < sl.size(); i++)
-         sl[i] = sl[i] + "<br>";
+          {
+           for (int i = 0; i < sl.size(); i++)
+               sl[i] = sl[i] + "<br>";
       
-       log->log (sl.join("\n"));
-      }
+           log->log (sl.join("\n"));
+          }
 
       return; 
      }
+ 
  
   if (is_image (full_path))
      {
       CDocument *d = documents->get_current();
       if (! d)
-       return;
+         return;
 
       d->insert_image (full_path);
       main_tab_widget->setCurrentIndex (idx_tab_edit);
       return;
      }
+
 
   CDocument *d = documents->open_file (full_path, cb_fman_codecs->currentText());
   if (d)
@@ -6096,9 +6076,7 @@ void rvln::fman_dir_changed (const QString &full_path)
   ui_update = true;
   ed_fman_path->setText (full_path);
 
-//#if defined(Q_WS_WIN) || defined(Q_OS_OS2)
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
 
   cb_fman_drives->setCurrentIndex (cb_fman_drives->findText (full_path.left(3).toUpper()));
 
@@ -6112,15 +6090,16 @@ void rvln::fman_current_file_changed (const QString &full_path, const QString &j
 {
   ed_fman_fname->setText (just_name);
 
-  if (b_preview)
-  if (is_image (full_path))
+  if (b_preview && is_image (full_path))
      {
       if (! img_viewer->window_mini.isVisible())
          {
+          
           img_viewer->window_mini.show();
           activateWindow();
           fman->setFocus();
          }
+         
       img_viewer->set_image_mini (full_path);
      }
 }
@@ -6143,8 +6122,7 @@ void rvln::fman_rename()
   if (! ok || newname.isEmpty())
      return;
   
-  QString newfpath (fi.path());
-  newfpath.append ("/").append (newname);
+  QString newfpath = fi.path() + "/" + newname;
   QFile::rename (fname, newfpath);
   update_dyn_menus();
   fman->refresh();
@@ -8534,6 +8512,7 @@ void rvln::leaving_tune()
   settings->setValue ("img_filter", cb_output_image_flt->checkState());
 
 
+
   settings->setValue("fuzzy_q", spb_fuzzy_q->value());
 
 
@@ -8549,6 +8528,8 @@ void rvln::leaving_tune()
   settings->setValue ("ed_link_options", ed_link_options->text());
 
   settings->setValue ("ed_cols_per_row", ed_cols_per_row->text());
+
+  b_preview = settings->value ("b_preview", false).toBool(); 
 
   calendar->do_update();
   documents->apply_settings();

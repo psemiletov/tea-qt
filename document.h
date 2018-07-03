@@ -49,7 +49,9 @@ code from qwriter:
 #endif
 
 #if defined(Q_OS_UNIX)
+#ifndef Q_OS_MACOS
 #include "myjoystick.h"
+#endif
 #endif
 
 #include "logmemo.h"
@@ -326,8 +328,10 @@ public:
   QString recent_list_fname;
  
 #if defined(Q_OS_UNIX)
+#ifndef Q_OS_MACOS
   CJoystick *joystick;
 #endif 
+#endif
 
   QTimer *timer; 
   
@@ -336,10 +340,10 @@ public:
   ~CDox();
 
 #if defined(Q_OS_UNIX)
-
+#ifndef Q_OS_MACOS
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
-
+#endif
 #endif 
   
   void reload_recent_list();

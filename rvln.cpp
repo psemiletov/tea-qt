@@ -2314,7 +2314,7 @@ void rvln::cb_altmenu_stateChanged (int state)
 }
 
 #if defined(Q_OS_UNIX)
-
+#ifndef Q_OS_MACOS
 void rvln::cb_use_joystick_stateChanged (int state)
 {
   bool b;
@@ -2332,7 +2332,7 @@ void rvln::cb_use_joystick_stateChanged (int state)
 }
 
 #endif
-
+#endif
 
 void rvln::createOptions()
 {
@@ -2587,12 +2587,13 @@ void rvln::createOptions()
   cb_wasd->setCheckState (Qt::CheckState (settings->value ("wasd", "0").toInt()));
    
 #if defined(Q_OS_UNIX)
-   
+#ifndef Q_OS_MACOS   
   cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
   cb_use_joystick->setCheckState (Qt::CheckState (settings->value ("use_joystick", "0").toInt()));
   connect (cb_use_joystick, SIGNAL(stateChanged (int)),
            this, SLOT(cb_use_joystick_stateChanged (int)));
 #endif  
+#endif
   
 #if QT_VERSION >= 0x050000
     
@@ -2694,9 +2695,9 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_wasd);
   
 #if defined(Q_OS_UNIX)
-
+#ifndef Q_OS_MACOS
   page_common_layout->addWidget (cb_use_joystick);
-
+#endif
 #endif
 
   
@@ -8404,8 +8405,10 @@ void rvln::leaving_tune()
   settings->setValue ("wasd", cb_wasd->checkState());
   
 #if defined(Q_OS_UNIX)
+#ifndef Q_OS_MACOS
   settings->setValue ("use_joystick", cb_use_joystick->checkState());
 #endif  
+#endif
 
   settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
   

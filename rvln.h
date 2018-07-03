@@ -696,7 +696,9 @@ main window callbacks
 prefs window callbacks
 *************************/
 #if defined(Q_OS_UNIX)
+#ifndef Q_OS_MACOS
   void cb_use_joystick_stateChanged (int state);
+#endif
 #endif
 
 //  void cmb_ui_langs_currentIndexChanged (const QString &text);

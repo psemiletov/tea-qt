@@ -18,9 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifdef H_DEPRECATED
+#include <string>
+#include <vector>
+#endif
+
 #ifdef HUNSPELL_ENABLE
 #include <hunspell/hunspell.hxx>
 #endif
+
+#include <QTextCodec>
+#include <QDir>
+#include <QRegExp>
+
 
 #ifdef SPELLCHECK_ENABLE
 #include "spellchecker.h"
@@ -28,14 +38,6 @@
 
 #include "utils.h"
 
-#include <QTextCodec>
-#include <QDir>
-#include <QRegExp>
-
-#ifndef H_DEPRECATED
-#include <string>
-#include <vector>
-#endif
 
 
 #ifdef ASPELL_ENABLE
@@ -217,7 +219,7 @@ QStringList CSpellchecker::get_suggestions_list (const QString &word)
 
 CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, const QString &user_path): ASpellchecker (lang, path, user_path)
 {
-  qDebug() << "CHunspellChecker::CHunspellChecker - start";
+//  qDebug() << "CHunspellChecker::CHunspellChecker - start";
 
   initialized = false;
 
@@ -285,7 +287,7 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 
 #endif
 
-  qDebug() << "CHunspellChecker::CHunspellChecker - end";
+//  qDebug() << "CHunspellChecker::CHunspellChecker - end";
 }
 
 
@@ -348,16 +350,14 @@ void CHunspellChecker::change_lang (const QString &lang)
 
 #if defined(Q_OS_UNIX)
 
-  if (initialized)
-  if (file_exists (fname_userdict))
+  if (initialized && file_exists (fname_userdict))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
       user_words = qstring_load (fname_userdict, encoding).split ("\n");  
       user_words.removeFirst(); //зачем я это закомментировал раньше?
      }
 #else
-  if (initialized)
-  if (file_exists (fname_userdict_pure))
+  if (initialized && file_exists (fname_userdict_pure))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
       user_words = qstring_load (fname_userdict, encoding).split ("\n");  
@@ -389,7 +389,7 @@ bool CHunspellChecker::check (const QString &word)
  QByteArray es = codec->fromUnicode (word);
  
 #ifndef H_DEPRECATED
-  return speller->spell (es.data());
+  return speller->spell (es.data()); //old way
 #else  
   return speller->spell (QString(es).toStdString());
 #endif
@@ -436,7 +436,6 @@ QStringList CHunspellChecker::get_speller_modules_list()
 
 QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 {
-
   QStringList sl;
 
   if (! initialized || word.isEmpty())
@@ -448,7 +447,7 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 #ifndef H_DEPRECATED
   char **slst;
     
-  int size = speller->suggest(&slst, es.data());
+  int size = speller->suggest (&slst, es.data());
   
   for (int i = 0; i < size; i++)
       sl.append (codec->toUnicode (slst[i]));

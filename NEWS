@@ -1,17 +1,20 @@
 =====NEWS ABOUT TEA====
-TEA 44.1.1, November 2017
+TEA 45.0.0, July 2018
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
 https://github.com/psemiletov/tea-qt - development
 https://vk.com/teaeditor - VK-community
+https://www.facebook.com/groups/766324686841748/ - FB-community
 ---------------------------------------
   
-   This release fixes the desktop file and icons stuff (I hope it had not broke distros packages specs too much). Also you can build tea without QML using new option: 
+   After a long gap here is a new release, with all know bugs fixed, especially the syntax highlighting stuff. With such fixes, I can develop TEA further, based on this stable release. Almost each line of the code was reviewed.
+   But, what's new? 
+   On Linux, you can use the joystick to move cursor keys (this function is turned off by default and can be enabled via Tune - Common).
+   The recent list and bookmarks now saved the word wrap settings.
+   "Sum by last column" - can evaluate expressions and knows comments.
+   And more :)
 
-qmake "CONFIG+=noqml"
-
-   It slightly reduces the memory footprint and useful for some purposes.
 
    Stay tuned.
    Peter Semiletov

@@ -8,7 +8,6 @@
 #ifndef SINGLE_APP_SHARED_H
 #define SINGLE_APP_SHARED_H
 
-
 #include <QApplication>
 #include <QStringList>
 #include <QLocalServer>
@@ -62,4 +61,3 @@ private:
 
 
 #endif // SINGLE_APP_SHARED_H
-

@@ -61,14 +61,14 @@ int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_p
        for (int j = 0; j < text_to_find.length(); j++)
            {
             if (s[i + j] == text_to_find[j])
-  	       counter++;
+               counter++;
 
             if (get_percent ((double)text_to_find.length(), (double)counter) >= q)
-	       {
-	        result = i;
-	        jump = true;
-	        break;
-	       }
+	           {
+	            result = i;
+	            jump = true;
+	            break;
+	           }
            }
       }
 
@@ -528,6 +528,7 @@ unsigned int bin_to_decimal (const QString &s)
 
   return result;
 }
+
 
 QString conv_quotes (const QString &source, const QString &c1, const QString &c2)
 //QString conv_quotes (const QString &source, bool tex_mode)

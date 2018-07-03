@@ -146,6 +146,9 @@ QHash <QString, QString> hash_load_keyval (const QString &fname)
 
 bool is_image (const QString &filename)
 {
+  if (filename.isEmpty())
+     return false;
+     
   QList <QByteArray> a = QImageReader::supportedImageFormats();
 
   foreach (QByteArray x, a)

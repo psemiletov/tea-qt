@@ -138,8 +138,8 @@ void CShortcuts::captions_iterate()
              // qDebug() << ac->text();
              }
 
- captions.sort();
- captions.removeDuplicates(); //nasty hack
+  captions.sort();
+  captions.removeDuplicates(); //nasty hack
 }
 
 
@@ -216,7 +216,7 @@ void CShortcuts::load_from_file (const QString &file_name)
           if (hash.contains (ac->text()))
              {
               //if (ac->shortcut().isEmpty())
-                  ac->setShortcut (QKeySequence (hash.value (ac->text())));
+              ac->setShortcut (QKeySequence (hash.value (ac->text())));
              }
 }
 
@@ -226,5 +226,4 @@ void CShortcutEntry::keyPressEvent (QKeyEvent *event)
   event->accept();
   QString text = mod_to_string (event->modifiers()) + keycode_to_string (event->key());
   setText (text);
-  //qDebug() << text;
 }

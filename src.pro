@@ -1,7 +1,7 @@
-VERSION = 44.1.1
+VERSION = 45.0.0
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"44.1.1"\''
+DEFINES += 'VERSION_NUMBER=\'"45.0.0"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -280,7 +280,7 @@ icons/tea_icon_v2.png \
 icons/tea-icon-v3-01.png \
 icons/tea-icon-v3-02.png \
 icons/tea-icon-v3-03.png
-    
+
 
 
 

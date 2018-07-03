@@ -45,10 +45,6 @@ DJVU read code taken fromdvutxt.c:
 //C- +------------------------------------------------------------------
 */
 
-#include "tio.h"
-#include "utils.h"
-#include "tzipper.h"
-
 #include <QXmlStreamReader>
 #include <QTextStream>
 #include <QDebug>
@@ -63,7 +59,6 @@ DJVU read code taken fromdvutxt.c:
 
 
 #ifdef DJVU_ENABLE
-
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -71,12 +66,14 @@ DJVU read code taken fromdvutxt.c:
 #include <locale.h>
 #include <fcntl.h>
 #include <errno.h>
-
-#include "libdjvu/miniexp.h"
-#include "libdjvu/ddjvuapi.h"
-
+#include <libdjvu/miniexp.h>
+#include <libdjvu/ddjvuapi.h>
 #endif
 
+
+#include "tio.h"
+#include "utils.h"
+#include "tzipper.h"
 
 
 bool CTioPlainText::load (const QString &fname)

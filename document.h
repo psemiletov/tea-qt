@@ -49,7 +49,7 @@ code from qwriter:
 #endif
 
 #if defined(Q_OS_UNIX)
-#ifndef Q_OS_MACOS
+#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
 #include "myjoystick.h"
 #endif
 #endif
@@ -328,7 +328,7 @@ public:
   QString recent_list_fname;
  
 #if defined(Q_OS_UNIX)
-#ifndef Q_OS_MACOS
+#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
   CJoystick *joystick;
 #endif 
 #endif
@@ -340,7 +340,7 @@ public:
   ~CDox();
 
 #if defined(Q_OS_UNIX)
-#ifndef Q_OS_MACOS
+#if !defined (Q_OS_MAC) || !!defined (Q_OS_MACOS)
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
 #endif

@@ -3,7 +3,7 @@
 #include "myjoystick.h"
 
 #if defined(Q_OS_UNIX)
-#ifndef Q_OS_MACOS
+#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
 
 #include <QDebug>
 #include <QApplication>

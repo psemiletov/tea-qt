@@ -2,8 +2,7 @@
 
 #include "myjoystick.h"
 
-#if defined(Q_OS_UNIX)
-#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
+#if defined(Q_OS_LINUX)
 
 #include <QDebug>
 #include <QApplication>
@@ -91,5 +90,4 @@ void CJoystick::process_event (js_event e)
     }
 }
 
-#endif    
 #endif    

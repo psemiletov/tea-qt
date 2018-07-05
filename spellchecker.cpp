@@ -467,4 +467,4 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
   return sl;
 }
 
-#endif 
+#endif

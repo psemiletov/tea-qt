@@ -5,8 +5,7 @@
 
 #include <QObject>
 
-#if defined(Q_OS_UNIX)
-#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
+#if defined(Q_OS_LINUX)
 
 #include <iostream>
 #include <unistd.h>
@@ -71,5 +70,4 @@ public slots:
 };
 
 #endif
-#endif //MAC
 #endif

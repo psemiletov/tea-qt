@@ -48,10 +48,8 @@ code from qwriter:
 #include <QRegularExpression>
 #endif
 
-#if defined(Q_OS_UNIX)
-#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
+#if defined(Q_OS_LINUX)
 #include "myjoystick.h"
-#endif
 #endif
 
 #include "logmemo.h"
@@ -327,10 +325,8 @@ public:
   QStringList recent_files;
   QString recent_list_fname;
  
-#if defined(Q_OS_UNIX)
-#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
+#if defined(Q_OS_LINUX)
   CJoystick *joystick;
-#endif 
 #endif
 
   QTimer *timer; 
@@ -339,11 +335,9 @@ public:
   CDox();
   ~CDox();
 
-#if defined(Q_OS_UNIX)
-#if !defined (Q_OS_MAC) || !!defined (Q_OS_MACOS)
+#if defined(Q_OS_LINUX)
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
-#endif
 #endif 
   
   void reload_recent_list();

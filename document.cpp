@@ -317,10 +317,8 @@ CDox::~CDox()
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
   
-#if defined(Q_OS_UNIX)
-#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
+#if defined(Q_OS_LINUX)
   delete joystick;
-#endif
 #endif
 }
 
@@ -1043,8 +1041,7 @@ CDox::CDox()
   timer = new QTimer (this);
   timer->setInterval (100);
 
-#if defined(Q_OS_UNIX)
-#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
+#if defined(Q_OS_LINUX)
   joystick = new CJoystick (0, this);
 
   if (joystick->initialized)
@@ -1054,8 +1051,6 @@ CDox::CDox()
       if (settings->value ("use_joystick", "0").toInt())
          timer->start();   
      }
-     
-#endif     
 #endif
 }
 
@@ -2793,8 +2788,7 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
 }
 */
 
-#if defined(Q_OS_UNIX)
-#if !defined (Q_OS_MAC) || !defined (Q_OS_MACOS)
+#if defined(Q_OS_LINUX)
 bool CDox::event (QEvent *ev)
 {
 
@@ -2841,5 +2835,4 @@ void CDox::handle_joystick_event (CJoystickAxisEvent *event)
       d->textEdit->setTextCursor (cr);
      } 
 }    
-#endif
 #endif

@@ -2973,7 +2973,7 @@ void rvln::createOptions()
   idx_tab_keyboard = tab_options->addTab (page_keyboard, tr ("Keyboard"));
 
 
-  connect (tab_options, SIGNAL(currentChanged(int)), this, SLOT(tab_options_pageChanged(int)));
+//  connect (tab_options, SIGNAL(currentChanged(int)), this, SLOT(tab_options_pageChanged(int)));
 }
 
 
@@ -9643,6 +9643,7 @@ void rvln::search_mark_all()
              f.setForeground (QColor (hash_get_val (global_palette, "foregroundmark", "blue")));
 
              cr.mergeCharFormat (f);
+             d->textEdit->setTextCursor (cr);
             } 
          else 
              cont_search = false; 

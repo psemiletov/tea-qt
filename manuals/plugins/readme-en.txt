@@ -2,7 +2,7 @@ TEA PLUGINS DEVELOPER GUIDE
 
 1. What is the TEA plugin?
 
-The TEA plugin is QML-program that has access to inner TEA classes and variables. TEA plugin's files must be placed to its own directory. The main file must have the name "main.qml". It is the entry point. Plugin's directory name is the name of the plugin for TEA "Functions - Plugins" menu. The set of plugin directories can be placed into the top-level directory. For example, TEA source snips with "examples"  plugins directory. When you put it to $HOME/.config/tea/plugins, you'll the the "examples" menu at the "Funtions - Plugins" menu.
+The TEA plugin is QML-program that has access to inner TEA classes and variables. TEA plugin's files must be placed to its own directory. The main file must have the name "main.qml". It is the entry point. Plugin's directory name is the name of the plugin for TEA "Functions - Plugins" menu. The set of plugin directories can be placed into the top-level directory. For example, TEA source snips with "examples"  plugins directory. When you put it to $HOME/.config/tea/plugins, you'll have the "examples" menu at the "Functions - Plugins" menu.
 
 2. How to distribute TEA plugin?
 

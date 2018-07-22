@@ -8,7 +8,8 @@ DEFINES += 'VERSION_NUMBER=\'"45.0.2"\''
 
 
 DEFINES += NOCRYPT \
-          NOUNCRYPT
+          NOUNCRYPT \
+          QUAZIP_STATIC
 
 USE_ASPELL = true
 USE_HUNSPELL = true
@@ -97,7 +98,7 @@ useclang{
     QMAKE_CXXFLAGS += -std=c++11
 }
 
-
+#include(quazip.pri)
 
 SOURCES += rvln.cpp \
     main.cpp \
@@ -117,12 +118,12 @@ SOURCES += rvln.cpp \
     fontbox.cpp \
     tio.cpp \
     tzipper.cpp \
-    ioapi.c \
-    quazip.cpp \
-    quazipfile.cpp \
-    quazipnewinfo.cpp \
-    unzip.c \
-    zip.c \
+#    ioapi.c \
+#    quazip.cpp \
+#    quazipfile.cpp \
+#    quazipnewinfo.cpp \
+    #unzip.c \
+    #zip.c \
     single_application.cpp \
     single_application_shared.cpp \
     exif.cpp \
@@ -143,24 +144,57 @@ HEADERS += rvln.h \
     img_viewer.h \
     gui_utils.h \
     wavinfo.h \
-    zconf.h \
-    zlib.h \
+#    zconf.h \
+ #   zlib.h \
     tio.h \
     fontbox.h \
     tzipper.h \
-    ioapi.h \
-    quazip.h \
-    quazipfile.h \
-    quazipfileinfo.h \
-    quazipnewinfo.h \
-    unzip.h \
-    zip.h \
+    #ioapi.h \
+#    quazip.h \
+#    quazipfile.h \
+#    quazipfileinfo.h \
+    #quazipnewinfo.h \
+#    unzip.h \
+    #zip.h \
     single_application.h \
     single_application_shared.h \
     exif.h \
     myjoystick.h
   
 
+HEADERS += \
+        minizip_crypt.h \
+        ioapi.h \
+        JlCompress.h \
+        quaadler32.h \
+        quachecksum32.h \
+        quacrc32.h \
+        quagzipfile.h \
+        quaziodevice.h \
+        quazipdir.h \
+        quazipfile.h \
+        quazipfileinfo.h \
+        quazip_global.h \
+        quazip.h \
+        quazipnewinfo.h \
+        unzip.h \
+        zip.h
+
+SOURCES += qioapi.cpp \
+           JlCompress.cpp \
+           quaadler32.cpp \
+           quacrc32.cpp \
+           quagzipfile.cpp \
+           quaziodevice.cpp \
+           quazip.cpp \
+           quazipdir.cpp \
+           quazipfile.cpp \
+           quazipfileinfo.cpp \
+           quazipnewinfo.cpp \
+           unzip.c \
+           zip.c
+  
+  
 
 TEMPLATE = app
 
@@ -285,9 +319,14 @@ icons/tea-icon-v3-03.png
 
 
 unix:  {
-        LIBS += -lz
+#        LIBS += -lz
 
 
+    system(pkg-config --exists zlib) {
+    message ("Zlib found")
+        PKGCONFIG += zlib
+#        DEFINES += POPPLER_ENABLE
+        }
 #omp{
 #    QMAKE_CXXFLAGS += -fopenmp
 #    QMAKE_LFLAGS +=  -fopenmp
@@ -378,6 +417,8 @@ greaterThan(QT_MAJOR_VERSION, 4) {
   } else {
    LIBS += zlib1.dll
 
+   INCLUDEPATH+=c:\\Qt\\4.8.4\\src\\3rdparty\\zlib     
+   
         contains(USE_ASPELL,true)
                  {
                   exists ("C:\\MinGw\\include\\aspell.h")

@@ -33,7 +33,8 @@ bool CZipper::zip_directory (const QString &archpath, const QString &dir2pack)
   QString zipname (archpath); //zip name has a full path ending with .zip
   zipname.append ("/").append (archname).append (".zip");
  
-  QuaZip zip (zipname, settings->value ("zip_charset_out", "UTF-8").toString().trimmed());
+  QuaZip zip (zipname);
+  zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_out", "UTF-8").toString().trimmed().toLatin1().data())));
 
   if (! zip.open (QuaZip::mdCreate))
      return false;
@@ -84,8 +85,10 @@ bool CZipper::zip_directory (const QString &archpath, const QString &dir2pack)
 
 bool CZipper::read_as_utf8 (const QString &archname, const QString &fname)
 {
-  QuaZip zip (archname, settings->value ("zip_charset_in", "UTF-8").toString().trimmed());
-    
+  QuaZip zip (archname);
+  zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_in", "UTF-8").toString().trimmed().toLatin1().data())));
+
+  
   if (! zip.open (QuaZip::mdUnzip))
       return false;
 
@@ -147,8 +150,10 @@ bool CZipper::pack_prepared()
      return false;
   
   QString zipname (archive_fullpath);
-  QuaZip zip (zipname, settings->value ("zip_charset_out", "UTF-8").toString().trimmed());
+  QuaZip zip (zipname);
+  zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_out", "UTF-8").toString().trimmed().toLatin1().data())));
 
+  
   if (! zip.open (QuaZip::mdCreate))
       return false;
 
@@ -198,8 +203,10 @@ bool CZipper::pack_prepared()
 //based on the code from quazip Copyright (C) 2005-2007 Sergey A. Tachenov
 bool CZipper::unzip (const QString &archpath, const QString &destdir)
 {
-  QuaZip zip (archpath, settings->value ("zip_charset_in", "UTF-8").toString().trimmed());
+  QuaZip zip (archpath);
+  zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_in", "UTF-8").toString().trimmed().toLatin1().data())));
 
+  
   if (! zip.open (QuaZip::mdUnzip))
       {
        qDebug() << "zip.open() error: " << zip.getZipError();
@@ -346,7 +353,9 @@ QString CZipper::unzip_info (const QString &archpath)
 
 QStringList CZipper::unzip_list (const QString &archpath)
 {
-  QuaZip zip (archpath, settings->value ("zip_charset_in", "UTF-8").toString().trimmed());
+  QuaZip zip (archpath);
+  zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_in", "UTF-8").toString().trimmed().toLatin1().data())));
+
 
   if (! zip.open (QuaZip::mdUnzip))
       {

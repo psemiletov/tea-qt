@@ -46,6 +46,7 @@ CSpellchecker::CSpellchecker (const QString &lang, const QString &path,
                               const QString &user_path):
                               ASpellchecker (lang, path, user_path)
 {
+    qDebug() << "start ASpeller";
   ret = 0;
   speller = 0;
   spell_config = 0;
@@ -219,7 +220,7 @@ QStringList CSpellchecker::get_suggestions_list (const QString &word)
 
 CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, const QString &user_path): ASpellchecker (lang, path, user_path)
 {
-//  qDebug() << "CHunspellChecker::CHunspellChecker - start";
+  qDebug() << "CHunspellChecker::CHunspellChecker - start";
 
   initialized = false;
 
@@ -287,7 +288,7 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 
 #endif
 
-//  qDebug() << "CHunspellChecker::CHunspellChecker - end";
+  qDebug() << "CHunspellChecker::CHunspellChecker - end";
 }
 
 

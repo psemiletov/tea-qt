@@ -3,6 +3,7 @@
 #ifndef MYJOYSTICK_H
 #define MYJOYSTICK_H
 
+#include <QtGlobal>
 #include <QObject>
 
 #if defined(Q_OS_LINUX)

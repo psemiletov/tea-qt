@@ -484,11 +484,9 @@ void rvln::create_main_widget()
 
 void rvln::setup_spellcheckers()
 {
- 
 #ifdef ASPELL_ENABLE
   spellcheckers.append ("Aspell"); 
 #endif
-
   
 #ifdef HUNSPELL_ENABLE
   spellcheckers.append ("Hunspell"); 
@@ -496,10 +494,10 @@ void rvln::setup_spellcheckers()
 
   cur_spellchecker = settings->value ("cur_spellchecker", "Hunspell").toString();
   
+  
   if (spellcheckers.size() > 0)
      if (! spellcheckers.contains (cur_spellchecker))
          cur_spellchecker = spellcheckers[0]; 
-
   
 #ifdef ASPELL_ENABLE
   if (cur_spellchecker == "Aspell")
@@ -527,7 +525,7 @@ void rvln::setup_spellcheckers()
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", "/usr/share/hunspell").toString(), dir_user_dict);
 
 #endif
-  
+
  create_spellcheck_menu();
 }
 
@@ -3452,6 +3450,7 @@ void rvln::fn_change_spell_lang()
 void rvln::create_spellcheck_menu()
 {
   menu_spell_langs->clear();
+  
   create_menu_from_list (this, menu_spell_langs, spellchecker->get_speller_modules_list(), SLOT(fn_change_spell_lang()));
 }
 

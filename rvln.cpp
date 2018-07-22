@@ -6421,9 +6421,11 @@ void rvln::run_unitaz (int mode)
            uwords.append (new CStrIntPair (s, h.value (s)));
 
   if (mode == 0)
-     qSort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than);
+    // qSort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than);
+    std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than);
   if (mode == 1)
-     qSort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than_str);
+     //qSort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than_str);
+     std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than_str);
 
   QStringList outp;
 

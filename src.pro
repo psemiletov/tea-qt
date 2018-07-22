@@ -248,7 +248,7 @@ nodesktop{
 INSTALLS -= desktop icon128 icon64 icon48 icon32 iconsvg
 }
 
-RESOURCES += rlvn.qrc
+RESOURCES += rvln.qrc
 TRANSLATIONS = translations/tea_ru.ts \
                translations/tea_de.ts \
                translations/tea_fr.ts

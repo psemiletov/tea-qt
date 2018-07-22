@@ -61,7 +61,7 @@ double calculate (string expression)
   if (end_pos != string::npos)
       do 
         {
-         for (size_t i = end_pos; i == 0; i--)
+         for (size_t i = end_pos; i >= 0; i--)
              {
               if (expression[i] == '(')
                  {

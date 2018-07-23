@@ -42,6 +42,10 @@ some code is taken from Scribus::util.cpp:
 #include "utils.h"
 
 
+int str_fuzzy_search_bytwo (const QString &s, const QString &text_to_find, int start_pos)
+{
+
+}
 
 int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_pos, double q)
 {

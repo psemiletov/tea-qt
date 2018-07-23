@@ -23,7 +23,7 @@ started at 08 November 2007
 
 
 #include <math.h>
-
+#include <algorithm>
 
 #include <QMimeData>
 #include <QStyleFactory>

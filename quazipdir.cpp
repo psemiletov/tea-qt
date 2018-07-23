@@ -26,6 +26,8 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 
 #include <QSet>
 #include <QSharedData>
+#include <algorithm>
+
 
 /// \cond internal
 class QuaZipDirPrivate: public QSharedData {

@@ -86,6 +86,14 @@ WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 
 add_executable(${PROJECT} ${tea_SRCS} ${QT_RESOURCES})
 
+find_package(Qt5PrintSupport)
+if (Qt5PrintSupport_FOUND)
+   Message ("+ printer support")
+   add_definitions(-DPRINTER_ENABLE)
+   target_link_libraries(${PROJECT} Qt5::PrintSupport)
+endif()
+
+
 #find_package( ZLIB REQUIRED )
 #if ( ZLIB_FOUND )
 #    include_directories(${ZLIB_INCLUDE_DIRS} )

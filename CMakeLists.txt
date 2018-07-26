@@ -30,13 +30,14 @@ message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 
 
 find_package(PkgConfig REQUIRED)
-#pkg_check_modules(hunspell REQUIRED hunspell)
 pkg_check_modules(hunspell hunspell)
 if(hunspell_FOUND)
   add_definitions(-DHUNSPELL_ENABLE)
   add_definitions(-DSPELLCHECK_ENABLE)
   message("+ hunspell support")
 endif()
+
+
 
 
 #find_library(ASPELL_LIB
@@ -49,7 +50,9 @@ endif()
 #include_directories (${aspell_INCLUDE_DIRS})
 
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network Qml Quick)
+add_definitions(-DUSE_QML_STUFF)
+
 
 if(BUILD_TESTING)
   find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
@@ -86,12 +89,15 @@ WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 
 add_executable(${PROJECT} ${tea_SRCS} ${QT_RESOURCES})
 
+
 find_package(Qt5PrintSupport)
 if (Qt5PrintSupport_FOUND)
    Message ("+ printer support")
    add_definitions(-DPRINTER_ENABLE)
    target_link_libraries(${PROJECT} Qt5::PrintSupport)
 endif()
+
+
 
 
 #find_package( ZLIB REQUIRED )
@@ -127,6 +133,28 @@ if(ASPELL_INLCUDES)
 endif()
 
 
+find_package(PkgConfig)
+pkg_check_modules(popplerqt5 poppler-qt5)
+if(popplerqt5_FOUND)
+  add_definitions(-DPOPPLER_ENABLE)
+  target_link_libraries(${PROJECT} ${popplerqt5_LIBRARIES})
+  include_directories(${popplerqt5_INCLUDE_DIRS})
+
+  message("+ poppler support")
+endif()
+
+
+find_package(PkgConfig)
+pkg_check_modules(ddjvuapi ddjvuapi)
+if(popplerqt5_FOUND)
+  add_definitions(-DDJVU_ENABLE)
+  target_link_libraries(${PROJECT} ${ddjvuapi_LIBRARIES})
+  include_directories(${ddjvuapi_INCLUDE_DIRS})
+
+  message("+ djvuapi support")
+endif()
+
+
 if(UNIX OR MINGW)
     find_package(ZLIB REQUIRED)
 else(UNIX OR MINGW)
@@ -148,7 +176,7 @@ if(hunspell_FOUND)
   target_link_libraries(${PROJECT} ${hunspell_LIBRARIES} )
 endif()
 
-target_link_libraries(${PROJECT} Qt5::Widgets Qt5::Core Qt5::Network)
+target_link_libraries(${PROJECT} Qt5::Widgets Qt5::Core Qt5::Network Qt5::Qml Qt5::Quick)
 
 install (TARGETS ${PROJECT} DESTINATION bin)
 install (FILES ${upsm_ICONSVG} DESTINATION share/icons/hicolor/scalable/apps)

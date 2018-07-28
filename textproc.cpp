@@ -44,7 +44,22 @@ some code is taken from Scribus::util.cpp:
 
 int str_fuzzy_search_bytwo (const QString &s, const QString &text_to_find, int start_pos)
 {
+  int c = 0;
+  int result = -1;
 
+  int end_pos = s.length() - 1;
+  int len = text_to_find.length() - 1;
+
+  for (int i = start_pos; i < end_pos; i++)
+      {
+       if (s[i] == text_to_find[c++])
+          if ((i + len <= end_pos) && s[i + len] == text_to_find[c + len])
+             return i;
+      
+      }
+
+  return result;
+ 
 }
 
 int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_pos, double q)

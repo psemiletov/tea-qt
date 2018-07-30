@@ -620,6 +620,12 @@ CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTex
 
 void CDocument::set_hl (bool mode_auto, const QString &theext)
 {
+  if (highlighter)
+     delete highlighter;
+
+  if (! settings->value ("hl_enabled", 1).toBool())
+      return;
+
   QString ext;
   
   if (mode_auto)
@@ -643,8 +649,6 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   if (fname.isEmpty() || ! file_exists (fname))
      return;
 
-  if (highlighter)
-     delete highlighter;
   
 #if QT_VERSION >= 0x050000
   

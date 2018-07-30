@@ -1,3 +1,6 @@
++ Tune::Common:: Syntax highlighting enabled - turn on/off syntax hl globally (useful
+for large documents on slow machines)
+
 2018 jul
 45.0.2 - BSD fix
 45.0.1 - MacOS fix

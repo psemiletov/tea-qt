@@ -297,6 +297,8 @@ public:
 
   QCheckBox *cb_session_restore;
   QCheckBox *cb_use_hl_wrap;
+  QCheckBox *cb_hl_enabled;
+
   QCheckBox *cb_hl_brackets;
   QCheckBox *cb_auto_indent;
   QCheckBox *cb_spaces_instead_of_tabs;

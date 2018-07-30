@@ -1097,7 +1097,7 @@ void rvln::about()
 void rvln::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
-  //act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
+ // act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
   act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
 
 
@@ -1187,7 +1187,7 @@ void rvln::createMenus()
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
 
-  //fileMenu->addAction (act_test);
+  fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
   add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -2486,6 +2486,10 @@ void rvln::createOptions()
   cb_use_hl_wrap->setCheckState (Qt::CheckState (settings->value ("use_hl_wrap", "0").toInt()));
   page_interface_layout->addWidget (cb_use_hl_wrap);
 
+  cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
+  cb_hl_enabled->setCheckState (Qt::CheckState (settings->value ("hl_enabled", "2").toInt()));
+  page_interface_layout->addWidget (cb_hl_enabled);
+  
 
   cb_hl_current_line = new QCheckBox (tr ("Highlight current line"), tab_options);
   cb_hl_current_line->setCheckState (Qt::CheckState (settings->value ("additional_hl", "0").toInt()));
@@ -8419,6 +8423,8 @@ void rvln::leaving_tune()
 
   settings->setValue ("show_linenums", cb_show_linenums->checkState());
   settings->setValue ("use_hl_wrap", cb_use_hl_wrap->checkState());
+  settings->setValue ("hl_enabled", cb_hl_enabled->checkState());
+  
   settings->setValue ("hl_brackets", cb_hl_brackets->checkState());
   settings->setValue ("auto_indent", cb_auto_indent->checkState());
 
@@ -9367,7 +9373,53 @@ void rvln::keyPressEvent (QKeyEvent *event)
 void rvln::test()
 {
 
+ // int x = str_fuzzy_search_bytwo ("rampage tri sugar freee", "tri", 0);
+  //std::cout << x << endl;
 
+  std::cout << "rvln::test()" << endl;
+  //CDocument *d = documents->get_current();
+  //if (! d)
+    // return;
+
+    QTime time_start;
+    time_start.start();
+
+
+   QString fiftxt = "tri";
+   QString t = "tri rampage tri sugar freee rrrr tri";
+ 
+/*
+   QString fiftxt = fif_get_text();
+   QString t = d->textEdit->toPlainText();
+  */ 
+   //int len = d->textEdit->toPlainText().size();
+   int len = t.size();
+   int i = 0;
+   int found = 0; 
+   int searchlen = fiftxt.size();
+
+   //   std::cout << "len = " << len << endl;
+
+   
+   while (i < len)
+         {
+          std::cout << "i = " << i << endl;
+          int x = str_fuzzy_search_bytwo (t, fiftxt, i);
+          std::cout << "x = " << x << endl;
+          if (x != -1)
+             {
+              found++;
+              i = x + searchlen;
+              std::cout  << "yes i = " << i << endl;
+
+             }
+          else
+              i++;
+         }
+   
+    std::cout  << "FOUND: " << found << endl;
+
+    log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
      
 /*  CDocument *d = documents->get_current();
   if (! d)

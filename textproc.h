@@ -29,6 +29,6 @@ QString int_to_binary (int n);
 unsigned int bin_to_decimal (const QString &s);
 QString conv_quotes (const QString &source, const QString &c1, const QString &c2);
 QStringList html_get_by_patt (const QString &s, const QString &spatt);
-
+int str_fuzzy_search_bytwo (const QString &s, const QString &text_to_find, int start_pos);
 
 #endif // TEXTPROC_H

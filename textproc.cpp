@@ -37,6 +37,7 @@ some code is taken from Scribus::util.cpp:
 
 #include <QString>
 #include <QMap>
+#include <QDebug>
 
 #include "textproc.h"
 #include "utils.h"
@@ -44,7 +45,6 @@ some code is taken from Scribus::util.cpp:
 
 int str_fuzzy_search_bytwo (const QString &s, const QString &text_to_find, int start_pos)
 {
-  int c = 0;
   int result = -1;
 
   int end_pos = s.length() - 1;
@@ -52,15 +52,18 @@ int str_fuzzy_search_bytwo (const QString &s, const QString &text_to_find, int s
 
   for (int i = start_pos; i < end_pos; i++)
       {
-       if (s[i] == text_to_find[c++])
-          if ((i + len <= end_pos) && s[i + len] == text_to_find[c + len])
-             return i;
+       if (s[i] == text_to_find[0])
+          if ((i + len <= end_pos) && s[i + len] == text_to_find[len])
+             {
+              //qDebug() << s[i] << "+" << s[i + len];
+              return i;
+             } 
       
       }
 
   return result;
- 
 }
+
 
 int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_pos, double q)
 {

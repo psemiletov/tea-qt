@@ -380,7 +380,7 @@ void rvln::writeSettings()
   settings->setValue ("dir_last", dir_last);
   settings->setValue ("fname_def_palette", fname_def_palette);
   settings->setValue ("markup_mode", markup_mode);
-  settings->setValue ("VERSION_NUMBER", QString (VERSION_NUMBER));
+  settings->setValue ("VER_NUMBER", QString (VERSION_NUMBER));
   settings->setValue ("state", saveState());
 
   delete settings;
@@ -731,7 +731,7 @@ rvln::rvln()
 
   restoreState (settings->value ("state", QByteArray()).toByteArray());
 
-  QString vn = settings->value ("VERSION_NUMBER", "").toString();
+  QString vn = settings->value ("VER_NUMBER", "").toString();
   if (vn.isEmpty() || vn != QString (VERSION_NUMBER))
      {
       //update_hls (true);
@@ -9170,7 +9170,7 @@ void rvln::fn_table_swap_cells()
   if (t.indexOf (sep) == -1)
 	  return;
 	
-  int imax = fmax (col1, col2);
+  int imax = int (fmax (col1, col2));
 
   QStringList sl_temp = t.split (QChar::ParagraphSeparator); 
     

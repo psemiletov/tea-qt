@@ -49,6 +49,7 @@ DJVU read code taken fromdvutxt.c:
 #include <QTextStream>
 #include <QDebug>
 
+//FIXME: not good with cmake, cmake just use Qt5 here 
 #ifdef POPPLER_ENABLE
 #if QT_VERSION >= 0x050000
 #include <poppler-qt5.h>

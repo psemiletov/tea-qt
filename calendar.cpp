@@ -141,10 +141,10 @@ int moon_phase_trig1 (int year, int month, int day)
          double M5 = (M0 + phase * 29.10535608) * degToRad;
          double M6 = (M1 + phase * 385.81691806) * degToRad;
          double B6 = (B1 + phase * 390.67050646) * degToRad;
-         F -= 0.4068 * sin (M6) + (0.1734 - 0.000393 * T) * sin(M5);
+         F -= 0.4068 * sin (M6) + (0.1734 - 0.000393 * T) * sin (M5);
          F += 0.0161 * sin (2 * M6) + 0.0104 * sin (2 * B6);
-         F -= 0.0074 * sin (M5 - M6) - 0.0051 * sin(M5 + M6);
-         F += 0.0021 * sin (2 * M5) + 0.0010 * sin(2 * B6 - M6);
+         F -= 0.0074 * sin (M5 - M6) - 0.0051 * sin (M5 + M6);
+         F += 0.0021 * sin (2 * M5) + 0.0010 * sin (2 * B6 - M6);
          F += 0.5 / 1440;
          oldJ = jday;
          jday = J0 + 28 * phase + floor(F);

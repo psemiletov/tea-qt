@@ -95,15 +95,14 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
          QString tag_name = xml.qualifiedName().toString().toLower();
          
          foreach (QString ts, tags)
-         {
-         if (xml.isStartElement()) 
-             if (tag_name == ts)
-                tt = true;
+                {
+                 if (xml.isStartElement() && tag_name == ts)
+                       tt = true;
               
-         if (xml.isEndElement()) 
-            if (tag_name == ts) 
-               tt = false; 
-         } 
+                 if (xml.isEndElement() && tag_name == ts) 
+                       tt = false; 
+                 } 
+                 
          if (tt && xml.isCharacters())
             {
              QString s = xml.text().toString();
@@ -113,8 +112,6 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
                 data.append("\n");
                }
              }
-             
-             
         } 
     
    if (xml.hasError()) 
@@ -286,39 +283,10 @@ bool CTioABW::load (const QString &fname)
 {
   QString temp = qstring_load (fname);
 
-  data.clear();
-
-  QXmlStreamReader xml (temp);
-
-  bool tt = false;
-
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.qualifiedName().toString().toLower();
-
-         if (xml.isStartElement())
-             if (tag_name == "p")
-                tt = true;
-
-         if (xml.isEndElement())
-            if (tag_name == "p")
-               tt = false;
-
-         if (tt && xml.isCharacters())
-            {
-             QString s = xml.text().toString();
-             if (! s.isEmpty())
-                {
-                 data.append (s);
-                 data.append("\n");
-                }
-            }
-        }
-
-   if (xml.hasError())
-      qDebug() << "xml parse error";
+  QStringList tags;
+  tags.append ("p");
+  
+  data = extract_text_from_xml (temp, tags);
 
   return true;
 }
@@ -419,43 +387,17 @@ bool CTioXMLZipped::load (const QString &fname)
       source_fname = "word/document.xml";
       ts = "w:t";  
      }
+ 
   
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, source_fname))
-       return false;
-    
-  QXmlStreamReader xml (zipper.string_data);
+      return false;
+ 
+  QStringList tags;
+  tags.append (ts);
   
-  bool tt = false;
-  
-  while (! xml.atEnd()) 
-        {
-         xml.readNext();
-
-         QString tag_name = xml.qualifiedName().toString().toLower();
-         
-         if (xml.isStartElement()) 
-             if (tag_name == ts)
-                tt = true;
-              
-         if (xml.isEndElement()) 
-            if (tag_name == ts) 
-               tt = false; 
-
-         if (tt && xml.isCharacters())
-            {
-             QString s = xml.text().toString();
-             if (! s.isEmpty())
-               {
-                data.append (s);
-                data.append("\n");
-               }
-             }
-        } 
-    
-   if (xml.hasError()) 
-      qDebug() << "xml parse error";
-  
+  data = extract_text_from_xml (zipper.string_data, tags);
+ 
   return true;
 }
 
@@ -594,13 +536,13 @@ bool CTioFB2::load (const QString &fname)
              if (tag_name == "title")
                 {
                  title = false;
-                 data.append("\n");
+                 data.append ("\n");
                 }
 
              if (tag_name == "section")
                 {
                  section = false;
-                 data.append("\n");
+                 data.append ("\n");
                 }
              }
 
@@ -611,7 +553,7 @@ bool CTioFB2::load (const QString &fname)
                 {
                  data.append ("   ");
                  data.append (s);
-                 data.append("\n");
+                 data.append ("\n");
                 }
             }
         }
@@ -869,8 +811,6 @@ bool CTioPDF::load (const QString &fname)
 #endif
 
 
-
-
 #ifdef DJVU_ENABLE
 
 
@@ -901,8 +841,8 @@ void djvumsg_handle()
              return;
             }
                 
-        ddjvu_message_pop(ctx);
-       }
+         ddjvu_message_pop(ctx);
+        }
 }
 
 
@@ -946,18 +886,16 @@ bool CTioDJVU::load (const QString &fname)
   while (! ddjvu_document_decoding_done (doc))
         djvumsg_handle();
 
-
   int n = ddjvu_document_get_pagenum (doc);
   
   for (int i = 0; i < n; i++)
       dopage (i);
- 
-  
+   
   if (doc)
-    ddjvu_document_release(doc);
+    ddjvu_document_release (doc);
     
   if (ctx)
-    ddjvu_context_release(ctx);
+    ddjvu_context_release (ctx);
 
   data = temp_data_s;
   return true;
@@ -1036,12 +974,9 @@ bool CTioEpub::load (const QString &fname)
       qDebug() << "xml parse error";
   
 
-  //QString alldata;
-  
+
   foreach (QString fn, html_files)
          {
-          std::cout << fn.toStdString() << std::endl;
- 
           if (! zipper.read_as_utf8 (fname, fn))
               return false;
               
@@ -1052,67 +987,9 @@ bool CTioEpub::load (const QString &fname)
           
           QString t = extract_text_from_xml (zipper.string_data, tags);
           
-          
           data += t;
           data += "\n";
          }
    
-  
-  
-  //std::cout << zipper.string_data.toStdString() << std::endl;
-  //QString ext = file_get_ext (fname);
-  
-  
-//  QStringList fnames = zipfile::getFileList (fname);
-  
-/*
-  if (ext == "kwd")
-     {
-      source_fname = "maindoc.xml";
-      ts = "text";
-     } 
-  else
-  if (ext == "docx")
-     {
-      source_fname = "word/document.xml";
-      ts = "w:t";  
-     }
-  
-  CZipper zipper;
-  if (! zipper.read_as_utf8 (fname, source_fname))
-       return false;
-    
-  QXmlStreamReader xml (zipper.string_data);
-  
-  bool tt = false;
-  
-  while (! xml.atEnd()) 
-        {
-         xml.readNext();
-
-         QString tag_name = xml.qualifiedName().toString().toLower();
-         
-         if (xml.isStartElement()) 
-             if (tag_name == ts)
-                tt = true;
-              
-         if (xml.isEndElement()) 
-            if (tag_name == ts) 
-               tt = false; 
-
-         if (tt && xml.isCharacters())
-            {
-             QString s = xml.text().toString();
-             if (! s.isEmpty())
-               {
-                data.append (s);
-                data.append("\n");
-               }
-             }
-        } 
-    
-   if (xml.hasError()) 
-      qDebug() << "xml parse error";
-  */
   return true;
 }

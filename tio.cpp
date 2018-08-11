@@ -48,6 +48,7 @@ DJVU read code taken fromdvutxt.c:
 #include <QXmlStreamReader>
 #include <QTextStream>
 #include <QDebug>
+#include <iostream>
 
 //FIXME: not good with cmake, cmake just use Qt5 here 
 #ifdef POPPLER_ENABLE
@@ -75,6 +76,52 @@ DJVU read code taken fromdvutxt.c:
 #include "tio.h"
 #include "utils.h"
 #include "tzipper.h"
+#include "JlCompress.h"
+#include "textproc.h"
+
+
+
+QString extract_text_from_xml (const QString &string_data, const QStringList &tags)
+{
+  QString data;
+  QXmlStreamReader xml (string_data);
+  
+  bool tt = false;
+  
+  while (! xml.atEnd()) 
+        {
+         xml.readNext();
+
+         QString tag_name = xml.qualifiedName().toString().toLower();
+         
+         foreach (QString ts, tags)
+         {
+         if (xml.isStartElement()) 
+             if (tag_name == ts)
+                tt = true;
+              
+         if (xml.isEndElement()) 
+            if (tag_name == ts) 
+               tt = false; 
+         } 
+         if (tt && xml.isCharacters())
+            {
+             QString s = xml.text().toString();
+             if (! s.isEmpty())
+               {
+                data.append (s);
+                data.append("\n");
+               }
+             }
+             
+             
+        } 
+    
+   if (xml.hasError()) 
+      qDebug() << "xml parse error";
+   
+  return data;    
+}
 
 
 bool CTioPlainText::load (const QString &fname)
@@ -161,6 +208,7 @@ CTioHandler::CTioHandler()
   list.append (new CTioABW);
   list.append (new CTioFB2);
   list.append (new CTioRTF);
+  list.append (new CTioEpub);
 
 #ifdef POPPLER_ENABLE
   
@@ -916,3 +964,155 @@ bool CTioDJVU::load (const QString &fname)
 }
 
 #endif
+
+
+CTioEpub::CTioEpub()
+{
+  ronly = true;
+
+  extensions.append ("epub");
+}
+
+
+bool CTioEpub::load (const QString &fname)
+{
+  data.clear();
+    
+  
+  JlCompress zipfile;  
+  
+  QStringList html_files;
+    
+  QString source_fname;
+  QString ts;  
+  
+  
+  CZipper zipper;
+  if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
+       return false;
+  
+  
+  QString opf_fname;
+  QString opf_dir;
+  
+  int start = zipper.string_data.indexOf ("full-path=\"");
+  int end = zipper.string_data.indexOf ("\"", start + 11);
+  
+  opf_fname = zipper.string_data.mid (start + 11, end - start - 11);
+  opf_dir = opf_fname.left (opf_fname.indexOf ("/"));
+   
+  std::cout << opf_fname.toStdString() << std::endl;
+  std::cout << opf_dir.toStdString() << std::endl;
+
+  //READ FILES LIST. PARSE OPF FILE
+  
+  if (! zipper.read_as_utf8 (fname, opf_fname))
+       return false;
+  
+  
+  
+  
+  QXmlStreamReader xml (zipper.string_data);
+  
+  bool tt = false;
+  
+  while (! xml.atEnd()) 
+        {
+         xml.readNext();
+
+         QString tag_name = xml.qualifiedName().toString().toLower();
+         if (tag_name == "item")
+            {
+             QString attr_href = xml.attributes().value ("href").toString();
+             QString ext = file_get_ext (attr_href);
+             if (ext == "html" || ext == "htm" || ext == "xml")
+                html_files.append (opf_dir + "/" + attr_href);
+             //std::cout << attr_href.toStdString() << std::endl;
+ 
+            }
+        } 
+    
+  if (xml.hasError()) 
+      qDebug() << "xml parse error";
+  
+
+  //QString alldata;
+  
+  foreach (QString fn, html_files)
+         {
+          std::cout << fn.toStdString() << std::endl;
+ 
+          if (! zipper.read_as_utf8 (fname, fn))
+              return false;
+              
+          //QString t = strip_html (zipper.string_data);
+          QStringList tags;
+          tags.append ("p");
+         // tags.append ("h2");
+          
+          QString t = extract_text_from_xml (zipper.string_data, tags);
+          
+          
+          data += t;
+          data += "\n";
+         }
+   
+  
+  
+  //std::cout << zipper.string_data.toStdString() << std::endl;
+  //QString ext = file_get_ext (fname);
+  
+  
+//  QStringList fnames = zipfile::getFileList (fname);
+  
+/*
+  if (ext == "kwd")
+     {
+      source_fname = "maindoc.xml";
+      ts = "text";
+     } 
+  else
+  if (ext == "docx")
+     {
+      source_fname = "word/document.xml";
+      ts = "w:t";  
+     }
+  
+  CZipper zipper;
+  if (! zipper.read_as_utf8 (fname, source_fname))
+       return false;
+    
+  QXmlStreamReader xml (zipper.string_data);
+  
+  bool tt = false;
+  
+  while (! xml.atEnd()) 
+        {
+         xml.readNext();
+
+         QString tag_name = xml.qualifiedName().toString().toLower();
+         
+         if (xml.isStartElement()) 
+             if (tag_name == ts)
+                tt = true;
+              
+         if (xml.isEndElement()) 
+            if (tag_name == ts) 
+               tt = false; 
+
+         if (tt && xml.isCharacters())
+            {
+             QString s = xml.text().toString();
+             if (! s.isEmpty())
+               {
+                data.append (s);
+                data.append("\n");
+               }
+             }
+        } 
+    
+   if (xml.hasError()) 
+      qDebug() << "xml parse error";
+  */
+  return true;
+}

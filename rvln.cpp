@@ -1098,11 +1098,11 @@ void rvln::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
  // act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
-  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+ // act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
 
 
 
-  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+  //connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
   
@@ -1187,7 +1187,7 @@ void rvln::createMenus()
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
 
-  fileMenu->addAction (act_test);
+  //fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
   add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -9370,156 +9370,6 @@ void rvln::keyPressEvent (QKeyEvent *event)
 */
 
 
-void rvln::test()
-{
-
- // int x = str_fuzzy_search_bytwo ("rampage tri sugar freee", "tri", 0);
-  //std::cout << x << endl;
-
-  std::cout << "rvln::test()" << endl;
-  //CDocument *d = documents->get_current();
-  //if (! d)
-    // return;
-
-    QTime time_start;
-    time_start.start();
-
-
-   QString fiftxt = "tri";
-   QString t = "tri rampage tri sugar freee rrrr tri";
- 
-/*
-   QString fiftxt = fif_get_text();
-   QString t = d->textEdit->toPlainText();
-  */ 
-   //int len = d->textEdit->toPlainText().size();
-   int len = t.size();
-   int i = 0;
-   int found = 0; 
-   int searchlen = fiftxt.size();
-
-   //   std::cout << "len = " << len << endl;
-
-   
-   while (i < len)
-         {
-          std::cout << "i = " << i << endl;
-          int x = str_fuzzy_search_bytwo (t, fiftxt, i);
-          std::cout << "x = " << x << endl;
-          if (x != -1)
-             {
-              found++;
-              i = x + searchlen;
-              std::cout  << "yes i = " << i << endl;
-
-             }
-          else
-              i++;
-         }
-   
-    std::cout  << "FOUND: " << found << endl;
-
-    log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
-     
-/*  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-    QTime time_start;
-    time_start.start();
-
-  pb_status->show();
-  pb_status->setRange (0, d->textEdit->toPlainText().size() - 1);
-  pb_status->setFormat (tr ("%p% completed"));
-  pb_status->setTextVisible (true);
-
-   int i = 0;
-
-   QString fiftxt = fif_get_text();
-
-   d->text_to_search = fiftxt;
-
-   QTextCursor cr = d->textEdit->document()->find (d->text_to_search, 0, get_search_options());
-   cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.size());
-8779797
-
-    do
-      {
-
-          {
-           f = cr.blockCharFormat();
-           f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
-           f.setUnderlineColor (QColor (hash_get_val (documents->palette, "error", "red")));
-           cr.mergeCharFormat (f);
-          }
-
-        pb_status->setValue (i++);
-       }
-    while (cr.movePosition (QTextCursor::NextWord));
-
-    cr.setPosition (pos);
-    d->textEdit->setTextCursor (cr);
-    d->textEdit->document()->setModified (false);
-
-    pb_status->hide();
-
-    log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
-//  CDocument *d = documents->get_current();
-//  if (! d)
-  //   return;
-
-
-//  QLabel *l_font_demo = new QLabel (d->get_all_text());
-//  l_font_demo->setFont (QFont (sl[0]));
-//  l_font_demo->show();
-
-
-*/
-
-/*  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QStringList l = text_get_bookmarks (d->textEdit->toPlainText());
-  qstring_list_print (l);
-*/
-
-
-/*
-  QRegExp e ("([0-1][0-9]|2[0-3]):([0-5][0-9])");
-  QString s ("aaa 22:13 bbb");
-  qDebug() << s.indexOf (e);
-  */
-/*
-  QString source = "aaa 22:13 bbb 44:56";
-  QRegExp e ("([0-1][0-9]|2[0-3]):([0-5][0-9])");
-  
-  QString sl_parsed;
- 
-  int i = 0;
-  int x = 0;
-  
-  while (x != -1)
-       {
-        qDebug() << "i=" << i;
-        x = source.indexOf (e, i);
-        qDebug() << "x=" << x; 
-        if (x != -1)   
-           i += (x + 4);
-        //else   
-          //  i += 4;       
-       }
-*/  
-
-//    WId wid = QxtWindowSystem::findWindow("Mail - Kontact");
-  //  QPixmap screenshot = QPixmap::grabWindow(wid);
-  
-//full desktop:
-//originalPixmap = QPixmap::grabWindow(QApplication::desktop()->winId());
-  
-}
-
-
 
 void rvln::fn_sum_by_last_col()
 {
@@ -10267,4 +10117,161 @@ void rvln::text_compare_two_strings()
 
        log->log (s);
       } 
+}
+
+
+
+
+void rvln::test()
+{
+
+ // int x = str_fuzzy_search_bytwo ("rampage tri sugar freee", "tri", 0);
+  //std::cout << x << endl;
+
+  std::cout << "rvln::test()" << endl;
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+    QTime time_start;
+    time_start.start();
+
+
+   //QString fiftxt = "tri";
+   //QString t = "tri rampage tri sugar freee rrrr tri";
+ 
+
+   QString fiftxt = fif_get_text();
+   QString t = d->textEdit->toPlainText();
+   
+   //int len = d->textEdit->toPlainText().size();
+   int len = t.size();
+   int i = 0;
+   int found = 0; 
+   int searchlen = fiftxt.size();
+
+   //   std::cout << "len = " << len << endl;
+
+   
+   while (i < len)
+         {
+          //std::cout << "i = " << i << endl;
+          //int x = str_fuzzy_search_bytwo (t, fiftxt, i);
+          
+          //int x = str_q_search_bytwo (t, fiftxt, i);
+          int x = t.indexOf (fiftxt, i);
+          
+          
+         // std::cout << "x = " << x << endl;
+          if (x != -1)
+             {
+              found++;
+              i = x + searchlen;
+           //   std::cout  << "yes i = " << i << endl;
+             }
+          else
+              //i++;
+              break;
+         }
+   
+    std::cout  << "FOUND: " << found << endl;
+
+    log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
+     
+/*  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+    QTime time_start;
+    time_start.start();
+
+  pb_status->show();
+  pb_status->setRange (0, d->textEdit->toPlainText().size() - 1);
+  pb_status->setFormat (tr ("%p% completed"));
+  pb_status->setTextVisible (true);
+
+   int i = 0;
+
+   QString fiftxt = fif_get_text();
+
+   d->text_to_search = fiftxt;
+
+   QTextCursor cr = d->textEdit->document()->find (d->text_to_search, 0, get_search_options());
+   cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.size());
+8779797
+
+    do
+      {
+
+          {
+           f = cr.blockCharFormat();
+           f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
+           f.setUnderlineColor (QColor (hash_get_val (documents->palette, "error", "red")));
+           cr.mergeCharFormat (f);
+          }
+
+        pb_status->setValue (i++);
+       }
+    while (cr.movePosition (QTextCursor::NextWord));
+
+    cr.setPosition (pos);
+    d->textEdit->setTextCursor (cr);
+    d->textEdit->document()->setModified (false);
+
+    pb_status->hide();
+
+    log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
+//  CDocument *d = documents->get_current();
+//  if (! d)
+  //   return;
+
+
+//  QLabel *l_font_demo = new QLabel (d->get_all_text());
+//  l_font_demo->setFont (QFont (sl[0]));
+//  l_font_demo->show();
+
+
+*/
+
+/*  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QStringList l = text_get_bookmarks (d->textEdit->toPlainText());
+  qstring_list_print (l);
+*/
+
+
+/*
+  QRegExp e ("([0-1][0-9]|2[0-3]):([0-5][0-9])");
+  QString s ("aaa 22:13 bbb");
+  qDebug() << s.indexOf (e);
+  */
+/*
+  QString source = "aaa 22:13 bbb 44:56";
+  QRegExp e ("([0-1][0-9]|2[0-3]):([0-5][0-9])");
+  
+  QString sl_parsed;
+ 
+  int i = 0;
+  int x = 0;
+  
+  while (x != -1)
+       {
+        qDebug() << "i=" << i;
+        x = source.indexOf (e, i);
+        qDebug() << "x=" << x; 
+        if (x != -1)   
+           i += (x + 4);
+        //else   
+          //  i += 4;       
+       }
+*/  
+
+//    WId wid = QxtWindowSystem::findWindow("Mail - Kontact");
+  //  QPixmap screenshot = QPixmap::grabWindow(wid);
+  
+//full desktop:
+//originalPixmap = QPixmap::grabWindow(QApplication::desktop()->winId());
+  
 }

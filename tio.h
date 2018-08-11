@@ -99,6 +99,17 @@ public:
 };
 
 
+class CTioEpub: public CTioReadOnly
+{
+  Q_OBJECT
+
+public:
+
+  CTioEpub();
+  bool load (const QString &fname);
+};
+
+
 class CTioODTSpecial: public CTioReadOnly
 {
   Q_OBJECT

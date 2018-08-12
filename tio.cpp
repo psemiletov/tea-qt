@@ -76,7 +76,7 @@ DJVU read code taken fromdvutxt.c:
 #include "tio.h"
 #include "utils.h"
 #include "tzipper.h"
-#include "JlCompress.h"
+//#include "JlCompress.h"
 #include "textproc.h"
 
 
@@ -917,7 +917,7 @@ bool CTioEpub::load (const QString &fname)
   data.clear();
     
   
-  JlCompress zipfile;  
+  //JlCompress zipfile;  
   
   QStringList html_files;
     
@@ -939,8 +939,8 @@ bool CTioEpub::load (const QString &fname)
   opf_fname = zipper.string_data.mid (start + 11, end - start - 11);
   opf_dir = opf_fname.left (opf_fname.indexOf ("/"));
    
-  std::cout << opf_fname.toStdString() << std::endl;
-  std::cout << opf_dir.toStdString() << std::endl;
+  //std::cout << opf_fname.toStdString() << std::endl;
+  //std::cout << opf_dir.toStdString() << std::endl;
 
   //READ FILES LIST. PARSE OPF FILE
   

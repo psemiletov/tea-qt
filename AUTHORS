@@ -1,5 +1,5 @@
 Code and design:
-Peter 'Roxton' Semiletov <peter.semiletov@gmail.com, http://semiletov.org>
+Peter Semiletov <peter.semiletov@gmail.com, http://semiletov.org>
 
 PHP hl module by Boo-boo.
 
@@ -8,7 +8,7 @@ Code from other projects: Diego Iastrubni, Qxt Foundation, Trolltech ASA, Franz 
 ZIP and Zlib stuff by:
 Zlib - (C) 1995-2005 Jean-loup Gailly and Mark Adler
 Zip/Unzip - (C) 1998-2005 Gilles Vollant
-QuaZIP - (C) 2005-2007 Sergey A. Tachenov
+QuaZIP - (C) 2005-2018 Sergey A. Tachenov
 single application module (one of two) - Berenger Bramas (http://berenger.eu/blog/c-qt-singleapplication-single-app-instance/)
 exif.h/cpp - public domain code from http://imonad.com (based on Exif Jpeg header manipulation tool http://www.sentex.net/~mwandel/jhead/)
 Some code snippets were taken from qtcentre programming forum.

@@ -26,8 +26,6 @@ set(CMAKE_AUTORCC ON)
 
 message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 
-#add_subdirectory (quazip)
-
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(hunspell hunspell)
@@ -37,17 +35,6 @@ if(hunspell_FOUND)
   message("+ hunspell support")
 endif()
 
-
-
-
-#find_library(ASPELL_LIB
-#           NAMES libaspell
-#           PATHS /usr/lib /usr/local/lib /usr/lib64 /usr/local/lib64
-#           )
- 
- 
-
-#include_directories (${aspell_INCLUDE_DIRS})
 
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network Qml Quick)
@@ -97,26 +84,6 @@ if (Qt5PrintSupport_FOUND)
    target_link_libraries(${PROJECT} Qt5::PrintSupport)
 endif()
 
-
-
-
-#find_package( ZLIB REQUIRED )
-#if ( ZLIB_FOUND )
-#    include_directories(${ZLIB_INCLUDE_DIRS} )
-    #target_link_libraries(${PROJECT} ${ZLIB_LIBRARIES} )
-#endif( ZLIB_FOUND )
-
-
-#find_package(ASPELL)
-#if (ASPELL_FOUND)
-  #message("+ Aspell support")
-  #add_definitions(-DASPELL_ENABLE)
-  #add_definitions(-DSPELLCHECK_ENABLE)
-  
-  #include_directories(${aspell_INCLUDE_DIRS} )
-  #target_link_libraries(${PROJECT} ${aspell_LIBRARIES} )
-  #add_definitions(${ASPELL_DEFINITIONS})
-#endif()
 
 
 find_path(ASPELL_INLCUDES aspell.h

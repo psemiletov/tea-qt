@@ -76,9 +76,7 @@ DJVU read code taken fromdvutxt.c:
 #include "tio.h"
 #include "utils.h"
 #include "tzipper.h"
-//#include "JlCompress.h"
 #include "textproc.h"
-
 
 
 QString extract_text_from_xml (const QString &string_data, const QStringList &tags)
@@ -201,7 +199,7 @@ CTioHandler::CTioHandler()
   list.append (default_handler);
   list.append (new CTioGzip);
   list.append (new CTioXMLZipped);
-  list.append (new CTioODTSpecial);
+  list.append (new CTioODT);
   list.append (new CTioABW);
   list.append (new CTioFB2);
   list.append (new CTioRTF);
@@ -292,7 +290,7 @@ bool CTioABW::load (const QString &fname)
 }
 
 
-bool CTioODTSpecial::load (const QString &fname)
+bool CTioODT::load (const QString &fname)
 {
   data.clear();
   
@@ -349,7 +347,7 @@ bool CTioODTSpecial::load (const QString &fname)
 }
 
 
-CTioODTSpecial::CTioODTSpecial()
+CTioODT::CTioODT()
 {
   ronly = true;
 

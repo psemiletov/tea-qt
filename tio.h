@@ -110,13 +110,13 @@ public:
 };
 
 
-class CTioODTSpecial: public CTioReadOnly
+class CTioODT: public CTioReadOnly
 {
   Q_OBJECT
 
 public:
 
-  CTioODTSpecial();
+  CTioODT();
   bool load (const QString &fname);
 };
 

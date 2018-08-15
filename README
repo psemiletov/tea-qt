@@ -10,15 +10,39 @@ https://www.facebook.com/groups/766324686841748/
 
 TEA is good. TEA is a text editor with the hundreds of features.
 
-===INSTALLATION===
+===INSTALLATION FROM THE SOURCE===
 
-If you have installed Qt 4.6+ or Qt 5, just run:
+You can install TEA from the source by two ways, using build systems qmake and cmake (since TEA 46). But first, you need to install some development libraries.
+
+Mandatory:
+
+Qt 4 or 5 
+zlib
+
+Optional:
+
+libaspell (for spell checking engine)
+libhunspell (for spell checking engine)
+poppler-qt5 (to read the text from PDF)
+ddjvuap (to read the text from DJVU)
+
+If you want to build and install TEA with cmake, run at the source dir:
+
+mkdir b
+cd b
+cmake ..
+make
+make install (as root or with sudo)
+
+
+With qmake it is even more simplier:
 
 qmake
 make
-make install
+make install (as root or with sudo)
 
-To make some source configuration, use CONFIG variable at qmake command line parameter. For example:
+
+To make some source configuration (with qmake), use CONFIG variable at qmake command line parameter. For example:
 
 qmake "CONFIG+=useclang" "CONFIG+=noaspell"
 
@@ -33,12 +57,16 @@ usepoppler - use libpoppler-qt5 or qt4 for PDF text layer import. DISABLED by de
 usedjvu - use libdjvulibre to read DJVU files text (read only). DISABLED by default
 noprinter - disable printing support
 
-If you have installed both Qt4 and Qt5, use the qmake from Qt4 or Qt5 to configure TEA with exact version of QT. The common solution is to make symlink to qmake from Qt5 and name it qmake5, then use qmake5 instead of the usual qmake.
+Notes: 
 
+1. If you have installed both Qt4 and Qt5, use the qmake from Qt4 or Qt5 to configure TEA with exact version of QT. The common solution is to make symlink to qmake from Qt5 and name it qmake5, then use qmake5 instead of the usual qmake.
+
+2. If the context menus in TEA are not localized, install the qttranslations package from your distro's repository.
+
+3. With cmake, there are no way to disable some TEA features manually - they will be compiled if TEA found the libs those needed.
 
 /*
-
-Snippet for Ubuntu users (Qt5 build) - run this from Terminal at the TEA source directory (unpacked):
+Basic snippet for Ubuntu users (Qt5 build) - run this from Terminal at the TEA source directory (unpacked):
 
 sudo apt-get install g++ pkg-config
 sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev
@@ -57,28 +85,25 @@ sudo apt-get install libqt4-dev qt4-dev-tools
 qmake
 make
 sudo make install
-
 */
 
-===DEPENDENCIES===
-
-Qt 4.6+ or Qt 5+. Optional: libaspell, libhunspell-1.2, libpoppler-qt5, libdjvulibre
-Debian/Ubuntu users need to install zlib1g-dev, and, optionally: libaspell-dev, libhunspell-dev packages
-
-If there the context menus are not localized, install the 
-qttranslations package from your distro's repository.
 
 ===NOTE FOR PACKAGE MAINTAINERS===
 
-TEA after the compilation is a single binary file (with embedded resources). To override the default installation path (/usr/local, with binary at /usr/local/bin) use:
+1. TEA after the compilation is a single binary file (with embedded resources). 
+
+2. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
 
 qmake PREFIX=your_path
 make
 make install
 
+3. cmake vs qmake. TEA's qmake project file is rather old and obscure, but it will be supported forever because it works well with Qt 4 and Qt 5. The cmake's CMakeLists.txt for TEA is the modern way to deal with TEA source, good for Qt 5, and will be used with the upcoming Qt 6 (because I don't want use qbs instead of qmake).
+
+
 ===NOTE FOR UBUNTU USERS===
 
-User defined hotkeys cannot work due to Qt5 and Unity global menu feature. To remove global menu support in Qt5 apps, do 
+User defined hotkeys may not work due to Qt5 and Unity global menu feature. To remove global menu support in Qt5 apps, do 
 
 sudo apt-get autoremove appmenu-qt5
 

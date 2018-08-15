@@ -55,8 +55,24 @@ file(GLOB tea_SRCS "*.c" "*.cpp")
 file(GLOB tea_HEADERS "*.h")
 
 
-set(${PROJECT}_ICONPNG
-    ./icons/${PROJECT}.png
+
+set(${PROJECT}_ICONPNG32
+    ./icons/32/${PROJECT}.png
+)
+
+
+set(${PROJECT}_ICONPNG48
+    ./icons/48/${PROJECT}.png
+)
+
+
+set(${PROJECT}_ICONPNG64
+    ./icons/64/${PROJECT}.png
+)
+
+
+set(${PROJECT}_ICONPNG128
+    ./icons/128/${PROJECT}.png
 )
 
 set(${PROJECT}_ICONSVG
@@ -147,5 +163,9 @@ target_link_libraries(${PROJECT} Qt5::Widgets Qt5::Core Qt5::Network Qt5::Qml Qt
 
 install (TARGETS ${PROJECT} DESTINATION bin)
 install (FILES ${upsm_ICONSVG} DESTINATION share/icons/hicolor/scalable/apps)
-install (FILES ${upsm_ICONPNG} DESTINATION share/icons/hicolor/128x128/apps)
+install (FILES ${upsm_ICONPNG32} DESTINATION share/icons/hicolor/32x32/apps)
+install (FILES ${upsm_ICONPNG48} DESTINATION share/icons/hicolor/48x48/apps)
+install (FILES ${upsm_ICONPNG64} DESTINATION share/icons/hicolor/64x64/apps)
+install (FILES ${upsm_ICONPNG128} DESTINATION share/icons/hicolor/128x128/apps)
+
 install (FILES ${upsm_DESKTOP} DESTINATION share/applications)

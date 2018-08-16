@@ -91,33 +91,6 @@ bool b_altmenu;
 int cursor_blink_time;
 
 
-#ifdef USE_QML_STUFF
-class CPluginListItem: public QObject
-{
-public:
-
-  QString id;
-  CQQuickWindow *window;
- 
-  CPluginListItem (const QString &plid, CQQuickWindow *wnd);
-};
-#endif
-
-
-
-#if QT_VERSION >= 0x050000
-class QStyleHints
-{
-public:
-  int cursorFlashTime() const 
-     {
-      return cursor_blink_time;	
-     } 
-
-};
-#endif
-
-
 class MyProxyStyle: public QProxyStyle
 {
 public:
@@ -137,17 +110,18 @@ public:
 };
 
 
-class CFSizeFName: public QObject
+
+#if QT_VERSION >= 0x050000
+class QStyleHints
 {
 public:
+  int cursorFlashTime() const 
+     {
+      return cursor_blink_time;	
+     } 
 
-  qint64 size;
-  QString fname;
-
-  CFSizeFName (qint64 sz, const QString &fn):
-               size (sz),
-               fname (fn) {}
 };
+#endif
 
 
 

@@ -48,7 +48,7 @@ endif()
 
 qt5_add_resources(QT_RESOURCES rvln.qrc)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} -fuse-ld=gold")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 
 file(GLOB tea_SRCS "*.c" "*.cpp")

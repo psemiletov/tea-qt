@@ -61,6 +61,57 @@
 #endif
 
 
+
+#ifdef USE_QML_STUFF
+class CQQuickWindow: public QQuickWindow
+{
+Q_OBJECT
+   
+public:
+
+  QString id;
+ 
+  CQQuickWindow (QWindow * parent = 0): QQuickWindow (parent) {}
+ 
+protected:
+
+  bool event (QEvent *event);
+};
+
+#endif
+
+
+#ifdef USE_QML_STUFF
+class CPluginListItem: public QObject
+{
+public:
+
+  QString id;
+  CQQuickWindow *window;
+ 
+  CPluginListItem (const QString &plid, CQQuickWindow *wnd);
+};
+#endif
+
+
+
+
+
+class CFSizeFName: public QObject
+{
+public:
+
+  qint64 size;
+  QString fname;
+
+  CFSizeFName (qint64 sz, const QString &fn):
+               size (sz),
+               fname (fn) {}
+};
+
+
+
+
 class CMarkupPair: public QObject
 {
 Q_OBJECT
@@ -1021,24 +1072,5 @@ prefs window widgets
   void markup_text (const QString &mode);
 };
 
-
-#ifdef USE_QML_STUFF
-
-class CQQuickWindow: public QQuickWindow
-{
-Q_OBJECT
-   
-public:
-
-  QString id;
- 
-  CQQuickWindow (QWindow * parent = 0): QQuickWindow (parent) {}
- 
-protected:
-
-  bool event (QEvent *event);
-};
-
-#endif
 
 #endif

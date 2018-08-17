@@ -1,12 +1,13 @@
 //this code by Peter Semiletov is the public domain
 
 #include <QtGlobal>
-#include "myjoystick.h"
 
 #if defined(Q_OS_LINUX)
 
 #include <QDebug>
 #include <QApplication>
+
+#include "myjoystick.h"
 
 
 CJoystick::~CJoystick()

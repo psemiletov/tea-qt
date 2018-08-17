@@ -36,6 +36,7 @@ class QUAZIP_EXPORT QuaCrc32 : public QuaChecksum32 {
 
 public:
 	QuaCrc32();
+	~QuaCrc32() {}
 
 	quint32 calculate(const QByteArray &data);
 

@@ -29,6 +29,7 @@ public:
   bool pressed;
     
   CJoystickButtonEvent (QEvent::Type type): QEvent (type), button (0), pressed (false) {}
+//  ~CJoystickButtonEvent() {}
 };
 
 
@@ -40,6 +41,7 @@ public:
   qint16 value;
     
   CJoystickAxisEvent (QEvent::Type type): QEvent(type), axis (0), value (0) {}
+//  ~CJoystickAxisEvent() {} 
 };
 
 

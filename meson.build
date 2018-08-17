@@ -5,6 +5,7 @@ project('tea', ['cpp','c'],
 
 add_global_arguments('-DVERSION_NUMBER="46.0.0"', language : 'cpp')
 
+moc_params = ['-DQ_OS_LINUX=1', '-DQ_OS_UNIX=1', '-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
 
 if build_machine.system() == 'Linux'
 add_global_arguments('-DQ_OS_LINUX=1', language : 'cpp')
@@ -15,6 +16,9 @@ hunspell_dep = dependency('hunspell', required : false)
 if hunspell_dep.found()
    add_global_arguments('-DSPELLCHECK_ENABLE=1', language : 'cpp')
    add_global_arguments('-DHUNSPELL_ENABLE=1', language : 'cpp')
+   moc_params += ['-DSPELLCHECK_ENABLE=1']
+   moc_params += ['-DHUNSPELL_ENABLE=1']
+   
 else
   # Do something else.
 endif
@@ -22,13 +26,13 @@ endif
 poppler_dep = dependency('poppler-qt5', required : false)
 if poppler_dep.found()
    add_global_arguments('-DPOPPLER_ENABLE=1', language : 'cpp')
+   moc_params += ['-DPOPPLER_ENABLE=1']
 else
   # Do something else.
 endif
 
 
-add_global_arguments('-DUSE_QML_STUFF', language : 'cpp')
-
+add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 
 zlib_dep = dependency('zlib', required : true)
@@ -84,6 +88,7 @@ tea_headers = [
            
 src_processed = qt5.preprocess(
   moc_headers : tea_headers,
+   moc_extra_arguments: moc_params,
   qresources  : 'rvln.qrc'
 )
 
@@ -127,7 +132,7 @@ tea_source = ['rvln.cpp',
 
 
 tea_exe = executable ('tea',
-  sources : [tea_source, src_processed], 
+  sources : [src_processed, tea_source], 
   install : true,
   dependencies : [qt5_dep, hunspell_dep, zlib_dep, poppler_dep],
   cpp_args : '-std=c++11'  

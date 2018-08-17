@@ -36,6 +36,7 @@
 #include <QTextBrowser>
 #include <QTranslator>
 #include <QProcess>
+#include <QProxyStyle>
 
 
 #ifdef USE_QML_STUFF
@@ -62,6 +63,46 @@
 
 
 
+
+class MyProxyStyle: public QProxyStyle
+{
+public:
+
+ static bool b_altmenu;
+ static int cursor_blink_time;
+
+
+  int styleHint (StyleHint hint, const QStyleOption *option = 0,
+                 const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const 
+                {
+                 if (hint == QStyle::SH_ItemView_ActivateItemOnSingleClick)
+                    return 0;
+         
+                 if (! b_altmenu && hint == QStyle::SH_MenuBar_AltKeyNavigation)
+                    return 0;
+                  
+                 return QProxyStyle::styleHint (hint, option, widget, returnData);
+                }
+     
+   MyProxyStyle (QStyle *style = 0);
+};
+
+
+
+#if QT_VERSION >= 0x050000
+class QStyleHints
+{
+public:
+  int cursorFlashTime() const 
+     {
+      return MyProxyStyle::cursor_blink_time;	
+     } 
+
+};
+#endif
+
+
+
 #ifdef USE_QML_STUFF
 class CQQuickWindow: public QQuickWindow
 {
@@ -72,6 +113,7 @@ public:
   QString id;
  
   CQQuickWindow (QWindow * parent = 0): QQuickWindow (parent) {}
+  ~CQQuickWindow() {}
  
 protected:
 
@@ -84,21 +126,23 @@ protected:
 #ifdef USE_QML_STUFF
 class CPluginListItem: public QObject
 {
+Q_OBJECT
+
 public:
 
   QString id;
   CQQuickWindow *window;
  
   CPluginListItem (const QString &plid, CQQuickWindow *wnd);
+//  ~CPluginListItem() {}
 };
 #endif
 
 
-
-
-
 class CFSizeFName: public QObject
 {
+Q_OBJECT
+
 public:
 
   qint64 size;
@@ -108,8 +152,6 @@ public:
                size (sz),
                fname (fn) {}
 };
-
-
 
 
 class CMarkupPair: public QObject

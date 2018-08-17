@@ -48,7 +48,6 @@ started at 08 November 2007
 #include <QSettings>
 #include <QLibraryInfo>
 #include <QCryptographicHash>
-#include <QProxyStyle>
 
 
 #ifdef USE_QML_STUFF
@@ -87,47 +86,19 @@ started at 08 November 2007
 #endif
 
 
-bool b_altmenu;
-int cursor_blink_time;
 
-
-class MyProxyStyle: public QProxyStyle
-{
-public:
-  int styleHint (StyleHint hint, const QStyleOption *option = 0,
-                 const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const 
-                {
-                 if (hint == QStyle::SH_ItemView_ActivateItemOnSingleClick)
-                    return 0;
-         
-                 if (! b_altmenu && hint == QStyle::SH_MenuBar_AltKeyNavigation)
-                    return 0;
-                  
-                 return QProxyStyle::styleHint (hint, option, widget, returnData);
-                }
-     
-   MyProxyStyle (QStyle *style = 0);
-};
-
-
-
-#if QT_VERSION >= 0x050000
-class QStyleHints
-{
-public:
-  int cursorFlashTime() const 
-     {
-      return cursor_blink_time;	
-     } 
-
-};
-#endif
 
 
 
 #ifdef USE_QML_STUFF
 QList <CPluginListItem *> plugins_list;
 #endif
+
+
+bool MyProxyStyle::b_altmenu = false;
+int MyProxyStyle::cursor_blink_time = 1;
+
+
 
 extern QSettings *settings;
 extern QMenu *current_files_menu;
@@ -317,13 +288,13 @@ void rvln::update_bookmarks()
 
 void rvln::readSettings()
 {
-  cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
+  MyProxyStyle::cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
 
-  qApp->setCursorFlashTime (cursor_blink_time);
+  qApp->setCursorFlashTime (MyProxyStyle::cursor_blink_time);
   
   recent_list_max_items = settings->value ("recent_list.max_items", 21).toInt();
   
-  b_altmenu = settings->value ("b_altmenu", "0").toBool(); 
+  MyProxyStyle::b_altmenu = settings->value ("b_altmenu", "0").toBool(); 
    
   int ui_tab_align = settings->value ("ui_tabs_align", "0").toInt();
   main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align));
@@ -2278,11 +2249,11 @@ void rvln::pb_remove_hotkey_clicked()
 void rvln::cb_altmenu_stateChanged (int state)
 {
   if (state == Qt::Unchecked)
-      b_altmenu = false;
+      MyProxyStyle::b_altmenu = false;
   else 
-      b_altmenu = true;
+      MyProxyStyle::b_altmenu = true;
   
-  settings->setValue ("b_altmenu", b_altmenu);
+  settings->setValue ("b_altmenu", MyProxyStyle::b_altmenu);
 }
 
 #if defined(Q_OS_LINUX)
@@ -2548,7 +2519,7 @@ void rvln::createOptions()
   page_common_layout->setAlignment (Qt::AlignTop);
 
   cb_altmenu = new QCheckBox (tr ("Use Alt key to access main menu"), tab_options);
-  if (b_altmenu)
+  if (MyProxyStyle::b_altmenu)
     cb_altmenu->setCheckState (Qt::Checked);
   else
       cb_altmenu->setCheckState (Qt::Unchecked);
@@ -8413,7 +8384,7 @@ void rvln::leaving_tune()
 
   settings->setValue ("cursor_blink_time", spb_cursor_blink_time->value());
   
-  cursor_blink_time = spb_cursor_blink_time->value();
+  MyProxyStyle::cursor_blink_time = spb_cursor_blink_time->value();
   
   qApp->setCursorFlashTime (spb_cursor_blink_time->value());
  

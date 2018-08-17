@@ -6,13 +6,11 @@ add_definitions(${Qt5Widgets_DEFINITIONS})
 add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
 
 
-
-
 set(PROJECT "tea")
 project ($PROJECT VERSION 45.0.3)
 
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
-#add_definitions(-DQUAZIP_STATIC)
+
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    add_definitions(-DQ_OS_LINUX)
@@ -36,7 +34,6 @@ if(hunspell_FOUND)
 endif()
 
 
-
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network Qml Quick)
 add_definitions(-DUSE_QML_STUFF)
 
@@ -53,7 +50,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 file(GLOB tea_SRCS "*.c" "*.cpp")
 file(GLOB tea_HEADERS "*.h")
-
 
 
 set(${PROJECT}_ICONPNG32
@@ -101,11 +97,9 @@ if (Qt5PrintSupport_FOUND)
 endif()
 
 
-
 find_path(ASPELL_INLCUDES aspell.h
          "/usr/include/"
          "/usr/local/"
-         
         )      
             
 if(ASPELL_INLCUDES)

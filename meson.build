@@ -4,6 +4,7 @@ project('tea', ['cpp','c'],
          license : 'GPLv3')
 
 add_global_arguments('-DVERSION_NUMBER="46.0.0"', language : 'cpp')
+add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 #harcoded for now
 moc_params = ['-DQ_OS_LINUX=1', '-DQ_OS_UNIX=1', '-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
@@ -26,8 +27,6 @@ poppler_dep = dependency('poppler-qt5', required : false)
 if poppler_dep.found()
    add_global_arguments('-DPOPPLER_ENABLE=1', language : 'cpp')
    moc_params += ['-DPOPPLER_ENABLE=1']
-else
-  # Do something else.
 endif
 
 ddjvuapi_dep = dependency('ddjvuapi', required : false)
@@ -36,15 +35,11 @@ if ddjvuapi_dep.found()
    moc_params += ['-DDJVU_ENABLE=1']
 endif
 
-add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
-
 
 zlib_dep = dependency('zlib', required : true)
 
-
 qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network', 'Qml', 'Quick']) 
 qt5 = import('qt5') 
-
 
 
 tea_headers = [
@@ -85,15 +80,13 @@ tea_headers = [
     'single_application_shared.h',
     'exif.h',
     'myjoystick.h']
-  
-           
-           
+
+
 src_processed = qt5.preprocess(
   moc_headers : tea_headers,
    moc_extra_arguments: moc_params,
   qresources  : 'rvln.qrc'
 )
-
 
 
 tea_source = ['rvln.cpp',
@@ -140,8 +133,8 @@ tea_exe = executable ('tea',
   cpp_args : '-std=c++11'  
   )
 
-  
-  
+
+
 install_data(['icons/32/tea.png'],
              install_dir : 'share/icons/hicolor/32x32/apps')
 
@@ -150,14 +143,12 @@ install_data(['icons/48/tea.png'],
 
 install_data(['icons/64/tea.png'],
              install_dir : 'share/icons/hicolor/64x64/apps')
-                          
+
 install_data(['icons/128/tea.png'],
              install_dir : 'share/icons/hicolor/128x128/apps')
-             
-             
+
 install_data(['icons/svg/tea.svg'],
              install_dir : 'share/icons/hicolor/scalable/apps')
 
 install_data(['desktop/tea.desktop'],
              install_dir : 'share/applications')
-             

@@ -5,6 +5,7 @@ project('tea', ['cpp','c'],
 
 add_global_arguments('-DVERSION_NUMBER="46.0.0"', language : 'cpp')
 
+#harcoded for now
 moc_params = ['-DQ_OS_LINUX=1', '-DQ_OS_UNIX=1', '-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
 
 if build_machine.system() == 'Linux'
@@ -12,15 +13,13 @@ add_global_arguments('-DQ_OS_LINUX=1', language : 'cpp')
 add_global_arguments('-DQ_OS_UNIX=1', language : 'cpp')
 endif   
 
+
 hunspell_dep = dependency('hunspell', required : false)
 if hunspell_dep.found()
    add_global_arguments('-DSPELLCHECK_ENABLE=1', language : 'cpp')
    add_global_arguments('-DHUNSPELL_ENABLE=1', language : 'cpp')
    moc_params += ['-DSPELLCHECK_ENABLE=1']
    moc_params += ['-DHUNSPELL_ENABLE=1']
-   
-else
-  # Do something else.
 endif
 
 poppler_dep = dependency('poppler-qt5', required : false)
@@ -31,6 +30,11 @@ else
   # Do something else.
 endif
 
+ddjvuapi_dep = dependency('ddjvuapi', required : false)
+if ddjvuapi_dep.found()
+   add_global_arguments('-DDJVU_ENABLE=1', language : 'cpp')
+   moc_params += ['-DDJVU_ENABLE=1']
+endif
 
 add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
@@ -40,8 +44,6 @@ zlib_dep = dependency('zlib', required : true)
 
 qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network', 'Qml', 'Quick']) 
 qt5 = import('qt5') 
-
-
 
 
 
@@ -134,7 +136,7 @@ tea_source = ['rvln.cpp',
 tea_exe = executable ('tea',
   sources : [src_processed, tea_source], 
   install : true,
-  dependencies : [qt5_dep, hunspell_dep, zlib_dep, poppler_dep],
+  dependencies : [qt5_dep, hunspell_dep, zlib_dep, poppler_dep, ddjvuapi_dep],
   cpp_args : '-std=c++11'  
   )
 

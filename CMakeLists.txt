@@ -129,7 +129,7 @@ endif()
 
 find_package(PkgConfig)
 pkg_check_modules(ddjvuapi ddjvuapi)
-if(popplerqt5_FOUND)
+if(ddjvuapi_FOUND)
   add_definitions(-DDJVU_ENABLE)
   target_link_libraries(${PROJECT} ${ddjvuapi_LIBRARIES})
   include_directories(${ddjvuapi_INCLUDE_DIRS})

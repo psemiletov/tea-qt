@@ -1,3 +1,8 @@
++ Tune :: Logmemo font settings
++ Profile saves logmemo and GUI font settings
++ meson/ninja build system support
+* quazip fixes
+
 + Tune::Common:: Syntax highlighting enabled - turn on/off syntax hl globally (useful
 for large documents on slow machines)
 

@@ -814,6 +814,10 @@ prefs window callbacks
   void slot_editor_fontname_changed (const QString &text);
   void slot_font_size_changed (int i);
 
+  void slot_logmemo_fontname_changed (const QString &text);
+  void slot_logmemo_font_size_changed (int i);
+
+
   void slot_app_font_size_changed (int i);
   void slot_style_currentIndexChanged (const QString &text);
 
@@ -960,6 +964,10 @@ prefs window widgets
 
   QFontComboBox *cmb_font_name;
   QSpinBox *spb_font_size;
+
+  QFontComboBox *cmb_logmemo_font_name;
+  QSpinBox *spb_logmemo_font_size;
+
 
   QFontComboBox *cmb_app_font_name;
   QSpinBox *spb_app_font_size;

@@ -53,7 +53,7 @@ class QUAZIP_EXPORT QuaChecksum32
 {
 
 public:
-        ~QuaChecksum32() {}
+      virtual  ~QuaChecksum32() {}
 
 	///Calculates the checksum for data.
 	/** \a data source data

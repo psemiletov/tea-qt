@@ -1704,12 +1704,6 @@ void rvln::createStatusBar()
 }
 
 
-rvln::~rvln()
-{
-  qDebug() << "~rvln()";
-}
-
-
 void rvln::pageChanged (int index)
 {
   if (b_destroying_all)
@@ -9927,7 +9921,6 @@ void rvln::fn_number_dms2dc()
   double longt_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
   
   QString longt_decimal_degrees_N = QString::number (longt_decimal_degrees, 'f', 3) + QChar (UQDG) + east_or_west;
- 
  
   log->log (lat_decimal_degrees_N + " " + longt_decimal_degrees_N);
 //  qDebug() << "decimal_degrees " << decimal_degrees; 

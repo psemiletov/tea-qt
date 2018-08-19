@@ -241,7 +241,7 @@ Q_OBJECT
 public:
 
   rvln();
-  ~rvln();
+  ~rvln() {}
   
 #ifdef USE_QML_STUFF
   QQmlEngine *qml_engine;

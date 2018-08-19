@@ -364,6 +364,8 @@ public:
   QToolBar *tb_fman_dir;
   QLabel *l_fman_preview;
 
+  QLabel *l_charset;
+
   QLabel *l_status;
   QProgressBar *pb_status;
   QLineEdit *ed_spellcheck_path;
@@ -900,6 +902,7 @@ main window widgets
   QToolBar *fileToolBar;
   QToolBar *editToolBar;
   QToolBar *filesToolBar;
+  QToolBar *statusToolBar;
 
   QAction *act_labels;
 

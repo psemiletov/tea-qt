@@ -77,16 +77,29 @@ void CDocument::update_status()
 {
   if (! cursor_xy_visible)
      {
-      holder->l_status_bar->setText (charset);
+      //holder->l_status_bar->setText (charset);
+      holder->l_charset->setText (charset);
+
       return;
      }
  
   int x = textEdit->textCursor().position() - textEdit->textCursor().block().position() + 1;
   int y = textEdit->textCursor().block().blockNumber() + 1;
-
-  holder->l_status_bar->setText (QString ("%1:%2 %3").arg (
+/*
+  holder->l_status_bar->setText (
+                                 QString ("%3 %1:%2").arg (
                                  QString::number (y)).arg (
-                                 QString::number (x)).arg (charset));
+                                 QString::number (x)).arg (charset));*/
+                                 
+  holder->l_status_bar->setText (
+                                 QString ("%1:%2").arg (
+                                 QString::number (y)).arg (
+                                 QString::number (x)));
+                                 
+                                 
+  holder->l_charset->setText (charset);
+                               
+                                 
 }
 
 

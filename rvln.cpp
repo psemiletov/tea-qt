@@ -575,6 +575,26 @@ rvln::rvln()
   
   theme_dir = get_file_path (fname_stylesheet) + "/"; 
     
+
+  l_charset = new QLabel;
+  
+  l_status = new QLabel;
+  pb_status = new QProgressBar;
+  pb_status->setRange (0, 0);
+
+
+  statusBar()->addWidget (l_status);
+  //statusBar()->addWidget (pb_status);
+  statusBar()->insertPermanentWidget (1, pb_status);
+  statusBar()->insertPermanentWidget (0, l_charset);
+    
+
+/*
+  statusBar()->insertPermanentWidget (0, pb_status);
+  statusBar()->insertPermanentWidget (1, l_status);
+  */
+  pb_status->hide();
+
     
   createActions();
   createMenus();
@@ -628,6 +648,10 @@ rvln::rvln()
   documents->dir_config = dir_config;
   documents->todo.dir_days = dir_days;
   documents->fname_crapbook = fname_crapbook;
+
+  documents->l_status_bar = l_status;
+  documents->l_charset = l_charset;
+
  
   load_palette (fname_def_palette);
  
@@ -652,6 +676,8 @@ rvln::rvln()
   cmb_fif->addItems (sl_fif_history);
   cmb_fif->clearEditText(); 
 
+
+
   createFman();
   createOptions();
   createCalendar();
@@ -662,15 +688,6 @@ rvln::rvln()
   dir_last = settings->value ("dir_last", QDir::homePath()).toString();
   b_preview = settings->value ("b_preview", false).toBool(); 
   
-  l_status = new QLabel;
-  pb_status = new QProgressBar;
-  pb_status->setRange (0, 0);
-
-  statusBar()->insertPermanentWidget (0, pb_status);
-  statusBar()->insertPermanentWidget (1, l_status);
-
-  pb_status->hide();
-  documents->l_status_bar = l_status;
 
   img_viewer = new CImgViewer;
 
@@ -1689,18 +1706,27 @@ void rvln::createToolBars()
 
   filesToolBar->setIconSize (QSize (icon_size, icon_size));
       
+      
   QToolButton *tb_current_list = new QToolButton();
   tb_current_list->setIcon (get_theme_icon ("current-list.png"));
     
   tb_current_list->setMenu (current_files_menu);
   tb_current_list->setPopupMode(QToolButton::InstantPopup);
   filesToolBar->addWidget (tb_current_list);
+ 
+ /*
+  statusToolBar = addToolBar (tr ("Status"));
+  statusToolBar->setObjectName ("statusToolBar");
+     
+  statusToolBar->addWidget (pb_status);
+  statusToolBar->addWidget (l_status);*/
 }
 
 
 void rvln::createStatusBar()
 {
-  statusBar()->showMessage (tr ("Ready"));
+ // statusBar()->hide();
+  //statusBar()->showMessage (tr ("Ready"));
 }
 
 

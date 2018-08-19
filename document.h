@@ -308,6 +308,8 @@ public:
   QHash <QString, QString> markup_modes;
   
   QLabel *l_status_bar;
+  QLabel *l_charset;
+
   QString dir_config;
 
   QString fname_crapbook;

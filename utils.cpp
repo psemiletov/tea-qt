@@ -334,8 +334,7 @@ bool CFTypeChecker::check (const QString &fname)
 
 bool char_is_bad (const QChar &c)
 {
- 
- if (! c.isNull() && ! c.isLetter())
+  if (! c.isNull() && ! c.isLetter())
      return true;
   
   return false;

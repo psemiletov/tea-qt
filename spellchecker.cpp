@@ -46,7 +46,7 @@ CSpellchecker::CSpellchecker (const QString &lang, const QString &path,
                               const QString &user_path):
                               ASpellchecker (lang, path, user_path)
 {
-    qDebug() << "start ASpeller";
+  qDebug() << "start ASpeller";
   ret = 0;
   speller = 0;
   spell_config = 0;
@@ -385,12 +385,17 @@ bool CHunspellChecker::check (const QString &word)
 {
   if (! initialized)
       return false;
+      
+  //if (word.isEmpty())
+    // return false;    
 
  QTextCodec *codec = QTextCodec::codecForName (encoding);
  QByteArray es = codec->fromUnicode (word);
  
 #ifndef H_DEPRECATED
-  return speller->spell (es.data()); //old way
+
+   return speller->spell (es.constData()); 
+  //return speller->spell (es.data()); //old way
 #else  
   return speller->spell (QString(es).toStdString());
 #endif

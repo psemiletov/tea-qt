@@ -585,8 +585,8 @@ rvln::rvln()
 
   statusBar()->addWidget (l_status);
   //statusBar()->addWidget (pb_status);
-  statusBar()->insertPermanentWidget (1, pb_status);
-  statusBar()->insertPermanentWidget (0, l_charset);
+  statusBar()->addPermanentWidget (pb_status);
+  statusBar()->addPermanentWidget (l_charset);
     
 
 /*
@@ -3486,6 +3486,8 @@ void rvln::fn_spell_check()
   CDocument *d = documents->get_current();
   if (! d)
      return;
+     
+  QColor color_error = QColor (hash_get_val (global_palette, "error", "red"));   
 
   QTime time_start;
   time_start.start();
@@ -3514,17 +3516,36 @@ void rvln::fn_spell_check()
 
   do
     {
+   
 //     if (i % 100 == 0)
   //      qApp->processEvents();
-        
-     QChar c = text.at (cr.position());
-     if (char_is_bad (c))
-        while (char_is_bad (c))
-              {
-               cr.movePosition (QTextCursor::NextCharacter);
-               c = text.at (cr.position());
-              }
+   
+    
+   
+     pos = cr.position();
 
+//   qDebug() << "pos: " << pos;      
+   
+
+     QChar c = text.at (pos);
+    
+    qDebug() << "1";
+ 
+     
+    if (char_is_bad (c))
+    while (char_is_bad (c))
+          {
+           cr.movePosition (QTextCursor::NextCharacter);
+           
+           pos = cr.position();
+  
+           if (pos < text.size())
+              c = text.at (pos);
+           else
+               break;   
+ 
+          }
+  
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
           
      QString stext = cr.selectedText();
@@ -3533,30 +3554,40 @@ void rvln::fn_spell_check()
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
         }
-           
+
      if (! stext.isEmpty())
      if (! spellchecker->check (cr.selectedText()))
         {
+        
          f = cr.blockCharFormat();
          
 #if QT_VERSION >= 0x050000
         
          f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
-         f.setUnderlineColor (QColor (hash_get_val (global_palette, "error", "red")));
+         f.setUnderlineColor (color_error);
   
 #else
 
          f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
-         f.setUnderlineColor (QColor (hash_get_val (global_palette, "error", "red")));
+         f.setUnderlineColor (color_error);
 
 #endif         
          
          cr.mergeCharFormat (f);
+         
         }
 
+qDebug() << "3";           
+
       pb_status->setValue (i++);
+      
+qDebug() << "4";           
+      
      }
   while (cr.movePosition (QTextCursor::NextWord));
+  
+  qDebug() << "5";           
+
   
   cr.setPosition (pos);
   d->textEdit->setTextCursor (cr);
@@ -3565,6 +3596,9 @@ void rvln::fn_spell_check()
   pb_status->hide();
   
   log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
+  
+  qDebug() << "6";           
+
 }
 
 

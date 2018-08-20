@@ -57,7 +57,7 @@ usepoppler - use libpoppler-qt5 or qt4 for PDF text layer import. DISABLED by de
 usedjvu - use libdjvulibre to read DJVU files text (read only). DISABLED by default
 noprinter - disable printing support
 
-Notes: 
+Notes:
 
 1. If you have installed both Qt4 and Qt5, use the qmake from Qt4 or Qt5 to configure TEA with exact version of QT. The common solution is to make symlink to qmake from Qt5 and name it qmake5, then use qmake5 instead of the usual qmake.
 

@@ -49,6 +49,8 @@ started at 08 November 2007
 #include <QLibraryInfo>
 #include <QCryptographicHash>
 
+//#include <QStringBuilder>
+
 
 #ifdef USE_QML_STUFF
 
@@ -84,9 +86,6 @@ started at 08 November 2007
 #ifdef SPELLCHECKER_ENABLE
 #include "spellchecker.h"
 #endif
-
-
-
 
 
 
@@ -947,8 +946,8 @@ bool rvln::saveAs()
 
       if (file_exists (d->file_name))
          fman->nav (get_file_path (d->file_name));
-          else
-              fman->nav (dir_last);
+      else
+          fman->nav (dir_last);
 
       ed_fman_fname->setFocus();   
           
@@ -3503,6 +3502,7 @@ void rvln::fn_spell_check()
   int pos = cr.position();
 
   QString text = d->textEdit->toPlainText();
+  int text_size = text.size();
 
 //delete all underlines
   cr.setPosition (0);
@@ -3520,31 +3520,24 @@ void rvln::fn_spell_check()
 //     if (i % 100 == 0)
   //      qApp->processEvents();
    
-    
-   
      pos = cr.position();
-
-//   qDebug() << "pos: " << pos;      
-   
 
      QChar c = text.at (pos);
     
-    qDebug() << "1";
- 
      
-    if (char_is_bad (c))
-    while (char_is_bad (c))
-          {
-           cr.movePosition (QTextCursor::NextCharacter);
+     if (char_is_bad (c))
+     while (char_is_bad (c))
+           {
+            cr.movePosition (QTextCursor::NextCharacter);
            
-           pos = cr.position();
+            pos = cr.position();
   
-           if (pos < text.size())
-              c = text.at (pos);
-           else
-               break;   
+            if (pos < text_size)
+               c = text.at (pos);
+            else
+                break;   
  
-          }
+           }
   
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
           
@@ -3574,20 +3567,13 @@ void rvln::fn_spell_check()
 #endif         
          
          cr.mergeCharFormat (f);
-         
         }
 
-qDebug() << "3";           
-
       pb_status->setValue (i++);
-      
-qDebug() << "4";           
       
      }
   while (cr.movePosition (QTextCursor::NextWord));
   
-  qDebug() << "5";           
-
   
   cr.setPosition (pos);
   d->textEdit->setTextCursor (cr);
@@ -3596,9 +3582,6 @@ qDebug() << "4";
   pb_status->hide();
   
   log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
-  
-  qDebug() << "6";           
-
 }
 
 

@@ -7,12 +7,18 @@ add_global_arguments('-DVERSION_NUMBER="46.0.0"', language : 'cpp')
 add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 #harcoded for now
-moc_params = ['-DQ_OS_LINUX=1', '-DQ_OS_UNIX=1', '-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
+moc_params = ['-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
+#moc_params += ['-DQ_OS_LINUX=1', '-DQ_OS_UNIX=1']
 
-if build_machine.system() == 'Linux'
-add_global_arguments('-DQ_OS_LINUX=1', language : 'cpp')
-add_global_arguments('-DQ_OS_UNIX=1', language : 'cpp')
-endif   
+#message ('SYSTEM')
+
+#message (build_machine.system())
+
+if build_machine.system() == 'linux'
+#add_global_arguments('-DQ_OS_LINUX=1', language : 'cpp')
+#add_global_arguments('-DQ_OS_UNIX=1', language : 'cpp')
+moc_params += ['-DQ_OS_LINUX=1', '-DQ_OS_UNIX=1']
+endif
 
 
 hunspell_dep = dependency('hunspell', required : false)
@@ -129,8 +135,8 @@ tea_source = ['rvln.cpp',
 tea_exe = executable ('tea',
   sources : [src_processed, tea_source], 
   install : true,
-  dependencies : [qt5_dep, hunspell_dep, zlib_dep, poppler_dep, ddjvuapi_dep],
-  cpp_args : '-std=c++11'  
+  dependencies : [qt5_dep, hunspell_dep, zlib_dep, poppler_dep, ddjvuapi_dep]
+#  cpp_args : '-std=c++11'  
   )
 
 

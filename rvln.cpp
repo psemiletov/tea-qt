@@ -3516,15 +3516,16 @@ void rvln::fn_spell_check()
 
   do
     {
-   
 //     if (i % 100 == 0)
   //      qApp->processEvents();
    
      pos = cr.position();
+     if (pos >= text_size)
+        break;
+     
 
      QChar c = text.at (pos);
-    
-     
+ 
      if (char_is_bad (c))
      while (char_is_bad (c))
            {
@@ -3536,7 +3537,6 @@ void rvln::fn_spell_check()
                c = text.at (pos);
             else
                 break;   
- 
            }
   
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);

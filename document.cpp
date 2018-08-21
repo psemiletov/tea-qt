@@ -82,7 +82,7 @@ void CDocument::update_status()
 
       return;
      }
- 
+
   int x = textEdit->textCursor().position() - textEdit->textCursor().block().position() + 1;
   int y = textEdit->textCursor().block().blockNumber() + 1;
 /*
@@ -90,16 +90,13 @@ void CDocument::update_status()
                                  QString ("%3 %1:%2").arg (
                                  QString::number (y)).arg (
                                  QString::number (x)).arg (charset));*/
-                                 
+
   holder->l_status_bar->setText (
                                  QString ("%1:%2").arg (
                                  QString::number (y)).arg (
                                  QString::number (x)));
-                                 
-                                 
+
   holder->l_charset->setText (charset);
-                               
-                                 
 }
 
 
@@ -107,7 +104,7 @@ void CDocument::update_title (bool fullname)
 {
   if (! holder->parent_wnd)
      return;
-     
+
   QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
 
   if (fullname)
@@ -127,7 +124,7 @@ void CDocument::reload (const QString &enc)
 bool CDocument::open_file (const QString &fileName, const QString &codec)
 {
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
-  
+
   if (! tio)
       return false;
 
@@ -153,7 +150,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
 
   set_tab_caption (QFileInfo (file_name).fileName());
   set_hl();
-  
+
   set_markup_mode();
   textEdit->document()->setModified (false);
 
@@ -168,7 +165,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
              if (lt[0] == file_name) 
                 i.remove();
         }
-       
+
   return true;
 }
 
@@ -176,7 +173,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
 bool CDocument::save_with_name (const QString &fileName, const QString &codec)
 {
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
-  
+
   if (! tio)
       return false;
 
@@ -186,8 +183,8 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
       tio->charset = codec;
 
   tio->data = textEdit->toPlainText();
-  
-   if (eol != "\n")
+
+  if (eol != "\n")
       tio->data.replace ("\n", eol);
 
   if (! tio->save (fileName))
@@ -198,22 +195,23 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
       return false;
      }
 
-if (! b_destroying_all)
- {
-  charset = tio->charset;
-  file_name = fileName;
+  if (! b_destroying_all)
+     {
+      charset = tio->charset;
+      file_name = fileName;
 
-  set_tab_caption (QFileInfo (file_name).fileName());
+      set_tab_caption (QFileInfo (file_name).fileName());
 
-  holder->log->log (tr ("%1 is saved").arg (file_name));
+      holder->log->log (tr ("%1 is saved").arg (file_name));
 
-  update_title (settings->value ("full_path_at_window_title", 1).toBool());
-  update_status();
+      update_title (settings->value ("full_path_at_window_title", 1).toBool());
+      update_status();
 
-  textEdit->document()->setModified (false);
-  
-  holder->update_current_files_menu();
- }
+      textEdit->document()->setModified (false);
+
+      holder->update_current_files_menu();
+     }
+
   return true;
 }
 

@@ -50,7 +50,7 @@ DJVU read code taken fromdvutxt.c:
 #include <QDebug>
 #include <iostream>
 
-//FIXME: not good with cmake, cmake just use Qt5 here 
+//FIXME: not good with cmake, cmake just use Qt5 here
 #ifdef POPPLER_ENABLE
 #if QT_VERSION >= 0x050000
 #include <poppler-qt5.h>
@@ -83,24 +83,24 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
 {
   QString data;
   QXmlStreamReader xml (string_data);
-  
+
   bool tt = false;
-  
-  while (! xml.atEnd()) 
+
+  while (! xml.atEnd())
         {
          xml.readNext();
 
          QString tag_name = xml.qualifiedName().toString().toLower();
-         
+
          foreach (QString ts, tags)
                 {
                  if (xml.isStartElement() && tag_name == ts)
-                       tt = true;
-              
+                    tt = true;
+
                  if (xml.isEndElement() && tag_name == ts) 
-                       tt = false; 
-                 } 
-                 
+                    tt = false; 
+                 }
+
          if (tt && xml.isCharacters())
             {
              QString s = xml.text().toString();
@@ -110,12 +110,12 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
                 data.append("\n");
                }
              }
-        } 
-    
-   if (xml.hasError()) 
+        }
+
+   if (xml.hasError())
       qDebug() << "xml parse error";
-   
-  return data;    
+
+  return data;
 }
 
 
@@ -141,8 +141,8 @@ bool CTioPlainText::load (const QString &fname)
   else
   if (block.indexOf ('\r') != -1)
      eol = "\r";
-        
-/*  
+
+/*
    if (eol == "\n")
      qDebug() << "LF";
    if (eol == "\r\n")
@@ -195,7 +195,7 @@ bool CTioPlainText::save (const QString &fname)
 CTioHandler::CTioHandler()
 {
   default_handler = new CTioPlainText;
-  
+
   list.append (default_handler);
   list.append (new CTioGzip);
   list.append (new CTioXMLZipped);
@@ -206,16 +206,12 @@ CTioHandler::CTioHandler()
   list.append (new CTioEpub);
 
 #ifdef POPPLER_ENABLE
-  
   list.append (new CTioPDF);
-    
-#endif    
+#endif
 
 #ifdef DJVU_ENABLE
-  
   list.append (new CTioDJVU);
-    
-#endif    
+#endif
 }
 
 

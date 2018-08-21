@@ -55,7 +55,7 @@ int moon_phase_trig2 (int year, int month, int day)
   int r = (j1 - jd + 30) % 30;
   if (r == 0)
      r = 30;
-  
+
   return r;
 }
 
@@ -85,7 +85,7 @@ int moon_phase_conway (int year, int month, int day)
 {
   int r = year % 100;
   r %= 19;
-  
+
   if (r > 9)
      r -= 19;
 
@@ -96,7 +96,7 @@ int moon_phase_conway (int year, int month, int day)
 
   r -= ((year < 2000) ? 4 : 8.3);
   r = (int) floor (r + 0.5) % 30;
-  
+
   return (r < 0) ? r + 30 : r;
 }
 
@@ -194,9 +194,9 @@ CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): Q
   moon_mode = false;
   moon_tiles.load (":/images/moon-phases.png");
   northern_hemisphere = true;
-    
+
   //setHeaderTextFormat (const QTextCharFormat & format);
-  
+
   QTextCharFormat tformat;
   tformat.setForeground (QBrush (QColor ("white")));
   tformat.setBackground (QBrush (QColor ("black")));
@@ -228,7 +228,7 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
       //вычисляем ряд и колонку
       int cursorOffset = moon_day;
       int off = 0;
-  
+
      /* int row = 0;
       while (cursorOffset >= (off + 8))
             {
@@ -238,16 +238,16 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
      */
 
       int row = moon_day / 7;
-  
+
       if ((moon_day % 7 == 0) && (row != 0))
        row--;
- 
+
       int col = cursorOffset - off;
 
  //    qDebug() << "moon day: " << moon_day << "| date:" << date.toString("dd") << " | row = " << row << " col = " << col;
 
       int trow = moon_day / 7;
-    
+
       if ((moon_day % 7 == 0) && (trow != 0))
           trow--;
     /*

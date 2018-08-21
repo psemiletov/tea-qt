@@ -3485,7 +3485,7 @@ void rvln::fn_spell_check()
   CDocument *d = documents->get_current();
   if (! d)
      return;
-     
+
   QColor color_error = QColor (hash_get_val (global_palette, "error", "red"));   
 
   QTime time_start;
@@ -3518,19 +3518,19 @@ void rvln::fn_spell_check()
     {
 //     if (i % 100 == 0)
   //      qApp->processEvents();
-   
+
      pos = cr.position();
      if (pos >= text_size)
         break;
-     
+
 
      QChar c = text.at (pos);
- 
+
      if (char_is_bad (c))
      while (char_is_bad (c))
            {
             cr.movePosition (QTextCursor::NextCharacter);
-           
+
             pos = cr.position();
   
             if (pos < text_size)
@@ -3569,12 +3569,17 @@ void rvln::fn_spell_check()
          cr.mergeCharFormat (f);
         }
 
-      pb_status->setValue (i++);
+
+      i++;
       
+      if (i % 512 == 0)
+        pb_status->setValue (i);
+
+
      }
   while (cr.movePosition (QTextCursor::NextWord));
-  
-  
+
+
   cr.setPosition (pos);
   d->textEdit->setTextCursor (cr);
   d->textEdit->document()->setModified (false);

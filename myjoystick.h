@@ -27,44 +27,42 @@ public:
 
   uint button;
   bool pressed;
-    
+
   CJoystickButtonEvent (QEvent::Type type): QEvent (type), button (0), pressed (false) {}
-//  ~CJoystickButtonEvent() {}
 };
 
 
 class CJoystickAxisEvent: public QEvent
 {
 public:
-  
+
   uint axis;
   qint16 value;
-    
+
   CJoystickAxisEvent (QEvent::Type type): QEvent(type), axis (0), value (0) {}
-//  ~CJoystickAxisEvent() {} 
 };
 
 
 class CJoystick: public QObject
 {
 Q_OBJECT
-    
+
 public:
 
   QObject *receiver; //link to object that handle joystick events
 
   int fd; //joystick file descriptor 
   uint id; //joystick id
-    
+
   QString description; //joystick text description
-  bool initialized; 
-       
+  bool initialized;
+
   uint number_of_axis;
   uint number_of_buttons;
 
   CJoystick (uint idn, QObject *upper_link);
-  ~CJoystick(); 
-    
+  ~CJoystick();
+
    void process_event (js_event e);
 
 public slots:

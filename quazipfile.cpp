@@ -76,8 +76,8 @@ class QuaZipFilePrivate {
       */
     void setZipError(int zipError) const;
     /// The constructor for the corresponding QuaZipFile constructor.
-    inline QuaZipFilePrivate(QuaZipFile *q):
-      q(q),
+    inline QuaZipFilePrivate(QuaZipFile *q1):
+      q(q1),
       zip(NULL),
       caseSensitivity(QuaZip::csDefault),
       raw(false),
@@ -87,8 +87,8 @@ class QuaZipFilePrivate {
       internal(true),
       zipError(UNZ_OK) {}
     /// The constructor for the corresponding QuaZipFile constructor.
-    inline QuaZipFilePrivate(QuaZipFile *q, const QString &zipName):
-      q(q),
+    inline QuaZipFilePrivate(QuaZipFile *q1, const QString &zipName):
+      q(q1),
       caseSensitivity(QuaZip::csDefault),
       raw(false),
       writePos(0),
@@ -100,9 +100,9 @@ class QuaZipFilePrivate {
         zip=new QuaZip(zipName);
       }
     /// The constructor for the corresponding QuaZipFile constructor.
-    inline QuaZipFilePrivate(QuaZipFile *q, const QString &zipName, const QString &fileName,
+    inline QuaZipFilePrivate(QuaZipFile *q1, const QString &zipName, const QString &fileName,
         QuaZip::CaseSensitivity cs):
-      q(q),
+      q(q1),
       raw(false),
       writePos(0),
       uncompressedSize(0),
@@ -117,8 +117,8 @@ class QuaZipFilePrivate {
         this->caseSensitivity=cs;
       }
     /// The constructor for the QuaZipFile constructor accepting a file name.
-    inline QuaZipFilePrivate(QuaZipFile *q, QuaZip *zip):
-      q(q),
+    inline QuaZipFilePrivate(QuaZipFile *q1, QuaZip *zip):
+      q(q1),
       zip(zip),
       raw(false),
       writePos(0),

@@ -240,7 +240,7 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
       int row = moon_day / 7;
 
       if ((moon_day % 7 == 0) && (row != 0))
-       row--;
+         row--;
 
       int col = cursorOffset - off;
 
@@ -260,14 +260,11 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
     //вычисляем, откуда копировать
 
       int pad = 3;
-  
       int x = (col - 1) * 73 + (pad * col) - pad;
       int y = row * 73 + (pad * row);
 
       QRect r (x, y, 66, 73);
-
       QImage tile = moon_tiles.copy (r);
-
       QColor bg_color (Qt::black);
 
       painter->fillRect (rect, bg_color);
@@ -283,7 +280,7 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
       painter->setPen (QPen (Qt::yellow));
 
       QTextCharFormat tcf = dateTextFormat (date);
-   
+
       if (tcf.fontStrikeOut())
          painter->setPen (QPen (Qt::magenta));
       else
@@ -298,7 +295,7 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
           dpen.setWidth (5);
           painter->setPen (dpen);
           painter->drawRect (rect);
-         } 
+         }
       }
  else
      QCalendarWidget::paintCell (painter, rect, date);

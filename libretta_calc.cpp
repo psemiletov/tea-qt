@@ -141,13 +141,13 @@ double calculate (string expression)
       CItem current = *p;
 
       list<CItem>::iterator t = p;
-      t++;
+      ++t;
 
       CItem next = *t;
 
       if (current.op == '*' || current.op == '/')
          {
-              
+
           if (current.op == '*')
              {
               next.val = current.val * next.val;             

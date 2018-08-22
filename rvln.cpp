@@ -49,8 +49,6 @@ started at 08 November 2007
 #include <QLibraryInfo>
 #include <QCryptographicHash>
 
-//#include <QStringBuilder>
-
 
 #ifdef USE_QML_STUFF
 
@@ -89,6 +87,7 @@ started at 08 November 2007
 
 
 
+
 #ifdef USE_QML_STUFF
 QList <CPluginListItem *> plugins_list;
 #endif
@@ -98,7 +97,6 @@ bool MyProxyStyle::b_altmenu = false;
 int MyProxyStyle::cursor_blink_time = 1;
 
 
-
 extern QSettings *settings;
 extern QMenu *current_files_menu;
 extern QHash <QString, QString> global_palette;
@@ -106,9 +104,11 @@ extern bool b_recent_off;
 extern bool b_destroying_all;
 extern int recent_list_max_items;
 
-rvln *mainWindow;  
+rvln *mainWindow;
 CDox *documents;
 QVariantMap hs_path;
+
+QString current_version_number;
 
 
 enum {
@@ -324,7 +324,7 @@ void rvln::writeSettings()
   settings->setValue ("dir_last", dir_last);
   settings->setValue ("fname_def_palette", fname_def_palette);
   settings->setValue ("markup_mode", markup_mode);
-  settings->setValue ("VER_NUMBER", QString (VERSION_NUMBER));
+  settings->setValue ("VER_NUMBER", QString (current_version_number));
   settings->setValue ("state", saveState());
 
   delete settings;
@@ -692,8 +692,16 @@ rvln::rvln()
 
   restoreState (settings->value ("state", QByteArray()).toByteArray());
 
+  current_version_number = VERSION_NUMBER;
+  if (current_version_number.indexOf ('\"') != -1)
+     {
+      current_version_number.remove (0, 1);
+      current_version_number.remove (current_version_number.size() - 1, 1);
+      qDebug() << "current_version_number: " << current_version_number;
+     }
+  
   QString vn = settings->value ("VER_NUMBER", "").toString();
-  if (vn.isEmpty() || vn != QString (VERSION_NUMBER))
+  if (vn.isEmpty() || vn != QString (current_version_number))
      {
       //update_hls (true);
       help_show_news();
@@ -722,7 +730,7 @@ rvln::rvln()
   setAcceptDrops (true);
 
   
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (VERSION_NUMBER)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (current_version_number)));
  
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
   qApp->setWindowIcon (QIcon (icon_fname));
@@ -3523,7 +3531,6 @@ void rvln::fn_spell_check()
      if (pos >= text_size)
         break;
 
-
      QChar c = text.at (pos);
 
      if (char_is_bad (c))
@@ -3532,15 +3539,15 @@ void rvln::fn_spell_check()
             cr.movePosition (QTextCursor::NextCharacter);
 
             pos = cr.position();
-  
+
             if (pos < text_size)
                c = text.at (pos);
             else
-                break;   
+                break;
            }
-  
+
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-          
+
      QString stext = cr.selectedText();
      if (! stext.isEmpty() && ends_with_badchar (stext))
         {
@@ -3551,33 +3558,31 @@ void rvln::fn_spell_check()
      if (! stext.isEmpty())
      if (! spellchecker->check (cr.selectedText()))
         {
-        
+
          f = cr.blockCharFormat();
-         
+
 #if QT_VERSION >= 0x050000
-        
+
          f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
          f.setUnderlineColor (color_error);
-  
+
 #else
 
          f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
          f.setUnderlineColor (color_error);
 
-#endif         
-         
+#endif
+
          cr.mergeCharFormat (f);
         }
 
 
-      i++;
-      
-      if (i % 512 == 0)
+     i++;
+
+     if (i % 512 == 0)
         pb_status->setValue (i);
-
-
-     }
-  while (cr.movePosition (QTextCursor::NextWord));
+    }
+   while (cr.movePosition (QTextCursor::NextWord));
 
 
   cr.setPosition (pos);
@@ -3585,7 +3590,7 @@ void rvln::fn_spell_check()
   d->textEdit->document()->setModified (false);
 
   pb_status->hide();
-  
+
   log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
 }
 
@@ -5085,7 +5090,7 @@ void rvln::cb_button_saves_as()
      return;
 
   QString filename (fman->dir.path());
-  
+
   filename.append ("/").append (ed_fman_fname->text());
 
   if (file_exists (filename))
@@ -5098,20 +5103,20 @@ void rvln::cb_button_saves_as()
          return;
 
 
-   d->save_with_name (filename, cb_fman_codecs->currentText());
-   d->set_markup_mode();
+  d->save_with_name (filename, cb_fman_codecs->currentText());
+  d->set_markup_mode();
 
-   add_to_last_used_charsets (cb_fman_codecs->currentText());
+  add_to_last_used_charsets (cb_fman_codecs->currentText());
 
-   d->set_hl();
-   QFileInfo f (d->file_name);
-   dir_last = f.path();
-   update_dyn_menus();
+  d->set_hl();
+  QFileInfo f (d->file_name);
+  dir_last = f.path();
+  update_dyn_menus();
 
-   shortcuts->load_from_file (shortcuts->fname);
+  shortcuts->load_from_file (shortcuts->fname);
 
-   fman->refresh();
-   main_tab_widget->setCurrentIndex (idx_tab_edit);
+  fman->refresh();
+  main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
 
@@ -9815,10 +9820,10 @@ void rvln::fman_zeropad()
   if (finalsize < 1)
      finalsize = 10;
 
-  QStringList sl = fman->get_sel_fnames();   
-  
+  QStringList sl = fman->get_sel_fnames();
+
   if (sl.size() < 1)
-     return; 
+     return;
 
   for (int i = 0; i < sl.size(); i++) 
       {

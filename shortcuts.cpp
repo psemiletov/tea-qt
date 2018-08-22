@@ -19,18 +19,17 @@
  ***************************************************************************/
 
 
-#include "shortcuts.h"
-#include "utils.h"
-#include "gui_utils.h"
-
 #include <QString>
 #include <QDebug>
-
 
 #include <QKeyEvent>
 #include <QAction>
 #include <QStringList>
 #include <QKeySequence>
+
+#include "shortcuts.h"
+#include "utils.h"
+#include "gui_utils.h"
 
 
 
@@ -129,14 +128,11 @@ void CShortcuts::captions_iterate()
 {
   captions.clear();
   QList <QAction *> a = w->findChildren <QAction *>();
-    
-  foreach (QAction *ac, a)  
+
+  foreach (QAction *ac, a)
           if (ac)
-          if (! ac->text().isEmpty())
-             {
-              captions.prepend (ac->text());
-             // qDebug() << ac->text();
-             }
+             if (! ac->text().isEmpty())
+                 captions.prepend (ac->text());
 
   captions.sort();
   captions.removeDuplicates(); //nasty hack
@@ -146,11 +142,11 @@ void CShortcuts::captions_iterate()
 QAction* CShortcuts::find_by_caption (const QString &text)
 {
   QList<QAction *> a = w->findChildren<QAction *>();
-  
-  foreach (QAction *ac, a)  
+
+  foreach (QAction *ac, a)
           if (ac->text() == text)
              return ac;
- 
+
   return NULL;
 }
 
@@ -159,10 +155,10 @@ QAction* CShortcuts::find_by_shortcut (const QString &shcut)
 {
   QList<QAction *> a = w->findChildren<QAction *>();
 
-  foreach (QAction *ac, a)  
+  foreach (QAction *ac, a)
          if (ac->shortcut().toString() == shcut)
             return ac;
-  
+
   return NULL;
 }
 
@@ -198,7 +194,7 @@ void CShortcuts::save_to_file (const QString &file_name)
   foreach (QAction *ac, a)
           if (! ac->shortcut().toString().isEmpty())
              s.append (ac->text()).append ("=").append (ac->shortcut().toString()).append ("\n");
-                 
+
   qstring_save (file_name, s);
 }
 

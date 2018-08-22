@@ -4,8 +4,8 @@ this code is Public Domain
 
 #include <QVBoxLayout>
 #include <QDebug>
-#include <QSpinBox> 
-#include <QFont> 
+#include <QSpinBox>
+#include <QFont>
 #include <QFontComboBox>
 
 #include "fontbox.h"
@@ -15,8 +15,8 @@ CFontBox::CFontBox (QWidget *parent): QWidget (parent)
 {
   QVBoxLayout *h_box = new QVBoxLayout;
   setLayout (h_box);
- 
-  QFontComboBox *cf = new QFontComboBox(); 
+
+  QFontComboBox *cf = new QFontComboBox();
 
   QSpinBox *spb_font_size = new QSpinBox (this);
   spb_font_size->setRange (6, 64);

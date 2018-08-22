@@ -34,13 +34,13 @@ void create_menu_from_dir (QObject *handler,
                            const QString &dir,
                            const char *method
                            );
-
+/*
 void create_menu_from_dir_dir (QObject *handler,
                                QMenu *menu,
                                const QString &dir,
                                const char *method
                                );
-
+*/
 QImage image_scale_by (const QImage &source,
                        bool by_side,
                        int value,

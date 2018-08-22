@@ -43,11 +43,11 @@ void create_menu_from_dir (QObject *handler,
                            )
 {
   menu->setTearOffEnabled (true);
-  
+
   QDir d (dir);
   if (! d.exists())
      return;
-  
+
   QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::AllEntries,
                                           QDir::DirsFirst | QDir::IgnoreCase |
                                           QDir::LocaleAware | QDir::Name);
@@ -71,6 +71,7 @@ void create_menu_from_dir (QObject *handler,
 }
 
 //uses dir name as menuitem, no recursion
+/*
 void create_menu_from_dir_dir (QObject *handler,
                                QMenu *menu,
                                const QString &dir,
@@ -97,7 +98,7 @@ void create_menu_from_dir_dir (QObject *handler,
              }
          }
 }
-
+*/
 
 QImage image_scale_by (const QImage &source,
                        bool by_side,
@@ -106,7 +107,7 @@ QImage image_scale_by (const QImage &source,
 {
   if (source.isNull())
      return source;
-  
+
   bool horisontal = (source.width() > source.height());
 
   int width;

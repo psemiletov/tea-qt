@@ -108,7 +108,7 @@ void CDocument::update_title (bool fullname)
   QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
 
   if (fullname)
-     w->setWindowTitle (file_name);
+      w->setWindowTitle (file_name);
   else
       w->setWindowTitle (QFileInfo (file_name).fileName());
 }
@@ -219,17 +219,17 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
 CDocument::CDocument (QObject *parent): QObject (parent)
 {
   QString fname = tr ("new[%1]").arg (QTime::currentTime().toString ("hh-mm-ss"));
-  
+
   fnameswoexts.insert ("configure", "sh");
   fnameswoexts.insert ("install-sh", "sh");
-  
+
   markup_mode = "HTML";
   file_name = fname;
   cursor_xy_visible = true;
   charset = "UTF-8";
   text_to_search = "";
   position = 0;
-  
+
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
   eol = "\r\n";

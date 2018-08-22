@@ -65,16 +65,16 @@ class CDocument;
 class CTEAEdit: public QPlainTextEdit
 {
   Q_OBJECT
-  
+
 public:
 
-  QString indent_val;  
+  QString indent_val;
   QList <QTextEdit::ExtraSelection> extraSelections;
   QTextEdit::ExtraSelection brace_selection;
-  
+
   QPoint rect_sel_start; //rect selection
   QPoint rect_sel_end;   //rect selection
- 
+
   CDocument *doc; //uplink
 
   QColor current_line_color;
@@ -92,7 +92,7 @@ public:
   bool hl_brackets;
   bool draw_margin;
   bool draw_linenums;
-  
+
   bool use_hl_wrap;
   bool wrap;
 
@@ -127,30 +127,30 @@ public:
   void rect_sel_cut (bool just_del = false);
 
   void braceHighlight();
-  
+
   void lineNumberAreaPaintEvent(QPaintEvent *event);
   int lineNumberAreaWidth();
 
   Q_INVOKABLE bool has_rect_selection();
-  
+
 
 protected:
 
   bool canInsertFromMimeData (const QMimeData *source);
   void insertFromMimeData (const QMimeData *source);
-  
-  QMimeData* createMimeDataFromSelection(); 
+
+  QMimeData* createMimeDataFromSelection();
 
   void paintEvent(QPaintEvent *event);
-  void keyPressEvent (QKeyEvent *event);    
+  void keyPressEvent (QKeyEvent *event);
   void resizeEvent(QResizeEvent *event);
-  
+
 public slots:
 
   void updateLineNumberAreaWidth (int newBlockCount);
   void cb_cursorPositionChanged();
   void updateLineNumberArea (const QRect &, int);
-  
+
   void slot_selectionChanged();
 };
 
@@ -158,21 +158,21 @@ public slots:
 class CSyntaxHighlighter: public QSyntaxHighlighter
 {
 public:
- 
+
   CSyntaxHighlighter (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
- 
+
   CDocument *document;
   bool casecare;
   bool wrap;
-  
+
   int xml_format;
-  
+
   QString exts;
   QString langs;
-    
+
   QString cm_mult;
   QString cm_single;
- 
+
   QTextCharFormat singleLineCommentFormat;
   QTextCharFormat multiLineCommentFormat;
 };
@@ -195,14 +195,14 @@ public:
         };
 
   QRegExp commentStartExpression;
-  QRegExp commentEndExpression;      
+  QRegExp commentEndExpression;
 
-  Qt::CaseSensitivity cs;  
-    
+  Qt::CaseSensitivity cs;
+
   CSyntaxHighlighterQRegExp (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
 
   QVector <HighlightingRule> highlightingRules;
- 
+
   void load_from_xml (const QString &fname);
 };
 
@@ -218,18 +218,18 @@ protected:
   void highlightBlock (const QString &text);
 
 public:
- 
+
   struct HighlightingRule
         {
          QRegularExpression pattern;
          QTextCharFormat format;
         };
-        
+
   QRegularExpression commentStartExpression;
   QRegularExpression commentEndExpression;
 
   QRegularExpression::PatternOptions pattern_opts;
-    
+
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
 
   QVector <HighlightingRule> highlightingRules;

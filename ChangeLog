@@ -1,4 +1,5 @@
-+ Prj menu:: Run program, Build program, Clean program
++ --m TEA command line option to enable multiply instance mode
++ Prg menu:: Run program, Build program, Clean program
 
 + Tune :: Logmemo font settings
 + Profile saves logmemo and GUI font settings

@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstring>
 
 #include <QApplication>
 #include <QDebug>
@@ -65,7 +66,14 @@ int main (int argc, char *argv[])
 
  CSingleApplicationShared app (argc, argv, "tea unique id 1977");
  
- if (app.alreadyExists())
+ bool single_mode = true;
+ 
+ if (argc > 1)
+    if (strcmp(argv[1], "--m") == 0)
+       single_mode = false;
+    
+    
+ if (single_mode && app.alreadyExists())
     {
      if (argc > 1)
         for (int i = 1; i < argc; i++) 

@@ -1575,7 +1575,7 @@ void rvln::createMenus()
 
 
 
-  menu_project = menuBar()->addMenu (tr ("Prj"));;
+  menu_project = menuBar()->addMenu (tr ("Prg"));;
   menu_project->setTearOffEnabled (true);
 
   add_to_menu (menu_project, tr ("Run program"), SLOT(prj_run()));

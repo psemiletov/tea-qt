@@ -584,9 +584,9 @@ main window callbacks
 
   void edit_copy_current_fname();
 
-  void prj_run();
-  void prj_build();
-  void prj_clean();
+  void ide_run();
+  void ide_build();
+  void ide_clean();
 
   
   void fn_count();
@@ -853,7 +853,7 @@ main window widgets
   QMenu *fileMenu;
   QMenu *editMenu;
 
-  QMenu *menu_project;
+  QMenu *menu_ide;
 
 
   QMenu *menu_cal;

@@ -147,13 +147,15 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
   textEdit->setPlainText (tio->data);
 
   file_name = fileName;
-
+/*
   if (file_get_ext (file_name) == "teaproject")
     {
      holder->fname_current_project = file_name;
      holder->hash_project.clear();
      holder->hash_project = hash_load_keyval (file_name);
     }
+*/
+  holder->update_project (file_name);
 
   set_tab_caption (QFileInfo (file_name).fileName());
   set_hl();
@@ -218,14 +220,16 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
 
       holder->update_current_files_menu();
       
-      
+      /*
      if (file_get_ext (file_name) == "teaproject")
         {
          holder->fname_current_project = file_name;
          holder->hash_project.clear();
          holder->hash_project = hash_load_keyval (file_name);
         }
-
+*/
+         holder->update_project (file_name);
+ 
      }
 
   return true;
@@ -2866,4 +2870,16 @@ void CDox::handle_joystick_event (CJoystickAxisEvent *event)
       d->textEdit->setTextCursor (cr);
      } 
 }    
+
 #endif
+
+
+void CDox::update_project (const QString &fileName)
+{
+  if (file_get_ext (fileName) == "teaproject")
+    {
+     fname_current_project = fileName;
+     hash_project.clear();
+     hash_project = hash_load_keyval (fileName);
+    }
+}

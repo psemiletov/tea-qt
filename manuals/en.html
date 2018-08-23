@@ -22,6 +22,7 @@
 <a href="#mni_functions">Functions</a><br>
 <a href="#mni_spell">Functions - Spell checking</a><br>
 <a href="#mni_plugins">Functions - Plugins</a><br>
+<a href="#mni_ide">IDE</a><br>
 <a href="#mni_run">Run</a><br>
 <a href="#mni_nav">Nav</a><br>
 <a href="#mni_fm">Fm</a><br>
@@ -691,6 +692,57 @@ Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i
 <br>
 <a name="mni_plugins"></a>
 <p><b>Functions &gt; Plugins</b>. TEA (Qt5-builds) can run the plugins written in QML (see the source code tarball/manuals/plugins for the details how to write TEA plugins). The plugins are snipped as archived directories (TEA itself can unpack ZIPped plugin to plugins folder if you try open such archive in TEA). To install the plugin. just unpack it WITH its directory to $HOME/.config/tea/plugins (UNIX-way) or drive:\Documents and Settings\username\tea\plugins (Windows-way). Then restart TEA to rescan the plugins list. Delete plugin's directory to uninstall it. I am not responsible on how plugin work - it can do everything just like the normal stand-alone program,  so trust your plugin developer or don't use it.
+</p>
+
+
+<br><br>
+<a name="mni_ide"></a>
+<h3>IDE</h3>
+
+
+<p>TEA has some basic IDE functions. The use TEA as IDE is simple.</p>
+
+<p> The first, you need to create the project file. To do this, just create the new file and insert TEA project file template from <b>Functions - Place - TEA project template</b>.
+</p>
+
+<p>Save it at the your project's source top directory, under any file name, but with the "teaproject" extention, i.e. <i>filename.teaproject</i>. 
+</p>
+
+<p>teaproject file is a simple key=value text file. Thus, you can hold many teaproject file at the same directory. Here are, for example, TEA's teaproject files for different build systems (qmake, cmake and meson):
+</p>
+
+<p>tea-make.teaproject</p>
+
+<pre>command_build=make
+command_clean=make clean
+command_run=bin/tea --m&<pre>
+
+<p>tea-meson.teaproject</p>
+
+<pre>dir_build=b
+command_build=ninja
+command_clean=ninja -t clean
+command_run=./tea --m&<pre>
+
+<p>tea-cmake.teaproject</p>
+
+<pre>dir_build=cmake
+command_build=make
+command_clean=make clean
+command_run=./tea --m&</pre>
+
+<p>The syntax is clear:</p>
+
+<p><i>dir_build</i> - the directory, where <i>command_build</i> will run for the building. If there is no <i>dir_build</i>, then the teaproject file directory will be used as <i>dir_build</i>. The directory can be absolute, if not, the relative one to the teaproject file directory will be used.
+</p>
+
+<p><i>command_build</i> can be any, as you wish: make, ninja, etc.</p>
+
+<p><i>command_clean</i> - runs at <i>dir_build</i> to clean the project.</p>
+
+<p><i>command_clean</i> - runs at <i>dir_build</i> to clean the project.</p>
+
+<p>When you open, save or switch (by the tab) to the teaproject file, TEA reads it into the inner structures and uses the commands from teaproject when run menu items from <b>IDE</b> menu: <b>Run program</b>, <b>Build program</b>, <b>Clean program</b>. Please note that TEA reads the SAVED contents of the teaproject file, not the current edited state.
 </p>
 
 

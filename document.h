@@ -344,6 +344,7 @@ public:
   void handle_joystick_event (CJoystickAxisEvent *ev);
 #endif
 
+  void update_project (const QString &fileName);
   void reload_recent_list();
   void add_to_recent (CDocument *d);
   void update_recent_menu();

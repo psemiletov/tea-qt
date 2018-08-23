@@ -1575,12 +1575,12 @@ void rvln::createMenus()
 
 
 
-  menu_project = menuBar()->addMenu (tr ("Prg"));;
-  menu_project->setTearOffEnabled (true);
+  menu_ide = menuBar()->addMenu (tr ("IDE"));;
+  menu_ide->setTearOffEnabled (true);
 
-  add_to_menu (menu_project, tr ("Run program"), SLOT(prj_run()));
-  add_to_menu (menu_project, tr ("Build program"), SLOT(prj_build()));
-  add_to_menu (menu_project, tr ("Clean program"), SLOT(prj_clean()));
+  add_to_menu (menu_ide, tr ("Run program"), SLOT(ide_run()));
+  add_to_menu (menu_ide, tr ("Build program"), SLOT(ide_build()));
+  add_to_menu (menu_ide, tr ("Clean program"), SLOT(ide_clean()));
 
 
 
@@ -1768,6 +1768,10 @@ void rvln::pageChanged (int index)
   d->update_title (settings->value ("full_path_at_window_title", 1).toBool());
   d->update_status();
 
+  
+  documents->update_project (d->file_name);
+
+  
   update_labels_menu();
 }
 
@@ -10196,7 +10200,7 @@ void rvln::text_compare_two_strings()
 }
 
 
-void rvln::prj_run()
+void rvln::ide_run()
 {
   if (documents->hash_project.isEmpty())
      return;
@@ -10238,7 +10242,7 @@ void rvln::prj_run()
 }
 
 
-void rvln::prj_build()
+void rvln::ide_build()
 {
   if (documents->hash_project.isEmpty())
      return;
@@ -10276,7 +10280,8 @@ void rvln::prj_build()
   process->start (command_build, QIODevice::ReadWrite);
 }
 
-void rvln::prj_clean()
+
+void rvln::ide_clean()
 {
 
 

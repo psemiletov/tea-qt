@@ -1,6 +1,6 @@
 /***************************************************************************
  *   2007-2018 by Peter Semiletov                                          *
- *   peter.semiletov@gmail.com                                                           *
+ *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -148,6 +148,13 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
 
   file_name = fileName;
 
+  if (file_get_ext (file_name) == "teaproject")
+    {
+     holder->fname_current_project = file_name;
+     holder->hash_project.clear();
+     holder->hash_project = hash_load_keyval (file_name);
+    }
+
   set_tab_caption (QFileInfo (file_name).fileName());
   set_hl();
 
@@ -210,6 +217,15 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
       textEdit->document()->setModified (false);
 
       holder->update_current_files_menu();
+      
+      
+     if (file_get_ext (file_name) == "teaproject")
+        {
+         holder->fname_current_project = file_name;
+         holder->hash_project.clear();
+         holder->hash_project = hash_load_keyval (file_name);
+        }
+
      }
 
   return true;
@@ -247,7 +263,7 @@ CDocument::~CDocument()
   if (file_name.endsWith (".notes") && textEdit->document()->isModified()) 
      save_with_name_plain (file_name);
   else
-  if (file_name.startsWith (holder->dir_config) && textEdit->document()->isModified()) 
+  if (file_name.startsWith (holder->dir_config) && textEdit->document()->isModified())
      save_with_name_plain (file_name);
   else
   if (textEdit->document()->isModified() && file_exists (file_name))
@@ -285,15 +301,15 @@ void CDocument::create_new()
 
   textEdit->doc = this;
 
-  textEdit->current_line_color = QColor (hash_get_val (global_palette, 
-                                         "cur_line_color", 
+  textEdit->current_line_color = QColor (hash_get_val (global_palette,
+                                         "cur_line_color",
                                          "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
 
   highlighter = NULL;
 
   int tab_index = holder->tab_widget->addTab (textEdit, file_name);
   tab_page = holder->tab_widget->widget (tab_index);
-   
+
   textEdit->setFocus (Qt::OtherFocusReason);
 }
 
@@ -327,7 +343,7 @@ CDox::~CDox()
         delete list.takeFirst();
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
-  
+
 #if defined(Q_OS_LINUX)
   delete joystick;
 #endif
@@ -349,9 +365,9 @@ CDocument* CDox::create_new()
 
   doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
   doc->update_status();
-  
+
   update_current_files_menu();
-  
+
   return doc;
 }
 

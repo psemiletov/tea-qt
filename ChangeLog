@@ -1,3 +1,5 @@
++ Prj menu:: Run program, Build program, Clean program
+
 + Tune :: Logmemo font settings
 + Profile saves logmemo and GUI font settings
 + meson/ninja build system support

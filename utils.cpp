@@ -336,7 +336,7 @@ bool char_is_bad (const QChar &c)
 {
   if (! c.isNull() && ! c.isLetter())
      return true;
-  
+
   return false;
 }
 
@@ -348,4 +348,11 @@ QStringList bytearray_to_stringlist (QList<QByteArray> a)
           r.append (i.data());
 
   return r;
+}
+
+
+QString qstring_load_value (const QString &fileName, const QString &key, const QString &def)
+{
+  QHash <QString, QString> h = hash_load_keyval (fileName);
+  return hash_get_val (h, key, def);
 }

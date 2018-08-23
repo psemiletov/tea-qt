@@ -252,9 +252,9 @@ public:
   bool cursor_xy_visible;
 
   QHash <QString, QString> fnameswoexts;
-  
+
   QString eol;
-  
+
   CDox *holder;
   CSyntaxHighlighter *highlighter;
   CTEAEdit *textEdit;
@@ -303,10 +303,12 @@ public:
   CTioHandler tio_handler;
 
   QString fname_current_session;
+  QString fname_current_project;
 
   QHash <QString, QString> hls;
   QHash <QString, QString> markup_modes;
-  
+  QHash <QString, QString> hash_project;
+
   QLabel *l_status_bar;
   QLabel *l_charset;
 
@@ -326,13 +328,13 @@ public:
   QMenu *recent_menu;
   QStringList recent_files;
   QString recent_list_fname;
- 
+
 #if defined(Q_OS_LINUX)
   CJoystick *joystick;
 #endif
 
-  QTimer *timer; 
-  
+  QTimer *timer;
+
 
   CDox();
   ~CDox();
@@ -340,8 +342,8 @@ public:
 #if defined(Q_OS_LINUX)
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
-#endif 
-  
+#endif
+
   void reload_recent_list();
   void add_to_recent (CDocument *d);
   void update_recent_menu();
@@ -354,18 +356,18 @@ public:
   Q_INVOKABLE CDocument* get_current();
   Q_INVOKABLE void close_by_idx (int i);
   Q_INVOKABLE void close_current();
-  
+
   Q_INVOKABLE void save_to_session (const QString &fileName);
   Q_INVOKABLE void load_from_session (const QString &fileName);
-  
+
   Q_INVOKABLE void apply_settings();
   Q_INVOKABLE void apply_settings_single (CDocument *d);
 
 public slots:
- 
+
   void open_recent();
   void open_current();
- 
+
 };
 
 
@@ -389,6 +391,6 @@ protected:
       }
 
 };
-  
+
 
 #endif

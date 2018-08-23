@@ -35,6 +35,11 @@ public:
 };
 
 
+
+QStringList bytearray_to_stringlist (QList<QByteArray> a);
+QString qstring_load_value (const QString &fileName, const QString &key, const QString &def);
+
+
 QString hash_keyval_to_string (const QHash<QString, QString> &h);
 QString hash_get_val (QHash<QString, QString> &h, const QString &key, const QString &def_val);
 
@@ -93,9 +98,6 @@ inline QString get_file_path (const QString &fileName)
 {
   return QFileInfo (fileName).absolutePath();
 }
-
-
-QStringList bytearray_to_stringlist (QList<QByteArray> a);
 
 
 #endif

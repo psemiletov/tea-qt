@@ -43,6 +43,10 @@
     <file>text-data/template-html</file>
     <file>text-data/template-html5</file>
 
+    <file>text-data/template-teaproject</file>
+
+    
+    
     <file>text-data/tpl_cpp.cpp</file>
     <file>text-data/tpl_c.c</file>
 

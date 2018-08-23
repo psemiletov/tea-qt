@@ -546,6 +546,7 @@ main window callbacks
   void fn_insert_cpp();
   void fn_insert_c();
   void fn_insert_template_html5();
+  void fn_insert_template_tea();
 
   bool save();
   bool saveAs();
@@ -583,6 +584,11 @@ main window callbacks
 
   void edit_copy_current_fname();
 
+  void prj_run();
+  void prj_build();
+  void prj_clean();
+
+  
   void fn_count();
   void fn_count_rx();
 
@@ -846,6 +852,10 @@ main window widgets
 
   QMenu *fileMenu;
   QMenu *editMenu;
+
+  QMenu *menu_project;
+
+
   QMenu *menu_cal;
 
   QMenu *menu_cal_add;
@@ -875,7 +885,7 @@ main window widgets
 #endif
 
   QMenu *menu_view_themes;
-  
+
   QMenu *menu_markup;
   QMenu *menu_functions;
   QMenu *menu_functions_case;

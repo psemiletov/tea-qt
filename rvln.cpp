@@ -1397,6 +1397,11 @@ void rvln::createMenus()
   tm->setTearOffEnabled (true);
 
   add_to_menu (tm, "Lorem ipsum", SLOT(fn_insert_loremipsum()));
+  
+  add_to_menu (tm, tr ("TEA project template"), SLOT(fn_insert_template_tea()));
+
+  
+  
   add_to_menu (tm, tr ("HTML template"), SLOT(fn_insert_template_html()));
   add_to_menu (tm, tr ("HTML5 template"), SLOT(fn_insert_template_html5()));
 
@@ -1564,9 +1569,20 @@ void rvln::createMenus()
 
   add_to_menu (menu_cal, tr ("Remove day record"), SLOT(cal_remove()));
   
- 
+
   
   menu_programs = menuBar()->addMenu (tr ("Run"));
+
+
+
+  menu_project = menuBar()->addMenu (tr ("Prj"));;
+  menu_project->setTearOffEnabled (true);
+
+  add_to_menu (menu_project, tr ("Run program"), SLOT(prj_run()));
+  add_to_menu (menu_project, tr ("Build program"), SLOT(prj_build()));
+  add_to_menu (menu_project, tr ("Clean program"), SLOT(prj_clean()));
+
+
 
   menu_nav = menuBar()->addMenu (tr ("Nav"));
   menu_nav->setTearOffEnabled (true);
@@ -4711,11 +4727,13 @@ void rvln::file_open_programs_file()
 
 void rvln::process_readyReadStandardOutput()
 {
+  qDebug() << "rvln::process_readyReadStandardOutput()"; 
+   
   QProcess *p = qobject_cast<QProcess *>(sender());
-  QByteArray a = p->readAllStandardOutput().data();  
-  QTextCodec *c = QTextCodec::codecForLocale(); 
-  QString t = c->toUnicode (a); 
-  
+  QByteArray a = p->readAllStandardOutput().data();
+  QTextCodec *c = QTextCodec::codecForLocale();
+  QString t = c->toUnicode (a);
+
   log->log (t);
 }
 
@@ -4736,10 +4754,10 @@ void rvln::file_open_program()
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
       if (! file_exists (d->file_name))
-         return;   
+         return;
 
       QFileInfo fi (d->file_name);
-     
+
       command = command.replace ("%s", d->file_name);
       command = command.replace ("%basename", fi.baseName());
       command = command.replace ("%filename", fi.fileName());
@@ -4753,12 +4771,12 @@ void rvln::file_open_program()
   else
   if (main_tab_widget->currentIndex() == idx_tab_fman)
      command = command.replace ("%s", fman->get_sel_fname());
-    
+
   QProcess *process  = new QProcess (this);
-  
+
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
   process->setProcessChannelMode (QProcess::MergedChannels) ;
-  
+
   process->start (command, QIODevice::ReadWrite);
 }
 
@@ -4790,6 +4808,16 @@ void rvln::fn_insert_template_html()
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (qstring_load (":/text-data/template-html"));
+}
+
+
+void rvln::fn_insert_template_tea()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->textEdit->textCursor().insertText (qstring_load (":/text-data/template-teaproject"));
 }
 
 
@@ -10165,6 +10193,93 @@ void rvln::text_compare_two_strings()
 
        log->log (s);
       } 
+}
+
+
+void rvln::prj_run()
+{
+  if (documents->hash_project.isEmpty())
+     return;
+
+  if (documents->fname_current_project.isEmpty())
+     return;
+
+
+  QFileInfo source_dir (documents->fname_current_project);
+
+  QString dir_build = hash_get_val (documents->hash_project,
+                                    "dir_build", source_dir.absolutePath());
+
+
+
+  if (dir_build[0] != "/") //dir is not absolute path
+      dir_build = source_dir.absolutePath() + "/" + dir_build;
+
+    qDebug() << "dir_build: " << dir_build;
+
+
+  QString command_run = hash_get_val (documents->hash_project,
+                                      "command_run", "");
+
+
+
+  qDebug() << "command_run: " << command_run;
+
+  QProcess *process  = new QProcess (this);
+  process->setWorkingDirectory (dir_build);
+
+  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
+
+  process->start (command_run, QIODevice::ReadWrite);
+
+
+
+}
+
+
+void rvln::prj_build()
+{
+  if (documents->hash_project.isEmpty())
+     return;
+
+  if (documents->fname_current_project.isEmpty())
+     return;
+
+
+  QFileInfo source_dir (documents->fname_current_project);
+
+  QString dir_build = hash_get_val (documents->hash_project,
+                                    "dir_build", source_dir.absolutePath());
+  
+  
+
+  if (dir_build[0] != "/") //dir is not absolute path
+      dir_build = source_dir.absolutePath() + "/" + dir_build;
+
+    qDebug() << "dir_build: " << dir_build;
+
+
+  QString command_build = hash_get_val (documents->hash_project,
+                                            "command_build", "make");
+
+
+  
+  qDebug() << "command_build: " << command_build;
+
+  QProcess *process  = new QProcess (this);
+  process->setWorkingDirectory (dir_build);
+
+  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
+
+  process->start (command_build, QIODevice::ReadWrite);
+}
+
+void rvln::prj_clean()
+{
+
+
 }
 
 

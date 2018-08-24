@@ -2389,6 +2389,7 @@ void rvln::createOptions()
 
   cmb_app_font_name = new QFontComboBox (page_interface);
   cmb_app_font_name->setCurrentFont (QFont (settings->value ("app_font_name", qApp->font().family()).toString()));
+
   spb_app_font_size = new QSpinBox (page_interface);
   spb_app_font_size->setRange (6, 64);
   QFontInfo fi = QFontInfo (qApp->font());
@@ -7600,8 +7601,18 @@ void rvln::view_use_profile()
   settings->setValue ("app_font_name", s.value ("app_font_name", "Sans").toString());
   settings->setValue ("app_font_size", s.value ("app_font_size", "12").toInt());
 
+  update_stylesheet (fname_stylesheet);
+  documents->apply_settings();
+  
+  cmb_font_name->setCurrentFont (QFont (settings->value ("editor_font_name", "Serif").toString()));
+  spb_font_size->setValue (settings->value ("editor_font_size", "16").toInt());
 
-  documents->apply_settings();  
+  cmb_logmemo_font_name->setCurrentFont (QFont (settings->value ("logmemo_font", "Monospace").toString()));
+  spb_logmemo_font_size->setValue (settings->value ("logmemo_fontsize", "14").toInt());
+
+  QFontInfo fi = QFontInfo (qApp->font());
+  spb_app_font_size->setValue (settings->value ("app_font_size", fi.pointSize()).toInt());
+  cmb_app_font_name->setCurrentFont (QFont (settings->value ("app_font_name", qApp->font().family()).toString()));
 }
 
 
@@ -8777,12 +8788,13 @@ void rvln::update_stylesheet (const QString &f)
 
   QString fontsize = "font-size:" + settings->value ("app_font_size", fi.pointSize()).toString() + "pt;";  
   QString fontfamily = "font-family:" + settings->value ("app_font_name", qApp->font().family()).toString() + ";";  
+  
   QString edfontsize = "font-size:" + settings->value ("editor_font_size", "16").toString() + "pt;";  
-  QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_fontsize", "16").toString() + "pt;";  
-  QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + "pt;";  
-
   QString edfontfamily = "font-family:" + settings->value ("editor_font_name", "Serif").toString() + ";";  
  
+  QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_fontsize", "16").toString() + "pt;";  
+  QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + "pt;";  
+  
   QString stylesheet; 
   
   stylesheet = "QWidget, QWidget * {" + fontfamily + fontsize + "}\n";

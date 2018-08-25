@@ -35,6 +35,12 @@ public:
   CLogMemo (QWidget *parent = 0);
   
   void log (const QString &text);
+  
+  void mouseDoubleClickEvent(QMouseEvent *event);  
+
+signals:
+
+  void double_click (const QString &text);
 };
 
 #endif // LOGMEMO_H

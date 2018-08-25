@@ -18,7 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QDebug>
 #include <QTime>
+#include <QTextBlock>
 #include <QTextCursor>
 
 #include "logmemo.h"
@@ -26,7 +28,6 @@
 
 CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 {
-  
   setObjectName ("logmemo");
   
   setFocusPolicy (Qt::ClickFocus);
@@ -53,4 +54,37 @@ void CLogMemo::log (const QString &text)
   cr.movePosition (QTextCursor::Start);
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
   setTextCursor (cr);
+}
+
+
+void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
+{
+  QTextCursor cur =	cursorForPosition (event->pos());
+  QString txt = cur.block().text();
+  int col = cur.positionInBlock();
+  
+  int idx_right = txt.indexOf (" ", col);
+  if (idx_right == -1)
+     {
+      event->accept();
+      return;
+     }
+
+  txt = txt.left (idx_right);
+  int sz = txt.size() - 1;
+
+  for (int i = sz; i != -1; i--)
+     {
+      if (txt[i] == " ")
+         {
+          txt = txt.right (i);
+          break;
+         }
+     }
+  
+  //qDebug() << "txt:" << txt;
+
+  emit double_click (txt);
+
+  event->accept();
 }

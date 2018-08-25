@@ -514,7 +514,6 @@ CGIFWindow::~CGIFWindow()
 }
 
 
-
 void CGIFWindow::closeEvent (QCloseEvent *event)
 {
   event->accept();

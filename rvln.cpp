@@ -24,6 +24,7 @@ started at 08 November 2007
 
 #include <math.h>
 #include <algorithm>
+#include <iostream>
 
 #include <QMimeData>
 #include <QStyleFactory>
@@ -365,6 +366,10 @@ void rvln::create_main_widget()
   tab_widget->setCornerWidget (bt_close);
 
   log = new CLogMemo;
+
+  connect (log, SIGNAL(double_click (const QString &)),
+           this, SLOT(logmemo_double_click (const QString &)));
+
 
 
   mainSplitter = new QSplitter (Qt::Vertical);
@@ -1066,12 +1071,10 @@ void rvln::about()
 void rvln::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
+ 
  // act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
- // act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-
-
-
-  //connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
   
@@ -1156,7 +1159,7 @@ void rvln::createMenus()
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
 
-  //fileMenu->addAction (act_test);
+  fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
   add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -10287,6 +10290,8 @@ void rvln::ide_build()
   process->setWorkingDirectory (dir_build);
 
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+
+  
   process->setProcessChannelMode (QProcess::MergedChannels) ;
 
   process->start (command_build, QIODevice::ReadWrite);
@@ -10295,10 +10300,98 @@ void rvln::ide_build()
 
 void rvln::ide_clean()
 {
+    if (documents->hash_project.isEmpty())
+       return;
 
+    if (documents->fname_current_project.isEmpty())
+       return;
+
+
+    QFileInfo source_dir (documents->fname_current_project);
+
+    QString dir_build = hash_get_val (documents->hash_project,
+                                      "dir_build", source_dir.absolutePath());
+
+
+
+    if (dir_build[0] != "/") //dir is not absolute path
+        dir_build = source_dir.absolutePath() + "/" + dir_build;
+
+      qDebug() << "dir_build: " << dir_build;
+
+
+    QString command_clean = hash_get_val (documents->hash_project,
+                                              "command_clean", "make");
+
+
+
+    qDebug() << "command_clean: " << command_clean;
+
+    QProcess *process  = new QProcess (this);
+    process->setWorkingDirectory (dir_build);
+
+    connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+
+
+    process->setProcessChannelMode (QProcess::MergedChannels) ;
+
+    process->start (command_clean, QIODevice::ReadWrite);
 
 }
 
+void rvln::logmemo_double_click (const QString &txt)
+{
+    std::cout << "txt:" << txt.toStdString() << std::endl;
+
+
+    if (documents->hash_project.isEmpty())
+       return;
+
+    if (documents->fname_current_project.isEmpty())
+       return;
+
+
+    QString source_fname;
+    QString source_line;
+    QString source_col;
+
+    QStringList parsed = txt.split (":");
+    if (parsed.size() == 0)
+        return;
+
+    source_fname = parsed[0];
+
+    if (parsed.size() > 1)
+       source_line = parsed[1];
+
+    if (parsed.size() > 2)
+       source_col = parsed[2];
+
+    std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
+    std::cout << "source_line:" << source_line.toStdString() << std::endl;
+    std::cout << "source_col:" << source_col.toStdString() << std::endl;
+
+    QFileInfo dir_source (documents->fname_current_project);
+
+    QString source_dir = dir_source.absolutePath();
+
+    if (source_fname.startsWith(".."))
+        source_fname.remove (0, 2);
+
+     source_fname = source_dir + source_fname;
+
+     CDocument *d = documents->open_file (source_fname, "UTF-8");
+
+     QTextCursor cur = d->textEdit->textCursor();
+     cur.movePosition (QTextCursor::Start);
+     cur.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, source_line.toInt());
+     cur.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, source_col.toInt());
+
+
+     if (! cur.isNull())
+         d->textEdit->setTextCursor (cur);
+
+}
 
 
 
@@ -10308,56 +10401,74 @@ void rvln::test()
  // int x = str_fuzzy_search_bytwo ("rampage tri sugar freee", "tri", 0);
   //std::cout << x << endl;
 
-  std::cout << "rvln::test()" << endl;
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
+  //std::cout << "rvln::test()" << endl;
+//  CDocument *d = documents->get_current();
+  //if (! d)
+    // return;
 
-    QTime time_start;
-    time_start.start();
+    if (documents->hash_project.isEmpty())
+       return;
+
+    if (documents->fname_current_project.isEmpty())
+       return;
 
 
-   //QString fiftxt = "tri";
-   //QString t = "tri rampage tri sugar freee rrrr tri";
- 
+QString txt = "../document.cpp:2366:7: warning";
+int col = 5;
 
-   QString fiftxt = fif_get_text();
-   QString t = d->textEdit->toPlainText();
-   
-   //int len = d->textEdit->toPlainText().size();
-   int len = t.size();
-   int i = 0;
-   int found = 0; 
-   int searchlen = fiftxt.size();
+//parse
 
-   //   std::cout << "len = " << len << endl;
+int idx_right = txt.indexOf (" ", col);
+if (idx_right == -1)
+   {
+    return;
+   }
 
-   
-   while (i < len)
-         {
-          //std::cout << "i = " << i << endl;
-          //int x = str_fuzzy_search_bytwo (t, fiftxt, i);
-          
-          //int x = str_q_search_bytwo (t, fiftxt, i);
-          int x = t.indexOf (fiftxt, i);
-          
-          
-         // std::cout << "x = " << x << endl;
-          if (x != -1)
-             {
-              found++;
-              i = x + searchlen;
-           //   std::cout  << "yes i = " << i << endl;
-             }
-          else
-              //i++;
-              break;
-         }
-   
-    std::cout  << "FOUND: " << found << endl;
+txt = txt.left (idx_right);
 
-    log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
+
+//std::cout  << txt.toStdString() << std::endl;
+
+  QString source_fname;
+  QString source_line;
+  QString source_col;
      
+  QStringList parsed = txt.split (":");
+  if (parsed.size() == 0)
+      return;
+
+  source_fname = parsed[0];
+
+  if (parsed.size() > 1)
+     source_line = parsed[1];
+
+  if (parsed.size() > 2)
+     source_col = parsed[2];
+
+  std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
+  std::cout << "source_line:" << source_line.toStdString() << std::endl;
+  std::cout << "source_col:" << source_col.toStdString() << std::endl;
+
+  QFileInfo dir_source (documents->fname_current_project);
+
+  QString source_dir = dir_source.absolutePath();
+
+  if (source_fname.startsWith(".."))
+      source_fname.remove (0, 2);
+
+   source_fname = source_dir + source_fname;
+
+   CDocument *d = documents->open_file (source_fname, "UTF-8");
+
+   QTextCursor cur = d->textEdit->textCursor();
+   cur.movePosition (QTextCursor::Start);
+   cur.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, source_line.toInt());
+   cur.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, source_col.toInt());
+
+
+   if (! cur.isNull())
+       d->textEdit->setTextCursor (cur);
+
 /*  CDocument *d = documents->get_current();
   if (! d)
      return;

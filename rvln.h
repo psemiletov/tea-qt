@@ -437,7 +437,10 @@ public slots:
 /*************************
 main window callbacks
 *************************/
- 
+
+  void logmemo_double_click (const QString &txt);
+
+
   void repeat();
 
   void receiveMessage (const QString &msg);

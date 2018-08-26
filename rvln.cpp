@@ -1585,6 +1585,10 @@ void rvln::createMenus()
   add_to_menu (menu_ide, tr ("Build program"), SLOT(ide_build()));
   add_to_menu (menu_ide, tr ("Clean program"), SLOT(ide_clean()));
 
+  menu_ide->addSeparator();
+
+  add_to_menu (menu_ide, tr ("Toggle header/source"), SLOT(nav_toggle_hs()));
+
 
 
   menu_nav = menuBar()->addMenu (tr ("Nav"));
@@ -1595,7 +1599,6 @@ void rvln::createMenus()
   add_to_menu (menu_nav, tr ("Go to line"), SLOT(nav_goto_line()),"Alt+G");
   add_to_menu (menu_nav, tr ("Next tab"), SLOT(nav_goto_right_tab()));
   add_to_menu (menu_nav, tr ("Prev tab"), SLOT(nav_goto_left_tab()));
-  add_to_menu (menu_nav, tr ("Toggle header/source"), SLOT(nav_toggle_hs()));
   add_to_menu (menu_nav, tr ("Focus the Famous input field"), SLOT(nav_focus_to_fif()), "Ctrl+F");
   add_to_menu (menu_nav, tr ("Focus the editor"), SLOT(nav_focus_to_editor()));
 
@@ -7616,6 +7619,8 @@ void rvln::view_use_profile()
   QFontInfo fi = QFontInfo (qApp->font());
   spb_app_font_size->setValue (settings->value ("app_font_size", fi.pointSize()).toInt());
   cmb_app_font_name->setCurrentFont (QFont (settings->value ("app_font_name", qApp->font().family()).toString()));
+
+  cb_wordwrap->setCheckState (Qt::CheckState (settings->value ("word_wrap", "2").toInt()));
 }
 
 

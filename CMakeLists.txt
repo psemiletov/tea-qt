@@ -100,8 +100,8 @@ endif()
 find_path(ASPELL_INLCUDES aspell.h
          "/usr/include/"
          "/usr/local/"
-        )      
-            
+        )
+
 if(ASPELL_INLCUDES)
   add_definitions(-DASPELL_ENABLE)
   add_definitions(-DSPELLCHECK_ENABLE)
@@ -156,10 +156,10 @@ endif()
 target_link_libraries(${PROJECT} Qt5::Widgets Qt5::Core Qt5::Network Qt5::Qml Qt5::Quick)
 
 install (TARGETS ${PROJECT} DESTINATION bin)
-install (FILES ${upsm_ICONSVG} DESTINATION share/icons/hicolor/scalable/apps)
-install (FILES ${upsm_ICONPNG32} DESTINATION share/icons/hicolor/32x32/apps)
-install (FILES ${upsm_ICONPNG48} DESTINATION share/icons/hicolor/48x48/apps)
-install (FILES ${upsm_ICONPNG64} DESTINATION share/icons/hicolor/64x64/apps)
-install (FILES ${upsm_ICONPNG128} DESTINATION share/icons/hicolor/128x128/apps)
+install (FILES ${tea_ICONSVG} DESTINATION share/icons/hicolor/scalable/apps)
+install (FILES ${tea_ICONPNG32} DESTINATION share/icons/hicolor/32x32/apps)
+install (FILES ${tea_ICONPNG48} DESTINATION share/icons/hicolor/48x48/apps)
+install (FILES ${tea_ICONPNG64} DESTINATION share/icons/hicolor/64x64/apps)
+install (FILES ${tea_ICONPNG128} DESTINATION share/icons/hicolor/128x128/apps)
 
-install (FILES ${upsm_DESKTOP} DESTINATION share/applications)
+install (FILES ${tea_DESKTOP} DESTINATION share/applications)

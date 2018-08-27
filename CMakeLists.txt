@@ -72,7 +72,7 @@ set(${PROJECT}_ICONPNG128
 )
 
 set(${PROJECT}_ICONSVG
-    ./icons/${PROJECT}.svg
+    ./icons/svg/${PROJECT}.svg
 )
 
 set(${PROJECT}_DESKTOP

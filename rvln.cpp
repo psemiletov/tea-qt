@@ -2500,6 +2500,13 @@ void rvln::createOptions()
   cb_wordwrap = new QCheckBox (tr ("Word wrap"), tab_options);
   cb_wordwrap->setCheckState (Qt::CheckState (settings->value ("word_wrap", "2").toInt()));
   page_interface_layout->addWidget (cb_wordwrap);
+  
+  
+  cb_colored_console = new QCheckBox (tr ("Use colored console output (can crash)"), tab_options);
+  cb_colored_console->setCheckState (Qt::CheckState (settings->value ("colored_console", "0").toInt()));
+  page_interface_layout->addWidget (cb_colored_console);
+  
+  
 
   /*
   cb_right_to_left = new QCheckBox (tr ("Right to left alignment"), tab_options);
@@ -4745,16 +4752,15 @@ void rvln::file_open_programs_file()
 
 void rvln::process_readyReadStandardOutput()
 {
-  qDebug() << "rvln::process_readyReadStandardOutput()"; 
-   
   QProcess *p = qobject_cast<QProcess *>(sender());
   QByteArray a = p->readAllStandardOutput().data();
   QTextCodec *c = QTextCodec::codecForLocale();
   QString t = c->toUnicode (a);
 
-//  log->log (t);
-  log->logterm (t);
-
+  if (settings->value ("colored_console", "0").toBool())
+     log->logterm (t);
+  else
+      log->log (t);
 }
 
 
@@ -8511,6 +8517,10 @@ void rvln::leaving_tune()
   settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
   
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
+  settings->setValue ("colored_console", cb_colored_console->checkState());
+  
+  
+  
   //settings->setValue ("right_to_left", cb_right_to_left->checkState());
   
 #if QT_VERSION >= 0x050000
@@ -10239,20 +10249,12 @@ void rvln::ide_run()
   QString dir_build = hash_get_val (documents->hash_project,
                                     "dir_build", source_dir.absolutePath());
 
-
-
   if (dir_build[0] != "/") //dir is not absolute path
       dir_build = source_dir.absolutePath() + "/" + dir_build;
-
-    qDebug() << "dir_build: " << dir_build;
-
 
   QString command_run = hash_get_val (documents->hash_project,
                                       "command_run", "");
 
-
-
-  qDebug() << "command_run: " << command_run;
 
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (dir_build);
@@ -10261,9 +10263,6 @@ void rvln::ide_run()
   process->setProcessChannelMode (QProcess::MergedChannels) ;
 
   process->start (command_run, QIODevice::ReadWrite);
-
-
-
 }
 
 
@@ -10280,30 +10279,27 @@ void rvln::ide_build()
 
   QString dir_build = hash_get_val (documents->hash_project,
                                     "dir_build", source_dir.absolutePath());
-  
-  
+
+
 
   if (dir_build[0] != "/") //dir is not absolute path
       dir_build = source_dir.absolutePath() + "/" + dir_build;
 
-    qDebug() << "dir_build: " << dir_build;
-
-
   QString command_build = hash_get_val (documents->hash_project,
-                                            "command_build", "make");
+                                       "command_build", "make");
 
 
 
-  command_build = "unbuffer " + command_build;
-  
-  qDebug() << "command_build: " << command_build;
+  if (settings->value ("colored_console", "0").toBool())
+     command_build = "unbuffer " + command_build;
+
 
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (dir_build);
 
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
 
-  
+
   process->setProcessChannelMode (QProcess::MergedChannels) ;
 
   process->start (command_build, QIODevice::ReadWrite);
@@ -10329,8 +10325,7 @@ void rvln::ide_clean()
     if (dir_build[0] != "/") //dir is not absolute path
         dir_build = source_dir.absolutePath() + "/" + dir_build;
 
-      qDebug() << "dir_build: " << dir_build;
-
+   
 
     QString command_clean = hash_get_val (documents->hash_project,
                                               "command_clean", "make");

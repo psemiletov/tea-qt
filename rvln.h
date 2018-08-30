@@ -379,6 +379,8 @@ public:
   QCheckBox *cb_right_to_left;
 
   QCheckBox *cb_wordwrap;
+  QCheckBox *cb_colored_console;
+  
   QCheckBox *cb_show_linenums;
   QCheckBox *cb_hl_current_line;
   QCheckBox *cb_show_margin;

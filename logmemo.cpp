@@ -29,12 +29,12 @@
 CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 {
   setObjectName ("logmemo");
-  
+
   setFocusPolicy (Qt::ClickFocus);
   setUndoRedoEnabled (false);
   setReadOnly (true);
-  
-  setTextInteractionFlags (Qt::LinksAccessibleByMouse | Qt::TextSelectableByMouse | 
+
+  setTextInteractionFlags (Qt::LinksAccessibleByMouse | Qt::TextSelectableByMouse |
                            Qt::TextSelectableByKeyboard);
 }
 
@@ -65,29 +65,23 @@ void CLogMemo::logterm (const QString &text)
   setTextCursor (cr);
 
   QTime t = QTime::currentTime();
-////////////////////
-//  textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + text + "<br>");
 
-
+  //  textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + text + "<br>");
 
    QString txt = text;
    txt.remove("\x1b(B", Qt::CaseInsensitive);
 
-    // Since it is just one single text stream define here instead of globally
-    AnsiEscapeCodeHandler ansi_handler;
+   AnsiEscapeCodeHandler ansi_handler;
 
-    FormattedTextList result = ansi_handler.parseText (FormattedText(txt, currentCharFormat ()));
+   FormattedTextList l = ansi_handler.parseText (FormattedText(txt, currentCharFormat ()));
 
-    // Loop through the text/format results
-    foreach(FormattedText ft, result){
-        setCurrentCharFormat (ft.format);
-        insertPlainText (ft.text);
-    }
-
+   foreach (FormattedText ft, l)
+           {
+            setCurrentCharFormat (ft.format);
+            insertPlainText (ft.text);
+           }
 
 
-
-///////////////////
   cr = textCursor();
   cr.movePosition (QTextCursor::Start);
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
@@ -100,7 +94,7 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
   QTextCursor cur = cursorForPosition (event->pos());
   QString txt = cur.block().text();
   int col = cur.positionInBlock();
-  
+
   int idx_right = txt.indexOf (" ", col);
   if (idx_right == -1)
      {
@@ -124,7 +118,7 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
            break;
           }
       }
-  
+
   emit double_click (txt);
 
   event->accept();

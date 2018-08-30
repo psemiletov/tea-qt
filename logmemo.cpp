@@ -24,7 +24,7 @@
 #include <QTextCursor>
 
 #include "logmemo.h"
-
+#include "ansiescapecodehandler.h"
 
 CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 {
@@ -57,9 +57,47 @@ void CLogMemo::log (const QString &text)
 }
 
 
+void CLogMemo::logterm (const QString &text)
+{
+  QTextCursor cr = textCursor();
+  cr.movePosition (QTextCursor::Start);
+  cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
+  setTextCursor (cr);
+
+  QTime t = QTime::currentTime();
+////////////////////
+//  textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + text + "<br>");
+
+
+
+   QString txt = text;
+   txt.remove("\x1b(B", Qt::CaseInsensitive);
+
+    // Since it is just one single text stream define here instead of globally
+    AnsiEscapeCodeHandler ansi_handler;
+
+    FormattedTextList result = ansi_handler.parseText (FormattedText(txt, currentCharFormat ()));
+
+    // Loop through the text/format results
+    foreach(FormattedText ft, result){
+        setCurrentCharFormat (ft.format);
+        insertPlainText (ft.text);
+    }
+
+
+
+
+///////////////////
+  cr = textCursor();
+  cr.movePosition (QTextCursor::Start);
+  cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
+  setTextCursor (cr);
+}
+
+
 void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 {
-  QTextCursor cur =	cursorForPosition (event->pos());
+  QTextCursor cur = cursorForPosition (event->pos());
   QString txt = cur.block().text();
   int col = cur.positionInBlock();
   
@@ -72,18 +110,21 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 
   txt = txt.left (idx_right);
   int sz = txt.size() - 1;
+  if (sz == -1)
+      {
+       event->accept();
+       return;
+      }
 
   for (int i = sz; i != -1; i--)
-     {
-      if (txt[i] == " ")
-         {
-          txt = txt.right (i);
-          break;
-         }
-     }
+      {
+       if (txt[i] == " ")
+          {
+           txt = txt.right (i);
+           break;
+          }
+      }
   
-  //qDebug() << "txt:" << txt;
-
   emit double_click (txt);
 
   event->accept();

@@ -2506,11 +2506,11 @@ void rvln::createOptions()
   cb_right_to_left->setCheckState (Qt::CheckState (settings->value ("right_to_left", "0").toInt()));
   page_interface_layout->addWidget (cb_right_to_left);
 */
-
+/*
   cb_use_hl_wrap = new QCheckBox (tr ("Use wrap setting from highlighting module"), tab_options);
   cb_use_hl_wrap->setCheckState (Qt::CheckState (settings->value ("use_hl_wrap", "0").toInt()));
   page_interface_layout->addWidget (cb_use_hl_wrap);
-
+*/
   cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
   cb_hl_enabled->setCheckState (Qt::CheckState (settings->value ("hl_enabled", "2").toInt()));
   page_interface_layout->addWidget (cb_hl_enabled);
@@ -3096,7 +3096,6 @@ void rvln::open_at_cursor()
       
       return;
      }
-
      
   documents->open_file (fname, d->charset);
 }
@@ -3109,11 +3108,19 @@ void rvln::toggle_wrap()
   CDocument *d = documents->get_current();
   if (! d)
      return;
-
+  
+  
+  d->textEdit->set_word_wrap (! d->textEdit->get_word_wrap());
+  
+/*
   if (d->textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
      d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
   else
       d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
+
+
+  qDebug() << "WRAP:::::: = " << d->textEdit->lineWrapMode();
+*/
 }
 
 
@@ -4745,7 +4752,9 @@ void rvln::process_readyReadStandardOutput()
   QTextCodec *c = QTextCodec::codecForLocale();
   QString t = c->toUnicode (a);
 
-  log->log (t);
+//  log->log (t);
+  log->logterm (t);
+
 }
 
 
@@ -7593,34 +7602,30 @@ void rvln::view_use_profile()
   settings->setValue ("additional_hl", s.value ("additional_hl", "0").toInt()); 
   settings->setValue ("show_margin", s.value ("show_margin", "0").toInt()); 
 
-  cb_wordwrap->setCheckState (Qt::CheckState (settings->value ("word_wrap", "2").toInt()));
-  cb_show_linenums->setCheckState (Qt::CheckState (settings->value ("show_linenums", "0").toInt()));
-  cb_hl_current_line->setCheckState (Qt::CheckState (settings->value ("additional_hl", "0").toInt()));
-  cb_show_margin->setCheckState (Qt::CheckState (settings->value ("show_margin", "0").toInt()));
-
   settings->setValue ("editor_font_name", s.value ("editor_font_name", "Serif").toString());
   settings->setValue ("editor_font_size", s.value ("editor_font_size", "14").toInt());
-
   settings->setValue ("logmemo_font", s.value ("logmemo_font", "Monospace").toString());
   settings->setValue ("logmemo_font_size", s.value ("logmemo_font_size", "14").toInt());
-
   settings->setValue ("app_font_name", s.value ("app_font_name", "Sans").toString());
   settings->setValue ("app_font_size", s.value ("app_font_size", "12").toInt());
+
+  cb_wordwrap->setCheckState (Qt::CheckState (s.value ("word_wrap", "2").toInt()));
+  cb_show_linenums->setCheckState (Qt::CheckState (s.value ("show_linenums", "0").toInt()));
+  cb_hl_current_line->setCheckState (Qt::CheckState (s.value ("additional_hl", "0").toInt()));
+  cb_show_margin->setCheckState (Qt::CheckState (s.value ("show_margin", "0").toInt()));
 
   update_stylesheet (fname_stylesheet);
   documents->apply_settings();
   
-  cmb_font_name->setCurrentFont (QFont (settings->value ("editor_font_name", "Serif").toString()));
-  spb_font_size->setValue (settings->value ("editor_font_size", "16").toInt());
+  cmb_font_name->setCurrentFont (QFont (s.value ("editor_font_name", "Serif").toString()));
+  spb_font_size->setValue (s.value ("editor_font_size", "16").toInt());
 
-  cmb_logmemo_font_name->setCurrentFont (QFont (settings->value ("logmemo_font", "Monospace").toString()));
-  spb_logmemo_font_size->setValue (settings->value ("logmemo_fontsize", "14").toInt());
+  cmb_logmemo_font_name->setCurrentFont (QFont (s.value ("logmemo_font", "Monospace").toString()));
+  spb_logmemo_font_size->setValue (s.value ("logmemo_fontsize", "14").toInt());
 
   QFontInfo fi = QFontInfo (qApp->font());
-  spb_app_font_size->setValue (settings->value ("app_font_size", fi.pointSize()).toInt());
-  cmb_app_font_name->setCurrentFont (QFont (settings->value ("app_font_name", qApp->font().family()).toString()));
-
-  cb_wordwrap->setCheckState (Qt::CheckState (settings->value ("word_wrap", "2").toInt()));
+  spb_app_font_size->setValue (s.value ("app_font_size", fi.pointSize()).toInt());
+  cmb_app_font_name->setCurrentFont (QFont (s.value ("app_font_name", qApp->font().family()).toString()));
 }
 
 
@@ -8519,7 +8524,7 @@ void rvln::leaving_tune()
   settings->setValue ("session_restore", cb_session_restore->checkState());
 
   settings->setValue ("show_linenums", cb_show_linenums->checkState());
-  settings->setValue ("use_hl_wrap", cb_use_hl_wrap->checkState());
+ // settings->setValue ("use_hl_wrap", cb_use_hl_wrap->checkState());
   settings->setValue ("hl_enabled", cb_hl_enabled->checkState());
   
   settings->setValue ("hl_brackets", cb_hl_brackets->checkState());
@@ -10288,6 +10293,8 @@ void rvln::ide_build()
                                             "command_build", "make");
 
 
+
+  command_build = "unbuffer " + command_build;
   
   qDebug() << "command_build: " << command_build;
 

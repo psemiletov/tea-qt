@@ -631,7 +631,7 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 {
   document = doc;
   casecare = true;
-  wrap = true;
+//  wrap = true;
   load_from_xml (fname);
 }
 
@@ -695,7 +695,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 #endif  
 
 //  qDebug() << "highlighter->wrap: " << highlighter->wrap;
-  
+ /* 
   if (textEdit->use_hl_wrap)
      {
       if (highlighter->wrap)
@@ -703,7 +703,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
       else
           textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
      }
-
+*/
 }
 
 
@@ -729,8 +729,7 @@ void CDox::apply_settings_single (CDocument *d)
 
   d->textEdit->setCursorWidth (settings->value ("cursor_width", 2).toInt());
   d->textEdit->setCenterOnScroll (settings->value ("center_on_scroll", true).toBool());
-  d->textEdit->use_hl_wrap = settings->value ("use_hl_wrap", true).toBool();
-  d->textEdit->wrap = settings->value ("word_wrap", true).toBool();
+//  d->textEdit->use_hl_wrap = settings->value ("use_hl_wrap", true).toBool();
     
   QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
   QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
@@ -738,14 +737,22 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
   d->textEdit->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
 
+//  bool wrap = settings->value ("word_wrap", true).toBool();
     
-  if (! d->textEdit->use_hl_wrap)
-     {
-      if (d->textEdit->wrap)
-         d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
-      else
-          d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
-     }
+  //if (! d->textEdit->use_hl_wrap)
+//     {
+
+
+
+
+/*
+ if (! settings->value ("word_wrap", true).toBool())
+     d->textEdit->setWordWrapMode(QTextOption::NoWrap); 
+ else
+     d->textEdit->setWordWrapMode (QTextOption::WordWrap);
+//  qDebug() << "WRAP:::::: = " << d->textEdit->lineWrapMode();
+*/
+
   
   if (settings->value ("right_to_left", false).toBool())
      d->textEdit->document()->setDefaultTextOption (QTextOption (Qt::AlignRight));
@@ -798,6 +805,18 @@ void CDox::apply_settings_single (CDocument *d)
                            t_sel_back_color);
                            
   d->textEdit->setStyleSheet (sheet);*/
+  
+/*  
+   if (! settings->value ("word_wrap", true).toBool())
+    d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
+ else
+     d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
+ 
+  qDebug() << "WRAP:::::: = " << d->textEdit->lineWrapMode();
+*/
+  
+  d->textEdit->set_word_wrap (settings->value ("word_wrap", true).toBool());
+
   d->textEdit->repaint();
   d->set_hl();
 }
@@ -826,7 +845,8 @@ void CDox::add_to_recent (CDocument *d)
   s += QString::number (d->textEdit->textCursor().position());
   s += ",";
 
-  if (d->textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
+  //if (d->textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
+  if (! d->textEdit->get_word_wrap())
      s+="0";
   else 
       s+="1";
@@ -872,10 +892,16 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
 
   if (sl.size() >= 4)
      {
-      if (sl[3] == "1")
+      /*if (sl[3] == "1")
          d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
       else    
-          d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
+          d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);*/
+            if (sl[3] == "1")
+         d->textEdit->set_word_wrap (true);
+      else    
+         d->textEdit->set_word_wrap (false);
+
+
      }
 
   return d;
@@ -894,7 +920,9 @@ QString CDocument::get_triplex()
   s += QString::number (textEdit->textCursor().position());
   s += ",";
 
-  if (textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
+  //if (textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
+  if (! textEdit->get_word_wrap())
+
      s+="0";
   else 
       s+="1";
@@ -1043,8 +1071,8 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   draw_margin = false;
   hl_brackets = false;
   auto_indent = false;
-  use_hl_wrap = false;
-  wrap = true;
+ // use_hl_wrap = false;
+  //wrap = true;
   tab_sp_width = 8;
   spaces_instead_of_tabs = true;
   
@@ -1161,7 +1189,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
 // qDebug() << "CSyntaxHighlighterQRegularExpression::load_from_xml ";
   
-  wrap = true;
+  //wrap = true;
   casecare = true;
   exts = "default";
   langs = "default";
@@ -1210,10 +1238,10 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                      if (! s_xml_format.isEmpty())
                         xml_format = s_xml_format.toInt();
                     
-                     QString s_wrap = xml.attributes().value ("wrap").toString();
+                     /*QString s_wrap = xml.attributes().value ("wrap").toString();
                      if (! s_wrap.isEmpty())
                         if (s_wrap == "0" || s_wrap == "false")
-                           wrap = false;
+                           wrap = false;*/
                         
                      QString s_casecare = xml.attributes().value ("casecare").toString();
                      if (! s_casecare.isEmpty())
@@ -1424,10 +1452,10 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
                  if (attr_name == "options")
                     {
-                     QString s_wrap = xml.attributes().value ("wrap").toString();
+                    /* QString s_wrap = xml.attributes().value ("wrap").toString();
                      if (! s_wrap.isEmpty())
                         if (s_wrap == "0" || s_wrap == "false")
-                           wrap = false;
+                           wrap = false;*/
 
                      QString s_casecare = xml.attributes().value ("casecare").toString();
                      if (! s_casecare.isEmpty())
@@ -2882,4 +2910,24 @@ void CDox::update_project (const QString &fileName)
      hash_project.clear();
      hash_project = hash_load_keyval (fileName);
     }
+}
+
+
+void CTEAEdit::set_word_wrap (bool wrap)
+{
+  if (wrap)
+     setWordWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);    
+  else
+     setWordWrapMode (QTextOption::NoWrap);    
+     
+   
+}
+
+bool CTEAEdit::get_word_wrap()
+{
+  if (wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere)   
+     return true;
+  else
+     return false;
+   
 }

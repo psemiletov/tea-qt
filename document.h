@@ -93,8 +93,8 @@ public:
   bool draw_margin;
   bool draw_linenums;
 
-  bool use_hl_wrap;
-  bool wrap;
+ // bool use_hl_wrap;
+ // bool wrap;
 
   bool auto_indent;
   bool spaces_instead_of_tabs;
@@ -111,6 +111,9 @@ public:
   void set_margin_pos (int mp);
   void set_hl_cur_line (bool enable);
   void set_hl_brackets (bool enable);
+  
+  void set_word_wrap (bool wrap);
+  bool get_word_wrap();
 
   void indent();
   void un_indent();
@@ -163,7 +166,7 @@ public:
 
   CDocument *document;
   bool casecare;
-  bool wrap;
+//  bool wrap;
 
   int xml_format;
 

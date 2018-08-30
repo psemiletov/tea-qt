@@ -887,7 +887,7 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
   CDocument *d = open_file (sl[0], sl[1]);
   if (! d)
      return NULL;
-  
+
   d->goto_pos (sl[2].toInt());
 
   if (sl.size() >= 4)
@@ -898,7 +898,7 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
           d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);*/
             if (sl[3] == "1")
          d->textEdit->set_word_wrap (true);
-      else    
+      else
          d->textEdit->set_word_wrap (false);
 
 
@@ -1100,7 +1100,7 @@ CDox::CDox()
   markup_modes.insert ("mediawiki", "MediaWiki");
   markup_modes.insert ("md", "Markdown");
   markup_modes.insert ("markdown", "Markdown");
-  
+
   timer = new QTimer (this);
   timer->setInterval (100);
 
@@ -1110,9 +1110,9 @@ CDox::CDox()
   if (joystick->initialized)
      {
       connect(timer, SIGNAL(timeout()), joystick, SLOT(read_joystick()));
-  
+
       if (settings->value ("use_joystick", "0").toInt())
-         timer->start();   
+         timer->start();
      }
 #endif
 }
@@ -1148,10 +1148,10 @@ QStringList CDocument::get_words()
         {
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
-        }  
-           
+        }
+
      if (! stext.isEmpty())
-        result.append (stext);     
+        result.append (stext);
     }
   while (cr.movePosition (QTextCursor::NextWord));
 
@@ -1165,7 +1165,7 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
   tformat.setForeground (QBrush (QColor (color).darker (darker_val)));
 
   if (fontstyle.isEmpty())
-     return tformat; 
+     return tformat;
 
   if (fontstyle.contains ("bold"))
       tformat.setFontWeight (QFont::Bold);

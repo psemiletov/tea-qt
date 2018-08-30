@@ -111,6 +111,7 @@ SOURCES += rvln.cpp \
     document.cpp \
     utils.cpp \
     spellchecker.cpp \
+    ansiescapecodehandler.cpp \
     fman.cpp \
     shortcuts.cpp \
     logmemo.cpp \
@@ -144,6 +145,7 @@ HEADERS += rvln.h \
     img_viewer.h \
     gui_utils.h \
     wavinfo.h \
+    ansiescapecodehandler.h \
 #    zconf.h \
  #   zlib.h \
     tio.h \

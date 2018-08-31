@@ -57,7 +57,7 @@ code from qwriter:
 #include "todo.h"
 
 
-class LineNumberArea;
+//class LineNumberArea;
 class CDox;
 class CDocument;
 
@@ -166,7 +166,6 @@ public:
 
   CDocument *document;
   bool casecare;
-//  bool wrap;
 
   int xml_format;
 
@@ -304,9 +303,16 @@ class CDox: public QObject
 public:
 
   CTioHandler tio_handler;
+  CTodo todo;
+
+  QStringList recent_files;
 
   QString fname_current_session;
   QString fname_current_project;
+  QString dir_config;
+  QString fname_crapbook;
+  QString markup_mode;
+  QString recent_list_fname;
 
   QHash <QString, QString> hls;
   QHash <QString, QString> markup_modes;
@@ -315,29 +321,19 @@ public:
   QLabel *l_status_bar;
   QLabel *l_charset;
 
-  QString dir_config;
+  QList <CDocument*> list;
 
-  QString fname_crapbook;
-
-  CTodo todo;
-
-  QString markup_mode;
   QStatusBar *status_bar;
   CLogMemo *log;
-  QList <CDocument*> list;
   QMainWindow *parent_wnd;
   QTabWidget *tab_widget;
-
   QMenu *recent_menu;
-  QStringList recent_files;
-  QString recent_list_fname;
+
+  QTimer *timer;
 
 #if defined(Q_OS_LINUX)
   CJoystick *joystick;
 #endif
-
-  QTimer *timer;
-
 
   CDox();
   ~CDox();
@@ -390,9 +386,9 @@ public:
 protected:
 
   void paintEvent (QPaintEvent *event)
-      {
-       code_editor->lineNumberAreaPaintEvent (event);
-      }
+       {
+        code_editor->lineNumberAreaPaintEvent (event);
+       }
 
 };
 

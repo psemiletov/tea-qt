@@ -52,6 +52,8 @@ public:
 
   virtual bool load (const QString &fname) = 0;
   virtual bool save (const QString &fname) = 0;
+
+  virtual ~CTio() {};
 };
 
 

@@ -77,19 +77,12 @@ void CDocument::update_status()
 {
   if (! cursor_xy_visible)
      {
-      //holder->l_status_bar->setText (charset);
       holder->l_charset->setText (charset);
-
       return;
      }
 
   int x = textEdit->textCursor().position() - textEdit->textCursor().block().position() + 1;
   int y = textEdit->textCursor().block().blockNumber() + 1;
-/*
-  holder->l_status_bar->setText (
-                                 QString ("%3 %1:%2").arg (
-                                 QString::number (y)).arg (
-                                 QString::number (x)).arg (charset));*/
 
   holder->l_status_bar->setText (
                                  QString ("%1:%2").arg (
@@ -147,14 +140,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
   textEdit->setPlainText (tio->data);
 
   file_name = fileName;
-/*
-  if (file_get_ext (file_name) == "teaproject")
-    {
-     holder->fname_current_project = file_name;
-     holder->hash_project.clear();
-     holder->hash_project = hash_load_keyval (file_name);
-    }
-*/
+
   holder->update_project (file_name);
 
   set_tab_caption (QFileInfo (file_name).fileName());
@@ -219,17 +205,7 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
       textEdit->document()->setModified (false);
 
       holder->update_current_files_menu();
-      
-      /*
-     if (file_get_ext (file_name) == "teaproject")
-        {
-         holder->fname_current_project = file_name;
-         holder->hash_project.clear();
-         holder->hash_project = hash_load_keyval (file_name);
-        }
-*/
-         holder->update_project (file_name);
- 
+      holder->update_project (file_name);
      }
 
   return true;
@@ -310,7 +286,6 @@ void CDocument::create_new()
                                          "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
 
   highlighter = NULL;
-
   int tab_index = holder->tab_widget->addTab (textEdit, file_name);
   tab_page = holder->tab_widget->widget (tab_index);
 
@@ -631,7 +606,6 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 {
   document = doc;
   casecare = true;
-//  wrap = true;
   load_from_xml (fname);
 }
 
@@ -641,7 +615,6 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
                                                                             CSyntaxHighlighter (parent, doc, fname)
 {
-  //qDebug() << "CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression";
   document = doc;
   load_from_xml (fname);
 }
@@ -680,30 +653,19 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   if (fname.isEmpty() || ! file_exists (fname))
      return;
 
-  
+
 #if QT_VERSION >= 0x050000
-  
+
   if (settings->value ("qregexpsyntaxhl", 0).toBool())
      highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
   else
      highlighter = new CSyntaxHighlighterQRegularExpression (textEdit->document(), this, fname);
-  
-#else
-  
-  highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
-  
-#endif  
 
-//  qDebug() << "highlighter->wrap: " << highlighter->wrap;
- /* 
-  if (textEdit->use_hl_wrap)
-     {
-      if (highlighter->wrap)
-         textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
-      else
-          textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
-     }
-*/
+#else
+
+  highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
+
+#endif
 }
 
 
@@ -719,71 +681,42 @@ void CDox::apply_settings_single (CDocument *d)
 {
   int darker_val = settings->value ("darker_val", 100).toInt();
 
-/*  
-  QFont f;
-  f.fromString (settings->value ("editor_font_name", "Monospace").toString());
-  f.setPointSize (settings->value ("editor_font_size", "12").toInt());
-  d->textEdit->setFont (f);
-  d->textEdit->lineNumberArea->setFont (f);
-*/
-
   d->textEdit->setCursorWidth (settings->value ("cursor_width", 2).toInt());
   d->textEdit->setCenterOnScroll (settings->value ("center_on_scroll", true).toBool());
-//  d->textEdit->use_hl_wrap = settings->value ("use_hl_wrap", true).toBool();
-    
+
   QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
   QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
-    
+
   d->textEdit->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
   d->textEdit->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
 
-//  bool wrap = settings->value ("word_wrap", true).toBool();
-    
-  //if (! d->textEdit->use_hl_wrap)
-//     {
-
-
-
-
-/*
- if (! settings->value ("word_wrap", true).toBool())
-     d->textEdit->setWordWrapMode(QTextOption::NoWrap); 
- else
-     d->textEdit->setWordWrapMode (QTextOption::WordWrap);
-//  qDebug() << "WRAP:::::: = " << d->textEdit->lineWrapMode();
-*/
-
-  
   if (settings->value ("right_to_left", false).toBool())
      d->textEdit->document()->setDefaultTextOption (QTextOption (Qt::AlignRight));
   else
      d->textEdit->document()->setDefaultTextOption (QTextOption (Qt::AlignLeft));
-    
- 
+
+
   d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
   d->textEdit->setTabStopWidth (d->textEdit->tab_sp_width * d->textEdit->brace_width);
-  
+
   d->textEdit->setup_brace_width();
 
   d->textEdit->set_show_linenums (settings->value ("show_linenums", false).toBool());
   d->textEdit->set_show_margin (settings->value ("show_margin", false).toBool());
   d->textEdit->set_margin_pos (settings->value ("margin_pos", 72).toInt());
-  
-  
   d->textEdit->highlight_current_line = settings->value ("additional_hl", false).toBool();
   d->textEdit->hl_brackets = settings->value ("hl_brackets", false).toBool();
-
-  d->textEdit->current_line_color = QColor (hash_get_val (global_palette, "cur_line_color", "#EEF6FF")).darker (darker_val);
   d->textEdit->brackets_color = QColor (hash_get_val (global_palette, "brackets", "yellow")).darker (darker_val);
-  
+  d->textEdit->current_line_color = QColor (hash_get_val (global_palette, "cur_line_color", "#EEF6FF")).darker (darker_val);
+
   d->cursor_xy_visible = settings->value ("cursor_xy_visible", "2").toBool();
   d->textEdit->auto_indent = settings->value ("auto_indent", false).toBool();
 
   QString text_color = hash_get_val (global_palette, "text", "black");
   QString t_text_color = QColor (text_color).darker(darker_val).name(); 
-    
+
   d->textEdit->text_color = QColor (t_text_color);
 
   QString back_color = hash_get_val (global_palette, "background", "white");
@@ -791,30 +724,6 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->margin_color = QColor (hash_get_val (global_palette, "margin_color", text_color)).darker(darker_val);
   d->textEdit->linenums_bg = QColor (hash_get_val (global_palette, "linenums_bg", back_color)).darker(darker_val);
 
-  //QString sel_back_color = hash_get_val (global_palette, "sel-background", "black");
-  //QString sel_text_color = hash_get_val (global_palette, "sel-text", "white");
-  //QString t_back_color = QColor (back_color).darker(darker_val).name(); 
-  //QString t_sel_text_color = QColor (sel_text_color).darker(darker_val).name(); 
-  //QString t_sel_back_color = QColor (sel_back_color).darker(darker_val).name(); 
-    
-  /*
-  QString sheet = QString ("QPlainTextEdit { color: %1 ; background-color: %2 ; selection-color: %3; selection-background-color: %4;}").arg (
-                           t_text_color).arg (
-                           t_back_color).arg (
-                           t_sel_text_color).arg (
-                           t_sel_back_color);
-                           
-  d->textEdit->setStyleSheet (sheet);*/
-  
-/*  
-   if (! settings->value ("word_wrap", true).toBool())
-    d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
- else
-     d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
- 
-  qDebug() << "WRAP:::::: = " << d->textEdit->lineWrapMode();
-*/
-  
   d->textEdit->set_word_wrap (settings->value ("word_wrap", true).toBool());
 
   d->textEdit->repaint();

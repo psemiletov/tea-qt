@@ -291,11 +291,11 @@ void rvln::readSettings()
   MyProxyStyle::cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
 
   qApp->setCursorFlashTime (MyProxyStyle::cursor_blink_time);
-  
+
   recent_list_max_items = settings->value ("recent_list.max_items", 21).toInt();
-  
+
   MyProxyStyle::b_altmenu = settings->value ("b_altmenu", "0").toBool(); 
-   
+
   int ui_tab_align = settings->value ("ui_tabs_align", "0").toInt();
   main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align));
 
@@ -328,6 +328,9 @@ void rvln::writeSettings()
   settings->setValue ("VER_NUMBER", QString (current_version_number));
   settings->setValue ("state", saveState());
 
+  settings->setValue ("word_wrap", cb_wordwrap->checkState());
+  settings->setValue ("show_linenums", cb_show_linenums->checkState());
+
   delete settings;
 }
 
@@ -340,12 +343,12 @@ void rvln::create_main_widget()
 
   main_tab_widget = new QTabWidget;
   main_tab_widget->setObjectName ("main_tab_widget");
-  
+
   main_tab_widget->setTabShape (QTabWidget::Triangular);
 
   tab_widget = new QTabWidget;
-  
-  
+
+
 #if QT_VERSION >= 0x040500
   tab_widget->setMovable (true);
 #endif

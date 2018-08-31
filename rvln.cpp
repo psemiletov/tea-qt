@@ -2382,7 +2382,7 @@ void rvln::createOptions()
 
   spb_logmemo_font_size = new QSpinBox (page_interface);
   spb_logmemo_font_size->setRange (6, 64);
-  spb_logmemo_font_size->setValue (settings->value ("logmemo_fontsize", "14").toInt());
+  spb_logmemo_font_size->setValue (settings->value ("logmemo_font_size", "12").toInt());
 
 
   connect (cmb_logmemo_font_name, SIGNAL(currentIndexChanged (const QString &)),
@@ -3205,7 +3205,7 @@ void rvln::slot_font_size_changed (int i)
 
 void rvln::slot_logmemo_font_size_changed (int i)
 {
-  settings->setValue("logmemo_fontsize", i);
+  settings->setValue("logmemo_font_size", i);
   update_stylesheet (fname_stylesheet);
 }
 
@@ -7627,7 +7627,7 @@ void rvln::view_use_profile()
   spb_font_size->setValue (s.value ("editor_font_size", "16").toInt());
 
   cmb_logmemo_font_name->setCurrentFont (QFont (s.value ("logmemo_font", "Monospace").toString()));
-  spb_logmemo_font_size->setValue (s.value ("logmemo_fontsize", "14").toInt());
+  spb_logmemo_font_size->setValue (s.value ("logmemo_font_size", "12").toInt());
 
   QFontInfo fi = QFontInfo (qApp->font());
   spb_app_font_size->setValue (s.value ("app_font_size", fi.pointSize()).toInt());
@@ -8815,7 +8815,7 @@ void rvln::update_stylesheet (const QString &f)
   QString edfontsize = "font-size:" + settings->value ("editor_font_size", "16").toString() + "pt;";  
   QString edfontfamily = "font-family:" + settings->value ("editor_font_name", "Serif").toString() + ";";  
  
-  QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_fontsize", "16").toString() + "pt;";  
+  QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_font_size", "12").toString() + "pt;";  
   QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + "pt;";  
   
   QString stylesheet; 
@@ -10325,14 +10325,8 @@ void rvln::ide_clean()
     if (dir_build[0] != "/") //dir is not absolute path
         dir_build = source_dir.absolutePath() + "/" + dir_build;
 
-   
-
     QString command_clean = hash_get_val (documents->hash_project,
-                                              "command_clean", "make");
-
-
-
-    qDebug() << "command_clean: " << command_clean;
+                                          "command_clean", "make");
 
     QProcess *process  = new QProcess (this);
     process->setWorkingDirectory (dir_build);
@@ -10343,13 +10337,11 @@ void rvln::ide_clean()
     process->setProcessChannelMode (QProcess::MergedChannels) ;
 
     process->start (command_clean, QIODevice::ReadWrite);
-
 }
 
 void rvln::logmemo_double_click (const QString &txt)
 {
-    std::cout << "txt:" << txt.toStdString() << std::endl;
-
+//    std::cout << "txt:" << txt.toStdString() << std::endl;
 
     if (documents->hash_project.isEmpty())
        return;
@@ -10373,11 +10365,11 @@ void rvln::logmemo_double_click (const QString &txt)
 
     if (parsed.size() > 2)
        source_col = parsed[2];
-
+/*
     std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
     std::cout << "source_line:" << source_line.toStdString() << std::endl;
     std::cout << "source_col:" << source_col.toStdString() << std::endl;
-
+*/
     QFileInfo dir_source (documents->fname_current_project);
 
     QString source_dir = dir_source.absolutePath();
@@ -10397,7 +10389,6 @@ void rvln::logmemo_double_click (const QString &txt)
 
      if (! cur.isNull())
          d->textEdit->setTextCursor (cur);
-
 }
 
 

@@ -71,69 +71,87 @@ static QColor ansiColor(uint code)
     return QColor(red, green, blue);
 }
 
-QList<FormattedText> AnsiEscapeCodeHandler::parseText(const FormattedText &input)
-{
-    enum AnsiEscapeCodes {
-        ResetFormat            =  0,
-        BoldText               =  1,
-        TextColorStart         = 30,
-        TextColorEnd           = 37,
-        RgbTextColor           = 38,
-        DefaultTextColor       = 39,
-        BackgroundColorStart   = 40,
-        BackgroundColorEnd     = 47,
-        RgbBackgroundColor     = 48,
-        DefaultBackgroundColor = 49
+
+enum AnsiEscapeCodes
+    {
+     ResetFormat            =  0,
+     BoldText               =  1,
+     TextColorStart         = 30,
+     TextColorEnd           = 37,
+     RgbTextColor           = 38,
+     DefaultTextColor       = 39,
+     BackgroundColorStart   = 40,
+     BackgroundColorEnd     = 47,
+     RgbBackgroundColor     = 48,
+     DefaultBackgroundColor = 49
     };
 
-    QList<FormattedText> outputData;
 
-    QTextCharFormat charFormat = m_previousFormatClosed ? input.format : m_previousFormat;
+QList<FormattedText> AnsiEscapeCodeHandler::parseText (const FormattedText &input)
+{
+  QList<FormattedText> outputData;
 
-    const QString escape = QLatin1String("\x1b[");
-    const int escapePos = input.text.indexOf(escape);
-    if (escapePos < 0) {
-        outputData << FormattedText(input.text, charFormat);
-        return outputData;
-    } else if (escapePos != 0) {
+  QTextCharFormat charFormat = m_previousFormatClosed ? input.format : m_previousFormat;
+
+  const QString escape = QLatin1String("\x1b[");
+  const int escapePos = input.text.indexOf (escape);
+
+  if (escapePos < 0)
+     {
+      outputData << FormattedText(input.text, charFormat);
+      return outputData;
+     }
+  else if (escapePos != 0)
         outputData << FormattedText(input.text.left(escapePos), charFormat);
-    }
 
-    const QChar semicolon       = QLatin1Char(';');
-    const QChar colorTerminator = QLatin1Char('m');
-    const QChar eraseToEol      = QLatin1Char('K');
+  const QChar semicolon       = QLatin1Char (';');
+  const QChar colorTerminator = QLatin1Char ('m');
+  const QChar eraseToEol      = QLatin1Char ('K');
+
     // strippedText always starts with "\e["
-    QString strippedText = input.text.mid(escapePos);
-    while (!strippedText.isEmpty()) {
-        while (strippedText.startsWith(escape)) {
-            strippedText.remove(0, 2);
+  QString strippedText = input.text.mid (escapePos);
 
-            // \e[K is not supported. Just strip it.
-            if (strippedText.startsWith(eraseToEol)) {
-                strippedText.remove(0, 1);
-                continue;
-            }
-            // get the number
-            QString strNumber;
-            QStringList numbers;
-            while (strippedText.at(0).isDigit() || strippedText.at(0) == semicolon) {
-                if (strippedText.at(0).isDigit()) {
-                    strNumber += strippedText.at(0);
-                } else {
+  while (! strippedText.isEmpty())
+        {
+         while (strippedText.startsWith (escape))
+               {
+                strippedText.remove(0, 2);
+
+                // \e[K is not supported. Just strip it.
+                if (strippedText.startsWith (eraseToEol)) 
+                   {
+                    strippedText.remove (0, 1);
+                    continue;
+                   }
+
+                // get the number
+                QString strNumber;
+                QStringList numbers;
+
+                while (strippedText.at(0).isDigit() || strippedText.at(0) == semicolon)
+                      {
+                       if (strippedText.at(0).isDigit())
+                           strNumber += strippedText.at(0);
+                       else
+                          {
+                           numbers << strNumber;
+                           strNumber.clear();
+                          }
+
+                       strippedText.remove (0, 1);
+                      }
+
+                if (! strNumber.isEmpty())
                     numbers << strNumber;
-                    strNumber.clear();
-                }
-                strippedText.remove(0, 1);
-            }
-            if (!strNumber.isEmpty())
-                numbers << strNumber;
 
-            // remove terminating char
-            if (!strippedText.startsWith(colorTerminator)) {
+                // remove terminating char
+                if (! strippedText.startsWith(colorTerminator)) 
+                   {
+                    strippedText.remove (0, 1);
+                    continue;
+                   }
+                   
                 strippedText.remove(0, 1);
-                continue;
-            }
-            strippedText.remove(0, 1);
 
             if (numbers.isEmpty()) {
                 charFormat = input.format;

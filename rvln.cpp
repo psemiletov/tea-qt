@@ -1073,8 +1073,8 @@ void rvln::createActions()
   icon_size = settings->value ("icon_size", "32").toInt();
  
  // act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
-  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+//  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+//  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
   
@@ -1159,7 +1159,7 @@ void rvln::createMenus()
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
 
-  fileMenu->addAction (act_test);
+ // fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
   add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -1688,7 +1688,7 @@ void rvln::createMenus()
   menu_view_profiles->setTearOffEnabled (true);
 
   add_to_menu (menu_view, tr ("Save profile"), SLOT(profile_save_as()));
-  
+
   add_to_menu (menu_view, tr ("Toggle word wrap"), SLOT(toggle_wrap()));
   add_to_menu (menu_view, tr ("Hide error marks"), SLOT(view_hide_error_marks()));
   add_to_menu (menu_view, tr ("Toggle fullscreen"), SLOT(view_toggle_fs()));
@@ -2454,15 +2454,15 @@ void rvln::createOptions()
 
   int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
   tab_widget->setTabPosition (int_to_tabpos (docs_tab_align));
-  
+
 
   QComboBox *cmb_docs_tabs_align = new_combobox (page_interface_layout,
                              tr ("Documents tabs align"),
                              sl_tabs_align,
                              docs_tab_align);
-                             
+
   connect (cmb_docs_tabs_align, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_docs_tabs_currentIndexChanged (int)));                             
+           this, SLOT(cmb_docs_tabs_currentIndexChanged (int)));
 
 
   QStringList sl_icon_sizes;
@@ -2476,22 +2476,22 @@ void rvln::createOptions()
   connect (cmb_icon_size, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(cmb_icon_sizes_currentIndexChanged (const QString &)));
 
-  
+
   QStringList sl_tea_icons;
   sl_tea_icons.append ("1");
   sl_tea_icons.append ("2");
   sl_tea_icons.append ("3");
-  
+
   cmb_tea_icons = new_combobox (page_interface_layout,
                                 tr ("TEA program icon"),
                                 sl_tea_icons,
                                 settings->value ("icon_fname", "1").toString());
- 
+
   connect (cmb_tea_icons, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(cmb_tea_icons_currentIndexChanged (const QString &)));
 
-  
-  
+
+
   cb_show_linenums = new QCheckBox (tr ("Show line numbers"), tab_options);
   cb_show_linenums->setCheckState (Qt::CheckState (settings->value ("show_linenums", "0").toInt()));
   page_interface_layout->addWidget (cb_show_linenums);
@@ -2500,28 +2500,17 @@ void rvln::createOptions()
   cb_wordwrap = new QCheckBox (tr ("Word wrap"), tab_options);
   cb_wordwrap->setCheckState (Qt::CheckState (settings->value ("word_wrap", "2").toInt()));
   page_interface_layout->addWidget (cb_wordwrap);
-  
-  
+
+
   cb_colored_console = new QCheckBox (tr ("Use colored console output (can crash)"), tab_options);
   cb_colored_console->setCheckState (Qt::CheckState (settings->value ("colored_console", "0").toInt()));
   page_interface_layout->addWidget (cb_colored_console);
-  
-  
 
-  /*
-  cb_right_to_left = new QCheckBox (tr ("Right to left alignment"), tab_options);
-  cb_right_to_left->setCheckState (Qt::CheckState (settings->value ("right_to_left", "0").toInt()));
-  page_interface_layout->addWidget (cb_right_to_left);
-*/
-/*
-  cb_use_hl_wrap = new QCheckBox (tr ("Use wrap setting from highlighting module"), tab_options);
-  cb_use_hl_wrap->setCheckState (Qt::CheckState (settings->value ("use_hl_wrap", "0").toInt()));
-  page_interface_layout->addWidget (cb_use_hl_wrap);
-*/
+
   cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
   cb_hl_enabled->setCheckState (Qt::CheckState (settings->value ("hl_enabled", "2").toInt()));
   page_interface_layout->addWidget (cb_hl_enabled);
-  
+
 
   cb_hl_current_line = new QCheckBox (tr ("Highlight current line"), tab_options);
   cb_hl_current_line->setCheckState (Qt::CheckState (settings->value ("additional_hl", "0").toInt()));
@@ -2552,7 +2541,7 @@ void rvln::createOptions()
   spb_tab_sp_width = new_spin_box (page_interface_layout,
                                    tr ("Tab width in spaces"), 1, 64,
                                    settings->value ("tab_sp_width", 8).toInt());
-  
+
   cb_center_on_cursor = new QCheckBox (tr ("Cursor center on scroll"), tab_options);
   cb_center_on_cursor->setCheckState (Qt::CheckState (settings->value ("center_on_scroll", "2").toInt()));
   page_interface_layout->addWidget (cb_center_on_cursor);
@@ -2574,9 +2563,9 @@ void rvln::createOptions()
 
   spb_margin_pos = new QSpinBox;
   spb_margin_pos->setValue (settings->value ("margin_pos", 72).toInt());
-   
+
   QHBoxLayout *lt_margin = new QHBoxLayout;
-    
+
   lt_margin->insertWidget (-1, cb_show_margin, 0, Qt::AlignLeft);
   lt_margin->insertWidget (-1, spb_margin_pos, 1, Qt::AlignLeft);
 
@@ -2585,7 +2574,7 @@ void rvln::createOptions()
   cb_full_path_at_window_title = new QCheckBox (tr ("Show full path at window title"), tab_options);
   cb_full_path_at_window_title->setCheckState (Qt::CheckState (settings->value ("full_path_at_window_title", "2").toInt()));
   page_interface_layout->addWidget (cb_full_path_at_window_title);
-  
+
   page_interface->setLayout (page_interface_layout);
   page_interface->show();
 
@@ -2597,10 +2586,6 @@ void rvln::createOptions()
   tab_options->addTab (scra_interface, tr ("Interface"));
 
 
-  //tab_options->addTab (page_interface, tr ("Interface"));
-
-  //////////
-  
   QWidget *page_common = new QWidget (tab_options);
   QVBoxLayout *page_common_layout = new QVBoxLayout;
   page_common_layout->setAlignment (Qt::AlignTop);
@@ -2610,25 +2595,23 @@ void rvln::createOptions()
     cb_altmenu->setCheckState (Qt::Checked);
   else
       cb_altmenu->setCheckState (Qt::Unchecked);
-  
+
   connect (cb_altmenu, SIGNAL(stateChanged (int)),
            this, SLOT(cb_altmenu_stateChanged (int)));
-   
+
   cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
   cb_wasd->setCheckState (Qt::CheckState (settings->value ("wasd", "0").toInt()));
-   
-#if defined(Q_OS_LINUX)   
+
+#if defined(Q_OS_LINUX)
   cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
   cb_use_joystick->setCheckState (Qt::CheckState (settings->value ("use_joystick", "0").toInt()));
   connect (cb_use_joystick, SIGNAL(stateChanged (int)),
            this, SLOT(cb_use_joystick_stateChanged (int)));
 #endif
-  
+
 #if QT_VERSION >= 0x050000
-    
   cb_use_qregexpsyntaxhl = new QCheckBox (tr ("Old syntax hl engine (restart TEA to apply)"), tab_options);
   cb_use_qregexpsyntaxhl->setCheckState (Qt::CheckState (settings->value ("qregexpsyntaxhl", 0).toInt()));
-  
 #endif
 
   cb_auto_img_preview = new QCheckBox (tr ("Automatic preview images at file manager"), tab_options);
@@ -2636,7 +2619,7 @@ void rvln::createOptions()
 
   cb_session_restore = new QCheckBox (tr ("Restore the last session on start-up"), tab_options);
   cb_session_restore->setCheckState (Qt::CheckState (settings->value ("session_restore", "0").toInt()));
-  
+
   cb_override_locale = new QCheckBox (tr ("Override locale"), tab_options);
   cb_override_locale->setCheckState (Qt::CheckState (settings->value ("override_locale", 0).toInt()));
 
@@ -3115,19 +3098,8 @@ void rvln::toggle_wrap()
   CDocument *d = documents->get_current();
   if (! d)
      return;
-  
-  
+
   d->textEdit->set_word_wrap (! d->textEdit->get_word_wrap());
-  
-/*
-  if (d->textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
-     d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
-  else
-      d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);
-
-
-  qDebug() << "WRAP:::::: = " << d->textEdit->lineWrapMode();
-*/
 }
 
 
@@ -7626,7 +7598,7 @@ void rvln::view_use_profile()
 
   update_stylesheet (fname_stylesheet);
   documents->apply_settings();
-  
+
   cmb_font_name->setCurrentFont (QFont (s.value ("editor_font_name", "Serif").toString()));
   spb_font_size->setValue (s.value ("editor_font_size", "16").toInt());
 
@@ -7677,9 +7649,8 @@ void rvln::profile_save_as()
   s.setValue ("app_font_name", settings->value ("app_font_name", "Sans").toString());
   s.setValue ("app_font_size", settings->value ("app_font_size", "12").toInt());
 
-
   s.sync();
-  
+
   update_profiles();
   shortcuts->load_from_file (shortcuts->fname);
 }
@@ -8508,8 +8479,6 @@ void rvln::cal_gen_mooncal()
 
 void rvln::leaving_tune()
 {
-//  qDebug() << "Leaving Tune";
-
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
 
@@ -8518,34 +8487,27 @@ void rvln::leaving_tune()
   settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
 
   settings->setValue ("wasd", cb_wasd->checkState());
-  
+
 #if defined(Q_OS_LINUX)
   settings->setValue ("use_joystick", cb_use_joystick->checkState());
 #endif
 
   settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
-  
+
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
   settings->setValue ("colored_console", cb_colored_console->checkState());
-  
-  
-  
-  //settings->setValue ("right_to_left", cb_right_to_left->checkState());
-  
-#if QT_VERSION >= 0x050000
-    
-  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->checkState());
 
-#endif  
-  
+#if QT_VERSION >= 0x050000
+  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->checkState());
+#endif
+
   settings->setValue ("additional_hl", cb_hl_current_line->checkState());
 
   settings->setValue ("session_restore", cb_session_restore->checkState());
 
   settings->setValue ("show_linenums", cb_show_linenums->checkState());
- // settings->setValue ("use_hl_wrap", cb_use_hl_wrap->checkState());
   settings->setValue ("hl_enabled", cb_hl_enabled->checkState());
-  
+
   settings->setValue ("hl_brackets", cb_hl_brackets->checkState());
   settings->setValue ("auto_indent", cb_auto_indent->checkState());
 

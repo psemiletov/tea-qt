@@ -150,38 +150,50 @@ QList<FormattedText> AnsiEscapeCodeHandler::parseText (const FormattedText &inpu
                     strippedText.remove (0, 1);
                     continue;
                    }
-                   
+
                 strippedText.remove(0, 1);
 
-            if (numbers.isEmpty()) {
-                charFormat = input.format;
-                endFormatScope();
-            }
+                if (numbers.isEmpty()) 
+                   {
+                    charFormat = input.format;
+                    endFormatScope();
+                   }
 
-            for (int i = 0; i < numbers.size(); ++i) {
-                const int code = numbers.at(i).toInt();
+                for (int i = 0; i < numbers.size(); ++i)
+                    {
+                     const int code = numbers.at(i).toInt();
 
-                if (code >= TextColorStart && code <= TextColorEnd) {
-                    charFormat.setForeground(ansiColor(code - TextColorStart));
-                    setFormatScope(charFormat);
-                } else if (code >= BackgroundColorStart && code <= BackgroundColorEnd) {
-                    charFormat.setBackground(ansiColor(code - BackgroundColorStart));
-                    setFormatScope(charFormat);
-                } else {
-                    switch (code) {
-                    case ResetFormat:
-                        charFormat = input.format;
-                        endFormatScope();
-                        break;
-                    case BoldText:
-                        charFormat.setFontWeight(QFont::Bold);
-                        setFormatScope(charFormat);
-                        break;
-                    case DefaultTextColor:
-                        charFormat.setForeground(input.format.foreground());
-                        setFormatScope(charFormat);
-                        break;
-                    case DefaultBackgroundColor:
+                     if (code >= TextColorStart && code <= TextColorEnd)
+                        {
+                         charFormat.setForeground (ansiColor (code - TextColorStart));
+                         setFormatScope (charFormat);
+                        }
+                     else
+                     if (code >= BackgroundColorStart && code <= BackgroundColorEnd)
+                        {
+                         charFormat.setBackground(ansiColor(code - BackgroundColorStart));
+                         setFormatScope(charFormat);
+                        }
+                     else
+                        {
+                        switch (code)
+                               {
+                                case ResetFormat:
+                                                 charFormat = input.format;
+                                                 endFormatScope();
+                                                 break;
+
+                                case BoldText:
+                                               charFormat.setFontWeight(QFont::Bold);
+                                               setFormatScope(charFormat);
+                                               break;
+
+                                case DefaultTextColor:
+                                                     charFormat.setForeground (input.format.foreground());
+                                                     setFormatScope (charFormat);
+                                                     break;
+
+                                case DefaultBackgroundColor:
                         charFormat.setBackground(input.format.background());
                         setFormatScope(charFormat);
                         break;

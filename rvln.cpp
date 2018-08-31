@@ -7603,6 +7603,10 @@ void rvln::view_use_profile()
   resize (size);
   move (pos);
 
+  fname_def_palette = s.value ("fname_def_palette", ":/palettes/TEA").toString();
+  load_palette (fname_def_palette);
+
+  settings->setValue ("fname_def_palette", fname_def_palette);
   settings->setValue ("word_wrap", s.value ("word_wrap", "2").toInt());
   settings->setValue ("show_linenums", s.value ("show_linenums", "0").toInt());
   settings->setValue ("additional_hl", s.value ("additional_hl", "0").toInt()); 
@@ -7650,6 +7654,11 @@ void rvln::profile_save_as()
   fname.append ("/").append (name);
 
   QSettings s (fname, QSettings::IniFormat);
+
+//  fname_def_palette = s->value ("fname_def_palette", ":/palettes/TEA").toString();
+
+
+  s.setValue ("fname_def_palette", fname_def_palette);
 
   s.setValue ("word_wrap", settings->value ("word_wrap", "2").toInt());
   s.setValue ("show_linenums", settings->value ("show_linenums", "0").toInt());

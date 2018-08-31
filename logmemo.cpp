@@ -82,10 +82,10 @@ void CLogMemo::logterm (const QString &text)
            }
 
 
-  cr = textCursor();
-  cr.movePosition (QTextCursor::Start);
-  cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
-  setTextCursor (cr);
+   cr = textCursor();
+   cr.movePosition (QTextCursor::Start);
+   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
+   setTextCursor (cr);
 }
 
 

@@ -1237,11 +1237,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                      QString s_xml_format = xml.attributes().value ("xml_format").toString();
                      if (! s_xml_format.isEmpty())
                         xml_format = s_xml_format.toInt();
-                    
-                     /*QString s_wrap = xml.attributes().value ("wrap").toString();
-                     if (! s_wrap.isEmpty())
-                        if (s_wrap == "0" || s_wrap == "false")
-                           wrap = false;*/
                         
                      QString s_casecare = xml.attributes().value ("casecare").toString();
                      if (! s_casecare.isEmpty())
@@ -1303,6 +1298,8 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                        {
                         QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                         QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
+
+                       // qDebug() << "attr_type == item, attr_name == " << attr_name; 
 
                         QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
                         if (! rg.isValid())

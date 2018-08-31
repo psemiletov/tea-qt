@@ -445,80 +445,6 @@ bool CDocument::save_with_name_plain (const QString &fileName)
   return true;
 }
 
-/*
-QString CDocument::get_filename_at_cursor()
-{
-  if (textEdit->textCursor().hasSelection())
-     {
-      QFileInfo nf (file_name);
-      QDir cd (nf.absolutePath());
-      return cd.cleanPath (cd.absoluteFilePath(textEdit->textCursor().selectedText()));
-     }
-
-  QString s = textEdit->toPlainText();
-
-  QString x;
-
-  if (markup_mode == "LaTeX")
-     {
-      int pos = textEdit->textCursor().position();
-
-      int end = s.indexOf ("}", pos);
-      if (end == -1)
-         return x;
-
-      int start = s.lastIndexOf ("{", pos);
-      if (start == -1)
-         return x;
-
-      x = s.mid (start + 1, end - (start + 1));
-     
-      QFileInfo inf (file_name);
-      QDir cur_dir (inf.absolutePath());
-         
-      QString result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
-      if (file_exists (result))
-         return result;
-     
-      int i = x.lastIndexOf ("/");
-      if (i < 0)
-         i = x.lastIndexOf ("\\");
-     
-      if (i < 0)
-         return QString();
-
-      x = x.mid (i + 1);   
-     
-      result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
-      //qDebug() << "in cur dir: " << result;
-      return result;
-     }
-  else
- //   if (markup_mode == "HTML")
-   //fallback to HTML markup 
-     {
-      int pos = textEdit->textCursor().position();
-
-      int end = s.indexOf ("\"", pos);
-      if (end == -1)
-         return x;
-
-      int start = s.lastIndexOf ("\"", pos);
-      if (start == -1)
-         return x;
-
-      x = s.mid (start + 1, end - (start + 1));
-
-      if (x.startsWith("#"))
-         return x;
-
-      QFileInfo inf (file_name);
-      QDir cur_dir (inf.absolutePath());
-
-      return cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
-     }
-}
-*/
 
 QString CDocument::get_filename_at_cursor()
 {
@@ -647,12 +573,8 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
      return;
 
   QString fname = holder->hls.value (ext);
-  
-//  qDebug() << "hl fname is " << fname;
-  
   if (fname.isEmpty() || ! file_exists (fname))
      return;
-
 
 #if QT_VERSION >= 0x050000
 
@@ -690,12 +612,6 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
   d->textEdit->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
 
-  if (settings->value ("right_to_left", false).toBool())
-     d->textEdit->document()->setDefaultTextOption (QTextOption (Qt::AlignRight));
-  else
-     d->textEdit->document()->setDefaultTextOption (QTextOption (Qt::AlignLeft));
-
-
   d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
@@ -716,11 +632,9 @@ void CDox::apply_settings_single (CDocument *d)
 
   QString text_color = hash_get_val (global_palette, "text", "black");
   QString t_text_color = QColor (text_color).darker(darker_val).name(); 
-
   d->textEdit->text_color = QColor (t_text_color);
 
   QString back_color = hash_get_val (global_palette, "background", "white");
-
   d->textEdit->margin_color = QColor (hash_get_val (global_palette, "margin_color", text_color)).darker(darker_val);
   d->textEdit->linenums_bg = QColor (hash_get_val (global_palette, "linenums_bg", back_color)).darker(darker_val);
 
@@ -750,18 +664,15 @@ void CDox::add_to_recent (CDocument *d)
   s += ",";
   s += d->charset;
   s += ",";
-  //s += QString ("%1").arg (d->textEdit->textCursor().position());
   s += QString::number (d->textEdit->textCursor().position());
   s += ",";
 
-  //if (d->textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
   if (! d->textEdit->get_word_wrap())
      s+="0";
   else 
       s+="1";
 
   recent_files.prepend (s);
-//  if (recent_files.size() > settings->value ("recent_list.max_items", 21).toInt())
   if (recent_files.size() > recent_list_max_items)
      recent_files.removeLast();
 }
@@ -801,16 +712,10 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
 
   if (sl.size() >= 4)
      {
-      /*if (sl[3] == "1")
-         d->textEdit->setLineWrapMode (QPlainTextEdit::WidgetWidth);
-      else    
-          d->textEdit->setLineWrapMode (QPlainTextEdit::NoWrap);*/
-            if (sl[3] == "1")
+      if (sl[3] == "1")
          d->textEdit->set_word_wrap (true);
       else
          d->textEdit->set_word_wrap (false);
-
-
      }
 
   return d;
@@ -829,9 +734,7 @@ QString CDocument::get_triplex()
   s += QString::number (textEdit->textCursor().position());
   s += ",";
 
-  //if (textEdit->lineWrapMode() == QPlainTextEdit::NoWrap)
   if (! textEdit->get_word_wrap())
-
      s+="0";
   else 
       s+="1";
@@ -849,31 +752,6 @@ void CDocument::set_markup_mode()
   
   if (! t.isEmpty())
      markup_mode = t;
-
-/*
-  if (e == "htm" || e == "html")
-    markup_mode = "HTML";
-  else
-  if (e == "xhtml")
-    markup_mode = "XHTML";
-  else
-  if (e == "xml")
-    markup_mode = "Docbook";
-  else
-  if (e == "tex")
-    markup_mode = "LaTeX";
-  else
-  if (e == "lout")
-    markup_mode = "Lout";
-  else
-  if (e == "dokuwiki")
-    markup_mode = "DokuWiki";
-  else
-  if (e == "mediawiki")
-    markup_mode = "MediaWiki";
-  else
-  if (e == "md" || e == "markdown")
-     markup_mode = "Markdown";  */
 }
 
 

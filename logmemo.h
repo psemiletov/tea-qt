@@ -32,6 +32,8 @@ class CLogMemo: public QPlainTextEdit
 
 public:
 
+  bool no_jump;
+
   CLogMemo (QWidget *parent = 0);
   
   void log (const QString &text);

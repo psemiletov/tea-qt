@@ -30,6 +30,7 @@
 CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 {
   setObjectName ("logmemo");
+  no_jump = false;
 
   setFocusPolicy (Qt::ClickFocus);
   setUndoRedoEnabled (false);
@@ -42,6 +43,9 @@ CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 
 void CLogMemo::log (const QString &text)
 {
+  if (no_jump)
+     return;
+
   QTextCursor cr = textCursor();
   cr.movePosition (QTextCursor::Start);
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
@@ -60,6 +64,9 @@ void CLogMemo::log (const QString &text)
 
 void CLogMemo::logterm (const QString &text)
 {
+  if (no_jump)
+     return;
+
   QTextCursor cr = textCursor();
   cr.movePosition (QTextCursor::Start);
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
@@ -92,38 +99,25 @@ void CLogMemo::logterm (const QString &text)
 
 void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 {
-  qDebug() << "CLogMemo::mouseDoubleClickEvent - start";
   QTextCursor cur = cursorForPosition (event->pos());
- 
-  /*QString txt = cur.block().text();
-  int col = cur.positionInBlock();
-*/
+
 
   QString txt = toPlainText();
-  int col = cur.position();
+  int pos = cur.position();
 
-  
-  qDebug() << "col: " << col;
- qDebug() << "chat at col: " << txt[col];
-
-  
-  int idx_right = txt.indexOf (" ", col);
+  int idx_right = txt.indexOf (" ", pos);
   if (idx_right == -1)
      {
       event->accept();
       return;
      }
 
-  //txt = txt.left (idx_right);
-
-
   int idx_left = 0;
-  
-  for (int i = col; i != -1; i--)
+
+  for (int i = pos; i != -1; i--)
       {
        if (txt[i] == " ")
           {
-           //txt = txt.right (i);
            idx_left = i;
            break;
           }
@@ -131,12 +125,7 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 
    txt = txt.mid (idx_left, idx_right - idx_left + 1);
 
-   qDebug() << "txt: " << txt;
-      
-      
   emit double_click (txt.simplified());
 
   event->accept();
-  qDebug() << "CLogMemo::mouseDoubleClickEvent - end";
-  
 }

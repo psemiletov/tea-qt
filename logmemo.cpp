@@ -26,6 +26,7 @@
 #include "logmemo.h"
 #include "ansiescapecodehandler.h"
 
+
 CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 {
   setObjectName ("logmemo");
@@ -91,10 +92,21 @@ void CLogMemo::logterm (const QString &text)
 
 void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 {
+  qDebug() << "CLogMemo::mouseDoubleClickEvent - start";
   QTextCursor cur = cursorForPosition (event->pos());
-  QString txt = cur.block().text();
+ 
+  /*QString txt = cur.block().text();
   int col = cur.positionInBlock();
+*/
 
+  QString txt = toPlainText();
+  int col = cur.position();
+
+  
+  qDebug() << "col: " << col;
+ qDebug() << "chat at col: " << txt[col];
+
+  
   int idx_right = txt.indexOf (" ", col);
   if (idx_right == -1)
      {
@@ -102,24 +114,29 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
       return;
      }
 
-  txt = txt.left (idx_right);
-  int sz = txt.size() - 1;
-  if (sz == -1)
-      {
-       event->accept();
-       return;
-      }
+  //txt = txt.left (idx_right);
 
-  for (int i = sz; i != -1; i--)
+
+  int idx_left = 0;
+  
+  for (int i = col; i != -1; i--)
       {
        if (txt[i] == " ")
           {
-           txt = txt.right (i);
+           //txt = txt.right (i);
+           idx_left = i;
            break;
           }
       }
 
-  emit double_click (txt);
+   txt = txt.mid (idx_left, idx_right - idx_left + 1);
+
+   qDebug() << "txt: " << txt;
+      
+      
+  emit double_click (txt.simplified());
 
   event->accept();
+  qDebug() << "CLogMemo::mouseDoubleClickEvent - end";
+  
 }

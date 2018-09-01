@@ -10313,8 +10313,12 @@ void rvln::ide_clean()
     process->start (command_clean, QIODevice::ReadWrite);
 }
 
+
 void rvln::logmemo_double_click (const QString &txt)
 {
+  qDebug() << "rvln::logmemo_double_click  - start";
+  
+  qDebug() << "txt: " << txt;
 //    std::cout << "txt:" << txt.toStdString() << std::endl;
 
     if (documents->hash_project.isEmpty())
@@ -10332,6 +10336,8 @@ void rvln::logmemo_double_click (const QString &txt)
     if (parsed.size() == 0)
         return;
 
+    qDebug() << "1";
+
     source_fname = parsed[0];
 
     if (parsed.size() > 1)
@@ -10339,6 +10345,15 @@ void rvln::logmemo_double_click (const QString &txt)
 
     if (parsed.size() > 2)
        source_col = parsed[2];
+
+
+   if (source_fname.startsWith(".."))
+       source_fname.remove (0, 2);
+
+    qDebug() << "source_fname: " << source_fname;
+
+    qDebug() << "2";
+
 /*
     std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
     std::cout << "source_line:" << source_line.toStdString() << std::endl;
@@ -10348,21 +10363,40 @@ void rvln::logmemo_double_click (const QString &txt)
 
     QString source_dir = dir_source.absolutePath();
 
-    if (source_fname.startsWith(".."))
-        source_fname.remove (0, 2);
 
+    
+    qDebug() << "3";
+    
+    
      source_fname = source_dir + source_fname;
 
+     
      CDocument *d = documents->open_file (source_fname, "UTF-8");
 
+     if (! d)
+        return; 
+     
+     qDebug() << "4";
+    
+     
      QTextCursor cur = d->textEdit->textCursor();
      cur.movePosition (QTextCursor::Start);
      cur.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, source_line.toInt());
      cur.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, source_col.toInt());
 
-
+     qDebug() << "5";
+    
+     
      if (! cur.isNull())
+       {
          d->textEdit->setTextCursor (cur);
+         d->textEdit->setFocus(); 
+       }  
+     
+     
+     
+qDebug() << "rvln::logmemo_double_click  - end";
+     
 }
 
 

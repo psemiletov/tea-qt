@@ -1592,6 +1592,18 @@ void rvln::createMenus()
 
   add_to_menu (menu_ide, tr ("Toggle header/source"), SLOT(nav_toggle_hs()));
 
+  menu_ide->addSeparator();
+
+  add_to_menu (menu_ide, tr ("Run gtags"), SLOT(ide_gtags()));
+  add_to_menu (menu_ide, tr ("global definition"), SLOT(ide_global_definition()));
+  add_to_menu (menu_ide, tr ("global references"), SLOT(ide_global_references()));
+
+
+  menu_ide->addSeparator();
+
+
+  add_to_menu (menu_ide, tr ("Run ctags"), SLOT(ide_ctags()));
+
 
 
   menu_nav = menuBar()->addMenu (tr ("Nav"));
@@ -10248,13 +10260,10 @@ void rvln::ide_build()
   if (documents->fname_current_project.isEmpty())
      return;
 
-
   QFileInfo source_dir (documents->fname_current_project);
 
   QString dir_build = hash_get_val (documents->hash_project,
                                     "dir_build", source_dir.absolutePath());
-
-
 
   if (dir_build[0] != "/") //dir is not absolute path
       dir_build = source_dir.absolutePath() + "/" + dir_build;
@@ -10262,20 +10271,15 @@ void rvln::ide_build()
   QString command_build = hash_get_val (documents->hash_project,
                                        "command_build", "make");
 
-
-
   if (settings->value ("colored_console", "0").toBool())
      command_build = "unbuffer " + command_build;
-
 
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (dir_build);
 
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
 
-
   process->setProcessChannelMode (QProcess::MergedChannels) ;
-
   process->start (command_build, QIODevice::ReadWrite);
 }
 
@@ -10312,6 +10316,117 @@ void rvln::ide_clean()
 
     process->start (command_clean, QIODevice::ReadWrite);
 }
+
+
+void rvln::ide_ctags()
+{
+  if (documents->hash_project.isEmpty())
+     return;
+
+  if (documents->fname_current_project.isEmpty())
+     return;
+
+  QFileInfo source_dir (documents->fname_current_project);
+
+  QString command_ctags = hash_get_val (documents->hash_project,
+                                       "command_ctags", "ctags -R");
+
+  QProcess *process  = new QProcess (this);
+  process->setWorkingDirectory (source_dir.absolutePath());
+
+  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
+  process->start (command_ctags, QIODevice::ReadWrite);
+
+  if (! process->waitForFinished())
+     return;
+
+  //else parse ctags file
+}
+
+
+
+void rvln::ide_global_run()
+{
+  if (documents->hash_project.isEmpty())
+     return;
+
+  if (documents->fname_current_project.isEmpty())
+     return;
+
+  QFileInfo source_dir (documents->fname_current_project);
+
+  QString command_gtags = hash_get_val (documents->hash_project,
+                                       "command_gtags", "gtags");
+
+  QProcess *process  = new QProcess (this);
+  process->setWorkingDirectory (source_dir.absolutePath());
+
+  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
+  process->start (command_gtags, QIODevice::ReadWrite);
+
+  if (! process->waitForFinished())
+     return;
+
+}
+
+void rvln::ide_global_definition()
+{
+  if (documents->hash_project.isEmpty())
+     return;
+
+  if (documents->fname_current_project.isEmpty())
+     return;
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QString sel_text = d->textEdit->textCursor().selectedText();
+
+
+  QFileInfo source_dir (documents->fname_current_project);
+
+  QString command = hash_get_val (documents->hash_project,
+                                  "command_global_definition", "global -a -x");
+
+
+  command = command + " " + sel_text;
+
+  QProcess *process  = new QProcess (this);
+  process->setWorkingDirectory (source_dir.absolutePath());
+
+ // connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+
+//  process->setProcessChannelMode (QProcess::MergedChannels) ;
+  process->start (command, QIODevice::ReadWrite);
+
+  if (! process->waitForFinished())
+     return;
+
+  QByteArray a = process->readAll();
+  if (a.isEmpty())
+     return;
+
+   QString s(a);
+//value_t            28 lib/optional/libffi/ffi.cpp struct value_t {
+
+  if (s.indexOf ('\t') != -1)
+     qDebug() << "TAB!";
+
+
+}
+
+
+void rvln::ide_global_references()
+{
+
+
+}
+
 
 
 void rvln::logmemo_double_click (const QString &txt)

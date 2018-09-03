@@ -12,7 +12,7 @@ TEA is good. TEA is a text editor with the hundreds of features.
 
 ===INSTALLATION FROM THE SOURCE===
 
-You can install TEA from the source by two ways, using build systems qmake and cmake (since TEA 46). But first, you need to install some development libraries.
+You can install TEA from the source by 4 ways, using build systems qmake/make, meson/ninja, cmake/make, cmake/ninja. But first, you need to install some development libraries.
 
 Mandatory:
 
@@ -37,7 +37,6 @@ make install (as root or with sudo)
 
 To build and install TEA with cmake/ninja and GCC, do:
 
-
 mkdir b
 cd b
 cmake -GNinja ..
@@ -55,7 +54,6 @@ ninja
 ninja install
 
 To build and install TEA with meson/ninja and CLANG, do:
-
 
 mkdir b
 CC=clang CXX=clang++ meson --buildtype=release b

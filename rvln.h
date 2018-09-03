@@ -595,8 +595,7 @@ main window callbacks
 
   void ide_ctags();
 
-
-  void ide_global_run();
+  void ide_gtags();
   void ide_global_definition();
   void ide_global_references();
 

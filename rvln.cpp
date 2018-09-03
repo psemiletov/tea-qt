@@ -10347,7 +10347,7 @@ void rvln::ide_ctags()
 
 
 
-void rvln::ide_global_run()
+void rvln::ide_gtags()
 {
   if (documents->hash_project.isEmpty())
      return;
@@ -10363,10 +10363,17 @@ void rvln::ide_global_run()
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (source_dir.absolutePath());
 
-  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+//  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+
+  if (file_exists (source_dir.absolutePath() + "/GTAGS"))
+     command_gtags = "global -u";
+
 
   process->setProcessChannelMode (QProcess::MergedChannels) ;
   process->start (command_gtags, QIODevice::ReadWrite);
+
+  if (! process->waitForStarted())
+     return;
 
   if (! process->waitForFinished())
      return;
@@ -10387,11 +10394,10 @@ void rvln::ide_global_definition()
 
   QString sel_text = d->textEdit->textCursor().selectedText();
 
-
   QFileInfo source_dir (documents->fname_current_project);
 
   QString command = hash_get_val (documents->hash_project,
-                                  "command_global_definition", "global -a -x");
+                                  "command_global_definition", "global -a -x --result=grep");
 
 
   command = command + " " + sel_text;
@@ -10399,10 +10405,11 @@ void rvln::ide_global_definition()
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (source_dir.absolutePath());
 
- // connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
-
-//  process->setProcessChannelMode (QProcess::MergedChannels) ;
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
   process->start (command, QIODevice::ReadWrite);
+
+  if (! process->waitForStarted())
+     return;
 
   if (! process->waitForFinished())
      return;
@@ -10411,11 +10418,73 @@ void rvln::ide_global_definition()
   if (a.isEmpty())
      return;
 
-   QString s(a);
+  QString s(a);
 //value_t            28 lib/optional/libffi/ffi.cpp struct value_t {
 
-  if (s.indexOf ('\t') != -1)
-     qDebug() << "TAB!";
+  //if (s.indexOf ('\t') != -1)
+    // qDebug() << "TAB!";
+
+
+
+
+//qDebug() << "4";
+
+  //parse output
+
+  QStringList sl_output = s.split ("\n");
+  if (sl_output.size() == -1)
+     return;
+/*
+  foreach (QString str, sl_output)
+          {
+           if (! str.isEmpty())
+              {
+               QStringList sl_parsed = str.simplified().split (" ");
+               qDebug() << "symbol: " << sl_parsed[0];
+               qDebug() << "line: " << sl_parsed[1];
+               qDebug() << "path: " << sl_parsed[2];
+               qDebug() << "pattern: " << sl_parsed[3];
+
+
+              } 
+          }
+*/
+
+///home/rox/devel/tea-qt/main.cpp:36:int main (int argc, char *argv[])
+
+/*
+
+global -a -x --result=grep CDocument
+/home/rox/devel/tea-qt/document.cpp:215:CDocument::CDocument (QObject *parent): QObject (parent)
+/home/rox/devel/tea-qt/document.cpp:241:CDocument::~CDocument()
+
+
+*/
+
+  foreach (QString str, sl_output)
+          {
+           if (! str.isEmpty())
+              {
+               int idx_path = str.indexOf (":");                 
+               QString str_path = str.left (idx_path);
+
+               int idx_line = str.indexOf (":", idx_path + 1);                 
+               QString str_line = str.mid (idx_path + 1, idx_line - idx_path);
+
+//               int idx_pattern = str.indexOf (":", idx_line + 1);                 
+               QString str_pattern = str.right (str.size() - idx_line + 1);
+
+               qDebug() << "path: " << str_path;
+               qDebug() << "line: " << str_line;
+               qDebug() << "pattern: " << str_pattern;
+
+
+              } 
+          }
+
+
+qDebug() << "3";
+
 
 
 }

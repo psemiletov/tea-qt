@@ -592,13 +592,13 @@ main window callbacks
   void ide_run();
   void ide_build();
   void ide_clean();
-
+/*
   void ide_ctags();
 
   void ide_gtags();
   void ide_global_definition();
   void ide_global_references();
-
+*/
   
   void fn_count();
   void fn_count_rx();

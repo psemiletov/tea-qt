@@ -1591,7 +1591,7 @@ void rvln::createMenus()
   menu_ide->addSeparator();
 
   add_to_menu (menu_ide, tr ("Toggle header/source"), SLOT(nav_toggle_hs()));
-
+/*
   menu_ide->addSeparator();
 
   add_to_menu (menu_ide, tr ("Run gtags"), SLOT(ide_gtags()));
@@ -1604,7 +1604,7 @@ void rvln::createMenus()
 
   add_to_menu (menu_ide, tr ("Run ctags"), SLOT(ide_ctags()));
 
-
+*/
 
   menu_nav = menuBar()->addMenu (tr ("Nav"));
   menu_nav->setTearOffEnabled (true);
@@ -10318,6 +10318,7 @@ void rvln::ide_clean()
 }
 
 
+/*
 void rvln::ide_ctags()
 {
   if (documents->hash_project.isEmpty())
@@ -10434,32 +10435,9 @@ void rvln::ide_global_definition()
   QStringList sl_output = s.split ("\n");
   if (sl_output.size() == -1)
      return;
-/*
-  foreach (QString str, sl_output)
-          {
-           if (! str.isEmpty())
-              {
-               QStringList sl_parsed = str.simplified().split (" ");
-               qDebug() << "symbol: " << sl_parsed[0];
-               qDebug() << "line: " << sl_parsed[1];
-               qDebug() << "path: " << sl_parsed[2];
-               qDebug() << "pattern: " << sl_parsed[3];
-
-
-              } 
-          }
-*/
 
 ///home/rox/devel/tea-qt/main.cpp:36:int main (int argc, char *argv[])
 
-/*
-
-global -a -x --result=grep CDocument
-/home/rox/devel/tea-qt/document.cpp:215:CDocument::CDocument (QObject *parent): QObject (parent)
-/home/rox/devel/tea-qt/document.cpp:241:CDocument::~CDocument()
-
-
-*/
 
   foreach (QString str, sl_output)
           {
@@ -10495,7 +10473,7 @@ void rvln::ide_global_references()
 
 
 }
-
+*/
 
 
 void rvln::logmemo_double_click (const QString &txt)

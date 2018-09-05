@@ -125,7 +125,7 @@ qmake PREFIX=your_path
 make
 make install
 
-3. cmake vs qmake. TEA's qmake project file is rather old and obscure, but it will be supported forever because it works well with Qt 4 and Qt 5. The cmake's CMakeLists.txt for TEA is the modern way to deal with TEA source, good for Qt 5, and will be used with the upcoming Qt 6 (because I don't want use qbs instead of qmake).
+3. cmake vs qmake vs meson. TEA's qmake project file is rather old and obscure, but it will be supported forever because it works well with Qt 4 and Qt 5. Use of meson or cmake build system is a modern way to build TEA. I use meson internally, but TEA's cmake stuff more mature.
 
 
 ===NOTE FOR UBUNTU USERS===

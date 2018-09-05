@@ -82,7 +82,11 @@ Voulez-vous sauvegardez vos changements ?</translation>
     <name>CTioReadOnly</name>
     <message>
         <source>saving of this format is not supported</source>
-        <translation>sauvegarder dans ce format n&apos;est pas supporté</translation>
+        <translation type="vanished">sauvegarder dans ce format n&apos;est pas supporté</translation>
+    </message>
+    <message>
+        <source>Saving for this format is not supported</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -126,6 +130,36 @@ Voulez-vous sauvegardez vos changements ?</translation>
     </message>
 </context>
 <context>
+    <name>QuaGzipFile</name>
+    <message>
+        <source>QIODevice::Append is not supported for GZIP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening gzip for both reading and writing is not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can open a gzip either for reading or for writing. Which is it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not gzopen() file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuaZIODevice</name>
+    <message>
+        <source>QIODevice::Append is not supported for QuaZIODevice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QuaZipFile</name>
     <message>
         <source>ZIP/UNZIP API error %1</source>
@@ -162,7 +196,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Test</source>
-        <translation>Test</translation>
+        <translation type="vanished">Test</translation>
     </message>
     <message>
         <source>New</source>
@@ -856,7 +890,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Ready</source>
-        <translation>Prêt</translation>
+        <translation type="vanished">Prêt</translation>
     </message>
     <message>
         <source>%1 is saved</source>
@@ -888,7 +922,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Use wrap setting from highlighting module</source>
-        <translation>Utiliser le retour à la ligne du module de surlignage</translation>
+        <translation type="vanished">Utiliser le retour à la ligne du module de surlignage</translation>
     </message>
     <message>
         <source>Highlight current line</source>
@@ -1904,6 +1938,38 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Cannot save: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TEA project template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IDE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run program</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build program</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clean program</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logmemo font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use colored console output (can crash)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Syntax highlighting enabled</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -35,39 +35,54 @@ public:
 };
 
 
+/* file utils */
 
-QStringList bytearray_to_stringlist (QList<QByteArray> a);
-QString qstring_load_value (const QString &fileName, const QString &key, const QString &def);
-
-
-QString hash_keyval_to_string (const QHash<QString, QString> &h);
-QString hash_get_val (QHash<QString, QString> &h, const QString &key, const QString &def_val);
-
-QString file_get_ext (const QString &file_name);
+bool file_is_writable (const QString &fname);
+bool file_is_readable (const QString &fname);
 
 bool dir_exists (const QString &path);
 bool file_exists (const QString &fileName);
-void qstring_list_print (const QStringList &l);
+
+QString change_file_ext (const QString &s, const QString &ext);
+QString file_get_ext (const QString &file_name);
+
+QStringList read_dir_entries (const QString &path);
+
+
+/* io utils */
 
 bool qstring_save (const QString &fileName, const QString &data, const char *enc = "UTF-8");
 QString qstring_load (const QString &fileName, const char *enc = "UTF-8");
 QString qstring_load_first_line (const QString &fileName);
-
-
-QStringList read_dir_entries (const QString &path);
-QHash<QString, QString> hash_load (const QString &fname);
-QHash<QString, QString> hash_load_keyval (const QString &fname);
-QHash<QString, QString> stringlist_to_hash (const QStringList &l);
-QString hash_keyval_to_string (QHash<QString, QString> *h);
-bool is_image (const QString &filename);
-QString string_between (const QString &source, const QString &sep1, const QString &sep2);
 QByteArray file_load (const QString &fileName);
 
 
-QString change_file_ext (const QString &s, const QString &ext);
+/* string/stringlist utils */
+
+QString string_between (const QString &source, const QString &sep1, const QString &sep2);
+bool char_is_bad (const QChar &c);
+void qstring_list_print (const QStringList &l);
+QStringList bytearray_to_stringlist (QList<QByteArray> a);
+
+
+/* hash utils */
+
+QString hash_get_val (QHash<QString, QString> &h, const QString &key, const QString &def_val);
+QString qstring_load_value (const QString &fileName, const QString &key, const QString &def);
+QString hash_keyval_to_string (const QHash<QString, QString> &h);
+
+QHash<QString, QString> hash_load (const QString &fname);
+QHash<QString, QString> hash_load_keyval (const QString &fname);
+QHash<QString, QString> stringlist_to_hash (const QStringList &l);
+
+
+/* image utils */
+
+bool is_image (const QString &filename);
 QString get_insert_image (const QString &file_name, const QString &full_path, const QString &markup_mode);
 
-bool char_is_bad (const QChar &c);
+
+/* inlines */
 
 
 inline int get_value (int total, int perc)

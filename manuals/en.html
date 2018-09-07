@@ -708,7 +708,7 @@ Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i
 <p>Save it at the your project's source top directory, under any file name, but with the "teaproject" extention, i.e. <i>filename.teaproject</i>. 
 </p>
 
-<p>teaproject file is a simple key=value text file. Thus, you can hold many teaproject file at the same directory. Here are, for example, TEA's teaproject files for different build systems (qmake, cmake and meson):
+<p>teaproject file is a simple key=value text file. It holds the project settings. Thus, you can hold many teaproject file at the same directory. Here are, for example, TEA's teaproject files for different build systems (qmake, cmake and meson):
 </p>
 
 <p>tea-make.teaproject</p>
@@ -738,13 +738,15 @@ command_run=./tea --m&</pre>
 
 <p><i>command_build</i> can be any, as you wish: make, ninja, etc.</p>
 
-<p><i>command_clean</i> - runs at <i>dir_build</i> to clean the project.</p>
+<p><i>command_run</i> - runs at <i>dir_build</i> to run compiled binary.</p>
 
 <p><i>command_clean</i> - runs at <i>dir_build</i> to clean the project.</p>
 
 <p>When you open, save or switch (by the tab) to the teaproject file, TEA reads it into the inner structures and uses the commands from teaproject when run menu items from <b>IDE</b> menu: <b>Run program</b>, <b>Build program</b>, <b>Clean program</b>. Please note that TEA reads the SAVED contents of the teaproject file, not the current edited state.
 </p>
 
+<p>The <b>IDE</b> menu is useful in a pair with <b>View - Profiles</b> menu. For example, you can create the "ide-profile" with some font settings, wide window, no word wrap; and "text-profile" with another font set, word wrap, smaller window, etc. Then you can quickly switch between the profiles via menu or by the hotkeys.
+</p>
 
 <br><br>
 <a name="mni_run"></a>
@@ -882,7 +884,7 @@ The input dialog box will be provided. Then, walk through your directories. Sele
 
 <p>TEA partially supports Eclipse IDE themes (<a href="http://eclipsecolorthemes.org">eclipsecolorthemes.org</a>) - just put XML file of the theme to TEA palettes directory and select it from the menu as the native TEA palette. Please note that TEA palette format supports more highlighting elements than Eclipse Color Theme plugin, so Eclipse themes will be not so colorful as TEA native palettes.</p>
 
-<p><b>Profiles</b> - this menu allows you to switch between view profiles (they includes parameters such as window position, size, word wrap and line numbering settings, etc.). So you can save your current settings via <b>Save profile</b> function, and named profile will appear in the <b>Profiles</b> menu. In any time you can select it to recall saved settings.</p>
+<p><b>Profiles</b> - this menu allows you to switch between view profiles (they includes parameters such as window position, size, fonts, word wrap and line numbering settings, etc.). So you can save your current settings via <b>Save profile</b> function, and named profile will appear in the <b>Profiles</b> menu. In any time you can select it to recall saved settings.</p>
 
 
 <br>

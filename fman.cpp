@@ -241,9 +241,6 @@ void CFMan::header_view_sortIndicatorChanged (int logicalIndex, Qt::SortOrder or
 
 CFMan::CFMan (QWidget *parent): QTreeView (parent)
 {
-//  sort_mode = 0;
-//  sort_order = Qt::AscendingOrder;
- 
   sort_mode = settings->value ("fman_sort_mode", 0).toInt(); 
   sort_order = Qt::SortOrder (settings->value ("fman_sort_order", 0).toInt()); 
      
@@ -252,22 +249,13 @@ CFMan::CFMan (QWidget *parent): QTreeView (parent)
   mymodel->setHeaderData (0, Qt::Horizontal, QObject::tr ("Name"));
   mymodel->setHeaderData (1, Qt::Horizontal, QObject::tr ("Size"));
   mymodel->setHeaderData (2, Qt::Horizontal, QObject::tr ("Modified at"));
-
-  /*
-   
-   QStandardItem *col = mymodel (0);
-    
-   */
   
   setRootIsDecorated (false);
-
   setAlternatingRowColors (true);
   setAllColumnsShowFocus (true);
-
   setModel (mymodel);
-
   setDragEnabled (true);
-  
+ 
 
 #if QT_VERSION >= 0x050000
 
@@ -292,8 +280,6 @@ CFMan::CFMan (QWidget *parent): QTreeView (parent)
   setSelectionBehavior (QAbstractItemView::SelectRows);
 
   connect (this, SIGNAL(activated(const QModelIndex &)), this, SLOT(tv_activated(const QModelIndex &)));
-//  connect (this, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(tv_activated(const QModelIndex &)));
-
 }
 
 
@@ -324,8 +310,7 @@ QString CFMan::get_sel_fname()
 
   QModelIndex index = selectionModel()->currentIndex();
   QString item_string = index.data().toString();
-  //return full path
-  return dir.path() + "/" + item_string;
+  return dir.path() + "/" + item_string; //return the full path
 }
 
 
@@ -536,7 +521,6 @@ void CFMan::keyPressEvent (QKeyEvent *event)
 void CFMan::drawRow (QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
   if (index.row() == currentIndex().row())
- // if (index.row() == selectionModel()->currentIndex().row())
      {
       QStyleOptionViewItem current_option = option;
       QTreeView::drawRow (painter, current_option, index);
@@ -551,8 +535,7 @@ void CFMan::drawRow (QPainter *painter, const QStyleOptionViewItem &option, cons
 
       QApplication::style()->drawPrimitive (QStyle::PE_FrameFocusRect, &o, painter);
       
-      QRect r = option.rect.adjusted(1,1,-1,-1);
-      
+      QRect r = option.rect.adjusted (1, 1, -1,-1);
       painter->drawRect (r);
      }
   else

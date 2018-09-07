@@ -17,8 +17,8 @@
 #include <QEvent>
 
 
-const QEvent::Type evtJoystickAxis = QEvent::Type(QEvent::User + 1);
-const QEvent::Type evtJoystickButton = QEvent::Type(QEvent::User + 2);
+const QEvent::Type evtJoystickAxis = QEvent::Type (QEvent::User + 1);
+const QEvent::Type evtJoystickButton = QEvent::Type (QEvent::User + 2);
 
 
 class CJoystickButtonEvent: public QEvent
@@ -39,7 +39,7 @@ public:
   uint axis;
   qint16 value;
 
-  CJoystickAxisEvent (QEvent::Type type): QEvent(type), axis (0), value (0) {}
+  CJoystickAxisEvent (QEvent::Type type): QEvent (type), axis (0), value (0) {}
 };
 
 
@@ -49,7 +49,7 @@ Q_OBJECT
 
 public:
 
-  QObject *receiver; //link to object that handle joystick events
+  QObject *receiver; //link to the object that handle joystick events
 
   int fd; //joystick file descriptor 
   uint id; //joystick id

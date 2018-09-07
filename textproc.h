@@ -17,17 +17,18 @@ enum
      QSTRL_PROC_LIST_FLIP_SEP,
     };
 
-
 int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_pos, double q);
 QString apply_table (const QString &s, const QString &fname, bool use_regexp);
 QString strip_html (const QString &text);
-int romanToDecimal (const char *roman);
-QString arabicToRoman (int i);
 QString qstringlist_process (const QString &s, const QString &params, int mode);
 QString string_reverse (const QString &s);
-QString int_to_binary (int n);
-unsigned int bin_to_decimal (const QString &s);
 QString conv_quotes (const QString &source, const QString &c1, const QString &c2);
 QStringList html_get_by_patt (const QString &s, const QString &spatt);
+
+int romanToDecimal (const char *roman);
+QString arabicToRoman (int i);
+QString int_to_binary (int n);
+unsigned int bin_to_decimal (const QString &s);
+
 
 #endif // TEXTPROC_H

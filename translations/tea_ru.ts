@@ -753,7 +753,7 @@ Do you want to save your changes?</source>
     <message>
         <location filename="../rvln.cpp" line="1407"/>
         <source>TEA project template</source>
-        <translation>Шаблон файла проекта TEA</translation>
+        <translation>Шаблон проекта TEA</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="1412"/>

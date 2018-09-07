@@ -41,17 +41,15 @@ class CFMan: public QTreeView
 public:
 
   CZipper zipper;
+  QDir dir;
   
   int sort_mode;
   Qt::SortOrder sort_order;
   
   QStandardItemModel *mymodel;
   QList <QFileInfo> list;
-  
-  QDir dir;
     
   CFMan (QWidget *parent = 0);
-  //~CFMan();
 
   void add_entry (const QFileInfo &fi);
   void append_dot_entry (const QString &fname);

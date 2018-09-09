@@ -381,6 +381,7 @@ public:
   QCheckBox *cb_wordwrap;
   QCheckBox *cb_colored_console;
   
+  QCheckBox *cb_fif_at_toolbar;
   QCheckBox *cb_show_linenums;
   QCheckBox *cb_hl_current_line;
   QCheckBox *cb_show_margin;
@@ -924,6 +925,7 @@ main window widgets
   QToolBar *editToolBar;
   QToolBar *filesToolBar;
   QToolBar *statusToolBar;
+  QToolBar *fifToolBar;
 
   QAction *act_labels;
 

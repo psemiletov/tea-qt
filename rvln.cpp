@@ -331,6 +331,10 @@ void rvln::writeSettings()
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
   settings->setValue ("show_linenums", cb_show_linenums->checkState());
 
+  settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->checkState());
+
+
+
   delete settings;
 }
 
@@ -378,15 +382,6 @@ void rvln::create_main_widget()
   mainSplitter = new QSplitter (Qt::Vertical);
   v_box->addWidget (mainSplitter);
 
-  cmb_fif = new QComboBox;
-  cmb_fif->setInsertPolicy (QComboBox::InsertAtTop); 
-  cmb_fif->setObjectName ("FIF");
-  
-
-  cmb_fif->setEditable (true);
-  fif = cmb_fif->lineEdit();
-  connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
-
   main_tab_widget->setMinimumHeight (10);
   log->setMinimumHeight (10);
 
@@ -394,33 +389,44 @@ void rvln::create_main_widget()
   mainSplitter->addWidget (main_tab_widget);
   mainSplitter->addWidget (log);
 
+// FIF creation code
+
+  if (! settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      qDebug() << "TRAD FIF";
+      cmb_fif = new QComboBox;
+      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop); 
+      cmb_fif->setObjectName ("FIF");
   
-  QHBoxLayout *lt_fte = new QHBoxLayout;
-  v_box->addLayout (lt_fte);
+      cmb_fif->setEditable (true);
+      fif = cmb_fif->lineEdit();
+      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
+
   
+      QHBoxLayout *lt_fte = new QHBoxLayout;
+      v_box->addLayout (lt_fte);
+  
+      QToolButton *bt_find = new QToolButton (this);
+      QToolButton *bt_prev = new QToolButton (this);
+      QToolButton *bt_next = new QToolButton (this);
+      bt_next->setArrowType (Qt::RightArrow);
+      bt_prev->setArrowType (Qt::LeftArrow);
 
-  QToolButton *bt_find = new QToolButton (this);
-  QToolButton *bt_prev = new QToolButton (this);
-  QToolButton *bt_next = new QToolButton (this);
-  bt_next->setArrowType (Qt::RightArrow);
-  bt_prev->setArrowType (Qt::LeftArrow);
+     connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
+     connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
+     connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
 
-  connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
-  connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
-  connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
+     bt_find->setIcon (get_theme_icon ("search_find.png"));
 
-  bt_find->setIcon (get_theme_icon ("search_find.png"));
-
-
-
-  QLabel *l_fif = new QLabel (tr ("FIF"));
+     QLabel *l_fif = new QLabel (tr ("FIF"));
  
-  lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
-  lt_fte->addWidget (cmb_fif, 1);
+     lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
+     lt_fte->addWidget (cmb_fif, 1);
   
-  lt_fte->addWidget (bt_find);
-  lt_fte->addWidget (bt_prev);
-  lt_fte->addWidget (bt_next);
+     lt_fte->addWidget (bt_find);
+     lt_fte->addWidget (bt_prev);
+     lt_fte->addWidget (bt_next);
+    }
 
   mainSplitter->setStretchFactor (1, 1);
 
@@ -667,7 +673,6 @@ rvln::rvln()
  
   documents->todo.load_dayfile();
 
-  //update_hls();
   update_hls_noncached();
   update_view_hls();
 
@@ -1741,9 +1746,8 @@ void rvln::createToolBars()
   editToolBar->addAction (copyAct);
   editToolBar->addAction (pasteAct);
 
-  editToolBar->addSeparator();
-
-  editToolBar->addAction (act_labels);
+ // editToolBar->addSeparator();
+ // editToolBar->addAction (act_labels);
   
   filesToolBar = addToolBar (tr ("Files"));
   filesToolBar->setObjectName ("filesToolBar");
@@ -1764,6 +1768,49 @@ void rvln::createToolBars()
      
   statusToolBar->addWidget (pb_status);
   statusToolBar->addWidget (l_status);*/
+qDebug() << "11111";
+  if (settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      fifToolBar = addToolBar (tr ("FIF"));
+      fifToolBar->setObjectName ("fifToolBar");
+  
+      cmb_fif = new QComboBox;
+      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop); 
+      cmb_fif->setObjectName ("FIF");
+  
+      cmb_fif->setMinimumWidth (200);
+      cmb_fif->setSizePolicy (QSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Preferred, QSizePolicy::ComboBox));
+            
+      cmb_fif->setEditable (true);
+      fif = cmb_fif->lineEdit();
+      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
+  
+      QWidget *wd_fte = new QWidget;
+      QHBoxLayout *lt_fte = new QHBoxLayout;
+      wd_fte->setLayout (lt_fte);  
+
+      QToolButton *bt_find = new QToolButton (this);
+      QToolButton *bt_prev = new QToolButton (this);
+      QToolButton *bt_next = new QToolButton (this);
+      bt_next->setArrowType (Qt::RightArrow);
+      bt_prev->setArrowType (Qt::LeftArrow);
+
+      connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
+      connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
+      connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
+
+      bt_find->setIcon (get_theme_icon ("search_find.png"));
+ 
+      lt_fte->addWidget (bt_find);
+      lt_fte->addWidget (bt_prev);
+      lt_fte->addWidget (bt_next);
+
+      lt_fte->addWidget (cmb_fif);
+
+      fifToolBar->addWidget (wd_fte);
+     }
+qDebug() << "22222";
+
 }
 
 
@@ -2505,6 +2552,10 @@ void rvln::createOptions()
   connect (cmb_tea_icons, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(cmb_tea_icons_currentIndexChanged (const QString &)));
 
+
+  cb_fif_at_toolbar = new QCheckBox (tr ("FIF at the top (restart needed)"), tab_options);
+  cb_fif_at_toolbar->setCheckState (Qt::CheckState (settings->value ("fif_at_toolbar", "0").toInt()));
+  page_interface_layout->addWidget (cb_fif_at_toolbar);
 
 
   cb_show_linenums = new QCheckBox (tr ("Show line numbers"), tab_options);

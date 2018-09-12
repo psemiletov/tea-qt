@@ -1871,5 +1871,9 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <source>Syntax highlighting enabled</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>FIF at the top (restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -1972,5 +1972,9 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <source>Syntax highlighting enabled</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>FIF at the top (restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

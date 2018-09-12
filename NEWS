@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 45.0.0, July 2018
+TEA 46.0.0, September 2018
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -8,13 +8,30 @@ https://vk.com/teaeditor - VK-community
 https://www.facebook.com/groups/766324686841748/ - FB-community
 ---------------------------------------
   
-   After a long gap here is a new release, with all know bugs fixed, especially the syntax highlighting stuff. With such fixes, I can develop TEA further, based on this stable release. Almost each line of the code was reviewed.
-   But, what's new? 
-   On Linux, you can use the joystick to move cursor keys (this function is turned off by default and can be enabled via Tune - Common).
-   The recent list and bookmarks now saved the word wrap settings.
-   "Sum by last column" - can evaluate expressions and knows comments.
-   And more :)
+   Build systems.
+   Starting with 4.6 release, you can build/install TEA from the source by 4 ways, using build systems qmake+make, meson+ninja, cmake+make, cmake+ninja. See the README file for details. Also, at the "specs" directory, I put some examples for RPM-specs. There are three examples: for qmake, cmake and meson.
+   Please note, that TEA doesn't use Qt's zlib anymore and now depends on the system's zlib.
+   
+   GUI changes and improvements.
+   I hate GUI changes, so almost all GUI changes in TEA are optional and disabled by default. The status bar is redesigned, and it is not optional. But, with the new option "Tune - Interface - FIF at the top (restart needed)", you can place the Famous Input Field to the toolbar area.
+   Also, you can set the Logmemo font separately from the text editor area font.
+   Another good news - the Profiles feature from the "View" menu now fixed and works as supposed. An each profile holds some GUI settings (fonts, window position and size, word wrapping, etc). You can save the profile and then, later, quickly restore the settings by selecting the profile from menu or via the hotkey. It is useful when you want to work, for example, with some programming language sources files, and with the usual text files. In the first case, just make the profile with the wide window, no word wrap, Monospace font, etc. And for the usual text files, make profile with another font, smaller window, the word wrapping turned on, etc.
+   Some people don't like syntax highlighting, or it can be slow on large files. Now you can disable it using "Tune - Interface - Syntax highlighting enabled".
 
+   IDE.
+   TEA 46 features a new menu - "IDE", and the conception of the project files. Read the manual for details. TEA becomes a light front-end to common program building tasks, using simple config files (no GUI "wizards", options, etc.). You can quickly switch between build configurations, keep different versions of them for the same program (for example, cmake+gcc build, cmake+clang build, meson+ninja build).
+   When building, Logmemo will show the console output and you can double click on the error or the warning (where filename:line:character) to navigate there.
+  Use "Tune - Interface - Use colored console output (may crash)" option to enable colorized console output. But it can crash. Actually, the colorizer has been taken from QtCreator before this colorizer was broken at the upstream.
+
+   New format support.
+   Now TEA can open EPUB files in the same mode as PDF or FB2 - the plain text read-only.
+
+   Inner changes, fixes.
+   TEA 46 uses a new version of QUAZIP library, that needed for some formats support such as DOCX or ODT and zip-related code.
+   The spell checking functions now work a much faster due to the fix of the progress indication. 
+   The word wrapping is totally fixed. But, the word wrap in syntax highlighting files settings has been removed to simplify TEA's previously obscure word wrapping stuff.
+   TEA palettes was extended to cover more syntax highlighting elements.
+   The "--m" parameter allows to run TEA in multiply instance mode.
 
    Stay tuned.
    Peter Semiletov

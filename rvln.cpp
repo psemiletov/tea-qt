@@ -393,7 +393,6 @@ void rvln::create_main_widget()
 
   if (! settings->value ("fif_at_toolbar", 0).toBool())
      {
-      qDebug() << "TRAD FIF";
       cmb_fif = new QComboBox;
       cmb_fif->setInsertPolicy (QComboBox::InsertAtTop); 
       cmb_fif->setObjectName ("FIF");
@@ -1746,8 +1745,11 @@ void rvln::createToolBars()
   editToolBar->addAction (copyAct);
   editToolBar->addAction (pasteAct);
 
- // editToolBar->addSeparator();
- // editToolBar->addAction (act_labels);
+  if (settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      editToolBar->addSeparator();
+      editToolBar->addAction (act_labels);
+     }
   
   filesToolBar = addToolBar (tr ("Files"));
   filesToolBar->setObjectName ("filesToolBar");
@@ -1768,7 +1770,6 @@ void rvln::createToolBars()
      
   statusToolBar->addWidget (pb_status);
   statusToolBar->addWidget (l_status);*/
-qDebug() << "11111";
   if (settings->value ("fif_at_toolbar", 0).toBool())
      {
       fifToolBar = addToolBar (tr ("FIF"));
@@ -10286,7 +10287,7 @@ void rvln::ide_run()
   QString dir_build = hash_get_val (documents->hash_project,
                                     "dir_build", source_dir.absolutePath());
 
-  if (dir_build[0] != "/") //dir is not absolute path
+  if (dir_build[0] != '/') //dir is not absolute path
       dir_build = source_dir.absolutePath() + "/" + dir_build;
 
   QString command_run = hash_get_val (documents->hash_project,
@@ -10316,7 +10317,7 @@ void rvln::ide_build()
   QString dir_build = hash_get_val (documents->hash_project,
                                     "dir_build", source_dir.absolutePath());
 
-  if (dir_build[0] != "/") //dir is not absolute path
+  if (dir_build[0] != '/') //dir is not absolute path
       dir_build = source_dir.absolutePath() + "/" + dir_build;
 
   QString command_build = hash_get_val (documents->hash_project,
@@ -10351,7 +10352,7 @@ void rvln::ide_clean()
 
 
 
-    if (dir_build[0] != "/") //dir is not absolute path
+    if (dir_build[0] != '/') //dir is not absolute path
         dir_build = source_dir.absolutePath() + "/" + dir_build;
 
     QString command_clean = hash_get_val (documents->hash_project,

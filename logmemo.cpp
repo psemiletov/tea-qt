@@ -116,7 +116,7 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 
   for (int i = pos; i != -1; i--)
       {
-       if (txt[i] == " ")
+       if (txt[i] == ' ')
           {
            idx_left = i;
            break;

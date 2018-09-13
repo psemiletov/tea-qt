@@ -80,13 +80,10 @@ started at 08 November 2007
 #include "wavinfo.h"
 #include "exif.h"
 #include "fontbox.h"
-#include "JlCompress.h"
 
 #ifdef SPELLCHECKER_ENABLE
 #include "spellchecker.h"
 #endif
-
-
 
 
 #ifdef USE_QML_STUFF

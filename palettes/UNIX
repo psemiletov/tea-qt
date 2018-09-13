@@ -20,3 +20,4 @@ linenums_bg=#0a0d4b
 backgroundmark=red
 foregroundmark=white
 operator=green
+cur_line_color=#555753

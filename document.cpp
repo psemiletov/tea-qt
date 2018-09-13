@@ -1184,8 +1184,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
          m_start = commentStartExpression.match (text, startIndex + commentLength);
          startIndex = m_start.capturedStart(); 
         }
-
-//   qDebug() << "2";
 }
 
 #endif

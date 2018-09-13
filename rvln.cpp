@@ -80,7 +80,7 @@ started at 08 November 2007
 #include "wavinfo.h"
 #include "exif.h"
 #include "fontbox.h"
-
+#include "JlCompress.h"
 
 #ifdef SPELLCHECKER_ENABLE
 #include "spellchecker.h"
@@ -709,7 +709,7 @@ rvln::rvln()
      {
       current_version_number.remove (0, 1);
       current_version_number.remove (current_version_number.size() - 1, 1);
-      qDebug() << "current_version_number: " << current_version_number;
+ //     qDebug() << "current_version_number: " << current_version_number;
      }
   
   QString vn = settings->value ("VER_NUMBER", "").toString();
@@ -1660,10 +1660,15 @@ void rvln::createMenus()
   menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
   menu_fm_zip->setTearOffEnabled (true);
 
+  //add_to_menu (menu_fm_zip, tr ("Pack selected directory"), SLOT(fman_pack_sel_dir()));
+
+  menu_fm_zip->addSeparator();
+
   add_to_menu (menu_fm_zip, tr ("Create new ZIP"), SLOT(fman_create_zip()));
   add_to_menu (menu_fm_zip, tr ("Add to ZIP"), SLOT(fman_add_to_zip()));
   add_to_menu (menu_fm_zip, tr ("Save ZIP"), SLOT(fman_save_zip()));
 
+  menu_fm_zip->addSeparator();
 
   add_to_menu (menu_fm_zip, tr ("List ZIP content"), SLOT(fman_zip_info()));
   add_to_menu (menu_fm_zip, tr ("Unpack ZIP to current directory"), SLOT(fman_unpack_zip()));
@@ -1810,8 +1815,6 @@ void rvln::createToolBars()
 
       fifToolBar->addWidget (wd_fte);
      }
-qDebug() << "22222";
-
 }
 
 
@@ -8372,6 +8375,25 @@ void rvln::fman_zip_info()
   log->log (sl.join("\n"));
 }
 
+/*
+void rvln::fman_pack_sel_dir()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  QString fn = fman->get_sel_fname();
+  if (fn.isEmpty())
+     return;
+
+  QString fz = fn + ".zip"; 
+
+//
+  QuaZip::setDefaultFileNameCodec (QTextCodec::codecForName (settings->value ("zip_charset_out", "UTF-8").toString().toLatin1().data()));
+
+  if (JlCompress::compressDir (fz, fn))
+      log->log (fz + tr ("is created"));
+}
+*/
+
 
 void rvln::cmb_tea_icons_currentIndexChanged (const QString &text)
 {
@@ -9055,8 +9077,11 @@ void rvln::fn_use_plugin()
   last_action = qobject_cast<QAction *>(sender());
 
   if (! qml_engine)
-     qDebug() << "! qml_engine";
- 
+     {
+      qDebug() << "! qml_engine";
+      return;
+     } 
+
   QAction *a = qobject_cast<QAction *>(sender());
   
   QString qml_fname = a->data().toString() + "/" + "main.qml";
@@ -9184,8 +9209,6 @@ void rvln::update_plugins()
 
 void rvln::plugins_init()
 {
-  qDebug() << "rvln::plugins_init()";
-
   qml_engine = new QQmlEngine;
   
 //    qmlRegisterInterface<CDocument>("CDocument");

@@ -466,6 +466,7 @@ main window callbacks
 
   void fman_unpack_zip();
   void fman_zip_info();
+ // void fman_pack_sel_dir();
 
 
   void fman_refresh();

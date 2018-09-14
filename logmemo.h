@@ -37,7 +37,6 @@ public:
   CLogMemo (QWidget *parent = 0);
   
   void log (const QString &text);
-  void logterm (const QString &text);
   
   void mouseDoubleClickEvent(QMouseEvent *event);  
 

@@ -23,8 +23,12 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+#if QT_VERSION >= 0x050000
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
+#endif
+
 #include "logmemo.h"
-#include "ansiescapecodehandler.h"
 
 
 CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
@@ -40,6 +44,45 @@ CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
                            Qt::TextSelectableByKeyboard);
 }
 
+
+#if QT_VERSION >= 0x050000
+void CLogMemo::log (const QString &text)
+{
+  if (no_jump)
+     return;
+
+  QString txt = text;
+  QString tb = txt;
+
+  QRegularExpression re ("[a-zA-Z]+\\.[a-zA-Z]+:\\d+:\\d+:");
+
+  QRegularExpressionMatch match = re.match (txt, 1);
+
+  if (match.hasMatch()) 
+     {
+      QString matched = match.captured(0); // matched == "45 def"
+      matched = matched.remove (matched.size() - 1, 1);
+      tb.replace (matched, "<b>" + matched + "</b>");
+     }
+
+   txt = tb;
+
+  QTextCursor cr = textCursor();
+  cr.movePosition (QTextCursor::Start);
+  cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
+  setTextCursor (cr);
+
+  QTime t = QTime::currentTime();
+
+  textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + txt + "<br>");
+
+  cr = textCursor();
+  cr.movePosition (QTextCursor::Start);
+  cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
+  setTextCursor (cr);
+}
+
+#else
 
 void CLogMemo::log (const QString &text)
 {
@@ -61,40 +104,7 @@ void CLogMemo::log (const QString &text)
   setTextCursor (cr);
 }
 
-
-void CLogMemo::logterm (const QString &text)
-{
-  if (no_jump)
-     return;
-
-  QTextCursor cr = textCursor();
-  cr.movePosition (QTextCursor::Start);
-  cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
-  setTextCursor (cr);
-
-  QTime t = QTime::currentTime();
-
-  //  textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + text + "<br>");
-
-   QString txt = text;
-   txt.remove("\x1b(B", Qt::CaseInsensitive);
-
-   AnsiEscapeCodeHandler ansi_handler;
-
-   FormattedTextList l = ansi_handler.parseText (FormattedText(txt, currentCharFormat ()));
-
-   foreach (FormattedText ft, l)
-           {
-            setCurrentCharFormat (ft.format);
-            insertPlainText (ft.text);
-           }
-
-
-   cr = textCursor();
-   cr.movePosition (QTextCursor::Start);
-   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
-   setTextCursor (cr);
-}
+#endif
 
 
 void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
@@ -123,7 +133,7 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
           }
       }
 
-   txt = txt.mid (idx_left, idx_right - idx_left + 1);
+  txt = txt.mid (idx_left, idx_right - idx_left + 1);
 
   emit double_click (txt.simplified());
 

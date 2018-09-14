@@ -25,6 +25,7 @@ started at 08 November 2007
 #include <math.h>
 #include <algorithm>
 #include <iostream>
+#include <regex>
 
 #include <QMimeData>
 #include <QStyleFactory>
@@ -1077,8 +1078,8 @@ void rvln::createActions()
   icon_size = settings->value ("icon_size", "32").toInt();
  
  // act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
-//  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-//  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
   
@@ -1163,7 +1164,7 @@ void rvln::createMenus()
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
 
- // fileMenu->addAction (act_test);
+  fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
   add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -2568,11 +2569,11 @@ void rvln::createOptions()
   cb_wordwrap->setCheckState (Qt::CheckState (settings->value ("word_wrap", "2").toInt()));
   page_interface_layout->addWidget (cb_wordwrap);
 
-
+/*
   cb_colored_console = new QCheckBox (tr ("Use colored console output (can crash)"), tab_options);
   cb_colored_console->setCheckState (Qt::CheckState (settings->value ("colored_console", "0").toInt()));
   page_interface_layout->addWidget (cb_colored_console);
-
+*/
 
   cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
   cb_hl_enabled->setCheckState (Qt::CheckState (settings->value ("hl_enabled", "2").toInt()));
@@ -4796,10 +4797,7 @@ void rvln::process_readyReadStandardOutput()
   QTextCodec *c = QTextCodec::codecForLocale();
   QString t = c->toUnicode (a);
 
-  if (settings->value ("colored_console", "0").toBool())
-     log->logterm (t);
-  else
-      log->log (t);
+  log->log (t);
 }
 
 
@@ -8581,7 +8579,7 @@ void rvln::leaving_tune()
   settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
 
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
-  settings->setValue ("colored_console", cb_colored_console->checkState());
+ // settings->setValue ("colored_console", cb_colored_console->checkState());
 
 #if QT_VERSION >= 0x050000
   settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->checkState());
@@ -10343,8 +10341,8 @@ void rvln::ide_build()
   QString command_build = hash_get_val (documents->hash_project,
                                        "command_build", "make");
 
-  if (settings->value ("colored_console", "0").toBool())
-     command_build = "unbuffer " + command_build;
+ // if (settings->value ("colored_console", "0").toBool())
+   //  command_build = "unbuffer " + command_build;
 
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (dir_build);
@@ -10550,7 +10548,7 @@ void rvln::ide_global_references()
 
 void rvln::logmemo_double_click (const QString &txt)
 {
-//    std::cout << "txt:" << txt.toStdString() << std::endl;
+    std::cout << "txt:" << txt.toStdString() << std::endl;
 
     if (documents->hash_project.isEmpty())
        return;
@@ -10578,7 +10576,6 @@ void rvln::logmemo_double_click (const QString &txt)
 
    if (source_fname.startsWith(".."))
        source_fname.remove (0, 2);
-
 
 /*
     std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
@@ -10618,6 +10615,38 @@ void rvln::logmemo_double_click (const QString &txt)
 void rvln::test()
 {
 
+std::string subject("aaaa ../document.cpp:2366:7: warning nnnnnn");
+std::string result;
+
+//try {
+
+//  std::regex re("\b[A-Za-z]+\b:[0-9]:[0-9]:");
+
+
+//[a-zA-Z]+\.[a-zA-Z]+:\d+:\d+:
+
+
+/*
+  std::regex re ("[a-zA-Z]+\\.[a-zA-Z]+:\\d+:\\d+:");  
+
+  std::smatch match;
+  if (std::regex_search (subject, match, re)) 
+     {
+      std::cout << "ms:" << match.size() << std::endl;
+      result = match.str(0);
+      std::cout << "result:" << result << std::endl;
+
+
+  } else {
+    result = std::string("");
+  } 
+} catch (std::regex_error& e) {
+  // Syntax error in the regular expression
+}
+*/
+
+   
+
  // int x = str_fuzzy_search_bytwo ("rampage tri sugar freee", "tri", 0);
   //std::cout << x << endl;
 
@@ -10626,68 +10655,37 @@ void rvln::test()
   //if (! d)
     // return;
 
-    if (documents->hash_project.isEmpty())
-       return;
 
-    if (documents->fname_current_project.isEmpty())
-       return;
 
 
 QString txt = "../document.cpp:2366:7: warning";
-int col = 5;
+ // txt.replace(QRegularExpression("^(.):([0-9]+):[0-9]"), "!!!!!!!!!!!!!!!!!!!!!!!");
+
+QString t = txt;
+
+QRegularExpression re("[a-zA-Z]+\\.[a-zA-Z]+:\\d+:\\d+:");
+
+
+//QRegularExpression re("^\\(.[^:]+\\):\\([0-9]+\\):");
+
+QRegularExpressionMatch match = re.match (txt, 1);
+if (match.hasMatch()) {
+    QString matched = match.captured(0); // matched == "45 def"
+    qDebug() << "matched: " << matched; 
+
+     matched = matched.remove (matched.size() - 1, 1);
+    
+     t.replace (matched, "<b>" + matched + "<b>");
+
+    // ...
+
+}
+
+
+qDebug() << "t: " << t;
 
 //parse
 
-int idx_right = txt.indexOf (" ", col);
-if (idx_right == -1)
-   {
-    return;
-   }
-
-txt = txt.left (idx_right);
-
-
-//std::cout  << txt.toStdString() << std::endl;
-
-  QString source_fname;
-  QString source_line;
-  QString source_col;
-     
-  QStringList parsed = txt.split (":");
-  if (parsed.size() == 0)
-      return;
-
-  source_fname = parsed[0];
-
-  if (parsed.size() > 1)
-     source_line = parsed[1];
-
-  if (parsed.size() > 2)
-     source_col = parsed[2];
-
-  std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
-  std::cout << "source_line:" << source_line.toStdString() << std::endl;
-  std::cout << "source_col:" << source_col.toStdString() << std::endl;
-
-  QFileInfo dir_source (documents->fname_current_project);
-
-  QString source_dir = dir_source.absolutePath();
-
-  if (source_fname.startsWith(".."))
-      source_fname.remove (0, 2);
-
-   source_fname = source_dir + source_fname;
-
-   CDocument *d = documents->open_file (source_fname, "UTF-8");
-
-   QTextCursor cur = d->textEdit->textCursor();
-   cur.movePosition (QTextCursor::Start);
-   cur.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, source_line.toInt());
-   cur.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, source_col.toInt());
-
-
-   if (! cur.isNull())
-       d->textEdit->setTextCursor (cur);
 
 /*  CDocument *d = documents->get_current();
   if (! d)

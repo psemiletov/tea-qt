@@ -111,7 +111,6 @@ SOURCES += rvln.cpp \
     document.cpp \
     utils.cpp \
     spellchecker.cpp \
-    ansiescapecodehandler.cpp \
     fman.cpp \
     shortcuts.cpp \
     logmemo.cpp \

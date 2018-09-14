@@ -379,7 +379,7 @@ public:
   QCheckBox *cb_right_to_left;
 
   QCheckBox *cb_wordwrap;
-  QCheckBox *cb_colored_console;
+//  QCheckBox *cb_colored_console;
   
   QCheckBox *cb_fif_at_toolbar;
   QCheckBox *cb_show_linenums;

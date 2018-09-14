@@ -71,7 +71,6 @@ src_processed = qt5.preprocess(
 tea_source = ['rvln.cpp',
            'main.cpp',
            'todo.cpp',
-           'ansiescapecodehandler.cpp',
            'textproc.cpp',
            'libretta_calc.cpp',
            'wavinfo.cpp',

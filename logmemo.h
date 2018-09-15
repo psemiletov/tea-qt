@@ -38,7 +38,10 @@ public:
   CLogMemo (QWidget *parent = 0);
   
   void log (const QString &text);
+
+#if QT_VERSION >= 0x050000
   void log_terminal (const QString &text);
+#endif
   
   void mouseDoubleClickEvent(QMouseEvent *event);  
 

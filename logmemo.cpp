@@ -45,7 +45,7 @@ CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
                            Qt::TextSelectableByKeyboard);
 }
 
-
+#if QT_VERSION >= 0x050000
 void CLogMemo::log_terminal (const QString &text)
 {
   if (no_jump)
@@ -79,7 +79,7 @@ void CLogMemo::log_terminal (const QString &text)
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
   setTextCursor (cr);
 }
-
+#endif
 
 void CLogMemo::log (const QString &text)
 {
@@ -116,11 +116,9 @@ void CLogMemo::log (const QString &text)
 }
 
 
-
 void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 {
   QTextCursor cur = cursorForPosition (event->pos());
-
 
   QString txt = toPlainText();
   int pos = cur.position();

@@ -1077,9 +1077,8 @@ void rvln::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
  
- // act_test = new QAction (QIcon (":/icons/file-save.png"), tr ("Test"), this);
-  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+//  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+//  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
   
@@ -1164,7 +1163,7 @@ void rvln::createMenus()
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
 
-  fileMenu->addAction (act_test);
+ // fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
   add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -1748,7 +1747,7 @@ void rvln::createToolBars()
   editToolBar->addAction (copyAct);
   editToolBar->addAction (pasteAct);
 
-  if (settings->value ("fif_at_toolbar", 0).toBool())
+  if (! settings->value ("fif_at_toolbar", 0).toBool())
      {
       editToolBar->addSeparator();
       editToolBar->addAction (act_labels);
@@ -1773,6 +1772,7 @@ void rvln::createToolBars()
      
   statusToolBar->addWidget (pb_status);
   statusToolBar->addWidget (l_status);*/
+
   if (settings->value ("fif_at_toolbar", 0).toBool())
      {
       fifToolBar = addToolBar (tr ("FIF"));
@@ -4797,7 +4797,9 @@ void rvln::process_readyReadStandardOutput()
   QTextCodec *c = QTextCodec::codecForLocale();
   QString t = c->toUnicode (a);
 
+  log->terminal_output = true;
   log->log (t);
+  log->terminal_output = false;
 }
 
 
@@ -10548,7 +10550,7 @@ void rvln::ide_global_references()
 
 void rvln::logmemo_double_click (const QString &txt)
 {
-    std::cout << "txt:" << txt.toStdString() << std::endl;
+//    std::cout << "txt:" << txt.toStdString() << std::endl;
 
     if (documents->hash_project.isEmpty())
        return;

@@ -1965,10 +1965,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use colored console output (can crash)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Syntax highlighting enabled</source>
         <translation type="unfinished"></translation>
     </message>

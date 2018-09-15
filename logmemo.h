@@ -33,10 +33,12 @@ class CLogMemo: public QPlainTextEdit
 public:
 
   bool no_jump;
+  bool terminal_output;
 
   CLogMemo (QWidget *parent = 0);
   
   void log (const QString &text);
+  void log_terminal (const QString &text);
   
   void mouseDoubleClickEvent(QMouseEvent *event);  
 

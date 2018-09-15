@@ -1864,10 +1864,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use colored console output (can crash)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Syntax highlighting enabled</source>
         <translation type="unfinished"></translation>
     </message>

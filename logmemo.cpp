@@ -35,6 +35,7 @@ CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 {
   setObjectName ("logmemo");
   no_jump = false;
+  terminal_output = false;
 
   setFocusPolicy (Qt::ClickFocus);
   setUndoRedoEnabled (false);
@@ -45,8 +46,7 @@ CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
 }
 
 
-#if QT_VERSION >= 0x050000
-void CLogMemo::log (const QString &text)
+void CLogMemo::log_terminal (const QString &text)
 {
   if (no_jump)
      return;
@@ -60,21 +60,19 @@ void CLogMemo::log (const QString &text)
 
   if (match.hasMatch()) 
      {
-      QString matched = match.captured(0); // matched == "45 def"
+      QString matched = match.captured (0);
       matched = matched.remove (matched.size() - 1, 1);
       tb.replace (matched, "<b>" + matched + "</b>");
      }
 
-   txt = tb;
+  txt = tb;
 
   QTextCursor cr = textCursor();
   cr.movePosition (QTextCursor::Start);
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
   setTextCursor (cr);
 
-  QTime t = QTime::currentTime();
-
-  textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + txt + "<br>");
+  textCursor().insertHtml (txt + "<br>");
 
   cr = textCursor();
   cr.movePosition (QTextCursor::Start);
@@ -82,10 +80,19 @@ void CLogMemo::log (const QString &text)
   setTextCursor (cr);
 }
 
-#else
 
 void CLogMemo::log (const QString &text)
 {
+#if QT_VERSION >= 0x050000
+
+  if (terminal_output) 
+     {
+      log_terminal (text);
+      return; 
+     }
+
+#endif
+
   if (no_jump)
      return;
 
@@ -94,9 +101,13 @@ void CLogMemo::log (const QString &text)
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
   setTextCursor (cr);
 
-  QTime t = QTime::currentTime();
-
-  textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + text + "<br>");
+  if (! terminal_output) 
+     { 
+      QTime t = QTime::currentTime();
+      textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + text + "<br>");
+     }
+  else
+      textCursor().insertHtml (text + "<br>");
 
   cr = textCursor();
   cr.movePosition (QTextCursor::Start);
@@ -104,7 +115,6 @@ void CLogMemo::log (const QString &text)
   setTextCursor (cr);
 }
 
-#endif
 
 
 void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)

@@ -10617,8 +10617,8 @@ void rvln::logmemo_double_click (const QString &txt)
 void rvln::test()
 {
 
-std::string subject("aaaa ../document.cpp:2366:7: warning nnnnnn");
-std::string result;
+//std::string subject("aaaa ../document.cpp:2366:7: warning nnnnnn");
+//std::string result;
 
 //try {
 
@@ -10659,32 +10659,6 @@ std::string result;
 
 
 
-
-QString txt = "../document.cpp:2366:7: warning";
- // txt.replace(QRegularExpression("^(.):([0-9]+):[0-9]"), "!!!!!!!!!!!!!!!!!!!!!!!");
-
-QString t = txt;
-
-QRegularExpression re("[a-zA-Z]+\\.[a-zA-Z]+:\\d+:\\d+:");
-
-
-//QRegularExpression re("^\\(.[^:]+\\):\\([0-9]+\\):");
-
-QRegularExpressionMatch match = re.match (txt, 1);
-if (match.hasMatch()) {
-    QString matched = match.captured(0); // matched == "45 def"
-    qDebug() << "matched: " << matched; 
-
-     matched = matched.remove (matched.size() - 1, 1);
-    
-     t.replace (matched, "<b>" + matched + "<b>");
-
-    // ...
-
-}
-
-
-qDebug() << "t: " << t;
 
 //parse
 

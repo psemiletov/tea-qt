@@ -118,12 +118,6 @@ SOURCES += rvln.cpp \
     fontbox.cpp \
     tio.cpp \
     tzipper.cpp \
-#    ioapi.c \
-#    quazip.cpp \
-#    quazipfile.cpp \
-#    quazipnewinfo.cpp \
-    #unzip.c \
-    #zip.c \
     single_application.cpp \
     single_application_shared.cpp \
     exif.cpp \
@@ -144,29 +138,18 @@ HEADERS += rvln.h \
     img_viewer.h \
     gui_utils.h \
     wavinfo.h \
-    ansiescapecodehandler.h \
-#    zconf.h \
- #   zlib.h \
     tio.h \
     fontbox.h \
     tzipper.h \
-    #ioapi.h \
-#    quazip.h \
-#    quazipfile.h \
-#    quazipfileinfo.h \
-    #quazipnewinfo.h \
-#    unzip.h \
-    #zip.h \
     single_application.h \
     single_application_shared.h \
     exif.h \
     myjoystick.h
-  
+
 
 HEADERS += \
         minizip_crypt.h \
         ioapi.h \
-        JlCompress.h \
         quaadler32.h \
         quachecksum32.h \
         quacrc32.h \
@@ -182,7 +165,6 @@ HEADERS += \
         zip.h
 
 SOURCES += qioapi.cpp \
-           JlCompress.cpp \
            quaadler32.cpp \
            quacrc32.cpp \
            quagzipfile.cpp \
@@ -194,8 +176,8 @@ SOURCES += qioapi.cpp \
            quazipnewinfo.cpp \
            unzip.c \
            zip.c
-  
-  
+
+
 
 TEMPLATE = app
 
@@ -208,7 +190,6 @@ CONFIG += warn_on \
 QT += core
 QT += gui
 QT += network
-#QT += svg
 
 CONFIG-=qml_debug
 
@@ -242,7 +223,7 @@ nosingleapp{
        message ("No single application mode")
 }
 
-   
+
 INSTALLS += target desktop icon128 icon64 icon48 icon32 iconsvg
 
 nodesktop{
@@ -356,7 +337,7 @@ message ("hunspell enabled")
                 }
                 }
 
-                
+
 usepoppler{
 system(pkg-config --exists poppler-qt5) {
     message ("Poppler enabled")
@@ -419,7 +400,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
    LIBS += zlib1.dll
 
    INCLUDEPATH+=c:\\Qt\\4.8.4\\src\\3rdparty\\zlib     
-   
+
         contains(USE_ASPELL,true)
                  {
                   exists ("C:\\MinGw\\include\\aspell.h")

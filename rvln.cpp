@@ -25,7 +25,6 @@ started at 08 November 2007
 #include <math.h>
 #include <algorithm>
 #include <iostream>
-#include <regex>
 
 #include <QMimeData>
 #include <QStyleFactory>

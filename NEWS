@@ -21,8 +21,7 @@ https://www.facebook.com/groups/766324686841748/ - FB-community
    IDE.
    TEA 46 features a new menu - "IDE", and the conception of the project files. Read the manual for details. TEA becomes a light front-end to common program building tasks, using simple config files (no GUI "wizards", options, etc.). You can quickly switch between build configurations, keep different versions of them for the same program (for example, cmake+gcc build, cmake+clang build, meson+ninja build).
    When building, Logmemo will show the console output and you can double click on the error or the warning (where filename:line:character) to navigate there.
-  Use "Tune - Interface - Use colored console output (may crash)" option to enable colorized console output. But it can crash. Actually, the colorizer has been taken from QtCreator before this colorizer was broken at the upstream.
-
+ 
    New format support.
    Now TEA can open EPUB files in the same mode as PDF or FB2 - the plain text read-only.
 

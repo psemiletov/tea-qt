@@ -303,18 +303,10 @@ icons/tea-icon-v3-03.png
 unix:  {
 #        LIBS += -lz
 
-
     system(pkg-config --exists zlib) {
     message ("Zlib found")
         PKGCONFIG += zlib
-#        DEFINES += POPPLER_ENABLE
         }
-#omp{
-#    QMAKE_CXXFLAGS += -fopenmp
-#    QMAKE_LFLAGS +=  -fopenmp
-#    LIBS += -lgomp -lpthread
-#    message ("OMP enabled")
-#}
 
 
 contains(USE_ASPELL,true){
@@ -325,7 +317,6 @@ exists("/usr/include/aspell.h") {
     DEFINES += SPELLCHECK_ENABLE
 }
 }
-
 
 
 contains(USE_HUNSPELL,true){
@@ -342,7 +333,7 @@ usepoppler{
 system(pkg-config --exists poppler-qt5) {
     message ("Poppler enabled")
         PKGCONFIG += poppler-qt5
-            DEFINES += POPPLER_ENABLE
+        DEFINES += POPPLER_ENABLE
         }
 }
 
@@ -433,7 +424,7 @@ os2: {
 
 usepoppler{
 exists("C:/usr/include/poppler/qt4/poppler-qt4.h") {
-     message ("DJVU enabled")
+     message ("PDF enabled")
          PKGCONFIG += poppler-qt4
              DEFINES += POPPLER_ENABLE
 }

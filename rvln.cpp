@@ -2372,7 +2372,7 @@ void rvln::cb_altmenu_stateChanged (int state)
   settings->setValue ("b_altmenu", MyProxyStyle::b_altmenu);
 }
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 void rvln::cb_use_joystick_stateChanged (int state)
 {
   bool b;
@@ -2669,7 +2669,7 @@ void rvln::createOptions()
   cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
   cb_wasd->setCheckState (Qt::CheckState (settings->value ("wasd", "0").toInt()));
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
   cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
   cb_use_joystick->setCheckState (Qt::CheckState (settings->value ("use_joystick", "0").toInt()));
   connect (cb_use_joystick, SIGNAL(stateChanged (int)),
@@ -2773,7 +2773,7 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_altmenu);
   page_common_layout->addWidget (cb_wasd);
   
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
   page_common_layout->addWidget (cb_use_joystick);
 #endif
 
@@ -8573,7 +8573,7 @@ void rvln::leaving_tune()
 
   settings->setValue ("wasd", cb_wasd->checkState());
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
   settings->setValue ("use_joystick", cb_use_joystick->checkState());
 #endif
 

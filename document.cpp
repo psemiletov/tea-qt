@@ -323,7 +323,7 @@ CDox::~CDox()
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
   delete joystick;
 #endif
 }
@@ -891,7 +891,7 @@ CDox::CDox()
   timer = new QTimer (this);
   timer->setInterval (100);
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
   joystick = new CJoystick (0, this);
 
   if (joystick->initialized)
@@ -2633,7 +2633,7 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
 }
 */
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 bool CDox::event (QEvent *ev)
 {
 

@@ -2,7 +2,7 @@
 
 #include <QtGlobal>
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 
 #include <QDebug>
 #include <QApplication>

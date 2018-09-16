@@ -6,7 +6,7 @@
 #include <QtGlobal>
 #include <QObject>
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 
 #include <iostream>
 #include <unistd.h>

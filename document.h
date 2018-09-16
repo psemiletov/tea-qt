@@ -48,7 +48,7 @@ code from qwriter:
 #include <QRegularExpression>
 #endif
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 #include "myjoystick.h"
 #endif
 
@@ -331,14 +331,14 @@ public:
 
   QTimer *timer;
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
   CJoystick *joystick;
 #endif
 
   CDox();
   ~CDox();
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
 #endif

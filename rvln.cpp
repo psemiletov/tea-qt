@@ -4480,7 +4480,8 @@ QString toggle_fname_header_source (const QString &fileName)
 
   QString ext = f.suffix();
 
-  if (ext == "c" || ext == "cpp" || ext == "cxx" || ext == "cc" || ext == "c++")
+  if (ext == "c" || ext == "cpp" || ext == "cxx" || ext == "cc" || ext == "c++" ||
+      ext == "m" || ext == "mm")
      {
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".h"))
          return f.absolutePath() + "/" + f.baseName () + ".h";
@@ -4514,6 +4515,12 @@ QString toggle_fname_header_source (const QString &fileName)
       else
       if (file_exists (f.absolutePath() + "/" + f.baseName () + ".cc"))
          return f.absolutePath() + "/" + f.baseName () + ".cc";
+      else
+      if (file_exists (f.absolutePath() + "/" + f.baseName () + ".m"))
+         return f.absolutePath() + "/" + f.baseName () + ".m";
+      else
+      if (file_exists (f.absolutePath() + "/" + f.baseName () + ".mm"))
+         return f.absolutePath() + "/" + f.baseName () + ".mm";
      }
 
   return fileName;

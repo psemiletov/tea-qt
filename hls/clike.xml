@@ -1,4 +1,4 @@
-<document exts="cpp;c;h;hh;cxx;hpp;cc" langs="c++;c">
+<document exts="cpp;c;h;hh;cxx;hpp;cc;m;mm" langs="c++;c;objective c">
 
 <item name="options" wrap="0" xml_format="1"> 
 </item>

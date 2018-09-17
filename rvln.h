@@ -372,7 +372,7 @@ public:
   QLineEdit *ed_aspellcheck_path;
   
   QCheckBox *cb_use_qregexpsyntaxhl;
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
   QCheckBox *cb_use_joystick;
 #endif
 
@@ -813,7 +813,7 @@ main window callbacks
 /*************************
 prefs window callbacks
 *************************/
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
   void cb_use_joystick_stateChanged (int state);
 #endif
 

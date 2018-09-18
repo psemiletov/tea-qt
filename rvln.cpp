@@ -9102,7 +9102,7 @@ void rvln::fn_use_plugin()
       log->log (tr ("<b>Error:</b> ") + component->errorString());
       return; 
      }
-  
+ 
   CQQuickWindow *window = new CQQuickWindow;
 
   QObject::connect((QObject*)qml_engine, SIGNAL(quit()), window, SLOT(close()));

@@ -1256,12 +1256,11 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      if (xml_format == 0)
                         {
                          QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
-
                          
                          for (int i = 0; i < keywordPatterns.size(); i++)
                              if (! keywordPatterns.at(i).isEmpty())
                                 {
-                                 QRegExp rg = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);;
+                                 QRegExp rg = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);
                                  if (rg.isValid())
                                     {
                                      HighlightingRule rule;
@@ -1366,7 +1365,8 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 
   while (startIndex >= 0)
         {
-         int endIndex = text.indexOf (commentEndExpression, startIndex);
+//         int endIndex = text.indexOf (commentEndExpression, startIndex);
+         int endIndex = commentEndExpression.indexIn (text, startIndex);
 
          int commentLength;
          if (endIndex == -1)

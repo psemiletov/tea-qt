@@ -1,5 +1,9 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+* logmemo is scriptable again
++ Objective C support (hl, header/source switch)
+* Qt 4.x fix
+
 + "Nav - Toggle header/source" moved to IDE menu
 
 + --m TEA command line option to enable multiply instance mode

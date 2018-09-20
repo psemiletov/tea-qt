@@ -64,7 +64,7 @@ tea_headers_moc = [
 src_processed = qt5.preprocess(
   moc_headers : tea_headers_moc,
    moc_extra_arguments: moc_params,
-  qresources  : 'rvln.qrc'
+  qresources  : 'resources.qrc'
 )
 
 

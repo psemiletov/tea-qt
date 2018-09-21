@@ -100,7 +100,7 @@ public:
   QString user_dir;
   QString lng;
 
-  char *encoding;
+  const char *encoding;
   QString dict_dir;
   
   CHunspellChecker (const QString &lang, const QString &path = "", const QString &user_path = "");

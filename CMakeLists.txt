@@ -97,6 +97,12 @@ if (Qt5PrintSupport_FOUND)
 endif()
 
 
+if (EXISTS "/usr/include/linux/joystick.h")
+   message("+JOYSTICK_SUPPORTED")
+   add_definitions(-DJOYSTICK_SUPPORTED)
+endif()
+
+
 find_path(ASPELL_INLCUDES aspell.h
          "/usr/include/"
          "/usr/local/"

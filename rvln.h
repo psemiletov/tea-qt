@@ -364,10 +364,12 @@ public:
   
   QCheckBox *cb_use_qregexpsyntaxhl;
 
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
+#if defined(JOYSTICK_SUPPORTED)
+
   QCheckBox *cb_use_joystick;
-#endif
+//#endif
 #endif
 
   QCheckBox *cb_right_to_left;
@@ -798,11 +800,13 @@ main window callbacks
 /*************************
 prefs window callbacks
 *************************/
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
+#if defined(JOYSTICK_SUPPORTED)
+
   void cb_use_joystick_stateChanged (int state);
-#endif
+//#endif
 #endif
 
 //  void cmb_ui_langs_currentIndexChanged (const QString &text);

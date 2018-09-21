@@ -323,11 +323,13 @@ CDox::~CDox()
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
 
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+#if defined(JOYSTICK_SUPPORTED)
+
   delete joystick;
-#endif
+//#endif
 
 #endif
 }
@@ -895,9 +897,11 @@ CDox::CDox()
   timer = new QTimer (this);
   timer->setInterval (100);
 
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+#if defined(JOYSTICK_SUPPORTED)
+
   joystick = new CJoystick (0, this);
 
   if (joystick->initialized)
@@ -907,7 +911,7 @@ CDox::CDox()
       if (settings->value ("use_joystick", "0").toInt())
          timer->start();
      }
-#endif
+//#endif
 #endif
 }
 
@@ -2639,9 +2643,11 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
         }
 }
 */
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+#if defined(JOYSTICK_SUPPORTED)
+
 bool CDox::event (QEvent *ev)
 {
 
@@ -2690,7 +2696,7 @@ void CDox::handle_joystick_event (CJoystickAxisEvent *event)
 }    
 
 #endif
-#endif
+//#endif
 
 void CDox::update_project (const QString &fileName)
 {

@@ -48,12 +48,14 @@ code from qwriter:
 #include <QRegularExpression>
 #endif
 
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+#if defined(JOYSTICK_SUPPORTED)
+
 #include "myjoystick.h"
 #endif
-#endif
+//#endif
 
 #include "logmemo.h"
 #include "tio.h"
@@ -334,24 +336,28 @@ public:
 
   QTimer *timer;
 
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+#if defined(JOYSTICK_SUPPORTED)
+
   CJoystick *joystick;
 #endif
-#endif
+//#endif
 
   CDox();
   ~CDox();
 
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+#if defined(JOYSTICK_SUPPORTED)
+
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
 #endif
 
-#endif
+//#endif
 
   void update_project (const QString &fileName);
   void reload_recent_list();

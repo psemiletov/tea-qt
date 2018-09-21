@@ -2,9 +2,11 @@
 
 #include <QtGlobal>
 
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+
+#if defined(JOYSTICK_SUPPORTED)
 
 #include <QDebug>
 #include <QApplication>
@@ -96,4 +98,4 @@ void CJoystick::process_event (js_event e)
 }
 
 #endif
-#endif
+//#endif

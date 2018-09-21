@@ -13,6 +13,13 @@ if build_machine.system() == 'linux'
 moc_params += ['-DQ_OS_LINUX=1', '-DQ_OS_UNIX=1']
 endif
 
+compiler = meson.get_compiler('cpp')
+
+if compiler.has_header('/usr/include/linux/joystick.h')
+  moc_params += ['-DJOYSTICK_SUPPORTED=1']
+  add_global_arguments('-DJOYSTICK_SUPPORTED=1', language : 'cpp')
+endif
+
 
 hunspell_dep = dependency('hunspell', required : false)
 if hunspell_dep.found()

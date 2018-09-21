@@ -7,6 +7,12 @@ DEFINES += 'VERSION_NUMBER=\'"46.1.0"\''
 }
 
 
+exists("/usr/include/linux/joystick.h") {
+      message ("+JOYSTICK_SUPPORTED")
+      DEFINES += JOYSTICK_SUPPORTED
+}
+
+
 DEFINES += NOCRYPT \
           NOUNCRYPT \
           QUAZIP_STATIC

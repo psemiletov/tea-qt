@@ -8,9 +8,12 @@
 
 
 
-#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+
+#if defined(JOYSTICK_SUPPORTED)
+
 
 #include <iostream>
 #include <unistd.h>
@@ -76,4 +79,4 @@ public slots:
 
 #endif
 #endif
-#endif
+//#endif

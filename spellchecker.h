@@ -101,8 +101,10 @@ public:
   QString lng;
 
   const char *encoding;
-  QString dict_dir;
+  std::string str_encoding;
   
+  QString dict_dir;
+
   CHunspellChecker (const QString &lang, const QString &path = "", const QString &user_path = "");
   ~CHunspellChecker();
 

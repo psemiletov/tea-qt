@@ -265,7 +265,13 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
      initialized = true;
 
   speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
+
+#if !defined (H_DEPRECATED)
   encoding = speller->get_dic_encoding();
+#else
+  str_encoding = speller->get_dict_encoding();
+#endif  
+  
 
 #if defined(Q_OS_UNIX)
   
@@ -273,7 +279,12 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
   if (file_exists (fname_userdict))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
+
+#if ! defined (H_DEPRECATED)
       user_words = qstring_load (fname_userdict, encoding).split ("\n");
+#else      
+      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");      
+#endif      
       user_words.removeFirst();
      }
 #else
@@ -282,7 +293,12 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
   if (file_exists (fname_userdict_pure))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
+#if ! defined (H_DEPRECATED)      
       user_words = qstring_load (fname_userdict, encoding).split ("\n");
+#else
+      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");
+#endif      
+      
       user_words.removeFirst();
      }
 
@@ -308,7 +324,12 @@ CHunspellChecker::~CHunspellChecker()
   if (user_words.size() > 0)
      {
       user_words.prepend (QString::number (user_words.size()));
+#if ! defined (H_DEPRECATED)      
       qstring_save (filename, user_words.join ("\n"), encoding);
+#else
+      qstring_save (filename, user_words.join ("\n"), str_encoding.data());
+#endif      
+      
      }
 
   delete speller;
@@ -347,21 +368,35 @@ void CHunspellChecker::change_lang (const QString &lang)
 #endif
 
   speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
+
+#if ! defined (H_DEPRECATED)
   encoding = speller->get_dic_encoding();
+#else
+  str_encoding = speller->get_dict_encoding();
+#endif  
 
 #if defined(Q_OS_UNIX)
 
   if (initialized && file_exists (fname_userdict))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
+
+#if ! defined (H_DEPRECATED)
       user_words = qstring_load (fname_userdict, encoding).split ("\n");  
+#else      
+      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");       
+#endif      
       user_words.removeFirst(); //зачем я это закомментировал раньше?
      }
 #else
   if (initialized && file_exists (fname_userdict_pure))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
+#if ! defined (H_DEPRECATED)      
       user_words = qstring_load (fname_userdict, encoding).split ("\n");  
+#else
+      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");  
+#endif      
       user_words.removeFirst(); //зачем я это закомментировал раньше?
      }
      
@@ -374,7 +409,12 @@ void CHunspellChecker::add_to_user_dict (const QString &word)
   if (! initialized || word.isEmpty())
      return;
 
+#if !defined (H_DEPRECATED)
   QTextCodec *codec = QTextCodec::codecForName (encoding);
+#else
+  QTextCodec *codec = QTextCodec::codecForName (str_encoding.data());
+#endif  
+  
   QByteArray es = codec->fromUnicode (word);
   speller->add (es.data());
   user_words.append (word);
@@ -389,7 +429,12 @@ bool CHunspellChecker::check (const QString &word)
   //if (word.isEmpty())
     // return false;    
 
+#if ! defined (H_DEPRECATED)
  QTextCodec *codec = QTextCodec::codecForName (encoding);
+#else
+ QTextCodec *codec = QTextCodec::codecForName (str_encoding.data());
+#endif
+ 
  QByteArray es = codec->fromUnicode (word);
  
 #ifndef H_DEPRECATED
@@ -407,7 +452,12 @@ void CHunspellChecker::remove_from_user_dict (const QString &word)
   if (! initialized || word.isEmpty())
       return;
 
+#ifndef H_DEPRECATED
   QTextCodec *codec = QTextCodec::codecForName (encoding);
+#else
+ QTextCodec *codec = QTextCodec::codecForName (str_encoding.data());
+#endif  
+  
   QByteArray es = codec->fromUnicode (word);
   speller->remove (es.data()); 
   int i = user_words.indexOf (word);
@@ -446,8 +496,13 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 
   if (! initialized || word.isEmpty())
      return sl;
-
+     
+#if !defined (H_DEPRECATED)
   QTextCodec *codec = QTextCodec::codecForName (encoding);
+#else
+  QTextCodec *codec = QTextCodec::codecForName (str_encoding.data());
+#endif
+  
   QByteArray es = codec->fromUnicode (word);
 
 #ifndef H_DEPRECATED

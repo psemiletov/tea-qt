@@ -90,18 +90,18 @@ tea_source = ['rvln.cpp',
     'single_application_shared.cpp',
     'exif.cpp',
     'myjoystick.cpp',
-     'qioapi.cpp',
-           'quaadler32.cpp',
-           'quacrc32.cpp',
-           'quagzipfile.cpp',
-           'quaziodevice.cpp',
-           'quazip.cpp',
-           'quazipdir.cpp',
-           'quazipfile.cpp',
-           'quazipfileinfo.cpp',
-           'quazipnewinfo.cpp',
-           'unzip.c',
-           'zip.c']
+    'qioapi.cpp',
+    'quaadler32.cpp',
+    'quacrc32.cpp',
+    'quagzipfile.cpp',
+    'quaziodevice.cpp',
+    'quazip.cpp',
+    'quazipdir.cpp',
+    'quazipfile.cpp',
+    'quazipfileinfo.cpp',
+    'quazipnewinfo.cpp',
+    'unzip.c',
+    'zip.c']
 
 
 tea_exe = executable ('tea',
@@ -110,7 +110,6 @@ tea_exe = executable ('tea',
   dependencies : [qt5_dep, hunspell_dep, zlib_dep, poppler_dep, ddjvuapi_dep]
 #  cpp_args : '-std=c++11'  
   )
-
 
 
 install_data(['icons/32/tea.png'],

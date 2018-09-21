@@ -63,7 +63,6 @@
 
 
 
-
 class MyProxyStyle: public QProxyStyle
 {
 public:
@@ -102,7 +101,6 @@ public:
 #endif
 
 
-
 #ifdef USE_QML_STUFF
 class CQQuickWindow: public QQuickWindow
 {
@@ -112,7 +110,7 @@ public:
 
   QString id;
  
-  CQQuickWindow (QWindow * parent = 0): QQuickWindow (parent) {}
+  CQQuickWindow (QWindow *parent = 0): QQuickWindow (parent) {}
   ~CQQuickWindow() {}
  
 protected:
@@ -120,10 +118,7 @@ protected:
   bool event (QEvent *event);
 };
 
-#endif
 
-
-#ifdef USE_QML_STUFF
 class CPluginListItem: public QObject
 {
 Q_OBJECT
@@ -195,7 +190,6 @@ public slots:
  
  void slot_valueChanged (int value);
 };
-
 
 
 class CAboutWindow: public QWidget
@@ -277,7 +271,6 @@ public:
 
 #endif
 
-
   
   int icon_size;
 
@@ -314,9 +307,7 @@ public:
 
  
 #ifdef PRINTER_ENABLE
-
   QPrinter printer;
-
 #endif
 
 
@@ -372,14 +363,16 @@ public:
   QLineEdit *ed_aspellcheck_path;
   
   QCheckBox *cb_use_qregexpsyntaxhl;
+
+#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 #if defined(Q_OS_LINUX) || defined(Q_WS_X11)
   QCheckBox *cb_use_joystick;
+#endif
 #endif
 
   QCheckBox *cb_right_to_left;
 
   QCheckBox *cb_wordwrap;
-//  QCheckBox *cb_colored_console;
   
   QCheckBox *cb_fif_at_toolbar;
   QCheckBox *cb_show_linenums;
@@ -416,15 +409,11 @@ public:
   QCheckBox *cb_output_image_flt;
 
   QComboBox *cmb_tea_icons;
-  
-  
-  QComboBox *cmb_ui_langs;
+//  QComboBox *cmb_ui_langs;
 
   QSpinBox *spb_img_quality;
   QCheckBox *cb_zip_after_scale;
-  
   QCheckBox *cb_exif_rotate;
-  
   QCheckBox *cb_zor_use_exif;
 
 
@@ -447,11 +436,9 @@ main window callbacks
   void repeat();
 
   void receiveMessage (const QString &msg);
-  
   void receiveMessageShared (const QStringList& msg);
         
   void view_use_theme();
-
 
   void select_label();
   void update_labels_menu();
@@ -466,8 +453,6 @@ main window callbacks
 
   void fman_unpack_zip();
   void fman_zip_info();
- // void fman_pack_sel_dir();
-
 
   void fman_refresh();
   void fman_rename();
@@ -813,8 +798,11 @@ main window callbacks
 /*************************
 prefs window callbacks
 *************************/
+#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+
 #if defined(Q_OS_LINUX) || defined(Q_WS_X11)
   void cb_use_joystick_stateChanged (int state);
+#endif
 #endif
 
 //  void cmb_ui_langs_currentIndexChanged (const QString &text);

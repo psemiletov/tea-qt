@@ -6,6 +6,10 @@
 #include <QtGlobal>
 #include <QObject>
 
+
+
+#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+
 #if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 
 #include <iostream>
@@ -70,5 +74,6 @@ public slots:
   void read_joystick();
 };
 
+#endif
 #endif
 #endif

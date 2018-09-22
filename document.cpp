@@ -2176,8 +2176,6 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
 
 */
 
- // int y = textCursor().block().blockNumber();
- // int x = textCursor().position() - textCursor().block().position();
  
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
@@ -2186,15 +2184,11 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
   
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
-  //int xdiff = x2 - x1;
   
-  int how_many_copy_from_source = ydiff;
+//  int how_many_copy_from_source = ydiff;
   
-  int lines_to_end = blockCount() - y1;
-  
-  if (ydiff > lines_to_end)
-     how_many_copy_from_source = lines_to_end;
-     
+//  int lines_to_end = blockCount() - y1;
+      
   QStringList sl_source;
   
   for (int line = y1; line <= y2; line++)

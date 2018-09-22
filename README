@@ -31,6 +31,9 @@ libhunspell (for spell checking engine)
 poppler-qt5 (to read the text from PDF)
 ddjvuap (to read the text from DJVU)
 
+Note for FreeBSD users: you need the pkgconf package - pkg install pkgconf
+
+
 If you want to build and install TEA with cmake + make, run at the source dir:
 
 mkdir b

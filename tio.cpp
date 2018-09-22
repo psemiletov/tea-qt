@@ -501,8 +501,8 @@ bool CTioFB2::load (const QString &fname)
   QXmlStreamReader xml (temp);
 
   bool tt = false;
-  bool title = false;
-  bool section = false;
+ // bool title = false;
+ // bool section = false;
 
   while (! xml.atEnd())
         {
@@ -515,11 +515,11 @@ bool CTioFB2::load (const QString &fname)
              if (tag_name == ts)
                 tt = true;
 
-             if (tag_name == "title")
-                title = true;
+   //          if (tag_name == "title")
+     //           title = true;
 
-             if (tag_name == "section")
-                section = true;
+   //          if (tag_name == "section")
+     //           section = true;
             }
 
          if (xml.isEndElement())
@@ -529,13 +529,13 @@ bool CTioFB2::load (const QString &fname)
 
              if (tag_name == "title")
                 {
-                 title = false;
+       //          title = false;
                  data.append ("\n");
                 }
 
              if (tag_name == "section")
                 {
-                 section = false;
+       //          section = false;
                  data.append ("\n");
                 }
              }
@@ -909,15 +909,11 @@ CTioEpub::CTioEpub()
 bool CTioEpub::load (const QString &fname)
 {
   data.clear();
-    
-  
-  //JlCompress zipfile;  
   
   QStringList html_files;
     
   QString source_fname;
   QString ts;  
-  
   
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
@@ -942,11 +938,7 @@ bool CTioEpub::load (const QString &fname)
        return false;
   
   
-  
-  
   QXmlStreamReader xml (zipper.string_data);
-  
-  bool tt = false;
   
   while (! xml.atEnd()) 
         {
@@ -960,30 +952,28 @@ bool CTioEpub::load (const QString &fname)
              if (ext == "html" || ext == "htm" || ext == "xml")
                 html_files.append (opf_dir + "/" + attr_href);
              //std::cout << attr_href.toStdString() << std::endl;
- 
             }
         } 
     
   if (xml.hasError()) 
       qDebug() << "xml parse error";
-  
 
 
   foreach (QString fn, html_files)
-         {
-          if (! zipper.read_as_utf8 (fname, fn))
+          {
+           if (! zipper.read_as_utf8 (fname, fn))
               return false;
               
-          //QString t = strip_html (zipper.string_data);
-          QStringList tags;
-          tags.append ("p");
-         // tags.append ("h2");
+           //QString t = strip_html (zipper.string_data);
+           QStringList tags;
+           tags.append ("p");
+          // tags.append ("h2");
           
-          QString t = extract_text_from_xml (zipper.string_data, tags);
+           QString t = extract_text_from_xml (zipper.string_data, tags);
           
-          data += t;
-          data += "\n";
-         }
+           data += t;
+           data += "\n";
+          }
    
   return true;
 }

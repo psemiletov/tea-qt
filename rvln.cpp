@@ -9271,7 +9271,7 @@ void rvln::receiveMessage (const QString &msg)
   if (msg.isEmpty()) 
      return;
      
-  CDocument *d = documents->open_file (msg, "UTF-8"); 
+  documents->open_file (msg, "UTF-8"); 
 }
 
 
@@ -10282,7 +10282,7 @@ void rvln::fn_number_dd2dms()
 void rvln::receiveMessageShared (const QStringList &msg)
 {
   for (int i = 0; i < msg.size(); i++)
-      CDocument *d = documents->open_file (msg[i], "UTF-8"); 
+      documents->open_file (msg[i], "UTF-8"); 
       
   show();
   activateWindow();

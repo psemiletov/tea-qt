@@ -419,14 +419,14 @@ void CZORWindow::load_image (const QString &fname)
      {
       QTransform transform;
       
-      qreal angle;
+      qreal angle = 0.0;
       
       if (exif_orientation == 6)
          angle = 90;
-      else   
+      else
       if (exif_orientation == 8) //make clockwise
          angle = 270;
-      
+         
       transform.rotate (angle);
       
       QImage transformed_image = source_image.transformed (transform);

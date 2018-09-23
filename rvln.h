@@ -852,7 +852,7 @@ main window widgets
   QTabWidget *main_tab_widget;
   QTabWidget *tab_options;
   QTabWidget *tab_browser;
-  QTabWidget *tab_widget;
+  QTabWidget *tab_editor;
   QLineEdit *fif;
 
   QMenu *fileMenu;

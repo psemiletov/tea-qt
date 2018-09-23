@@ -67,7 +67,7 @@ QTabWidget::pane{
 }
 
 
-QTabWidget::tab-bar#tab_widget{
+QTabWidget::tab-bar#tab_editor{
     alignment: center;
 
 }

@@ -297,7 +297,7 @@ void rvln::readSettings()
   main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align));
 
   int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
-  tab_widget->setTabPosition (int_to_tabpos (docs_tab_align));
+  tab_editor->setTabPosition (int_to_tabpos (docs_tab_align));
 
   markup_mode = settings->value ("markup_mode", "HTML").toString();
   charset = settings->value ("charset", "UTF-8").toString();
@@ -347,14 +347,15 @@ void rvln::create_main_widget()
 
   main_tab_widget->setTabShape (QTabWidget::Triangular);
 
-  tab_widget = new QTabWidget;
-
+  tab_editor = new QTabWidget;
+  tab_editor->setUsesScrollButtons (true);
+//  tab_editor->setDocumentMode (true);
 
 #if QT_VERSION >= 0x040500
-  tab_widget->setMovable (true);
+  tab_editor->setMovable (true);
 #endif
   
-  tab_widget->setObjectName ("tab_widget");
+  tab_editor->setObjectName ("tab_editor");
   
   
  //QString tab_widget_style = "QTabWidget::pane { border-top: 0px solid rgb(100,100,100, 80); margin:0;  background: rgba(50,50,50, 100);  border-radius: 1px;   padding:0;}";
@@ -367,7 +368,7 @@ void rvln::create_main_widget()
 
   QPushButton *bt_close = new QPushButton ("X", this);
   connect (bt_close, SIGNAL(clicked()), this, SLOT(close_current()));
-  tab_widget->setCornerWidget (bt_close);
+  tab_editor->setCornerWidget (bt_close);
 
   log = new CLogMemo;
 
@@ -426,11 +427,11 @@ void rvln::create_main_widget()
 
   mainSplitter->setStretchFactor (1, 1);
 
-  idx_tab_edit = main_tab_widget->addTab (tab_widget, tr ("editor"));
+  idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
   setCentralWidget (main_widget);
 
   //tab_widget->resize (tab_widget->width(), width() - 100);
-  connect (tab_widget, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
+  connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
 }
 
 
@@ -646,7 +647,7 @@ rvln::rvln()
   
   documents = new CDox();
   documents->parent_wnd = this;
-  documents->tab_widget = tab_widget;
+  documents->tab_widget = tab_editor;
   documents->recent_menu = menu_file_recent;
   documents->recent_list_fname = dir_config + "/tea_recent";
   documents->reload_recent_list();
@@ -2521,7 +2522,7 @@ void rvln::createOptions()
 
 
   int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
-  tab_widget->setTabPosition (int_to_tabpos (docs_tab_align));
+  tab_editor->setTabPosition (int_to_tabpos (docs_tab_align));
 
 
   QComboBox *cmb_docs_tabs_align = new_combobox (page_interface_layout,
@@ -4388,10 +4389,10 @@ void rvln::nav_goto_right_tab()
   if (! d)
      return;
 
-  if (tab_widget->currentIndex() > (tab_widget->count() - 1))
+  if (tab_editor->currentIndex() > (tab_editor->count() - 1))
     return;
 
-  tab_widget->setCurrentIndex (tab_widget->currentIndex() + 1);
+  tab_editor->setCurrentIndex (tab_editor->currentIndex() + 1);
 }
 
 
@@ -4403,10 +4404,10 @@ void rvln::nav_goto_left_tab()
   if (! d)
      return;
 
-  if (tab_widget->currentIndex() == 0)
+  if (tab_editor->currentIndex() == 0)
      return;
 
-  tab_widget->setCurrentIndex (tab_widget->currentIndex() -1);
+  tab_editor->setCurrentIndex (tab_editor->currentIndex() -1);
 }
 
 
@@ -8441,7 +8442,7 @@ void rvln::cmb_ui_tabs_currentIndexChanged (int i)
 
 void rvln::cmb_docs_tabs_currentIndexChanged (int i)
 {
-  tab_widget->setTabPosition (int_to_tabpos (i));
+  tab_editor->setTabPosition (int_to_tabpos (i));
   
   settings->setValue ("docs_tabs_align", i);
 }

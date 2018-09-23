@@ -5,7 +5,7 @@ Cannot test because qbs is buggy on my system
 
 import qbs 1.0
 
-Application  {
+QtGuiApplication  {
 
 
    Depends {

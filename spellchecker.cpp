@@ -103,7 +103,7 @@ void CSpellchecker::add_to_user_dict (const QString &word)
 {
   if (! initialized || ! speller)
      return;
-  
+
   if (word.isEmpty())
      return;
 
@@ -124,9 +124,9 @@ void CSpellchecker::change_lang (const QString &lang)
 {
   if (! spell_config)
      return;
-     
+
   if (lang.isEmpty())
-     return;   
+     return;
 
   aspell_config_replace (spell_config, "lang", lang.toUtf8().data());
   aspell_config_replace (spell_config, "encoding", "UTF-8");
@@ -179,7 +179,7 @@ bool CSpellchecker::check (const QString &word)
 {
   if (! initialized || ! speller)
       return false;
-   
+
   if (word.isEmpty())
      return false;
 
@@ -283,7 +283,8 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 #if ! defined (H_DEPRECATED)
       user_words = qstring_load (fname_userdict, encoding).split ("\n");
 #else      
-      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");      
+      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");
+      
 #endif      
       user_words.removeFirst();
      }
@@ -384,7 +385,8 @@ void CHunspellChecker::change_lang (const QString &lang)
 #if ! defined (H_DEPRECATED)
       user_words = qstring_load (fname_userdict, encoding).split ("\n");  
 #else      
-      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");       
+      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");  
+     
 #endif      
       user_words.removeFirst(); //зачем я это закомментировал раньше?
      }

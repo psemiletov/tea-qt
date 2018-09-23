@@ -49,4 +49,4 @@ QScrollBar:vertical
 QTabWidget::pane
 {  border: 0px;}
 
-/*QTabWidget::tab-bar#tab_widget{    alignment: center;}*/
+/*QTabWidget::tab-bar#tab_editor{alignment: center;}*/

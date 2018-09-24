@@ -25,7 +25,7 @@ hunspell_dep = dependency('hunspell', required : false)
 if hunspell_dep.found()
    add_global_arguments('-DSPELLCHECK_ENABLE=1', language : 'cpp')
    add_global_arguments('-DHUNSPELL_ENABLE=1', language : 'cpp')
-   moc_params += ['-DSPELLCHECK_ENABLE=1']
+#   moc_params += ['-DSPELLCHECK_ENABLE=1']
    moc_params += ['-DHUNSPELL_ENABLE=1']
 endif
 

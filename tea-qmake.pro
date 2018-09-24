@@ -14,8 +14,8 @@ exists("/usr/include/linux/joystick.h") {
 
 
 DEFINES += NOCRYPT \
-          NOUNCRYPT \
-          QUAZIP_STATIC
+           NOUNCRYPT \
+           QUAZIP_STATIC
 
 USE_ASPELL = true
 USE_HUNSPELL = true
@@ -304,8 +304,6 @@ icons/tea-icon-v3-02.png \
 icons/tea-icon-v3-03.png
 
 
-
-
 unix:  {
 #        LIBS += -lz
 
@@ -320,7 +318,7 @@ exists("/usr/include/aspell.h") {
     message ("ASpell enabled")
     LIBS += -laspell
     DEFINES += ASPELL_ENABLE
-    DEFINES += SPELLCHECK_ENABLE
+#    DEFINES += SPELLCHECK_ENABLE
 }
 }
 
@@ -330,7 +328,7 @@ system(pkg-config --exists hunspell) {
 message ("hunspell enabled")
         PKGCONFIG += hunspell
             DEFINES += HUNSPELL_ENABLE
-                DEFINES += SPELLCHECK_ENABLE
+#               DEFINES += SPELLCHECK_ENABLE
                 }
                 }
 
@@ -371,7 +369,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                           message ("ASpell enabled")
                           LIBS += -laspell-15
                           DEFINES += ASPELL_ENABLE
-                          DEFINES += SPELLCHECK_ENABLE
+#                          DEFINES += SPELLCHECK_ENABLE
                           }
                   }
 
@@ -389,7 +387,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 
                           DEFINES += HUNSPELL_ENABLE
-                          DEFINES += SPELLCHECK_ENABLE
+ #                         DEFINES += SPELLCHECK_ENABLE
                          }
                 }
 
@@ -405,7 +403,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                           message ("ASpell enabled")
                           LIBS += -laspell-15
                           DEFINES += ASPELL_ENABLE
-                          DEFINES += SPELLCHECK_ENABLE
+#                          DEFINES += SPELLCHECK_ENABLE
                           }
                   }
 
@@ -417,7 +415,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                           message ("hunspell enabled")
                           LIBS += libhunspell.dll
                           DEFINES += HUNSPELL_ENABLE
-                          DEFINES += SPELLCHECK_ENABLE
+#                          DEFINES += SPELLCHECK_ENABLE
                          }
                 }
 }
@@ -452,7 +450,7 @@ exists("c:/usr/include/aspell.h") {
       message ("ASpell enabled")
       LIBS += -laspell_dll
       DEFINES += ASPELL_ENABLE
-      DEFINES += SPELLCHECK_ENABLE
+#      DEFINES += SPELLCHECK_ENABLE
 contains(USE_HUNSPELL,true)
 }
 }
@@ -463,6 +461,6 @@ exists("c:/extras/include/hunspell/hunspell.hxx") {
       LIBS += -lhunspell-1.4
       PKGCONFIG += hunspell
       DEFINES += HUNSPELL_ENABLE
-      DEFINES += SPELLCHECK_ENABLE
+#      DEFINES += SPELLCHECK_ENABLE
 }
 }

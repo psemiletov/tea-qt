@@ -36,18 +36,18 @@
 #include <QHash>
 
 
-class ASpellchecker
+class CSpellchecker
 {
 
 public:
 
   bool initialized;
 
-  ASpellchecker (const QString &lang,
+  CSpellchecker (const QString &lang,
                  const QString &path,
                  const QString &user) {};
 
-  virtual ~ASpellchecker() {};
+  virtual ~CSpellchecker() {};
 
   virtual void change_lang (const QString &lang) = 0;
   virtual void add_to_user_dict (const QString &word) = 0;
@@ -62,7 +62,7 @@ public:
 
 #ifdef ASPELL_ENABLE
 
-class CSpellchecker: public ASpellchecker
+class CAspellchecker: public CSpellchecker
 {
 
 public:
@@ -71,8 +71,8 @@ public:
   AspellCanHaveError *ret;
   AspellSpeller *speller;
   
-  CSpellchecker (const QString &lang, const QString &path = "", const QString &user_path = "");
-  ~CSpellchecker();
+  CAspellchecker (const QString &lang, const QString &path = "", const QString &user_path = "");
+  ~CAspellchecker();
 
   void change_lang (const QString &lang);
   void add_to_user_dict (const QString &word);
@@ -89,7 +89,7 @@ public:
 
 #ifdef HUNSPELL_ENABLE
 
-class CHunspellChecker: public ASpellchecker
+class CHunspellChecker: public CSpellchecker
 {
 
 public:

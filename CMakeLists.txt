@@ -29,7 +29,7 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(hunspell hunspell)
 if(hunspell_FOUND)
   add_definitions(-DHUNSPELL_ENABLE)
-  add_definitions(-DSPELLCHECK_ENABLE)
+#  add_definitions(-DSPELLCHECK_ENABLE)
   message("+ hunspell support")
 endif()
 
@@ -110,7 +110,7 @@ find_path(ASPELL_INLCUDES aspell.h
 
 if(ASPELL_INLCUDES)
   add_definitions(-DASPELL_ENABLE)
-  add_definitions(-DSPELLCHECK_ENABLE)
+#  add_definitions(-DSPELLCHECK_ENABLE)
   target_link_libraries(${PROJECT} libaspell.so)
   message("+ aspell support")
 endif()

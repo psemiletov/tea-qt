@@ -32,9 +32,9 @@
 #include <QRegExp>
 
 
-#ifdef SPELLCHECK_ENABLE
+//#ifdef SPELLCHECK_ENABLE
 #include "spellchecker.h"
-#endif
+//#endif
 
 #include "utils.h"
 
@@ -42,11 +42,11 @@
 
 #ifdef ASPELL_ENABLE
 
-CSpellchecker::CSpellchecker (const QString &lang, const QString &path,
-                              const QString &user_path):
-                              ASpellchecker (lang, path, user_path)
+CAspellchecker::CAspellchecker (const QString &lang, const QString &path,
+                                const QString &user_path):
+                                CSpellchecker (lang, path, user_path)
 {
-  qDebug() << "start ASpeller";
+  qDebug() << "CAspellchecker::CAspellchecker - start";
   ret = 0;
   speller = 0;
   spell_config = 0;
@@ -89,7 +89,7 @@ CSpellchecker::CSpellchecker (const QString &lang, const QString &path,
 }
 
 
-CSpellchecker::~CSpellchecker()
+CAspellchecker::~CAspellchecker()
 {
   if (speller)
      delete_aspell_speller (speller);
@@ -99,7 +99,7 @@ CSpellchecker::~CSpellchecker()
 }
 
 
-void CSpellchecker::add_to_user_dict (const QString &word)
+void CAspellchecker::add_to_user_dict (const QString &word)
 {
   if (! initialized || ! speller)
      return;
@@ -114,13 +114,13 @@ void CSpellchecker::add_to_user_dict (const QString &word)
 }
 
 
-void CSpellchecker::remove_from_user_dict (const QString &word)
+void CAspellchecker::remove_from_user_dict (const QString &word)
 {
   //const AspellWordList *awl = aspell_speller_personal_word_list (speller);
 }
 
 
-void CSpellchecker::change_lang (const QString &lang)
+void CAspellchecker::change_lang (const QString &lang)
 {
   if (! spell_config)
      return;
@@ -148,7 +148,7 @@ void CSpellchecker::change_lang (const QString &lang)
 }
 
 
-QStringList CSpellchecker::get_speller_modules_list()
+QStringList CAspellchecker::get_speller_modules_list()
 {
   QStringList l;
 
@@ -175,7 +175,7 @@ QStringList CSpellchecker::get_speller_modules_list()
 }
 
 
-bool CSpellchecker::check (const QString &word)
+bool CAspellchecker::check (const QString &word)
 {
   if (! initialized || ! speller)
       return false;
@@ -187,14 +187,11 @@ bool CSpellchecker::check (const QString &word)
 }
 
 
-QStringList CSpellchecker::get_suggestions_list (const QString &word)
+QStringList CAspellchecker::get_suggestions_list (const QString &word)
 {
   QStringList l;
 
-  if (! initialized)
-     return l;
-  
-  if (word.isEmpty() || ! speller)
+  if (! initialized || word.isEmpty() || !speller)
      return l;
 
   const AspellWordList *suggestions = aspell_speller_suggest (speller, word.toUtf8().data(), -1);
@@ -218,7 +215,7 @@ QStringList CSpellchecker::get_suggestions_list (const QString &word)
 
 #ifdef HUNSPELL_ENABLE
 
-CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, const QString &user_path): ASpellchecker (lang, path, user_path)
+CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, const QString &user_path): CSpellchecker (lang, path, user_path)
 {
   qDebug() << "CHunspellChecker::CHunspellChecker - start";
 
@@ -288,7 +285,7 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 #endif      
       user_words.removeFirst();
      }
-#else
+#else  //! UNIX
 
   if (initialized)
   if (file_exists (fname_userdict_pure))
@@ -390,7 +387,7 @@ void CHunspellChecker::change_lang (const QString &lang)
 #endif      
       user_words.removeFirst(); //зачем я это закомментировал раньше?
      }
-#else
+#else //! UNIX
   if (initialized && file_exists (fname_userdict_pure))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
@@ -427,9 +424,6 @@ bool CHunspellChecker::check (const QString &word)
 {
   if (! initialized)
       return false;
-      
-  //if (word.isEmpty())
-    // return false;    
 
 #if ! defined (H_DEPRECATED)
  QTextCodec *codec = QTextCodec::codecForName (encoding);

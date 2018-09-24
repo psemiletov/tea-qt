@@ -81,9 +81,9 @@ started at 08 November 2007
 #include "exif.h"
 #include "fontbox.h"
 
-#ifdef SPELLCHECKER_ENABLE
+//#ifdef SPELLCHECKER_ENABLE
 #include "spellchecker.h"
-#endif
+//#endif
 
 
 #ifdef USE_QML_STUFF
@@ -435,7 +435,8 @@ void rvln::create_main_widget()
 }
 
 
-#ifdef SPELLCHECK_ENABLE  
+//#ifdef SPELLCHECK_ENABLE  
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
 void rvln::setup_spellcheckers()
 {
@@ -462,11 +463,11 @@ void rvln::setup_spellcheckers()
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
       QString win32_aspell_path = settings->value ("win32_aspell_path", "C:\\Program Files\\Aspell").toString();
-      spellchecker = new CSpellchecker (lang, win32_aspell_path);
+      spellchecker = new CAspellchecker (lang, win32_aspell_path);
 
 #else
 
-      spellchecker = new CSpellchecker (lang);
+      spellchecker = new CAspellchecker (lang);
 
 #endif
 
@@ -673,7 +674,8 @@ rvln::rvln()
   update_hls_noncached();
   update_view_hls();
 
-#ifdef SPELLCHECK_ENABLE
+//#ifdef SPELLCHECK_ENABLE
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   setup_spellcheckers();
 #endif  
   
@@ -779,7 +781,8 @@ void rvln::closeEvent (QCloseEvent *event)
   plugins_done();
 #endif  
 
-#ifdef SPELLCHECK_ENABLE
+//#ifdef SPELLCHECK_ENABLE
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   delete spellchecker;
 #endif
 
@@ -1534,8 +1537,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes v2"), SLOT(fn_convert_quotes_tex_angle_02()));
 
   
-#ifdef SPELLCHECK_ENABLE
-
+//#ifdef SPELLCHECK_ENABLE
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   menu_functions->addSeparator();
 
   menu_spell_langs = menu_functions->addMenu (tr ("Spell-checker languages"));
@@ -2848,7 +2851,8 @@ void rvln::createOptions()
 
   QLabel *l_t = 0;
 
-#ifdef SPELLCHECK_ENABLE
+//#ifdef SPELLCHECK_ENABLE
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
   QGroupBox *gb_spell = new QGroupBox (tr ("Spell checking"));
   QVBoxLayout *vb_spell = new QVBoxLayout;
@@ -3543,8 +3547,8 @@ void rvln::file_last_opened()
 }
 
 
-#ifdef SPELLCHECK_ENABLE
-
+//#ifdef SPELLCHECK_ENABLE
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 void rvln::fn_change_spell_lang()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -7286,8 +7290,8 @@ void rvln::fn_binary_to_decimal()
 }
 
 
-#ifdef SPELLCHECK_ENABLE
-
+//#ifdef SPELLCHECK_ENABLE
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
 {
   cur_spellchecker = text;
@@ -7302,7 +7306,7 @@ void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
   
 #ifdef ASPELL_ENABLE
   if (cur_spellchecker == "Aspell")
-     spellchecker = new CSpellchecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString());
+     spellchecker = new CAspellchecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString());
 #endif
 
   

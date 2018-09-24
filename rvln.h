@@ -57,9 +57,9 @@
 #include "img_viewer.h"
 
 
-#ifdef SPELLCHECK_ENABLE
+//#ifdef SPELLCHECK_ENABLE
 #include "spellchecker.h"
-#endif
+//#endif
 
 
 
@@ -263,13 +263,13 @@ public:
   CFMan *fman;
   CImgViewer *img_viewer;
 
-#ifdef SPELLCHECK_ENABLE
+//#ifdef SPELLCHECK_ENABLE
 
-  ASpellchecker *spellchecker;
+  CSpellchecker *spellchecker;
   QStringList spellcheckers;
   QString cur_spellchecker;
 
-#endif
+//#endif
 
   
   int icon_size;
@@ -666,7 +666,7 @@ main window callbacks
   
   void remove_formatting();
   
-#ifdef SPELLCHECK_ENABLE
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
   void fn_change_spell_lang();
   void fn_spell_check();
@@ -680,16 +680,13 @@ main window callbacks
   void pb_choose_hunspell_path_clicked();
 #endif
 
-
 #ifdef ASPELL_ENABLE
-
 #if defined(Q_OS_WIN) || defined (Q_OS_OS2)
   void pb_choose_aspell_path_clicked();
 #endif
-
 #endif
 
-#endif
+#endif // SPELLCHECKERS ENABLED 
 
   void scale_image();
 
@@ -804,7 +801,6 @@ prefs window callbacks
 
 //#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
 #if defined(JOYSTICK_SUPPORTED)
-
   void cb_use_joystick_stateChanged (int state);
 //#endif
 #endif
@@ -1033,7 +1029,8 @@ prefs window widgets
   void calendar_update();
 
 
-#ifdef SPELLCHECK_ENABLE
+//#ifdef SPELLCHECK_ENABLE
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   void setup_spellcheckers();
   void create_spellcheck_menu();
 #endif

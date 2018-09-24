@@ -21,9 +21,16 @@ if compiler.has_header('/usr/include/linux/joystick.h')
 endif
 
 
+aspell_dep = compiler.find_library('aspell', required : false)
+if aspell_dep.found()
+   add_global_arguments('-DASPELL_ENABLE=1', language : 'cpp')
+   moc_params += ['-DASPELL_ENABLE=1']
+
+endif
+
 hunspell_dep = dependency('hunspell', required : false)
 if hunspell_dep.found()
-   add_global_arguments('-DSPELLCHECK_ENABLE=1', language : 'cpp')
+#   add_global_arguments('-DSPELLCHECK_ENABLE=1', language : 'cpp')
    add_global_arguments('-DHUNSPELL_ENABLE=1', language : 'cpp')
 #   moc_params += ['-DSPELLCHECK_ENABLE=1']
    moc_params += ['-DHUNSPELL_ENABLE=1']
@@ -114,7 +121,7 @@ tea_source = ['rvln.cpp',
 tea_exe = executable ('tea',
   sources : [src_processed, tea_source], 
   install : true,
-  dependencies : [qt5_dep, hunspell_dep, zlib_dep, poppler_dep, ddjvuapi_dep]
+  dependencies : [qt5_dep, hunspell_dep, aspell_dep, zlib_dep, poppler_dep, ddjvuapi_dep]
 #  cpp_args : '-std=c++11'  
   )
 

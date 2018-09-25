@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 46.1.0, September 2018
+TEA 46.2.0, September 25, 2018
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -8,9 +8,8 @@ https://vk.com/teaeditor - VK-community
 https://www.facebook.com/groups/766324686841748/ - FB-community
 ---------------------------------------
   
-   After the major 46 release, a lot of bugs were revealed. I was suprised that TEA lost the Qt 4.x compatibility, so it was fixes now, among the important fix for syntax highligting engine (Qt 4.x version). Thanks to Slackware where I can test it.
-   Another fix is related to Logmemo scripting, so the "log" function works again (can be called from JavaScript). 
-   The IDE part of 46.1 adds some Objective C stuff (syntax hl, header/source switch).
+   46.2 is focused mainly on bug fixing, compatibility with Qt 4.x and FreeBSD; inner changes of spell-checker things. Now Aspell is supported via meson, so TEA's support of cmake, qmake and meson is equal .
+
 
    Stay tuned.
    Peter Semiletov

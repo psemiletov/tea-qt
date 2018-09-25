@@ -1,9 +1,9 @@
 project('tea', ['cpp','c'],
          default_options : ['cpp_std=c++11'],
-         version : '46.1.0',
+         version : '46.2.0',
          license : 'GPLv3')
 
-add_global_arguments('-DVERSION_NUMBER="46.1.0"', language : 'cpp')
+add_global_arguments('-DVERSION_NUMBER="46.2.0"', language : 'cpp')
 add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 #harcoded for now

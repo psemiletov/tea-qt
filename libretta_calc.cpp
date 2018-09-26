@@ -49,10 +49,10 @@ double calculate (string expression)
   size_t position = expression.find (sep_find); 
 
   while (position != string::npos) 
-       {
-        expression.replace (position, 1, sep_need);
-        position = expression.find (sep_find, position + 1);
-       } 
+        {
+         expression.replace (position, 1, sep_need);
+         position = expression.find (sep_find, position + 1);
+        } 
 
 //open braces
 
@@ -66,7 +66,6 @@ double calculate (string expression)
         {
 //         for (size_t i = end_pos; i >= 0; i--)
          for (size_t i = end_pos; i-- > 0 ;)
-
              {
               if (expression[i] == '(')
                  {

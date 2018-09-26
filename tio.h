@@ -157,7 +157,7 @@ public:
 
 
 
-#ifdef POPPLER_ENABLE
+#if defined(POPPLER_ENABLE) || defined(Q_OS_OS2)
 
 class CTioPDF: public CTioReadOnly
 {
@@ -174,8 +174,7 @@ public:
 
 
 
-#ifdef DJVU_ENABLE
-
+#if defined(DJVU_ENABLE) || defined(Q_OS_OS2)
 class CTioDJVU: public CTioReadOnly
 {
   Q_OBJECT

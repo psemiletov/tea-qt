@@ -51,7 +51,7 @@ DJVU read code taken fromdvutxt.c:
 #include <iostream>
 
 //FIXME: not good with cmake, cmake just use Qt5 here
-#ifdef POPPLER_ENABLE
+#if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
 #if QT_VERSION >= 0x050000
 #include <poppler-qt5.h>
 #else
@@ -60,7 +60,7 @@ DJVU read code taken fromdvutxt.c:
 #endif
 
 
-#ifdef DJVU_ENABLE
+#if defined (DJVU_ENABLE) || defined(Q_OS_OS2)
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -205,11 +205,13 @@ CTioHandler::CTioHandler()
   list.append (new CTioRTF);
   list.append (new CTioEpub);
 
-#ifdef POPPLER_ENABLE
+#if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
+//#ifdef POPPLER_ENABLE
   list.append (new CTioPDF);
 #endif
 
-#ifdef DJVU_ENABLE
+#if defined (DJVU_ENABLE) || defined(Q_OS_OS2)
+//#ifdef DJVU_ENABLE
   list.append (new CTioDJVU);
 #endif
 }
@@ -758,9 +760,8 @@ bool CTioRTF::load (const QString &fname)
   return true;
 }
 
-
-#ifdef POPPLER_ENABLE
-
+#if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
+//#ifdef POPPLER_ENABLE
 
 CTioPDF::CTioPDF()
 {
@@ -805,7 +806,8 @@ bool CTioPDF::load (const QString &fname)
 #endif
 
 
-#ifdef DJVU_ENABLE
+//#ifdef DJVU_ENABLE
+#if defined (DJVU_ENABLE) || defined(Q_OS_OS2)
 
 
 const char *detail = 0;

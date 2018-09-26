@@ -91,6 +91,12 @@ inline int get_value (int total, int perc)
 }
 
 
+inline double get_value (double total, double perc)
+{
+  return (total * perc / 100);
+}
+
+
 inline double get_percent (double total, double value)
 {
   return (value / total) * 100;

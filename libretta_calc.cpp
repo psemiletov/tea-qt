@@ -6,6 +6,9 @@
 #include <iterator>
 #include <ctype.h>
 #include <locale>
+#include <math.h>
+
+#include "utils.h"
 
 
 using namespace std;
@@ -109,6 +112,7 @@ double calculate (string expression)
 
        if (t == '+' || t == '-' ||
            t == '/' || t == '*' || 
+           t == '^' || t == '%' || 
            i == stop_size)
           {
            new_operator = true;
@@ -133,9 +137,47 @@ double calculate (string expression)
      }
 
 
-//умножаем и делим
 
   list<CItem>::iterator p = items.begin();
+
+//степень и процент
+  do {
+      CItem current = *p;
+
+      list<CItem>::iterator t = p;
+      ++t;
+
+      CItem next = *t;
+
+      if (current.op == '^' || current.op == '%')
+         {
+
+          if (current.op == '^')
+             {
+              next.val = pow (current.val, next.val);             
+              *t = next;
+             }
+          else    
+              if (current.op == '%')
+                 {
+                  next.val = (float) get_value (current.val, next.val);             
+                  *t = next; 
+                 }
+
+          p = items.erase (p);
+            
+          continue;
+         }
+
+      p++;
+     }
+  while (p != items.end());
+
+
+
+
+//умножаем и делим
+  p = items.begin();
 
   do {
       CItem current = *p;

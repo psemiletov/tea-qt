@@ -8,7 +8,7 @@ https://vk.com/teaeditor - VK-community
 https://www.facebook.com/groups/766324686841748/ - FB-community
 ---------------------------------------
   
-   46.2 is focused mainly on bug fixing, compatibility with Qt 4.x and FreeBSD; inner changes of spell-checker things. Now Aspell is supported via meson, so TEA's support of cmake, qmake and meson is equal .
+   46.2 is focused mainly on bug fixing, compatibility with Qt 4.x and FreeBSD; inner changes of spell-checker things. Now Aspell is supported via meson, so TEA's support of cmake, qmake and meson is equal.
 
 
    Stay tuned.

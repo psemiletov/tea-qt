@@ -10577,55 +10577,51 @@ void rvln::ide_global_references()
 
 void rvln::logmemo_double_click (const QString &txt)
 {
-//    std::cout << "txt:" << txt.toStdString() << std::endl;
+    std::cout << "rvln::logmemo_double_click txt:" << txt.toStdString() << std::endl;
 
-    if (documents->hash_project.isEmpty())
-       return;
+  if (documents->hash_project.isEmpty())
+      return;
 
-    if (documents->fname_current_project.isEmpty())
-       return;
-
-
-    QString source_fname;
-    QString source_line;
-    QString source_col;
-
-    QStringList parsed = txt.split (":");
-    if (parsed.size() == 0)
-        return;
-
-    source_fname = parsed[0];
-
-    if (parsed.size() > 1)
-       source_line = parsed[1];
-
-    if (parsed.size() > 2)
-       source_col = parsed[2];
+  if (documents->fname_current_project.isEmpty())
+     return;
 
 
-   if (source_fname.startsWith(".."))
-       source_fname.remove (0, 2);
+  QString source_fname;
+  QString source_line;
+  QString source_col;
 
-/*
-    std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
-    std::cout << "source_line:" << source_line.toStdString() << std::endl;
-    std::cout << "source_col:" << source_col.toStdString() << std::endl;
-*/
-    QFileInfo dir_source (documents->fname_current_project);
+  QStringList parsed = txt.split (":");
+  if (parsed.size() == 0)
+     return;
 
-    QString source_dir = dir_source.absolutePath();
+  source_fname = parsed[0];
 
+  if (parsed.size() > 1)
+     source_line = parsed[1];
 
-     source_fname = source_dir + source_fname;
+  if (parsed.size() > 2)
+     source_col = parsed[2];
 
-     log->no_jump = true;
+  if (source_fname.startsWith(".."))
+     source_fname.remove (0, 2);
 
-     CDocument *d = documents->open_file (source_fname, "UTF-8");
+  QFileInfo dir_source (documents->fname_current_project);
+  QString source_dir = dir_source.absolutePath();
 
-     log->no_jump = false;
+  source_fname = source_dir + "/" + source_fname;
 
-     if (! d)
-        return; 
+  std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
+  std::cout << "source_line:" << source_line.toStdString() << std::endl;
+  std::cout << "source_col:" << source_col.toStdString() << std::endl;
+
+  log->no_jump = true;
+
+  CDocument *d = documents->open_file (source_fname, "UTF-8");
+
+  log->no_jump = false;
+
+  if (! d)
+     return; 
 
      QTextCursor cur = d->textEdit->textCursor();
      if (cur.isNull())

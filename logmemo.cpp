@@ -143,6 +143,9 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 
   txt = txt.mid (idx_left, idx_right - idx_left + 1);
 
+  //qDebug() << txt;
+  txt = txt.remove ('\n');
+
   emit double_click (txt.simplified());
 
   event->accept();

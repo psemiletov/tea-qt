@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 46.2.0, September 25, 2018
+TEA 46.3.0, September 29, 2018
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -8,8 +8,7 @@ https://vk.com/teaeditor - VK-community
 https://www.facebook.com/groups/766324686841748/ - FB-community
 ---------------------------------------
   
-   46.2 is focused mainly on bug fixing, compatibility with Qt 4.x and FreeBSD; inner changes of spell-checker things. Now Aspell is supported via meson, so TEA's support of cmake, qmake and meson is equal.
-
+   Built-in calculator now supports ^ (power) and % (percents) operations. OS/2 compatibility has been fixed (thanks to Elbert Pol). Some IDE-related functions are fixed too.
 
    Stay tuned.
    Peter Semiletov

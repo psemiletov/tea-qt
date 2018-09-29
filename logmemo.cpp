@@ -54,7 +54,8 @@ void CLogMemo::log_terminal (const QString &text)
   QString txt = text;
   QString tb = txt;
 
-  QRegularExpression re ("[a-zA-Z]+\\.[a-zA-Z]+:\\d+:\\d+:");
+  //QRegularExpression re ("[a-zA-Z_]+\\.[a-zA-Z]+:\\d+:\\d+:");
+QRegularExpression re ("\\w+\\.\\w+:\\d+:\\d+:");
 
   QRegularExpressionMatch match = re.match (txt, 1);
 
@@ -144,7 +145,7 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
   txt = txt.mid (idx_left, idx_right - idx_left + 1);
 
   //qDebug() << txt;
-  txt = txt.remove ('\n');
+ // txt = txt.remove ('\n');
 
   emit double_click (txt.simplified());
 

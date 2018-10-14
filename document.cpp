@@ -864,10 +864,10 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   draw_margin = false;
   hl_brackets = false;
   auto_indent = false;
- // use_hl_wrap = false;
-  //wrap = true;
   tab_sp_width = 8;
   spaces_instead_of_tabs = true;
+
+  document()->setUseDesignMetrics (true);
   
   QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
   QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");

@@ -1,7 +1,6 @@
 JAMSpell support (https://github.com/bakwc/JamSpell )
 
 
-возведение в степень не работет
 
 при повторении последней функции, сендер-ту становится от пункта меню "повторить"
 
@@ -13,7 +12,6 @@ JAMSpell support (https://github.com/bakwc/JamSpell )
 
 ! под Win32::Qt5 не хочет собираться с Hunspell
 в hl-файлах, вместо расширений в заголовке использовать regexp
-переход с qmake на cmake или qbs
 Mark all with fuzzy
 file compare
 tmtheme support

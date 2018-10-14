@@ -55,7 +55,7 @@ void CLogMemo::log_terminal (const QString &text)
   QString tb = txt;
 
   //QRegularExpression re ("[a-zA-Z_]+\\.[a-zA-Z]+:\\d+:\\d+:");
-QRegularExpression re ("\\w+\\.\\w+:\\d+:\\d+:");
+  QRegularExpression re ("\\w+\\.\\w+:\\d+:\\d+:");
 
   QRegularExpressionMatch match = re.match (txt, 1);
 

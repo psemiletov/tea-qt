@@ -12,7 +12,6 @@ JAMSpell support (https://github.com/bakwc/JamSpell )
 
 ! под Win32::Qt5 не хочет собираться с Hunspell
 в hl-файлах, вместо расширений в заголовке использовать regexp
-Mark all with fuzzy
 file compare
 tmtheme support
 filesToolbar странно меняет размер иконки
@@ -35,7 +34,6 @@ numbers into words
 ctags support
 make max recent items user-modified
 units conversion
-add function to update hls cache manually
 unicode table window
 split document panel
 ANSI art support

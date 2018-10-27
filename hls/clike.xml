@@ -8,9 +8,9 @@
 <item name="types" type="keywords" color="type">\b(bool|char|double|float|int|long|
 short|signed|size_t|unsigned|uint|void|wchar_t)\b</item>
 
-<item name="class" type="item" color="class">\bQ[A-Za-z]+\b</item>
+<item name="class" type="item" color="class">\bQ[A-Za-z0-9_]+\b</item>
 
-<item name="class" type="item" color="class">\bC[A-Za-z]+\b</item>
+<item name="class" type="item" color="class">\bC[A-Za-z0-9_]+\b</item>
 
 <item name="operator" type="item" color="operator">[-=\+\*\/\(\)\[]|]</item>
 

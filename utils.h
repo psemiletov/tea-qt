@@ -12,6 +12,11 @@ Peter Semiletov
 #include <QStringList>
 
 
+#if QT_VERSION >= 0x040500
+#include <QMimeDatabase>
+#endif
+
+
 class CFilesList: public QObject
 {
 public:
@@ -30,8 +35,13 @@ public:
   QStringList lexts;
   QStringList lnames;
 
-  CFTypeChecker (const QString &fnames, const QString &exts);
+#if QT_VERSION >= 0x040500
+  QMimeDatabase db;
+#endif
+
+  CFTypeChecker (const QStringList &fnames, const QStringList &exts);
   bool check (const QString &fname);
+  QStringList get_supported_exts();
 };
 
 

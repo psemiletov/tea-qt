@@ -11,6 +11,8 @@ Peter Semiletov
 #include <QImage>
 
 
+
+
 #include "utils.h"
 
 /* file utils */
@@ -350,16 +352,31 @@ void CFilesList::get (const QString &path)
 }
 
 
-CFTypeChecker::CFTypeChecker (const QString &fnames, const QString &exts)
+CFTypeChecker::CFTypeChecker (const QStringList &fnames, const QStringList &exts)
 {
-  lexts = qstring_load (exts).split ("\n");
+/*  lexts = qstring_load (exts).split ("\n");
   lnames = qstring_load (fnames).split ("\n");
+*/
+
+  lexts = exts;
+  lnames = fnames;
+
 }
 
 
 bool CFTypeChecker::check (const QString &fname)
 {
-  bool result = lnames.contains (fname.toLower());
+  bool result = false;
+#if QT_VERSION >= 0x040500
+ QMimeType mime = db.mimeTypeForFile(fname);
+
+ if (mime.inherits("text/plain")) 
+    result = true;      
+
+#endif
+
+  if (! result)
+  result = lnames.contains (fname.toLower());
   if (! result)
      {
       QString ext = file_get_ext (fname);
@@ -367,4 +384,18 @@ bool CFTypeChecker::check (const QString &fname)
      }
 
   return result;
+}
+
+
+QStringList CFTypeChecker::get_supported_exts()
+{
+  QStringList l;
+
+  l += lexts; 
+  l.append ("txt");
+//  qstring_list_print (l);
+
+  return l;
+
+
 }

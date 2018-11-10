@@ -340,7 +340,6 @@ public:
 
 //#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 #if defined(JOYSTICK_SUPPORTED)
-
   CJoystick *joystick;
 #endif
 //#endif

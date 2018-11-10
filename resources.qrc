@@ -49,7 +49,6 @@
     <file>text-data/tpl_cpp.cpp</file>
     <file>text-data/tpl_c.c</file>
 
-    <file>text-data/cm-tf-exts</file>
     <file>text-data/cm-tf-names</file>
 
     <file>themes/TEA/stylesheet.css</file>

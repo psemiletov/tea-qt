@@ -202,6 +202,7 @@ public:
   ~CTioHandler();
 
   CTio* get_for_fname (const QString &fname);
+  QStringList get_supported_exts();
 };
 
 #endif // TIO_H

@@ -107,7 +107,7 @@ CDox *documents;
 QVariantMap hs_path;
 
 QString current_version_number;
-
+QStringList lsupported_exts;
 
 enum {
       FM_ENTRY_MODE_NONE = 0,
@@ -5861,7 +5861,10 @@ void rvln::update_hls_noncached()
           {
            QStringList l = exts.split (";");
            for (int i = 0; i < l.size(); i++)
-               documents->hls.insert (l[i], fname);
+               {
+                documents->hls.insert (l[i], fname);
+                lsupported_exts.append (l[i]);
+               }
            }
       }
   
@@ -7590,7 +7593,13 @@ void rvln::search_in_files()
   QString path = fman->dir.path();
   QString text_to_search = fif_get_text();
 
-  CFTypeChecker fc (":/text-data/cm-tf-names", ":/text-data/cm-tf-exts");
+//  CFTypeChecker fc (":/text-data/cm-tf-names", ":/text-data/cm-tf-exts");
+
+  CFTypeChecker fc (qstring_load (":/text-data/cm-tf-names").split ("\n"),
+                    documents->tio_handler.get_supported_exts());
+
+  fc.lexts += lsupported_exts;
+
   QStringList l = documents->hls.uniqueKeys();
   fc.lexts.append (l);
 
@@ -7619,6 +7628,8 @@ void rvln::search_in_files()
        if (! fc.check (fileName))
           continue;
 
+       log->log (fileName);
+
        CTio *tio = documents->tio_handler.get_for_fname (fileName);
        tio->charset = charset;
 
@@ -7642,7 +7653,7 @@ void rvln::search_in_files()
   CTextListWnd *w = new CTextListWnd (tr ("Search results"), tr ("Files"));
 
   w->list->addItems (lresult);
-     
+
   connect (w->list, SIGNAL(itemDoubleClicked ( QListWidgetItem *)), 
            this, SLOT(search_in_files_results_dclicked ( QListWidgetItem *)));
 

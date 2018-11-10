@@ -979,3 +979,21 @@ bool CTioEpub::load (const QString &fname)
    
   return true;
 }
+
+
+QStringList CTioHandler::get_supported_exts()
+{
+  QStringList l;
+
+  foreach (CTio *t, list)
+          {
+           for (int i = 0; i < t->extensions.size(); i++)
+               l.append (t->extensions[i]); 
+          }
+
+   
+  l.append ("txt");
+//  qstring_list_print (l);
+
+  return l;
+}

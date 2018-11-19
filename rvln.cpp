@@ -108,6 +108,7 @@ QVariantMap hs_path;
 
 QString current_version_number;
 QStringList lsupported_exts;
+QList <CTextListWnd*> text_window_list;
 
 enum {
       FM_ENTRY_MODE_NONE = 0,
@@ -794,6 +795,13 @@ void rvln::closeEvent (QCloseEvent *event)
          {
           p->deleteLater();
          } 
+
+
+  foreach (CTextListWnd *w, text_window_list)
+          {
+           w->close();
+          } 
+
 
   event->accept();
 }
@@ -6449,6 +6457,13 @@ void CTextListWnd::closeEvent (QCloseEvent *event)
 }
 
 
+CTextListWnd::~CTextListWnd()
+{
+  int i = text_window_list.indexOf (this);
+  text_window_list.removeAt (i); 
+}
+
+
 CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
 {
   setAttribute (Qt::WA_DeleteOnClose);
@@ -6463,6 +6478,8 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
   
   setLayout (lt);
   setWindowTitle (title);
+  
+  text_window_list.append (this);
 }
 
 
@@ -6479,7 +6496,8 @@ void rvln::file_reload_enc()
   last_action = qobject_cast<QAction *>(sender());
 
   CTextListWnd *w = new CTextListWnd (tr ("Reload with encoding"), tr ("Charset"));
-
+ // w->setParent (this);
+ 
   if (sl_last_used_charsets.size () > 0)
      w->list->addItems (sl_last_used_charsets + sl_charsets);
   else
@@ -7651,6 +7669,7 @@ void rvln::search_in_files()
   pb_status->hide();
 
   CTextListWnd *w = new CTextListWnd (tr ("Search results"), tr ("Files"));
+  w->move (this->x(), this->y());
 
   w->list->addItems (lresult);
 
@@ -10644,6 +10663,17 @@ void rvln::logmemo_double_click (const QString &txt)
      cur.select (QTextCursor::WordUnderCursor);
      d->textEdit->setTextCursor (cur);
      d->textEdit->setFocus();
+}
+
+rvln::~rvln()
+{
+  qDebug() << "rvln::~rvln()";
+/*
+  foreach (CTextListWnd *w, text_window_list)
+          {
+           qDebug() << "close 1";
+           w->close();
+          } */
 }
 
 

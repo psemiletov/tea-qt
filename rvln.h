@@ -221,6 +221,7 @@ public:
   QListWidget *list;
   
   CTextListWnd (const QString &title, const QString &label_text);
+  ~CTextListWnd();
 
 protected:
 
@@ -235,7 +236,7 @@ Q_OBJECT
 public:
 
   rvln();
-  ~rvln() {}
+  ~rvln();
   
 #ifdef USE_QML_STUFF
   QQmlEngine *qml_engine;

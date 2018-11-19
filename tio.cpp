@@ -774,7 +774,10 @@ bool CTioPDF::load (const QString &fname)
 {
   Poppler::Document *d = Poppler::Document::load (fname);
   
-  if (! d || d->isLocked()) 
+  if (! d)
+     return false;
+
+  if (d->isLocked()) 
      {
       delete d;
       return false;

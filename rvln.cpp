@@ -804,6 +804,7 @@ void rvln::closeEvent (QCloseEvent *event)
 
 
   event->accept();
+  deleteLater();
 }
 
 
@@ -10665,9 +10666,10 @@ void rvln::logmemo_double_click (const QString &txt)
      d->textEdit->setFocus();
 }
 
+
 rvln::~rvln()
 {
-  qDebug() << "rvln::~rvln()";
+  cout << "rvln::~rvln()" << endl;
 /*
   foreach (CTextListWnd *w, text_window_list)
           {

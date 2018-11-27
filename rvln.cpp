@@ -2883,18 +2883,18 @@ void rvln::createOptions()
   l_t = new QLabel (tr ("Hunspell dictionaries directory"));
 
   ed_spellcheck_path = new QLineEdit (this);
-  
+
   ed_spellcheck_path->setText (settings->value ("hunspell_dic_path", "/usr/share/hunspell").toString());/*QDir::homePath ()).toString()*/
   ed_spellcheck_path->setReadOnly (true);
 
   QPushButton *pb_choose_path = new QPushButton (tr ("Select"), this);
 
   connect (pb_choose_path, SIGNAL(clicked()), this, SLOT(pb_choose_hunspell_path_clicked()));
-  
+
   hb_spellcheck_path->addWidget (l_t);
   hb_spellcheck_path->addWidget (ed_spellcheck_path);
   hb_spellcheck_path->addWidget (pb_choose_path);
-   
+
   vb_spell->addLayout (hb_spellcheck_path);
 
 #endif
@@ -2937,9 +2937,9 @@ void rvln::createOptions()
   QGroupBox *gb_func_misc = new QGroupBox (tr ("Miscellaneous"));
   QVBoxLayout *vb_func_misc = new QVBoxLayout;
   vb_func_misc->setAlignment (Qt::AlignTop);
-  
+
   gb_func_misc->setLayout (vb_func_misc);
-  
+
 
   spb_fuzzy_q = new_spin_box (vb_func_misc, tr ("Fuzzy search factor"), 10, 100, settings->value ("fuzzy_q", "60").toInt());
 
@@ -3016,7 +3016,7 @@ void rvln::createOptions()
   gb_webgallery->setLayout(vb_webgal);
   page_images_layout->addWidget (gb_webgallery);
 
-  
+
   QGroupBox *gb_exif = new QGroupBox (tr ("EXIF"));
   QVBoxLayout *vb_exif = new QVBoxLayout;
   gb_exif->setLayout(vb_exif);
@@ -3025,19 +3025,18 @@ void rvln::createOptions()
   cb_zor_use_exif= new QCheckBox (tr ("Use EXIF orientation at image viewer"), this);
   cb_zor_use_exif->setCheckState (Qt::CheckState (settings->value ("zor_use_exif_orientation", 0).toInt()));
   vb_exif->addWidget (cb_zor_use_exif);
-      
-   
+
+
   page_images->setLayout (page_images_layout);
   //page_images->show();
 
-    
   QScrollArea *scra_images = new QScrollArea;
   scra_images->setWidgetResizable (true);
   scra_images->setWidget (page_images);
 
   tab_options->addTab (scra_images, tr ("Images"));
- 
-  
+
+
 //  tab_options->addTab (page_images, tr ("Images"));
 ////////////////////////////
 
@@ -3556,7 +3555,6 @@ void rvln::file_last_opened()
 }
 
 
-//#ifdef SPELLCHECK_ENABLE
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 void rvln::fn_change_spell_lang()
 {
@@ -3572,7 +3570,6 @@ void rvln::fn_change_spell_lang()
 void rvln::create_spellcheck_menu()
 {
   menu_spell_langs->clear();
-  
   create_menu_from_list (this, menu_spell_langs, spellchecker->get_speller_modules_list(), SLOT(fn_change_spell_lang()));
 }
 
@@ -3587,7 +3584,7 @@ bool ends_with_badchar (const QString &s)
 
   if (s.endsWith ("\\"))
      return true;
-  
+
   return false;
 }
 
@@ -3613,7 +3610,9 @@ void rvln::fn_spell_check()
   int i = 0;
 
   QTextCursor cr = d->textEdit->textCursor();
+
   int pos = cr.position();
+  int savepos = pos;
 
   QString text = d->textEdit->toPlainText();
   int text_size = text.size();
@@ -3691,8 +3690,8 @@ void rvln::fn_spell_check()
    while (cr.movePosition (QTextCursor::NextWord));
 
 
-  cr.setPosition (pos);
-  d->textEdit->setTextCursor (cr);
+  cr.setPosition (savepos);
+//  d->textEdit->setTextCursor (crsave);
   d->textEdit->document()->setModified (false);
 
   pb_status->hide();

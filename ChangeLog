@@ -1,5 +1,8 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+* "search in files" results window close automatically with TEA
+* main windows destructor FIX //using deleteLater()
+
 * logmemo is scriptable again
 + Objective C support (hl, header/source switch)
 * Qt 4.x fix

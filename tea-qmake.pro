@@ -1,7 +1,7 @@
-VERSION = 46.3.0
+VERSION = 47.0.0
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"46.3.0"\''
+DEFINES += 'VERSION_NUMBER=\'"47.0.0"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -318,7 +318,6 @@ exists("/usr/include/aspell.h") {
     message ("ASpell enabled")
     LIBS += -laspell
     DEFINES += ASPELL_ENABLE
-#    DEFINES += SPELLCHECK_ENABLE
 }
 }
 
@@ -328,7 +327,6 @@ system(pkg-config --exists hunspell) {
 message ("hunspell enabled")
         PKGCONFIG += hunspell
             DEFINES += HUNSPELL_ENABLE
-#               DEFINES += SPELLCHECK_ENABLE
                 }
                 }
 
@@ -376,14 +374,17 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
         contains(USE_HUNSPELL,true)
                  {
-                  exists ("C:\\Qt\\Qt5.3.1\\Tools\\mingw482_32\\include\\hunspell\\hunspell.hxx")
+#                  exists ("C:\\Qt\\Qt5.3.1\\Tools\\mingw482_32\\include\\hunspell\\hunspell.hxx")
+                  exists ("c:\\Qt\\Qt5.3.1\\5.3\\mingw482_32\\include\\hunspell\\hunspell.hxx")
+
                          {
 
                           message ("hunspell enabled")
 
 
-                          LIBS += c:\dev\hunspell-mingw-master\lib\hunspell.dll
+#                          LIBS += c:\dev\hunspell-mingw-master\lib\hunspell.dll
                       #     LIBS += libhunspell.dll
+                           LIBS += hunspell.dll
 
 
                           DEFINES += HUNSPELL_ENABLE
@@ -403,7 +404,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                           message ("ASpell enabled")
                           LIBS += -laspell-15
                           DEFINES += ASPELL_ENABLE
-#                          DEFINES += SPELLCHECK_ENABLE
                           }
                   }
 
@@ -415,7 +415,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                           message ("hunspell enabled")
                           LIBS += libhunspell.dll
                           DEFINES += HUNSPELL_ENABLE
-#                          DEFINES += SPELLCHECK_ENABLE
                          }
                 }
 }
@@ -450,7 +449,6 @@ exists("c:/usr/include/aspell.h") {
       message ("ASpell enabled")
       LIBS += -laspell_dll
       DEFINES += ASPELL_ENABLE
-#      DEFINES += SPELLCHECK_ENABLE
 contains(USE_HUNSPELL,true)
 }
 }
@@ -461,6 +459,5 @@ exists("c:/extras/include/hunspell/hunspell.hxx") {
       LIBS += -lhunspell-1.4
       PKGCONFIG += hunspell
       DEFINES += HUNSPELL_ENABLE
-#      DEFINES += SPELLCHECK_ENABLE
 }
 }

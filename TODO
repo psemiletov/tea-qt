@@ -10,7 +10,6 @@ JAMSpell support (https://github.com/bakwc/JamSpell )
 при переключении темы, иконки меняются только после перезагрузки TEA
 
 
-! под Win32::Qt5 не хочет собираться с Hunspell
 в hl-файлах, вместо расширений в заголовке использовать regexp
 file compare
 tmtheme support

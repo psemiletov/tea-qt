@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 46.3.0, September 29, 2018
+TEA 47.0.0, November 30, 2018
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -8,7 +8,11 @@ https://vk.com/teaeditor - VK-community
 https://www.facebook.com/groups/766324686841748/ - FB-community
 ---------------------------------------
   
-   Built-in calculator now supports ^ (power) and % (percents) operations. OS/2 compatibility has been fixed (thanks to Elbert Pol). Some IDE-related functions are fixed too.
+   This is mainly bug fixing/stabilization release, with several interesting things:
+   Objective C syntax hl support.
+   C/C++, Pascal highlighting improvement.
+   The "Search in files" function now scan also PDF and DJVU (if TEA built with the needed libraries).
+   Enhanced font rendering mode.
 
    Stay tuned.
    Peter Semiletov

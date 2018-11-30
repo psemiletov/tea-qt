@@ -12,7 +12,7 @@ Peter Semiletov
 #include <QStringList>
 
 
-#if QT_VERSION >= 0x040500
+#if QT_VERSION >= 0x050000
 #include <QMimeDatabase>
 #endif
 
@@ -35,7 +35,7 @@ public:
   QStringList lexts;
   QStringList lnames;
 
-#if QT_VERSION >= 0x040500
+#if QT_VERSION >= 0x050000
   QMimeDatabase db;
 #endif
 

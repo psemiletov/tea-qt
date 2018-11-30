@@ -360,19 +360,16 @@ CFTypeChecker::CFTypeChecker (const QStringList &fnames, const QStringList &exts
 
   lexts = exts;
   lnames = fnames;
-
 }
 
 
 bool CFTypeChecker::check (const QString &fname)
 {
   bool result = false;
-#if QT_VERSION >= 0x040500
+#if QT_VERSION >= 0x050000
  QMimeType mime = db.mimeTypeForFile(fname);
-
  if (mime.inherits("text/plain")) 
     result = true;      
-
 #endif
 
   if (! result)

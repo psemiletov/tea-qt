@@ -7,7 +7,7 @@ add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea")
-project ($PROJECT VERSION 47.0.0)
+project ($PROJECT VERSION 47.0.1)
 
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 

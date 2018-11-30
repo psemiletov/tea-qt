@@ -1,5 +1,7 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+* qt4 compilation fix
+
 * "search in files" results window close automatically with TEA
 * main windows destructor FIX //using deleteLater()
 

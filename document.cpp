@@ -621,7 +621,15 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
+#if QT_VERSION >= 0x051000
+
+  d->textEdit->setTabStopDistance (d->textEdit->tab_sp_width * d->textEdit->brace_width);
+
+#else
+
   d->textEdit->setTabStopWidth (d->textEdit->tab_sp_width * d->textEdit->brace_width);
+
+#endif
 
   d->textEdit->setup_brace_width();
 

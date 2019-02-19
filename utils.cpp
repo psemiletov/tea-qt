@@ -53,11 +53,11 @@ QString change_file_ext (const QString &s, const QString &ext)
   int i = s.lastIndexOf (".");
   if (i == -1)
      return (s + "." + ext);
-  
-  
+
+
   QString r (s);
   r.truncate (++i);
-  
+
   r.append (ext);
   return r;
 }
@@ -275,7 +275,7 @@ bool is_image (const QString &filename)
 {
   if (filename.isEmpty())
      return false;
-     
+
   QList <QByteArray> a = QImageReader::supportedImageFormats();
 
   foreach (QByteArray x, a)
@@ -283,7 +283,7 @@ bool is_image (const QString &filename)
            QString t (x.data());
            if (filename.endsWith (t.prepend ("."), Qt::CaseInsensitive))
               return true;
-          } 
+          }
 
   return false;
 }
@@ -292,7 +292,7 @@ bool is_image (const QString &filename)
 QString get_insert_image (const QString &file_name, const QString &full_path, const QString &markup_mode)
 {
   if (! is_image (full_path))
-     return QString();     
+     return QString();
 
   QFileInfo inf (file_name);
   QDir dir (inf.absolutePath());
@@ -369,7 +369,7 @@ bool CFTypeChecker::check (const QString &fname)
 #if QT_VERSION >= 0x050000
  QMimeType mime = db.mimeTypeForFile(fname);
  if (mime.inherits("text/plain")) 
-    result = true;      
+    result = true;
 #endif
 
   if (! result)

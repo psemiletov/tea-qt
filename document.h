@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2018 by Peter Semiletov <peter.semiletov@gmail.com>                            *
+ *   2007-2019 by Peter Semiletov <peter.semiletov@gmail.com>                            *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -44,25 +44,26 @@ code from qwriter:
 #include <QPlainTextEdit>
 #include <QSyntaxHighlighter>
 
+#if QT_VERSION >= 0x050700
+//#include <QtGamepad/QGamepad>
+//#include <QGamepadKeyNavigation>
+#endif
+
+
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
 #endif
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 #if defined(JOYSTICK_SUPPORTED)
-
 #include "myjoystick.h"
 #endif
-//#endif
 
 #include "logmemo.h"
 #include "tio.h"
 #include "todo.h"
 
 
-//class LineNumberArea;
 class CDox;
 class CDocument;
 
@@ -336,33 +337,33 @@ public:
 
   QTimer *timer;
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
+#if defined(QTBUILDINJOYSTICK_ENABLE)
+ // QGamepad *gamepad;
+//  QGamepadKeyNavigation gamepadnav;
+#endif
 
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+
 #if defined(JOYSTICK_SUPPORTED)
   CJoystick *joystick;
 #endif
-//#endif
 
   CDox();
   ~CDox();
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 #if defined(JOYSTICK_SUPPORTED)
-
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
 #endif
 
-//#endif
 
   void update_project (const QString &fileName);
   void reload_recent_list();
   void add_to_recent (CDocument *d);
   void update_recent_menu();
   void update_current_files_menu();
+
+  void move_cursor (QTextCursor::MoveOperation mo); 
 
   Q_INVOKABLE CDocument* create_new();
   Q_INVOKABLE CDocument* open_file (const QString &fileName, const QString &codec);
@@ -382,6 +383,15 @@ public slots:
 
   void open_recent();
   void open_current();
+
+  void move_cursor_up(); 
+  void move_cursor_down();
+  void move_cursor_left();
+  void move_cursor_right();
+
+  void move_cursor_x(double v);
+  void move_cursor_y(double v);
+
 
 };
 

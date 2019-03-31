@@ -55,6 +55,9 @@ code from qwriter:
 #include <QTimer>
 
 
+
+
+
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
 #endif
@@ -157,7 +160,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
         {
          QStringList lt = i.next().split(",");
          if (lt.size() > 0)
-             if (lt[0] == file_name) 
+             if (lt[0] == file_name)
                 i.remove();
         }
 
@@ -240,7 +243,7 @@ CDocument::CDocument (QObject *parent): QObject (parent)
 
 CDocument::~CDocument()
 {
-  if (file_name.endsWith (".notes") && textEdit->document()->isModified()) 
+  if (file_name.endsWith (".notes") && textEdit->document()->isModified())
      save_with_name_plain (file_name);
   else
   if (file_name.startsWith (holder->dir_config) && textEdit->document()->isModified())
@@ -256,7 +259,7 @@ CDocument::~CDocument()
          save_with_name (file_name, charset);
      }
 
-  if (! file_name.startsWith (holder->dir_config) && ! file_name.endsWith (".notes")) 
+  if (! file_name.startsWith (holder->dir_config) && ! file_name.endsWith (".notes"))
      {
       holder->add_to_recent (this);
       holder->update_recent_menu();
@@ -323,14 +326,8 @@ CDox::~CDox()
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
-
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 #if defined(JOYSTICK_SUPPORTED)
-
   delete joystick;
-//#endif
-
 #endif
 }
 
@@ -374,7 +371,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 {
   if (! file_exists (fileName))
      return NULL;
-  
+
   if (is_image (fileName))
      {
       CDocument *td = get_current();
@@ -384,8 +381,8 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
           td->textEdit->setFocus (Qt::OtherFocusReason);
          }
       return td;
-     }   
-   
+     }
+
   CDocument *d = get_document_by_fname (fileName);
   if (d)
      {
@@ -400,9 +397,9 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
   doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
   tab_widget->setCurrentIndex (tab_widget->indexOf (doc->tab_page));
-  
+
   update_current_files_menu();
-  
+
   return doc;
 }
 
@@ -415,7 +412,7 @@ void CDox::close_by_idx (int i)
   CDocument *d = list[i];
   list.removeAt (i);
   delete d;
-  
+
   update_current_files_menu();
 }
 
@@ -447,7 +444,7 @@ bool CDocument::save_with_name_plain (const QString &fileName)
   out << textEdit->toPlainText();
 
   holder->update_current_files_menu();
-  
+
   return true;
 }
 
@@ -480,23 +477,23 @@ QString CDocument::get_filename_at_cursor()
          return x;
 
       x = s.mid (start + 1, end - (start + 1));
-     
+
       QFileInfo inf (file_name);
       QDir cur_dir (inf.absolutePath());
-         
+
       QString result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
       if (file_exists (result))
          return result;
-     
+
       int i = x.lastIndexOf ("/");
       if (i < 0)
          i = x.lastIndexOf ("\\");
-     
+
       if (i < 0)
          return QString();
 
-      x = x.mid (i + 1);   
-     
+      x = x.mid (i + 1);
+
       result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
       //qDebug() << "in cur dir: " << result;
       return result;
@@ -504,7 +501,7 @@ QString CDocument::get_filename_at_cursor()
   else
       {
        int pos = textEdit->textCursor().positionInBlock();
- 
+
        int end = s.indexOf ("\"", pos);
        if (end == -1)
          return x;
@@ -526,9 +523,9 @@ QString CDocument::get_filename_at_cursor()
 }
 
 
-CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent) 
+CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent)
 {
-  document = doc; 
+  document = doc;
   xml_format = 0;
 }
 
@@ -563,7 +560,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
       return;
 
   QString ext;
-  
+
   if (mode_auto)
      ext = file_get_ext (file_name);
   else
@@ -615,8 +612,8 @@ void CDox::apply_settings_single (CDocument *d)
   QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
   QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
 
-  d->textEdit->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
-  d->textEdit->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
+  d->textEdit->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name();
+  d->textEdit->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name();
 
   d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
@@ -645,7 +642,7 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->auto_indent = settings->value ("auto_indent", false).toBool();
 
   QString text_color = hash_get_val (global_palette, "text", "black");
-  QString t_text_color = QColor (text_color).darker(darker_val).name(); 
+  QString t_text_color = QColor (text_color).darker(darker_val).name();
   d->textEdit->text_color = QColor (t_text_color);
 
   QString back_color = hash_get_val (global_palette, "background", "white");
@@ -683,7 +680,7 @@ void CDox::add_to_recent (CDocument *d)
 
   if (! d->textEdit->get_word_wrap())
      s+="0";
-  else 
+  else
       s+="1";
 
   recent_files.prepend (s);
@@ -740,7 +737,7 @@ QString CDocument::get_triplex()
 {
   if (! file_exists (file_name))
      return QString ("");
-  
+
   QString s (file_name);
   s += ",";
   s += charset;
@@ -750,7 +747,7 @@ QString CDocument::get_triplex()
 
   if (! textEdit->get_word_wrap())
      s+="0";
-  else 
+  else
       s+="1";
 
   return s;
@@ -763,7 +760,7 @@ void CDocument::set_markup_mode()
 
   QString e = file_get_ext (file_name);
   QString t = holder->markup_modes[e];
-  
+
   if (! t.isEmpty())
      markup_mode = t;
 }
@@ -772,11 +769,11 @@ void CDocument::set_markup_mode()
 void CTEAEdit::cb_cursorPositionChanged()
 {
   viewport()->update();
-  
+
   if (doc)
      doc->update_status();
-     
-  if (hl_brackets)   
+
+  if (hl_brackets)
      update_ext_selections();
 }
 
@@ -855,14 +852,14 @@ void CTEAEdit::setup_brace_width()
 CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 {
   rect_sel_reset();
-    
+
   highlight_current_line = false;
   setup_brace_width();
-  
+
   lineNumberArea = new CLineNumberArea (this);
 
   connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
-  
+
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
   connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
   updateLineNumberAreaWidth (0);
@@ -876,16 +873,59 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   spaces_instead_of_tabs = true;
 
   document()->setUseDesignMetrics (true);
-  
+
   QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
   QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
 
   int darker_val = settings->value ("darker_val", 100).toInt();
 
-  sel_text_color = QColor (s_sel_text_color).darker(darker_val).name(); 
-  sel_back_color = QColor (s_sel_back_color).darker(darker_val).name(); 
-  
+  sel_text_color = QColor (s_sel_text_color).darker(darker_val).name();
+  sel_back_color = QColor (s_sel_back_color).darker(darker_val).name();
+
   connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
+}
+
+
+void CDox::move_cursor_up()
+{
+  move_cursor (QTextCursor::Up);
+}
+
+
+void CDox::move_cursor_down()
+{
+  move_cursor (QTextCursor::Down);
+}
+
+
+void CDox::move_cursor_left()
+{
+  move_cursor (QTextCursor::Left);
+}
+
+
+void CDox::move_cursor_right()
+{
+  move_cursor (QTextCursor::Right);
+}
+
+
+void CDox::move_cursor_x (double v)
+{
+  if (v < 0)
+     move_cursor (QTextCursor::Right);
+  if (v > 0)
+     move_cursor (QTextCursor::Left);
+}
+
+
+void CDox::move_cursor_y (double v)
+{
+  if (v < 0)
+     move_cursor (QTextCursor::Up);
+  if (v > 0)
+     move_cursor (QTextCursor::Down);
+  qDebug() << v;
 }
 
 
@@ -905,11 +945,31 @@ CDox::CDox()
   timer = new QTimer (this);
   timer->setInterval (100);
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
+#if defined(QTBUILDINJOYSTICK_ENABLE)
+/*
+  auto gamepads = QGamepadManager::instance()->connectedGamepads();
+  if (gamepads.isEmpty())
+      {
+       qDebug() << "Did not find any connected gamepads";
+       gamepad = 0;
+      }
+  else
+      {
+       gamepad = new QGamepad (*gamepads.begin(), this);
+       gamepadnav.setGamepad (gamepad);
+
+    //   gamepadnav.setActive (true);
+
+//       connect (gamepad, SIGNAL(axisLeftXChanged(double)), this, SLOT(move_cursor_x(double)));
+  //     connect (gamepad, SIGNAL(axisLeftYChanged(double)), this, SLOT(move_cursor_y(double)));
+
+      }
+ */
+#endif
+
+
 #if defined(JOYSTICK_SUPPORTED)
-
   joystick = new CJoystick (0, this);
 
   if (joystick->initialized)
@@ -919,8 +979,8 @@ CDox::CDox()
       if (settings->value ("use_joystick", "0").toInt())
          timer->start();
      }
-//#endif
 #endif
+
 }
 
 
@@ -984,7 +1044,7 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 
   if (fontstyle.contains ("strikeout"))
       tformat.setFontStrikeOut (true);
-  
+
   return tformat;
 }
 
@@ -994,21 +1054,21 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
 // qDebug() << "CSyntaxHighlighterQRegularExpression::load_from_xml ";
-  
+
   //wrap = true;
   casecare = true;
   exts = "default";
   langs = "default";
   pattern_opts = 0;
-  
+
   int darker_val = settings->value ("darker_val", 100).toInt();
-    
+
   if (! file_exists (fname))
      return;
-  
+
   QString temp = qstring_load (fname);
   QXmlStreamReader xml (temp);
-  
+
   while (! xml.atEnd())
         {
          xml.readNext();
@@ -1025,13 +1085,13 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 */
          if (xml.isStartElement())
             {
-            
+
              if (tag_name == "document")
                 {
                  exts = xml.attributes().value ("exts").toString();
                  langs = xml.attributes().value ("langs").toString();
                 }
-            
+
 
              if (tag_name == "item")
                 {
@@ -1043,14 +1103,14 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                      QString s_xml_format = xml.attributes().value ("xml_format").toString();
                      if (! s_xml_format.isEmpty())
                         xml_format = s_xml_format.toInt();
-                        
+
                      QString s_casecare = xml.attributes().value ("casecare").toString();
                      if (! s_casecare.isEmpty())
                         if (s_casecare == "0" || s_casecare == "false")
                            casecare = false;
-                        
-                     if (! casecare) 
-                        pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;                    
+
+                     if (! casecare)
+                        pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;
                      }
 
                  if (attr_type == "keywords")
@@ -1069,10 +1129,10 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                               if (! keywordPatterns.at(i).isEmpty())
                                  {
                                   QRegularExpression rg = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
-                                  
+
                                   if (! rg.isValid())
                                      qDebug() << "! valid " << rg.pattern();
-                                  else  
+                                  else
                                       {
                                        HighlightingRule rule;
                                        rule.pattern = rg;
@@ -1080,7 +1140,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                                        highlightingRules.append (rule);
                                       }
                                   }
-                         }       
+                         }
                       else
                       if (xml_format == 1)
                          {
@@ -1090,14 +1150,14 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                           if (! rg.isValid())
                              qDebug() << "! valid " << rg.pattern();
                           else
-                              {        
+                              {
                                HighlightingRule rule;
-                               rule.pattern = rg;  
+                               rule.pattern = rg;
                                rule.format = fmt;
-                               highlightingRules.append (rule); 
+                               highlightingRules.append (rule);
                               }
                          }
-                             
+
                      } //keywords
                  else
                     if (attr_type == "item")
@@ -1105,18 +1165,18 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                         QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                         QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                       // qDebug() << "attr_type == item, attr_name == " << attr_name; 
+                       // qDebug() << "attr_type == item, attr_name == " << attr_name;
 
                         QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
                         if (! rg.isValid())
                            qDebug() << "! valid " << rg.pattern();
-                        else    
+                        else
                             {
                              HighlightingRule rule;
-                             rule.pattern = rg;  
+                             rule.pattern = rg;
                              rule.format = fmt;
                              highlightingRules.append (rule);
-                            }              
+                            }
                        }
                     else
                         if (attr_type == "mcomment-start")
@@ -1158,9 +1218,9 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   foreach (HighlightingRule rule, highlightingRules)
           {
            QRegularExpressionMatch m = rule.pattern.match (text);
-           
+
            int index = m.capturedStart();
-  
+
            while (index >= 0)
                  {
                   int length = m.capturedLength();
@@ -1178,16 +1238,16 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
      return;
 
   QRegularExpressionMatch m_start = commentStartExpression.match (text);
-  
+
   if (previousBlockState() != 1)
       startIndex = m_start.capturedStart();
 
   while (startIndex >= 0)
         {
          QRegularExpressionMatch m_end = commentEndExpression.match (text, startIndex);
-         
+
          int endIndex = m_end.capturedStart();
-         
+
          int commentLength;
 
          if (endIndex == -1)
@@ -1201,7 +1261,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
          setFormat (startIndex, commentLength, multiLineCommentFormat);
 
          m_start = commentStartExpression.match (text, startIndex + commentLength);
-         startIndex = m_start.capturedStart(); 
+         startIndex = m_start.capturedStart();
         }
 }
 
@@ -1212,16 +1272,16 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
   //qDebug() << "CSyntaxHighlighter::load_from_xml - start";
 
   int darker_val = settings->value ("darker_val", 100).toInt();
- 
+
   exts = "default";
   langs = "default";
 
   cs = Qt::CaseSensitive;
-  
+
   if (! file_exists (fname))
      return;
 
-  
+
   QString temp = qstring_load (fname);
   QXmlStreamReader xml (temp);
 
@@ -1262,8 +1322,8 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      if (! s_casecare.isEmpty())
                         if (s_casecare == "0" || s_casecare == "false")
                            casecare = false;
-                        
-                     if (! casecare) 
+
+                     if (! casecare)
                         cs = Qt::CaseInsensitive;
                      }
 
@@ -1275,7 +1335,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      if (xml_format == 0)
                         {
                          QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
-                         
+
                          for (int i = 0; i < keywordPatterns.size(); i++)
                              if (! keywordPatterns.at(i).isEmpty())
                                 {
@@ -1283,7 +1343,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                                  if (rg.isValid())
                                     {
                                      HighlightingRule rule;
-                                     rule.pattern = rg; 
+                                     rule.pattern = rg;
                                      rule.format = fmt;
                                      highlightingRules.append (rule);
                                     }
@@ -1293,7 +1353,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                          if (xml_format == 1)
                             {
                              QRegExp rg = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
-                        
+
                              if (! rg.isValid())
                                 qDebug() << "! valid " << rg.pattern();
                              else
@@ -1302,16 +1362,16 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                                   rule.pattern = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
                                   rule.format = fmt;
                                   highlightingRules.append(rule);
-                                 }   
+                                 }
                             }
-                            
+
                      } //keywords
                  else
                  if (attr_type == "item")
                     {
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-                   
+
                      QRegExp rg = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
                      if (rg.isValid())
                         {
@@ -1319,7 +1379,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                          rule.pattern = rg;
                          rule.format = fmt;
                          highlightingRules.append (rule);
-                        } 
+                        }
                     }
                  else
                  if (attr_type == "mcomment-start")
@@ -1357,7 +1417,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
 void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 {
- 
+
   foreach (HighlightingRule rule, highlightingRules)
           {
            int index;
@@ -1417,9 +1477,9 @@ void CDox::save_to_session (const QString &fileName)
                {
                 l += t;
                 l += "\n";
-               } 
+               }
           }
-  
+
   qstring_save (fileName, l.trimmed());
 }
 
@@ -1433,7 +1493,7 @@ void CDox::load_from_session (const QString &fileName)
   if (l.size() < 0)
      return;
 
-  foreach (QString t, l)  
+  foreach (QString t, l)
           open_file_triplex (t);
 
   fname_current_session = fileName;
@@ -1443,7 +1503,7 @@ void CDox::load_from_session (const QString &fileName)
 QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
 {
   QHash <QString, QString> result;
- 
+
   QString temp = qstring_load (fname);
   QXmlStreamReader xml (temp);
 
@@ -1452,13 +1512,13 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
          xml.readNext();
 
          QString tag_name = xml.name().toString();
-         
+
          if (xml.isStartElement())
             {
 
             if (tag_name == "colorTheme")
              {
-                  
+
                  log->log (xml.attributes().value ("id").toString());
                  log->log (xml.attributes().value ("name").toString());
                  log->log (xml.attributes().value ("modified").toString());
@@ -1466,14 +1526,14 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                  log->log (xml.attributes().value ("website").toString());
                 }
 
-         
+
             if (tag_name == "singleLineComment")
                {
                 QString t = xml.attributes().value ("color").toString();
                 if (! t.isEmpty())
                      result.insert ("single comment", t);
                }
-         
+
 
             if (tag_name == "class")
                {
@@ -1485,7 +1545,7 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                    }
                }
 
-         
+
          if (tag_name == "operator")
             {
              QString t = xml.attributes().value ("color").toString();
@@ -1493,8 +1553,8 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                      result.insert ("operator", t);
             }
 
-         
-         
+
+
          if (tag_name == "string")
             {
              QString t = xml.attributes().value ("color").toString();
@@ -1502,8 +1562,8 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                  result.insert ("quotes", t);
             }
 
-         
-         
+
+
          if (tag_name == "multiLineComment")
             {
              QString t = xml.attributes().value ("color").toString();
@@ -1511,8 +1571,8 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                  result.insert ("mcomment-start", t);
             }
 
-         
-         
+
+
          if (tag_name == "foreground")
             {
              QString t = xml.attributes().value ("color").toString();
@@ -1534,13 +1594,13 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
             {
              QString t = xml.attributes().value ("color").toString();
              if (! t.isEmpty())
-                { 
+                {
                  result.insert ("background", t);
                  result.insert ("linenums_bg", t);
                 }
             }
-         
-         
+
+
          if (tag_name == "selectionForeground")
             {
              QString t = xml.attributes().value ("color").toString();
@@ -1548,8 +1608,8 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                 result.insert ("sel-text", t);
             }
 
-         
-         
+
+
          if (tag_name == "selectionBackground")
             {
              QString t = xml.attributes().value ("color").toString();
@@ -1557,7 +1617,7 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                result.insert ("sel-background", t);
             }
 
-         
+
          if (tag_name == "keyword")
             {
              QString t = xml.attributes().value ("color").toString();
@@ -1568,8 +1628,8 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                 }
              }
 
-        	 
-        	 
+
+
        	 if (tag_name == "currentLine")
             {
              QString t = xml.attributes().value ("color").toString();
@@ -1577,25 +1637,25 @@ QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
                 result.insert ("cur_line_color", t);
             }
 
-        	 
+
          if (tag_name == "bracket")
             {
              QString t = xml.attributes().value ("color").toString();
              if (! t.isEmpty())
                  result.insert ("brackets", t);
              }
-             
+
         }//is start
 
   if (xml.hasError())
      qDebug() << "xml parse error";
 
   } //cycle
-  
+
 
    result.insert ("error", "red");
-   
-   return result; 
+
+   return result;
 }
 */
 /*
@@ -1605,7 +1665,7 @@ void CDox::load_global_palette (const QString &fileName)
       return;
 
   global_palette.clear();
-  
+
   if (file_get_ext (fileName) == "xml")
      global_palette = load_eclipse_theme_xml (fileName);
   else
@@ -1637,37 +1697,37 @@ void CTEAEdit::calc_auto_indent()
   QTextCursor cur = textCursor();
   cur.movePosition (QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
   int aindent = 0;
-  
+
   QString s = cur.selectedText();
   int len = s.size();
-  
+
   QChar t = ' '; //what to detect - space or tab?
   if (s.indexOf ('\t') != -1)
      t = '\t';
-  
+
   if (t != '\t')
      {
       for (int i = 0; i < len; i++)
           if (! s.at(i).isSpace())
              {
-              aindent = i; 
+              aindent = i;
               break;
              }
      }
-  else   
+  else
      {
       for (int i = 0; i < len; i++)
           if (s.at(i) != '\t')
             {
-             aindent = i; 
+             aindent = i;
              break;
             }
      }
-           
+
 
   if (aindent != 0)
      indent_val = indent_val.fill (t, aindent);
-  else 
+  else
       indent_val.clear();
 }
 
@@ -1678,20 +1738,20 @@ void CTEAEdit::indent()
      {
       QString fl;
       fl = fl.fill (' ', tab_sp_width);
-         
+
       if (spaces_instead_of_tabs)
          textCursor().insertText (fl);
       else
           textCursor().insertText ("\t");
-       
+
       return;
      }
 
   QStringList l = textCursor().selectedText().split (QChar::ParagraphSeparator);
-       
+
   QString fl;
   fl = fl.fill (' ', tab_sp_width);
-        
+
   QMutableListIterator <QString> i (l);
 
   while (i.hasNext())
@@ -1701,14 +1761,14 @@ void CTEAEdit::indent()
             i.setValue (s.prepend (fl));
          else
              i.setValue (s.prepend ("\t"));
-         }       
-       
+         }
+
   textCursor().insertText (l.join ("\n"));
-  
+
   QTextCursor cur = textCursor();
-  cur.movePosition (QTextCursor::Up, QTextCursor::KeepAnchor, l.size() - 1);   
-  cur.movePosition (QTextCursor::StartOfLine, QTextCursor::KeepAnchor);   
-  
+  cur.movePosition (QTextCursor::Up, QTextCursor::KeepAnchor, l.size() - 1);
+  cur.movePosition (QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+
   setTextCursor (cur);
 }
 
@@ -1718,33 +1778,33 @@ void CTEAEdit::un_indent()
   if (! textCursor().hasSelection())
      {
       QString t = textCursor().selectedText();
-      if (! t.isEmpty() && (t.size() > 1) && t[0].isSpace()) 
+      if (! t.isEmpty() && (t.size() > 1) && t[0].isSpace())
          t = t.mid (1);
 
       return;
      }
-   
+
   QStringList l = textCursor().selectedText().split (QChar::ParagraphSeparator);
-   
+
   QMutableListIterator <QString> i (l);
 
   while (i.hasNext())
         {
          QString t = i.next();
-         
-         if (! t.isEmpty() && (t.size() > 1)) 
+
+         if (! t.isEmpty() && (t.size() > 1))
              if (t[0] == '\t' || t[0].isSpace())
                 {
                  t = t.mid (1);
                  i.setValue (t);
-                }              
-         }       
-   
+                }
+         }
+
   textCursor().insertText (l.join ("\n"));
 
   QTextCursor cur = textCursor();
-  cur.movePosition (QTextCursor::Up, QTextCursor::KeepAnchor, l.size() - 1);   
-  cur.movePosition (QTextCursor::StartOfLine, QTextCursor::KeepAnchor);   
+  cur.movePosition (QTextCursor::Up, QTextCursor::KeepAnchor, l.size() - 1);
+  cur.movePosition (QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
 
   setTextCursor (cur);
 }
@@ -1761,11 +1821,11 @@ void CTEAEdit::un_indent()
 
 void CTEAEdit::keyPressEvent (QKeyEvent *event)
 {
- // qDebug() << event->nativeScanCode() ; 
+ // qDebug() << event->nativeScanCode() ;
 
  // qDebug() << int_to_binary (event->nativeModifiers());
   // std::bitset<32> btst (event->nativeModifiers());
-   
+
    /*
    for (std::size_t i = 0; i < btst.size(); ++i) {
         qDebug() << "btst[" << i << "]: " << btst[i];
@@ -1776,14 +1836,14 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
 //LCTRL = 2
 //LALT = 3
   //LWIN = 6
-  
+
   if (settings->value ("wasd", "0").toInt())
      {
       std::bitset<32> btst (event->nativeModifiers());
       QTextCursor cr = textCursor();
 
       QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
-       
+
       if (btst[3] == 1 || btst[6] == 1) //LALT or LWIN
          {
           int visible_lines;
@@ -1812,22 +1872,22 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
                             cr.movePosition (QTextCursor::Right, m);
                             setTextCursor (cr);
                             return;
-                                 
+
                   case SK_E:
                             visible_lines = height() / fontMetrics().height();
                             cr.movePosition (QTextCursor::Down, m, visible_lines);
                             setTextCursor (cr);
-                            return;               
-                                  
+                            return;
+
                   case SK_C:
                             visible_lines = height() / fontMetrics().height();
                             cr.movePosition (QTextCursor::Up, m, visible_lines);
                             setTextCursor (cr);
-                            return;               
+                            return;
                 }
-      
+
        }
-    } 
+    }
 
 
   if (auto_indent && event->key() == Qt::Key_Return)
@@ -1837,7 +1897,7 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
       textCursor().insertText (indent_val);
       return;
      }
-   
+
   if (event->key() == Qt::Key_Tab)
      {
       indent();
@@ -1857,8 +1917,18 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
       setOverwriteMode (! overwriteMode());
       event->accept();
       return;
-     }   
-  
+     }
+/*   else
+   if (event->key() == doc->holder->gamepadnav.leftKey())
+      {
+       qDebug() << "left";
+      event->accept();
+
+       return;
+
+      }
+*/
+
   QPlainTextEdit::keyPressEvent (event);
 }
 
@@ -1866,12 +1936,12 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
 int CTEAEdit::lineNumberAreaWidth()
 {
   if (! draw_linenums)
-     return 0; 
+     return 0;
 
   int digits = 1;
   int max = qMax (1, blockCount());
-  
-  while (max >= 10) 
+
+  while (max >= 10)
         {
          max /= 10;
          ++digits;
@@ -1918,16 +1988,16 @@ void CTEAEdit::lineNumberAreaPaintEvent (QPaintEvent *event)
   int w = lineNumberArea->width();
   int h = fontMetrics().height();
 
-  while (block.isValid() && top <= event->rect().bottom()) 
+  while (block.isValid() && top <= event->rect().bottom())
         {
-         if (block.isVisible() && bottom >= event->rect().top()) 
+         if (block.isVisible() && bottom >= event->rect().top())
             {
              QString number = QString::number (blockNumber + 1) + " ";
 //             painter.setPen (text_color);
              painter.drawText (0, top, w, h, Qt::AlignRight, number);
              /*int index = bookMark.indexOf(number.toInt());
- 
-             if (index != -1) 
+
+             if (index != -1)
                 {
                 //painter.drawText(0, top, 30, fontMetrics().height(), Qt::AlignCenter, "+");
                  painter.setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
@@ -1955,7 +2025,7 @@ void CTEAEdit::braceHighlight()
 {
   //extraSelections.clear();
   //setExtraSelections (extraSelections);
-  
+
   brace_selection.format.setBackground (brackets_color);
 
   QTextDocument *doc = document();
@@ -1968,95 +2038,95 @@ void CTEAEdit::braceHighlight()
   beforeCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
   QString beforeBrace = beforeCursor.selectedText();
 
-  if ((brace != "{") && 
+  if ((brace != "{") &&
       (brace != "}") &&
       (brace != "[") &&
-      (brace != "]") && 
-      (brace != "(") && 
-      (brace != ")") && 
-      (brace != "<") && 
-      (brace != ">")) 
+      (brace != "]") &&
+      (brace != "(") &&
+      (brace != ")") &&
+      (brace != "<") &&
+      (brace != ">"))
       {
-       if ((beforeBrace == "{") 
-           || (beforeBrace == "}") 
+       if ((beforeBrace == "{")
+           || (beforeBrace == "}")
            || (beforeBrace == "[")
            || (beforeBrace == "]")
            || (beforeBrace == "(")
            || (beforeBrace == ")")
            || (beforeBrace == "<")
-           || (beforeBrace == ">")) 
+           || (beforeBrace == ">"))
           {
            cursor = beforeCursor;
            brace = cursor.selectedText();
           }
-       else 
+       else
            return;
        }
 
   QString openBrace;
   QString closeBrace;
 
-  if ((brace == "{") || (brace == "}")) 
+  if ((brace == "{") || (brace == "}"))
      {
       openBrace = "{";
       closeBrace = "}";
      }
   else
-  if ((brace == "[") || (brace == "]")) 
+  if ((brace == "[") || (brace == "]"))
      {
       openBrace = "[";
       closeBrace = "]";
      }
   else
-  if ((brace == "(") || (brace == ")")) 
+  if ((brace == "(") || (brace == ")"))
      {
       openBrace = "(";
       closeBrace = ")";
      }
   else
-  if ((brace == "<") || (brace == ">")) 
+  if ((brace == "<") || (brace == ">"))
      {
       openBrace = "<";
       closeBrace = ">";
      }
 
 
-  if (brace == openBrace) 
+  if (brace == openBrace)
      {
       QTextCursor cursor1 = doc->find (closeBrace, cursor);
       QTextCursor cursor2 = doc->find (openBrace, cursor);
-      if (cursor2.isNull()) 
+      if (cursor2.isNull())
          {
           brace_selection.cursor = cursor;
           extraSelections.append (brace_selection);
           brace_selection.cursor = cursor1;
           extraSelections.append (brace_selection);
           setExtraSelections (extraSelections);
-         } 
-      else 
+         }
+      else
           {
-           while (cursor1.position() > cursor2.position()) 
+           while (cursor1.position() > cursor2.position())
                  {
                   cursor1 = doc->find (closeBrace, cursor1);
                   cursor2 = doc->find (openBrace, cursor2);
-                  if (cursor2.isNull()) 
+                  if (cursor2.isNull())
                       break;
                  }
-                
+
            brace_selection.cursor = cursor;
            extraSelections.append (brace_selection);
            brace_selection.cursor = cursor1;
            extraSelections.append (brace_selection);
            setExtraSelections (extraSelections);
           }
-       } 
+       }
    else
        {
-        if (brace == closeBrace) 
+        if (brace == closeBrace)
            {
             QTextCursor cursor1 = doc->find (openBrace, cursor, QTextDocument::FindBackward);
             QTextCursor cursor2 = doc->find (closeBrace, cursor, QTextDocument::FindBackward);
-            if (cursor2.isNull()) 
+            if (cursor2.isNull())
                {
                 brace_selection.cursor = cursor;
                 extraSelections.append (brace_selection);
@@ -2064,16 +2134,16 @@ void CTEAEdit::braceHighlight()
                 extraSelections.append (brace_selection);
                 setExtraSelections (extraSelections);
                }
-            else 
+            else
                 {
-                 while (cursor1.position() < cursor2.position()) 
+                 while (cursor1.position() < cursor2.position())
                        {
                         cursor1 = doc->find (openBrace, cursor1, QTextDocument::FindBackward);
                         cursor2 = doc->find (closeBrace, cursor2, QTextDocument::FindBackward);
-                        if (cursor2.isNull()) 
+                        if (cursor2.isNull())
                            break;
                        }
-                       
+
                  brace_selection.cursor = cursor;
                  extraSelections.append (brace_selection);
                  brace_selection.cursor = cursor1;
@@ -2088,75 +2158,75 @@ void CTEAEdit::braceHighlight()
 bool CTEAEdit::has_rect_selection()
 {
  if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
-     return false; 
-     
- return true;    
+     return false;
+
+ return true;
 }
- 
+
 
 void CTEAEdit::update_rect_sel()
 {
  // qDebug() << "CTEAEdit::update_rect_sel()  -1";
- 
+
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
-     return; 
- 
+     return;
+
   QTextEdit::ExtraSelection rect_selection;
 
   //extraSelections.clear();
-    
+
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   //int ydiff = y2 - y1;
-     
+
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
   int xdiff = x2 - x1;
- 
+
   int correction = 0;
 
   QTextCursor cursor = textCursor();
-  
+
   cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
-  
+
   for (int y = y1; y <= y2; y++)
       {
 //       qDebug() << "y:" << y;
-       
-       QTextBlock b = document()->findBlockByNumber (y); 
-       
+
+       QTextBlock b = document()->findBlockByNumber (y);
+
    //    qDebug() << "b.text().length(): " << b.text().length();
      //  qDebug() << "x1: " << x1;
-       
+
        if (b.text().length() == 0)
           {
            //cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
            correction++;
            continue;
-          } 
-       
+          }
+
        int sel_len = xdiff;
-       
+
        if ((b.text().length() - x1) < xdiff)
           sel_len = b.text().length() - x1;
-   
+
        cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1 + correction);
 
        cursor.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, sel_len);
-              
+
        rect_selection.cursor = cursor;
        // rect_selection.format.setBackground (brackets_color);
        rect_selection.format.setBackground (sel_back_color);
        rect_selection.format.setForeground (sel_text_color);
-      
+
        extraSelections.append (rect_selection);
-  
+
        cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
-       
+
        if (b.text().length() != 0)
            correction = 0;
-       
+
       }
 
   setExtraSelections (extraSelections);
@@ -2171,154 +2241,154 @@ void CTEAEdit::update_rect_sel()
 }
 
 
-  
+
 void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
 {
 /*
 
 1. Определить с какой строки начинаем вставку
-2. Определить как вставляемый текст перекрывает старый. Если строк в старом меньше (или конец файла), 
+2. Определить как вставляемый текст перекрывает старый. Если строк в старом меньше (или конец файла),
 добавляем в выходной буфер строки.
 3. Составляем выходной буфер из строк старого и нового.
 4. Заменяем старый текст на выходной буфер.
 
 */
 
- 
+
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   int ydiff = y2 - y1;
-   
-  
+
+
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
-  
+
 //  int how_many_copy_from_source = ydiff;
-  
+
 //  int lines_to_end = blockCount() - y1;
-      
+
   QStringList sl_source;
-  
+
   for (int line = y1; line <= y2; line++)
       {
-       QTextBlock b = document()->findBlockByNumber (line); 
-       sl_source.append (b.text());   
-      }  
-  
+       QTextBlock b = document()->findBlockByNumber (line);
+       sl_source.append (b.text());
+      }
+
   QStringList sl_insert = s.split ("\n");
-  
+
   QStringList sl_dest;
-  
+
   for (int line = 0; line < sl_insert.size(); line++)
-      { 
+      {
        QString t;
-       
+
        if (line >= sl_source.size())
           {
            t = sl_insert [line];
            sl_dest.append (t);
-           continue;  
+           continue;
           }
-  
+
        t = sl_source[line].left (x1);
        t += sl_insert [line];
-       
+
        if (! insert)
           t += sl_source[line].mid (x2);
-       else   
+       else
            t += sl_source[line].mid (x1);
-  
+
        sl_dest.append (t);
       }
 
   QString new_text = sl_dest.join ("\n");
   //new_text += "\n";
 
-//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
-  
+//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст
+
   QTextCursor cursor = textCursor();
-  
+
   cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, ydiff);
   cursor.movePosition (QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-  
+
   cursor.removeSelectedText();
-  
+
   textCursor().insertText (new_text);
-  
+
 //  qDebug() << new_text;
 }
-  
-/*  
+
+/*
 void CTEAEdit::rect_sel_insert (const QString &s)
 {
- 
+
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   int ydiff = y2 - y1;
-   
-  
+
+
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
   int xdiff = x2 - x1;
-  
+
   int how_many_copy_from_source = ydiff;
-  
+
   int lines_to_end = blockCount() - y1;
-  
+
   if (ydiff > lines_to_end)
      how_many_copy_from_source = lines_to_end;
-     
+
   QStringList sl_source;
-  
+
   for (int line = y1; line <= y2; line++)
       {
-       QTextBlock b = document()->findBlockByNumber (line); 
-       sl_source.append (b.text());   
-      }  
-  
+       QTextBlock b = document()->findBlockByNumber (line);
+       sl_source.append (b.text());
+      }
+
   QStringList sl_insert = s.split ("\n");
-  
+
   QStringList sl_dest;
-  
+
   for (int line = 0; line < sl_insert.size(); line++)
-      { 
+      {
        QString t;
-       
+
        if (line >= sl_source.size())
           {
            t = sl_insert [line];
            sl_dest.append (t);
-           continue;  
+           continue;
           }
-  
+
        t = sl_source[line].left (x1);
        t += sl_insert [line];
        t += sl_source[line].mid (x1);
-  
+
        sl_dest.append (t);
       }
 
   QString new_text = sl_dest.join ("\n");
   //new_text += "\n";
 
-//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
-  
+//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст
+
   QTextCursor cursor = textCursor();
-  
+
   cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, ydiff);
   cursor.movePosition (QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-  
+
   cursor.removeSelectedText();
-  
+
   textCursor().insertText (new_text);
-  
+
   qDebug() << new_text;
 }
- */   
+ */
 
 bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
 {
@@ -2338,8 +2408,8 @@ QMimeData* CTEAEdit::createMimeDataFromSelection()
       return md;
      }
 
-  return QPlainTextEdit::createMimeDataFromSelection();   
-} 
+  return QPlainTextEdit::createMimeDataFromSelection();
+}
 
 
 void CTEAEdit::insertFromMimeData (const QMimeData *source)
@@ -2415,11 +2485,11 @@ void CDox::open_current()
 
 void CDox::update_current_files_menu()
 {
- QStringList current_files; 
- 
+ QStringList current_files;
+
   foreach (CDocument *d, list)
           current_files.prepend (d->file_name);
- 
+
   current_files_menu->clear();
   create_menu_from_list (this, current_files_menu, current_files, SLOT(open_current()));
 }
@@ -2441,27 +2511,27 @@ QString CTEAEdit::get_rect_sel()
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   //int ydiff = y2 - y1;
-  
+
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
   int xdiff = x2 - x1;
- 
+
 
   for (int y = y1; y <= y2; y++)
       {
        //int sel_len = xdiff;
-       
-       QTextBlock b = document()->findBlockByNumber (y); 
-       
+
+       QTextBlock b = document()->findBlockByNumber (y);
+
        //if ((b.text().length() - x1) < xdiff)
          // sel_len = b.text().length() - x1;
-          
-       QString t = b.text();   
+
+       QString t = b.text();
 
        result += t.mid (x1, xdiff);
-       
+
        if (y != y2)
-          result += '\n';   
+          result += '\n';
       }
 
   return result;
@@ -2473,59 +2543,59 @@ void CTEAEdit::rect_sel_cut (bool just_del)
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   int ydiff = y2 - y1;
-  
+
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
-  
+
 //  int how_many_copy_from_source = ydiff;
-  
+
   //int lines_to_end = blockCount() - y1;
-  
+
 //  if (ydiff > lines_to_end)
   //   how_many_copy_from_source = lines_to_end;
-     
+
   QStringList sl_source;
-  
+
   for (int line = y1; line <= y2; line++)
       {
-       QTextBlock b = document()->findBlockByNumber (line); 
-       sl_source.append (b.text());   
-      }  
-  
+       QTextBlock b = document()->findBlockByNumber (line);
+       sl_source.append (b.text());
+      }
+
   QStringList sl_dest;
   QStringList sl_copy;
-  
+
   for (int line = 0; line < sl_source.size(); line++)
-      { 
+      {
        QString t;
 
        t = sl_source[line].left (x1);
        t += sl_source[line].mid (x2);
        sl_dest.append (t);
-       
+
        sl_copy.append (sl_source[line].mid (x1, x2 - x1));
       }
 
   QString new_text = sl_dest.join ("\n");
 
-//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст     
-  
+//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст
+
   QTextCursor cursor = textCursor();
-  
+
   cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
   cursor.movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, ydiff);
   cursor.movePosition (QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-  
+
   cursor.beginEditBlock();
-  
+
   cursor.removeSelectedText();
- 
+
   cursor.insertText (new_text);
 
   cursor.endEditBlock();
-  
-  if (! just_del)  
+
+  if (! just_del)
      QApplication::clipboard()->setText (sl_copy.join ("\n"));
 }
 
@@ -2535,20 +2605,20 @@ void CTEAEdit::update_ext_selections()
   extraSelections.clear();
   setExtraSelections (extraSelections);
   update_rect_sel();
-  braceHighlight();     
+  braceHighlight();
 }
-  
+
 
 void CTEAEdit::slot_selectionChanged()
 {
   QTextCursor cursor = this->textCursor();
-  
+
   if (cursor.selectionStart() != cursor.selectionEnd())
      {
       rect_sel_start.setX (-1);
       rect_sel_end.setX (-1);
       update_ext_selections();
-     } 
+     }
 }
 
 
@@ -2564,23 +2634,23 @@ void CTEAEdit::text_replace (const QString &s)
 void CTEAEdit::copy()
 {
   qDebug() << "CTEAEdit::copy()";
-  
+
   if (has_rect_selection())
-     QApplication::clipboard()->setText (get_rect_sel());   
-  else   
+     QApplication::clipboard()->setText (get_rect_sel());
+  else
       QPlainTextEdit::copy();
 }
 */
 
 /*
- * 
- 
+ *
+
  // new INDEX-IN VARIANT
 
 void CSyntaxHighlighter::highlightBlock (const QString &text)
 {
  qDebug() << "1";
- 
+
   foreach (HighlightingRule rule, highlightingRules)
           {
            QRegExp expression (rule.pattern);
@@ -2645,9 +2715,7 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
         }
 }
 */
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 #if defined(JOYSTICK_SUPPORTED)
 
 bool CDox::event (QEvent *ev)
@@ -2660,12 +2728,13 @@ bool CDox::event (QEvent *ev)
       custom_event->accept();
       return true;
      }
-	
+
   return QObject::event(ev);
 }
 
 
-void CDox::handle_joystick_event (CJoystickAxisEvent *event)
+
+void CDox::move_cursor (QTextCursor::MoveOperation mo)
 {
   CDocument *d = get_current();
 
@@ -2675,30 +2744,51 @@ void CDox::handle_joystick_event (CJoystickAxisEvent *event)
   QTextCursor cr = d->textEdit->textCursor();
   if (cr.isNull())
      return;
-     
-  QTextCursor::MoveOperation mo = QTextCursor::NoMove;   
-     
-  if (event->axis == 1 && event->value < 0) //up
-     mo = QTextCursor::Up;
-           
-  if (event->axis == 1 && event->value > 0) //down
-     mo = QTextCursor::Down;
-     
-  if (event->axis == 0 && event->value < 0) //left
-     mo = QTextCursor::Left; 
-           
-  if (event->axis == 0 && event->value > 0) //right
-     mo = QTextCursor::Right;
-           
-  if (mo != QTextCursor::NoMove)         
+
+  if (mo != QTextCursor::NoMove)
      {
       cr.movePosition (mo, QTextCursor::MoveAnchor);
       d->textEdit->setTextCursor (cr);
-     } 
-}    
+     }
+}
+
+
+void CDox::handle_joystick_event (CJoystickAxisEvent *event)
+{
+//  CDocument *d = get_current();
+
+//  if (! d)
+  //   return;
+
+//  QTextCursor cr = d->textEdit->textCursor();
+//  if (cr.isNull())
+  //   return;
+
+  QTextCursor::MoveOperation mo = QTextCursor::NoMove;
+
+  if (event->axis == 1 && event->value < 0) //up
+     mo = QTextCursor::Up;
+
+  if (event->axis == 1 && event->value > 0) //down
+     mo = QTextCursor::Down;
+
+  if (event->axis == 0 && event->value < 0) //left
+     mo = QTextCursor::Left;
+
+  if (event->axis == 0 && event->value > 0) //right
+     mo = QTextCursor::Right;
+
+
+  move_cursor (mo);
+//  if (mo != QTextCursor::NoMove)
+  //   {
+    //  cr.movePosition (mo, QTextCursor::MoveAnchor);
+     // d->textEdit->setTextCursor (cr);
+     //}
+}
 
 #endif
-//#endif
+
 
 void CDox::update_project (const QString &fileName)
 {
@@ -2714,18 +2804,18 @@ void CDox::update_project (const QString &fileName)
 void CTEAEdit::set_word_wrap (bool wrap)
 {
   if (wrap)
-     setWordWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);    
+     setWordWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);
   else
-     setWordWrapMode (QTextOption::NoWrap);    
-     
-   
+     setWordWrapMode (QTextOption::NoWrap);
+
+
 }
 
 bool CTEAEdit::get_word_wrap()
 {
-  if (wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere)   
+  if (wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere)
      return true;
   else
      return false;
-   
+
 }

@@ -8,9 +8,6 @@
 
 
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
-
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 
 #if defined(JOYSTICK_SUPPORTED)
 
@@ -58,8 +55,11 @@ public:
 
   QObject *receiver; //link to the object that handle joystick events
 
-  int fd; //joystick file descriptor 
+  int fd; //joystick file descriptor
   uint id; //joystick id
+
+  int etype;
+  bool axis_pressed;
 
   QString description; //joystick text description
   bool initialized;
@@ -75,8 +75,10 @@ public:
 public slots:
 
   void read_joystick();
+  void read_joystick_depr();
+
 };
+
 
 #endif
 #endif
-//#endif

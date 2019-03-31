@@ -2,9 +2,6 @@
 
 #include <QtGlobal>
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
-
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11) 
 
 #if defined(JOYSTICK_SUPPORTED)
 
@@ -27,14 +24,21 @@ CJoystick::CJoystick (uint idn, QObject *upper_link)
   initialized = false;
   number_of_axis = 0;
   number_of_buttons = 0;
+  axis_pressed = false;
+  etype = 0;
 
-  QString filename = "/dev/input/js" + QString::number(id);
+  QString filename = "/dev/input/js" + QString::number (id);
 
-  if (( fd = open (filename.toUtf8().data(), O_NONBLOCK)) == -1)
+  qDebug() << "Trying to open " << filename;
+
+
+  if ((fd = open (filename.toUtf8().data(), O_NONBLOCK)) == -1)
      {
       qDebug() << "Cannot open " << filename;
       return;
      }
+
+  qDebug() << "ok";
 
   initialized = true;
 
@@ -54,6 +58,29 @@ CJoystick::CJoystick (uint idn, QObject *upper_link)
 }
 
 
+void CJoystick::read_joystick_depr()
+{
+  struct JS_DATA_TYPE js;
+  if (read (fd, &js, JS_RETURN) != JS_RETURN)
+     return; //error
+
+  CJoystickAxisEvent *event = new CJoystickAxisEvent (evtJoystickAxis);
+
+  if (js.y != 0)
+     {
+      event->axis = 0;
+      event->value = js.y;
+     }
+
+  if (js.x != 0)
+     {
+      event->axis = 1;
+      event->value = js.x;
+     }
+   QApplication::postEvent(receiver, reinterpret_cast<QEvent*>(event));
+}
+
+
 void CJoystick::read_joystick()
 {
   if (! initialized)
@@ -61,12 +88,13 @@ void CJoystick::read_joystick()
 
   struct js_event e;
 
-  while (read (fd, &e, sizeof(e)) > 0) 
+  while (read (fd, &e, sizeof(e)) > 0)
         {
          process_event (e);
         }
 
-  if (errno != EAGAIN) 
+
+  if (errno != EAGAIN)
      {
       qDebug() << "Joystick read error";
       initialized = false;
@@ -74,8 +102,12 @@ void CJoystick::read_joystick()
 }
 
 
+
+
 void CJoystick::process_event (js_event e)
 {
+ // qDebug() << "e.type" << e.type << endl;
+
   if (e.type & JS_EVENT_BUTTON)
      {
       CJoystickButtonEvent *event = new CJoystickButtonEvent (evtJoystickButton);
@@ -86,7 +118,7 @@ void CJoystick::process_event (js_event e)
       QApplication::postEvent (receiver, reinterpret_cast<QEvent*>(event));
      }
   else
-  if (e.type & JS_EVENT_AXIS) 
+  if (e.type & JS_EVENT_AXIS)
      {
       CJoystickAxisEvent *event = new CJoystickAxisEvent (evtJoystickAxis);
 
@@ -98,4 +130,3 @@ void CJoystick::process_event (js_event e)
 }
 
 #endif
-//#endif

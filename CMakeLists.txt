@@ -29,7 +29,6 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(hunspell hunspell)
 if(hunspell_FOUND)
   add_definitions(-DHUNSPELL_ENABLE)
-#  add_definitions(-DSPELLCHECK_ENABLE)
   message("+ hunspell support")
 endif()
 
@@ -41,6 +40,7 @@ add_definitions(-DUSE_QML_STUFF)
 if(BUILD_TESTING)
   find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
 endif()
+
 
 
 qt5_add_resources(QT_RESOURCES resources.qrc)
@@ -95,6 +95,7 @@ if (Qt5PrintSupport_FOUND)
    add_definitions(-DPRINTER_ENABLE)
    target_link_libraries(${PROJECT} Qt5::PrintSupport)
 endif()
+
 
 
 if (EXISTS "/usr/include/linux/joystick.h")

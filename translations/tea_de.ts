@@ -881,10 +881,6 @@ Do you want to overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>UI style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Word wrap</source>
         <translation>Zeilenumbruch</translation>
     </message>
@@ -1869,6 +1865,10 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>FIF at the top (restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI style (restart needed)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

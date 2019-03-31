@@ -97,7 +97,6 @@ if (Qt5PrintSupport_FOUND)
 endif()
 
 
-
 if (EXISTS "/usr/include/linux/joystick.h")
    message("+JOYSTICK_SUPPORTED")
    add_definitions(-DJOYSTICK_SUPPORTED)
@@ -111,7 +110,6 @@ find_path(ASPELL_INLCUDES aspell.h
 
 if(ASPELL_INLCUDES)
   add_definitions(-DASPELL_ENABLE)
-#  add_definitions(-DSPELLCHECK_ENABLE)
   target_link_libraries(${PROJECT} libaspell.so)
   message("+ aspell support")
 endif()
@@ -123,7 +121,6 @@ if(popplerqt5_FOUND)
   add_definitions(-DPOPPLER_ENABLE)
   target_link_libraries(${PROJECT} ${popplerqt5_LIBRARIES})
   include_directories(${popplerqt5_INCLUDE_DIRS})
-
   message("+ poppler support")
 endif()
 

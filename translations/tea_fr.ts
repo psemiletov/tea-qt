@@ -914,7 +914,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>UI style</source>
-        <translation>Modèle de l&apos;IU</translation>
+        <translation type="vanished">Modèle de l&apos;IU</translation>
     </message>
     <message>
         <source>Word wrap</source>
@@ -1970,6 +1970,10 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>FIF at the top (restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI style (restart needed)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

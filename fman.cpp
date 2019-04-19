@@ -39,7 +39,7 @@ void CFMan::dir_up()
 {
   if (dir.path() == "/")
      return;
-  
+
   QString oldcurdir = dir.dirName();
 
   dir.cdUp();
@@ -61,34 +61,34 @@ void CFMan::nav (const QString &path)
   setModel (0);
 
   QDir::SortFlags sort_flags = 0;
-  
+
   if (sort_order == Qt::DescendingOrder)
      sort_flags |= QDir::Reversed;
-  
+
   if (sort_mode == 0)
      sort_flags |= QDir::Name;
 
   if (sort_mode == 1)
      sort_flags |= QDir::Size;
-  
+
   if (sort_mode == 2)
      sort_flags |= QDir::Time;
 
   sort_flags |= QDir::DirsFirst;
   sort_flags |= QDir::IgnoreCase;
   sort_flags |= QDir::LocaleAware;
- 
-  
+
+
   mymodel->removeRows (0, mymodel->rowCount());
-  
+
   QFileInfoList lst = dir.entryInfoList (QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot |
-                                         QDir::Files | QDir::Drives, 
+                                         QDir::Files | QDir::Drives,
                                          sort_flags);
 
-  
-  
+
+
   /*QFileInfoList lst = dir.entryInfoList (QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot |
-                                         QDir::Files | QDir::Drives, 
+                                         QDir::Files | QDir::Drives,
                                          QDir::Name |
                                          QDir::DirsFirst | QDir::IgnoreCase | QDir::LocaleAware);
 
@@ -105,10 +105,10 @@ QDir::DirsLast 0x20  Put the files first, then the directories.
 QDir::Reversed 0x08  Reverse the sort order.
 QDir::IgnoreCase  0x10  Sort case-insensitively.
 QDir::LocaleAware 0x40  Sort items appropriately using the current locale settings.
-    
-    
+
+
    */
-  
+
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
   if (path != "/")
@@ -123,7 +123,7 @@ QDir::LocaleAware 0x40  Sort items appropriately using the current locale settin
 
   foreach (QFileInfo fi, lst)
            add_entry (fi);
-          
+
   setModel (mymodel);
   connect (selectionModel(), SIGNAL(currentChanged (const QModelIndex &, const QModelIndex &)), this, SLOT(cb_fman_currentChanged (const QModelIndex &, const QModelIndex &)));
   emit dir_changed (path);
@@ -144,20 +144,20 @@ const QModelIndex CFMan::index_from_name (const QString &name)
 void CFMan::tv_activated (const QModelIndex &index)
 {
   QString item_string = index.data().toString();
-  
+
   QString dpath = dir.path();
-  
+
   if (dpath.size() > 1)
      if (dpath.endsWith("/") || dpath.endsWith("\\"))
         dpath.truncate(dpath.size() - 1);
-    
+
   QString full_path;
-  
+
   if (dpath == "/")
      full_path = "/" + item_string;
   else
      full_path = dpath + "/" + item_string;
-  
+
   if (item_string == ".." && dir.path() != "/")
      {
       dir_up();
@@ -228,52 +228,52 @@ void CFMan::append_dot_entry (const QString &fname)
 
 void CFMan::header_view_sortIndicatorChanged (int logicalIndex, Qt::SortOrder order)
 {
-//  qDebug() << "header col = " << logicalIndex << " order = " << order; 
+//  qDebug() << "header col = " << logicalIndex << " order = " << order;
   sort_order = order;
   sort_mode = logicalIndex;
-  
+
   settings->setValue ("fman_sort_mode", sort_mode);
   settings->setValue ("fman_sort_order", sort_order);
-  
-  refresh();  
+
+  refresh();
 }
 
 
 CFMan::CFMan (QWidget *parent): QTreeView (parent)
 {
-  sort_mode = settings->value ("fman_sort_mode", 0).toInt(); 
-  sort_order = Qt::SortOrder (settings->value ("fman_sort_order", 0).toInt()); 
-     
+  sort_mode = settings->value ("fman_sort_mode", 0).toInt();
+  sort_order = Qt::SortOrder (settings->value ("fman_sort_order", 0).toInt());
+
   mymodel = new QStandardItemModel (0, 3, parent);
 
   mymodel->setHeaderData (0, Qt::Horizontal, QObject::tr ("Name"));
   mymodel->setHeaderData (1, Qt::Horizontal, QObject::tr ("Size"));
   mymodel->setHeaderData (2, Qt::Horizontal, QObject::tr ("Modified at"));
-  
+
   setRootIsDecorated (false);
   setAlternatingRowColors (true);
   setAllColumnsShowFocus (true);
   setModel (mymodel);
   setDragEnabled (true);
- 
+
 
 #if QT_VERSION >= 0x050000
 
   header()->setSectionResizeMode (QHeaderView::ResizeToContents);
   header()->setSectionsClickable (true);
-   
+
 #else
 
   header()->setResizeMode (QHeaderView::ResizeToContents);
   header()->setClickable (true);
-  
+
 #endif
 
   header()->setSortIndicator (sort_mode, sort_order);
-  header()->setSortIndicatorShown (true);  
+  header()->setSortIndicatorShown (true);
 
   connect (header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(header_view_sortIndicatorChanged(int, Qt::SortOrder)));
-  
+
   header()->setStretchLastSection (false);
 
   setSelectionMode (QAbstractItemView::ExtendedSelection);
@@ -325,11 +325,11 @@ QStringList CFMan::get_sel_fnames()
   foreach (QModelIndex index, il)
           {
            QString item_string = index.data().toString();
-           if (item_string != "..") 
+           if (item_string != "..")
               {
                QString full_path = dir.path() + "/" + item_string;
                li.append (full_path);
-              } 
+              }
           }
 
   return li;
@@ -341,10 +341,10 @@ void CFMan::refresh()
   QString current;
 
   if (selectionModel()->hasSelection())
-     {    
+     {
       QModelIndex index = selectionModel()->currentIndex();
       current = index.data().toString();
-     } 
+     }
 
   nav (dir.path());
 
@@ -376,29 +376,29 @@ int CFMan::get_sel_index()
 
 void CFMan::mouseMoveEvent (QMouseEvent *event)
 {
-  if (! (event->buttons() & Qt::LeftButton)) 
+  if (! (event->buttons() & Qt::LeftButton))
      return;
 
   QStringList l = get_sel_fnames();
   if (l.size() < 1)
      return;
-  
+
   QDrag *drag = new QDrag (this);
   QMimeData *mimeData = new QMimeData;
- 
+
   QList <QUrl> list;
 
   foreach (QString fn, l)
-           list.append (QUrl::fromLocalFile (fn)); 
+           list.append (QUrl::fromLocalFile (fn));
 
-  mimeData->setUrls (list); 
+  mimeData->setUrls (list);
   drag->setMimeData (mimeData);
- 
-  if (drag->exec (Qt::CopyAction | 
+
+  if (drag->exec (Qt::CopyAction |
                   Qt::MoveAction |
                   Qt::LinkAction) == Qt::MoveAction)
      refresh();
-    
+
   event->accept();
 }
 
@@ -433,7 +433,7 @@ void CFMan::keyPressEvent (QKeyEvent *event)
       return;
      }
 
-     
+
   if (event->key() == Qt::Key_Backspace)
      {
       dir_up();
@@ -441,7 +441,7 @@ void CFMan::keyPressEvent (QKeyEvent *event)
       return;
      }
 
-     
+
   if (event->key() == Qt::Key_Return)
      {
       tv_activated (currentIndex());
@@ -462,7 +462,7 @@ void CFMan::keyPressEvent (QKeyEvent *event)
       event->accept();
       return;
      }
-     
+
 
   if (event->key() == Qt::Key_Down)
      {
@@ -529,12 +529,12 @@ void CFMan::drawRow (QPainter *painter, const QStyleOptionViewItem &option, cons
       o.rect = option.rect.adjusted(1,1,-1,-1);
       o.state |= QStyle::State_KeyboardFocusChange;
       o.state |= QStyle::State_Item;
-      
+
       //o.backgroundColor = palette().color(QPalette::Background);
       //o.backgroundColor = QColor ("red");
 
       QApplication::style()->drawPrimitive (QStyle::PE_FrameFocusRect, &o, painter);
-      
+
       QRect r = option.rect.adjusted (1, 1, -1,-1);
       painter->drawRect (r);
      }

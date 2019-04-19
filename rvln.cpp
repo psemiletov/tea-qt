@@ -823,16 +823,25 @@ void rvln::open()
   if (! settings->value ("use_trad_dialogs", "0").toBool())
      {
       CDocument *d = documents->get_current();
+
       if (d)
          {
           if (file_exists (d->file_name))
-              fman->nav (get_file_path (d->file_name));
+             fman->nav (get_file_path (d->file_name));
           else
-              fman->nav (dir_last);
+              if (file_exists (dir_last))
+                  fman->nav (dir_last);
+              else
+                  fman->nav (QDir::homePath());
          }
       else
-          fman->nav (dir_last);
+          if (file_exists (dir_last))
+             fman->nav (dir_last);
+          else
+              fman->nav (QDir::homePath());
 
+      main_tab_widget->setCurrentIndex (idx_tab_fman);
+      fm_entry_mode = FM_ENTRY_MODE_OPEN;
       main_tab_widget->setCurrentIndex (idx_tab_fman);
       fm_entry_mode = FM_ENTRY_MODE_OPEN;
 
@@ -10654,16 +10663,16 @@ void rvln::logmemo_double_click (const QString &txt)
   if (! d)
      return;
 
-     QTextCursor cur = d->textEdit->textCursor();
-     if (cur.isNull())
-        return;
+  QTextCursor cur = d->textEdit->textCursor();
+  if (cur.isNull())
+     return;
 
-     cur.movePosition (QTextCursor::Start);
-     cur.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, source_line.toInt() - 1);
-     cur.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, source_col.toInt() - 1);
-     cur.select (QTextCursor::WordUnderCursor);
-     d->textEdit->setTextCursor (cur);
-     d->textEdit->setFocus();
+  cur.movePosition (QTextCursor::Start);
+  cur.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, source_line.toInt() - 1);
+  cur.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, source_col.toInt() - 1);
+  cur.select (QTextCursor::WordUnderCursor);
+  d->textEdit->setTextCursor (cur);
+  d->textEdit->setFocus();
 }
 
 

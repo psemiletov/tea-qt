@@ -829,16 +829,16 @@ void rvln::open()
           if (file_exists (d->file_name))
              fman->nav (get_file_path (d->file_name));
           else
-              if (file_exists (dir_last))
+       //       if (file_exists (dir_last))
                   fman->nav (dir_last);
-              else
-                  fman->nav (QDir::homePath());
+         //     else
+           //       fman->nav (QDir::homePath());
          }
       else
-          if (file_exists (dir_last))
+          //if (file_exists (dir_last))
              fman->nav (dir_last);
-          else
-              fman->nav (QDir::homePath());
+          //else
+            //  fman->nav (QDir::homePath());
 
       main_tab_widget->setCurrentIndex (idx_tab_fman);
       fm_entry_mode = FM_ENTRY_MODE_OPEN;
@@ -6254,7 +6254,13 @@ void rvln::fman_dir_changed (const QString &full_path)
 
 void rvln::fman_current_file_changed (const QString &full_path, const QString &just_name)
 {
-  ed_fman_fname->setText (just_name);
+  if (! is_dir (full_path))
+     ed_fman_fname->setText (just_name);
+  else
+      ed_fman_fname->setText ("");
+
+
+ // qDebug() << "is dir " << is_dir (full_path);
 
   if (b_preview && is_image (full_path))
      {

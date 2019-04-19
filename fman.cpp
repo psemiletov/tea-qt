@@ -54,7 +54,11 @@ void CFMan::dir_up()
 
 void CFMan::nav (const QString &path)
 {
-  dir.setPath (path);
+  if (file_exists (path))
+     dir.setPath (path);
+  else
+      dir.setPath (QDir::homePath());
+
   if (! dir.exists())
       return;
 
@@ -298,7 +302,7 @@ void CFMan::cb_fman_currentChanged (const QModelIndex &current, const QModelInde
 
   QString full_path = dir.path() + "/" + item_string;
 
-  if (! is_dir (full_path))
+//  if (! is_dir (full_path))
      emit current_file_changed (full_path, item_string);
 }
 

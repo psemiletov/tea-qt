@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 47.0.0, November 30, 2018
+TEA 47.1.0, may 04, 2019
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -8,11 +8,7 @@ https://vk.com/teaeditor - VK-community
 https://www.facebook.com/groups/766324686841748/ - FB-community
 ---------------------------------------
   
-   This is mainly bug fixing/stabilization release, with several interesting things:
-   Objective C syntax hl support.
-   C/C++, Pascal highlighting improvement.
-   The "Search in files" function now scan also PDF and DJVU (if TEA built with the needed libraries).
-   Enhanced font rendering mode.
+   Bug fixes for good. 
 
    Stay tuned.
    Peter Semiletov

@@ -337,11 +337,6 @@ public:
 
   QTimer *timer;
 
-#if defined(QTBUILDINJOYSTICK_ENABLE)
- // QGamepad *gamepad;
-//  QGamepadKeyNavigation gamepadnav;
-#endif
-
 
 #if defined(JOYSTICK_SUPPORTED)
   CJoystick *joystick;

@@ -946,29 +946,6 @@ CDox::CDox()
   timer->setInterval (100);
 
 
-#if defined(QTBUILDINJOYSTICK_ENABLE)
-/*
-  auto gamepads = QGamepadManager::instance()->connectedGamepads();
-  if (gamepads.isEmpty())
-      {
-       qDebug() << "Did not find any connected gamepads";
-       gamepad = 0;
-      }
-  else
-      {
-       gamepad = new QGamepad (*gamepads.begin(), this);
-       gamepadnav.setGamepad (gamepad);
-
-    //   gamepadnav.setActive (true);
-
-//       connect (gamepad, SIGNAL(axisLeftXChanged(double)), this, SLOT(move_cursor_x(double)));
-  //     connect (gamepad, SIGNAL(axisLeftYChanged(double)), this, SLOT(move_cursor_y(double)));
-
-      }
- */
-#endif
-
-
 #if defined(JOYSTICK_SUPPORTED)
   joystick = new CJoystick (0, this);
 
@@ -2716,24 +2693,6 @@ void CSyntaxHighlighter::highlightBlock (const QString &text)
 }
 */
 
-#if defined(JOYSTICK_SUPPORTED)
-
-bool CDox::event (QEvent *ev)
-{
-
-  if (static_cast<int>(ev->type() == evtJoystickAxis))
-     {
-      CJoystickAxisEvent* custom_event = reinterpret_cast<CJoystickAxisEvent*>(ev);
-      handle_joystick_event (custom_event);
-      custom_event->accept();
-      return true;
-     }
-
-  return QObject::event(ev);
-}
-
-
-
 void CDox::move_cursor (QTextCursor::MoveOperation mo)
 {
   CDocument *d = get_current();
@@ -2751,6 +2710,25 @@ void CDox::move_cursor (QTextCursor::MoveOperation mo)
       d->textEdit->setTextCursor (cr);
      }
 }
+
+
+#if defined(JOYSTICK_SUPPORTED)
+
+bool CDox::event (QEvent *ev)
+{
+
+  if (static_cast<int>(ev->type() == evtJoystickAxis))
+     {
+      CJoystickAxisEvent* custom_event = reinterpret_cast<CJoystickAxisEvent*>(ev);
+      handle_joystick_event (custom_event);
+      custom_event->accept();
+      return true;
+     }
+
+  return QObject::event(ev);
+}
+
+
 
 
 void CDox::handle_joystick_event (CJoystickAxisEvent *event)

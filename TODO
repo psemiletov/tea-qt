@@ -1,3 +1,5 @@
+cmake dist creates wrong tarball that cannot be build with meson
+
 JAMSpell support (https://github.com/bakwc/JamSpell )
 
 

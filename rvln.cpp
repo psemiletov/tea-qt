@@ -5358,6 +5358,21 @@ void rvln::update_places_bookmarks()
   sl_places_bmx = qstring_load (fname_places_bookmarks).split ("\n");
   if (sl_places_bmx.size() != 0)
      lv_places->addItems (sl_places_bmx);
+
+  QString fname_gtk_bookmarks = QDir::homePath() + "/" + ".gtk-bookmarks";
+//  qDebug() << "fname_gtk_bookmarks : " << fname_gtk_bookmarks;
+
+  //qDebug() << qstring_load (fname_gtk_bookmarks);
+
+  QStringList sl_gtk_bookmarks = qstring_load (fname_gtk_bookmarks).split ("\n");
+
+
+  if (sl_gtk_bookmarks.size() == 0)
+     return;
+
+  //sl_gtk_bookmarks.removeAll (QString(""));
+  lv_places->addItems (sl_gtk_bookmarks);
+
 }
 
 

@@ -3,7 +3,7 @@ cmake dist creates wrong tarball that cannot be build with meson
 JAMSpell support (https://github.com/bakwc/JamSpell )
 
 
-
+gtk_bookmarks в places предваряются пустой строкой - почему?
 при повторении последней функции, сендер-ту становится от пункта меню "повторить"
 
 избранное для ЗПВ

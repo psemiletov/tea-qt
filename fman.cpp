@@ -54,11 +54,14 @@ void CFMan::dir_up()
 
 void CFMan::nav (const QString &path)
 {
-  if (file_exists (path))
-     dir.setPath (path);
-  else
-      dir.setPath (QDir::homePath());
+  if (path.isEmpty())
+     return;
 
+  QString p = path;
+  if (path.startsWith ("file://"))
+     p = p.remove (0, 7); 
+
+  dir.setPath (p);
   if (! dir.exists())
       return;
 
@@ -130,7 +133,7 @@ QDir::LocaleAware 0x40  Sort items appropriately using the current locale settin
 
   setModel (mymodel);
   connect (selectionModel(), SIGNAL(currentChanged (const QModelIndex &, const QModelIndex &)), this, SLOT(cb_fman_currentChanged (const QModelIndex &, const QModelIndex &)));
-  emit dir_changed (path);
+  emit dir_changed (p);
 }
 
 

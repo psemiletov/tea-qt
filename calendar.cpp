@@ -183,6 +183,7 @@ int moon_phase_by_algo (int v, int year, int month, int day)
 
          };
 
+//  qDebug() << "moon_phase_by_algo: " << r;
   return r;
 }
 
@@ -225,36 +226,40 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
       if (moon_day == 0 || moon_day == 30 || moon_day == 1)
          has_image = false;
 
+//      qDebug() << "moon_day: " << moon_day;
+
       //вычисляем ряд и колонку
       int cursorOffset = moon_day;
       int off = 0;
 
-     /* int row = 0;
+/*
+      int row = 0;
+
       while (cursorOffset >= (off + 8))
             {
              off += 7;
              row++;
             }
-     */
+     
+      int col = cursorOffset - off;
+*/
+ //    qDebug() << "moon day: " << moon_day << "| date:" << date.toString("dd") << " | row = " << row << " col = " << col;
 
       int row = moon_day / 7;
 
       if ((moon_day % 7 == 0) && (row != 0))
-         row--;
+          row--;
+    
+      int col = cursorOffset - (row * 7);
 
-      int col = cursorOffset - off;
-
- //    qDebug() << "moon day: " << moon_day << "| date:" << date.toString("dd") << " | row = " << row << " col = " << col;
-
-      int trow = moon_day / 7;
-
-      if ((moon_day % 7 == 0) && (trow != 0))
-          trow--;
-    /*
+/*
     qDebug() << "moon day = " << moon_day;
     qDebug() << "moon_day / 7 = " << (double) moon_day / 7;
     qDebug() << "trow = " << trow;
     qDebug() << "row = " << row;
+
+    qDebug() << "col = " << col;
+    qDebug() << "tcol = " << tcol;
 */
 
     //вычисляем, откуда копировать

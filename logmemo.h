@@ -39,7 +39,7 @@ public:
   
 Q_INVOKABLE void log (const QString &text);
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   void log_terminal (const QString &text);
 #endif
   

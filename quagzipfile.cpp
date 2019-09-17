@@ -24,6 +24,7 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 
 #include <QFile>
 
+
 #include "quagzipfile.h"
 
 /// \cond internal
@@ -32,9 +33,9 @@ class QuaGzipFilePrivate {
     QString fileName;
     gzFile gzd;
     inline QuaGzipFilePrivate(): gzd(NULL) {}
-    inline QuaGzipFilePrivate(const QString &fileName): 
+    inline QuaGzipFilePrivate(const QString &fileName):
         fileName(fileName), gzd(NULL) {}
-    template<typename FileId> bool open(FileId id, 
+    template<typename FileId> bool open(FileId id,
         QIODevice::OpenMode mode, QString &error);
     gzFile open(int fd, const char *modeString);
     gzFile open(const QString &name, const char *modeString);
@@ -51,33 +52,30 @@ gzFile QuaGzipFilePrivate::open(int fd, const char *modeString)
 }
 
 template<typename FileId>
-bool QuaGzipFilePrivate::open(FileId id, QIODevice::OpenMode mode, 
+bool QuaGzipFilePrivate::open(FileId id, QIODevice::OpenMode mode,
                               QString &error)
 {
     char modeString[2];
     modeString[0] = modeString[1] = '\0';
     if ((mode & QIODevice::Append) != 0) {
-        error = QuaGzipFile::trUtf8("QIODevice::Append is not "
-                "supported for GZIP");
+        error = "QIODevice::Append is not supported for GZIP";
         return false;
     }
     if ((mode & QIODevice::ReadOnly) != 0
             && (mode & QIODevice::WriteOnly) != 0) {
-        error = QuaGzipFile::trUtf8("Opening gzip for both reading"
-            " and writing is not supported");
+        error = "Opening gzip for both reading and writing is not supported";
         return false;
     } else if ((mode & QIODevice::ReadOnly) != 0) {
         modeString[0] = 'r';
     } else if ((mode & QIODevice::WriteOnly) != 0) {
         modeString[0] = 'w';
     } else {
-        error = QuaGzipFile::trUtf8("You can open a gzip either for reading"
-            " or for writing. Which is it?");
+        error = "You can open a gzip either for reading or for writing. Which is it?";
         return false;
     }
     gzd = open(id, modeString);
     if (gzd == NULL) {
-        error = QuaGzipFile::trUtf8("Could not gzopen() file");
+        error = "Could not gzopen() file";
         return false;
     }
     return true;

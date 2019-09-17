@@ -243,7 +243,6 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
      
       int col = cursorOffset - off;
 */
- //    qDebug() << "moon day: " << moon_day << "| date:" << date.toString("dd") << " | row = " << row << " col = " << col;
 
       int row = moon_day / 7;
 

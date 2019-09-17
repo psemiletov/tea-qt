@@ -1,6 +1,6 @@
 cmake dist creates wrong tarball that cannot be build with meson
 
-JAMSpell support (https://github.com/bakwc/JamSpell )
+JAMSpell support? (https://github.com/bakwc/JamSpell)
 
 
 gtk_bookmarks в places предваряются пустой строкой - почему?

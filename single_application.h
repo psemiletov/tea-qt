@@ -38,9 +38,7 @@ private:
         QString _uniqueKey;
 
 #ifndef Q_OS_OS2
-
         QSharedMemory sharedMemory;
-        
 #endif        
         QLocalServer *localServer;
 

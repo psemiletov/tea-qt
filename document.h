@@ -44,13 +44,9 @@ code from qwriter:
 #include <QPlainTextEdit>
 #include <QSyntaxHighlighter>
 
-#if QT_VERSION >= 0x050700
-//#include <QtGamepad/QGamepad>
-//#include <QGamepadKeyNavigation>
-#endif
 
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QRegularExpression>
 #endif
 
@@ -215,7 +211,7 @@ public:
 };
 
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 
 class CSyntaxHighlighterQRegularExpression: public CSyntaxHighlighter
 {

@@ -19,28 +19,28 @@
 
 class CSingleApplicationShared: public QApplication
 {
-        Q_OBJECT
+   Q_OBJECT
 public:
-        CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey);
+       CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey);
            
-        ~CSingleApplicationShared() {qDebug() << "~CSingleApplicationShared";};  
+       ~CSingleApplicationShared() {qDebug() << "~CSingleApplicationShared";};  
 
-        static int cursorFlashTime() 
-               {
-                return 0;
-               } 
+       static int cursorFlashTime() 
+              {
+               return 0;
+              } 
         
-        bool alreadyExists() const
-             {
-              return bAlreadyExists;
-             }
+       bool alreadyExists() const
+            {
+             return bAlreadyExists;
+            }
         
-        bool isMasterApp() const
-             {
-              return !alreadyExists();
-              }
+       bool isMasterApp() const
+            {
+             return !alreadyExists();
+            }
 
-        bool sendMessage(const QString &message);
+      bool sendMessage(const QString &message);
         
         
 public slots:
@@ -54,7 +54,6 @@ private:
         bool bAlreadyExists;
         
 #ifndef Q_OS_OS2
-        
         QSharedMemory sharedMemory;
 #endif        
 };

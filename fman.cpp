@@ -59,7 +59,7 @@ void CFMan::nav (const QString &path)
 
   QString p = path;
   if (path.startsWith ("file://"))
-     p = p.remove (0, 7); 
+     p = p.remove (0, 7);
 
   dir.setPath (p);
   if (! dir.exists())
@@ -263,8 +263,7 @@ CFMan::CFMan (QWidget *parent): QTreeView (parent)
   setModel (mymodel);
   setDragEnabled (true);
 
-
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 
   header()->setSectionResizeMode (QHeaderView::ResizeToContents);
   header()->setSectionsClickable (true);
@@ -305,8 +304,7 @@ void CFMan::cb_fman_currentChanged (const QModelIndex &current, const QModelInde
 
   QString full_path = dir.path() + "/" + item_string;
 
-//  if (! is_dir (full_path))
-     emit current_file_changed (full_path, item_string);
+  emit current_file_changed (full_path, item_string);
 }
 
 

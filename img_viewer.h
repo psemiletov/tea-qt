@@ -21,8 +21,6 @@ public:
 
   void load_image (const QString &fname);
 
-  //void paintEvent (QPaintEvent *event);
-//  void resizeEvent (QResizeEvent *event);
   void keyPressEvent ( QKeyEvent * event);
   void closeEvent (QCloseEvent *event);
 
@@ -43,7 +41,6 @@ public:
 
   void load_image (const QString &fname);
 
-//  void resizeEvent (QResizeEvent *event);
   void paintEvent (QPaintEvent *event);
   void keyPressEvent ( QKeyEvent * event);
   void closeEvent (QCloseEvent *event);
@@ -86,8 +83,6 @@ public:
   QWidget window_mini; 
   CZORWindow window_full;
   QLabel *img_mini;
-
-  //void set_image_full_clipboard();
 
   CImgViewer (QObject *parent = 0);
   void set_image_mini (const QString &fname);

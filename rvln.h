@@ -1,5 +1,5 @@
 /**************************************************************************
- *   2007-2018 by Peter Semiletov                            *
+ *   2007-2019 by Peter Semiletov                            *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -87,8 +87,7 @@ public:
 };
 
 
-
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 class QStyleHints
 {
 public:
@@ -324,12 +323,8 @@ public:
   QString dir_hls;
   QString dir_themes;
 
-
-//#if QT_VERSION >= 0x050000
-
   QString dir_plugins;
 
-//#endif
   
   QString dir_snippets;
   QString dir_scripts;
@@ -365,12 +360,8 @@ public:
   
   QCheckBox *cb_use_qregexpsyntaxhl;
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
 #if defined(JOYSTICK_SUPPORTED)
-
   QCheckBox *cb_use_joystick;
-//#endif
 #endif
 
   QCheckBox *cb_right_to_left;

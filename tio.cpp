@@ -1,6 +1,6 @@
 /*
 
-DJVU read code taken fromdvutxt.c:  
+DJVU read code taken fromdvutxt.c:
 
 //C- DjVuLibre-3.5
 //C- Copyright (c) 2002  Leon Bottou and Yann Le Cun.
@@ -26,16 +26,16 @@ DJVU read code taken fromdvutxt.c:
 //C- | The computer code originally released by LizardTech under this
 //C- | license and unmodified by other parties is deemed "the LIZARDTECH
 //C- | ORIGINAL CODE."  Subject to any third party intellectual property
-//C- | claims, LizardTech grants recipient a worldwide, royalty-free, 
-//C- | non-exclusive license to make, use, sell, or otherwise dispose of 
-//C- | the LIZARDTECH ORIGINAL CODE or of programs derived from the 
-//C- | LIZARDTECH ORIGINAL CODE in compliance with the terms of the GNU 
-//C- | General Public License.   This grant only confers the right to 
-//C- | infringe patent claims underlying the LIZARDTECH ORIGINAL CODE to 
-//C- | the extent such infringement is reasonably necessary to enable 
-//C- | recipient to make, have made, practice, sell, or otherwise dispose 
-//C- | of the LIZARDTECH ORIGINAL CODE (or portions thereof) and not to 
-//C- | any greater extent that may be necessary to utilize further 
+//C- | claims, LizardTech grants recipient a worldwide, royalty-free,
+//C- | non-exclusive license to make, use, sell, or otherwise dispose of
+//C- | the LIZARDTECH ORIGINAL CODE or of programs derived from the
+//C- | LIZARDTECH ORIGINAL CODE in compliance with the terms of the GNU
+//C- | General Public License.   This grant only confers the right to
+//C- | infringe patent claims underlying the LIZARDTECH ORIGINAL CODE to
+//C- | the extent such infringement is reasonably necessary to enable
+//C- | recipient to make, have made, practice, sell, or otherwise dispose
+//C- | of the LIZARDTECH ORIGINAL CODE (or portions thereof) and not to
+//C- | any greater extent that may be necessary to utilize further
 //C- | modifications or combinations.
 //C- |
 //C- | The LIZARDTECH ORIGINAL CODE is provided "AS IS" WITHOUT WARRANTY
@@ -52,7 +52,7 @@ DJVU read code taken fromdvutxt.c:
 
 //FIXME: not good with cmake, cmake just use Qt5 here
 #if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <poppler-qt5.h>
 #else
 #include <poppler-qt4.h>
@@ -97,8 +97,8 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
                  if (xml.isStartElement() && tag_name == ts)
                     tt = true;
 
-                 if (xml.isEndElement() && tag_name == ts) 
-                    tt = false; 
+                 if (xml.isEndElement() && tag_name == ts)
+                    tt = false;
                  }
 
          if (tt && xml.isCharacters())
@@ -281,7 +281,7 @@ bool CTioABW::load (const QString &fname)
 
   QStringList tags;
   tags.append ("p");
-  
+
   data = extract_text_from_xml (temp, tags);
 
   return true;
@@ -291,25 +291,25 @@ bool CTioABW::load (const QString &fname)
 bool CTioODT::load (const QString &fname)
 {
   data.clear();
-  
+
   CZipper zipper;
-  
+
   if (! zipper.read_as_utf8 (fname, "content.xml"))
      {
       qDebug() << "cannot read content.xml";
       return false;
      }
-   
+
   QXmlStreamReader xml (zipper.string_data);
- 
+
   bool tt = false;
-  while (! xml.atEnd()) 
+  while (! xml.atEnd())
         {
          xml.readNext();
 
          QString tag_name = xml.qualifiedName().toString().toLower();
-         
-         if (xml.isStartElement()) 
+
+         if (xml.isStartElement())
             {
              if (tag_name == "text:s")
                 {
@@ -321,15 +321,15 @@ bool CTioODT::load (const QString &fname)
                      fillval = fillval.fill (' ', av.toInt());
                      data.append (fillval);
                     }
-                 }   
+                 }
             }
-              
-         if (xml.isEndElement()) 
+
+         if (xml.isEndElement())
             {
              if (tag_name.startsWith ("text") && tag_name != "text:span")
                 tt = true;
             }
-         
+
          if (xml.isCharacters() && tt)
             {
              tt = false;
@@ -337,10 +337,10 @@ bool CTioODT::load (const QString &fname)
              data.append ("\n");
             }
         }
-    
-   if (xml.hasError()) 
+
+   if (xml.hasError())
       qDebug() << "xml parse error";
-   
+
   return true;
 }
 
@@ -366,34 +366,34 @@ CTioXMLZipped::CTioXMLZipped()
 bool CTioXMLZipped::load (const QString &fname)
 {
   data.clear();
-    
+
   QString source_fname;
-  QString ts;  
-  
+  QString ts;
+
   QString ext = file_get_ext (fname);
 
   if (ext == "kwd")
      {
       source_fname = "maindoc.xml";
       ts = "text";
-     } 
+     }
   else
   if (ext == "docx")
      {
       source_fname = "word/document.xml";
-      ts = "w:t";  
+      ts = "w:t";
      }
- 
-  
+
+
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, source_fname))
       return false;
- 
+
   QStringList tags;
   tags.append (ts);
-  
+
   data = extract_text_from_xml (zipper.string_data, tags);
- 
+
   return true;
 }
 
@@ -401,42 +401,48 @@ bool CTioXMLZipped::load (const QString &fname)
 CCharsetMagic::CCharsetMagic()
 {
   QStringList fnames = read_dir_entries (":/encsign");
-  
+
   CSignaturesList *koi8u = NULL;
   CSignaturesList *koi8r= NULL;
-  
+
   foreach (QString fn, fnames)
           {
            QString fname = ":/encsign";
-           fname.append ("/"); 
-           fname.append (fn); 
-           
-           QByteArray a = file_load (fname);     
-           QList<QByteArray> bsl = a.split ('\n'); 
-  
+           fname.append ("/");
+           fname.append (fn);
+
+           QByteArray a = file_load (fname);
+           QList<QByteArray> bsl = a.split ('\n');
+
            CSignaturesList *sl = new CSignaturesList;
            sl->encname = fn;
-           
+
            if (fn == "KOI8-R")
               koi8r = sl;
 
            if (fn == "KOI8-U")
               koi8u = sl;
-           
-           for (int i = 0; i < bsl.count(); i++) 
-               sl->words.append (bsl[i]);        
-                      
-           signatures.append (sl);          
+
+           for (int i = 0; i < bsl.count(); i++)
+               sl->words.append (bsl[i]);
+
+           signatures.append (sl);
           }
-          
+
   int ku = signatures.indexOf (koi8u);
   int kr = signatures.indexOf (koi8r);
-          
-  signatures.swap (ku, kr);      
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+  signatures.swapItemsAt (ku, kr);
+#else
+  signatures.swap (ku, kr);
+
+#endif
+
 }
 
 
-CCharsetMagic::~CCharsetMagic()  
+CCharsetMagic::~CCharsetMagic()
 {
   for (int i = 0; i < signatures.count(); i++)
       delete signatures.at (i);
@@ -449,14 +455,14 @@ QString CCharsetMagic::guess_for_file (const QString &fname)
 
   QByteArray bafile = file_load (fname);
   QString ext = file_get_ext (fname);
-   
-  if (ext == "html" || 
-      ext == "htm" || 
+
+  if (ext == "html" ||
+      ext == "htm" ||
       ext == "xhtml")
      {
       QTextCodec *defcodec = QTextCodec::codecForName ("UTF-8");
       QTextCodec *codec = QTextCodec::codecForHtml (bafile, defcodec);
-      return codec->name(); 
+      return codec->name();
      }
 
   for (int i = 0; i < signatures.count(); i++)
@@ -466,9 +472,9 @@ QString CCharsetMagic::guess_for_file (const QString &fname)
                {
                 enc = signatures[i]->encname;
                 return enc;
-               }           
+               }
            }
-  
+
   return enc;
 }
 
@@ -773,35 +779,35 @@ CTioPDF::CTioPDF()
 bool CTioPDF::load (const QString &fname)
 {
   Poppler::Document *d = Poppler::Document::load (fname);
-  
+
   if (! d)
      return false;
 
-  if (d->isLocked()) 
+  if (d->isLocked())
      {
       delete d;
       return false;
      }
-     
-     
-  int pages_count = d->numPages();   
-  
+
+
+  int pages_count = d->numPages();
+
   for (int i = 0; i < pages_count; i++)
       {
        Poppler::Page *p = d->page (i);
-      
+
        QList<Poppler::TextBox*> tb = p->textList();
-       
+
        for (int j = 0; j < tb.size(); j++)
            {
             data += tb[j]->text();
             //if (tb[j]->hasSpaceAfter())
             data += " ";
-          
+
             delete tb[j];
            }
       }
-     
+
   delete d;
   return true;
 }
@@ -828,18 +834,18 @@ void djvumsg_handle()
 
   if (! ctx)
     return;
-    
+
   msg = ddjvu_message_wait (ctx);
-    
+
   while ((msg = ddjvu_message_peek (ctx)))
         {
          if (msg->m_any.tag == DDJVU_ERROR)
             {
-             qDebug() << msg->m_error.message;              
+             qDebug() << msg->m_error.message;
              qDebug() << msg->m_error.filename << ":" << msg->m_error.lineno;
              return;
             }
-                
+
          ddjvu_message_pop(ctx);
         }
 }
@@ -848,20 +854,20 @@ void djvumsg_handle()
 void dopage (int pageno)
 {
   miniexp_t r = miniexp_nil;
-  
+
   const char *lvl = (detail) ? detail : "page";
-  
+
   while ((r = ddjvu_document_get_pagetext (doc, pageno, lvl)) == miniexp_dummy)
          djvumsg_handle();
 
   if ((r = miniexp_nth (5, r)) && miniexp_stringp (r))
      {
-      const char *s = miniexp_to_str (r); 
+      const char *s = miniexp_to_str (r);
       if (s)
          {
           temp_data_s.append (s);
-          temp_data_s.append ('\n');  
-         } 
+          temp_data_s.append ('\n');
+         }
      }
 }
 
@@ -877,22 +883,22 @@ bool CTioDJVU::load (const QString &fname)
 {
   if (! (ctx = ddjvu_context_create ("tea")))
      return false;
-     
+
   if (! (doc = ddjvu_document_create_by_filename (ctx, fname.toUtf8().data(), TRUE)))
      return false;
 
-    
+
   while (! ddjvu_document_decoding_done (doc))
         djvumsg_handle();
 
   int n = ddjvu_document_get_pagenum (doc);
-  
+
   for (int i = 0; i < n; i++)
       dopage (i);
-   
+
   if (doc)
     ddjvu_document_release (doc);
-    
+
   if (ctx)
     ddjvu_context_release (ctx);
 
@@ -914,38 +920,38 @@ CTioEpub::CTioEpub()
 bool CTioEpub::load (const QString &fname)
 {
   data.clear();
-  
+
   QStringList html_files;
-    
+
   QString source_fname;
-  QString ts;  
-  
+  QString ts;
+
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
        return false;
-  
-  
+
+
   QString opf_fname;
   QString opf_dir;
-  
+
   int start = zipper.string_data.indexOf ("full-path=\"");
   int end = zipper.string_data.indexOf ("\"", start + 11);
-  
+
   opf_fname = zipper.string_data.mid (start + 11, end - start - 11);
   opf_dir = opf_fname.left (opf_fname.indexOf ("/"));
-   
+
   //std::cout << opf_fname.toStdString() << std::endl;
   //std::cout << opf_dir.toStdString() << std::endl;
 
   //READ FILES LIST. PARSE OPF FILE
-  
+
   if (! zipper.read_as_utf8 (fname, opf_fname))
        return false;
-  
-  
+
+
   QXmlStreamReader xml (zipper.string_data);
-  
-  while (! xml.atEnd()) 
+
+  while (! xml.atEnd())
         {
          xml.readNext();
 
@@ -958,9 +964,9 @@ bool CTioEpub::load (const QString &fname)
                 html_files.append (opf_dir + "/" + attr_href);
              //std::cout << attr_href.toStdString() << std::endl;
             }
-        } 
-    
-  if (xml.hasError()) 
+        }
+
+  if (xml.hasError())
       qDebug() << "xml parse error";
 
 
@@ -968,18 +974,18 @@ bool CTioEpub::load (const QString &fname)
           {
            if (! zipper.read_as_utf8 (fname, fn))
               return false;
-              
+
            //QString t = strip_html (zipper.string_data);
            QStringList tags;
            tags.append ("p");
           // tags.append ("h2");
-          
+
            QString t = extract_text_from_xml (zipper.string_data, tags);
-          
+
            data += t;
            data += "\n";
           }
-   
+
   return true;
 }
 
@@ -991,10 +997,10 @@ QStringList CTioHandler::get_supported_exts()
   foreach (CTio *t, list)
           {
            for (int i = 0; i < t->extensions.size(); i++)
-               l.append (t->extensions[i]); 
+               l.append (t->extensions[i]);
           }
 
-   
+
   l.append ("txt");
 //  qstring_list_print (l);
 

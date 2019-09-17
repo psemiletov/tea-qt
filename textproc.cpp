@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2018 by Peter Semiletov                                          *
+ *   2007-2019 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -354,7 +354,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
   QStringList sl;
   QStringList l;
   QString result;
-  
+
   if (mode != QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP && mode != QSTRL_PROC_LIST_FLIP_SEP)
      sl = s.split (QChar::ParagraphSeparator);
 
@@ -364,28 +364,28 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                                     {
                                                      if (s.indexOf (params) == -1)
                                                         return s;
-                                                        
+
                                                      QStringList sl = s.split (params);
                                                      sl.sort();
                                                      result = sl.join (params);
                                                      return result;
                                                     };
-                                                    
+
           case QSTRL_PROC_LIST_FLIP_SEP:  {
                                            if (s.indexOf (params) == -1)
                                               return s;
-        
+
                                            QStringList sl = s.split (params);
                                            sl.sort();
-                                                     
+
                                            foreach (QString t, sl)
                                            l.prepend (t);
 
                                            result = l.join (params);
                                            return result;
                                           };
-                                                                                                   
-         
+
+
           case QSTRL_PROC_FLT_WITH_SORTNOCASECARE:
                                                  {
                                                   QMap <QString, QString> map;
@@ -505,7 +505,7 @@ QString int_to_binary (int n)
 /*
 QString int_to_binary (int n)
 {
-  std::bitset<sizeof (int)> bt (n);  
+  std::bitset<sizeof (int)> bt (n);
   return QString::fromStdString (bt.to_string<char,std::string::traits_type,std::string::allocator_type>());
 }
 */

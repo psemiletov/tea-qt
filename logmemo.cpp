@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2018 by Peter Semiletov                                          *
+ *   2007-2019 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,7 +23,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #endif
@@ -45,7 +45,7 @@ CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
                            Qt::TextSelectableByKeyboard);
 }
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 void CLogMemo::log_terminal (const QString &text)
 {
   if (no_jump)
@@ -54,12 +54,11 @@ void CLogMemo::log_terminal (const QString &text)
   QString txt = text;
   QString tb = txt;
 
-  //QRegularExpression re ("[a-zA-Z_]+\\.[a-zA-Z]+:\\d+:\\d+:");
   QRegularExpression re ("\\w+\\.\\w+:\\d+:\\d+:");
 
   QRegularExpressionMatch match = re.match (txt, 1);
 
-  if (match.hasMatch()) 
+  if (match.hasMatch())
      {
       QString matched = match.captured (0);
       matched = matched.remove (matched.size() - 1, 1);
@@ -84,14 +83,13 @@ void CLogMemo::log_terminal (const QString &text)
 
 void CLogMemo::log (const QString &text)
 {
-#if QT_VERSION >= 0x050000
 
-  if (terminal_output) 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  if (terminal_output)
      {
       log_terminal (text);
-      return; 
+      return;
      }
-
 #endif
 
   if (no_jump)
@@ -102,8 +100,8 @@ void CLogMemo::log (const QString &text)
   cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, 0);
   setTextCursor (cr);
 
-  if (! terminal_output) 
-     { 
+  if (! terminal_output)
+     {
       QTime t = QTime::currentTime();
       textCursor().insertHtml ("[" + t.toString("hh:mm:ss") + "] " + text + "<br>");
      }

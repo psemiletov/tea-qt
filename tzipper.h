@@ -28,7 +28,6 @@ public:
    bool read_as_utf8 (const QString &archname, const QString &fname);
 
    bool unzip (const QString &archpath, const QString &destdir);
-//   QString unzip_info (const QString &archpath);
    QStringList unzip_list (const QString &archpath);
 
 signals:

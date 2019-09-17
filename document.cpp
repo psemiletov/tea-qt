@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2018 by Peter Semiletov                                          *
+ *   2007-2019 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -41,7 +41,6 @@ code from qwriter:
 #include <bitset>
 #include <algorithm>
 
-
 #include <QApplication>
 #include <QClipboard>
 #include <QSettings>
@@ -54,11 +53,7 @@ code from qwriter:
 #include <QMimeData>
 #include <QTimer>
 
-
-
-
-
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QRegularExpression>
 #endif
 
@@ -87,8 +82,7 @@ void CDocument::update_status()
   int x = textEdit->textCursor().position() - textEdit->textCursor().block().position() + 1;
   int y = textEdit->textCursor().block().blockNumber() + 1;
 
-  holder->l_status_bar->setText (
-                                 QString ("%1:%2").arg (
+  holder->l_status_bar->setText (QString ("%1:%2").arg (
                                  QString::number (y)).arg (
                                  QString::number (x)));
 
@@ -539,7 +533,7 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 }
 
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 
 CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
                                                                             CSyntaxHighlighter (parent, doc, fname)
@@ -579,7 +573,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   if (fname.isEmpty() || ! file_exists (fname))
      return;
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 
   if (settings->value ("qregexpsyntaxhl", 0).toBool())
      highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
@@ -618,7 +612,7 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
-#if QT_VERSION >= 0x051000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 
   d->textEdit->setTabStopDistance (d->textEdit->tab_sp_width * d->textEdit->brace_width);
 
@@ -1026,13 +1020,10 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 }
 
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 
 void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
-// qDebug() << "CSyntaxHighlighterQRegularExpression::load_from_xml ";
-
-  //wrap = true;
   casecare = true;
   exts = "default";
   langs = "default";
@@ -1099,8 +1090,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                      if (xml_format == 0) //old and ugly format
                         {
                          QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
-
-                         //HighlightingRule rule;
 
                          for (int i = 0; i < keywordPatterns.size(); i++)
                               if (! keywordPatterns.at(i).isEmpty())

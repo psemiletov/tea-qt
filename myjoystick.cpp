@@ -29,16 +29,11 @@ CJoystick::CJoystick (uint idn, QObject *upper_link)
 
   QString filename = "/dev/input/js" + QString::number (id);
 
-  qDebug() << "Trying to open " << filename;
-
-
   if ((fd = open (filename.toUtf8().data(), O_NONBLOCK)) == -1)
      {
       qDebug() << "Cannot open " << filename;
       return;
      }
-
-  qDebug() << "ok";
 
   initialized = true;
 
@@ -77,7 +72,8 @@ void CJoystick::read_joystick_depr()
       event->axis = 1;
       event->value = js.x;
      }
-   QApplication::postEvent(receiver, reinterpret_cast<QEvent*>(event));
+
+   QApplication::postEvent (receiver, reinterpret_cast<QEvent*>(event));
 }
 
 

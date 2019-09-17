@@ -352,7 +352,7 @@ void rvln::create_main_widget()
   tab_editor->setUsesScrollButtons (true);
 //  tab_editor->setDocumentMode (true);
 
-#if QT_VERSION >= 0x040500
+#if QT_VERSION >= QT_VERSION_CHECK(4, 5, 0)
   tab_editor->setMovable (true);
 #endif
 
@@ -491,7 +491,7 @@ void rvln::setup_spellcheckers()
 
 void rvln::init_styles()
 {
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 
   QString default_style = qApp->style()->objectName();
 
@@ -828,17 +828,9 @@ void rvln::open()
          {
           if (file_exists (d->file_name))
              fman->nav (get_file_path (d->file_name));
-          else
-       //       if (file_exists (dir_last))
-                  fman->nav (dir_last);
-         //     else
-           //       fman->nav (QDir::homePath());
          }
       else
-          //if (file_exists (dir_last))
-             fman->nav (dir_last);
-          //else
-            //  fman->nav (QDir::homePath());
+          fman->nav (dir_last);
 
       main_tab_widget->setCurrentIndex (idx_tab_fman);
       fm_entry_mode = FM_ENTRY_MODE_OPEN;
@@ -1031,7 +1023,8 @@ bool rvln::saveAs()
 
   dialog.setFileMode (QFileDialog::AnyFile);
   dialog.setAcceptMode (QFileDialog::AcceptSave);
-  dialog.setConfirmOverwrite (false);
+//  dialog.setConfirmOverwrite (false);
+ // dialog.setOption (QFileDialog::DontConfirmOverwrite, true);
   dialog.setDirectory (dir_last);
 
   QLabel *l = new QLabel (tr ("Charset"));
@@ -2696,20 +2689,17 @@ void rvln::createOptions()
   cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
   cb_wasd->setCheckState (Qt::CheckState (settings->value ("wasd", "0").toInt()));
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
 #if defined(JOYSTICK_SUPPORTED)
 
   cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
   cb_use_joystick->setCheckState (Qt::CheckState (settings->value ("use_joystick", "0").toInt()));
   connect (cb_use_joystick, SIGNAL(stateChanged (int)),
            this, SLOT(cb_use_joystick_stateChanged (int)));
-//#endif
 #endif
 
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   cb_use_qregexpsyntaxhl = new QCheckBox (tr ("Old syntax hl engine (restart TEA to apply)"), tab_options);
   cb_use_qregexpsyntaxhl->setCheckState (Qt::CheckState (settings->value ("qregexpsyntaxhl", 0).toInt()));
 #endif
@@ -2806,15 +2796,11 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_altmenu);
   page_common_layout->addWidget (cb_wasd);
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
 #if defined(JOYSTICK_SUPPORTED)
-
   page_common_layout->addWidget (cb_use_joystick);
-//#endif
 #endif
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   page_common_layout->addWidget (cb_use_qregexpsyntaxhl);
 #endif
 
@@ -3676,7 +3662,7 @@ void rvln::fn_spell_check()
 
          f = cr.blockCharFormat();
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 
          f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
          f.setUnderlineColor (color_error);
@@ -6064,7 +6050,13 @@ void rvln::createFman()
 
   QPushButton *bt_magicenc = new QPushButton ("?", this);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+  bt_magicenc->setMaximumWidth (QApplication::fontMetrics().horizontalAdvance("???"));
+#else
   bt_magicenc->setMaximumWidth (QApplication::fontMetrics().width ("???"));
+#endif
+
+
   connect (bt_magicenc, SIGNAL(clicked()), this, SLOT(guess_enc()));
 
 
@@ -6452,7 +6444,13 @@ void rvln::fm_full_info()
 
   l.append (tr ("file name: %1").arg (fi.absoluteFilePath()));
   l.append (tr ("size: %1 kbytes").arg (QString::number (fi.size() / 1024)));
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+  l.append (tr ("created: %1").arg (fi.birthTime().toString ("yyyy-MM-dd@hh:mm:ss")));
+#else
   l.append (tr ("created: %1").arg (fi.created().toString ("yyyy-MM-dd@hh:mm:ss")));
+#endif
+
   l.append (tr ("modified: %1").arg (fi.lastModified().toString ("yyyy-MM-dd@hh:mm:ss")));
 
   if (file_get_ext (fname) == "wav")
@@ -8390,7 +8388,11 @@ void rvln::mrkup_document_weight()
                }
            }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+  std::sort (lst.begin(), lst.end(), CFSizeFNameLessThan);
+#else
   qSort (lst.begin(), lst.end(), CFSizeFNameLessThan);
+#endif
 
   for (int i = 0; i < lst.size(); i++)
      {
@@ -8658,20 +8660,15 @@ void rvln::leaving_tune()
 
   settings->setValue ("wasd", cb_wasd->checkState());
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
 #if defined(JOYSTICK_SUPPORTED)
-
   settings->setValue ("use_joystick", cb_use_joystick->checkState());
 #endif
-//#endif
 
   settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
 
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
- // settings->setValue ("colored_console", cb_colored_console->checkState());
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->checkState());
 #endif
 
@@ -9373,7 +9370,7 @@ void rvln::fn_sort_latex_table_by_col_abc()
   latex_table_sort_col = fiftxt[1].toInt();
 
   if (t.indexOf (sep) == -1)
-	  return;
+     return;
 
   QStringList sl_temp = t.split (QChar::ParagraphSeparator);
 
@@ -9381,16 +9378,22 @@ void rvln::fn_sort_latex_table_by_col_abc()
 
   foreach (QString v, sl_temp)
           {
-	       if (! v.isEmpty())
-	          {
+           if (! v.isEmpty())
+              {
                QStringList sl_parsed = v.split (sep);
                if (latex_table_sort_col + 1 <= sl_parsed.size())
-            	   output.append (sl_parsed);
-	          }
-          }
+               output.append (sl_parsed);
+              }
+         }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
 
+  std::sort (output.begin(), output.end(), latex_table_sort_fn);
+
+#else
   qSort (output.begin(), output.end(), latex_table_sort_fn);
+
+#endif
 
   sl_temp.clear();
 
@@ -9417,7 +9420,7 @@ void rvln::fn_table_swap_cells()
   QStringList fiftxt = fif_get_text().split("~");
 
   if (fiftxt.size() < 3)
-	 return;
+     return;
 
   int col1 = fiftxt[1].toInt();
   int col2 = fiftxt[2].toInt();
@@ -9427,10 +9430,10 @@ void rvln::fn_table_swap_cells()
   QString t = d->textEdit->textCursor().selectedText();
 
   if (t.isEmpty())
-	     return;
+     return;
 
   if (t.indexOf (sep) == -1)
-	  return;
+     return;
 
   int imax = int (fmax (col1, col2));
 
@@ -9445,7 +9448,11 @@ void rvln::fn_table_swap_cells()
               QStringList sl_parsed = v.split (sep);
               if (imax + 1 <= sl_parsed.size())
                  {
-            	  sl_parsed.swap (col1, col2);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+                  sl_parsed.swapItemsAt (col1, col2);
+#else
+                  sl_parsed.swap (col1, col2);
+#endif
                   output.append (sl_parsed);
                  }
              }

@@ -16,7 +16,8 @@
 #include "ioapi.h"
 #include "quazip_global.h"
 #include <QIODevice>
-#if (QT_VERSION >= 0x050100)
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 #define QUAZIP_QSAVEFILE_BUG_WORKAROUND
 #endif
 #ifdef QUAZIP_QSAVEFILE_BUG_WORKAROUND

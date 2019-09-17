@@ -20,14 +20,14 @@ Peter Semiletov
 
 bool file_is_writable (const QString &fname)
 {
-  QFile f (fname);  
+  QFile f (fname);
   return f.isWritable();
 }
 
 
 bool file_is_readable (const QString &fname)
 {
-  QFile f (fname);  
+  QFile f (fname);
   return f.isReadable();
 }
 
@@ -156,7 +156,7 @@ QString string_between (const QString &source,
      return result;
 
   pos1 += sep1.size();
-  
+
   result = source.mid (pos1, pos2 - pos1);
   return result;
 }
@@ -366,9 +366,9 @@ CFTypeChecker::CFTypeChecker (const QStringList &fnames, const QStringList &exts
 bool CFTypeChecker::check (const QString &fname)
 {
   bool result = false;
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
  QMimeType mime = db.mimeTypeForFile(fname);
- if (mime.inherits("text/plain")) 
+ if (mime.inherits("text/plain"))
     result = true;
 #endif
 
@@ -388,7 +388,7 @@ QStringList CFTypeChecker::get_supported_exts()
 {
   QStringList l;
 
-  l += lexts; 
+  l += lexts;
   l.append ("txt");
 //  qstring_list_print (l);
 

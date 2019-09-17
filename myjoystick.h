@@ -6,11 +6,7 @@
 #include <QtGlobal>
 #include <QObject>
 
-
-
-
 #if defined(JOYSTICK_SUPPORTED)
-
 
 #include <iostream>
 #include <unistd.h>

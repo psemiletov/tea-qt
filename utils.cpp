@@ -142,6 +142,15 @@ QByteArray file_load (const QString &fileName)
 
 /* string/stringlist utils */
 
+
+void strlist_swap (QStringList &l, int a, int b)
+{
+  QString t = l[a];
+  l[a] = l[b];
+  l[b] = t;
+}
+
+
 QString string_between (const QString &source,
                         const QString &sep1,
                         const QString &sep2)

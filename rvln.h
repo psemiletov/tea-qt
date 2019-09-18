@@ -57,9 +57,7 @@
 #include "img_viewer.h"
 
 
-//#ifdef SPELLCHECK_ENABLE
 #include "spellchecker.h"
-//#endif
 
 
 
@@ -72,30 +70,30 @@ public:
 
 
   int styleHint (StyleHint hint, const QStyleOption *option = 0,
-                 const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const 
+                 const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const
                 {
                  if (hint == QStyle::SH_ItemView_ActivateItemOnSingleClick)
                     return 0;
-         
+
                  if (! b_altmenu && hint == QStyle::SH_MenuBar_AltKeyNavigation)
                     return 0;
-                  
+
                  return QProxyStyle::styleHint (hint, option, widget, returnData);
                 }
-     
+
    MyProxyStyle (QStyle *style = 0);
 };
 
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x050000
 class QStyleHints
 {
 public:
-  int cursorFlashTime() const 
-     {
-      return MyProxyStyle::cursor_blink_time;	
-     } 
 
+  int cursorFlashTime() const
+     {
+      return MyProxyStyle::cursor_blink_time;
+     }
 };
 #endif
 
@@ -104,14 +102,14 @@ public:
 class CQQuickWindow: public QQuickWindow
 {
 Q_OBJECT
-   
+
 public:
 
   QString id;
- 
+
   CQQuickWindow (QWindow *parent = 0): QQuickWindow (parent) {}
   ~CQQuickWindow() {}
- 
+
 protected:
 
   bool event (QEvent *event);
@@ -126,9 +124,8 @@ public:
 
   QString id;
   CQQuickWindow *window;
- 
+
   CPluginListItem (const QString &plid, CQQuickWindow *wnd);
-//  ~CPluginListItem() {}
 };
 #endif
 
@@ -166,9 +163,9 @@ public:
 
   QString string_value;
   int int_value;
-   
+
   CStrIntPair (const QString &s, int i);
-};  
+};
 
 
 class CDarkerWindow: public QWidget
@@ -176,7 +173,7 @@ class CDarkerWindow: public QWidget
 Q_OBJECT
 
   QSlider *slider;
-  
+
 public:
 
   CDarkerWindow();
@@ -184,9 +181,9 @@ public:
 protected:
 
   void closeEvent (QCloseEvent *event);
-  
+
 public slots:
- 
+
  void slot_valueChanged (int value);
 };
 
@@ -194,7 +191,7 @@ public slots:
 class CAboutWindow: public QWidget
 {
 Q_OBJECT
-  
+
 public:
 
   QLabel *logo;
@@ -204,7 +201,7 @@ public:
 protected:
 
   void closeEvent (QCloseEvent *event);
-  
+
 public slots:
 
   void update_image();
@@ -218,7 +215,7 @@ Q_OBJECT
 public:
 
   QListWidget *list;
-  
+
   CTextListWnd (const QString &title, const QString &label_text);
   ~CTextListWnd();
 
@@ -236,19 +233,19 @@ public:
 
   rvln();
   ~rvln();
-  
+
 #ifdef USE_QML_STUFF
   QQmlEngine *qml_engine;
 #endif
-  
-  
+
+
   QStringList sl_places_bmx;
   QStringList sl_urls;
   QStringList sl_charsets;
   QStringList sl_last_used_charsets;
   QStringList sl_fif_history;
-  
-  int fm_entry_mode; 
+
+  int fm_entry_mode;
 
   QDate date1;
   QDate date2;
@@ -257,21 +254,16 @@ public:
 
   CLogMemo *log;
   QAction *last_action;
- 
- 
+
+
   CShortcuts *shortcuts;
   CFMan *fman;
   CImgViewer *img_viewer;
-
-//#ifdef SPELLCHECK_ENABLE
 
   CSpellchecker *spellchecker;
   QStringList spellcheckers;
   QString cur_spellchecker;
 
-//#endif
-
-  
   int icon_size;
 
   bool b_preview;
@@ -284,14 +276,14 @@ public:
   int idx_tab_learn;
   int idx_tab_keyboard;
   int idx_prev;
- 
+
   int fman_find_idx;
   QList <QStandardItem *> l_fman_find;
-  
+
   bool ui_update;
 
   QString fname_storage_file;
-  QString fname_stylesheet; 
+  QString fname_stylesheet;
   QString man_search_value;
   QString markup_mode;
 
@@ -299,13 +291,13 @@ public:
   QHash <QString, QString> programs;
   QHash <QString, QString> places_bookmarks;
   QHash <int, QString> moon_phase_algos;
-  
+
   QTranslator myappTranslator;
   QTranslator qtTranslator;
 
   QDir dir_lv;
 
- 
+
 #ifdef PRINTER_ENABLE
   QPrinter printer;
 #endif
@@ -315,7 +307,7 @@ public:
   QString fman_fname_to_find;
 
   QString dir_user_dict;
-  QString dir_profiles;  
+  QString dir_profiles;
   QString dir_last;
   QString dir_config;
   QString dir_templates;
@@ -325,7 +317,7 @@ public:
 
   QString dir_plugins;
 
-  
+
   QString dir_snippets;
   QString dir_scripts;
   QString dir_palettes;
@@ -357,7 +349,7 @@ public:
   QProgressBar *pb_status;
   QLineEdit *ed_spellcheck_path;
   QLineEdit *ed_aspellcheck_path;
-  
+
   QCheckBox *cb_use_qregexpsyntaxhl;
 
 #if defined(JOYSTICK_SUPPORTED)
@@ -367,7 +359,7 @@ public:
   QCheckBox *cb_right_to_left;
 
   QCheckBox *cb_wordwrap;
-  
+
   QCheckBox *cb_fif_at_toolbar;
   QCheckBox *cb_show_linenums;
   QCheckBox *cb_hl_current_line;
@@ -391,10 +383,10 @@ public:
 
   QSpinBox *spb_tab_sp_width;
   QCheckBox *cb_center_on_cursor;
-  
+
   QCheckBox *cb_full_path_at_window_title;
-  
-  
+
+
   QCheckBox *cb_use_trad_dialogs;
   QCheckBox *cb_start_on_sunday;
   QCheckBox *cb_northern_hemisphere;
@@ -431,14 +423,14 @@ main window callbacks
 
   void receiveMessage (const QString &msg);
   void receiveMessageShared (const QStringList& msg);
-        
+
   void view_use_theme();
 
   void select_label();
   void update_labels_menu();
   void update_labels_list();
 
-  
+
   void fm_full_info();
 
   void fm_hashsum_md5();
@@ -456,7 +448,7 @@ main window callbacks
   void fman_multreplace();
   void fman_apply_template();
 
-  
+
   void fman_drives_changed (const QString & path);
   void fman_current_file_changed (const QString &full_path, const QString &just_name);
   void fman_file_activated (const QString &full_path);
@@ -478,9 +470,7 @@ main window callbacks
 //  void tab_options_pageChanged (int index);
 
 #ifdef PRINTER_ENABLE
-
   void file_print();
-
 #endif
 
 
@@ -490,7 +480,7 @@ main window callbacks
   void rename_selected();
 
   void file_reload();
-  void file_reload_enc_itemDoubleClicked (QListWidgetItem *item); 
+  void file_reload_enc_itemDoubleClicked (QListWidgetItem *item);
   void file_reload_enc();
   void file_open_bookmarks_file();
   void file_open_programs_file();
@@ -502,9 +492,9 @@ main window callbacks
   void file_open_program();
   void file_add_to_bookmarks();
   void file_crapbook();
-  
+
   void file_notes();
-  
+
   void file_use_template();
   void file_use_snippet();
   void file_use_palette();
@@ -528,7 +518,7 @@ main window callbacks
 
   void cal_remove();
   void fn_sum_by_last_col();
-  
+
   void fn_insert_cpp();
   void fn_insert_c();
   void fn_insert_template_html5();
@@ -564,7 +554,7 @@ main window callbacks
   void set_as_storage_file();
   void copy_to_storage_file();
   void capture_clipboard_to_storage_file();
-  
+
   void upCase();
   void dnCase();
 
@@ -580,7 +570,7 @@ main window callbacks
   void ide_global_definition();
   void ide_global_references();
 */
-  
+
   void fn_count();
   void fn_count_rx();
 
@@ -601,21 +591,21 @@ main window callbacks
   void fn_table_swap_cells();
   void fn_table_delete_cells();
   void fn_table_copy_cells();
-  
+
   void fn_flip_a_list();
   void fn_flip_a_list_sep();
-  
+
   void fn_insert_loremipsum();
   void fn_insert_template_html();
   void fn_run_script();
   void cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus);
   void fn_number_arabic_to_roman();
   void fn_number_roman_to_arabic();
-  
+
   void fn_number_dms2dc();
   void fn_number_dd2dms();
 
-  
+
   void fn_filter_rm_less_than();
   void fn_filter_rm_greater_than();
   void fn_filter_rm_duplicates();
@@ -625,20 +615,20 @@ main window callbacks
   void fn_filter_delete_after_sep();
 
   void fn_rm_formatting();
-  
+
   void fn_rm_compress();
- 
+
   void text_compare_two_strings();
-  
+
   void fn_convert_quotes_angle();
   void fn_convert_quotes_curly();
-  
+
   void fn_convert_quotes_tex_curly();
 
   void fn_convert_quotes_tex_angle_01();
   void fn_convert_quotes_tex_angle_02();
-  
-  
+
+
   void fn_get_words_count();
   void fn_unitaz_abc();
   void fn_extract_words();
@@ -655,9 +645,9 @@ main window callbacks
   void fn_number_decimal_to_binary();
   void fn_number_flip_bits();
   void fn_binary_to_decimal();
-  
+
   void remove_formatting();
-  
+
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
   void fn_change_spell_lang();
@@ -678,7 +668,7 @@ main window callbacks
 #endif
 #endif
 
-#endif // SPELLCHECKERS ENABLED 
+#endif // SPELLCHECKERS ENABLED
 
   void scale_image();
 
@@ -702,12 +692,12 @@ main window callbacks
   void mrkup_mode_choosed();
   void mrkup_header();
   void mrkup_align();
-  
+
   void mrkup_align_center();
   void mrkup_align_left();
   void mrkup_align_right();
   void mrkup_align_justify();
-  
+
   void mrkup_document_weight();
   void markup_ins_image();
   void mrkup_color();
@@ -730,8 +720,8 @@ main window callbacks
   void view_toggle_fs();
   void view_stay_on_top();
   void instr_font_gallery();
-  
-  
+
+
   void nav_goto_line();
   void nav_goto_right_tab();
   void nav_goto_left_tab();
@@ -776,7 +766,7 @@ main window callbacks
   void set_eol_mac();
 
   void fn_stat_words_lengths();
-  
+
   void guess_enc();
 
   void cal_add_days();
@@ -784,17 +774,14 @@ main window callbacks
   void cal_add_years();
 
   void recentoff();
-  
+
 
 /*************************
 prefs window callbacks
 *************************/
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
 
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
 #if defined(JOYSTICK_SUPPORTED)
   void cb_use_joystick_stateChanged (int state);
-//#endif
 #endif
 
 //  void cmb_ui_langs_currentIndexChanged (const QString &text);
@@ -822,11 +809,11 @@ prefs window callbacks
   void slot_app_font_size_changed (int i);
   void slot_style_currentIndexChanged (const QString &text);
 
-  
+
 #ifdef USE_QML_STUFF
   void fn_use_plugin();
 #endif
-  
+
 public:
 
 /*************************
@@ -871,8 +858,8 @@ main window widgets
 
   QMenu *menu_fn_sessions;
   QMenu *menu_fn_scripts;
-  
-  
+
+
 #ifdef USE_QML_STUFF
   QMenu *menu_fn_plugins;
 #endif
@@ -912,7 +899,7 @@ main window widgets
 
   QAction *act_test;
   QAction *filesAct;
-  
+
   QAction *newAct;
   QAction *openAct;
   QAction *saveAct;
@@ -928,7 +915,7 @@ main window widgets
   QAction *aboutQtAct;
   QAction *menu_find_whole_words;
   QAction *menu_find_from_cursor;
-  
+
   QAction *menu_find_case;
   QAction *menu_find_regexp;
   QAction *menu_find_fuzzy;
@@ -943,7 +930,7 @@ main window widgets
   QComboBox *cmb_styles;
   QComboBox *cmb_icon_size;
 
-  
+
   CCalendarWidget *calendar;
 
 /*************************
@@ -962,10 +949,10 @@ prefs window widgets
 
   QLineEdit *ed_locale_override;
   QLineEdit *ed_img_viewer_override;
-  
+
   QSpinBox *spb_cursor_blink_time;
   QSpinBox *spb_cursor_width;
-  
+
   CShortcutEntry *ent_shtcut;
   QListWidget *lv_menuitems;
 
@@ -985,7 +972,7 @@ prefs window widgets
 
   QCheckBox *cb_altmenu;
   QCheckBox *cb_wasd;
-  
+
 
   QCheckBox *cb_auto_img_preview;
   QCheckBox *cb_override_locale;
@@ -993,8 +980,8 @@ prefs window widgets
   QCheckBox *cb_override_img_viewer;
 
   QComboBox *cmb_cmdline_default_charset;
-  
-  
+
+
   QComboBox *cmb_zip_charset_in;
   QComboBox *cmb_zip_charset_out;
 
@@ -1009,19 +996,18 @@ prefs window widgets
 
 
   void update_stylesheet (const QString &f);
-  
+
   QString theme_dir;
-  
+
   QIcon get_theme_icon (const QString &name);
   QString get_theme_icon_fname (const QString &name);
 
   void update_dyn_menus();
   void create_paths();
-  
+
   void calendar_update();
 
 
-//#ifdef SPELLCHECK_ENABLE
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   void setup_spellcheckers();
   void create_spellcheck_menu();
@@ -1047,14 +1033,14 @@ prefs window widgets
   void update_sessions();
   void update_palettes();
   void update_view_hls();
-  
+
 #ifdef USE_QML_STUFF
   void update_plugins();
 #endif
-  
+
   void update_themes();
 
-  
+
   //void update_hls (bool force = false);
   void update_hls_noncached();
 
@@ -1082,36 +1068,35 @@ prefs window widgets
 
   void createFman();
   void create_markup_hash();
-  //void create_markup_hash2();
 
   void count_substring (bool use_regexp);
 
   void run_unitaz (int mode);
- 
+
   void create_moon_phase_algos();
 
- 
+
   QHash <QString, QString> load_eclipse_theme_xml (const QString &fname);
 
   void load_palette (const QString &fileName);
 
- 
+
   QTextDocument::FindFlags get_search_options();
 
   void fman_convert_images (bool by_side, int value);
- 
+
   Q_INVOKABLE QString fif_get_text();
-   
-  
+
+
   void fn_filter_delete_by_sep (bool mode);
- 
+
   void fman_items_select_by_regexp (bool mode);
   void fman_find();
   void fman_find_next();
   void fman_find_prev();
- 
+
   void opt_update_keyb();
-  
+
   void opt_shortcuts_find();
   void opt_shortcuts_find_next();
   void opt_shortcuts_find_prev();
@@ -1121,11 +1106,11 @@ prefs window widgets
   void idx_tab_tune_activate();
   void idx_tab_fman_activate();
   void idx_tab_learn_activate();
-  
+
 #ifdef USE_QML_STUFF
   void plugins_init();
   void plugins_done();
-#endif  
+#endif
 
   void markup_text (const QString &mode);
 };

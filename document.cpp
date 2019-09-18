@@ -53,7 +53,7 @@ code from qwriter:
 #include <QMimeData>
 #include <QTimer>
 
-#if QT_VERSION >= 0x05
+#if QT_VERSION >= 0x050000
 #include <QRegularExpression>
 #endif
 

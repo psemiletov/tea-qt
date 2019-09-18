@@ -73,6 +73,7 @@ QString string_between (const QString &source, const QString &sep1, const QStrin
 bool char_is_bad (const QChar &c);
 void qstring_list_print (const QStringList &l);
 QStringList bytearray_to_stringlist (QList<QByteArray> a);
+void strlist_swap (QStringList &l, int a, int b);
 
 
 /* hash utils */

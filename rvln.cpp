@@ -348,10 +348,8 @@ void rvln::create_main_widget()
 
   tab_editor = new QTabWidget;
   tab_editor->setUsesScrollButtons (true);
-//  tab_editor->setDocumentMode (true);
 
-//#if QT_VERSION >= QT_VERSION_CHECK(4, 5, 0)
-#if QT_VERSION >= 0x0405
+#if QT_VERSION >= 0x040500
   tab_editor->setMovable (true);
 #endif
 
@@ -359,8 +357,6 @@ void rvln::create_main_widget()
 
 
  //QString tab_widget_style = "QTabWidget::pane { border-top: 0px solid rgb(100,100,100, 80); margin:0;  background: rgba(50,50,50, 100);  border-radius: 1px;   padding:0;}";
-
-
 //  QString tab_widget_style = "QTabWidget::pane { border-top: 0px solid grey; background-color: grey;}";
   //main_tab_widget->setStyleSheet (tab_widget_style);
 //  tab_widget->setStyleSheet (tab_widget_style);
@@ -490,7 +486,7 @@ void rvln::setup_spellcheckers()
 
 void rvln::init_styles()
 {
-#if QT_VERSION >= 0x05
+#if QT_VERSION >= 0x050000
 
   QString default_style = qApp->style()->objectName();
 
@@ -740,10 +736,6 @@ rvln::rvln()
 #endif
 
   setAcceptDrops (true);
-
- // qDebug() << "QT_VERSION: " << QString("%1").arg(QT_VERSION, 0, 16);
-//  qDebug() << "Qt5_VERSION_MAJOR" << Qt5_VERSION_MAJOR;
-//   qDebug() << qPrintable(QString::number(QT_VERSION, 16));
 
   log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (current_version_number)));
 
@@ -2701,7 +2693,7 @@ void rvln::createOptions()
 #endif
 
 
-#if QT_VERSION >= 0x05
+#if QT_VERSION >= 0x050000
   cb_use_qregexpsyntaxhl = new QCheckBox (tr ("Old syntax hl engine (restart TEA to apply)"), tab_options);
   cb_use_qregexpsyntaxhl->setCheckState (Qt::CheckState (settings->value ("qregexpsyntaxhl", 0).toInt()));
 #endif
@@ -2802,7 +2794,7 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_use_joystick);
 #endif
 
-#if QT_VERSION >= 0x05
+#if QT_VERSION >= 0x050000
   page_common_layout->addWidget (cb_use_qregexpsyntaxhl);
 #endif
 
@@ -3664,7 +3656,7 @@ void rvln::fn_spell_check()
 
          f = cr.blockCharFormat();
 
-#if QT_VERSION >= 0x05
+#if QT_VERSION >= 0x050000
 
          f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
          f.setUnderlineColor (color_error);
@@ -6051,14 +6043,15 @@ void rvln::createFman()
   l_t = new QLabel (tr ("Charset"));
 
   QPushButton *bt_magicenc = new QPushButton ("?", this);
+  bt_magicenc->setToolTip (tr ("Guess encoding!"));
 
-//#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-#if QT_VERSION >= 0x0511
+  /*
+#if QT_VERSION >= 0x051100
   bt_magicenc->setMaximumWidth (QApplication::fontMetrics().horizontalAdvance("???"));
 #else
   bt_magicenc->setMaximumWidth (QApplication::fontMetrics().width ("???"));
 #endif
-
+*/
 
   connect (bt_magicenc, SIGNAL(clicked()), this, SLOT(guess_enc()));
 
@@ -6447,14 +6440,7 @@ void rvln::fm_full_info()
 
   l.append (tr ("file name: %1").arg (fi.absoluteFilePath()));
   l.append (tr ("size: %1 kbytes").arg (QString::number (fi.size() / 1024)));
-
-#if QT_VERSION >= 0x0510
-  l.append (tr ("created: %1").arg (fi.birthTime().toString ("yyyy-MM-dd@hh:mm:ss")));
-#else
-  l.append (tr ("created: %1").arg (fi.created().toString ("yyyy-MM-dd@hh:mm:ss")));
-#endif
-
-  l.append (tr ("modified: %1").arg (fi.lastModified().toString ("yyyy-MM-dd@hh:mm:ss")));
+  l.append (tr ("last modified: %1").arg (fi.lastModified().toString ("yyyy-MM-dd@hh:mm:ss")));
 
   if (file_get_ext (fname) == "wav")
      {
@@ -8391,12 +8377,8 @@ void rvln::mrkup_document_weight()
                }
            }
 
-//#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
-//#if QT_VERSION >= 0x050000
   std::sort (lst.begin(), lst.end(), CFSizeFNameLessThan);
-//#else
 //  qSort (lst.begin(), lst.end(), CFSizeFNameLessThan);
-//#endif
 
   for (int i = 0; i < lst.size(); i++)
      {
@@ -8672,7 +8654,7 @@ void rvln::leaving_tune()
 
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
 
-#if QT_VERSION >= 0x05
+#if QT_VERSION >= 0x050000
   settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->checkState());
 #endif
 
@@ -9390,14 +9372,8 @@ void rvln::fn_sort_latex_table_by_col_abc()
               }
          }
 
-//#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
-
   std::sort (output.begin(), output.end(), latex_table_sort_fn);
-
-//#else
   //qSort (output.begin(), output.end(), latex_table_sort_fn);
-
-//#endif
 
   sl_temp.clear();
 
@@ -9410,7 +9386,6 @@ void rvln::fn_sort_latex_table_by_col_abc()
 
   d->textEdit->textCursor().insertText (t);
 }
-
 
 
 void rvln::fn_table_swap_cells()
@@ -9452,12 +9427,13 @@ void rvln::fn_table_swap_cells()
               QStringList sl_parsed = v.split (sep);
               if (imax + 1 <= sl_parsed.size())
                  {
-//#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
-#if QT_VERSION >= 0x0513
-                  sl_parsed.swapItemsAt (col1, col2);
-#else
-                  sl_parsed.swap (col1, col2);
-#endif
+                  strlist_swap (sl_parsed, col1, col2);
+
+//#if QT_VERSION >= 0x060000
+                  //sl_parsed.swapItemsAt (col1, col2);
+//#else
+//                  sl_parsed.swap (col1, col2);
+//#endif
                   output.append (sl_parsed);
                  }
              }

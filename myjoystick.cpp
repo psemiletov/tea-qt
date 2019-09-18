@@ -98,8 +98,6 @@ void CJoystick::read_joystick()
 }
 
 
-
-
 void CJoystick::process_event (js_event e)
 {
  // qDebug() << "e.type" << e.type << endl;

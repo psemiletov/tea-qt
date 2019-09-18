@@ -53,7 +53,7 @@ DJVU read code taken fromdvutxt.c:
 //FIXME: not good with cmake, cmake just use Qt5 here
 #if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
 
-#if QT_VERSION >= 0x05
+#if QT_VERSION_MAJOR >= 5
 #include <poppler-qt5.h>
 #else
 #include <poppler-qt4.h>
@@ -434,7 +434,8 @@ CCharsetMagic::CCharsetMagic()
   int ku = signatures.indexOf (koi8u);
   int kr = signatures.indexOf (koi8r);
 
-#if QT_VERSION >= 0x0513
+//#if QT_VERSION >= 0x0513
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 13)
   signatures.swapItemsAt (ku, kr);
 #else
   signatures.swap (ku, kr);

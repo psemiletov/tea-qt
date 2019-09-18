@@ -45,7 +45,8 @@ code from qwriter:
 #include <QSyntaxHighlighter>
 
 
-#if QT_VERSION >= 0x050000
+//#if QT_VERSION >= 0x050000
+#if QT_VERSION_MAJOR >= 5
 #include <QRegularExpression>
 #endif
 
@@ -206,7 +207,8 @@ public:
   void load_from_xml (const QString &fname);
 };
 
-#if QT_VERSION >= 0x05
+#if QT_VERSION >= 0x050000
+//#if QT_VERSION_MAJOR >= 5
 
 class CSyntaxHighlighterQRegularExpression: public CSyntaxHighlighter
 {

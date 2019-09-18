@@ -17,9 +17,11 @@
 #include "quazip_global.h"
 #include <QIODevice>
 
-#if QT_VERSION >= 0x0501
+//#if QT_VERSION >= 0x0501
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >=1)
 #define QUAZIP_QSAVEFILE_BUG_WORKAROUND
 #endif
+
 #ifdef QUAZIP_QSAVEFILE_BUG_WORKAROUND
 #include <QSaveFile>
 #endif

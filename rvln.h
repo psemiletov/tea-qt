@@ -85,7 +85,8 @@ public:
 };
 
 
-#if QT_VERSION >= 0x050000
+//#if QT_VERSION >= 0x050000
+#if QT_VERSION_MAJOR >= 5
 class QStyleHints
 {
 public:

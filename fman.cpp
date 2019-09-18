@@ -263,7 +263,8 @@ CFMan::CFMan (QWidget *parent): QTreeView (parent)
   setModel (mymodel);
   setDragEnabled (true);
 
-#if QT_VERSION >= 0x05
+//#if QT_VERSION >= 0x05
+#if QT_VERSION_MAJOR >= 5
 
   header()->setSectionResizeMode (QHeaderView::ResizeToContents);
   header()->setSectionsClickable (true);

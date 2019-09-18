@@ -23,7 +23,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #endif
@@ -84,7 +84,7 @@ void CLogMemo::log_terminal (const QString &text)
 void CLogMemo::log (const QString &text)
 {
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
   if (terminal_output)
      {
       log_terminal (text);
@@ -141,9 +141,6 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
       }
 
   txt = txt.mid (idx_left, idx_right - idx_left + 1);
-
-  //qDebug() << txt;
- // txt = txt.remove ('\n');
 
   emit double_click (txt.simplified());
 

@@ -36,6 +36,11 @@ endif()
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network Qml Quick)
 add_definitions(-DUSE_QML_STUFF)
 
+#find_package(Qt5Widgets REQUIRED)
+#if (Qt5Widgets_FOUND)
+#    message(${Qt5Widgets_VERSION})
+#endif()
+
 
 if(BUILD_TESTING)
   find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)

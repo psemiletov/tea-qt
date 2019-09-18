@@ -67,11 +67,11 @@ int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_p
                counter++;
 
             if (get_percent ((double)text_to_find.length(), (double)counter) >= q)
-	       {
-	        result = i;
-	        jump = true;
-	        break;
-	       }
+               {
+                result = i;
+                jump = true;
+                break;
+               }
            }
       }
 

@@ -29,10 +29,10 @@ QString qstring_get_last_after (const QString &s, const QString &sep)
 bool CZipper::zip_directory (const QString &archpath, const QString &dir2pack)
 {
   QString archname = qstring_get_last_after (dir2pack, "/");
- 
+
   QString zipname (archpath); //zip name has a full path ending with .zip
   zipname.append ("/").append (archname).append (".zip");
- 
+
   QuaZip zip (zipname);
   zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_out", "UTF-8").toString().trimmed().toLatin1().data())));
 
@@ -65,20 +65,20 @@ bool CZipper::zip_directory (const QString &archpath, const QString &dir2pack)
            outFile.write (ba);
 
            outFile.close();
-          
+
            if (outFile.getZipError() != UNZ_OK)
               return false;
 
            inFile.close();
-          
+
            emit new_iteration (file);
           }
-  
+
   zip.close();
 
-  if (zip.getZipError() != 0) 
+  if (zip.getZipError() != 0)
      return false;
-  
+
   return true;
 }
 
@@ -88,22 +88,22 @@ bool CZipper::read_as_utf8 (const QString &archname, const QString &fname)
   QuaZip zip (archname);
   zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_in", "UTF-8").toString().trimmed().toLatin1().data())));
 
-  
+
   if (! zip.open (QuaZip::mdUnzip))
       return false;
 
   zip.setCurrentFile (fname);
-  
+
   if (! zip.hasCurrentFile())
       return false;
-  
+
   QuaZipFileInfo info;
   if (! zip.getCurrentFileInfo (&info))
      return false;
 
   QuaZipFile file (&zip);
 
-  if (! file.open (QIODevice::ReadOnly)) 
+  if (! file.open (QIODevice::ReadOnly))
       return false;
 
   QByteArray ba = file.readAll();
@@ -133,9 +133,9 @@ QByteArray gzip_deflateFile (const QString &fileName)
   QByteArray data;
 
   while ((i = gzread (gzDoc, &buff, 4096)) > 0)
-        { 
-         buff[i] = '\0'; 
-         data.append (buff); 
+        {
+         buff[i] = '\0';
+         data.append (buff);
         }
 
   gzclose(gzDoc);
@@ -148,12 +148,12 @@ bool CZipper::pack_prepared()
 {
   if (archive_fullpath.isEmpty())
      return false;
-  
+
   QString zipname (archive_fullpath);
   QuaZip zip (zipname);
   zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_out", "UTF-8").toString().trimmed().toLatin1().data())));
 
-  
+
   if (! zip.open (QuaZip::mdCreate))
       return false;
 
@@ -163,7 +163,7 @@ bool CZipper::pack_prepared()
   foreach (QString fi, files_list)
           {
            QFileInfo file (fi);
-           
+
            if (! file.isFile())
               continue;
 
@@ -182,7 +182,7 @@ bool CZipper::pack_prepared()
            outFile.write (ba);
 
            outFile.close();
-           
+
            if (outFile.getZipError() != UNZ_OK)
                return false;
 
@@ -195,7 +195,7 @@ bool CZipper::pack_prepared()
 
   if (zip.getZipError() != 0)
      return false;
-     
+
   return true;
 }
 
@@ -206,7 +206,7 @@ bool CZipper::unzip (const QString &archpath, const QString &destdir)
   QuaZip zip (archpath);
   zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_in", "UTF-8").toString().trimmed().toLatin1().data())));
 
-  
+
   if (! zip.open (QuaZip::mdUnzip))
       {
        qDebug() << "zip.open() error: " << zip.getZipError();
@@ -381,4 +381,3 @@ QStringList CZipper::unzip_list (const QString &archpath)
   zip.close();
   return result;
 }
-

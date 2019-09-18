@@ -53,7 +53,7 @@ code from qwriter:
 #include <QMimeData>
 #include <QTimer>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
 #include <QRegularExpression>
 #endif
 
@@ -533,15 +533,13 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 }
 
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-
+#if QT_VERSION >= 0x05
 CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
                                                                             CSyntaxHighlighter (parent, doc, fname)
 {
   document = doc;
   load_from_xml (fname);
 }
-
 #endif
 
 
@@ -573,7 +571,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   if (fname.isEmpty() || ! file_exists (fname))
      return;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
 
   if (settings->value ("qregexpsyntaxhl", 0).toBool())
      highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
@@ -612,7 +610,7 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+#if QT_VERSION >= 0x0510
 
   d->textEdit->setTabStopDistance (d->textEdit->tab_sp_width * d->textEdit->brace_width);
 
@@ -1020,7 +1018,8 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 }
 
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+
+#if QT_VERSION >= 0x05
 
 void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {

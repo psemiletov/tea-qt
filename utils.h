@@ -12,7 +12,7 @@ Peter Semiletov
 #include <QStringList>
 
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
 #include <QMimeDatabase>
 #endif
 
@@ -35,7 +35,7 @@ public:
   QStringList lexts;
   QStringList lnames;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
   QMimeDatabase db;
 #endif
 
@@ -129,6 +129,5 @@ inline QString get_file_path (const QString &fileName)
 {
   return QFileInfo (fileName).absolutePath();
 }
-
 
 #endif

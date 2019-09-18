@@ -354,10 +354,6 @@ void CFilesList::get (const QString &path)
 
 CFTypeChecker::CFTypeChecker (const QStringList &fnames, const QStringList &exts)
 {
-/*  lexts = qstring_load (exts).split ("\n");
-  lnames = qstring_load (fnames).split ("\n");
-*/
-
   lexts = exts;
   lnames = fnames;
 }
@@ -366,7 +362,8 @@ CFTypeChecker::CFTypeChecker (const QStringList &fnames, const QStringList &exts
 bool CFTypeChecker::check (const QString &fname)
 {
   bool result = false;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+
+#if QT_VERSION >= 0x05
  QMimeType mime = db.mimeTypeForFile(fname);
  if (mime.inherits("text/plain"))
     result = true;
@@ -390,9 +387,5 @@ QStringList CFTypeChecker::get_supported_exts()
 
   l += lexts;
   l.append ("txt");
-//  qstring_list_print (l);
-
   return l;
-
-
 }

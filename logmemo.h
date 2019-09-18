@@ -36,14 +36,14 @@ public:
   bool terminal_output;
 
   CLogMemo (QWidget *parent = 0);
-  
+
 Q_INVOKABLE void log (const QString &text);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
   void log_terminal (const QString &text);
 #endif
-  
-  void mouseDoubleClickEvent(QMouseEvent *event);  
+
+  void mouseDoubleClickEvent(QMouseEvent *event);
 
 signals:
 

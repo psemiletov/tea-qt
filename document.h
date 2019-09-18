@@ -22,7 +22,7 @@
 Copyright (C) 2006-2008 Trolltech ASA. All rights reserved.
 */
 
-/* 
+/*
 Diego Iastrubni <elcuco@kde.org> //some GPL'ed code from new-editor-diego-3, found on qtcentre forum
 */
 
@@ -45,8 +45,7 @@ code from qwriter:
 #include <QSyntaxHighlighter>
 
 
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
 #include <QRegularExpression>
 #endif
 
@@ -95,9 +94,6 @@ public:
   bool draw_margin;
   bool draw_linenums;
 
- // bool use_hl_wrap;
- // bool wrap;
-
   bool auto_indent;
   bool spaces_instead_of_tabs;
   int tab_sp_width; //in spaces
@@ -113,7 +109,7 @@ public:
   void set_margin_pos (int mp);
   void set_hl_cur_line (bool enable);
   void set_hl_brackets (bool enable);
-  
+
   void set_word_wrap (bool wrap);
   bool get_word_wrap();
 
@@ -210,8 +206,7 @@ public:
   void load_from_xml (const QString &fname);
 };
 
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION >= 0x05
 
 class CSyntaxHighlighterQRegularExpression: public CSyntaxHighlighter
 {
@@ -354,7 +349,7 @@ public:
   void update_recent_menu();
   void update_current_files_menu();
 
-  void move_cursor (QTextCursor::MoveOperation mo); 
+  void move_cursor (QTextCursor::MoveOperation mo);
 
   Q_INVOKABLE CDocument* create_new();
   Q_INVOKABLE CDocument* open_file (const QString &fileName, const QString &codec);
@@ -375,7 +370,7 @@ public slots:
   void open_recent();
   void open_current();
 
-  void move_cursor_up(); 
+  void move_cursor_up();
   void move_cursor_down();
   void move_cursor_left();
   void move_cursor_right();

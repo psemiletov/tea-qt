@@ -60,7 +60,7 @@ int moon_phase_trig2 (int year, int month, int day)
 }
 
 
-/*This simply mods the difference between the date and a known 
+/*This simply mods the difference between the date and a known
 new moon date (1970-01-07) by the length of the lunar period.
 For this reason, it is only valid from 1970 onwards.*/
 
@@ -77,7 +77,7 @@ int moon_phase_simple (int year, int month, int day)
 /*
 Conway
 This is based on a 'do it in your head' algorithm by John Conway.
-In its current form, it's only valid for the 20th and 21st centuries, 
+In its current form, it's only valid for the 20th and 21st centuries,
 but I'm sure John's got refinements. :)
 */
 
@@ -102,7 +102,7 @@ int moon_phase_conway (int year, int month, int day)
 
 
 /*Trig1
-This is based on some Basic code by Roger W. Sinnot from Sky & Telescope magazine, March 1985. 
+This is based on some Basic code by Roger W. Sinnot from Sky & Telescope magazine, March 1985.
 I don't pretend to understand it - something to do with a first-order approximation
  to the 'real' calculation of the position of the bodies involved - which I'm still working on... :)
 */
@@ -230,9 +230,9 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
 
       //вычисляем ряд и колонку
       int cursorOffset = moon_day;
-      int off = 0;
 
 /*
+      int off = 0;
       int row = 0;
 
       while (cursorOffset >= (off + 8))
@@ -240,7 +240,7 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
              off += 7;
              row++;
             }
-     
+
       int col = cursorOffset - off;
 */
 
@@ -248,7 +248,7 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
 
       if ((moon_day % 7 == 0) && (row != 0))
           row--;
-    
+
       int col = cursorOffset - (row * 7);
 
 /*

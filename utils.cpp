@@ -372,10 +372,10 @@ bool CFTypeChecker::check (const QString &fname)
 {
   bool result = false;
 
-#if QT_VERSION >= 0x05
- QMimeType mime = db.mimeTypeForFile(fname);
- if (mime.inherits("text/plain"))
-    result = true;
+#if QT_VERSION >= 0x050000
+  QMimeType mime = db.mimeTypeForFile(fname);
+  if (mime.inherits("text/plain"))
+     result = true;
 #endif
 
   if (! result)

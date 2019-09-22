@@ -353,10 +353,17 @@ CDocument* CDox::get_document_by_fname (const QString &fileName)
   if (fileName.isEmpty())
      return NULL;
 
+  for (int i = 0; i < list.size(); i++)
+      {
+       CDocument *d = list[i];
+       if (d->file_name == fileName)
+              return d;
+      }
+  /*
   foreach (CDocument *d, list)
           if (d->file_name == fileName)
               return d;
-
+*/
   return NULL;
 }
 
@@ -1439,15 +1446,15 @@ void CDox::save_to_session (const QString &fileName)
   fname_current_session = fileName;
   QString l;
 
-  foreach (CDocument *d, list)
+  for (int i = 0; i < list.size(); i++)
+      {
+       QString t = list[i]->get_triplex();
+       if (! t.isEmpty())
           {
-           QString t = d->get_triplex();
-           if (! t.isEmpty())
-               {
-                l += t;
-                l += "\n";
-               }
+           l += t;
+           l += "\n";
           }
+      }
 
   qstring_save (fileName, l.trimmed());
 }
@@ -1462,8 +1469,9 @@ void CDox::load_from_session (const QString &fileName)
   if (l.size() < 0)
      return;
 
-  foreach (QString t, l)
-          open_file_triplex (t);
+  for (int i = 0; i < l.size(); i++)
+      open_file_triplex (l[i]);
+
 
   fname_current_session = fileName;
 }

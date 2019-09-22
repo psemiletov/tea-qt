@@ -12,10 +12,8 @@ public:
 
   QImage moon_tiles;
   QString dir_days;
-
   bool moon_mode;
   bool northern_hemisphere;
-
   int moon_phase_algo;
 
   CCalendarWidget (QWidget *parent, const QString &a_dir_days);

@@ -1,5 +1,5 @@
  /**************************************************************************
- *   2007-2018 by Peter Semiletov                                          *
+ *   2007-2019 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -128,8 +128,8 @@ QDir::LocaleAware 0x40  Sort items appropriately using the current locale settin
 
 #endif
 
-  foreach (QFileInfo fi, lst)
-           add_entry (fi);
+  for (int i = 0; i < lst.size(); i++)
+       add_entry (lst.at(i));
 
   setModel (mymodel);
   connect (selectionModel(), SIGNAL(currentChanged (const QModelIndex &, const QModelIndex &)), this, SLOT(cb_fman_currentChanged (const QModelIndex &, const QModelIndex &)));

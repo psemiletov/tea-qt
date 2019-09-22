@@ -50,7 +50,7 @@ code from qwriter:
 #endif
 
 
-#if defined(JOYSTICK_SUPPORTED)
+#if defined (JOYSTICK_SUPPORTED)
 #include "myjoystick.h"
 #endif
 
@@ -93,7 +93,6 @@ public:
   bool hl_brackets;
   bool draw_margin;
   bool draw_linenums;
-
   bool auto_indent;
   bool spaces_instead_of_tabs;
   int tab_sp_width; //in spaces
@@ -164,12 +163,10 @@ public:
 
   CDocument *document;
   bool casecare;
-
   int xml_format;
 
   QString exts;
   QString langs;
-
   QString cm_mult;
   QString cm_single;
 

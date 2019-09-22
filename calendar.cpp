@@ -182,7 +182,6 @@ int moon_phase_by_algo (int v, int year, int month, int day)
 
          };
 
-//  qDebug() << "moon_phase_by_algo: " << r;
   return r;
 }
 
@@ -224,8 +223,6 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDa
 
       if (moon_day == 0 || moon_day == 30 || moon_day == 1)
          has_image = false;
-
-//      qDebug() << "moon_day: " << moon_day;
 
       //вычисляем ряд и колонку
       int cursorOffset = moon_day;

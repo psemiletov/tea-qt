@@ -50,7 +50,6 @@ int moon_phase_trig2 (int year, int month, int day)
   QDate d (year, month, day);
   int j1 = d.toJulianDay();
   int jd = (2415020 + 28 * n) + i;
-  //return (j1 - jd + 30) % 30;
 
   int r = (j1 - jd + 30) % 30;
   if (r == 0)

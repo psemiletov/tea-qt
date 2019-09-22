@@ -207,8 +207,6 @@ public:
 };
 
 #if QT_VERSION >= 0x050000
-//#if QT_VERSION_MAJOR >= 5
-
 class CSyntaxHighlighterQRegularExpression: public CSyntaxHighlighter
 {
   Q_OBJECT
@@ -330,18 +328,19 @@ public:
   QTimer *timer;
 
 
+
+
 #if defined(JOYSTICK_SUPPORTED)
+
   CJoystick *joystick;
-#endif
 
-  CDox();
-  ~CDox();
-
-
-#if defined(JOYSTICK_SUPPORTED)
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
 #endif
+
+
+   CDox();
+  ~CDox();
 
 
   void update_project (const QString &fileName);
@@ -403,6 +402,5 @@ protected:
        }
 
 };
-
 
 #endif

@@ -7,7 +7,7 @@ add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea")
-project ($PROJECT VERSION 47.1.0)
+project ($PROJECT VERSION 48.0.0)
 
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 
@@ -36,16 +36,10 @@ endif()
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network Qml Quick)
 add_definitions(-DUSE_QML_STUFF)
 
-#find_package(Qt5Widgets REQUIRED)
-#if (Qt5Widgets_FOUND)
-#    message(${Qt5Widgets_VERSION})
-#endif()
-
 
 if(BUILD_TESTING)
   find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
 endif()
-
 
 
 qt5_add_resources(QT_RESOURCES resources.qrc)

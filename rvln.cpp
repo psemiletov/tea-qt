@@ -394,6 +394,8 @@ void rvln::create_main_widget()
 
       cmb_fif->setEditable (true);
       fif = cmb_fif->lineEdit();
+      fif->setToolTip (tr ("The famous input field. Use for search/replace, function parameters."));
+
       connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
 
 
@@ -432,7 +434,6 @@ void rvln::create_main_widget()
 }
 
 
-//#ifdef SPELLCHECK_ENABLE
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
 void rvln::setup_spellcheckers()
@@ -487,8 +488,7 @@ void rvln::setup_spellcheckers()
 
 void rvln::init_styles()
 {
-//#if QT_VERSION >= 0x050000
-#if QT_VERSION_MAJOR >= 5
+#if QT_VERSION >= 0x050000
   QString default_style = qApp->style()->objectName();
 
   if (default_style == "GTK+") //can be buggy
@@ -671,7 +671,6 @@ rvln::rvln()
   update_hls_noncached();
   update_view_hls();
 
-//#ifdef SPELLCHECK_ENABLE
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   setup_spellcheckers();
 #endif
@@ -777,7 +776,6 @@ void rvln::closeEvent (QCloseEvent *event)
   plugins_done();
 #endif
 
-//#ifdef SPELLCHECK_ENABLE
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   delete spellchecker;
 #endif
@@ -1018,8 +1016,6 @@ bool rvln::saveAs()
 
   dialog.setFileMode (QFileDialog::AnyFile);
   dialog.setAcceptMode (QFileDialog::AcceptSave);
-//  dialog.setConfirmOverwrite (false);
- // dialog.setOption (QFileDialog::DontConfirmOverwrite, true);
   dialog.setDirectory (dir_last);
 
   QLabel *l = new QLabel (tr ("Charset"));
@@ -1543,7 +1539,6 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes v2"), SLOT(fn_convert_quotes_tex_angle_02()));
 
 
-//#ifdef SPELLCHECK_ENABLE
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   menu_functions->addSeparator();
 
@@ -1586,10 +1581,7 @@ void rvln::createMenus()
   add_to_menu (menu_cal, tr ("Remove day record"), SLOT(cal_remove()));
 
 
-
   menu_programs = menuBar()->addMenu (tr ("Run"));
-
-
 
   menu_ide = menuBar()->addMenu (tr ("IDE"));;
   menu_ide->setTearOffEnabled (true);
@@ -2382,9 +2374,6 @@ void rvln::cb_altmenu_stateChanged (int state)
   settings->setValue ("b_altmenu", MyProxyStyle::b_altmenu);
 }
 
-//#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD) && !defined(Q_OS_FREEBSD)
-
-//#if defined(Q_OS_LINUX) || defined(Q_WS_X11)
 #if defined(JOYSTICK_SUPPORTED)
 
 void rvln::cb_use_joystick_stateChanged (int state)
@@ -2403,7 +2392,6 @@ void rvln::cb_use_joystick_stateChanged (int state)
       documents->timer->stop();
 }
 #endif
-//#endif
 
 void rvln::createOptions()
 {
@@ -2452,7 +2440,7 @@ void rvln::createOptions()
   connect (spb_font_size, SIGNAL(valueChanged (int)), this, SLOT(slot_font_size_changed (int )));
 
 
-//
+
   QLabel *l_font_logmemo = new QLabel (tr ("Logmemo font"));
 
   cmb_logmemo_font_name = new QFontComboBox (page_interface);
@@ -2467,7 +2455,6 @@ void rvln::createOptions()
            this, SLOT(slot_logmemo_fontname_changed(const QString &)));
 
   connect (spb_logmemo_font_size, SIGNAL(valueChanged (int)), this, SLOT(slot_logmemo_font_size_changed (int )));
-//
 
   QLabel *l_app_font = new QLabel (tr ("Interface font"));
 
@@ -2694,8 +2681,7 @@ void rvln::createOptions()
 #endif
 
 
-//#if QT_VERSION >= 0x050000
-#if QT_VERSION_MAJOR >= 5
+#if QT_VERSION >= 0x050000
   cb_use_qregexpsyntaxhl = new QCheckBox (tr ("Old syntax hl engine (restart TEA to apply)"), tab_options);
   cb_use_qregexpsyntaxhl->setCheckState (Qt::CheckState (settings->value ("qregexpsyntaxhl", 0).toInt()));
 #endif
@@ -2796,8 +2782,7 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_use_joystick);
 #endif
 
-//#if QT_VERSION >= 0x050000
-#if QT_VERSION_MAJOR >= 5
+#if QT_VERSION >= 0x050000
   page_common_layout->addWidget (cb_use_qregexpsyntaxhl);
 #endif
 
@@ -2852,7 +2837,6 @@ void rvln::createOptions()
 
   QLabel *l_t = 0;
 
-//#ifdef SPELLCHECK_ENABLE
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
   QGroupBox *gb_spell = new QGroupBox (tr ("Spell checking"));
@@ -3659,8 +3643,8 @@ void rvln::fn_spell_check()
 
          f = cr.blockCharFormat();
 
-//#if QT_VERSION >= 0x050000
-#if QT_VERSION_MAJOR >= 5
+#if QT_VERSION >= 0x050000
+//#if QT_VERSION_MAJOR >= 5
 
          f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
          f.setUnderlineColor (color_error);
@@ -7332,8 +7316,6 @@ void rvln::fn_binary_to_decimal()
      d->textEdit->textCursor().insertText (QString::number (bin_to_decimal (d->textEdit->textCursor().selectedText())));
 }
 
-
-//#ifdef SPELLCHECK_ENABLE
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
 {
@@ -8658,8 +8640,8 @@ void rvln::leaving_tune()
 
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
 
-//#if QT_VERSION >= 0x050000
-#if QT_VERSION_MAJOR >= 5
+#if QT_VERSION >= 0x050000
+//#if QT_VERSION_MAJOR >= 5
   settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->checkState());
 #endif
 
@@ -8934,8 +8916,6 @@ void rvln::file_notes()
 
 void rvln::update_stylesheet (const QString &f)
 {
-//  qDebug() << "update_stylesheet";
-
 //Update paletted
 
   int darker_val = settings->value ("darker_val", 100).toInt();
@@ -9468,24 +9448,19 @@ void rvln::fn_table_delete_cells()
   QStringList fiftxt = fif_get_text().split("~");
 
   if (fiftxt.size() < 2)
-	 return;
+     return;
 
   int col1 = fiftxt[1].toInt();
-  //int col2 = col1;
 
-  /*
-  if (fiftxt.size() == 3)
-     col2 = fiftxt[2].toInt();
-	*/
   QString sep = fiftxt[0];
 
   QString t = d->textEdit->textCursor().selectedText();
 
   if (t.isEmpty())
-	     return;
+      return;
 
   if (t.indexOf (sep) == -1)
-	  return;
+     return;
 
 
   QStringList sl_temp = t.split (QChar::ParagraphSeparator);
@@ -9499,7 +9474,7 @@ void rvln::fn_table_delete_cells()
                QStringList sl_parsed = v.split (sep);
                if (col1 + 1 <= sl_parsed.size())
                   {
-            	   sl_parsed.removeAt (col1);
+                   sl_parsed.removeAt (col1);
                    output.append (sl_parsed);
                   }
               }
@@ -9529,7 +9504,7 @@ void rvln::fn_table_copy_cells()
   QStringList fiftxt = fif_get_text().split("~");
 
   if (fiftxt.size() < 2)
-	 return;
+      return;
 
   QString sep = fiftxt[0];
 
@@ -9537,16 +9512,16 @@ void rvln::fn_table_copy_cells()
   int col2 = 0;
 
   if (fiftxt.size() == 3)
-	  col2 = fiftxt[2].toInt();
+     col2 = fiftxt[2].toInt();
 
 
   QString t = d->textEdit->textCursor().selectedText();
 
   if (t.isEmpty())
-	     return;
+      return;
 
   if (t.indexOf (sep) == -1)
-	  return;
+      return;
 
   QStringList sl_temp = t.split (QChar::ParagraphSeparator);
 
@@ -9568,15 +9543,15 @@ void rvln::fn_table_copy_cells()
   else
       foreach (QString v, sl_temp)
               {
-	           if (! v.isEmpty())
+               if (! v.isEmpty())
                   {
-	               QStringList sl_parsed = v.split (sep);
-	               if (col1 + 1 <= sl_parsed.size())
-	                  {
-	                   QStringList tl = sl_parsed.mid (col1, 1);
-	                   output.append (tl);
-	                  }
-                   }
+                   QStringList sl_parsed = v.split (sep);
+                   if (col1 + 1 <= sl_parsed.size())
+                      {
+                       QStringList tl = sl_parsed.mid (col1, 1);
+                       output.append (tl);
+                      }
+                  }
                }
 
   sl_temp.clear();

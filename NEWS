@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 47.1.0, may 04, 2019
+TEA 48.0.0, september, 2019
 ---------------------------------------
 http://semiletov.org/tea - official size #1
 http://tea.ourproject.org - official size #1
@@ -8,7 +8,8 @@ https://vk.com/teaeditor - VK-community
 https://www.facebook.com/groups/766324686841748/ - FB-community
 ---------------------------------------
   
-   Bug fixes for good. 
+   After a long time. Moon calendar has been fixed, as well as a coup of things. The main changes of 48 are under the hood, because I began to prepare TEA source to upcoming Qt 6. The goal is to have compatibility with Qt 4 (still in use in Slackware and OS/2), 5 and 6. 
+
 
    Stay tuned.
    Peter Semiletov

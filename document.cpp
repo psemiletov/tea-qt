@@ -572,8 +572,8 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   if (fname.isEmpty() || ! file_exists (fname))
      return;
 
-//#if QT_VERSION >= 0x050000
-#if (QT_VERSION_MAJOR >= 5)
+#if QT_VERSION >= 0x050000
+//#if (QT_VERSION_MAJOR >= 5)
 
   if (settings->value ("qregexpsyntaxhl", 0).toBool())
      highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
@@ -1992,9 +1992,6 @@ void CTEAEdit::resizeEvent (QResizeEvent *e)
 
 void CTEAEdit::braceHighlight()
 {
-  //extraSelections.clear();
-  //setExtraSelections (extraSelections);
-
   brace_selection.format.setBackground (brackets_color);
 
   QTextDocument *doc = document();
@@ -2208,7 +2205,6 @@ void CTEAEdit::update_rect_sel()
   */
  // qDebug() << get_rect_sel();
 }
-
 
 
 void CTEAEdit::rect_sel_replace (const QString &s, bool insert)

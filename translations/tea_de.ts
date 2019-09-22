@@ -125,36 +125,6 @@ Do you want to save your changes?</source>
     </message>
 </context>
 <context>
-    <name>QuaGzipFile</name>
-    <message>
-        <source>QIODevice::Append is not supported for GZIP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Opening gzip for both reading and writing is not supported</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You can open a gzip either for reading or for writing. Which is it?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not gzopen() file</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QuaZIODevice</name>
-    <message>
-        <source>QIODevice::Append is not supported for QuaZIODevice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>QuaZipFile</name>
     <message>
         <source>ZIP/UNZIP API error %1</source>
@@ -1128,14 +1098,6 @@ opera=opera %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>created: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>modified: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>bits per sample: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1869,6 +1831,18 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>UI style (restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The famous input field. Use for search/replace, function parameters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Guess encoding!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>last modified: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

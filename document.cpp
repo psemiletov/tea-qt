@@ -1022,8 +1022,8 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 
 
 
-//#if QT_VERSION >= 0x050000
-#if (QT_VERSION_MAJOR >= 5)
+#if QT_VERSION >= 0x050000
+//#if (QT_VERSION_MAJOR >= 5)
 
 void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
@@ -2721,15 +2721,6 @@ bool CDox::event (QEvent *ev)
 
 void CDox::handle_joystick_event (CJoystickAxisEvent *event)
 {
-//  CDocument *d = get_current();
-
-//  if (! d)
-  //   return;
-
-//  QTextCursor cr = d->textEdit->textCursor();
-//  if (cr.isNull())
-  //   return;
-
   QTextCursor::MoveOperation mo = QTextCursor::NoMove;
 
   if (event->axis == 1 && event->value < 0) //up
@@ -2746,11 +2737,6 @@ void CDox::handle_joystick_event (CJoystickAxisEvent *event)
 
 
   move_cursor (mo);
-//  if (mo != QTextCursor::NoMove)
-  //   {
-    //  cr.movePosition (mo, QTextCursor::MoveAnchor);
-     // d->textEdit->setTextCursor (cr);
-     //}
 }
 
 #endif

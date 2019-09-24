@@ -1832,7 +1832,7 @@ void rvln::pageChanged (int index)
   if (index == -1)
       return;
 
-  CDocument *d = documents->list[index];
+  CDocument *d = documents->items[index];
   if (! d)
      return;
 
@@ -4121,7 +4121,7 @@ void rvln::search_replace_all_at_ofiles()
   if (l.size() < 2)
      return;
 
-  int c = documents->list.size();
+  int c = documents->items.size();
   if (c < 0)
      return;
 
@@ -4129,8 +4129,10 @@ void rvln::search_replace_all_at_ofiles()
   if (menu_find_case->isChecked())
      cs = Qt::CaseSensitive;
 
-  foreach (CDocument *d, documents->list)
+  for (vector <size_t>::size_type i = 0; i < documents->items.size(); i++)
+//  foreach (CDocument *d, documents->list)
           {
+           CDocument *d = documents->items[i];
            QString s;
 
            if (menu_find_regexp->isChecked())
@@ -5585,7 +5587,7 @@ void rvln::session_save_as()
 {
   last_action = qobject_cast<QAction *>(sender());
 
-  if (documents->list.size() < 0)
+  if (documents->items.size() < 0)
      return;
 
   bool ok;

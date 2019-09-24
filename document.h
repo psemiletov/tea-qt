@@ -36,6 +36,7 @@ code from qwriter:
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
+#include <vector>
 
 #include <QPoint>
 #include <QStatusBar>
@@ -186,10 +187,11 @@ protected:
 public:
 
   struct HighlightingRule
-        {
-         QRegExp pattern;
-         QTextCharFormat format;
-        };
+      {
+       QRegExp pattern;
+       QTextCharFormat format;
+      };
+
 
   QRegExp commentStartExpression;
   QRegExp commentEndExpression;
@@ -198,7 +200,8 @@ public:
 
   CSyntaxHighlighterQRegExp (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
 
-  QVector <HighlightingRule> highlightingRules;
+ // QVector <HighlightingRule> highlightingRules;
+  std::vector <HighlightingRule> highlightingRules;
 
   void load_from_xml (const QString &fname);
 };
@@ -227,7 +230,9 @@ public:
 
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
 
-  QVector <HighlightingRule> highlightingRules;
+ // QVector <HighlightingRule> highlightingRules;
+  std::vector <HighlightingRule> highlightingRules;
+
 
   QTextCharFormat singleLineCommentFormat;
   QTextCharFormat multiLineCommentFormat;
@@ -314,17 +319,16 @@ public:
   QLabel *l_status_bar;
   QLabel *l_charset;
 
-  QList <CDocument*> list;
+  //QList <CDocument*> list;
+
+  std::vector <CDocument*> items;
 
   QStatusBar *status_bar;
   CLogMemo *log;
   QMainWindow *parent_wnd;
   QTabWidget *tab_widget;
   QMenu *recent_menu;
-
   QTimer *timer;
-
-
 
 
 #if defined(JOYSTICK_SUPPORTED)
@@ -338,7 +342,6 @@ public:
 
    CDox();
   ~CDox();
-
 
   void update_project (const QString &fileName);
   void reload_recent_list();
@@ -372,10 +375,8 @@ public slots:
   void move_cursor_left();
   void move_cursor_right();
 
-  void move_cursor_x(double v);
-  void move_cursor_y(double v);
-
-
+  void move_cursor_x (double v);
+  void move_cursor_y (double v);
 };
 
 

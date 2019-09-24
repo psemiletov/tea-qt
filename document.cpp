@@ -62,6 +62,7 @@ code from qwriter:
 #include "gui_utils.h"
 #include "textproc.h"
 
+using namespace std;
 
 QHash <QString, QString> global_palette;
 QSettings *settings;
@@ -237,6 +238,8 @@ CDocument::CDocument (QObject *parent): QObject (parent)
 
 CDocument::~CDocument()
 {
+  qDebug() << "CDocument::~CDocument()";
+
   if (file_name.endsWith (".notes") && textEdit->document()->isModified())
      save_with_name_plain (file_name);
   else
@@ -315,8 +318,12 @@ CDox::~CDox()
 {
   b_destroying_all = true;
 
-  while (! list.isEmpty())
-        delete list.takeFirst();
+  //while (! list.isEmpty())
+    //    delete list.takeFirst();
+
+  if (items.size() > 0)
+     for (vector <int>::size_type i = 0; i < items.size(); i++)
+          delete items[i];
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
 
@@ -332,7 +339,8 @@ CDocument* CDox::create_new()
 
   doc->holder = this;
   doc->markup_mode = markup_mode;
-  list.append (doc);
+  //list.append (doc);
+  items.push_back (doc);
 
   doc->create_new();
 
@@ -350,14 +358,14 @@ CDocument* CDox::create_new()
 
 CDocument* CDox::get_document_by_fname (const QString &fileName)
 {
-  if (fileName.isEmpty())
+  if (fileName.isEmpty() || items.size() == 0)
      return NULL;
 
-  for (int i = 0; i < list.size(); i++)
+  for (vector <int>::size_type i = 0; i < items.size(); i++)
       {
-       CDocument *d = list[i];
+       CDocument *d = items[i];
        if (d->file_name == fileName)
-              return d;
+          return d;
       }
   /*
   foreach (CDocument *d, list)
@@ -410,8 +418,8 @@ void CDox::close_by_idx (int i)
   if (i < 0)
      return;
 
-  CDocument *d = list[i];
-  list.removeAt (i);
+  CDocument *d = items[i];
+  items.erase (items.begin() + i);
   delete d;
 
   update_current_files_menu();
@@ -430,7 +438,7 @@ CDocument* CDox::get_current()
   if (i < 0)
      return NULL;
 
-  return list[i];
+  return items[i];
 }
 
 
@@ -660,8 +668,14 @@ void CDox::apply_settings_single (CDocument *d)
 
 void CDox::apply_settings()
 {
-  foreach (CDocument *d, list)
-          apply_settings_single (d);
+  //foreach (CDocument *d, list)
+    //      apply_settings_single (d);
+
+  if (items.size() == 0)
+     return;
+
+  for (vector <int>::size_type i = 0; i < items.size(); i++)
+      apply_settings_single (items[i]);
 }
 
 
@@ -1113,7 +1127,8 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                                        HighlightingRule rule;
                                        rule.pattern = rg;
                                        rule.format = fmt;
-                                       highlightingRules.append (rule);
+                                       //highlightingRules.append (rule);
+                                       highlightingRules.push_back (rule);
                                       }
                                   }
                          }
@@ -1130,7 +1145,8 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                                HighlightingRule rule;
                                rule.pattern = rg;
                                rule.format = fmt;
-                               highlightingRules.append (rule);
+//                               highlightingRules.append (rule);
+                               highlightingRules.push_back (rule);
                               }
                          }
 
@@ -1151,7 +1167,9 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                              HighlightingRule rule;
                              rule.pattern = rg;
                              rule.format = fmt;
-                             highlightingRules.append (rule);
+//                             highlightingRules.append (rule);
+                             highlightingRules.push_back (rule);
+
                             }
                        }
                     else
@@ -1191,20 +1209,24 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
 void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 {
-  foreach (HighlightingRule rule, highlightingRules)
-          {
-           QRegularExpressionMatch m = rule.pattern.match (text);
+  if (highlightingRules.size() == 0)
+     return;
 
-           int index = m.capturedStart();
+  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
+  //for (vector <size_t>::size_type i = 0; i < highlightingRules.size(); i++)
+      {
+       QRegularExpressionMatch m = /*highlightingRules[i]*/it->pattern.match (text);
 
-           while (index >= 0)
-                 {
-                  int length = m.capturedLength();
-                  setFormat (index, length, rule.format);
-                  m = rule.pattern.match (text, index + length);
-                  index = m.capturedStart();
-                 }
-          }
+       int index = m.capturedStart();
+
+       while (index >= 0)
+             {
+              int length = m.capturedLength();
+              setFormat (index, length, /*highlightingRules[i]*/it->format);
+              m = /*highlightingRules[i]*/it->pattern.match (text, index + length);
+              index = m.capturedStart();
+             }
+       }
 
   setCurrentBlockState (0);
 
@@ -1321,7 +1343,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                                      HighlightingRule rule;
                                      rule.pattern = rg;
                                      rule.format = fmt;
-                                     highlightingRules.append (rule);
+                                     highlightingRules.push_back (rule);
                                     }
                                 }
                           }
@@ -1337,7 +1359,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                                   HighlightingRule rule;
                                   rule.pattern = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
                                   rule.format = fmt;
-                                  highlightingRules.append(rule);
+                                  highlightingRules.push_back (rule);
                                  }
                             }
 
@@ -1354,7 +1376,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                          HighlightingRule rule;
                          rule.pattern = rg;
                          rule.format = fmt;
-                         highlightingRules.append (rule);
+                         highlightingRules.push_back (rule);
                         }
                     }
                  else
@@ -1393,18 +1415,21 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
 void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 {
+  if (highlightingRules.size() == 0)
+     return;
 
-  foreach (HighlightingRule rule, highlightingRules)
+  for (vector <int>::size_type i = 0; i < highlightingRules.size(); i++)
+  //foreach (HighlightingRule rule, highlightingRules)
           {
            int index;
 
-           index = text.indexOf (rule.pattern);
+           index = text.indexOf (highlightingRules[i].pattern);
 
            while (index >= 0)
                  {
-                  int length = rule.pattern.matchedLength();
-                  setFormat (index, length, rule.format);
-                  index = text.indexOf (rule.pattern, index + length);
+                  int length = highlightingRules[i].pattern.matchedLength();
+                  setFormat (index, length, highlightingRules[i].format);
+                  index = text.indexOf (highlightingRules[i].pattern, index + length);
                  }
            }
 
@@ -1440,15 +1465,15 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 
 void CDox::save_to_session (const QString &fileName)
 {
-  if (list.size() < 0)
+  if (items.size() < 0)
      return;
 
   fname_current_session = fileName;
   QString l;
 
-  for (int i = 0; i < list.size(); i++)
+  for (vector <int>::size_type i = 0; i < items.size(); i++)
       {
-       QString t = list[i]->get_triplex();
+       QString t = items[i]->get_triplex();
        if (! t.isEmpty())
           {
            l += t;
@@ -2458,10 +2483,13 @@ void CDox::open_current()
 
 void CDox::update_current_files_menu()
 {
- QStringList current_files;
+  QStringList current_files;
 
-  foreach (CDocument *d, list)
-          current_files.prepend (d->file_name);
+  if (items.size() > 0)
+     for (vector <int>::size_type i = 0; i < items.size(); i++)
+         current_files.prepend (items[i]->file_name);
+//  foreach (CDocument *d, list)
+  //        current_files.prepend (d->file_name);
 
   current_files_menu->clear();
   create_menu_from_list (this, current_files_menu, current_files, SLOT(open_current()));

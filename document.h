@@ -251,7 +251,7 @@ public:
 
   bool cursor_xy_visible;
 
-  QHash <QString, QString> fnameswoexts;
+  //QHash <QString, QString> fnameswoexts;
 
   QString eol;
 

@@ -214,8 +214,8 @@ CDocument::CDocument (QObject *parent): QObject (parent)
 {
   QString fname = tr ("new[%1]").arg (QTime::currentTime().toString ("hh-mm-ss"));
 
-  fnameswoexts.insert ("configure", "sh");
-  fnameswoexts.insert ("install-sh", "sh");
+ // fnameswoexts.insert ("configure", "sh");
+  //fnameswoexts.insert ("install-sh", "sh");
 
   markup_mode = "HTML";
   file_name = fname;
@@ -322,7 +322,7 @@ CDox::~CDox()
     //    delete list.takeFirst();
 
   if (items.size() > 0)
-     for (vector <int>::size_type i = 0; i < items.size(); i++)
+     for (vector <size_t>::size_type i = 0; i < items.size(); i++)
           delete items[i];
 
   qstring_save (recent_list_fname, recent_files.join ("\n"));
@@ -361,7 +361,7 @@ CDocument* CDox::get_document_by_fname (const QString &fileName)
   if (fileName.isEmpty() || items.size() == 0)
      return NULL;
 
-  for (vector <int>::size_type i = 0; i < items.size(); i++)
+  for (vector <size_t>::size_type i = 0; i < items.size(); i++)
       {
        CDocument *d = items[i];
        if (d->file_name == fileName)
@@ -419,8 +419,8 @@ void CDox::close_by_idx (int i)
      return;
 
   CDocument *d = items[i];
-  items.erase (items.begin() + i);
   delete d;
+  items.erase (items.begin() + i);
 
   update_current_files_menu();
 }
@@ -549,7 +549,6 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 
 
 #if QT_VERSION >= 0x050000
-//#if QT_VERSION_MAJOR >= 5
 CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
                                                                             CSyntaxHighlighter (parent, doc, fname)
 {
@@ -574,12 +573,12 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   else
       ext = theext;
 
-  if (ext.isEmpty())
+ /* if (ext.isEmpty())
      {
       QFileInfo fi (file_name);
       ext = fnameswoexts[fi.fileName()];
      }
-
+*/
   if (ext.isEmpty())
      return;
 
@@ -588,7 +587,6 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
      return;
 
 #if QT_VERSION >= 0x050000
-//#if (QT_VERSION_MAJOR >= 5)
 
   if (settings->value ("qregexpsyntaxhl", 0).toBool())
      highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
@@ -668,13 +666,10 @@ void CDox::apply_settings_single (CDocument *d)
 
 void CDox::apply_settings()
 {
-  //foreach (CDocument *d, list)
-    //      apply_settings_single (d);
-
   if (items.size() == 0)
      return;
 
-  for (vector <int>::size_type i = 0; i < items.size(); i++)
+  for (vector <size_t>::size_type i = 0; i < items.size(); i++)
       apply_settings_single (items[i]);
 }
 
@@ -875,9 +870,9 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
   lineNumberArea = new CLineNumberArea (this);
 
   connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
-
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
   connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
+
   updateLineNumberAreaWidth (0);
 
   margin_pos = 72;
@@ -1044,7 +1039,6 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 
 
 #if QT_VERSION >= 0x050000
-//#if (QT_VERSION_MAJOR >= 5)
 
 void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
@@ -1200,8 +1194,8 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
        }//is start
 
-  if (xml.hasError())
-     qDebug() << "xml parse error";
+   if (xml.hasError())
+      qDebug() << "xml parse error";
 
   } //cycle
 }
@@ -1471,7 +1465,7 @@ void CDox::save_to_session (const QString &fileName)
   fname_current_session = fileName;
   QString l;
 
-  for (vector <int>::size_type i = 0; i < items.size(); i++)
+  for (vector <size_t>::size_type i = 0; i < items.size(); i++)
       {
        QString t = items[i]->get_triplex();
        if (! t.isEmpty())
@@ -2156,10 +2150,10 @@ void CTEAEdit::braceHighlight()
 
 bool CTEAEdit::has_rect_selection()
 {
- if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
+  if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
      return false;
 
- return true;
+  return true;
 }
 
 
@@ -2486,7 +2480,7 @@ void CDox::update_current_files_menu()
   QStringList current_files;
 
   if (items.size() > 0)
-     for (vector <int>::size_type i = 0; i < items.size(); i++)
+     for (vector <size_t>::size_type i = 0; i < items.size(); i++)
          current_files.prepend (items[i]->file_name);
 //  foreach (CDocument *d, list)
   //        current_files.prepend (d->file_name);
@@ -2781,11 +2775,11 @@ void CDox::handle_joystick_event (CJoystickAxisEvent *event)
 void CDox::update_project (const QString &fileName)
 {
   if (file_get_ext (fileName) == "teaproject")
-    {
-     fname_current_project = fileName;
-     hash_project.clear();
-     hash_project = hash_load_keyval (fileName);
-    }
+     {
+      fname_current_project = fileName;
+      hash_project.clear();
+      hash_project = hash_load_keyval (fileName);
+     }
 }
 
 
@@ -2795,15 +2789,15 @@ void CTEAEdit::set_word_wrap (bool wrap)
      setWordWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);
   else
      setWordWrapMode (QTextOption::NoWrap);
-
-
 }
+
 
 bool CTEAEdit::get_word_wrap()
 {
-  if (wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere)
-     return true;
+  return wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere;
+  /*if (wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere)
+      return true;
   else
-     return false;
+      return false;*/
 
 }

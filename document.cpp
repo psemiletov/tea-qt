@@ -367,11 +367,7 @@ CDocument* CDox::get_document_by_fname (const QString &fileName)
        if (d->file_name == fileName)
           return d;
       }
-  /*
-  foreach (CDocument *d, list)
-          if (d->file_name == fileName)
-              return d;
-*/
+
   return NULL;
 }
 
@@ -504,7 +500,6 @@ QString CDocument::get_filename_at_cursor()
       x = x.mid (i + 1);
 
       result = cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
-      //qDebug() << "in cur dir: " << result;
       return result;
      }
   else
@@ -936,7 +931,6 @@ void CDox::move_cursor_y (double v)
      move_cursor (QTextCursor::Up);
   if (v > 0)
      move_cursor (QTextCursor::Down);
-  qDebug() << v;
 }
 
 
@@ -1121,7 +1115,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                                        HighlightingRule rule;
                                        rule.pattern = rg;
                                        rule.format = fmt;
-                                       //highlightingRules.append (rule);
                                        highlightingRules.push_back (rule);
                                       }
                                   }
@@ -1139,7 +1132,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                                HighlightingRule rule;
                                rule.pattern = rg;
                                rule.format = fmt;
-//                               highlightingRules.append (rule);
                                highlightingRules.push_back (rule);
                               }
                          }
@@ -1161,9 +1153,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                              HighlightingRule rule;
                              rule.pattern = rg;
                              rule.format = fmt;
-//                             highlightingRules.append (rule);
                              highlightingRules.push_back (rule);
-
                             }
                        }
                     else
@@ -1209,15 +1199,15 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
   //for (vector <size_t>::size_type i = 0; i < highlightingRules.size(); i++)
       {
-       QRegularExpressionMatch m = /*highlightingRules[i]*/it->pattern.match (text);
+       QRegularExpressionMatch m = it->pattern.match (text);
 
        int index = m.capturedStart();
 
        while (index >= 0)
              {
               int length = m.capturedLength();
-              setFormat (index, length, /*highlightingRules[i]*/it->format);
-              m = /*highlightingRules[i]*/it->pattern.match (text, index + length);
+              setFormat (index, length, it->format);
+              m = it->pattern.match (text, index + length);
               index = m.capturedStart();
              }
        }
@@ -1412,18 +1402,20 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
   if (highlightingRules.size() == 0)
      return;
 
-  for (vector <int>::size_type i = 0; i < highlightingRules.size(); i++)
+  //for (vector <int>::size_type i = 0; i < highlightingRules.size(); i++)
+   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
   //foreach (HighlightingRule rule, highlightingRules)
           {
            int index;
 
-           index = text.indexOf (highlightingRules[i].pattern);
+           //index = text.indexOf (highlightingRules[i].pattern);
+           index = text.indexOf (it->pattern);
 
            while (index >= 0)
                  {
-                  int length = highlightingRules[i].pattern.matchedLength();
-                  setFormat (index, length, highlightingRules[i].format);
-                  index = text.indexOf (highlightingRules[i].pattern, index + length);
+                  int length = it->pattern.matchedLength();
+                  setFormat (index, length, it->format);
+                  index = text.indexOf (it->pattern, index + length);
                  }
            }
 

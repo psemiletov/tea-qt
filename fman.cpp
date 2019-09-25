@@ -177,8 +177,6 @@ void CFMan::tv_activated (const QModelIndex &index)
       QModelIndex index = mymodel->index (0, 0);
       selectionModel()->setCurrentIndex (index, QItemSelectionModel::Select |
                                          QItemSelectionModel::Rows);
-
-      return;
      }
   else
       emit file_activated (full_path);
@@ -299,9 +297,7 @@ void CFMan::cb_fman_currentChanged (const QModelIndex &current, const QModelInde
      }
 
   QModelIndex i = model()->index (row, 0);
-
   QString item_string = i.data().toString();
-
   QString full_path = dir.path() + "/" + item_string;
 
   emit current_file_changed (full_path, item_string);
@@ -327,15 +323,17 @@ QStringList CFMan::get_sel_fnames()
   QModelIndexList il = selectionModel()->QItemSelectionModel::selectedRows (0);
   QStringList li;
 
-  foreach (QModelIndex index, il)
+  QList<QModelIndex>::iterator i;
+  for (i = il.begin(); i != il.end(); ++i)
+//  foreach (QModelIndex index, il)
+      {
+       QString item_string = i->data().toString();
+       if (item_string != "..")
           {
-           QString item_string = index.data().toString();
-           if (item_string != "..")
-              {
-               QString full_path = dir.path() + "/" + item_string;
-               li.append (full_path);
-              }
+           QString full_path = dir.path() + "/" + item_string;
+           li.append (full_path);
           }
+      }
 
   return li;
 }
@@ -391,12 +389,12 @@ void CFMan::mouseMoveEvent (QMouseEvent *event)
   QDrag *drag = new QDrag (this);
   QMimeData *mimeData = new QMimeData;
 
-  QList <QUrl> list;
+  QList <QUrl> url_list;
 
-  foreach (QString fn, l)
-           list.append (QUrl::fromLocalFile (fn));
+  for (int i = 0; i < l.size(); i++)
+       url_list.append (QUrl::fromLocalFile (l[i]));
 
-  mimeData->setUrls (list);
+  mimeData->setUrls (url_list);
   drag->setMimeData (mimeData);
 
   if (drag->exec (Qt::CopyAction |

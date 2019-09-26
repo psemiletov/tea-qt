@@ -13,7 +13,7 @@
 
 #include "single_application.h"
 
-CSingleApplication::CSingleApplication(int &argc, char *argv[], const QString uniqueKey) : QApplication(argc, argv), _uniqueKey(uniqueKey)
+CSingleApplication::CSingleApplication(int &argc, char *argv[], const QString uniqueKey): QApplication(argc, argv), _uniqueKey (uniqueKey)
 {
 
 #ifndef Q_OS_OS2
@@ -44,7 +44,7 @@ CSingleApplication::CSingleApplication(int &argc, char *argv[], const QString un
 #endif      
 }
 
-// public slots.
+// public slots
 
 void CSingleApplication::receiveMessage()
 {
@@ -66,7 +66,7 @@ void CSingleApplication::receiveMessage()
   delete localSocket;
 }
 
-// public functions.
+// public functions
 
 bool CSingleApplication::isRunning()
 {
@@ -102,3 +102,4 @@ bool CSingleApplication::sendMessage(const QString &message)
   localSocket.disconnectFromServer();
   return true;
 }
+

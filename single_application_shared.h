@@ -19,44 +19,51 @@
 
 class CSingleApplicationShared: public QApplication
 {
-   Q_OBJECT
+  Q_OBJECT
+
+
+private:
+
+#ifndef Q_OS_OS2
+  QSharedMemory sharedMemory;
+#endif        
+
+  bool bAlreadyExists;
+
 public:
-       CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey);
-           
-       ~CSingleApplicationShared() {qDebug() << "~CSingleApplicationShared";};  
 
-       static int cursorFlashTime() 
-              {
-               return 0;
-              } 
-        
-       bool alreadyExists() const
-            {
-             return bAlreadyExists;
-            }
-        
-       bool isMasterApp() const
-            {
-             return !alreadyExists();
-            }
+  CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey);
+  ~CSingleApplicationShared() {qDebug() << "~CSingleApplicationShared";};  
 
-      bool sendMessage(const QString &message);
+  static int cursorFlashTime() 
+             {
+              return 0;
+             } 
+        
+  bool alreadyExists() const
+      {
+       return bAlreadyExists;
+      }
+        
+  bool isMasterApp() const
+      {
+       return ! alreadyExists();
+      }
+
+  bool sendMessage (const QString &message);
         
         
 public slots:
-        void checkForMessage();
- 
+
+  void checkForMessage();
+
 signals:
-        void messageAvailable(const QStringList& messages);
-        void signal_commit_data();
+
+  void messageAvailable(const QStringList& messages);
+  void signal_commit_data();
  
-private:
-        bool bAlreadyExists;
-        
-#ifndef Q_OS_OS2
-        QSharedMemory sharedMemory;
-#endif        
 };
 
 
 #endif // SINGLE_APP_SHARED_H
+

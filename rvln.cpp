@@ -6321,12 +6321,12 @@ void rvln::fman_delete()
   update_dyn_menus();
   fman->refresh();
 
-  if (i < fman->list.count())
-     {
-      QModelIndex index = fman->index_from_idx (i);
-      fman->selectionModel()->setCurrentIndex (index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-      fman->scrollTo (index, QAbstractItemView::PositionAtCenter);
-     }
+  QModelIndex index = fman->index_from_idx (i);
+  if (! index.isValid())
+     index = fman->index_from_idx (0);
+
+  fman->selectionModel()->setCurrentIndex (index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+  fman->scrollTo (index, QAbstractItemView::PositionAtCenter);
 }
 
 

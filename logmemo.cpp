@@ -23,8 +23,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
-//#if QT_VERSION >= 0x05
-#if QT_VERSION_MAJOR >= 5
+#if QT_VERSION >= 0x050000
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #endif
@@ -46,9 +45,7 @@ CLogMemo::CLogMemo (QWidget *parent): QPlainTextEdit (parent)
                            Qt::TextSelectableByKeyboard);
 }
 
-//#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-#if QT_VERSION_MAJOR >= 5
-
+#if QT_VERSION >= 0x050000
 void CLogMemo::log_terminal (const QString &text)
 {
   if (no_jump)
@@ -87,9 +84,7 @@ void CLogMemo::log_terminal (const QString &text)
 void CLogMemo::log (const QString &text)
 {
 
-//#if QT_VERSION >= 0x05
-#if QT_VERSION_MAJOR >= 5
-
+#if QT_VERSION >= 0x050000
   if (terminal_output)
      {
       log_terminal (text);

@@ -73,7 +73,7 @@ void CJoystick::read_joystick_depr()
       event->value = js.x;
      }
 
-   QApplication::postEvent (receiver, reinterpret_cast<QEvent*>(event));
+  QApplication::postEvent (receiver, reinterpret_cast<QEvent*>(event));
 }
 
 
@@ -88,7 +88,6 @@ void CJoystick::read_joystick()
         {
          process_event (e);
         }
-
 
   if (errno != EAGAIN)
      {

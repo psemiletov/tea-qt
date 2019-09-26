@@ -54,7 +54,6 @@ QString change_file_ext (const QString &s, const QString &ext)
   if (i == -1)
      return (s + "." + ext);
 
-
   QString r (s);
   r.truncate (++i);
 
@@ -182,8 +181,10 @@ bool char_is_bad (const QChar &c)
 
 void qstring_list_print (const QStringList &l)
 {
-  foreach (QString s, l)
-          qDebug() << s;
+//  foreach (QString s, l)
+  //        qDebug() << s;
+  for (int i = 0; i < l.size(); i++)
+      qDebug() << l[i];
 }
 
 
@@ -220,17 +221,24 @@ QString qstring_load_value (const QString &fileName, const QString &key, const Q
   return hash_get_val (h, key, def);
 }
 
-
+/*
 QString hash_keyval_to_string (const QHash <QString, QString> &h)
 {
   QStringList l;
 
-  foreach (QString s, h.keys())
-          l.prepend (s.append ("=").append (h.value (s)));
+ // foreach (QString s, h.keys())
+   //       l.prepend (s.append ("=").append (h.value (s)));
+
+  QList< QString> keys = h.keys(); 
+
+  QList <QString>::iterator i;
+  for (i = keys.begin(); i != keys.end(); ++i)
+      l.prepend (*i + "=" +  h.value (*i));
+      
 
   return l.join ("\n").trimmed();
 }
-
+*/
 
 QHash <QString, QString> hash_load (const QString &fname)
 {

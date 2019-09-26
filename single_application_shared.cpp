@@ -19,7 +19,7 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
 {
 #ifndef Q_OS_OS2
 
-  qDebug() << "CSingleApplicationShared::CSingleApplicationShared";
+//  qDebug() << "CSingleApplicationShared::CSingleApplicationShared";
 
   sharedMemory.setKey(uniqueKey);
  
@@ -30,13 +30,13 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
       *(char*)sharedMemory.data() = '\0';
       sharedMemory.unlock();
  
-       bAlreadyExists = false;
+      bAlreadyExists = false;
  
-       // start checking for messages of other instances.
-       QTimer *timer = new QTimer(this);
-       connect(timer, SIGNAL(timeout()), this, SLOT(checkForMessage()));
-       timer->start(200);
-      }
+      // start checking for messages of other instances.
+      QTimer *timer = new QTimer(this);
+      connect(timer, SIGNAL(timeout()), this, SLOT(checkForMessage()));
+      timer->start(200);
+     }
        
   // it exits, so we can attach it?!
   else 
@@ -49,7 +49,7 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
 }
  
  
-// public slots.
+// public slots
  
 void CSingleApplicationShared::checkForMessage()
 {
@@ -72,10 +72,10 @@ void CSingleApplicationShared::checkForMessage()
          arguments << QString::fromUtf8 (byteArray.constData());
         }
  
-   *(char*)sharedMemory.data() = '\0';
-   sharedMemory.unlock();
+  *(char*)sharedMemory.data() = '\0';
+  sharedMemory.unlock();
  
-   if (arguments.size()) emit messageAvailable (arguments);
+  if (arguments.size()) emit messageAvailable (arguments);
 #endif    
 }
  
@@ -108,5 +108,6 @@ bool CSingleApplicationShared::sendMessage (const QString &message)
   sharedMemory.unlock();
     
 #endif 
+
  return true;
 }

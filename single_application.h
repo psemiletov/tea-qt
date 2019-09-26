@@ -18,31 +18,35 @@
 
 class CSingleApplication : public QApplication
 {
-        Q_OBJECT
-public:
-        CSingleApplication (int &argc, char *argv[], const QString uniqueKey);
-
-        bool isRunning();
-        bool sendMessage(const QString &message);
-
-        static int cursorFlashTime() {return 0;}; 
-
-public slots:
-        void receiveMessage();
-
-signals:
-        void messageAvailable(QString message);
+  Q_OBJECT
 
 private:
-        bool _isRunning;
-        QString _uniqueKey;
 
 #ifndef Q_OS_OS2
-        QSharedMemory sharedMemory;
+  QSharedMemory sharedMemory;
 #endif        
-        QLocalServer *localServer;
 
-        static const int timeout = 1000;
+  bool _isRunning;
+  QString _uniqueKey;
+
+  QLocalServer *localServer;
+  static const int timeout = 1000;
+
+public:
+
+  CSingleApplication (int &argc, char *argv[], const QString uniqueKey);
+  bool isRunning();
+  bool sendMessage(const QString &message);
+  static int cursorFlashTime() {return 0;}; 
+
+public slots:
+
+  void receiveMessage();
+
+signals:
+
+  void messageAvailable(QString message);
+
 };
 
 #endif // SINGLE_APP_H

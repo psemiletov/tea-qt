@@ -45,34 +45,32 @@ bool CZipper::zip_directory (const QString &archpath, const QString &dir2pack)
   QFile inFile;
   QuaZipFile outFile(&zip);
 
-  foreach (QFileInfo file, files)
-          {
-           if (! file.isFile())
-              continue;
+  for (QList <QFileInfo>::iterator file = files.begin(); file != files.end(); ++file)
+      {
+       if (! file->isFile())
+          continue;
 
-           inFile.setFileName (file.absoluteFilePath());
+       inFile.setFileName (file->absoluteFilePath());
 
-           if (! inFile.open (QIODevice::ReadOnly))
-              return false;
+       if (! inFile.open (QIODevice::ReadOnly))
+          return false;
 
-           QString outfname (archname);
-           outfname.append ("/").append (file.fileName());
+       QString outfname (archname);
+       outfname.append ("/").append (file->fileName());
 
-           if (! outFile.open (QIODevice::WriteOnly, QuaZipNewInfo (outfname, inFile.fileName())))
-               return false;
+       if (! outFile.open (QIODevice::WriteOnly, QuaZipNewInfo (outfname, inFile.fileName())))
+          return false;
 
-           QByteArray ba = inFile.readAll();
-           outFile.write (ba);
+       QByteArray ba = inFile.readAll();
+       outFile.write (ba);
+       outFile.close();
 
-           outFile.close();
+       if (outFile.getZipError() != UNZ_OK)
+          return false;
 
-           if (outFile.getZipError() != UNZ_OK)
-              return false;
-
-           inFile.close();
-
-           emit new_iteration (file);
-          }
+       inFile.close();
+       emit new_iteration (*file); //GOOD?
+      }
 
   zip.close();
 
@@ -153,43 +151,39 @@ bool CZipper::pack_prepared()
   QuaZip zip (zipname);
   zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_out", "UTF-8").toString().trimmed().toLatin1().data())));
 
-
   if (! zip.open (QuaZip::mdCreate))
       return false;
 
   QFile inFile;
   QuaZipFile outFile (&zip);
 
-  foreach (QString fi, files_list)
-          {
-           QFileInfo file (fi);
+  for (int i = 0; i < files_list.size(); i++)
+      {
+       QFileInfo file (files_list[i]);
+       if (! file.isFile())
+          continue;
 
-           if (! file.isFile())
-              continue;
+       inFile.setFileName (file.absoluteFilePath());
+       if (! inFile.open (QIODevice::ReadOnly))
+          return false;
 
-           inFile.setFileName (file.absoluteFilePath());
+       QString outfname (archive_name);
+       outfname.append ("/").append (file.fileName());
 
-           if (! inFile.open (QIODevice::ReadOnly))
-               return false;
+       if (! outFile.open (QIODevice::WriteOnly, QuaZipNewInfo (outfname, inFile.fileName())))
+          return false;
 
-           QString outfname (archive_name);
-           outfname.append ("/").append (file.fileName());
+       QByteArray ba = inFile.readAll();
+       outFile.write (ba);
+       outFile.close();
 
-           if (! outFile.open (QIODevice::WriteOnly, QuaZipNewInfo (outfname, inFile.fileName())))
-               return false;
+       if (outFile.getZipError() != UNZ_OK)
+          return false;
 
-           QByteArray ba = inFile.readAll();
-           outFile.write (ba);
+       inFile.close();
 
-           outFile.close();
-
-           if (outFile.getZipError() != UNZ_OK)
-               return false;
-
-           inFile.close();
-
-           emit new_iteration (file);
-         }
+       emit new_iteration (file);
+      }
 
   zip.close();
 
@@ -205,7 +199,6 @@ bool CZipper::unzip (const QString &archpath, const QString &destdir)
 {
   QuaZip zip (archpath);
   zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_in", "UTF-8").toString().trimmed().toLatin1().data())));
-
 
   if (! zip.open (QuaZip::mdUnzip))
       {
@@ -355,7 +348,6 @@ QStringList CZipper::unzip_list (const QString &archpath)
 {
   QuaZip zip (archpath);
   zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_in", "UTF-8").toString().trimmed().toLatin1().data())));
-
 
   if (! zip.open (QuaZip::mdUnzip))
       {

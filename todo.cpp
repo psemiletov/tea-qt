@@ -2,7 +2,6 @@
 #include "todo.h"
 
 
-
 void CTodo::check_timeout()
 {
   QDate cur_date = QDate::currentDate();

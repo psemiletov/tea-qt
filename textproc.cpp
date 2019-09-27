@@ -287,9 +287,9 @@ int value (char c)
 
 int romanToDecimal (const char *roman)
 {
-   int decimal = 0;
-   for (; *roman; roman++)
-   {
+  int decimal = 0;
+  for (; *roman; roman++)
+      {
       /* Check for four of a letter in a fow */
       if ((*(roman + 1) && *(roman + 2) && *(roman + 3))
          && (*roman == *(roman + 1))
@@ -378,8 +378,8 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                            QStringList sl = s.split (params);
                                            sl.sort();
 
-                                           foreach (QString t, sl)
-                                           l.prepend (t);
+                                           for (int i = 0; i < sl.size(); i++)
+                                                l.prepend (sl[i]);
 
                                            result = l.join (params);
                                            return result;
@@ -390,37 +390,40 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                                  {
                                                   QMap <QString, QString> map;
 
-                                                  foreach (QString value, sl)
-                                                          map.insert (value.toLower(), value);
-
-                                                  foreach (QString value, map)
-                                                         l.append (value);
+                                                  for (int i = 0; i < sl.size(); i++)
+                                                      map.insert (sl[i].toLower(), sl[i]);
+                     
+                                                  for (QMap<QString, QString>::const_iterator i = map.constBegin();
+                                                       i != map.constEnd();
+                                                       i++)
+                                                       l.append (i.value());
 
                                                   break;
                                                  }
 
           case QSTRL_PROC_FLT_REMOVE_EMPTY:
                                            {
-                                            foreach (QString s, sl)
-                                                    if (! s.isEmpty())
-                                                       l.append (s);
+                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                                if (! i->isEmpty())
+                                                   l.append (*i);
+
                                             break;
                                            };
 
 
           case QSTRL_PROC_FLT_REMOVE_DUPS:
                                           {
-                                           foreach (QString s, sl)
-                                                    if (! l.contains (s))
-                                                        l.append (s);
+                                           for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                               if (! l.contains (*i))
+                                                  l.append (*i);
                                            break;
                                           };
 
           case QSTRL_PROC_REMOVE_FORMATTING:
                                            {
-                                            foreach (QString t, sl)
-                                                     l.append (t.simplified());
-
+                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                                 l.append (i->simplified());
+                                           
                                             break;
                                            };
 

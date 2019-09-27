@@ -181,8 +181,6 @@ bool char_is_bad (const QChar &c)
 
 void qstring_list_print (const QStringList &l)
 {
-//  foreach (QString s, l)
-  //        qDebug() << s;
   for (int i = 0; i < l.size(); i++)
       qDebug() << l[i];
 }
@@ -191,9 +189,14 @@ void qstring_list_print (const QStringList &l)
 QStringList bytearray_to_stringlist (QList<QByteArray> a)
 {
   QStringList r;
+ 
+  for (int i = 0; i < a.size(); i++) 
+          r.append (a[i].data());
+
+/*
   foreach (QByteArray i, a)
           r.append (i.data());
-
+*/
   return r;
 }
 
@@ -221,36 +224,6 @@ QString qstring_load_value (const QString &fileName, const QString &key, const Q
   return hash_get_val (h, key, def);
 }
 
-/*
-QString hash_keyval_to_string (const QHash <QString, QString> &h)
-{
-  QStringList l;
-
- // foreach (QString s, h.keys())
-   //       l.prepend (s.append ("=").append (h.value (s)));
-
-  QList< QString> keys = h.keys(); 
-
-  QList <QString>::iterator i;
-  for (i = keys.begin(); i != keys.end(); ++i)
-      l.prepend (*i + "=" +  h.value (*i));
-      
-
-  return l.join ("\n").trimmed();
-}
-*/
-
-QHash <QString, QString> hash_load (const QString &fname)
-{
-  QHash<QString, QString> result;
-
-  if (! file_exists (fname))
-     return result;
-
-  result = stringlist_to_hash (qstring_load (fname).split ("\n"));
-  return result;
-}
-
 
 QHash <QString, QString> hash_load_keyval (const QString &fname)
 {
@@ -261,26 +234,12 @@ QHash <QString, QString> hash_load_keyval (const QString &fname)
 
   QStringList l = qstring_load (fname).split ("\n");
 
-  foreach (QString s, l)
-          {
-           QStringList sl = s.split ("=");
-           if (sl.size() > 1)
-               result.insert (sl[0], sl[1]);
-          }
-
-  return result;
-}
-
-
-QHash <QString, QString> stringlist_to_hash (const QStringList &l)
-{
-  QHash <QString, QString> result;
-
-  if (l.empty())
-     return result;
-
-  foreach (QString s, l)
-          result.insert (s, s);
+  for (QList <QString>::iterator i = l.begin(); i != l.end(); ++i)
+      {
+       QStringList sl = i->split ("=");
+       if (sl.size() > 1)
+          result.insert (sl[0], sl[1]);
+      }
 
   return result;
 }
@@ -295,12 +254,12 @@ bool is_image (const QString &filename)
 
   QList <QByteArray> a = QImageReader::supportedImageFormats();
 
-  foreach (QByteArray x, a)
-          {
-           QString t (x.data());
-           if (filename.endsWith (t.prepend ("."), Qt::CaseInsensitive))
-              return true;
-          }
+  for (QList <QByteArray>::iterator i = a.begin(); i != a.end(); i++)
+      {
+       QString t (i->data());
+       if (filename.endsWith (t.prepend ("."), Qt::CaseInsensitive))
+          return true;
+      }
 
   return false;
 }

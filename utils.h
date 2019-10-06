@@ -40,8 +40,8 @@ public:
 #endif
 
   CFTypeChecker (const QStringList &fnames, const QStringList &exts);
-  bool check (const QString &fname);
-  QStringList get_supported_exts();
+  bool check (const QString &fname) const; 
+  QStringList get_supported_exts() const;
 };
 
 
@@ -72,7 +72,7 @@ QByteArray file_load (const QString &fileName);
 QString string_between (const QString &source, const QString &sep1, const QString &sep2);
 bool char_is_bad (const QChar &c);
 void qstring_list_print (const QStringList &l);
-QStringList bytearray_to_stringlist (QList<QByteArray> a);
+QStringList bytearray_to_stringlist (const QList<QByteArray> &a);
 void strlist_swap (QStringList &l, int a, int b);
 
 
@@ -128,3 +128,4 @@ inline QString get_file_path (const QString &fileName)
 }
 
 #endif
+

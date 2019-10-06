@@ -23,11 +23,9 @@ public:
   QHash <QString, QString> table;
   
   QMessageBox msgBox;
-  
   QWidget *w;
   QTextEdit *text_info;
-  
-  
+    
   CTodo();
   ~CTodo();
   
@@ -40,3 +38,4 @@ public slots:
 };
 
 #endif // TODO_H
+

@@ -379,7 +379,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                            sl.sort();
 
                                            for (int i = 0; i < sl.size(); i++)
-                                                l.prepend (sl[i]);
+                                                l.prepend (sl.at(i));
 
                                            result = l.join (params);
                                            return result;
@@ -443,26 +443,31 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
 
            case QSTRL_PROC_LIST_FLIP:
                                      {
-                                      foreach (QString t, sl)
-                                              l.prepend (t);
+                                      for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                           l.prepend (*i);
+
                                       break;
                                      }
 
            case QSTRL_PROC_FLT_LESS:
                                     {
                                      int t = params.toInt();
-                                     foreach (QString s, sl)
-                                     if (s.size() > t)
-                                        l.append (s);
+
+                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                          if (i->size() > t)
+                                             l.append (*i);
+
                                      break;
                                     }
 
            case QSTRL_PROC_FLT_GREATER:
                                     {
                                      int t = params.toInt();
-                                     foreach (QString s, sl)
-                                     if (s.size() < t)
-                                        l.append (s);
+
+                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                          if (i->size() < t)
+                                             l.append (*i);
+
                                      break;
                                     }
          }
@@ -624,3 +629,4 @@ QStringList html_get_by_patt (const QString &s, const QString &spatt)
 
   return result;
 }
+

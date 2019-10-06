@@ -96,14 +96,14 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
 
          QString tag_name = xml.qualifiedName().toString().toLower();
 
-         foreach (QString ts, tags)
-                {
-                 if (xml.isStartElement() && tag_name == ts)
-                    tt = true;
+         for (QList <QString>::const_iterator ts = tags.begin(); ts != tags.end(); ts++)
+             {
+              if (xml.isStartElement() && tag_name == *ts)
+                  tt = true;
 
-                 if (xml.isEndElement() && tag_name == ts)
-                    tt = false;
-                 }
+              if (xml.isEndElement() && tag_name == *ts)
+                  tt = false;
+             }
 
          if (tt && xml.isCharacters())
             {
@@ -195,32 +195,6 @@ bool CTioPlainText::save (const QString &fname)
   return true;
 }
 
-/*
-CTioHandler::CTioHandler()
-{
-  default_handler = new CTioPlainText;
-
-  list.append (default_handler);
-  list.append (new CTioGzip);
-  list.append (new CTioXMLZipped);
-  list.append (new CTioODT);
-  list.append (new CTioABW);
-  list.append (new CTioFB2);
-  list.append (new CTioRTF);
-  list.append (new CTioEpub);
-
-#if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
-//#ifdef POPPLER_ENABLE
-  list.append (new CTioPDF);
-#endif
-
-#if defined (DJVU_ENABLE) || defined(Q_OS_OS2)
-//#ifdef DJVU_ENABLE
-  list.append (new CTioDJVU);
-#endif
-}
-*/
-
 
 CTioHandler::CTioHandler()
 {
@@ -236,39 +210,29 @@ CTioHandler::CTioHandler()
   list.push_back (new CTioEpub);
 
 #if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
-//#ifdef POPPLER_ENABLE
   list.push_back (new CTioPDF);
 #endif
 
 #if defined (DJVU_ENABLE) || defined(Q_OS_OS2)
-//#ifdef DJVU_ENABLE
   list.push_back (new CTioDJVU);
 #endif
 }
 
 
-
-
 CTioHandler::~CTioHandler()
 {
-//  while (! list.isEmpty())
-  //     delete list.takeFirst();
   if (list.size() > 0)
      for (vector <size_t>::size_type i = 0; i < list.size(); i++)
           delete list[i];
-
-
 }
 
 
-CTio* CTioHandler::get_for_fname (const QString &fname)
+CTio* CTioHandler::get_for_fname (const QString &fname) const
 {
   CTio *instance;
   QString ext = file_get_ext (fname).toLower();
 
-//  for (int i = 0; i < list.size(); i++)
-   for (vector <size_t>::size_type i = 0; i < list.size(); i++)
-
+  for (vector <size_t>::size_type i = 0; i < list.size(); i++)
       {
        instance = list.at (i);
        if (instance->extensions.indexOf (ext) != -1)
@@ -446,7 +410,6 @@ CCharsetMagic::CCharsetMagic()
 
  // for (QList <QString>::iterator fn = fnames.begin(); fn != fnames.end(); fn++)
 
- // foreach (QString fn, fnames)
   for (int i = 0; i < fnames.size(); i++) 
       {
        QString fn = fnames[i];
@@ -477,7 +440,6 @@ CCharsetMagic::CCharsetMagic()
   int kr = signatures.indexOf (koi8r);
 
 //  swap (signatures[ku], signatures[kr]);
-
 
 //#if QT_VERSION >= 0x051300
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 13)

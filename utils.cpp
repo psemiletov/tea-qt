@@ -184,7 +184,7 @@ void qstring_list_print (const QStringList &l)
 }
 
 
-QStringList bytearray_to_stringlist (QList<QByteArray> a)
+QStringList bytearray_to_stringlist (const QList<QByteArray> &a)
 {
   QStringList r;
  
@@ -328,13 +328,13 @@ CFTypeChecker::CFTypeChecker (const QStringList &fnames, const QStringList &exts
 }
 
 
-bool CFTypeChecker::check (const QString &fname)
+bool CFTypeChecker::check (const QString &fname) const
 {
   bool result = false;
 
 #if QT_VERSION >= 0x050000
   QMimeType mime = db.mimeTypeForFile(fname);
-  if (mime.inherits("text/plain"))
+  if (mime.inherits ("text/plain"))
      result = true;
 #endif
 
@@ -350,7 +350,7 @@ bool CFTypeChecker::check (const QString &fname)
 }
 
 
-QStringList CFTypeChecker::get_supported_exts()
+QStringList CFTypeChecker::get_supported_exts() const
 {
   QStringList l;
 

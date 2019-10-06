@@ -175,8 +175,6 @@ public:
 #endif
 
 
-
-
 #if defined(DJVU_ENABLE) || defined(Q_OS_OS2)
 class CTioDJVU: public CTioReadOnly
 {
@@ -197,7 +195,6 @@ class CTioHandler: public QObject
 
 public:
 
-//  QList <CTio *> list;
   std::vector <CTio *> list;
 
   CTioPlainText *default_handler;
@@ -205,8 +202,9 @@ public:
   CTioHandler();
   ~CTioHandler();
 
-  CTio* get_for_fname (const QString &fname);
+  CTio* get_for_fname (const QString &fname) const;
   QStringList get_supported_exts();
 };
 
 #endif // TIO_H
+

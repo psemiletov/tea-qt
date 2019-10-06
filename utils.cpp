@@ -10,10 +10,8 @@ Peter Semiletov
 #include <QImageReader>
 #include <QImage>
 
-
-
-
 #include "utils.h"
+
 
 /* file utils */
 
@@ -191,12 +189,8 @@ QStringList bytearray_to_stringlist (QList<QByteArray> a)
   QStringList r;
  
   for (int i = 0; i < a.size(); i++) 
-          r.append (a[i].data());
+       r.append (a.at(i).data());
 
-/*
-  foreach (QByteArray i, a)
-          r.append (i.data());
-*/
   return r;
 }
 
@@ -234,11 +228,11 @@ QHash <QString, QString> hash_load_keyval (const QString &fname)
 
   QStringList l = qstring_load (fname).split ("\n");
 
-  for (QList <QString>::iterator i = l.begin(); i != l.end(); ++i)
+  for (QList <QString>::iterator i = l.begin(); i != l.end(); i++)
       {
        QStringList sl = i->split ("=");
        if (sl.size() > 1)
-          result.insert (sl[0], sl[1]);
+          result.insert (sl.at(0), sl.at(1));
       }
 
   return result;
@@ -296,8 +290,9 @@ QString get_insert_image (const QString &file_name, const QString &full_path, co
   if (markup_mode == "Lout")
       result = QString ("@IncludeGraphic {%1}").arg (dir.relativeFilePath (full_path));
 
-   return result;
+  return result;
 }
+
 
 /* class functions */
 
@@ -306,14 +301,13 @@ void CFilesList::iterate (QFileInfo &fi)
   if (fi.isDir())
      {
       QDir d (fi.absoluteFilePath());
-      QFileInfoList lfi= d.entryInfoList (QDir::Dirs | QDir::Files |
-                                          QDir::Readable | QDir::NoDotAndDotDot);
+      QFileInfoList lfi= d.entryInfoList (QDir::Dirs | QDir::Files | QDir::Readable | QDir::NoDotAndDotDot);
       for (int i = 0; i < lfi.count(); i++)
            iterate (lfi[i]);
      }
   else
   if (fi.isFile())
-      list.append (fi.absoluteFilePath());
+     list.append (fi.absoluteFilePath());
 }
 
 
@@ -321,8 +315,7 @@ void CFilesList::get (const QString &path)
 {
   list.clear();
   QDir d (path);
-  QFileInfoList lfi= d.entryInfoList (QDir::Dirs | QDir::Files |
-                                      QDir::Readable | QDir::NoDotAndDotDot);
+  QFileInfoList lfi= d.entryInfoList (QDir::Dirs | QDir::Files | QDir::Readable | QDir::NoDotAndDotDot);
   for (int i = 0; i < lfi.count(); i++)
       iterate (lfi[i]);
 }
@@ -365,3 +358,4 @@ QStringList CFTypeChecker::get_supported_exts()
   l.append ("txt");
   return l;
 }
+

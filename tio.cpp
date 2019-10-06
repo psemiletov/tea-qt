@@ -81,6 +81,8 @@ DJVU read code taken fromdvutxt.c:
 #include "textproc.h"
 
 
+using namespace std;
+
 QString extract_text_from_xml (const QString &string_data, const QStringList &tags)
 {
   QString data;
@@ -193,7 +195,7 @@ bool CTioPlainText::save (const QString &fname)
   return true;
 }
 
-
+/*
 CTioHandler::CTioHandler()
 {
   default_handler = new CTioPlainText;
@@ -217,12 +219,45 @@ CTioHandler::CTioHandler()
   list.append (new CTioDJVU);
 #endif
 }
+*/
+
+
+CTioHandler::CTioHandler()
+{
+  default_handler = new CTioPlainText;
+
+  list.push_back (default_handler);
+  list.push_back (new CTioGzip);
+  list.push_back (new CTioXMLZipped);
+  list.push_back (new CTioODT);
+  list.push_back (new CTioABW);
+  list.push_back (new CTioFB2);
+  list.push_back (new CTioRTF);
+  list.push_back (new CTioEpub);
+
+#if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
+//#ifdef POPPLER_ENABLE
+  list.push_back (new CTioPDF);
+#endif
+
+#if defined (DJVU_ENABLE) || defined(Q_OS_OS2)
+//#ifdef DJVU_ENABLE
+  list.push_back (new CTioDJVU);
+#endif
+}
+
+
 
 
 CTioHandler::~CTioHandler()
 {
-  while (! list.isEmpty())
-       delete list.takeFirst();
+//  while (! list.isEmpty())
+  //     delete list.takeFirst();
+  if (list.size() > 0)
+     for (vector <size_t>::size_type i = 0; i < list.size(); i++)
+          delete list[i];
+
+
 }
 
 
@@ -231,7 +266,9 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
   CTio *instance;
   QString ext = file_get_ext (fname).toLower();
 
-  for (int i = 0; i < list.size(); i++)
+//  for (int i = 0; i < list.size(); i++)
+   for (vector <size_t>::size_type i = 0; i < list.size(); i++)
+
       {
        instance = list.at (i);
        if (instance->extensions.indexOf (ext) != -1)
@@ -405,15 +442,20 @@ CCharsetMagic::CCharsetMagic()
   QStringList fnames = read_dir_entries (":/encsign");
 
   CSignaturesList *koi8u = NULL;
-  CSignaturesList *koi8r= NULL;
+  CSignaturesList *koi8r = NULL;
 
-  foreach (QString fn, fnames)
-          {
+ // for (QList <QString>::iterator fn = fnames.begin(); fn != fnames.end(); fn++)
+
+ // foreach (QString fn, fnames)
+  for (int i = 0; i < fnames.size(); i++) 
+      {
+       QString fn = fnames[i];
+
            QString fname = ":/encsign";
            fname.append ("/");
            fname.append (fn);
 
-           QByteArray a = file_load (fname);
+           QByteArray a = file_load (fn);
            QList<QByteArray> bsl = a.split ('\n');
 
            CSignaturesList *sl = new CSignaturesList;
@@ -434,13 +476,15 @@ CCharsetMagic::CCharsetMagic()
   int ku = signatures.indexOf (koi8u);
   int kr = signatures.indexOf (koi8r);
 
-//#if QT_VERSION >= 0x0513
+//  swap (signatures[ku], signatures[kr]);
+
+
+//#if QT_VERSION >= 0x051300
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 13)
   signatures.swapItemsAt (ku, kr);
 #else
   signatures.swap (ku, kr);
 #endif
-
 }
 
 
@@ -597,7 +641,6 @@ QString rtf_strip (const QString &rtf)
   QChar ch;
   for (int j = start; j < length; j++)
       {
-
        ch = rtf.at (j);
 
        if (ch == '\\')//we are looking at the backslash
@@ -996,15 +1039,20 @@ QStringList CTioHandler::get_supported_exts()
 {
   QStringList l;
 
-  foreach (CTio *t, list)
-          {
-           for (int i = 0; i < t->extensions.size(); i++)
-               l.append (t->extensions[i]);
-          }
+  for (std::vector <CTio*>::iterator t = list.begin(); t != list.end(); t++)
+    
+  //for (QList <CTio*>::iterator t = list.begin(); t != list.end(); t++)
+      {
+/*       CTio *io = *t;
+       for (int i = 0; i < io->extensions.size(); i++)
+           l.append (io->extensions[i]);*/
+
+       for (int i = 0; i < (*t)->extensions.size(); i++)
+           l.append ((*t)->extensions[i]);
+      }
 
 
   l.append ("txt");
-//  qstring_list_print (l);
-
   return l;
 }
+

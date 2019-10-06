@@ -61,15 +61,18 @@ void CTodo::load_dayfile()
   QString s = qstring_load (fname);
   
   QStringList sl = s.split ('[');
-  for (int i = 0; i < sl.size(); i++)
+
+  for (QList <QString>::iterator s = sl.begin(); s != sl.end(); s++)
       {
-       int br = sl[i].indexOf (']');
+       int br = s->indexOf (']');
        if (br == -1)
           continue;
           
-       QString time = sl[i].left (br);
-       QString text = sl[i].right (sl[i].size() - br - 1);
+       QString time = s->left (br);
+       QString text = s->right (s->size() - br - 1);
 
        table.insert (time, text);
-      }
+      } 
+
 }
+

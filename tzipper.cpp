@@ -312,37 +312,6 @@ bool CZipper::unzip (const QString &archpath, const QString &destdir)
   return true;
 }
 
-/*
-QString CZipper::unzip_info (const QString &archpath)
-{
-  QuaZip zip (archpath, settings->value ("zip_charset_in", "UTF-8").toString().trimmed());
-
-  if (! zip.open (QuaZip::mdUnzip))
-      {
-       qDebug() << "zip.open() error: " << zip.getZipError();
-       return QString();
-      }
-
-  QString result;
-
-  QuaZipFileInfo info;
-
-  for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile())
-      {
-       if (! zip.getCurrentFileInfo (&info))
-          {
-           qDebug() << "getCurrentFileInfo()" << zip.getZipError();
-           return QString();
-          }
-
-       result += info.name;
-       result += "<br>";
-      }
-
-  zip.close();
-  return result;
-}
-*/
 
 QStringList CZipper::unzip_list (const QString &archpath)
 {
@@ -373,3 +342,4 @@ QStringList CZipper::unzip_list (const QString &archpath)
   zip.close();
   return result;
 }
+

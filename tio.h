@@ -2,6 +2,9 @@
 #define TIO_H
 
 
+#include <vector>
+
+
 #include <QObject>
 #include <QList>
 #include <QByteArray>
@@ -19,7 +22,6 @@ public:
 };
 
 
-//FIXME: переписать под хэш?
 class CCharsetMagic: public QObject
 {
   Q_OBJECT
@@ -27,6 +29,7 @@ class CCharsetMagic: public QObject
 public:
 
   QList <CSignaturesList*> signatures;
+//  std::vector <CSignaturesList*> signatures;
 
   CCharsetMagic();
   ~CCharsetMagic();
@@ -194,7 +197,8 @@ class CTioHandler: public QObject
 
 public:
 
-  QList <CTio *> list;
+//  QList <CTio *> list;
+  std::vector <CTio *> list;
 
   CTioPlainText *default_handler;
 

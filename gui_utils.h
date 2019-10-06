@@ -7,21 +7,7 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QBoxLayout>
-#include <QDialog>
-#include <QListWidget>
 
-/*
-class CTextListWindow: public QDialog
-{
-  Q_OBJECT
-
-public:
-
-  QListWidget *list;
-  CTextListWindow (const QString &title, const QString &label_text);
-
-};
-*/
 
 void create_menu_from_list (QObject *handler,
                             QMenu *menu,

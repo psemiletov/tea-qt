@@ -813,6 +813,7 @@ prefs window callbacks
 
 #ifdef USE_QML_STUFF
   void fn_use_plugin();
+
 #endif
 
 public:

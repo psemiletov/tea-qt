@@ -57,6 +57,7 @@ started at 08 November 2007
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickView>
+//#include <QJSEngine>
 
 #endif
 
@@ -10615,7 +10616,6 @@ void rvln::logmemo_double_click (const QString &txt)
 
   if (documents->fname_current_project.isEmpty())
      return;
-
 
   QString source_fname;
   QString source_line;

@@ -123,3 +123,4 @@ void CJoystick::process_event (js_event e)
 }
 
 #endif
+

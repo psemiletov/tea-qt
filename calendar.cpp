@@ -306,3 +306,4 @@ void CCalendarWidget::do_update()
 {
   updateCells();
 }
+

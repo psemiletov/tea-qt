@@ -52,3 +52,4 @@ void CFontBox::slot_font_size_changed (int i)
   f.setPointSize (i);
   edit.setFont (f);
 }
+

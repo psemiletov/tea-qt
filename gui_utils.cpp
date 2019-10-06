@@ -10,7 +10,6 @@ this code is Public Domain
 #include <QMenu>
 #include <QStringList>
 #include <QAction>
-#include <QListWidgetItem>
 
 #include "gui_utils.h"
 #include "utils.h"
@@ -24,15 +23,15 @@ void create_menu_from_list (QObject *handler,
 {
   menu->setTearOffEnabled (true);
 
-  foreach (QString s, list)
+  for (QList <QString>::const_iterator i = list.begin(); i != list.end(); i++)
+      {
+       if (! i->startsWith ("#"))
           {
-           if (! s.startsWith ("#"))
-              {
-               QAction *act = new QAction (s, menu->parentWidget());
-               handler->connect (act, SIGNAL(triggered()), handler, method);
-               menu->addAction (act);
-              }
+           QAction *act = new QAction (*i, menu->parentWidget());
+           handler->connect (act, SIGNAL(triggered()), handler, method);
+           menu->addAction (act);
           }
+      }
 }
 
 
@@ -52,53 +51,24 @@ void create_menu_from_dir (QObject *handler,
                                           QDir::DirsFirst | QDir::IgnoreCase |
                                           QDir::LocaleAware | QDir::Name);
 
-  foreach (QFileInfo fi, lst_fi)
-         {
-          if (fi.isDir())
-             {
-              QMenu *mni_temp = menu->addMenu (fi.fileName());
-              create_menu_from_dir (handler, mni_temp,
-                                    fi.filePath(), method);
-             }
-          else
-              {
-               QAction *act = new QAction (fi.fileName(), menu->parentWidget());
-               act->setData (fi.filePath());
-               handler->connect (act, SIGNAL(triggered()), handler, method);
-               menu->addAction (act);
-              }
-         }
+  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); fi++)
+      {
+       if (fi->isDir())
+          {
+           QMenu *mni_temp = menu->addMenu (fi->fileName());
+           create_menu_from_dir (handler, mni_temp,
+                                 fi->filePath(), method);
+          }
+       else
+           {
+            QAction *act = new QAction (fi->fileName(), menu->parentWidget());
+            act->setData (fi->filePath());
+            handler->connect (act, SIGNAL(triggered()), handler, method);
+            menu->addAction (act);
+           }
+      }
 }
 
-//uses dir name as menuitem, no recursion
-/*
-void create_menu_from_dir_dir (QObject *handler,
-                               QMenu *menu,
-                               const QString &dir,
-                               const char *method
-                               )
-{
-  menu->setTearOffEnabled (true);
-  
-  QDir d (dir);
-  if (! d.exists())
-     return;
-  
-  QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
-                                          QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
-
-  foreach (QFileInfo fi, lst_fi)
-         {
-          if (fi.isDir())
-             {
-              QAction *act = new QAction (fi.fileName(), menu->parentWidget());
-              act->setData (fi.filePath());
-              handler->connect (act, SIGNAL(triggered()), handler, method);
-              menu->addAction (act);
-             }
-         }
-}
-*/
 
 QImage image_scale_by (const QImage &source,
                        bool by_side,
@@ -118,11 +88,11 @@ QImage image_scale_by (const QImage &source,
       width = value;
       height = value;
      }
-   else
-       {
-        width = get_value (source.width(), value);
-        height = get_value (source.height(), value);
-       }
+  else
+      {
+       width = get_value (source.width(), value);
+       height = get_value (source.height(), value);
+      }
 
   if (horisontal)
      return source.scaledToWidth (width, mode);
@@ -208,39 +178,3 @@ QComboBox* new_combobox (QBoxLayout *layout,
   return r;
 }
 
-
-/*
-CTextListWindow::CTextListWindow (const QString &title, const QString &label_text): QDialog (0) 
-{
-  //setAttribute (Qt::WA_DeleteOnClose);
-  QVBoxLayout *lt = new QVBoxLayout;
-
-  QLabel *l = new QLabel (label_text);
-
-  list = new QListWidget (this);
-   
-  lt->addWidget (l);
-  lt->addWidget (list);
-    
-  QHBoxLayout *lt_h = new QHBoxLayout;
-  
-  QPushButton *bt_apply = new QPushButton (tr ("OK"));
-  QPushButton *bt_exit = new QPushButton (tr ("Exit"));
-
-  connect (list, SIGNAL(itemActivated (QListWidgetItem *)), this, SLOT(accept()));
-
-
-  connect (bt_apply, SIGNAL(clicked()), this, SLOT(accept()));
-  connect (bt_exit, SIGNAL(clicked()), this, SLOT(reject()));
-
-  lt_h->addWidget (bt_apply);
-  lt_h->addWidget (bt_exit);
-
-  lt->addLayout (lt_h);
-
-  setLayout (lt);
-    
-  setWindowTitle (title);
-}
-
-*/

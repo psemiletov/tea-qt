@@ -468,7 +468,6 @@ void CZORWindow::keyPressEvent (QKeyEvent * event)
 }
 
 
-
 void CGIFWindow::keyPressEvent (QKeyEvent * event)
 {
   if (event->key() == Qt::Key_Escape)
@@ -518,3 +517,4 @@ void CGIFWindow::closeEvent (QCloseEvent *event)
 {
   event->accept();
 }
+

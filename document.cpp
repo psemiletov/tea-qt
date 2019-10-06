@@ -318,9 +318,6 @@ CDox::~CDox()
 {
   b_destroying_all = true;
 
-  //while (! list.isEmpty())
-    //    delete list.takeFirst();
-
   if (items.size() > 0)
      for (vector <size_t>::size_type i = 0; i < items.size(); i++)
           delete items[i];
@@ -339,7 +336,6 @@ CDocument* CDox::create_new()
 
   doc->holder = this;
   doc->markup_mode = markup_mode;
-  //list.append (doc);
   items.push_back (doc);
 
   doc->create_new();
@@ -1055,14 +1051,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
          QString tag_name = xml.name().toString().toLower();
 
-/*
-         if (xml.isStartElement())
-            if (tag_name == "document")
-               {
-                exts = xml.attributes().value ("exts").toString();
-                langs = xml.attributes().value ("langs").toString();
-               }
-*/
          if (xml.isStartElement())
             {
 
@@ -1272,14 +1260,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
          xml.readNext();
 
          QString tag_name = xml.name().toString().toLower();
-/*
-         if (xml.isStartElement())
-            if (tag_name == "document")
-                {
-                 exts = xml.attributes().value ("exts").toString();
-                 langs = xml.attributes().value ("langs").toString();
-                }
-*/
+
          if (xml.isStartElement())
             {
              if (tag_name == "document")
@@ -1295,11 +1276,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
                  if (attr_name == "options")
                     {
-                    /* QString s_wrap = xml.attributes().value ("wrap").toString();
-                     if (! s_wrap.isEmpty())
-                        if (s_wrap == "0" || s_wrap == "false")
-                           wrap = false;*/
-
                      QString s_casecare = xml.attributes().value ("casecare").toString();
                      if (! s_casecare.isEmpty())
                         if (s_casecare == "0" || s_casecare == "false")
@@ -1404,12 +1380,8 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 
   //for (vector <int>::size_type i = 0; i < highlightingRules.size(); i++)
    for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
-  //foreach (HighlightingRule rule, highlightingRules)
           {
-           int index;
-
-           //index = text.indexOf (highlightingRules[i].pattern);
-           index = text.indexOf (it->pattern);
+           int index = text.indexOf (it->pattern);
 
            while (index >= 0)
                  {
@@ -1431,7 +1403,6 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 
   while (startIndex >= 0)
         {
-//         int endIndex = text.indexOf (commentEndExpression, startIndex);
          int endIndex = commentEndExpression.indexIn (text, startIndex);
 
          int commentLength;
@@ -2411,9 +2382,10 @@ void CTEAEdit::insertFromMimeData (const QMimeData *source)
       return;
      }
 
-  foreach (QUrl u, source->urls())
+//  foreach (QUrl u, source->urls())
+    for (QList <QUrl>::iterator u = source->urls().begin(); u != source->urls().end(); u++)
           {
-           fName = u.toLocalFile();
+           fName = u->toLocalFile();
            info.setFile(fName);
            if (info.isFile())
               doc->holder->open_file (fName, "UTF-8");
@@ -2474,8 +2446,6 @@ void CDox::update_current_files_menu()
   if (items.size() > 0)
      for (vector <size_t>::size_type i = 0; i < items.size(); i++)
          current_files.prepend (items[i]->file_name);
-//  foreach (CDocument *d, list)
-  //        current_files.prepend (d->file_name);
 
   current_files_menu->clear();
   create_menu_from_list (this, current_files_menu, current_files, SLOT(open_current()));
@@ -2617,91 +2587,6 @@ void CTEAEdit::text_replace (const QString &s)
       textCursor().insertText (s);
 }
 
-/*
-void CTEAEdit::copy()
-{
-  qDebug() << "CTEAEdit::copy()";
-
-  if (has_rect_selection())
-     QApplication::clipboard()->setText (get_rect_sel());
-  else
-      QPlainTextEdit::copy();
-}
-*/
-
-/*
- *
-
- // new INDEX-IN VARIANT
-
-void CSyntaxHighlighter::highlightBlock (const QString &text)
-{
- qDebug() << "1";
-
-  foreach (HighlightingRule rule, highlightingRules)
-          {
-           QRegExp expression (rule.pattern);
-
-           int index;
-
-           if (! casecare)
-              index = expression.indexIn (text.toLower());
-           else
-               index = expression.indexIn (text);
-
-           while (index >= 0)
-                 {
-                  int length = expression.matchedLength();
-                  setFormat (index, length, rule.format);
-
-                  if (! casecare)
-                      index = expression.indexIn (text.toLower(), index + length);
-                  else
-                      index = expression.indexIn (text, index + length);
-                 }
-           }
-
-  setCurrentBlockState (0);
-
-  int startIndex = 0;
-
-  if (commentStartExpression.isEmpty() || commentEndExpression.isEmpty())
-     return;
-
-  if (previousBlockState() != 1)
-     {
-      if (! casecare)
-         startIndex = commentStartExpression.indexIn (text.toLower());
-      else
-         startIndex = commentStartExpression.indexIn (text);
-     }
-
-  while (startIndex >= 0)
-        {
-         int endIndex;
-         if (! casecare)
-            endIndex = commentEndExpression.indexIn (text.toLower(), startIndex);
-         else
-            endIndex = commentEndExpression.indexIn (text, startIndex);
-
-         int commentLength;
-         if (endIndex == -1)
-            {
-             setCurrentBlockState (1);
-             commentLength = text.length() - startIndex;
-            }
-         else
-             commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
-
-         setFormat (startIndex, commentLength, multiLineCommentFormat);
-
-         if (! casecare)
-            startIndex = commentStartExpression.indexIn (text.toLower(), startIndex + commentLength);
-         else
-            startIndex = commentStartExpression.indexIn (text, startIndex + commentLength);
-        }
-}
-*/
 
 void CDox::move_cursor (QTextCursor::MoveOperation mo)
 {
@@ -2737,8 +2622,6 @@ bool CDox::event (QEvent *ev)
 
   return QObject::event(ev);
 }
-
-
 
 
 void CDox::handle_joystick_event (CJoystickAxisEvent *event)
@@ -2791,5 +2674,5 @@ bool CTEAEdit::get_word_wrap()
       return true;
   else
       return false;*/
-
 }
+

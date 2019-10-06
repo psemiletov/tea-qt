@@ -380,3 +380,4 @@ int get_exif_orientation (const QString &fname)
      
   return o;    
 }
+

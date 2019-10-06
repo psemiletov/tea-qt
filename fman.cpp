@@ -117,15 +117,11 @@ QDir::LocaleAware 0x40  Sort items appropriately using the current locale settin
    */
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
   if (path != "/")
      append_dot_entry ("..");
-
 #else
-
   if (path.size() != 2)
      append_dot_entry ("..");
-
 #endif
 
   for (int i = 0; i < lst.size(); i++)
@@ -325,7 +321,6 @@ QStringList CFMan::get_sel_fnames()
 
   QList<QModelIndex>::iterator i;
   for (i = il.begin(); i != il.end(); ++i)
-//  foreach (QModelIndex index, il)
       {
        QString item_string = i->data().toString();
        if (item_string != "..")
@@ -544,3 +539,4 @@ void CFMan::drawRow (QPainter *painter, const QStyleOptionViewItem &option, cons
   else
       QTreeView::drawRow (painter, option, index);
 }
+

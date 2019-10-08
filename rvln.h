@@ -980,6 +980,7 @@ prefs window widgets
   QCheckBox *cb_override_locale;
 
   QCheckBox *cb_override_img_viewer;
+  QCheckBox *cb_use_enca_for_charset_detection;
 
   QComboBox *cmb_cmdline_default_charset;
 

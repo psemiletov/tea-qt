@@ -9,11 +9,32 @@ Peter Semiletov
 #include <QDir>
 #include <QImageReader>
 #include <QImage>
+#include <QProcess>
 
 #include "utils.h"
 
 
 /* file utils */
+
+QString guess_enc_for_file (const QString &fname)
+{
+  QString enc = "UTF-8";
+
+  QProcess p;
+    
+  p.start ("enca", QStringList() << "-i" << fname);
+
+  if( !p.waitForStarted() || !p.waitForFinished() ) 
+       return enc;
+
+  QString s = p.readAllStandardOutput();
+  if (! s.isEmpty())
+     enc = s.trimmed();
+
+//  qDebug() << enc;
+
+  return enc;
+}
 
 
 bool file_is_writable (const QString &fname)
@@ -133,8 +154,39 @@ QByteArray file_load (const QString &fileName)
       return b;
 
   b = file.readAll();
+
   return b;
 }
+
+
+QByteArray file_load2 (const QString &fileName)
+{
+  qDebug() << "QByteArray file_load2";
+
+  QFile file (fileName);
+  QByteArray b;
+
+  qDebug() << "!1";
+
+
+  if (! file.open (QFile::ReadOnly))
+      {
+        QFileDevice::FileError e = file.error();
+        qDebug() << "QFileDevice::FileError e: " << e;   
+        return b;
+      }  
+
+  qDebug() << "!2";
+
+  b = file.readAll();
+
+  qDebug() << QString (b);
+
+  qDebug() << "!3";
+
+  return b;
+}
+
 
 
 /* string/stringlist utils */

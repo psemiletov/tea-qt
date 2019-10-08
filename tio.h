@@ -28,8 +28,8 @@ class CCharsetMagic: public QObject
 
 public:
 
-  QList <CSignaturesList*> signatures;
-//  std::vector <CSignaturesList*> signatures;
+ // QList <CSignaturesList*> signatures;
+  std::vector <CSignaturesList*> signatures;
 
   CCharsetMagic();
   ~CCharsetMagic();

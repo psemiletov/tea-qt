@@ -155,7 +155,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
         {
          QStringList lt = i.next().split(",");
          if (lt.size() > 0)
-             if (lt[0] == file_name)
+             if (lt.at(0) == file_name)
                 i.remove();
         }
 
@@ -213,9 +213,6 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
 CDocument::CDocument (QObject *parent): QObject (parent)
 {
   QString fname = tr ("new[%1]").arg (QTime::currentTime().toString ("hh-mm-ss"));
-
- // fnameswoexts.insert ("configure", "sh");
-  //fnameswoexts.insert ("install-sh", "sh");
 
   markup_mode = "HTML";
   file_name = fname;
@@ -357,13 +354,18 @@ CDocument* CDox::get_document_by_fname (const QString &fileName)
   if (fileName.isEmpty() || items.size() == 0)
      return NULL;
 
-  for (vector <size_t>::size_type i = 0; i < items.size(); i++)
+/*  for (vector <size_t>::size_type i = 0; i < items.size(); i++)
       {
        CDocument *d = items[i];
        if (d->file_name == fileName)
           return d;
       }
+*/
 
+  for (vector <CDocument *>::iterator i = items.begin(); i != items.end(); i++)
+       if ((*i)->file_name == fileName)
+          return *i;
+ 
   return NULL;
 }
 
@@ -397,7 +399,8 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
   doc->update_status();
   doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
-  tab_widget->setCurrentIndex (tab_widget->indexOf (doc->tab_page));
+ // tab_widget->setCurrentIndex (tab_widget->indexOf (doc->tab_page));
+  main_tab_widget->setCurrentIndex (0);
 
   update_current_files_menu();
 
@@ -410,8 +413,7 @@ void CDox::close_by_idx (int i)
   if (i < 0)
      return;
 
-  CDocument *d = items[i];
-  delete d;
+  delete items[i];
   items.erase (items.begin() + i);
 
   update_current_files_menu();
@@ -564,12 +566,6 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   else
       ext = theext;
 
- /* if (ext.isEmpty())
-     {
-      QFileInfo fi (file_name);
-      ext = fnameswoexts[fi.fileName()];
-     }
-*/
   if (ext.isEmpty())
      return;
 
@@ -1043,6 +1039,9 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
      return;
 
   QString temp = qstring_load (fname);
+  if (temp.isEmpty())
+     return;
+
   QXmlStreamReader xml (temp);
 
   while (! xml.atEnd())
@@ -1107,7 +1106,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                                       }
                                   }
                          }
-                      else
+                      else //current, good format
                       if (xml_format == 1)
                          {
                           HighlightingRule rule;
@@ -1170,7 +1169,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
                      }//item
 
-       }//is start
+       }//end of "is start"
 
    if (xml.hasError())
       qDebug() << "xml parse error";
@@ -1184,10 +1183,12 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   if (highlightingRules.size() == 0)
      return;
 
-  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
+  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); it++)
   //for (vector <size_t>::size_type i = 0; i < highlightingRules.size(); i++)
       {
        QRegularExpressionMatch m = it->pattern.match (text);
+       if (! m.isValid())  
+           continue;
 
        int index = m.capturedStart();
 
@@ -1196,6 +1197,9 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
               int length = m.capturedLength();
               setFormat (index, length, it->format);
               m = it->pattern.match (text, index + length);
+              if (! m.isValid())  
+                  break;
+
               index = m.capturedStart();
              }
        }
@@ -1245,14 +1249,15 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
   exts = "default";
   langs = "default";
-
   cs = Qt::CaseSensitive;
 
   if (! file_exists (fname))
      return;
 
-
   QString temp = qstring_load (fname);
+  if (temp.isEmpty())
+     return;
+
   QXmlStreamReader xml (temp);
 
   while (! xml.atEnd())
@@ -1379,17 +1384,17 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
      return;
 
   //for (vector <int>::size_type i = 0; i < highlightingRules.size(); i++)
-   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
-          {
-           int index = text.indexOf (it->pattern);
+  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); it++)
+      {
+       int index = text.indexOf (it->pattern);
 
-           while (index >= 0)
-                 {
-                  int length = it->pattern.matchedLength();
-                  setFormat (index, length, it->format);
-                  index = text.indexOf (it->pattern, index + length);
-                 }
-           }
+       while (index >= 0)
+             {
+              int length = it->pattern.matchedLength();
+              setFormat (index, length, it->format);
+              index = text.indexOf (it->pattern, index + length);
+             }
+       }
 
   setCurrentBlockState (0);
 
@@ -1428,9 +1433,9 @@ void CDox::save_to_session (const QString &fileName)
   fname_current_session = fileName;
   QString l;
 
-  for (vector <size_t>::size_type i = 0; i < items.size(); i++)
+  for (vector <CDocument*>::iterator i = items.begin(); i != items.end(); i++)
       {
-       QString t = items[i]->get_triplex();
+       QString t = (*i)->get_triplex();
        if (! t.isEmpty())
           {
            l += t;
@@ -1458,179 +1463,6 @@ void CDox::load_from_session (const QString &fileName)
   fname_current_session = fileName;
 }
 
-/*
-QHash <QString, QString> CDox::load_eclipse_theme_xml (const QString &fname)
-{
-  QHash <QString, QString> result;
-
-  QString temp = qstring_load (fname);
-  QXmlStreamReader xml (temp);
-
-   while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.name().toString();
-
-         if (xml.isStartElement())
-            {
-
-            if (tag_name == "colorTheme")
-             {
-
-                 log->log (xml.attributes().value ("id").toString());
-                 log->log (xml.attributes().value ("name").toString());
-                 log->log (xml.attributes().value ("modified").toString());
-                 log->log (xml.attributes().value ("author").toString());
-                 log->log (xml.attributes().value ("website").toString());
-                }
-
-
-            if (tag_name == "singleLineComment")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                     result.insert ("single comment", t);
-               }
-
-
-            if (tag_name == "class")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                   {
-                    result.insert ("class", t);
-                    result.insert ("type", t);
-                   }
-               }
-
-
-         if (tag_name == "operator")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                     result.insert ("operator", t);
-            }
-
-
-
-         if (tag_name == "string")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                 result.insert ("quotes", t);
-            }
-
-
-
-         if (tag_name == "multiLineComment")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                 result.insert ("mcomment-start", t);
-            }
-
-
-
-         if (tag_name == "foreground")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                 {
-                  result.insert ("text", t);
-                  result.insert ("functions", t);
-                  result.insert ("modifiers", t);
-                  result.insert ("margin_color", t);
-                  result.insert ("digits", t);
-                  result.insert ("digits-float", t);
-                  result.insert ("label", t);
-                  result.insert ("include", t);
-                  result.insert ("preproc", t);
-                 }
-             }
-
-         if (tag_name == "background")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                {
-                 result.insert ("background", t);
-                 result.insert ("linenums_bg", t);
-                }
-            }
-
-
-         if (tag_name == "selectionForeground")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                result.insert ("sel-text", t);
-            }
-
-
-
-         if (tag_name == "selectionBackground")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-               result.insert ("sel-background", t);
-            }
-
-
-         if (tag_name == "keyword")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                {
-                 result.insert ("keywords", t);
-                result.insert ("tags", t);
-                }
-             }
-
-
-
-       	 if (tag_name == "currentLine")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                result.insert ("cur_line_color", t);
-            }
-
-
-         if (tag_name == "bracket")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                 result.insert ("brackets", t);
-             }
-
-        }//is start
-
-  if (xml.hasError())
-     qDebug() << "xml parse error";
-
-  } //cycle
-
-
-   result.insert ("error", "red");
-
-   return result;
-}
-*/
-/*
-void CDox::load_global_palette (const QString &fileName)
-{
-  if (! file_exists (fileName))
-      return;
-
-  global_palette.clear();
-
-  if (file_get_ext (fileName) == "xml")
-     global_palette = load_eclipse_theme_xml (fileName);
-  else
-      global_palette = hash_load_keyval (fileName);
-}
-*/
 
 QString CDocument::get_selected_text() const
 {
@@ -1773,7 +1605,6 @@ void CTEAEdit::un_indent()
 #define SK_D 40
 #define SK_W 25
 #define SK_S 39
-
 #define SK_E 26
 #define SK_C 54
 

@@ -48,6 +48,8 @@ DJVU read code taken fromdvutxt.c:
 #include <QXmlStreamReader>
 #include <QTextStream>
 #include <QDebug>
+#include <QProcess>
+
 #include <iostream>
 
 //FIXME: not good with cmake, cmake just use Qt5 here
@@ -403,6 +405,8 @@ bool CTioXMLZipped::load (const QString &fname)
 
 CCharsetMagic::CCharsetMagic()
 {
+  qDebug() << "CCharsetMagic::CCharsetMagic()";
+
   QStringList fnames = read_dir_entries (":/encsign");
 
   CSignaturesList *koi8u = NULL;
@@ -412,34 +416,42 @@ CCharsetMagic::CCharsetMagic()
 
   for (int i = 0; i < fnames.size(); i++) 
       {
-       QString fn = fnames[i];
 
-           QString fname = ":/encsign";
-           fname.append ("/");
-           fname.append (fn);
+       QString fn = fnames.at(i);
 
-           QByteArray a = file_load (fn);
-           QList<QByteArray> bsl = a.split ('\n');
+       QString fname = ":/encsign/";
 
-           CSignaturesList *sl = new CSignaturesList;
-           sl->encname = fn;
+       fname.append (fn);
 
-           if (fn == "KOI8-R")
-              koi8r = sl;
+       QByteArray a = file_load (fname);
 
-           if (fn == "KOI8-U")
-              koi8u = sl;
+       QList<QByteArray> bsl = a.split (',');
 
-           for (int i = 0; i < bsl.count(); i++)
-               sl->words.append (bsl[i]);
+       CSignaturesList *sl = new CSignaturesList;
+       sl->encname = fn;
 
-           signatures.append (sl);
-          }
+       if (fn == "KOI8-R")
+          koi8r = sl;
 
+       if (fn == "KOI8-U")
+          koi8u = sl;
+
+       for (int i = 0; i < bsl.count(); i++)
+           sl->words.append (bsl[i]);
+
+
+       signatures.push_back (sl);
+      }
+
+  std::vector<CSignaturesList*>::iterator it1 = std::find(signatures.begin(), signatures.end(), koi8u);  
+  std::vector<CSignaturesList*>::iterator it2 = std::find(signatures.begin(), signatures.end(), koi8r);  
+  std::swap (*it1, *it2);
+
+
+//  qDebug() << "signatures.size: " << signatures.size();
+/*
   int ku = signatures.indexOf (koi8u);
   int kr = signatures.indexOf (koi8r);
-
-//  swap (signatures[ku], signatures[kr]);
 
 //#if QT_VERSION >= 0x051300
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 13)
@@ -447,13 +459,80 @@ CCharsetMagic::CCharsetMagic()
 #else
   signatures.swap (ku, kr);
 #endif
+*/
 }
 
 
 CCharsetMagic::~CCharsetMagic()
 {
-  for (int i = 0; i < signatures.count(); i++)
-      delete signatures.at (i);
+  //for (int i = 0; i < signatures.count(); i++)
+    //  delete signatures.at (i);
+  
+  if (signatures.size() > 0)
+     for (vector <size_t>::size_type i = 0; i < signatures.size(); i++)
+          delete signatures[i];
+
+}
+
+
+//from https://stackoverflow.com/questions/28270310/how-to-easily-detect-utf8-encoding-in-the-string
+bool is_valid_utf8(const char * string)
+{
+    if (!string)
+        return true;
+
+    const unsigned char * bytes = (const unsigned char *)string;
+    unsigned int cp;
+    int num;
+
+    while (*bytes != 0x00)
+    {
+        if ((*bytes & 0x80) == 0x00)
+        {
+            // U+0000 to U+007F 
+            cp = (*bytes & 0x7F);
+            num = 1;
+        }
+        else if ((*bytes & 0xE0) == 0xC0)
+        {
+            // U+0080 to U+07FF 
+            cp = (*bytes & 0x1F);
+            num = 2;
+        }
+        else if ((*bytes & 0xF0) == 0xE0)
+        {
+            // U+0800 to U+FFFF 
+            cp = (*bytes & 0x0F);
+            num = 3;
+        }
+        else if ((*bytes & 0xF8) == 0xF0)
+        {
+            // U+10000 to U+10FFFF 
+            cp = (*bytes & 0x07);
+            num = 4;
+        }
+        else
+            return false;
+
+        bytes += 1;
+        for (int i = 1; i < num; ++i)
+        {
+            if ((*bytes & 0xC0) != 0x80)
+                return false;
+            cp = (cp << 6) | (*bytes & 0x3F);
+            bytes += 1;
+        }
+
+        if ((cp > 0x10FFFF) ||
+            ((cp >= 0xD800) && (cp <= 0xDFFF)) ||
+            ((cp <= 0x007F) && (num != 1)) ||
+            ((cp >= 0x0080) && (cp <= 0x07FF) && (num != 2)) ||
+            ((cp >= 0x0800) && (cp <= 0xFFFF) && (num != 3)) ||
+            ((cp >= 0x10000) && (cp <= 0x1FFFFF) && (num != 4)))
+            return false;
+    }
+
+    return true;
 }
 
 
@@ -473,15 +552,20 @@ QString CCharsetMagic::guess_for_file (const QString &fname)
       return codec->name();
      }
 
-  for (int i = 0; i < signatures.count(); i++)
-       for (int x = 0; x < signatures[i]->words.count(); x++)
-           {
-            if (bafile.contains (signatures[i]->words[x]))
-               {
-                enc = signatures[i]->encname;
-                return enc;
-               }
-           }
+  if (is_valid_utf8 (bafile.data()))
+     return enc;
+
+  if (signatures.size() > 0)
+     for (vector <size_t>::size_type i = 0; i < signatures.size(); i++)
+          for (int x = 0; x < signatures[i]->words.count(); x++)
+              {
+               if (bafile.contains (signatures[i]->words[x]) > 0)
+                  {
+
+                   enc = signatures[i]->encname;
+                   return enc;
+                  }
+              }
 
   return enc;
 }

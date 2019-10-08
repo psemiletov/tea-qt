@@ -331,7 +331,6 @@ void rvln::writeSettings()
   settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->checkState());
 
 
-
   delete settings;
 }
 
@@ -647,6 +646,8 @@ rvln::rvln()
   documents = new CDox();
   documents->parent_wnd = this;
   documents->tab_widget = tab_editor;
+  documents->main_tab_widget = main_tab_widget;
+
   documents->recent_menu = menu_file_recent;
   documents->recent_list_fname = dir_config + "/tea_recent";
   documents->reload_recent_list();
@@ -1083,8 +1084,8 @@ void rvln::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
 
-//  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-//  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
 
@@ -1169,7 +1170,7 @@ void rvln::createMenus()
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
 
- // fileMenu->addAction (act_test);
+  fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
   add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -2708,6 +2709,9 @@ void rvln::createOptions()
   hb_locovr->insertWidget (-1, ed_locale_override, 1, Qt::AlignLeft);
 
 
+  cb_use_enca_for_charset_detection = new QCheckBox (tr ("Use Enca for charset detection"), tab_options);
+  cb_use_enca_for_charset_detection->setCheckState (Qt::CheckState (settings->value ("use_enca_for_charset_detection", 0).toInt()));
+
   cb_override_img_viewer = new QCheckBox (tr ("Use external image viewer for F2"), tab_options);
   cb_override_img_viewer->setCheckState (Qt::CheckState (settings->value ("override_img_viewer", 0).toInt()));
 
@@ -2790,6 +2794,9 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_auto_img_preview);
   page_common_layout->addWidget (cb_session_restore);
   page_common_layout->addWidget (cb_use_trad_dialogs);
+  page_common_layout->addWidget (cb_use_enca_for_charset_detection);
+
+
 
  // page_common_layout->addLayout (hb_moon_phase_algo);
 
@@ -3528,7 +3535,7 @@ void rvln::file_last_opened()
       documents->open_file_triplex (documents->recent_files[0]);
       documents->recent_files.removeAt (0);
       documents->update_recent_menu();
-      main_tab_widget->setCurrentIndex (idx_tab_edit);
+    //  main_tab_widget->setCurrentIndex (idx_tab_edit);
      }
 }
 
@@ -7893,11 +7900,18 @@ void rvln::set_eol_mac()
 
 void rvln::guess_enc()
 {
- CCharsetMagic cm;
+  QString enc;
+  QString fn = fman->get_sel_fname();
 
- QString fn = fman->get_sel_fname();
- QString enc = cm.guess_for_file (fn);
- cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc));
+  if (settings->value ("use_enca_for_charset_detection", 0).toBool())
+      enc = guess_enc_for_file (fn);
+  else
+      {
+       CCharsetMagic cm;
+       enc = cm.guess_for_file (fn);
+      }  
+
+ cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
 }
 
 
@@ -8676,6 +8690,11 @@ void rvln::leaving_tune()
   settings->setValue ("cursor_width", spb_cursor_width->value());
 
   settings->setValue ("override_img_viewer", cb_override_img_viewer->checkState());
+  settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->checkState());
+
+
+
+
 
   settings->setValue ("override_locale", cb_override_locale->checkState());
   settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->checkState());
@@ -10682,6 +10701,10 @@ rvln::~rvln()
 
 void rvln::test()
 {
+   QString fname = ":/encsign/CP1251";
+  QByteArray a = file_load2 (fname);
+
+       qDebug() << "QByteArray a: " << QString(a);
 
 //std::string subject("aaaa ../document.cpp:2366:7: warning nnnnnn");
 //std::string result;

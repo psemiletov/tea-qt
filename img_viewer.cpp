@@ -59,7 +59,6 @@ void CImgViewer::set_image_mini (const QString &fname)
 
 void CImgViewer::set_image_full (const QString &fname)
 {
- // window_full.show_image (fname);
   window_full.load_image (fname);
   //qDebug() << "get_exif_orintation " << get_exif_orintation (fname);
 }

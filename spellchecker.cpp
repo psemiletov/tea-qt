@@ -213,7 +213,7 @@ QStringList CAspellchecker::get_suggestions_list (const QString &word)
 
 CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, const QString &user_path): CSpellchecker (lang, path, user_path)
 {
-  qDebug() << "CHunspellChecker::CHunspellChecker - start";
+//  qDebug() << "CHunspellChecker::CHunspellChecker - start";
 
   initialized = false;
 
@@ -298,7 +298,7 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 
 #endif
 
-  qDebug() << "CHunspellChecker::CHunspellChecker - end";
+  //qDebug() << "CHunspellChecker::CHunspellChecker - end";
 }
 
 

@@ -28,7 +28,7 @@ CFontBox::CFontBox (QWidget *parent): QWidget (parent)
   h_box->addWidget (spb_font_size);
   h_box->addWidget (&edit);
   
-  edit.setPlainText (tr("Example string"));
+  edit.setPlainText (tr ("Example string"));
    
   connect (cf, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(slot_fontname_changed(const QString &)));

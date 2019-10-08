@@ -47,6 +47,9 @@ public:
 
 /* file utils */
 
+QString guess_enc_for_file (const QString &fname);
+
+
 bool file_is_writable (const QString &fname);
 bool file_is_readable (const QString &fname);
 
@@ -65,6 +68,8 @@ bool qstring_save (const QString &fileName, const QString &data, const char *enc
 QString qstring_load (const QString &fileName, const char *enc = "UTF-8");
 QString qstring_load_first_line (const QString &fileName);
 QByteArray file_load (const QString &fileName);
+QByteArray file_load2 (const QString &fileName);
+
 
 
 /* string/stringlist utils */

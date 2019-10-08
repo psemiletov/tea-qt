@@ -327,6 +327,8 @@ public:
   CLogMemo *log;
   QMainWindow *parent_wnd;
   QTabWidget *tab_widget;
+  QTabWidget *main_tab_widget;
+
   QMenu *recent_menu;
   QTimer *timer;
 

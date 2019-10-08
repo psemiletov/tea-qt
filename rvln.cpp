@@ -1084,8 +1084,8 @@ void rvln::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
 
-  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+//  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+  //connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
 
@@ -1170,7 +1170,7 @@ void rvln::createMenus()
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
 
-  fileMenu->addAction (act_test);
+  //fileMenu->addAction (act_test);
 
   fileMenu->addAction (newAct);
   add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));

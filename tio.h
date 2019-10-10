@@ -28,7 +28,6 @@ class CCharsetMagic: public QObject
 
 public:
 
- // QList <CSignaturesList*> signatures;
   std::vector <CSignaturesList*> signatures;
 
   CCharsetMagic();
@@ -202,7 +201,7 @@ public:
   CTioHandler();
   ~CTioHandler();
 
-  CTio* get_for_fname (const QString &fname) const;
+  CTio* get_for_fname (const QString &fname);
   QStringList get_supported_exts();
 };
 

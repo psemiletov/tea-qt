@@ -159,36 +159,6 @@ QByteArray file_load (const QString &fileName)
 }
 
 
-QByteArray file_load2 (const QString &fileName)
-{
-  qDebug() << "QByteArray file_load2";
-
-  QFile file (fileName);
-  QByteArray b;
-
-  qDebug() << "!1";
-
-
-  if (! file.open (QFile::ReadOnly))
-      {
-        QFileDevice::FileError e = file.error();
-        qDebug() << "QFileDevice::FileError e: " << e;   
-        return b;
-      }  
-
-  qDebug() << "!2";
-
-  b = file.readAll();
-
-  qDebug() << QString (b);
-
-  qDebug() << "!3";
-
-  return b;
-}
-
-
-
 /* string/stringlist utils */
 
 

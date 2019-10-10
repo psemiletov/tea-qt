@@ -1084,8 +1084,8 @@ void rvln::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
 
-//  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-  //connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
 
@@ -1520,6 +1520,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Remove formatting"), SLOT(fn_rm_formatting()));
   add_to_menu (tm, tr ("Remove formatting at each line"), SLOT(fn_rm_formatting_at_each_line()));
   add_to_menu (tm, tr ("Compress"), SLOT(fn_rm_compress()));
+  add_to_menu (tm, tr ("Anagram"), SLOT(fn_anagram()));
+
 
 
   add_to_menu (tm, tr ("Remove trailing spaces"), SLOT(fn_rm_trailing_spaces()));
@@ -10096,8 +10098,6 @@ void rvln::fman_del_n_first_chars()
 
 void rvln::fman_multreplace()
 {
-  //QString fiftxt = fif_get_text();
-
   QStringList l = fif_get_text().split ("~");
   if (l.size() < 2)
      return;
@@ -10628,7 +10628,7 @@ void rvln::ide_global_references()
 
 void rvln::logmemo_double_click (const QString &txt)
 {
-    std::cout << "rvln::logmemo_double_click txt:" << txt.toStdString() << std::endl;
+ // std::cout << "rvln::logmemo_double_click txt:" << txt.toStdString() << std::endl;
 
   if (documents->hash_project.isEmpty())
       return;
@@ -10698,14 +10698,42 @@ rvln::~rvln()
 }
 
 
+void rvln::fn_anagram()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QString t = d->textEdit->textCursor().selectedText();
+  if (t.isEmpty())
+     return;
+
+  QString txt = anagram (t).join('\n');
+
+  d = documents->create_new();
+  if (d)
+     d->textEdit->textCursor().insertText (txt);
+
+}
+
+/*
+void anagram(string input){
+    sort(input.begin(), input.end());
+    do
+        cout << input << endl;
+    while(next_permutation(input.begin(), input.end()));
+}
+*/
+
 
 void rvln::test()
 {
-   QString fname = ":/encsign/CP1251";
-  QByteArray a = file_load2 (fname);
+ 
+//anagram (fif_get_text().toStdString());
 
-       qDebug() << "QByteArray a: " << QString(a);
-
+//anagram (fif_get_text());
 //std::string subject("aaaa ../document.cpp:2366:7: warning nnnnnn");
 //std::string result;
 

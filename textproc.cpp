@@ -34,6 +34,7 @@ some code is taken from Scribus::util.cpp:
 */
 
 
+#include <algorithm>
 
 #include <QString>
 #include <QMap>
@@ -41,6 +42,8 @@ some code is taken from Scribus::util.cpp:
 
 #include "textproc.h"
 #include "utils.h"
+
+using namespace std;
 
 
 int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_pos, double q)
@@ -629,4 +632,20 @@ QStringList html_get_by_patt (const QString &s, const QString &spatt)
 
   return result;
 }
+
+
+QStringList anagram (const QString &s)
+{
+  QString input = s;
+  QStringList sl;
+
+  sort (input.begin(), input.end());
+
+  do
+    sl.append (input);
+  while (next_permutation (input.begin(), input.end()));
+
+  return sl;
+}
+
 

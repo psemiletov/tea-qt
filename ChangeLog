@@ -3,7 +3,7 @@
 + Tune::Common - Use Enca for charset detection
 Enca binary can be used to detect encoding. TEA's own detection engine works with Russian/Ukrainian charsets,
 so Enca is the better option, when installed.
-
++ UTF-8 detection has been improved
 
 + When open the recent file, editor tab is activated
 

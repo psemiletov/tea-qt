@@ -45,12 +45,13 @@ DJVU read code taken fromdvutxt.c:
 //C- +------------------------------------------------------------------
 */
 
+#include <iostream>
+
 #include <QXmlStreamReader>
 #include <QTextStream>
 #include <QDebug>
-#include <QProcess>
+//#include <QProcess>
 
-#include <iostream>
 
 //FIXME: not good with cmake, cmake just use Qt5 here
 #if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
@@ -161,7 +162,7 @@ bool CTioPlainText::load (const QString &fname)
 
   QFile file (fname);
 
-  if (! file.open (QFile::ReadOnly/* | QFile::Text)*/))
+  if (! file.open (QFile::ReadOnly))
      {
       error_string = file.errorString();
       return false;
@@ -229,7 +230,7 @@ CTioHandler::~CTioHandler()
 }
 
 
-CTio* CTioHandler::get_for_fname (const QString &fname) const
+CTio* CTioHandler::get_for_fname (const QString &fname)
 {
   CTio *instance;
   QString ext = file_get_ext (fname).toLower();
@@ -405,26 +406,19 @@ bool CTioXMLZipped::load (const QString &fname)
 
 CCharsetMagic::CCharsetMagic()
 {
-  qDebug() << "CCharsetMagic::CCharsetMagic()";
-
   QStringList fnames = read_dir_entries (":/encsign");
 
   CSignaturesList *koi8u = NULL;
   CSignaturesList *koi8r = NULL;
 
- // for (QList <QString>::iterator fn = fnames.begin(); fn != fnames.end(); fn++)
-
   for (int i = 0; i < fnames.size(); i++) 
       {
 
        QString fn = fnames.at(i);
-
        QString fname = ":/encsign/";
-
        fname.append (fn);
 
        QByteArray a = file_load (fname);
-
        QList<QByteArray> bsl = a.split (',');
 
        CSignaturesList *sl = new CSignaturesList;
@@ -436,12 +430,15 @@ CCharsetMagic::CCharsetMagic()
        if (fn == "KOI8-U")
           koi8u = sl;
 
+          
+       //fill with signatures 
        for (int i = 0; i < bsl.count(); i++)
            sl->words.append (bsl[i]);
 
-
        signatures.push_back (sl);
       }
+
+//the following is needed to correct detection KOI8-R/U
 
   std::vector<CSignaturesList*>::iterator it1 = std::find(signatures.begin(), signatures.end(), koi8u);  
   std::vector<CSignaturesList*>::iterator it2 = std::find(signatures.begin(), signatures.end(), koi8r);  
@@ -465,13 +462,9 @@ CCharsetMagic::CCharsetMagic()
 
 CCharsetMagic::~CCharsetMagic()
 {
-  //for (int i = 0; i < signatures.count(); i++)
-    //  delete signatures.at (i);
-  
   if (signatures.size() > 0)
      for (vector <size_t>::size_type i = 0; i < signatures.size(); i++)
           delete signatures[i];
-
 }
 
 
@@ -561,7 +554,6 @@ QString CCharsetMagic::guess_for_file (const QString &fname)
               {
                if (bafile.contains (signatures[i]->words[x]) > 0)
                   {
-
                    enc = signatures[i]->encname;
                    return enc;
                   }
@@ -601,8 +593,6 @@ bool CTioFB2::load (const QString &fname)
   QXmlStreamReader xml (temp);
 
   bool tt = false;
- // bool title = false;
- // bool section = false;
 
   while (! xml.atEnd())
         {
@@ -614,12 +604,6 @@ bool CTioFB2::load (const QString &fname)
             {
              if (tag_name == ts)
                 tt = true;
-
-   //          if (tag_name == "title")
-     //           title = true;
-
-   //          if (tag_name == "section")
-     //           section = true;
             }
 
          if (xml.isEndElement())
@@ -628,17 +612,11 @@ bool CTioFB2::load (const QString &fname)
                  tt = false;
 
              if (tag_name == "title")
-                {
-       //          title = false;
                  data.append ("\n");
-                }
 
              if (tag_name == "section")
-                {
-       //          section = false;
                  data.append ("\n");
-                }
-             }
+            }
 
          if (tt && xml.isCharacters())
             {
@@ -858,7 +836,6 @@ bool CTioRTF::load (const QString &fname)
 }
 
 #if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
-//#ifdef POPPLER_ENABLE
 
 CTioPDF::CTioPDF()
 {
@@ -906,9 +883,7 @@ bool CTioPDF::load (const QString &fname)
 #endif
 
 
-//#ifdef DJVU_ENABLE
 #if defined (DJVU_ENABLE) || defined(Q_OS_OS2)
-
 
 const char *detail = 0;
 int escape = 0;
@@ -1003,7 +978,6 @@ bool CTioDJVU::load (const QString &fname)
 CTioEpub::CTioEpub()
 {
   ronly = true;
-
   extensions.append ("epub");
 }
 
@@ -1021,7 +995,6 @@ bool CTioEpub::load (const QString &fname)
   if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
        return false;
 
-
   QString opf_fname;
   QString opf_dir;
 
@@ -1038,7 +1011,6 @@ bool CTioEpub::load (const QString &fname)
 
   if (! zipper.read_as_utf8 (fname, opf_fname))
        return false;
-
 
   QXmlStreamReader xml (zipper.string_data);
 
@@ -1066,10 +1038,8 @@ bool CTioEpub::load (const QString &fname)
            if (! zipper.read_as_utf8 (fname, fn))
               return false;
 
-           //QString t = strip_html (zipper.string_data);
            QStringList tags;
            tags.append ("p");
-          // tags.append ("h2");
 
            QString t = extract_text_from_xml (zipper.string_data, tags);
 
@@ -1086,17 +1056,8 @@ QStringList CTioHandler::get_supported_exts()
   QStringList l;
 
   for (std::vector <CTio*>::iterator t = list.begin(); t != list.end(); t++)
-    
-  //for (QList <CTio*>::iterator t = list.begin(); t != list.end(); t++)
-      {
-/*       CTio *io = *t;
-       for (int i = 0; i < io->extensions.size(); i++)
-           l.append (io->extensions[i]);*/
-
        for (int i = 0; i < (*t)->extensions.size(); i++)
            l.append ((*t)->extensions[i]);
-      }
-
 
   l.append ("txt");
   return l;

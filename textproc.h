@@ -24,6 +24,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode);
 QString string_reverse (const QString &s);
 QString conv_quotes (const QString &source, const QString &c1, const QString &c2);
 QStringList html_get_by_patt (const QString &s, const QString &spatt);
+QStringList anagram (const QString &s);
 
 int romanToDecimal (const char *roman);
 QString arabicToRoman (int i);

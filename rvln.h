@@ -434,9 +434,37 @@ main window callbacks
 
   void fm_full_info();
 
+#if QT_VERSION >= 0x050000
   void fm_hashsum_md5();
   void fm_hashsum_md4();
   void fm_hashsum_sha1();
+
+  void fm_hashsum_sha224();
+  void fm_hashsum_sha384();
+  void fm_hashsum_sha256();
+  void fm_hashsum_sha512();
+
+
+#endif
+
+
+//#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
+
+  void fm_hashsum_sha3_224();
+  void fm_hashsum_sha3_256();
+  void fm_hashsum_sha3_384();
+  void fm_hashsum_sha3_512();
+
+//#endif
+
+
+  void fm_hashsum_keccak_256();
+  void fm_hashsum_keccak_224();
+  void fm_hashsum_keccak_384();
+  void fm_hashsum_keccak_512();
+
+
+
 
   void fman_unpack_zip();
   void fman_zip_info();
@@ -886,6 +914,8 @@ main window widgets
   QMenu *menu_fm_file_infos;
   QMenu *menu_fm_img_conv;
   QMenu *menu_fm_zip;
+  QMenu *menu_fm_checksums;
+
   QMenu *menu_view;
   QMenu *menu_spell_langs;
   QMenu *helpMenu;

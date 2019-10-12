@@ -1,5 +1,6 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ Functions - Text - Anagram
 + Tune::Common - Use Enca for charset detection
 Enca binary can be used to detect encoding. TEA's own detection engine works with Russian/Ukrainian charsets,
 so Enca is the better option, when installed.

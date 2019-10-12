@@ -1655,9 +1655,43 @@ void rvln::createMenus()
   add_to_menu (menu_fm_file_infos, tr ("Count lines in selected files"), SLOT(fman_count_lines_in_selected_files()));
   add_to_menu (menu_fm_file_infos, tr ("Full info"), SLOT(fm_full_info()));
 
-  add_to_menu (menu_fm_file_infos, tr ("MD5 checksum"), SLOT(fm_hashsum_md5()));
-  add_to_menu (menu_fm_file_infos, tr ("MD4 checksum"), SLOT(fm_hashsum_md4()));
-  add_to_menu (menu_fm_file_infos, tr ("SHA1 checksum"), SLOT(fm_hashsum_sha1()));
+  menu_fm_checksums = menu_fm->addMenu (tr ("Checksum"));
+  menu_fm_checksums->setTearOffEnabled (true);
+
+  add_to_menu (menu_fm_checksums, tr ("MD5"), SLOT(fm_hashsum_md5()));
+  add_to_menu (menu_fm_checksums, tr ("MD4"), SLOT(fm_hashsum_md4()));
+  add_to_menu (menu_fm_checksums, tr ("SHA-1"), SLOT(fm_hashsum_sha1()));
+
+#if QT_VERSION >= 0x050000
+
+  add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-224"), SLOT(fm_hashsum_sha224()));
+  add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-256"), SLOT(fm_hashsum_sha256()));
+  add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-384"), SLOT(fm_hashsum_sha384()));
+  add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-512"), SLOT(fm_hashsum_sha512()));
+
+#endif
+
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
+
+ add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-224"), SLOT(fm_hashsum_sha3_224()));
+ add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-256"), SLOT(fm_hashsum_sha3_256()));
+ add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-384"), SLOT(fm_hashsum_sha3_384()));
+ add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-512"), SLOT(fm_hashsum_sha3_512()));
+
+#endif
+
+
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 10)
+
+ add_to_menu (menu_fm_checksums, tr ("Keccak-224"), SLOT(fm_hashsum_keccak_224()));
+ add_to_menu (menu_fm_checksums, tr ("Keccak-256"), SLOT(fm_hashsum_keccak_256()));
+ add_to_menu (menu_fm_checksums, tr ("Keccak-384"), SLOT(fm_hashsum_keccak_384()));
+ add_to_menu (menu_fm_checksums, tr ("Keccak-512"), SLOT(fm_hashsum_keccak_512()));
+
+#endif
+
+
+
 
   menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
   menu_fm_zip->setTearOffEnabled (true);
@@ -6382,10 +6416,230 @@ void rvln::fm_hashsum_sha1()
 
   h.addData (file_load (filename));
   QString sm = h.result().toHex();
-  QString s = tr ("SHA1 checksum for %1 is %2").arg (filename).arg (sm);
+  QString s = tr ("SHA-1 checksum for %1 is %2").arg (filename).arg (sm);
 
   log->log (s);
 }
+
+
+#if QT_VERSION >= 0x050000
+void rvln::fm_hashsum_sha224()
+{
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Sha224);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("SHA-2 SHA-224 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+}
+
+
+void rvln::fm_hashsum_sha384()
+{
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Sha384);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("SHA-2 SHA-384 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+}
+
+
+void rvln::fm_hashsum_sha256()
+{
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Sha256);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("SHA-2 SHA-256 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+}
+
+
+void rvln::fm_hashsum_sha512()
+{
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Sha512);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("SHA-2 SHA-512 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+}
+#endif
+
+
+
+void rvln::fm_hashsum_sha3_224()
+{
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Sha3_224);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("SHA-3 224 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+
+#endif
+}
+
+
+void rvln::fm_hashsum_sha3_256()
+{
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Sha3_256);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("SHA-3 256 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+
+#endif
+}
+
+
+void rvln::fm_hashsum_sha3_384()
+{
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Sha3_384);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("SHA-3 384 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+
+#endif
+}
+
+
+void rvln::fm_hashsum_sha3_512()
+{
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Sha3_512);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("SHA-3 512 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+
+#endif
+}
+
+
+void rvln::fm_hashsum_keccak_224()
+{
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Keccak_224);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("Keccak 224 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+
+#endif
+}
+
+
+void rvln::fm_hashsum_keccak_256()
+{
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Keccak_256);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("Keccak 256 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+
+#endif
+}
+
+
+void rvln::fm_hashsum_keccak_384()
+{
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Keccak_384);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("Keccak 384 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+
+#endif
+}
+
+
+void rvln::fm_hashsum_keccak_512()
+{
+#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 10)
+  QString filename = fman->get_sel_fname();
+  if (! file_exists (filename))
+      return;
+
+  QCryptographicHash h (QCryptographicHash::Keccak_512);
+
+  h.addData (file_load (filename));
+  QString sm = h.result().toHex();
+  QString s = tr ("Keccak 512 checksum for %1 is %2").arg (filename).arg (sm);
+
+  log->log (s);
+
+#endif
+}
+
 
 
 void rvln::fman_refresh()

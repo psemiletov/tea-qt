@@ -545,19 +545,10 @@ unsigned int bin_to_decimal (const QString &s)
 
 
 QString conv_quotes (const QString &source, const QString &c1, const QString &c2)
-//QString conv_quotes (const QString &source, bool tex_mode)
 {
-//  QString c1 = "\xAB";
-//  QString c2 = "\xBB";
   QString x;
   QString dest;
-/*
-  if (tex_mode)
-    {
-     c1 = "``";
-     c2 = "\'\'";
-    }
-  */
+
   bool flag = true;
   int c = source.size() - 1;
   for (int i = 0; i <= c; i++)
@@ -647,5 +638,4 @@ QStringList anagram (const QString &s)
 
   return sl;
 }
-
 

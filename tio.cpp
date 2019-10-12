@@ -1,5 +1,4 @@
 /*
-
 DJVU read code taken fromdvutxt.c:
 
 //C- DjVuLibre-3.5
@@ -50,7 +49,6 @@ DJVU read code taken fromdvutxt.c:
 #include <QXmlStreamReader>
 #include <QTextStream>
 #include <QDebug>
-//#include <QProcess>
 
 
 //FIXME: not good with cmake, cmake just use Qt5 here

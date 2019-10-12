@@ -251,8 +251,6 @@ public:
 
   bool cursor_xy_visible;
 
-  //QHash <QString, QString> fnameswoexts;
-
   QString eol;
 
   CDox *holder;
@@ -319,7 +317,6 @@ public:
   QLabel *l_status_bar;
   QLabel *l_charset;
 
-  //QList <CDocument*> list;
 
   std::vector <CDocument*> items;
 
@@ -339,6 +336,7 @@ public:
 
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
+
 #endif
 
 
@@ -404,3 +402,4 @@ protected:
 };
 
 #endif
+

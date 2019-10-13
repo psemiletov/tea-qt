@@ -49,7 +49,7 @@ started at 08 November 2007
 #include <QSettings>
 #include <QLibraryInfo>
 #include <QCryptographicHash>
-
+#include <QFontDialog>
 
 #ifdef USE_QML_STUFF
 
@@ -2458,7 +2458,7 @@ void rvln::createOptions()
   connect (cmb_styles, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(slot_style_currentIndexChanged (const QString &)));
 
-
+/*
   QHBoxLayout *lt_h = new QHBoxLayout;
 
   QLabel *l_font = new QLabel (tr ("Editor font"));
@@ -2476,11 +2476,28 @@ void rvln::createOptions()
            this, SLOT(slot_editor_fontname_changed(const QString &)));
 
   connect (spb_font_size, SIGNAL(valueChanged (int)), this, SLOT(slot_font_size_changed (int )));
+*/
+
+
+//  QLabel *l_font_logmemo = new QLabel (tr ("Logmemo font"));
+
+  
+  //QPushButton *bt_font_logmemo = new QPushButton (settings->value ("logmemo_font", "Monospace").toString() + "," + settings->value ("logmemo_font_size", "12").toString(), this);
+
+
+  QPushButton *bt_font_interface = new QPushButton (tr ("Interface font"), this);
+  connect (bt_font_interface, SIGNAL(clicked()), this, SLOT(slot_font_interface_select()));
+
+  QPushButton *bt_font_editor = new QPushButton (tr ("Editor font"), this);
+  connect (bt_font_editor, SIGNAL(clicked()), this, SLOT(slot_font_editor_select()));
+
+  QPushButton *bt_font_logmemo = new QPushButton (tr ("Logmemo font"), this);
+  connect (bt_font_logmemo, SIGNAL(clicked()), this, SLOT(slot_font_logmemo_select()));
 
 
 
-  QLabel *l_font_logmemo = new QLabel (tr ("Logmemo font"));
 
+/*
   cmb_logmemo_font_name = new QFontComboBox (page_interface);
   cmb_logmemo_font_name->setCurrentFont (QFont (settings->value ("logmemo_font", "Monospace").toString()));
 
@@ -2493,7 +2510,8 @@ void rvln::createOptions()
            this, SLOT(slot_logmemo_fontname_changed(const QString &)));
 
   connect (spb_logmemo_font_size, SIGNAL(valueChanged (int)), this, SLOT(slot_logmemo_font_size_changed (int )));
-
+*/
+/*
   QLabel *l_app_font = new QLabel (tr ("Interface font"));
 
   cmb_app_font_name = new QFontComboBox (page_interface);
@@ -2515,16 +2533,22 @@ void rvln::createOptions()
   lt_h->addWidget (spb_font_size);
 
   page_interface_layout->addLayout (lt_h, 1);
+*/
+ // lt_h = new QHBoxLayout;
 
-  lt_h = new QHBoxLayout;
+//  lt_h->addWidget (l_font_logmemo);
+//  lt_h->addWidget (bt_font_logmemo);
 
-  lt_h->addWidget (l_font_logmemo);
-  lt_h->addWidget (cmb_logmemo_font_name);
-  lt_h->addWidget (spb_logmemo_font_size);
+ // lt_h->addWidget (cmb_logmemo_font_name);
+//  lt_h->addWidget (spb_logmemo_font_size);
 
-  page_interface_layout->addLayout (lt_h);
+ // page_interface_layout->addLayout (lt_h);
 
+  page_interface_layout->addWidget (bt_font_interface);
+  page_interface_layout->addWidget (bt_font_editor);
+  page_interface_layout->addWidget (bt_font_logmemo);
 
+/*
   lt_h = new QHBoxLayout;
 
   lt_h->addWidget (l_app_font);
@@ -2532,7 +2556,7 @@ void rvln::createOptions()
   lt_h->addWidget (spb_app_font_size);
 
   page_interface_layout->addLayout (lt_h);
-
+*/
 
 
   QStringList sl_tabs_align;
@@ -3062,7 +3086,7 @@ void rvln::createOptions()
 
   QWidget *page_keyboard = new QWidget (tab_options);
 
-  lt_h = new QHBoxLayout;
+  QHBoxLayout *lt_h = new QHBoxLayout;
 
   QHBoxLayout *lt_shortcut = new QHBoxLayout;
 
@@ -3252,48 +3276,52 @@ void rvln::nav_goto_pos()
   d->textEdit->setTextCursor (cr);
 }
 
-
+/*
 void rvln::slot_editor_fontname_changed (const QString &text)
 {
   settings->setValue ("editor_font_name", text);
   update_stylesheet (fname_stylesheet);
 }
-
-
+*/
+/*
 void rvln::slot_logmemo_fontname_changed (const QString &text)
 {
   settings->setValue ("logmemo_font", text);
   update_stylesheet (fname_stylesheet);
 }
+*/
 
-
+/*
 void rvln::slot_app_fontname_changed (const QString &text)
 {
   settings->setValue ("app_font_name", text);
   update_stylesheet (fname_stylesheet);
 }
+*/
 
-
+/*
 void rvln::slot_app_font_size_changed (int i)
 {
   settings->setValue("app_font_size", i);
   update_stylesheet (fname_stylesheet);
 }
+*/
 
-
+/*
 void rvln::slot_font_size_changed (int i)
 {
   settings->setValue("editor_font_size", i);
   update_stylesheet (fname_stylesheet);
 }
+*/
 
-
+/*
 void rvln::slot_logmemo_font_size_changed (int i)
 {
   settings->setValue("logmemo_font_size", i);
   update_stylesheet (fname_stylesheet);
 }
-
+*/
 
 void rvln::mrkup_color()
 {
@@ -6641,7 +6669,6 @@ void rvln::fm_hashsum_keccak_512()
 }
 
 
-
 void rvln::fman_refresh()
 {
   fman->refresh();
@@ -9207,7 +9234,15 @@ void rvln::update_stylesheet (const QString &f)
   QString edfontfamily = "font-family:" + settings->value ("editor_font_name", "Serif").toString() + ";";
 
   QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_font_size", "12").toString() + "pt;";
-  QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + "pt;";
+  QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + ";";
+
+//  qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+
+//  qDebug() << "logmemo_font: " << logmemo_font;
+//  qDebug() << "logmemo_fontsize: " << logmemo_fontsize;
+
+//  qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+
 
   QString stylesheet;
 
@@ -9270,6 +9305,9 @@ void rvln::update_stylesheet (const QString &f)
 
   stylesheet += css_fif;
 
+ // qDebug() << "stylesheet: " << stylesheet;
+
+
 //Update themed
 
   QString cssfile = qstring_load (f);
@@ -9283,7 +9321,7 @@ void rvln::update_stylesheet (const QString &f)
   qApp->setStyleSheet ("");
   qApp->setStyleSheet (cssfile);
 
-  //qDebug() << "css_path " << css_path;
+//  qDebug() << "css_path " << css_path;
 }
 
 
@@ -10980,6 +11018,53 @@ void anagram(string input){
     while(next_permutation(input.begin(), input.end()));
 }
 */
+
+
+void rvln::slot_font_logmemo_select()
+{
+  bool ok;
+  QFont font = QFontDialog::getFont(&ok, QFont(settings->value ("logmemo_font", "Monospace").toString(), settings->value ("logmemo_font_size", "12").toInt()), this);
+  if (! ok) 
+     return;
+
+  //  qDebug() << font.toString();
+  settings->setValue ("logmemo_font", font.family());
+  settings->setValue("logmemo_font_size", font.pointSize());
+  update_stylesheet (fname_stylesheet);
+}
+
+
+void rvln::slot_font_editor_select()
+{
+  bool ok;
+  QFont font = QFontDialog::getFont(&ok, QFont(settings->value ("editor_font_name", "Serif").toString(), settings->value ("editor_font_size", "16").toInt()), this);
+  if (! ok) 
+     return;
+
+  settings->setValue ("editor_font_name", font.family());
+  settings->setValue("editor_font_size", font.pointSize());
+  update_stylesheet (fname_stylesheet);
+}
+
+
+void rvln::slot_font_interface_select()
+{
+  qDebug() << "rvln::slot_font_interface_select()";
+
+
+
+  bool ok;
+  QFontInfo fi = QFontInfo (qApp->font());
+//fi.pointSize()).toInt()
+  QFont font = QFontDialog::getFont (&ok, QFont (settings->value ("app_font_name", "Sans").toString(), settings->value ("app_font_size", fi.pointSize()).toInt()), this);
+  if (! ok) 
+     return;
+
+  settings->setValue ("app_font_name", font.family());
+  settings->setValue("app_font_size", font.pointSize());
+  update_stylesheet (fname_stylesheet);
+}
+
 
 
 void rvln::test()

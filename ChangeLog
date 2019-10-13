@@ -1,5 +1,8 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ Fm - Checksum menu
++ Fm - Checksum menu - MD4, MD5, SHA1, SHA 224, all SHA-2, 3, Keccak
+
 + Functions - Text - Anagram
 + Tune::Common - Use Enca for charset detection
 Enca binary can be used to detect encoding. TEA's own detection engine works with Russian/Ukrainian charsets,

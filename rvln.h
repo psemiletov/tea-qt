@@ -829,15 +829,21 @@ prefs window callbacks
   void pb_remove_hotkey_clicked();
 
   void slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QListWidgetItem *previous);
-  void slot_app_fontname_changed (const QString &text);
-  void slot_editor_fontname_changed (const QString &text);
-  void slot_font_size_changed (int i);
+  
+ // void slot_app_fontname_changed (const QString &text);
+//  void slot_editor_fontname_changed (const QString &text);
+ // void slot_font_size_changed (int i);
 
-  void slot_logmemo_fontname_changed (const QString &text);
-  void slot_logmemo_font_size_changed (int i);
+//  void slot_logmemo_fontname_changed (const QString &text);
+//  void slot_logmemo_font_size_changed (int i);
+
+  void slot_font_logmemo_select();
+  void slot_font_interface_select();
+  void slot_font_editor_select();
 
 
-  void slot_app_font_size_changed (int i);
+//  void slot_app_font_size_changed (int i);
+
   void slot_style_currentIndexChanged (const QString &text);
 
 

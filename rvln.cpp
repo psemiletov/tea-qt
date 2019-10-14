@@ -57,7 +57,6 @@ started at 08 November 2007
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickView>
-//#include <QJSEngine>
 
 #endif
 
@@ -86,7 +85,7 @@ started at 08 November 2007
 
 
 #ifdef USE_QML_STUFF
-QList <CPluginListItem *> plugins_list;
+std::vector <CPluginListItem *> plugins_list;
 #endif
 
 
@@ -107,7 +106,7 @@ QVariantMap hs_path;
 
 QString current_version_number;
 QStringList lsupported_exts;
-QList <CTextListWnd*> text_window_list;
+std::vector <CTextListWnd*> text_window_list;
 
 enum {
       FM_ENTRY_MODE_NONE = 0,
@@ -791,12 +790,15 @@ void rvln::closeEvent (QCloseEvent *event)
           p->deleteLater();
          }
 
-
+/*
   foreach (CTextListWnd *w, text_window_list)
           {
            w->close();
           }
-
+*/
+ if (text_window_list.size() > 0)
+     for (vector <size_t>::size_type i = 0; i < text_window_list.size(); i++)
+          text_window_list[i]->close();
 
   event->accept();
   deleteLater();
@@ -6758,8 +6760,12 @@ void CTextListWnd::closeEvent (QCloseEvent *event)
 
 CTextListWnd::~CTextListWnd()
 {
-  int i = text_window_list.indexOf (this);
-  text_window_list.removeAt (i);
+//  int i = text_window_list.indexOf (this);
+//  text_window_list.removeAt (i);
+
+  std::vector<CTextListWnd*>::iterator it = std::find(text_window_list.begin(), text_window_list.end(), this); 
+  text_window_list.erase (it);
+
 }
 
 
@@ -6778,7 +6784,9 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
   setLayout (lt);
   setWindowTitle (title);
 
-  text_window_list.append (this);
+  text_window_list.push_back (this);
+
+ // text_window_list.append (this);
 }
 
 
@@ -9478,7 +9486,9 @@ void rvln::fn_use_plugin()
 
   window->id = qml_fname;
 
-  plugins_list.append (new CPluginListItem (qml_fname, window));
+//  plugins_list.append (new CPluginListItem (qml_fname, window));
+  plugins_list.push_back (new CPluginListItem (qml_fname, window));
+
 
   QVariant v = item->property ("close_on_complete");
 
@@ -9498,12 +9508,15 @@ bool CQQuickWindow::event (QEvent *event)
 {
   if (event->type() == QEvent::Close)
      {
-      for (int i = 0; i < plugins_list.size(); ++i)
+      if (plugins_list.size() > 0)
+      for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
+//      for (int i = 0; i < plugins_list.size(); ++i)
           {
            if (plugins_list[i]->id == id)
               {
                delete plugins_list[i];
-               plugins_list.removeAt (i);
+//               plugins_list.removeAt (i);
+               plugins_list.erase (plugins_list.begin() + i);
                break;
               }
            }
@@ -9600,8 +9613,10 @@ void rvln::plugins_done()
 //закрыть все плагины из списка (при созд. плагина добавляем указатель в список)
 //и потом
 
-  for (int i = 0; i < plugins_list.size(); ++i)
-       plugins_list[i]->window->close();
+  //for (int i = 0; i < plugins_list.size(); ++i)
+  if (plugins_list.size() > 0)
+      for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
+         plugins_list[i]->window->close();
 
   delete qml_engine;
 }

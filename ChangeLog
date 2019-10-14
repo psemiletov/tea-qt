@@ -1,5 +1,7 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ Tune - Interface :: new, simplified font selectors (also workaround of Qt 5.13 font bug)
+
 + Fm - Checksum menu
 + Fm - Checksum menu - MD4, MD5, SHA1, SHA 224, all SHA-2, 3, Keccak
 

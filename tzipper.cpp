@@ -1,9 +1,9 @@
-#include "tzipper.h"
-#include "utils.h"
-
 #include <QDir>
 #include <QSettings>
 #include <QDebug>
+
+#include "tzipper.h"
+#include "utils.h"
 
 
 extern QSettings *settings;

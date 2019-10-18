@@ -18,7 +18,6 @@ this code is Public Domain
 #include "exif.h"
 #include "utils.h"
 
-
 extern QSettings *settings;
 
 

@@ -26,6 +26,9 @@ started at 08 November 2007
 #include <algorithm>
 #include <iostream>
 
+#include <QCompleter>
+#include <QFileSystemModel>
+
 #include <QMimeData>
 #include <QStyleFactory>
 #include <QLabel>
@@ -83,7 +86,6 @@ started at 08 November 2007
 
 #include "spellchecker.h"
 
-
 #ifdef USE_QML_STUFF
 std::vector <CPluginListItem *> plugins_list;
 #endif
@@ -94,6 +96,8 @@ int MyProxyStyle::cursor_blink_time = 1;
 
 
 extern QSettings *settings;
+
+
 extern QMenu *current_files_menu;
 extern QHash <QString, QString> global_palette;
 extern bool b_recent_off;
@@ -317,18 +321,14 @@ void rvln::writeSettings()
   settings->setValue ("charset", charset);
   settings->setValue ("splitterSizes", mainSplitter->saveState());
   settings->setValue ("spl_fman", spl_fman->saveState());
-
   settings->setValue ("dir_last", dir_last);
   settings->setValue ("fname_def_palette", fname_def_palette);
   settings->setValue ("markup_mode", markup_mode);
   settings->setValue ("VER_NUMBER", QString (current_version_number));
   settings->setValue ("state", saveState());
-
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
   settings->setValue ("show_linenums", cb_show_linenums->checkState());
-
   settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->checkState());
-
 
   delete settings;
 }
@@ -354,12 +354,6 @@ void rvln::create_main_widget()
 #endif
 
   tab_editor->setObjectName ("tab_editor");
-
-
- //QString tab_widget_style = "QTabWidget::pane { border-top: 0px solid rgb(100,100,100, 80); margin:0;  background: rgba(50,50,50, 100);  border-radius: 1px;   padding:0;}";
-//  QString tab_widget_style = "QTabWidget::pane { border-top: 0px solid grey; background-color: grey;}";
-  //main_tab_widget->setStyleSheet (tab_widget_style);
-//  tab_widget->setStyleSheet (tab_widget_style);
 
 
   QPushButton *bt_close = new QPushButton ("X", this);
@@ -393,7 +387,7 @@ void rvln::create_main_widget()
 
       cmb_fif->setEditable (true);
       fif = cmb_fif->lineEdit();
-      fif->setToolTip (tr ("The famous input field. Use for search/replace, function parameters."));
+      fif->setToolTip (tr ("The famous input field. Use for search/replace, function parameters"));
 
       connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
 
@@ -407,21 +401,21 @@ void rvln::create_main_widget()
       bt_next->setArrowType (Qt::RightArrow);
       bt_prev->setArrowType (Qt::LeftArrow);
 
-     connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
-     connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
-     connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
+      connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
+      connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
+      connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
 
-     bt_find->setIcon (get_theme_icon ("search_find.png"));
+      bt_find->setIcon (get_theme_icon ("search_find.png"));
 
-     QLabel *l_fif = new QLabel (tr ("FIF"));
+      QLabel *l_fif = new QLabel (tr ("FIF"));
 
-     lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
-     lt_fte->addWidget (cmb_fif, 1);
+      lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
+      lt_fte->addWidget (cmb_fif, 1);
 
-     lt_fte->addWidget (bt_find);
-     lt_fte->addWidget (bt_prev);
-     lt_fte->addWidget (bt_next);
-    }
+      lt_fte->addWidget (bt_find);
+      lt_fte->addWidget (bt_prev);
+      lt_fte->addWidget (bt_next);
+     }
 
   mainSplitter->setStretchFactor (1, 1);
 
@@ -447,7 +441,6 @@ void rvln::setup_spellcheckers()
 
   cur_spellchecker = settings->value ("cur_spellchecker", "Hunspell").toString();
 
-
   if (spellcheckers.size() > 0)
      if (! spellcheckers.contains (cur_spellchecker))
          cur_spellchecker = spellcheckers[0];
@@ -467,7 +460,6 @@ void rvln::setup_spellcheckers()
       spellchecker = new CAspellchecker (lang);
 
 #endif
-
      }
 
 #endif
@@ -504,18 +496,11 @@ void rvln::init_styles()
 
   fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
 
- // qDebug() << "fname_stylesheet = " << fname_stylesheet;
-
-//  qApp->setStyleSheet("QMenu { background-color: blue }");
-
-  //QApplication::setStyle (QStyleFactory::create (settings->value ("ui_style", default_style).toString()));
-//  QApplication::setStyle (new MyProxyStyle);
-
-
   MyProxyStyle *ps = new MyProxyStyle (QStyleFactory::create (settings->value ("ui_style", default_style).toString()));
 
   QApplication::setStyle (ps);
 
+//вызывается позже
 //  update_stylesheet (fname_stylesheet);
 }
 
@@ -578,7 +563,9 @@ rvln::rvln()
       }
 
 
-  QString fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
+//  QString fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
+  fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
+
 
   theme_dir = get_file_path (fname_stylesheet) + "/";
 
@@ -591,15 +578,10 @@ rvln::rvln()
 
 
   statusBar()->addWidget (l_status);
-  //statusBar()->addWidget (pb_status);
   statusBar()->addPermanentWidget (pb_status);
   statusBar()->addPermanentWidget (l_charset);
 
 
-/*
-  statusBar()->insertPermanentWidget (0, pb_status);
-  statusBar()->insertPermanentWidget (1, l_status);
-  */
   pb_status->hide();
 
 
@@ -829,8 +811,6 @@ void rvln::open()
       else
           fman->nav (dir_last);
 
-      main_tab_widget->setCurrentIndex (idx_tab_fman);
-      fm_entry_mode = FM_ENTRY_MODE_OPEN;
       main_tab_widget->setCurrentIndex (idx_tab_fman);
       fm_entry_mode = FM_ENTRY_MODE_OPEN;
 
@@ -5929,9 +5909,7 @@ void rvln::update_hls_noncached()
        if (! file_exists (fname))
           fname = dir_hls + "/" + l1[i];
 
-       //QString buffer = qstring_load (fname);
        QString buffer = qstring_load_first_line (fname);
-
        QString exts = string_between (buffer, "exts=\"", "\"");
 
        if (! exts.isEmpty())
@@ -7463,7 +7441,11 @@ void rvln::fn_sort_casecareless()
 void rvln::fman_fname_entry_confirm()
 {
   if (fm_entry_mode == FM_ENTRY_MODE_OPEN)
-     fman_open();
+     {
+       
+       fman_open();
+
+     } 
 
   if (fm_entry_mode == FM_ENTRY_MODE_SAVE)
      cb_button_saves_as();
@@ -10083,7 +10065,7 @@ void rvln::search_mark_all()
                  int pos = str_fuzzy_search (d->textEdit->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
                  if (pos != -1)
                     {
-                     from = pos + d->text_to_search.length() - 1;
+                     //from = pos + d->text_to_search.length() - 1;
                      //set selection:
                      cr = d->textEdit->textCursor();
                      cr.setPosition (pos, QTextCursor::MoveAnchor);

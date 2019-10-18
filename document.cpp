@@ -66,6 +66,7 @@ using namespace std;
 
 QHash <QString, QString> global_palette;
 QSettings *settings;
+
 QMenu *current_files_menu;
 int recent_list_max_items;
 bool b_recent_off;

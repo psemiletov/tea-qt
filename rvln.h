@@ -92,9 +92,9 @@ class QStyleHints
 public:
 
   int cursorFlashTime() const
-     {
-      return MyProxyStyle::cursor_blink_time;
-     }
+      {
+       return MyProxyStyle::cursor_blink_time;
+      }
 };
 #endif
 

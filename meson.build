@@ -9,6 +9,7 @@ add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 #harcoded for now
 moc_params = ['-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
 
+
 if build_machine.system() == 'linux'
 moc_params += ['-DQ_OS_LINUX=1', '-DQ_OS_UNIX=1']
 endif
@@ -30,9 +31,7 @@ endif
 
 hunspell_dep = dependency('hunspell', required : false)
 if hunspell_dep.found()
-#   add_global_arguments('-DSPELLCHECK_ENABLE=1', language : 'cpp')
    add_global_arguments('-DHUNSPELL_ENABLE=1', language : 'cpp')
-#   moc_params += ['-DSPELLCHECK_ENABLE=1']
    moc_params += ['-DHUNSPELL_ENABLE=1']
 endif
 

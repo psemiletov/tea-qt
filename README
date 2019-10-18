@@ -56,7 +56,7 @@ To build and install TEA with meson/ninja and GCC, do:
 
 
 mkdir b
-meson --buildtype=release b
+meson
 cd b
 ninja
 ninja install
@@ -64,7 +64,7 @@ ninja install
 To build and install TEA with meson/ninja and CLANG, do:
 
 mkdir b
-CC=clang CXX=clang++ meson --buildtype=release b
+CC=clang CXX=clang++ meson b
 cd b
 ninja
 ninja install

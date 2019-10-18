@@ -174,3 +174,4 @@ QDateTime QuaZipFileInfo64::getNTFScTime(int *fineTicks) const
 {
     return getNTFSTime(extra, 16, fineTicks);
 }
+

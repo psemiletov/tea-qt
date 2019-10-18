@@ -34,7 +34,6 @@
 
 extern QSettings *settings;
 
-
 void CFMan::dir_up()
 {
   if (dir.path() == "/")

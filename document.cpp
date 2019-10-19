@@ -2214,8 +2214,10 @@ void CTEAEdit::insertFromMimeData (const QMimeData *source)
       return;
      }
 
+   QList<QUrl> l = source->urls();
+
 //  foreach (QUrl u, source->urls())
-    for (QList <QUrl>::iterator u = source->urls().begin(); u != source->urls().end(); u++)
+    for (QList <QUrl>::iterator u = l.begin(); u != l.end(); u++)
           {
            fName = u->toLocalFile();
            info.setFile(fName);

@@ -1096,7 +1096,7 @@ prefs window widgets
 
 
   void createToolBars();
-  void createStatusBar();
+//  void createStatusBar();
   void readSettings();
   void writeSettings();
 

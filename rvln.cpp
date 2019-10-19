@@ -387,10 +387,9 @@ void rvln::create_main_widget()
 
       cmb_fif->setEditable (true);
       fif = cmb_fif->lineEdit();
-      fif->setToolTip (tr ("The famous input field. Use for search/replace, function parameters"));
+      fif->setStatusTip (tr ("The famous input field. Use for search/replace, function parameters"));
 
       connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
-
 
       QHBoxLayout *lt_fte = new QHBoxLayout;
       v_box->addLayout (lt_fte);
@@ -563,24 +562,19 @@ rvln::rvln()
       }
 
 
-//  QString fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
   fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
-
-
   theme_dir = get_file_path (fname_stylesheet) + "/";
 
 
   l_charset = new QLabel;
-
   l_status = new QLabel;
+
   pb_status = new QProgressBar;
   pb_status->setRange (0, 0);
-
 
   statusBar()->addWidget (l_status);
   statusBar()->addPermanentWidget (pb_status);
   statusBar()->addPermanentWidget (l_charset);
-
 
   pb_status->hide();
 
@@ -588,7 +582,7 @@ rvln::rvln()
   createActions();
   createMenus();
   createToolBars();
-  createStatusBar();
+ // createStatusBar();
 
   init_styles();
 
@@ -609,7 +603,6 @@ rvln::rvln()
   update_charsets();
   update_profiles();
   create_markup_hash();
-
   create_moon_phase_algos();
 
   setMinimumSize (12, 12);
@@ -620,8 +613,6 @@ rvln::rvln()
   connect (main_tab_widget, SIGNAL(currentChanged(int)), this, SLOT(main_tab_page_changed(int)));
 
   readSettings();
-
-
   read_search_options();
 
   documents = new CDox();
@@ -642,7 +633,6 @@ rvln::rvln()
 
   documents->l_status_bar = l_status;
   documents->l_charset = l_charset;
-
 
   load_palette (fname_def_palette);
 
@@ -665,8 +655,6 @@ rvln::rvln()
   sl_fif_history = qstring_load (fname_fif).split ("\n");
   cmb_fif->addItems (sl_fif_history);
   cmb_fif->clearEditText();
-
-
 
   createFman();
   createOptions();
@@ -767,16 +755,14 @@ void rvln::closeEvent (QCloseEvent *event)
 
   QList<CMarkupPair *> l = hs_markup.values();
 
+  for (QList <CMarkupPair *>::iterator i = l.begin(); i != l.end(); i++)
+      delete (*i);
+
+/*
   foreach (CMarkupPair *p, l)
          {
           p->deleteLater();
          }
-
-/*
-  foreach (CTextListWnd *w, text_window_list)
-          {
-           w->close();
-          }
 */
  if (text_window_list.size() > 0)
      for (vector <size_t>::size_type i = 0; i < text_window_list.size(); i++)
@@ -842,11 +828,11 @@ void rvln::open()
   QDir volDir2 ("/media");
   QStringList volumes2 (volDir2.entryList (volDir.filter() | QDir::NoDotAndDotDot));
 
-  foreach (QString v, volumes)
-          sidebarUrls.append (QUrl::fromLocalFile ("/mnt/" + v));
+  for (int i = 0; i < volumes.size(); i++)
+      sidebarUrls.append (QUrl::fromLocalFile ("/mnt/" + volumes.at(i)));
 
-  foreach (QString v, volumes2)
-          sidebarUrls.append (QUrl::fromLocalFile ("/media/" + v));
+  for (int i = 0; i < volumes2.size(); i++)
+      sidebarUrls.append (QUrl::fromLocalFile ("/media/" + volumes2.at(i)));
 
 #endif
 
@@ -890,17 +876,19 @@ void rvln::open()
 
       fileNames = dialog.selectedFiles();
 
-      foreach (QString fn, fileNames)
+//      for (QList <QString>::iterator fn = fileNames.begin(); fn != fileNames.end(); fn++)
+//      foreach (QString fn, fileNames)
+      for (int i = 0; i < fileNames.size(); i++)  
+          {
+           CDocument *d = documents->open_file (fileNames.at(i), cb_codecs->currentText());
+           if (d)
               {
-               CDocument *d = documents->open_file (fn, cb_codecs->currentText());
-               if (d)
-                  {
-                   dir_last = get_file_path (d->file_name);
-                   charset = d->charset;
-                  }
-
-               add_to_last_used_charsets (cb_codecs->currentText());
+               dir_last = get_file_path (d->file_name);
+               charset = d->charset;
               }
+
+           add_to_last_used_charsets (cb_codecs->currentText());
+          }
      }
   else
       dialog.setSidebarUrls (sidebarUrls_old);
@@ -983,15 +971,14 @@ bool rvln::saveAs()
   QDir volDir ("/mnt");
   QStringList volumes (volDir.entryList (volDir.filter() | QDir::NoDotAndDotDot));
 
-  foreach (QString v, volumes)
-          sidebarUrls.append (QUrl::fromLocalFile ("/mnt/" + v));
-
-
   QDir volDir2 ("/media");
   QStringList volumes2 (volDir2.entryList (volDir2.filter() | QDir::NoDotAndDotDot));
 
-  foreach (QString v, volumes2)
-          sidebarUrls.append (QUrl::fromLocalFile ("/media/" + v));
+  for (int i = 0; i < volumes.size(); i++)
+      sidebarUrls.append (QUrl::fromLocalFile ("/mnt/" + volumes.at(i)));
+
+  for (int i = 0; i < volumes2.size(); i++)
+      sidebarUrls.append (QUrl::fromLocalFile ("/media/" + volumes2.at(i)));
 
 
 #endif
@@ -1220,20 +1207,13 @@ void rvln::createMenus()
   editMenu->addAction (copyAct);
   editMenu->addAction (pasteAct);
 
- // add_to_menu (editMenu, tr ("Paste from charset"), SLOT(ed_paste_from_charset()));
-
-
-
   editMenu->addSeparator();
-
 
   add_to_menu (editMenu, tr ("Block start"), SLOT(ed_block_start()));
   add_to_menu (editMenu, tr ("Block end"), SLOT(ed_block_end()));
   add_to_menu (editMenu, tr ("Copy block"), SLOT(ed_block_copy()));
   add_to_menu (editMenu, tr ("Paste block"), SLOT(ed_block_paste()));
   add_to_menu (editMenu, tr ("Cut block"), SLOT(ed_block_cut()));
-
-
 
   editMenu->addSeparator();
 
@@ -1253,7 +1233,6 @@ void rvln::createMenus()
   editMenu->addSeparator();
 
   add_to_menu (editMenu, tr ("Comment selection"), SLOT(ed_comment()));
-  //add_to_menu (editMenu, tr ("Variants"), SLOT(ed_variants()));
 
   editMenu->addSeparator();
 
@@ -1283,12 +1262,6 @@ void rvln::createMenus()
   tm = menu_markup->addMenu (tr ("Align"));
   tm->setTearOffEnabled (true);
 
-/*
-  create_menu_from_list (this, tm,
-                         QString ("Center Left Right Justify").split (" "),
-                         SLOT (mrkup_align()));
-
-  */
   add_to_menu (tm, tr ("Center"), SLOT(mrkup_align_center()));
   add_to_menu (tm, tr ("Left"), SLOT(mrkup_align_left()));
   add_to_menu (tm, tr ("Right"), SLOT(mrkup_align_right()));
@@ -1318,7 +1291,6 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Rename selected file"), SLOT(rename_selected()));
 
 
-
   menu_search = menuBar()->addMenu (tr ("Search"));
   menu_search->setTearOffEnabled (true);
 
@@ -1343,7 +1315,6 @@ void rvln::createMenus()
 
   menu_search->addSeparator();
 
-
   menu_find_case = new QAction (tr ("Case sensitive"), this);
   menu_search->addAction (menu_find_case);
   menu_find_case->setCheckable (true);
@@ -1358,12 +1329,10 @@ void rvln::createMenus()
   menu_find_from_cursor->setCheckable (true);
   connect (menu_find_from_cursor, SIGNAL(triggered()), this, SLOT(search_from_cursor_mode()));
 
-
   menu_find_regexp = new QAction (tr ("Regexp mode"), this);
   menu_search->addAction (menu_find_regexp);
   menu_find_regexp->setCheckable (true);
   connect (menu_find_regexp, SIGNAL(triggered()), this, SLOT(search_regexp_mode()));
-
 
   menu_find_fuzzy = new QAction (tr ("Fuzzy mode"), this);
   menu_search->addAction (menu_find_fuzzy);
@@ -1393,18 +1362,11 @@ void rvln::createMenus()
   tm->setTearOffEnabled (true);
 
   add_to_menu (tm, "Lorem ipsum", SLOT(fn_insert_loremipsum()));
-
   add_to_menu (tm, tr ("TEA project template"), SLOT(fn_insert_template_tea()));
-
-
-
   add_to_menu (tm, tr ("HTML template"), SLOT(fn_insert_template_html()));
   add_to_menu (tm, tr ("HTML5 template"), SLOT(fn_insert_template_html5()));
-
   add_to_menu (tm, tr ("C++ template"), SLOT(fn_insert_cpp()));
   add_to_menu (tm, tr ("C template"), SLOT(fn_insert_c()));
-
-
   add_to_menu (tm, tr ("Date"), SLOT(fn_insert_date()));
   add_to_menu (tm, tr ("Time"), SLOT(fn_insert_time()));
 
@@ -1421,11 +1383,7 @@ void rvln::createMenus()
 
   add_to_menu (tm, tr ("Sort case sensitively"), SLOT(fn_sort_casecare()));
   add_to_menu (tm, tr ("Sort case insensitively"), SLOT(fn_sort_casecareless()));
-
   add_to_menu (tm, tr ("Sort case sensitively, with separator"), SLOT(fn_sort_casecare_sep()));
-
-
-
   add_to_menu (tm, tr ("Flip a list"), SLOT(fn_flip_a_list()));
   add_to_menu (tm, tr ("Flip a list with separator"), SLOT(fn_flip_a_list_sep()));
 
@@ -1437,7 +1395,6 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Swap cells"), SLOT(fn_table_swap_cells()));
   add_to_menu (tm, tr ("Delete by column"), SLOT(fn_table_delete_cells()));
   add_to_menu (tm, tr ("Copy by column[s]"), SLOT(fn_table_copy_cells()));
-
 
 
   tm = menu_functions->addMenu (tr ("Filter"));
@@ -1465,10 +1422,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Flip bits (bitwise complement)"), SLOT(fn_number_flip_bits()));
   add_to_menu (tm, tr ("Enumerate"), SLOT(fn_enum()));
   add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
-
   add_to_menu (tm, tr ("deg min sec > dec degrees"), SLOT(fn_number_dms2dc()));
   add_to_menu (tm, tr ("dec degrees > deg min sec"), SLOT(fn_number_dd2dms()));
-
 
 
   tm = menu_functions->addMenu (tr ("Morse code"));
@@ -1476,7 +1431,6 @@ void rvln::createMenus()
 
   add_to_menu (tm, tr ("From Russian to Morse"), SLOT(fn_morse_from_ru()));
   add_to_menu (tm, tr ("From Morse To Russian"), SLOT(fn_morse_to_ru()));
-
   add_to_menu (tm, tr ("From English to Morse"), SLOT(fn_morse_from_en()));
   add_to_menu (tm, tr ("From Morse To English"), SLOT(fn_morse_to_en()));
 
@@ -1487,12 +1441,10 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Text statistics"), SLOT(fn_text_stat()));
   add_to_menu (tm, tr ("Extract words"), SLOT(fn_extract_words()));
   add_to_menu (tm, tr ("Words lengths"), SLOT(fn_stat_words_lengths()));
-
-  add_to_menu (tm, tr ("UNITAZ quantity sorting"), SLOT(fn_get_words_count()));
-  add_to_menu (tm, tr ("UNITAZ sorting alphabet"), SLOT(fn_unitaz_abc()));
-
   add_to_menu (tm, tr ("Count the substring"), SLOT(fn_count()));
   add_to_menu (tm, tr ("Count the substring (regexp)"), SLOT(fn_count_rx()));
+  add_to_menu (tm, tr ("UNITAZ quantity sorting"), SLOT(fn_get_words_count()));
+  add_to_menu (tm, tr ("UNITAZ sorting alphabet"), SLOT(fn_unitaz_abc()));
 
 
   tm = menu_functions->addMenu (tr ("Text"));
@@ -1503,13 +1455,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Remove formatting at each line"), SLOT(fn_rm_formatting_at_each_line()));
   add_to_menu (tm, tr ("Compress"), SLOT(fn_rm_compress()));
   add_to_menu (tm, tr ("Anagram"), SLOT(fn_anagram()));
-
-
-
   add_to_menu (tm, tr ("Remove trailing spaces"), SLOT(fn_rm_trailing_spaces()));
-
   add_to_menu (tm, tr ("Escape regexp"), SLOT(fn_escape()));
-
   add_to_menu (tm, tr ("Reverse"), SLOT(fn_reverse()));
   add_to_menu (tm, tr ("Compare two strings"), SLOT(text_compare_two_strings()));
 
@@ -1548,7 +1495,6 @@ void rvln::createMenus()
   add_to_menu (menu_cal, tr ("Mark first date"), SLOT(cal_set_date_a()));
   add_to_menu (menu_cal, tr ("Mark last date"), SLOT(cal_set_date_b()));
 
-
   menu_cal_add = menu_cal->addMenu (tr ("Add or subtract"));
   menu_cal_add->setTearOffEnabled (true);
 
@@ -1556,14 +1502,11 @@ void rvln::createMenus()
   add_to_menu (menu_cal_add, tr ("Months"), SLOT(cal_add_months()));
   add_to_menu (menu_cal_add, tr ("Years"), SLOT(cal_add_years()));
 
-
   menu_cal->addSeparator();
-
 
   add_to_menu (menu_cal, tr ("Go to current date"), SLOT(cal_set_to_current()));
   add_to_menu (menu_cal, tr ("Calculate moon days between dates"), SLOT(cal_gen_mooncal()));
   add_to_menu (menu_cal, tr ("Number of days between two dates"), SLOT(cal_diff_days()));
-
   add_to_menu (menu_cal, tr ("Remove day record"), SLOT(cal_remove()));
 
 
@@ -1585,11 +1528,7 @@ void rvln::createMenus()
   add_to_menu (menu_ide, tr ("Run gtags"), SLOT(ide_gtags()));
   add_to_menu (menu_ide, tr ("global definition"), SLOT(ide_global_definition()));
   add_to_menu (menu_ide, tr ("global references"), SLOT(ide_global_references()));
-
-
   menu_ide->addSeparator();
-
-
   add_to_menu (menu_ide, tr ("Run ctags"), SLOT(ide_ctags()));
 
 */
@@ -1645,35 +1584,25 @@ void rvln::createMenus()
   add_to_menu (menu_fm_checksums, tr ("SHA-1"), SLOT(fm_hashsum_sha1()));
 
 #if QT_VERSION >= 0x050000
-
   add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-224"), SLOT(fm_hashsum_sha224()));
   add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-256"), SLOT(fm_hashsum_sha256()));
   add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-384"), SLOT(fm_hashsum_sha384()));
   add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-512"), SLOT(fm_hashsum_sha512()));
-
 #endif
 
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
-
  add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-224"), SLOT(fm_hashsum_sha3_224()));
  add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-256"), SLOT(fm_hashsum_sha3_256()));
  add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-384"), SLOT(fm_hashsum_sha3_384()));
  add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-512"), SLOT(fm_hashsum_sha3_512()));
-
 #endif
 
-
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 10)
-
  add_to_menu (menu_fm_checksums, tr ("Keccak-224"), SLOT(fm_hashsum_keccak_224()));
  add_to_menu (menu_fm_checksums, tr ("Keccak-256"), SLOT(fm_hashsum_keccak_256()));
  add_to_menu (menu_fm_checksums, tr ("Keccak-384"), SLOT(fm_hashsum_keccak_384()));
  add_to_menu (menu_fm_checksums, tr ("Keccak-512"), SLOT(fm_hashsum_keccak_512()));
-
 #endif
-
-
-
 
   menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
   menu_fm_zip->setTearOffEnabled (true);
@@ -1702,19 +1631,13 @@ void rvln::createMenus()
 
   add_to_menu (menu_fm, tr ("Go to home dir"), SLOT(fman_home()));
   add_to_menu (menu_fm, tr ("Refresh current dir"), SLOT(fman_refresh()));
-
   add_to_menu (menu_fm, tr ("Preview image"), SLOT(fman_preview_image()));
-
   add_to_menu (menu_fm, tr ("Select by regexp"), SLOT(fman_select_by_regexp()));
   add_to_menu (menu_fm, tr ("Deselect by regexp"), SLOT(fman_deselect_by_regexp()));
-
-//  add_to_menu (menu_fm, tr ("Find in files"), SLOT(fman_find_in_files()));
 
 
   menu_view = menuBar()->addMenu (tr ("View"));
   menu_view->setTearOffEnabled (true);
-
-
 
   menu_view_themes = menu_view->addMenu (tr ("Themes"));
   menu_view_themes->setTearOffEnabled (true);
@@ -1730,7 +1653,6 @@ void rvln::createMenus()
   menu_view_profiles->setTearOffEnabled (true);
 
   add_to_menu (menu_view, tr ("Save profile"), SLOT(profile_save_as()));
-
   add_to_menu (menu_view, tr ("Toggle word wrap"), SLOT(toggle_wrap()));
   add_to_menu (menu_view, tr ("Hide error marks"), SLOT(view_hide_error_marks()));
   add_to_menu (menu_view, tr ("Toggle fullscreen"), SLOT(view_toggle_fs()));
@@ -1787,13 +1709,6 @@ void rvln::createToolBars()
   tb_current_list->setPopupMode(QToolButton::InstantPopup);
   filesToolBar->addWidget (tb_current_list);
 
- /*
-  statusToolBar = addToolBar (tr ("Status"));
-  statusToolBar->setObjectName ("statusToolBar");
-
-  statusToolBar->addWidget (pb_status);
-  statusToolBar->addWidget (l_status);*/
-
   if (settings->value ("fif_at_toolbar", 0).toBool())
      {
       fifToolBar = addToolBar (tr ("FIF"));
@@ -1837,13 +1752,6 @@ void rvln::createToolBars()
 }
 
 
-void rvln::createStatusBar()
-{
- // statusBar()->hide();
-  //statusBar()->showMessage (tr ("Ready"));
-}
-
-
 void rvln::pageChanged (int index)
 {
   if (b_destroying_all)
@@ -1859,9 +1767,7 @@ void rvln::pageChanged (int index)
   d->update_title (settings->value ("full_path_at_window_title", 1).toBool());
   d->update_status();
 
-
   documents->update_project (d->file_name);
-
 
   update_labels_menu();
 }
@@ -1870,7 +1776,6 @@ void rvln::pageChanged (int index)
 void rvln::close_current()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   documents->close_current();
 }
 
@@ -2154,7 +2059,6 @@ void rvln::fman_find()
      return;
 
   fman_find_idx = 0;
-
   fman->setCurrentIndex (fman->mymodel->indexFromItem (l_fman_find[fman_find_idx]));
 }
 
@@ -2411,7 +2315,9 @@ void rvln::cb_use_joystick_stateChanged (int state)
   else
       documents->timer->stop();
 }
+
 #endif
+
 
 void rvln::createOptions()
 {
@@ -2838,10 +2744,7 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_use_trad_dialogs);
   page_common_layout->addWidget (cb_use_enca_for_charset_detection);
 
-
-
  // page_common_layout->addLayout (hb_moon_phase_algo);
-
 
   page_common_layout->addLayout (hb_locovr);
   page_common_layout->addLayout (hb_imgvovr);
@@ -2902,7 +2805,6 @@ void rvln::createOptions()
 
   vb_spell->addLayout (hb_spellcheck_engine);
 
-
 #ifdef HUNSPELL_ENABLE
 
   QHBoxLayout *hb_spellcheck_path = new QHBoxLayout;
@@ -2953,7 +2855,6 @@ void rvln::createOptions()
 
   connect (cmb_spellcheckers, SIGNAL(currentIndexChanged (const QString&)),
            this, SLOT(cmb_spellchecker_currentIndexChanged (const QString &)));
-
 
   page_functions_layout->addWidget (gb_spell);
 
@@ -3071,7 +2972,6 @@ void rvln::createOptions()
   QHBoxLayout *lt_h = new QHBoxLayout;
 
   QHBoxLayout *lt_shortcut = new QHBoxLayout;
-
   QVBoxLayout *lt_vkeys = new QVBoxLayout;
   QVBoxLayout *lt_vbuttons = new QVBoxLayout;
 
@@ -3107,7 +3007,6 @@ void rvln::createOptions()
 
   idx_tab_keyboard = tab_options->addTab (page_keyboard, tr ("Keyboard"));
 
-
 //  connect (tab_options, SIGNAL(currentChanged(int)), this, SLOT(tab_options_pageChanged(int)));
 }
 
@@ -3132,12 +3031,7 @@ void rvln::slot_style_currentIndexChanged (const QString &text)
   if (style == 0)
      return;
 
-  //MyProxyStyle *ps = new MyProxyStyle (style);
-
-  //QApplication::setStyle (ps);
-
   settings->setValue ("ui_style", text);
-
 }
 
 
@@ -3352,44 +3246,6 @@ void rvln::nav_goto_line()
 void rvln::updateFonts()
 {
   documents->apply_settings();
-/*
-  QFont f;
-  f.fromString (settings->value ("editor_font_name", "Monospace").toString());
-  f.setPointSize (settings->value ("editor_font_size", "16").toInt());
-  man->setFont (f);
-
-  QFont fapp;
-  QFontInfo fi = QFontInfo (qApp->font());
-
-  fapp.setPointSize (settings->value ("app_font_size", fi.pointSize()).toInt());
-  fapp.fromString (settings->value ("app_font_name", qApp->font().family()).toString());
-  qApp->setFont (fapp);
-
-  */
-/*
-
-  QFontInfo fi = QFontInfo (qApp->font());
-
-
-  QString fontsize = "font-size:" + settings->value ("app_font_size", fi.pointSize()).toString() + "pt;";
-  QString fontfamily = "font-family:" + settings->value ("app_font_name", qApp->font().family()).toString() + ";";
-  QString edfontsize = "font-size:" + settings->value ("editor_font_size", "16").toString() + "pt;";
-  QString edfontfamily = "font-family:" + settings->value ("editor_font_name", "Monospace").toString() + ";";
-
-
-  stylesheet = "QWidget {" + fontfamily + fontsize + "}\n";
-
-  stylesheet += "QPlainTextEdit {" + edfontfamily + edfontsize + "}";
-
-  stylesheet += "QTextEdit {" + edfontfamily + edfontsize + "}";
-
-  stylesheet += "CLogMemo {" + fontsize + "}";
-
-  stylesheet += "CLineNumberArea {" + edfontfamily + edfontsize + "}";
-
-
-  qApp->setStyleSheet (stylesheet);
-*/
 }
 
 
@@ -3488,6 +3344,9 @@ void rvln::fn_apply_to_each_line()
   QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
   QString t = fif_get_text();
 
+  if (t.isEmpty())
+     return;
+
   if (t.startsWith ("@@"))
      {
       QString fname = dir_snippets + QDir::separator() + t;
@@ -3503,6 +3362,7 @@ void rvln::fn_apply_to_each_line()
      }
 
 
+//заковыристо, переписать попроще
   QMutableListIterator <QString> i (sl);
 
   while (i.hasNext())
@@ -3581,7 +3441,6 @@ void rvln::file_last_opened()
       documents->open_file_triplex (documents->recent_files[0]);
       documents->recent_files.removeAt (0);
       documents->update_recent_menu();
-    //  main_tab_widget->setCurrentIndex (idx_tab_edit);
      }
 }
 
@@ -3694,11 +3553,9 @@ void rvln::fn_spell_check()
      if (! stext.isEmpty())
      if (! spellchecker->check (cr.selectedText()))
         {
-
          f = cr.blockCharFormat();
 
 #if QT_VERSION >= 0x050000
-//#if QT_VERSION_MAJOR >= 5
 
          f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
          f.setUnderlineColor (color_error);
@@ -3842,7 +3699,7 @@ void rvln::file_add_to_bookmarks()
 
   for (int i = 0; i < l_bookmarks.size(); i++)
       {
-       if (l_bookmarks[i].contains (d->file_name))
+       if (l_bookmarks.at(i).contains (d->file_name))
           {
            l_bookmarks[i] = d->get_triplex();
            found = true;
@@ -3851,7 +3708,7 @@ void rvln::file_add_to_bookmarks()
       }
 
   if (! found)
-     l_bookmarks.prepend (d->get_triplex());
+      l_bookmarks.prepend (d->get_triplex());
 
   bookmarks = l_bookmarks.join ("\n").trimmed();
 
@@ -3865,7 +3722,6 @@ void rvln::file_use_template()
   last_action = qobject_cast<QAction *>(sender());
 
   QAction *a = qobject_cast<QAction *>(sender());
-
   QString txt = qstring_load (a->data().toString());
 
   CDocument *d = documents->create_new();
@@ -3966,15 +3822,23 @@ void rvln::dropEvent (QDropEvent *event)
   QString fName;
   QFileInfo info;
 
-  foreach (QUrl u, event->mimeData()->urls())
-          {
-           fName = u.toLocalFile();
-           info.setFile (fName);
-           if (info.isFile())
-               documents->open_file (fName, cb_fman_codecs->currentText());
-          }
+  QList<QUrl> l = event->mimeData()->urls();
 
- event->accept();
+  qDebug() << "l.size(): " << l.size();
+
+
+//  foreach (QUrl u, event->mimeData()->urls())
+  for (QList <QUrl>::iterator u = l.begin(); u != l.end(); u++)
+      {
+       fName = u->toLocalFile();
+       qDebug() << fName;
+
+       info.setFile (fName);
+       if (info.isFile())
+          documents->open_file (fName, cb_fman_codecs->currentText());
+      }
+
+  event->accept();
 }
 
 

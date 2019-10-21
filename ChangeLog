@@ -1,5 +1,9 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+* Text to HTML - fixed
+* drag and drop - fixed
+
+* Nav - Prev/Next tab, now circled
 + Tune - Interface :: new, simplified font selectors (also workaround of Qt 5.13 font bug)
 
 + Fm - Checksum menu

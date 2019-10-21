@@ -400,7 +400,6 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
   doc->update_status();
   doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
- // tab_widget->setCurrentIndex (tab_widget->indexOf (doc->tab_page));
   main_tab_widget->setCurrentIndex (0);
 
   update_current_files_menu();
@@ -943,7 +942,6 @@ CDox::CDox()
   timer = new QTimer (this);
   timer->setInterval (100);
 
-
 #if defined(JOYSTICK_SUPPORTED)
   joystick = new CJoystick (0, this);
 
@@ -955,7 +953,6 @@ CDox::CDox()
          timer->start();
      }
 #endif
-
 }
 
 
@@ -2216,8 +2213,7 @@ void CTEAEdit::insertFromMimeData (const QMimeData *source)
 
    QList<QUrl> l = source->urls();
 
-//  foreach (QUrl u, source->urls())
-    for (QList <QUrl>::iterator u = l.begin(); u != l.end(); u++)
+   for (QList <QUrl>::iterator u = l.begin(); u != l.end(); u++)
           {
            fName = u->toLocalFile();
            info.setFile(fName);
@@ -2445,7 +2441,6 @@ void CDox::move_cursor (QTextCursor::MoveOperation mo)
 
 bool CDox::event (QEvent *ev)
 {
-
   if (static_cast<int>(ev->type() == evtJoystickAxis))
      {
       CJoystickAxisEvent* custom_event = reinterpret_cast<CJoystickAxisEvent*>(ev);

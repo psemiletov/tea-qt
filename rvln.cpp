@@ -4309,7 +4309,7 @@ void rvln::fn_filter_rm_less_than()
      d->textEdit->textCursor().insertText (qstringlist_process (
                                                                 d->textEdit->textCursor().selectedText(),
                                                                 fif_get_text(),
-                                                                QSTRL_PROC_FLT_LESS));
+                                                               QSTRL_PROC_FLT_LESS));
 }
 
 
@@ -4318,13 +4318,11 @@ void rvln::fn_filter_rm_greater_than()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->textEdit->textCursor().insertText (qstringlist_process (
-                                        d->textEdit->textCursor().selectedText(),
-                                        fif_get_text(),
-                                        QSTRL_PROC_FLT_GREATER));
+  if (d)
+     d->textEdit->textCursor().insertText (qstringlist_process (
+                                                                d->textEdit->textCursor().selectedText(),
+                                                                fif_get_text(),
+                                                                QSTRL_PROC_FLT_GREATER));
 }
 
 
@@ -4333,13 +4331,11 @@ void rvln::fn_filter_rm_duplicates()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->textEdit->textCursor().insertText (qstringlist_process (
-                                        d->textEdit->textCursor().selectedText(),
-                                        fif_get_text(),
-                                        QSTRL_PROC_FLT_REMOVE_DUPS));
+  if (d)
+     d->textEdit->textCursor().insertText (qstringlist_process (
+                                                                d->textEdit->textCursor().selectedText(),
+                                                                fif_get_text(),
+                                                                QSTRL_PROC_FLT_REMOVE_DUPS));
 }
 
 
@@ -4348,13 +4344,11 @@ void rvln::fn_filter_rm_empty()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->textEdit->textCursor().insertText (qstringlist_process (
-                                        d->textEdit->textCursor().selectedText(),
-                                        fif_get_text(),
-                                        QSTRL_PROC_FLT_REMOVE_EMPTY));
+  if (d)
+      d->textEdit->textCursor().insertText (qstringlist_process (
+                                                                 d->textEdit->textCursor().selectedText(),
+                                                                 fif_get_text(),
+                                                                 QSTRL_PROC_FLT_REMOVE_EMPTY));
 }
 
 
@@ -4435,10 +4429,8 @@ void rvln::nav_toggle_hs()
   if (! d)
      return;
 
-  if (! file_exists (d->file_name))
-      return;
-
-  documents->open_file (toggle_fname_header_source (d->file_name), d->charset);
+  if (file_exists (d->file_name))
+      documents->open_file (toggle_fname_header_source (d->file_name), d->charset);
 }
 
 
@@ -4573,10 +4565,10 @@ void rvln::fn_rm_formatting_at_each_line()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(), "", QSTRL_PROC_REMOVE_FORMATTING));
+  if (d)
+      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+                                                                 "",
+                                                                 QSTRL_PROC_REMOVE_FORMATTING));
 }
 
 
@@ -5226,10 +5218,8 @@ void rvln::update_places_bookmarks()
 
   QStringList sl_gtk_bookmarks = qstring_load (fname_gtk_bookmarks).split ("\n");
 
-  if (sl_gtk_bookmarks.size() == 0)
-     return;
-
-  lv_places->addItems (sl_gtk_bookmarks);
+  if (sl_gtk_bookmarks.size() > 0)
+     lv_places->addItems (sl_gtk_bookmarks);
 }
 
 
@@ -5297,10 +5287,8 @@ void rvln::fman_create_dir()
   QString dname = fman->dir.path() + "/" + newdir;
 
   QDir d;
-  if (! d.mkpath (dname))
-     return;
-
-  fman->nav (dname);
+  if (d.mkpath (dname))
+     fman->nav (dname);
 }
 
 
@@ -5313,12 +5301,8 @@ void rvln::fn_convert_quotes_angle()
      return;
 
   QString source = d->textEdit->textCursor().selectedText();
-  if (source.isEmpty())
-     return;
-
-  QString dest = conv_quotes (source, "\u00AB", "\u00BB");
-
-  d->textEdit->textCursor().insertText (dest);
+  if (! source.isEmpty())
+     d->textEdit->textCursor().insertText (conv_quotes (source, "\u00AB", "\u00BB"));
 }
 
 
@@ -5331,12 +5315,8 @@ void rvln::fn_convert_quotes_curly()
      return;
 
   QString source = d->textEdit->textCursor().selectedText();
-  if (source.isEmpty())
-     return;
-
-  QString dest = conv_quotes (source, "\u201C", "\u201D");
-
-  d->textEdit->textCursor().insertText (dest);
+  if (! source.isEmpty())
+      d->textEdit->textCursor().insertText (conv_quotes (source, "\u201C", "\u201D"));
 }
 
 
@@ -5349,12 +5329,8 @@ void rvln::fn_convert_quotes_tex_curly()
      return;
 
   QString source = d->textEdit->textCursor().selectedText();
-  if (source.isEmpty())
-     return;
-
-  QString dest = conv_quotes (source, "``", "\'\'");
-
-  d->textEdit->textCursor().insertText (dest);
+  if (! source.isEmpty())
+     d->textEdit->textCursor().insertText (conv_quotes (source, "``", "\'\'"));
 }
 
 
@@ -5367,12 +5343,8 @@ void rvln::fn_convert_quotes_tex_angle_01()
      return;
 
   QString source = d->textEdit->textCursor().selectedText();
-  if (source.isEmpty())
-     return;
-
-  QString dest = conv_quotes (source, "<<", ">>");
-
-  d->textEdit->textCursor().insertText (dest);
+  if (! source.isEmpty())
+     d->textEdit->textCursor().insertText (conv_quotes (source, "<<", ">>"));
 }
 
 
@@ -5385,12 +5357,8 @@ void rvln::fn_convert_quotes_tex_angle_02()
      return;
 
   QString source = d->textEdit->textCursor().selectedText();
-  if (source.isEmpty())
-     return;
-
-  QString dest = conv_quotes (source, "\\glqq", "\\grqq");
-
-  d->textEdit->textCursor().insertText (dest);
+  if (! source.isEmpty())
+     d->textEdit->textCursor().insertText (conv_quotes (source, "\\glqq", "\\grqq"));
 }
 
 

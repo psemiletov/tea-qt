@@ -6972,7 +6972,6 @@ void rvln::fman_convert_images (bool by_side, int value)
 
        if (source.isNull())
           continue;
-
       
        qApp->processEvents();
 
@@ -7031,10 +7030,8 @@ void rvln::fman_img_conv_by_side()
   last_action = qobject_cast<QAction *>(sender());
 
   int side = fif_get_text().toInt();
-  if (side == 0)
-     return;
-
-  fman_convert_images (true, side);
+  if (side != 0)
+     fman_convert_images (true, side);
 }
 
 
@@ -7043,10 +7040,8 @@ void rvln::fman_img_conv_by_percent()
   last_action = qobject_cast<QAction *>(sender());
 
   int percent = fif_get_text().toInt();
-  if (percent == 0)
-     return;
-
-  fman_convert_images (false, percent);
+  if (percent != 0)
+     fman_convert_images (false, percent);
 }
 
 
@@ -7082,7 +7077,7 @@ void rvln::fman_add_to_zip()
      }
 
   for (int i = 0; i < li.size(); i++)
-          fman->zipper.files_list.append (li.at(i));
+      fman->zipper.files_list.append (li.at(i));
 }
 
 
@@ -7166,9 +7161,9 @@ void rvln::fn_sort_casecareless()
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (qstringlist_process (
-                                           d->textEdit->textCursor().selectedText(),
-                                           fif_get_text(),
-                                           QSTRL_PROC_FLT_WITH_SORTNOCASECARE));
+                                                                d->textEdit->textCursor().selectedText(),
+                                                                fif_get_text(),
+                                                                QSTRL_PROC_FLT_WITH_SORTNOCASECARE));
 }
 
 
@@ -7201,10 +7196,8 @@ void rvln::file_use_hl()
   QAction *a = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->set_hl (false, a->text());
+  if (d)
+     d->set_hl (false, a->text());
 }
 
 
@@ -7265,45 +7258,44 @@ void rvln::fn_number_flip_bits()
 void rvln::fn_use_table()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   QAction *a = qobject_cast<QAction *>(sender());
 
   if (main_tab_widget->currentIndex() == idx_tab_edit)
-    {
-     CDocument *d = documents->get_current();
-     if (! d)
-        return;
+     {
+      CDocument *d = documents->get_current();
+      if (! d)
+         return;
 
-     QString text;
+      QString text;
 
-     if (d->textEdit->textCursor().hasSelection())
+      if (d->textEdit->textCursor().hasSelection())
          text = d->textEdit->textCursor().selectedText();
-     else
-         text = d->textEdit->toPlainText();
+      else
+          text = d->textEdit->toPlainText();
 
-     if (d->textEdit->textCursor().hasSelection())
-        d->textEdit->textCursor().insertText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
-     else
+      if (d->textEdit->textCursor().hasSelection())
+         d->textEdit->textCursor().insertText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
+      else
          d->textEdit->setPlainText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
-     }
- else
-     if (main_tab_widget->currentIndex() == idx_tab_fman)
-        {
-         QStringList sl = fman->get_sel_fnames();
+      }
+  else
+      if (main_tab_widget->currentIndex() == idx_tab_fman)
+         {
+          QStringList sl = fman->get_sel_fnames();
 
-         if (sl.size() < 1)
-            return;
+          if (sl.size() < 1)
+             return;
 
-         char *charset = cb_fman_codecs->currentText().toLatin1().data();
+          char *charset = cb_fman_codecs->currentText().toLatin1().data();
 
-         foreach (QString fname, sl)
-                 {
-                  QString f = qstring_load (fname, charset);
-                  QString r = apply_table (f, a->data().toString(), menu_find_regexp->isChecked());
-                  qstring_save (fname, r, charset);
-                  log->log (tr ("%1 is processed and saved").arg (fname));
-                 }
-        }
+          for (QList <QString>::const_iterator fname = sl.begin(); fname != sl.end(); fname++)
+              {
+               QString f = qstring_load ((*fname), charset);
+               QString r = apply_table (f, a->data().toString(), menu_find_regexp->isChecked());
+               qstring_save ((*fname), r, charset);
+               log->log (tr ("%1 is processed and saved").arg ((*fname)));
+              }
+         }
 }
 
 
@@ -7455,7 +7447,6 @@ void rvln::fn_filter_delete_by_sep (bool mode)
 void rvln::fn_filter_delete_before_sep()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   fn_filter_delete_by_sep (true);
 }
 
@@ -7463,7 +7454,6 @@ void rvln::fn_filter_delete_before_sep()
 void rvln::fn_filter_delete_after_sep()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   fn_filter_delete_by_sep (false);
 }
 
@@ -7700,8 +7690,8 @@ void rvln::search_in_files()
 void rvln::view_use_profile()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   QAction *a = qobject_cast<QAction *>(sender());
+
   QSettings s (a->data().toString(), QSettings::IniFormat);
 
   QPoint pos = s.value ("pos", QPoint (1, 200)).toPoint();
@@ -7763,9 +7753,6 @@ void rvln::profile_save_as()
 
   QSettings s (fname, QSettings::IniFormat);
 
-//  fname_def_palette = s->value ("fname_def_palette", ":/palettes/TEA").toString();
-
-
   s.setValue ("fname_def_palette", fname_def_palette);
 
   s.setValue ("word_wrap", settings->value ("word_wrap", "2").toInt());
@@ -7826,7 +7813,6 @@ void rvln::fman_items_select_by_regexp (bool mode)
 void rvln::fman_select_by_regexp()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   fman_items_select_by_regexp (true);
 }
 
@@ -7834,7 +7820,6 @@ void rvln::fman_select_by_regexp()
 void rvln::fman_deselect_by_regexp()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   fman_items_select_by_regexp (false);
 }
 
@@ -7854,11 +7839,11 @@ void rvln::fman_count_lines_in_selected_files()
 
   long int sum = 0;
 
-  foreach (QString fname, sl)
-          {
-           QByteArray f = file_load (fname);
-           sum += f.count ('\n');
-          }
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QByteArray f = file_load (sl.at(i));
+       sum += f.count ('\n');
+      }
 
   log->log (tr ("There are %1 lines at %2 files").arg (sum).arg (sl.size()));
 }
@@ -7869,10 +7854,8 @@ void rvln::set_eol_unix()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (!d)
-     return;
-
-  d->eol = "\n";
+  if (d)
+     d->eol = "\n";
 }
 
 
@@ -7881,10 +7864,8 @@ void rvln::set_eol_win()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (!d)
-     return;
-
-  d->eol = "\r\n";
+  if (d)
+     d->eol = "\r\n";
 }
 
 
@@ -7893,10 +7874,8 @@ void rvln::set_eol_mac()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (!d)
-     return;
-
-  d->eol = "\r";
+  if (d)
+     d->eol = "\r";
 }
 
 
@@ -7967,24 +7946,13 @@ void rvln::ed_comment()
 
 void rvln::calendar_clicked (const QDate &date)
 {
-/*  qDebug() << date.toString ("yyyy-MM-dd");
-
-//  QDate d = QDate::currentDate();
-
-  qDebug() << "lunar day by moon_phase_trig2: " << moon_phase_trig2 (date.year(), date.month(), date.day());
-  qDebug() << "lunar day by moon_phase_trig1: " << moon_phase_trig1 (date.year(), date.month(), date.day());
-  qDebug() << "lunar day by moon_phase_simple: " << moon_phase_simple (date.year(), date.month(), date.day());
-  qDebug() << "lunar day by moon_phase_conway: " << moon_phase_conway (date.year(), date.month(), date.day());
-  qDebug() << "lunar day by moon_phase_leueshkanov : " << moon_phase_leueshkanov (date.year(), date.month(), date.day());
-  */
-
   QString fname = dir_days + "/" + date.toString ("yyyy-MM-dd");
 
   if (file_exists (fname))
-    {
-     QString s = qstring_load (fname);
-     log->log (s);
-    }
+     {
+      QString s = qstring_load (fname);
+      log->log (s);
+     }
 }
 
 
@@ -8004,12 +7972,14 @@ void rvln::calendar_activated (const QDate &date)
      }
   else
   if (! file_exists (fname))
-    {
-     qstring_save (fname, tr ("Enter your daily notes here."));
-     fresh = true;
-    }
+     {
+      qstring_save (fname, tr ("Enter your daily notes here."));
+      fresh = true;
+     }
 
   CDocument *d = documents->open_file (fname, "UTF-8");
+  if (! d)
+     return;
 
   if (fresh)
      d->textEdit->selectAll();
@@ -8232,7 +8202,7 @@ void rvln::rename_selected()
   if (! d)
      return;
 
-  if (!d->textEdit->textCursor().hasSelection())
+  if (! d->textEdit->textCursor().hasSelection())
      {
       log->log (tr ("Select the file name first!"));
       return;
@@ -8278,10 +8248,8 @@ void rvln::update_labels_menu()
   menu_labels->clear();
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  create_menu_from_list (this, menu_labels, d->labels, SLOT(select_label()));
+  if (d)
+     create_menu_from_list (this, menu_labels, d->labels, SLOT(select_label()));
 }
 
 
@@ -8299,7 +8267,6 @@ void rvln::update_labels_list()
 void rvln::select_label()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   QAction *Act = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
@@ -8367,20 +8334,21 @@ void rvln::mrkup_document_weight()
   int size_total = 0;
   int files_total = 1;
 
-  foreach (QString url, l)
-          {
-           QUrl relativeUrl (url);
-           QString resolved = baseUrl.resolved (relativeUrl).toString();
-           QFileInfo info (resolved);
-           if (! info.exists())
-              lst.append (new CFSizeFName (info.size(), tr ("%1 is not found<br>").arg (resolved)));
-           else
-               {
-                lst.append (new CFSizeFName (info.size(), resolved));
-                size_total += info.size();
-                ++files_total;
-               }
+  for (int i = 0; i < l.size(); i++)
+      {
+       QUrl relativeUrl (l.at(i));
+       QString resolved = baseUrl.resolved (relativeUrl).toString();
+       QFileInfo info (resolved);
+
+       if (! info.exists())
+           lst.append (new CFSizeFName (info.size(), tr ("%1 is not found<br>").arg (resolved)));
+       else
+           {
+            lst.append (new CFSizeFName (info.size(), resolved));
+            size_total += info.size();
+            ++files_total;
            }
+       }
 
   std::sort (lst.begin(), lst.end(), CFSizeFNameLessThan);
 //  qSort (lst.begin(), lst.end(), CFSizeFNameLessThan);
@@ -8422,12 +8390,11 @@ void rvln::fman_unpack_zip()
       return;
      }
 
-  foreach (QString fname, li)
-          {
-           z.unzip (fname, fman->dir.path());
-           log->log (fname + tr (" is unpacked"));
-
-          }
+  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); fname++)
+      {
+       z.unzip ((*fname), fman->dir.path());
+       log->log ((*fname) + tr (" is unpacked"));
+      }
 }
 
 

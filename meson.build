@@ -1,13 +1,14 @@
 project('tea', ['cpp','c'],
          default_options : ['cpp_std=c++11'],
-         version : '48.0.1',
+         version : '49.0.0',
          license : 'GPLv3')
 
-add_global_arguments('-DVERSION_NUMBER="48.0.1"', language : 'cpp')
-add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
+add_global_arguments('-DVERSION_NUMBER="49.0.0"', language : 'cpp')
+#add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 #harcoded for now
-moc_params = ['-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
+#moc_params = ['-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
+moc_params = ['-DQT_VERSION=0x050000']
 
 
 if build_machine.system() == 'linux'
@@ -50,7 +51,8 @@ endif
 
 zlib_dep = dependency('zlib', required : true)
 
-qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network', 'Qml', 'Quick']) 
+#qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network', 'Qml', 'Quick']) 
+qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network']) 
 qt5 = import('qt5') 
 
 
@@ -121,7 +123,6 @@ tea_exe = executable ('tea',
   sources : [src_processed, tea_source], 
   install : true,
   dependencies : [qt5_dep, hunspell_dep, aspell_dep, zlib_dep, poppler_dep, ddjvuapi_dep]
-#  cpp_args : '-std=c++11'  
   )
 
 

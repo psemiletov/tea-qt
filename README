@@ -7,21 +7,32 @@ http://tea.ourproject.org
 Development >
 https://github.com/psemiletov/tea-qt
 
+AUR: https://aur.archlinux.org/packages/tea-qt/
+
 Communities >
 https://vk.com/teaeditor
 https://www.facebook.com/groups/766324686841748/
 
-===INTRO===
+CONTENTS OF THIS README:
 
-TEA is a text editor with the hundreds of features.
+00 - INTRO
+01 - INSTALLATION FROM THE SOURCE
+02 - NOTES FOR PACKAGE MAINTAINERS
+03 - NOTE FOR UBUNTU USERS
+04 - LICENSE NOTES
+05 - DONATE
 
-===INSTALLATION FROM THE SOURCE===
+==00: INTRO==
+
+TEA is a text editor with the hundreds of features. Yes.
+
+==01: INSTALLATION FROM THE SOURCE===
 
 You can install TEA from the source by 4 ways, using build systems qmake/make, meson/ninja, cmake/make, cmake/ninja. But first, you need to install some development libraries.
 
 Mandatory:
 
-Qt 4 or 5 
+Qt 4 or 5
 zlib
 
 Optional:
@@ -83,6 +94,7 @@ qmake "CONFIG+=useclang" "CONFIG+=noaspell"
 
 You can use some values:
 
+noqml - no QML support (the preferablw mode)
 nosingleapp - do not build TEA with the single application mode support
 nodesktop - do not install desktop files and icons
 useclang - TEA will be compiled with Clang.
@@ -123,22 +135,28 @@ sudo make install
 */
 
 
-===NOTE FOR PACKAGE MAINTAINERS===
+==02: NOTES FOR PACKAGE MAINTAINERS==
 
-1. TEA after the compilation is a single binary file (with embedded resources). 
+1. TEA after the compilation is a single binary file (with embedded resources).
 
-2. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
+2. TEA supports 3 build systems:
+
+  * qmake - the traditional one, good for Qt4-Win32-OS/2 builds. TEA's qmake project file is old and obscure. QML plugins are enabled by deafault, that is not wise.
+  * cmake - good for Qt5+ build, the reference one for TEA, has more options than meson support.
+  * meson - I use it internally. Has no option to enable QML plugins.
+
+3. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
 
 qmake PREFIX=your_path
 make
 make install
 
-3. cmake vs qmake vs meson. TEA's qmake project file is rather old and obscure, but it will be supported forever because it works well with Qt 4 and Qt 5. Use of meson or cmake build system is a modern way to build TEA. I use meson internally, but TEA's cmake stuff more mature.
+4. QML plugins. Altough you can enable it for cmake with cmake -DUSE_QML=True, or use qmake-based build, I hope you don't enable them, because starting from TEA 49, QML-support at TEA is frozen and unmaintained, and will be removed if no one use it.
 
 
-===NOTE FOR UBUNTU USERS===
+==03: NOTE FOR UBUNTU USERS==
 
-User defined hotkeys may not work due to Qt5 and Unity global menu feature. To remove global menu support in Qt5 apps, do 
+User defined hotkeys may not work due to Qt5 and Unity global menu feature. To remove global menu support in Qt5 apps, do
 
 sudo apt-get autoremove appmenu-qt5
 
@@ -147,11 +165,11 @@ or, if you want to remove also GTK global menus, use:
 sudo apt-get autoremove appmenu-gtk appmenu-gtk3 appmenu-qt5
 
 
-===LICENSE NOTES===
+==04: LICENSE NOTES==
 
 TEA code is licensed under GPL V3 and, partially, as a Public Domain. TEA media (images, etc), manuals and translations are public domain. Note to contributors - please put your translations into the public domain or GPL.
 
-===DONATE===
+==05: DONATE==
 
 If you want to support TEA via donation, better give your support to the Ukrainian dog shelter Lyubas House - http://lyubas.pp.ua. There are lot of dogs with disabilities, and they need help more than TEA. To donate via PayPal, please see http://www.ukraineanimalrescue.org/#!lyubas-house/cxfj. Please specify "For Lyubas's House" in the comments of donation, because there are other projects uses that PayPal account.
 

@@ -7,7 +7,7 @@ add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea")
-project ($PROJECT VERSION 48.0.1)
+project ($PROJECT VERSION 49.0.0)
 
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 
@@ -33,8 +33,24 @@ if(hunspell_FOUND)
 endif()
 
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network Qml Quick)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network)
+
+
+if(NOT DEFINED USE_QML)
+message("QML IS NOT SUPPORTED")
+endif(NOT DEFINED USE_QML)
+
+message("USE_QML=${USE_QML}")
+if( USE_QML ) 
+    message("USE_QML evaluates to True")
+endif()
+
+if(DEFINED USE_QML)
+message("QML IS SUPPORTED")
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG OPTIONAL_COMPONENTS Qml Quick)
 add_definitions(-DUSE_QML_STUFF)
+endif(DEFINED USE_QML)
+
 
 
 if(BUILD_TESTING)
@@ -156,7 +172,12 @@ if(hunspell_FOUND)
   target_link_libraries(${PROJECT} ${hunspell_LIBRARIES} )
 endif()
 
-target_link_libraries(${PROJECT} Qt5::Widgets Qt5::Core Qt5::Network Qt5::Qml Qt5::Quick)
+target_link_libraries(${PROJECT} Qt5::Widgets Qt5::Core Qt5::Network)
+
+if(DEFINED USE_QML)
+target_link_libraries(${PROJECT} Qt5::Qml Qt5::Quick)
+endif()
+
 
 install (TARGETS ${PROJECT} DESTINATION bin)
 install (FILES ${tea_ICONSVG} DESTINATION share/icons/hicolor/scalable/apps)
@@ -166,3 +187,4 @@ install (FILES ${tea_ICONPNG64} DESTINATION share/icons/hicolor/64x64/apps)
 install (FILES ${tea_ICONPNG128} DESTINATION share/icons/hicolor/128x128/apps)
 
 install (FILES ${tea_DESKTOP} DESTINATION share/applications)
+

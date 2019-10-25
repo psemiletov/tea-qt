@@ -708,7 +708,7 @@ rvln::rvln()
 
   setAcceptDrops (true);
 
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>sites: semiletov.org/tea and tea.ourproject.org<br>development: github.com/psemiletov/tea-qt<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (current_version_number)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>Sites: semiletov.org/tea and tea.ourproject.org<br>Git: github.com/psemiletov/tea-qt<br>AUR: https://aur.archlinux.org/packages/tea-qt/<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (current_version_number)));
 
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
   qApp->setWindowIcon (QIcon (icon_fname));
@@ -758,14 +758,8 @@ void rvln::closeEvent (QCloseEvent *event)
   for (QList <CMarkupPair *>::iterator i = l.begin(); i != l.end(); i++)
       delete (*i);
 
-/*
-  foreach (CMarkupPair *p, l)
-         {
-          p->deleteLater();
-         }
-*/
- if (text_window_list.size() > 0)
-     for (vector <size_t>::size_type i = 0; i < text_window_list.size(); i++)
+  if (text_window_list.size() > 0)
+      for (vector <size_t>::size_type i = 0; i < text_window_list.size(); i++)
           text_window_list[i]->close();
 
   event->accept();
@@ -4080,9 +4074,9 @@ void rvln::search_replace_all()
 
           char *charset = cb_fman_codecs->currentText().toLatin1().data();
 
-          foreach (QString fname, sl)
+          for (QList <QString>::iterator fname = sl.begin(); fname != sl.end(); fname++)
                   {
-                   QString f = qstring_load (fname, charset);
+                   QString f = qstring_load ((*fname), charset);
                    QString r;
 
                    if (menu_find_regexp->isChecked())
@@ -4090,8 +4084,8 @@ void rvln::search_replace_all()
                    else
                        r = f.replace (l[0], l[1], cs);
 
-                   qstring_save (fname, r, charset);
-                   log->log (tr ("%1 is processed and saved").arg (fname));
+                   qstring_save ((*fname), r, charset);
+                   log->log (tr ("%1 is processed and saved").arg ((*fname)));
                   }
         }
 }
@@ -5855,8 +5849,9 @@ void rvln::createFman()
   lah_topbar->addWidget (cb_fman_drives);
 
   QFileInfoList l_drives = QDir::drives();
-  foreach (QFileInfo fi, l_drives)
-           cb_fman_drives->addItem (fi.path());
+//  foreach (QFileInfo fi, l_drives)
+  for (QList <QFileInfo>::iterator fi = l_drives.begin(); fi != l_drives.end(); fi++)
+       cb_fman_drives->addItem (fi->path());
 
 #endif
 
@@ -8527,7 +8522,6 @@ void rvln::fn_remove_by_regexp()
 void rvln::capture_clipboard_to_storage_file()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   capture_to_storage_file = ! capture_to_storage_file;
 }
 
@@ -8537,10 +8531,8 @@ void rvln::set_as_storage_file()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  fname_storage_file = d->file_name;
+  if (d)
+     fname_storage_file = d->file_name;
 }
 
 
@@ -8611,11 +8603,8 @@ void rvln::leaving_tune()
 {
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
-
   settings->setValue ("override_locale_val", ed_locale_override->text());
-
   settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
-
   settings->setValue ("wasd", cb_wasd->checkState());
 
 #if defined(JOYSTICK_SUPPORTED)
@@ -8623,7 +8612,6 @@ void rvln::leaving_tune()
 #endif
 
   settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
-
   settings->setValue ("word_wrap", cb_wordwrap->checkState());
 
 #if QT_VERSION >= 0x050000
@@ -8632,24 +8620,18 @@ void rvln::leaving_tune()
 #endif
 
   settings->setValue ("additional_hl", cb_hl_current_line->checkState());
-
   settings->setValue ("session_restore", cb_session_restore->checkState());
-
   settings->setValue ("show_linenums", cb_show_linenums->checkState());
   settings->setValue ("hl_enabled", cb_hl_enabled->checkState());
-
   settings->setValue ("hl_brackets", cb_hl_brackets->checkState());
   settings->setValue ("auto_indent", cb_auto_indent->checkState());
-
   settings->setValue ("spaces_instead_of_tabs", cb_spaces_instead_of_tabs->checkState());
   settings->setValue ("cursor_xy_visible", cb_cursor_xy_visible->checkState());
   settings->setValue ("tab_sp_width", spb_tab_sp_width->value());
-
   settings->setValue ("center_on_scroll", cb_center_on_cursor->checkState());
   settings->setValue ("show_margin", cb_show_margin->checkState());
   settings->setValue ("margin_pos", spb_margin_pos->value());
   settings->setValue ("b_preview", cb_auto_img_preview->checkState());
-
   settings->setValue ("cursor_blink_time", spb_cursor_blink_time->value());
 
   MyProxyStyle::cursor_blink_time = spb_cursor_blink_time->value();
@@ -8657,18 +8639,11 @@ void rvln::leaving_tune()
   qApp->setCursorFlashTime (spb_cursor_blink_time->value());
 
   settings->setValue ("cursor_width", spb_cursor_width->value());
-
   settings->setValue ("override_img_viewer", cb_override_img_viewer->checkState());
   settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->checkState());
-
-
-
-
-
   settings->setValue ("override_locale", cb_override_locale->checkState());
   settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->checkState());
   settings->setValue ("start_week_on_sunday", cb_start_on_sunday->checkState());
-
   settings->setValue ("northern_hemisphere", cb_northern_hemisphere->checkState());
 
   calendar->northern_hemisphere = bool (cb_northern_hemisphere->checkState());
@@ -8680,24 +8655,17 @@ void rvln::leaving_tune()
   settings->setValue ("zip_charset_in", cmb_zip_charset_in->currentText());
   settings->setValue ("zip_charset_out", cmb_zip_charset_out->currentText());
   settings->setValue ("cmdline_default_charset", cmb_cmdline_default_charset->currentText());
-
   settings->setValue ("label_end", ed_label_end->text());
   settings->setValue ("label_start", ed_label_start->text());
-
   settings->setValue ("output_image_fmt", cmb_output_image_fmt->currentText());
   settings->setValue ("img_filter", cb_output_image_flt->checkState());
   settings->setValue("fuzzy_q", spb_fuzzy_q->value());
   settings->setValue("img_quality", spb_img_quality->value());
   settings->setValue ("img_post_proc", cb_zip_after_scale->checkState());
-
   settings->setValue ("cb_exif_rotate", cb_exif_rotate->checkState());
-
   settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->checkState());
-
   settings->setValue ("ed_side_size", ed_side_size->text());
-
   settings->setValue ("ed_link_options", ed_link_options->text());
-
   settings->setValue ("ed_cols_per_row", ed_cols_per_row->text());
 
   b_preview = settings->value ("b_preview", false).toBool();
@@ -8754,15 +8722,6 @@ void rvln::cmb_ui_langs_currentIndexChanged (const QString &text)
 }
 */
 
-/*
-void rvln::tab_options_pageChanged (int index)
-{
-  if (index == idx_tab_keyboard)
-     {
-    //  opt_update_keyb();
-     }
-}
-*/
 
 void rvln::search_fuzzy_mode()
 {
@@ -8858,12 +8817,12 @@ void rvln::fn_stat_words_lengths()
 
   QStringList w = d->get_words();
 
-  foreach (QString s, w)
-          {
-           int len = s.length();
-           if (len <= 32)
-              lengths[len]++;
-          }
+  for (int i =0; i < w.size(); i++)
+      {
+       int len = w.at(i).length();
+       if (len <= 32)
+          lengths[len]++;
+      }
 
   QStringList l;
 
@@ -8922,13 +8881,6 @@ void rvln::update_stylesheet (const QString &f)
   QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_font_size", "12").toString() + "pt;";
   QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + ";";
 
-//  qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-
-//  qDebug() << "logmemo_font: " << logmemo_font;
-//  qDebug() << "logmemo_fontsize: " << logmemo_fontsize;
-
-//  qDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-
 
   QString stylesheet;
 
@@ -8956,37 +8908,37 @@ void rvln::update_stylesheet (const QString &f)
   QString t_sel_back_color = QColor (sel_back_color).darker(darker_val).name();
 
   QString css_plain_text_edit = QString ("QPlainTextEdit {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
-                           t_text_color).arg (
-                           t_back_color).arg (
-                           t_sel_text_color).arg (
-                           t_sel_back_color);
+                                         t_text_color).arg (
+                                         t_back_color).arg (
+                                         t_sel_text_color).arg (
+                                         t_sel_back_color);
 
   stylesheet += css_plain_text_edit;
 
   QString css_tea_edit = QString ("CTEAEdit {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
-                           t_text_color).arg (
-                           t_back_color).arg (
-                           t_sel_text_color).arg (
-                           t_sel_back_color);
+                                  t_text_color).arg (
+                                  t_back_color).arg (
+                                  t_sel_text_color).arg (
+                                  t_sel_back_color);
 
 
   stylesheet += css_tea_edit;
 
   QString css_tea_man = QString ("QTextBrowser {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
-                           t_text_color).arg (
-                           t_back_color).arg (
-                           t_sel_text_color).arg (
-                           t_sel_back_color);
+                                  t_text_color).arg (
+                                  t_back_color).arg (
+                                  t_sel_text_color).arg (
+                                  t_sel_back_color);
 
 
   stylesheet += css_tea_man;
 
 
   QString css_fif = QString ("QComboBox#FIF { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
-                            t_text_color).arg (
-                            t_back_color).arg (
-                            t_sel_text_color).arg (
-                            t_sel_back_color);
+                             t_text_color).arg (
+                             t_back_color).arg (
+                             t_sel_text_color).arg (
+                             t_sel_back_color);
 
 
   stylesheet += css_fif;
@@ -8999,21 +8951,17 @@ void rvln::update_stylesheet (const QString &f)
   QString cssfile = qstring_load (f);
 
   QString css_path = get_file_path (f) + "/";
-  //theme_dir = css_path;
 
   cssfile = cssfile.replace ("./", css_path);
   cssfile += stylesheet;
 
   qApp->setStyleSheet ("");
   qApp->setStyleSheet (cssfile);
-
-//  qDebug() << "css_path " << css_path;
 }
 
 
 QIcon rvln::get_theme_icon (const QString &name)
 {
-  //if (file_get_ext (fname) == "svg")
   QString fname = theme_dir + "icons/" + name;
 
   if (file_exists (fname))
@@ -9037,11 +8985,9 @@ QString rvln::get_theme_icon_fname (const QString &name)
 void rvln::view_use_theme()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   QAction *a = qobject_cast<QAction *>(sender());
-  QString css_fname = a->data().toString() + "/" + "stylesheet.css";
 
- // qDebug() << css_fname;
+  QString css_fname = a->data().toString() + "/" + "stylesheet.css";
 
   if (! file_exists (css_fname))
      {
@@ -9050,9 +8996,7 @@ void rvln::view_use_theme()
     }
 
   update_stylesheet (css_fname);
-
   fname_stylesheet = css_fname;
-
   settings->setValue ("fname_stylesheet", fname_stylesheet);
 }
 
@@ -9063,10 +9007,10 @@ bool has_css_file (const QString &path)
   QStringList l = d.entryList();
 
   for (int i = 0; i < l.size(); i++)
-     {
-      if (l[i].endsWith(".css"))
-          return true;
-     }
+      {
+       if (l.at(i).endsWith(".css"))
+           return true;
+      }
 
   return false;
 }
@@ -9083,25 +9027,25 @@ void create_menu_from_themes (QObject *handler,
   QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
                                           QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
 
-  foreach (QFileInfo fi, lst_fi)
-         {
-          if (fi.isDir())
-             {
-              if (has_css_file (fi.absoluteFilePath()))
-                 {
-                  QAction *act = new QAction (fi.fileName(), menu->parentWidget());
-                  act->setData (fi.filePath());
-                  handler->connect (act, SIGNAL(triggered()), handler, method);
-                  menu->addAction (act);
-                 }
-             else
-                 {
-                  QMenu *mni_temp = menu->addMenu (fi.fileName());
-                  create_menu_from_themes (handler, mni_temp,
-                                           fi.filePath(), method);
-                 }
-             }
-         }
+  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); fi++)
+      {
+       if (fi->isDir())
+          {
+           if (has_css_file (fi->absoluteFilePath()))
+              {
+               QAction *act = new QAction (fi->fileName(), menu->parentWidget());
+               act->setData (fi->filePath());
+               handler->connect (act, SIGNAL(triggered()), handler, method);
+               menu->addAction (act);
+              }
+           else
+               {
+                QMenu *mni_temp = menu->addMenu (fi->fileName());
+                create_menu_from_themes (handler, mni_temp,
+                                         fi->filePath(), method);
+               }
+           }
+       }
 }
 
 
@@ -9115,13 +9059,11 @@ void rvln::update_themes()
                            SLOT (view_use_theme())
                           );
 
-
   create_menu_from_themes (this,
-                            menu_view_themes,
-                            dir_themes,
-                            SLOT (view_use_theme())
-                            );
-
+                           menu_view_themes,
+                           dir_themes,
+                           SLOT (view_use_theme())
+                           );
 }
 
 
@@ -9164,9 +9106,7 @@ void rvln::fn_use_plugin()
 
   window->id = qml_fname;
 
-//  plugins_list.append (new CPluginListItem (qml_fname, window));
   plugins_list.push_back (new CPluginListItem (qml_fname, window));
-
 
   QVariant v = item->property ("close_on_complete");
 
@@ -9188,12 +9128,10 @@ bool CQQuickWindow::event (QEvent *event)
      {
       if (plugins_list.size() > 0)
       for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
-//      for (int i = 0; i < plugins_list.size(); ++i)
           {
            if (plugins_list[i]->id == id)
               {
                delete plugins_list[i];
-//               plugins_list.removeAt (i);
                plugins_list.erase (plugins_list.begin() + i);
                break;
               }
@@ -9232,26 +9170,26 @@ void create_menu_from_plugins (QObject *handler,
                                           QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
 
 
-  foreach (QFileInfo fi, lst_fi)
+//  foreach (QFileInfo fi, lst_fi)
+  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); fi++)
          {
-          if (fi.isDir())
+          if (fi->isDir())
              {
-              if (has_qml_file (fi.absoluteFilePath()))
+              if (has_qml_file (fi->absoluteFilePath()))
                  {
-                  QAction *act = new QAction (fi.fileName(), menu->parentWidget());
-                  act->setData (fi.filePath());
+                  QAction *act = new QAction (fi->fileName(), menu->parentWidget());
+                  act->setData (fi->filePath());
                   handler->connect (act, SIGNAL(triggered()), handler, method);
                   menu->addAction (act);
                  }
              else
                  {
-                  QMenu *mni_temp = menu->addMenu (fi.fileName());
+                  QMenu *mni_temp = menu->addMenu (fi->fileName());
                   create_menu_from_plugins (handler, mni_temp,
-                                     fi.filePath(), method);
+                                            fi->filePath(), method);
                  }
              }
          }
-
 }
 
 
@@ -9277,6 +9215,7 @@ void rvln::plugins_init()
   qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CLogMemo");
   qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CTEAEdit");
 
+  qml_engine->rootContext()->setContextProperty ("docs", documents);
   qml_engine->rootContext()->setContextProperty ("documents", documents);
   qml_engine->rootContext()->setContextProperty ("log", log);
   qml_engine->rootContext()->setContextProperty ("tea", this);
@@ -9291,10 +9230,9 @@ void rvln::plugins_done()
 //закрыть все плагины из списка (при созд. плагина добавляем указатель в список)
 //и потом
 
-  //for (int i = 0; i < plugins_list.size(); ++i)
   if (plugins_list.size() > 0)
       for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
-         plugins_list[i]->window->close();
+          plugins_list[i]->window->close();
 
   delete qml_engine;
 }
@@ -9323,7 +9261,7 @@ int latex_table_sort_col;
 
 bool latex_table_sort_fn (const QStringList &l1, const QStringList &l2)
 {
-  return l1[latex_table_sort_col] < l2[latex_table_sort_col];
+  return l1.at(latex_table_sort_col) < l2.at(latex_table_sort_col);
 }
 
 
@@ -9356,24 +9294,23 @@ void rvln::fn_sort_latex_table_by_col_abc()
 
   QList <QStringList> output;
 
-  foreach (QString v, sl_temp)
+  for (QList <QString>::iterator s = sl_temp.begin(); s != sl_temp.end(); s++)
+      {
+       if (! s->isEmpty())
           {
-           if (! v.isEmpty())
-              {
-               QStringList sl_parsed = v.split (sep);
-               if (latex_table_sort_col + 1 <= sl_parsed.size())
-               output.append (sl_parsed);
-              }
-         }
+           QStringList sl_parsed = s->split (sep);
+           if (latex_table_sort_col + 1 <= sl_parsed.size())
+            output.append (sl_parsed);
+          }
+      }
 
   std::sort (output.begin(), output.end(), latex_table_sort_fn);
-  //qSort (output.begin(), output.end(), latex_table_sort_fn);
 
   sl_temp.clear();
 
   for (int i = 0; i < output.size(); i++)
       {
-       sl_temp.append (output[i].join (sep));
+       sl_temp.append (output.at(i).join (sep));
       }
 
   t = sl_temp.join ("\n");
@@ -9414,31 +9351,30 @@ void rvln::fn_table_swap_cells()
 
   QList <QStringList> output;
 
-  foreach (QString v, sl_temp)
+//  foreach (QString v, sl_temp)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
+      {
+       if (! v->isEmpty())
           {
-           if (! v.isEmpty())
-             {
-              QStringList sl_parsed = v.split (sep);
-              if (imax + 1 <= sl_parsed.size())
-                 {
-                  strlist_swap (sl_parsed, col1, col2);
+           QStringList sl_parsed = v->split (sep);
+           if (imax + 1 <= sl_parsed.size())
+              {
 
 //#if QT_VERSION >= 0x060000
                   //sl_parsed.swapItemsAt (col1, col2);
 //#else
 //                  sl_parsed.swap (col1, col2);
 //#endif
-                  output.append (sl_parsed);
-                 }
-             }
+               strlist_swap (sl_parsed, col1, col2);
+               output.append (sl_parsed);
+              }
           }
+      }
 
   sl_temp.clear();
 
   for (int i = 0; i < output.size(); i++)
-      {
-       sl_temp.append (output[i].join (sep));
-      }
+       sl_temp.append (output.at(i).join (sep));
 
   t = sl_temp.join ("\n");
 
@@ -9476,25 +9412,23 @@ void rvln::fn_table_delete_cells()
 
   QList <QStringList> output;
 
-  foreach (QString v, sl_temp)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
+      {
+       if (! v->isEmpty())
           {
-           if (! v.isEmpty())
+           QStringList sl_parsed = v->split (sep);
+           if (col1 + 1 <= sl_parsed.size())
               {
-               QStringList sl_parsed = v.split (sep);
-               if (col1 + 1 <= sl_parsed.size())
-                  {
-                   sl_parsed.removeAt (col1);
-                   output.append (sl_parsed);
-                  }
+               sl_parsed.removeAt (col1);
+               output.append (sl_parsed);
               }
           }
+      }
 
   sl_temp.clear();
 
   for (int i = 0; i < output.size(); i++)
-      {
-       sl_temp.append (output[i].join (sep));
-      }
+       sl_temp.append (output.at(i).join (sep));
 
   t = sl_temp.join ("\n");
 
@@ -9537,39 +9471,37 @@ void rvln::fn_table_copy_cells()
   QList <QStringList> output;
 
   if (col2 > 0)
-  foreach (QString v, sl_temp)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
+      {
+       if (! v->isEmpty())
           {
-           if (! v.isEmpty())
+           QStringList sl_parsed = v->split (sep);
+           if (col2 + 1 <= sl_parsed.size())
               {
-               QStringList sl_parsed = v.split (sep);
-               if (col2 + 1 <= sl_parsed.size())
-                  {
-                   QStringList tl = sl_parsed.mid (col1, col2 - col1 + 1);
-                   output.append (tl);
-                  }
+               QStringList tl = sl_parsed.mid (col1, col2 - col1 + 1);
+               output.append (tl);
               }
           }
+      }
   else
-      foreach (QString v, sl_temp)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
+      {
+       if (! v->isEmpty())
+          {
+           QStringList sl_parsed = v->split (sep);
+           if (col1 + 1 <= sl_parsed.size())
               {
-               if (! v.isEmpty())
-                  {
-                   QStringList sl_parsed = v.split (sep);
-                   if (col1 + 1 <= sl_parsed.size())
-                      {
-                       QStringList tl = sl_parsed.mid (col1, 1);
-                       output.append (tl);
-                      }
-                  }
-               }
+               QStringList tl = sl_parsed.mid (col1, 1);
+               output.append (tl);
+              }
+           }
+      }
 
   sl_temp.clear();
 
   for (int i = 0; i < output.size(); i++)
-      {
-       sl_temp.append (output[i].join (sep));
-      }
-
+       sl_temp.append (output.at(i).join (sep));
+ 
   t = sl_temp.join ("\n");
 
   QApplication::clipboard()->setText (t);
@@ -9618,7 +9550,6 @@ void rvln::fn_sum_by_last_col()
   if (! d)
       return;
 
-
   QString t = d->textEdit->textCursor().selectedText();
   t = t.replace (",", ".");
 
@@ -9629,7 +9560,6 @@ void rvln::fn_sum_by_last_col()
 
   QStringList l = t.split (QChar::ParagraphSeparator);
 
-
   for (int i = 0; i < l.size(); i++)
       {
        if (l[i].startsWith ("//") ||  l[i].startsWith ("#") || l[i].startsWith (";"))
@@ -9638,8 +9568,6 @@ void rvln::fn_sum_by_last_col()
        QStringList t = l[i].split (" ");
        if (t.size() > 0)
           {
-           //qDebug() << t[t.size() - 1];
-           //sum += t[t.size() - 1].toDouble();
            QString s = t[t.size() - 1];
            std::string utf8_text = s.toUtf8().constData();
            double f = calculate (utf8_text);
@@ -9650,41 +9578,6 @@ void rvln::fn_sum_by_last_col()
   log->log (tr ("sum: %1").arg (sum));
 }
 
-/*
-void rvln::ed_paste_from_charset()
-{
-  CTextListWindow w (tr ("Select"), tr ("Available effects"));
-
-  w.list->addItems (sl_charsets);
-
-  int result = w.exec();
-
-  if (result != QDialog::Accepted)
-      return;
-
-  //AFx *f = avail_fx->find_by_name (w.list->currentItem()->text());
-
-  QClipboard *clipboard = QApplication::clipboard();
-  const QMimeData *mimeData = clipboard->mimeData();
-
-  if (!mimeData->hasText())
-     {
-      qDebug() << "! text";
-      return;
-
-     }
-
- // QString t = clipboard->text();
-
-  QTextCodec *codec = QTextCodec::codecForName (w.list->currentItem()->text().toLatin1());
-
-
-  QString s = codec->toUnicode (mimeData->data("text/plain"));
-
-  qDebug() << s.toUtf8().data();
-
-}
-*/
 
 void rvln::search_unmark()
 {
@@ -9756,12 +9649,11 @@ void rvln::search_mark_all()
          if (menu_find_regexp->isChecked())
             cr = d->textEdit->document()->find (QRegExp (d->text_to_search), from, get_search_options());
          else
-             if (menu_find_fuzzy->isChecked())
+             if (menu_find_fuzzy->isChecked()) //fuzzy search
                 {
                  int pos = str_fuzzy_search (d->textEdit->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
                  if (pos != -1)
                     {
-                     //from = pos + d->text_to_search.length() - 1;
                      //set selection:
                      cr = d->textEdit->textCursor();
                      cr.setPosition (pos, QTextCursor::MoveAnchor);
@@ -9773,8 +9665,8 @@ void rvln::search_mark_all()
                  else
                      cont_search = false;
                 }
-           else //normal search
-               cr = d->textEdit->document()->find (d->text_to_search, from, get_search_options());
+            else //normal search
+                 cr = d->textEdit->document()->find (d->text_to_search, from, get_search_options());
 
 
          if (! cr.isNull())
@@ -9832,9 +9724,6 @@ void rvln::scale_image()
   fnameout = fnameout.replace ("%ext", fi.suffix());
   fnameout = fi.absolutePath() + "/" + fnameout;
 
-
- // qDebug() << fnameout;
-
   bool scale_by_side = true;
 
   if (params[1].indexOf("%") != -1)
@@ -9861,48 +9750,44 @@ void rvln::scale_image()
   if (source.isNull())
      return;
 
+  if (settings->value ("cb_exif_rotate", 0).toInt())
+     {
+      int exif_orientation = get_exif_orientation (fname);
 
- if (settings->value ("cb_exif_rotate", 0).toInt())
-    {
-     int exif_orientation = get_exif_orientation (fname);
+      QTransform transform;
+      qreal angle = 0;
 
-     QTransform transform;
-     qreal angle = 0;
+      if (exif_orientation == 3)
+         angle = 180;
+      else
+      if (exif_orientation == 6)
+         angle = 90;
+      else
+      if (exif_orientation == 8)
+         angle = 270;
 
-     if (exif_orientation == 3)
-        angle = 180;
-     else
-     if (exif_orientation == 6)
-        angle = 90;
-     else
-     if (exif_orientation == 8)
-        angle = 270;
-
-     if (angle != 0)
-        {
-         transform.rotate (angle);
-         source = source.transformed (transform);
-        }
+      if (angle != 0)
+         {
+          transform.rotate (angle);
+          source = source.transformed (transform);
+         }
      }
 
+  QImage dest;
 
-    QImage dest;
+  if (scale_by_side)
+     dest = image_scale_by (source, true, side, transformMode);
+  else
+      dest = image_scale_by (source, false, percent, transformMode);
 
-    if (scale_by_side)
-       dest = image_scale_by (source, true, side, transformMode);
-    else
-        dest = image_scale_by (source, false, percent, transformMode);
+  QString fmt (settings->value ("output_image_fmt", "jpg").toString());
 
-    QString fmt (settings->value ("output_image_fmt", "jpg").toString());
+  fnameout = change_file_ext (fnameout, fmt);
 
-    fnameout = change_file_ext (fnameout, fmt);
-
-    if (! dest.save (fnameout, fmt.toLatin1().constData(), quality))
-        log->log (tr("Cannot save: %1").arg (fnameout));
-    else
-        log->log (tr("Saved: %1").arg (fnameout));
-
-  //    qDebug() << fnameout;
+  if (! dest.save (fnameout, fmt.toLatin1().constData(), quality))
+     log->log (tr("Cannot save: %1").arg (fnameout));
+  else
+      log->log (tr("Saved: %1").arg (fnameout));
 }
 
 
@@ -9978,12 +9863,8 @@ void rvln::ed_block_paste()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->textEdit->rect_sel_replace (QApplication::clipboard()->text());
-
-  //QApplication::clipboard()->setText (d->textEdit->get_rect_sel());
+  if (d)
+      d->textEdit->rect_sel_replace (QApplication::clipboard()->text());
 }
 
 
@@ -9992,14 +9873,8 @@ void rvln::ed_block_cut()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  //if (! d->textEdit->has_rect_selection())
-    // return;
-
-  d->textEdit->rect_sel_cut();
-  //QApplication::clipboard()->setText (d->textEdit->get_rect_sel());
+  if (d)
+      d->textEdit->rect_sel_cut();
 }
 
 
@@ -10062,19 +9937,20 @@ void rvln::fman_del_n_first_chars()
   if (sl.size() < 1)
      return;
 
-  foreach (QString fname, sl)
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QFileInfo fi (sl.at(i));
+   
+       if (fi.exists() && fi.isWritable())
           {
-           QFileInfo fi (fname);
-           if (fi.exists() && fi.isWritable())
-              {
-               QString newname = fi.fileName();
-               newname = newname.mid (todel);
+           QString newname = fi.fileName();
+           newname = newname.mid (todel);
 
-               QString newfpath (fi.path());
-               newfpath.append ("/").append (newname);
-               QFile::rename (fname, newfpath);
-              }
+           QString newfpath (fi.path());
+           newfpath.append ("/").append (newname);
+           QFile::rename (sl.at(i), newfpath);
           }
+       }
 
   update_dyn_menus();
   fman->refresh();
@@ -10092,19 +9968,20 @@ void rvln::fman_multreplace()
   if (sl.size() < 1)
      return;
 
-  foreach (QString fname, sl)
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QFileInfo fi (sl.at(i));
+ 
+       if (fi.exists() && fi.isWritable())
           {
-           QFileInfo fi (fname);
-           if (fi.exists() && fi.isWritable())
-              {
-               QString newname = fi.fileName();
-               newname = newname.replace (l[0], l[1]);
+           QString newname = fi.fileName();
+           newname = newname.replace (l[0], l[1]);
 
-               QString newfpath (fi.path());
-               newfpath.append ("/").append (newname);
-               QFile::rename (fname, newfpath);
-              }
+           QString newfpath (fi.path());
+           newfpath.append ("/").append (newname);
+           QFile::rename (sl.at(i), newfpath);
           }
+      }
 
   update_dyn_menus();
   fman->refresh();
@@ -10120,22 +9997,23 @@ void rvln::fman_apply_template()
   if (sl.size() < 1)
      return;
 
-  foreach (QString fname, sl)
-          {
-           QFileInfo fi (fname);
-           if (fi.exists() && fi.isWritable())
-              {
-               QString ext = file_get_ext (fname);
-               QString newname = fiftxt;
-               newname = newname.replace ("%filename", fi.fileName());
-               newname = newname.replace ("%ext", ext);
-               newname = newname.replace ("%basename", fi.baseName());
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QFileInfo fi (sl.at(i));
 
-               QString newfpath (fi.path());
-               newfpath.append ("/").append (newname);
-               QFile::rename (fname, newfpath);
-              }
-          }
+       if (fi.exists() && fi.isWritable())
+          {
+           QString ext = file_get_ext (sl.at(i));
+           QString newname = fiftxt;
+           newname = newname.replace ("%filename", fi.fileName());
+           newname = newname.replace ("%ext", ext);
+           newname = newname.replace ("%basename", fi.baseName());
+
+           QString newfpath (fi.path());
+           newfpath.append ("/").append (newname);
+           QFile::rename (sl.at(i), newfpath);
+           }
+      }
 
   update_dyn_menus();
   fman->refresh();

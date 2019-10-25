@@ -160,8 +160,6 @@ class CSyntaxHighlighter: public QSyntaxHighlighter
 {
 public:
 
-  CSyntaxHighlighter (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
-
   CDocument *document;
   bool casecare;
   int xml_format;
@@ -173,6 +171,8 @@ public:
 
   QTextCharFormat singleLineCommentFormat;
   QTextCharFormat multiLineCommentFormat;
+
+  CSyntaxHighlighter (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
 };
 
 
@@ -187,24 +187,22 @@ protected:
 public:
 
   struct HighlightingRule
-      {
-       QRegExp pattern;
-       QTextCharFormat format;
-      };
-
+         {
+          QRegExp pattern;
+          QTextCharFormat format;
+         };
 
   QRegExp commentStartExpression;
   QRegExp commentEndExpression;
 
   Qt::CaseSensitivity cs;
 
-  CSyntaxHighlighterQRegExp (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
-
- // QVector <HighlightingRule> highlightingRules;
   std::vector <HighlightingRule> highlightingRules;
 
+  CSyntaxHighlighterQRegExp (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);
 };
+
 
 #if QT_VERSION >= 0x050000
 class CSyntaxHighlighterQRegularExpression: public CSyntaxHighlighter
@@ -225,18 +223,14 @@ public:
 
   QRegularExpression commentStartExpression;
   QRegularExpression commentEndExpression;
-
   QRegularExpression::PatternOptions pattern_opts;
-
-  CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
-
- // QVector <HighlightingRule> highlightingRules;
-  std::vector <HighlightingRule> highlightingRules;
-
 
   QTextCharFormat singleLineCommentFormat;
   QTextCharFormat multiLineCommentFormat;
 
+  std::vector <HighlightingRule> highlightingRules;
+
+  CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);
 };
 
@@ -314,21 +308,17 @@ public:
   QHash <QString, QString> markup_modes;
   QHash <QString, QString> hash_project;
 
-  QLabel *l_status_bar;
-  QLabel *l_charset;
-
-
   std::vector <CDocument*> items;
 
+  QLabel *l_status_bar;
+  QLabel *l_charset;
   QStatusBar *status_bar;
   CLogMemo *log;
   QMainWindow *parent_wnd;
   QTabWidget *tab_widget;
   QTabWidget *main_tab_widget;
-
   QMenu *recent_menu;
   QTimer *timer;
-
 
 #if defined(JOYSTICK_SUPPORTED)
 
@@ -338,7 +328,6 @@ public:
   void handle_joystick_event (CJoystickAxisEvent *ev);
 
 #endif
-
 
    CDox();
   ~CDox();
@@ -356,12 +345,11 @@ public:
   Q_INVOKABLE CDocument* open_file_triplex (const QString &triplex);
   Q_INVOKABLE CDocument* get_document_by_fname (const QString &fileName);
   Q_INVOKABLE CDocument* get_current();
+
   Q_INVOKABLE void close_by_idx (int i);
   Q_INVOKABLE void close_current();
-
   Q_INVOKABLE void save_to_session (const QString &fileName);
   Q_INVOKABLE void load_from_session (const QString &fileName);
-
   Q_INVOKABLE void apply_settings();
   Q_INVOKABLE void apply_settings_single (CDocument *d);
 
@@ -374,7 +362,6 @@ public slots:
   void move_cursor_down();
   void move_cursor_left();
   void move_cursor_right();
-
   void move_cursor_x (double v);
   void move_cursor_y (double v);
 };

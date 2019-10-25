@@ -1,7 +1,7 @@
-VERSION = 48.0.1
+VERSION = 49.0.0
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"48.0.1"\''
+DEFINES += 'VERSION_NUMBER=\'"49.0.0"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -419,7 +419,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                 }
 }
 }
-
 
 
 os2: {

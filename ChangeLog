@@ -1,5 +1,13 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+
+* CMake:: TEA QML stuff is disabled by default.
+  To enable:
+  cmake -DUSE_QML=True 
+
+* Meson::
+  QML stuff is disabled
+
 * Text to HTML - fixed
 * drag and drop - fixed
 

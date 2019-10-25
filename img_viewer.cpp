@@ -65,12 +65,12 @@ void CImgViewer::set_image_full (const QString &fname)
 
 QString CImgViewer::get_the_thumb_name (const QString &img_fname)
 {
- 
+
 //FIXME: add OS2 tweak!
 #if !defined(Q_OS_WIN) || !defined(Q_OS_OS2)
 
   QCryptographicHash h (QCryptographicHash::Md5); 
-  
+
   QString uri (img_fname);
   uri.prepend ("file://");
   h.addData (uri.toUtf8());
@@ -79,30 +79,30 @@ QString CImgViewer::get_the_thumb_name (const QString &img_fname)
   QString fname (QDir::homePath());
   fname.append ("/.thumbnails/large");
   fname.append ("/").append (digest).append (".png");
- 
+
   if (file_exists (fname))
      return fname;
-  
+
   fname.clear();
   fname.append (QDir::homePath());
   fname.append ("/.thumbnails/normal");
   fname.append ("/").append (digest).append (".png");
- 
+
   if (file_exists (fname))
      return fname;
-  
-#endif 
-  
+
+#endif
+
   return QString();
 }
 
 /*
 CViewerWindow::CViewerWindow (QWidget *parent): QWidget (parent)
 {
-  current_index = 0; 
+  current_index = 0;
   angle = 0.0;
   scale = 100;
-  
+
   img_full = new QLabel (tr ("preview"));
   img_full->setAlignment (Qt::AlignCenter);
   QVBoxLayout *lt = new QVBoxLayout;

@@ -5849,7 +5849,6 @@ void rvln::createFman()
   lah_topbar->addWidget (cb_fman_drives);
 
   QFileInfoList l_drives = QDir::drives();
-//  foreach (QFileInfo fi, l_drives)
   for (QList <QFileInfo>::iterator fi = l_drives.begin(); fi != l_drives.end(); fi++)
        cb_fman_drives->addItem (fi->path());
 
@@ -6624,9 +6623,6 @@ void rvln::run_unitaz (int mode)
      std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than_str);
 
   QStringList outp;
-
-//  foreach (CStrIntPair *sp, uwords)
-//          outp.append (sp->string_value + " = " + QString::number (sp->int_value));
 
   for (int i = 0; i < uwords.size(); i++)
       outp.append (uwords.at(i)->string_value + " = " + QString::number (uwords.at(i)->int_value));
@@ -7720,15 +7716,15 @@ void rvln::view_use_profile()
   update_stylesheet (fname_stylesheet);
   documents->apply_settings();
 
-  cmb_font_name->setCurrentFont (QFont (s.value ("editor_font_name", "Serif").toString()));
-  spb_font_size->setValue (s.value ("editor_font_size", "16").toInt());
+//  cmb_font_name->setCurrentFont (QFont (s.value ("editor_font_name", "Serif").toString()));
+//  spb_font_size->setValue (s.value ("editor_font_size", "16").toInt());
 
-  cmb_logmemo_font_name->setCurrentFont (QFont (s.value ("logmemo_font", "Monospace").toString()));
-  spb_logmemo_font_size->setValue (s.value ("logmemo_font_size", "12").toInt());
+//  cmb_logmemo_font_name->setCurrentFont (QFont (s.value ("logmemo_font", "Monospace").toString()));
+//  spb_logmemo_font_size->setValue (s.value ("logmemo_font_size", "12").toInt());
 
-  QFontInfo fi = QFontInfo (qApp->font());
-  spb_app_font_size->setValue (s.value ("app_font_size", fi.pointSize()).toInt());
-  cmb_app_font_name->setCurrentFont (QFont (s.value ("app_font_name", qApp->font().family()).toString()));
+//  QFontInfo fi = QFontInfo (qApp->font());
+//  spb_app_font_size->setValue (s.value ("app_font_size", fi.pointSize()).toInt());
+//  cmb_app_font_name->setCurrentFont (QFont (s.value ("app_font_name", qApp->font().family()).toString()));
 }
 
 
@@ -9170,7 +9166,6 @@ void create_menu_from_plugins (QObject *handler,
                                           QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
 
 
-//  foreach (QFileInfo fi, lst_fi)
   for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); fi++)
          {
           if (fi->isDir())
@@ -9351,7 +9346,6 @@ void rvln::fn_table_swap_cells()
 
   QList <QStringList> output;
 
-//  foreach (QString v, sl_temp)
   for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
       {
        if (! v->isEmpty())

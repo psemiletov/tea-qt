@@ -94,7 +94,7 @@ qmake "CONFIG+=useclang" "CONFIG+=noaspell"
 
 You can use some values:
 
-noqml - no QML support (the preferablw mode)
+noqml - no QML support (the preferable mode)
 nosingleapp - do not build TEA with the single application mode support
 nodesktop - do not install desktop files and icons
 useclang - TEA will be compiled with Clang.

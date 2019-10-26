@@ -1030,20 +1030,18 @@ bool CTioEpub::load (const QString &fname)
   if (xml.hasError())
       qDebug() << "xml parse error";
 
+  for (int i = 0; i < html_files.size(); i++)
+      {
+       if (! zipper.read_as_utf8 (fname, html_files.at(i)))
+           return false;
 
-  foreach (QString fn, html_files)
-          {
-           if (! zipper.read_as_utf8 (fname, fn))
-              return false;
+       QStringList tags;
+       tags.append ("p");
 
-           QStringList tags;
-           tags.append ("p");
-
-           QString t = extract_text_from_xml (zipper.string_data, tags);
-
-           data += t;
-           data += "\n";
-          }
+       QString t = extract_text_from_xml (zipper.string_data, tags);
+       data += t;
+       data += "\n";
+      }
 
   return true;
 }

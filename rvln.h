@@ -28,7 +28,7 @@
 #include <QProgressBar>
 #include <QCheckBox>
 #include <QSpinBox>
-#include <QFontComboBox>
+//#include <QFontComboBox>
 #include <QSessionManager>
 #include <QApplication>
 #include <QCoreApplication>
@@ -996,15 +996,15 @@ prefs window widgets
   CShortcutEntry *ent_shtcut;
   QListWidget *lv_menuitems;
 
-  QFontComboBox *cmb_font_name;
-  QSpinBox *spb_font_size;
+//  QFontComboBox *cmb_font_name;
+//  QSpinBox *spb_font_size;
 
-  QFontComboBox *cmb_logmemo_font_name;
-  QSpinBox *spb_logmemo_font_size;
+//  QFontComboBox *cmb_logmemo_font_name;
+//  QSpinBox *spb_logmemo_font_size;
 
 
-  QFontComboBox *cmb_app_font_name;
-  QSpinBox *spb_app_font_size;
+//  QFontComboBox *cmb_app_font_name;
+//  QSpinBox *spb_app_font_size;
 
   QLineEdit *ed_fman_path;
   QListWidget *lv_places;

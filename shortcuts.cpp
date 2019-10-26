@@ -130,10 +130,9 @@ void CShortcuts::captions_iterate()
   QList <QAction *> a = w->findChildren <QAction *>();
 
   for (int i = 0; i < a.size(); i++) 
-//  foreach (QAction *ac, a)
-          if (a.at(i))
-             if (! a.at(i)->text().isEmpty())
-                 captions.prepend (a.at(i)->text());
+      if (a.at(i))
+          if (! a.at(i)->text().isEmpty())
+              captions.prepend (a.at(i)->text());
 
   captions.sort();
   captions.removeDuplicates(); //nasty hack
@@ -144,10 +143,9 @@ QAction* CShortcuts::find_by_caption (const QString &text)
 {
   QList<QAction *> a = w->findChildren<QAction *>();
 
-//  foreach (QAction *ac, a)
   for (int i = 0; i < a.size(); i++) 
-          if (a.at(i)->text() == text)
-             return a.at(i);
+       if (a.at(i)->text() == text)
+          return a.at(i);
 
   return NULL;
 }
@@ -157,10 +155,9 @@ QAction* CShortcuts::find_by_shortcut (const QString &shcut)
 {
   QList<QAction *> a = w->findChildren<QAction *>();
 
-//  foreach (QAction *ac, a)
- for (int i = 0; i < a.size(); i++) 
-         if (a.at(i)->shortcut().toString() == shcut)
-            return a.at(i);
+  for (int i = 0; i < a.size(); i++) 
+       if (a.at(i)->shortcut().toString() == shcut)
+          return a.at(i);
 
   return NULL;
 }
@@ -194,7 +191,6 @@ void CShortcuts::save_to_file (const QString &file_name)
   QList<QAction *> a = w->findChildren<QAction *>();
   QString s;
 
-//  foreach (QAction *ac, a)
    for (int i = 0; i < a.size(); i++) 
        if (! a.at(i)->shortcut().toString().isEmpty())
            s.append (a.at(i)->text()).append ("=").append (a.at(i)->shortcut().toString()).append ("\n");
@@ -212,7 +208,6 @@ void CShortcuts::load_from_file (const QString &file_name)
 
   QList<QAction *> a = w->findChildren<QAction *>();
 
-//  foreach (QAction *ac, a)
   for (int i = 0; i < a.size(); i++) 
       if (hash.contains (a.at(i)->text()))
          a[i]->setShortcut (QKeySequence (hash.value (a.at(i)->text())));

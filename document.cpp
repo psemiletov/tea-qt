@@ -355,14 +355,6 @@ CDocument* CDox::get_document_by_fname (const QString &fileName)
   if (fileName.isEmpty() || items.size() == 0)
      return NULL;
 
-/*  for (vector <size_t>::size_type i = 0; i < items.size(); i++)
-      {
-       CDocument *d = items[i];
-       if (d->file_name == fileName)
-          return d;
-      }
-*/
-
   for (vector <CDocument *>::iterator i = items.begin(); i != items.end(); i++)
        if ((*i)->file_name == fileName)
           return *i;
@@ -643,7 +635,6 @@ void CDox::apply_settings_single (CDocument *d)
   QString back_color = hash_get_val (global_palette, "background", "white");
   d->textEdit->margin_color = QColor (hash_get_val (global_palette, "margin_color", text_color)).darker(darker_val);
   d->textEdit->linenums_bg = QColor (hash_get_val (global_palette, "linenums_bg", back_color)).darker(darker_val);
-
   d->textEdit->set_word_wrap (settings->value ("word_wrap", true).toBool());
 
   d->textEdit->repaint();
@@ -1182,7 +1173,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
      return;
 
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); it++)
-  //for (vector <size_t>::size_type i = 0; i < highlightingRules.size(); i++)
       {
        QRegularExpressionMatch m = it->pattern.match (text);
        if (! m.isValid())  
@@ -1381,7 +1371,6 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
   if (highlightingRules.size() == 0)
      return;
 
-  //for (vector <int>::size_type i = 0; i < highlightingRules.size(); i++)
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); it++)
       {
        int index = text.indexOf (it->pattern);
@@ -1951,18 +1940,13 @@ bool CTEAEdit::has_rect_selection()
 
 void CTEAEdit::update_rect_sel()
 {
- // qDebug() << "CTEAEdit::update_rect_sel()  -1";
-
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
      return;
 
   QTextEdit::ExtraSelection rect_selection;
 
-  //extraSelections.clear();
-
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
-  //int ydiff = y2 - y1;
 
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
@@ -1977,16 +1961,10 @@ void CTEAEdit::update_rect_sel()
 
   for (int y = y1; y <= y2; y++)
       {
-//       qDebug() << "y:" << y;
-
        QTextBlock b = document()->findBlockByNumber (y);
-
-   //    qDebug() << "b.text().length(): " << b.text().length();
-     //  qDebug() << "x1: " << x1;
 
        if (b.text().length() == 0)
           {
-           //cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
            correction++;
            continue;
           }
@@ -1997,11 +1975,9 @@ void CTEAEdit::update_rect_sel()
           sel_len = b.text().length() - x1;
 
        cursor.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, x1 + correction);
-
        cursor.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, sel_len);
 
        rect_selection.cursor = cursor;
-       // rect_selection.format.setBackground (brackets_color);
        rect_selection.format.setBackground (sel_back_color);
        rect_selection.format.setForeground (sel_text_color);
 
@@ -2011,18 +1987,9 @@ void CTEAEdit::update_rect_sel()
 
        if (b.text().length() != 0)
            correction = 0;
-
       }
 
   setExtraSelections (extraSelections);
- /*
-  qDebug() << "ydiff: " << ydiff;
-  qDebug() << "y1:" << y1;
-  qDebug() << "y2:" << y2;
-  qDebug() << "x1:" << x1;
-  qDebug() << "x2:" << x2;
-  */
- // qDebug() << get_rect_sel();
 }
 
 
@@ -2037,8 +2004,6 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
 4. Заменяем старый текст на выходной буфер.
 
 */
-
-
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   int ydiff = y2 - y1;
@@ -2048,7 +2013,6 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
 
 //  int how_many_copy_from_source = ydiff;
-
 //  int lines_to_end = blockCount() - y1;
 
   QStringList sl_source;
@@ -2100,79 +2064,8 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
   cursor.removeSelectedText();
 
   textCursor().insertText (new_text);
-
-//  qDebug() << new_text;
 }
 
-/*
-void CTEAEdit::rect_sel_insert (const QString &s)
-{
-
-  int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
-  int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
-  int ydiff = y2 - y1;
-
-
-  int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
-  int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
-  int xdiff = x2 - x1;
-
-  int how_many_copy_from_source = ydiff;
-
-  int lines_to_end = blockCount() - y1;
-
-  if (ydiff > lines_to_end)
-     how_many_copy_from_source = lines_to_end;
-
-  QStringList sl_source;
-
-  for (int line = y1; line <= y2; line++)
-      {
-       QTextBlock b = document()->findBlockByNumber (line);
-       sl_source.append (b.text());
-      }
-
-  QStringList sl_insert = s.split ("\n");
-
-  QStringList sl_dest;
-
-  for (int line = 0; line < sl_insert.size(); line++)
-      {
-       QString t;
-
-       if (line >= sl_source.size())
-          {
-           t = sl_insert [line];
-           sl_dest.append (t);
-           continue;
-          }
-
-       t = sl_source[line].left (x1);
-       t += sl_insert [line];
-       t += sl_source[line].mid (x1);
-
-       sl_dest.append (t);
-      }
-
-  QString new_text = sl_dest.join ("\n");
-  //new_text += "\n";
-
-//теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст
-
-  QTextCursor cursor = textCursor();
-
-  cursor.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
-  cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y1);
-  cursor.movePosition (QTextCursor::NextBlock, QTextCursor::KeepAnchor, ydiff);
-  cursor.movePosition (QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-  cursor.removeSelectedText();
-
-  textCursor().insertText (new_text);
-
-  qDebug() << new_text;
-}
- */
 
 bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
 {
@@ -2214,12 +2107,12 @@ void CTEAEdit::insertFromMimeData (const QMimeData *source)
    QList<QUrl> l = source->urls();
 
    for (QList <QUrl>::iterator u = l.begin(); u != l.end(); u++)
-          {
-           fName = u->toLocalFile();
-           info.setFile(fName);
-           if (info.isFile())
-              doc->holder->open_file (fName, "UTF-8");
-          }
+       {
+        fName = u->toLocalFile();
+        info.setFile(fName);
+        if (info.isFile())
+           doc->holder->open_file (fName, "UTF-8");
+       }
 }
 
 
@@ -2297,22 +2190,15 @@ QString CTEAEdit::get_rect_sel()
 
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
-  //int ydiff = y2 - y1;
 
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
-  int xdiff = x2 - x1;
+  int xdiff = x2 - x1; //sel length
 
 
   for (int y = y1; y <= y2; y++)
       {
-       //int sel_len = xdiff;
-
        QTextBlock b = document()->findBlockByNumber (y);
-
-       //if ((b.text().length() - x1) < xdiff)
-         // sel_len = b.text().length() - x1;
-
        QString t = b.text();
 
        result += t.mid (x1, xdiff);

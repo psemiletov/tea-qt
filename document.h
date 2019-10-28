@@ -45,11 +45,9 @@ code from qwriter:
 #include <QPlainTextEdit>
 #include <QSyntaxHighlighter>
 
-
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
 #endif
-
 
 #if defined (JOYSTICK_SUPPORTED)
 #include "myjoystick.h"
@@ -69,6 +67,17 @@ class CTEAEdit: public QPlainTextEdit
   Q_OBJECT
 
 public:
+
+  bool highlight_current_line;
+  bool hl_brackets;
+  bool draw_margin;
+  bool draw_linenums;
+  bool auto_indent;
+  bool spaces_instead_of_tabs;
+  int tab_sp_width; //in spaces
+  int brace_width; //in pixels
+  int margin_pos; //in chars
+  int margin_x;  //in pixels
 
   QString indent_val;
   QList <QTextEdit::ExtraSelection> extraSelections;
@@ -90,17 +99,6 @@ public:
 
   QWidget *lineNumberArea;
 
-  bool highlight_current_line;
-  bool hl_brackets;
-  bool draw_margin;
-  bool draw_linenums;
-  bool auto_indent;
-  bool spaces_instead_of_tabs;
-  int tab_sp_width; //in spaces
-  int brace_width; //in pixels
-  int margin_pos; //in chars
-  int margin_x;  //in pixels
-
 
   CTEAEdit (QWidget *parent = 0);
 
@@ -115,33 +113,29 @@ public:
 
   void indent();
   void un_indent();
+
   void calc_auto_indent();
   void setup_brace_width();
+  void braceHighlight();
+
+  void lineNumberAreaPaintEvent(QPaintEvent *event);
+  int lineNumberAreaWidth();
 
   void text_replace (const QString &s);
-
   void rect_sel_reset();
   void rect_sel_replace (const QString &s, bool insert = false);
   void update_ext_selections();
   void update_rect_sel();
   QString get_rect_sel();
   void rect_sel_cut (bool just_del = false);
-
-  void braceHighlight();
-
-  void lineNumberAreaPaintEvent(QPaintEvent *event);
-  int lineNumberAreaWidth();
-
   Q_INVOKABLE bool has_rect_selection();
 
 
 protected:
 
+  QMimeData* createMimeDataFromSelection();
   bool canInsertFromMimeData (const QMimeData *source);
   void insertFromMimeData (const QMimeData *source);
-
-  QMimeData* createMimeDataFromSelection();
-
   void paintEvent(QPaintEvent *event);
   void keyPressEvent (QKeyEvent *event);
   void resizeEvent(QResizeEvent *event);
@@ -151,7 +145,6 @@ public slots:
   void updateLineNumberAreaWidth (int newBlockCount);
   void cb_cursorPositionChanged();
   void updateLineNumberArea (const QRect &, int);
-
   void slot_selectionChanged();
 };
 

@@ -1,5 +1,6 @@
 
-распознавание кодировок не работает
+
+shift-up/dn для выделения не работает
 cmake dist creates wrong tarball that cannot be build with meson
 
 JAMSpell support? (https://github.com/bakwc/JamSpell)

@@ -137,21 +137,28 @@ sudo make install
 
 ==02: NOTES FOR PACKAGE MAINTAINERS==
 
-1. TEA after the compilation is a single binary file (with embedded resources).
+0. Thank you for packaging TEA!
 
-2. TEA supports 3 build systems:
+1. Altough TEA has two home sites, it is better to use Github releases as the source:
+https://github.com/psemiletov/tea-qt/archive/$pkgver.tar.gz
+   
+Please note, that TEA source dir after unpacking will be tea-qt-${pkgver}
 
-  * qmake - the traditional one, good for Qt4-Win32-OS/2 builds. TEA's qmake project file is old and obscure. QML plugins are enabled by deafault, that is not wise.
-  * cmake - good for Qt5+ build, the reference one for TEA, has more options than meson support.
+2. TEA after the compilation is a single binary file (with embedded resources).
+
+3. TEA supports 3 build systems:
+
+  * qmake - the traditional one, good for Qt4-Win32-OS/2-Slackware builds. TEA's qmake project file is old and obscure. QML plugins are enabled by deafault, that is not wise.
+  * cmake - good for Qt5 build, the reference one for TEA, has more options than meson support. I recommend to use cmake to build TEA package.
   * meson - I use it internally. Has no option to enable QML plugins.
 
-3. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
+4. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
 
 qmake PREFIX=your_path
 make
 make install
 
-4. QML plugins. Altough you can enable it for cmake with cmake -DUSE_QML=True, or use qmake-based build, I hope you don't enable them, because starting from TEA 49, QML-support at TEA is frozen and unmaintained, and will be removed if no one use it.
+5. QML plugins. Altough you can enable it for cmake with cmake -DUSE_QML=True, or use qmake-based build, I hope you don't enable them, because starting from TEA 49, QML-support at TEA is frozen and unmaintained, and will be removed if no one use it.
 
 
 ==03: NOTE FOR UBUNTU USERS==

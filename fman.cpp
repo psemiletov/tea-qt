@@ -91,30 +91,6 @@ void CFMan::nav (const QString &path)
                                          QDir::Files | QDir::Drives,
                                          sort_flags);
 
-
-
-  /*QFileInfoList lst = dir.entryInfoList (QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot |
-                                         QDir::Files | QDir::Drives,
-                                         QDir::Name |
-                                         QDir::DirsFirst | QDir::IgnoreCase | QDir::LocaleAware);
-
-  */
-  /*
-    QDir::Name   0x00  Sort by name.
-QDir::Time  0x01  Sort by time (modification time).
-QDir::Size  0x02  Sort by file size.
-QDir::Type  0x80  Sort by file type (extension).
-QDir::Unsorted 0x03  Do not sort.
-QDir::NoSort   -1 Not sorted by default.
-QDir::DirsFirst   0x04  Put the directories first, then the files.
-QDir::DirsLast 0x20  Put the files first, then the directories.
-QDir::Reversed 0x08  Reverse the sort order.
-QDir::IgnoreCase  0x10  Sort case-insensitively.
-QDir::LocaleAware 0x40  Sort items appropriately using the current locale settings.
-
-
-   */
-
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
   if (path != "/")
      append_dot_entry ("..");
@@ -228,7 +204,6 @@ void CFMan::append_dot_entry (const QString &fname)
 
 void CFMan::header_view_sortIndicatorChanged (int logicalIndex, Qt::SortOrder order)
 {
-//  qDebug() << "header col = " << logicalIndex << " order = " << order;
   sort_order = order;
   sort_mode = logicalIndex;
 
@@ -319,7 +294,7 @@ QStringList CFMan::get_sel_fnames()
   QStringList li;
 
   QList<QModelIndex>::iterator i;
-  for (i = il.begin(); i != il.end(); ++i)
+  for (i = il.begin(); i != il.end(); i++)
       {
        QString item_string = i->data().toString();
        if (item_string != "..")

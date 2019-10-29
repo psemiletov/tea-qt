@@ -434,10 +434,12 @@ main window callbacks
 
   void fm_full_info();
 
-#if QT_VERSION >= 0x050000
   void fm_hashsum_md5();
   void fm_hashsum_md4();
   void fm_hashsum_sha1();
+
+
+#if QT_VERSION >= 0x050000
 
   void fm_hashsum_sha224();
   void fm_hashsum_sha384();

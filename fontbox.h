@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QPlainTextEdit>
 #include <QObject>
+#include <QFontComboBox>
+#include <QSpinBox>
+
 
 class CFontBox: public QWidget
 {
@@ -17,6 +20,8 @@ public slots:
 public:
 
  QPlainTextEdit edit;
+ QFontComboBox *cf;
+ QSpinBox *spb_font_size;
 
  CFontBox (QWidget *parent = 0); 
  

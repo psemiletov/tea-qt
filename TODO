@@ -1,6 +1,6 @@
 
-
-shift-up/dn для выделения не работает
+галерея шрифтов не работает в Qt 5.13+ Arch/Manjaro
+shift-up/dn для выделения не работает, и никогда не работала
 cmake dist creates wrong tarball that cannot be build with meson
 
 JAMSpell support? (https://github.com/bakwc/JamSpell)

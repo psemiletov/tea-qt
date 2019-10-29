@@ -47,7 +47,6 @@ public:
   Qt::SortOrder sort_order;
   
   QStandardItemModel *mymodel;
- // QList <QFileInfo> files_list;
     
   CFMan (QWidget *parent = 0);
 
@@ -85,3 +84,4 @@ protected:
 };
 
 #endif
+

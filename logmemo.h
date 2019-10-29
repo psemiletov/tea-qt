@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2017 by Peter Semiletov                                          *
+ *   2007-2019 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -51,3 +51,4 @@ signals:
 };
 
 #endif // LOGMEMO_H
+

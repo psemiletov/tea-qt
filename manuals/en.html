@@ -636,6 +636,16 @@ Oranges 11
 
 <p><b>Text  &gt; Compress</b> - removes all whitespaces at the selection.</p>
 
+<p><b>Text  &gt; Anagram</b> - find all anagrams of the selected text. Can be VERY slow and eats a lot of memory if the word is large. So TEA will not froze, it just thinks. Anagram example for "dog":</p>
+
+dgo<br>
+dog<br>
+gdo<br>
+god<br>
+odg<br>
+ogd<br>
+<br>
+
 <p><b>Text  &gt; Remove formatting at each line</b> - removes the formatting (tabs, new lines, double spaces etc.) at each selected line.</p>
 
 <p><b>Text  &gt; Remove formatting</b> - removes the formatting from the whole selected text, so the text will be converted to the one big  string without new lines, double spaces, etc.</p>
@@ -692,8 +702,9 @@ Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i
 
 <br>
 <a name="mni_plugins"></a>
-<p><b>Functions &gt; Plugins</b>. TEA (Qt5-builds) can run the plugins written in QML (see the source code tarball/manuals/plugins for the details how to write TEA plugins). The plugins are snipped as archived directories (TEA itself can unpack ZIPped plugin to plugins folder if you try open such archive in TEA). To install the plugin. just unpack it WITH its directory to $HOME/.config/tea/plugins (UNIX-way) or drive:\Documents and Settings\username\tea\plugins (Windows-way). Then restart TEA to rescan the plugins list. Delete plugin's directory to uninstall it. I am not responsible on how plugin work - it can do everything just like the normal stand-alone program,  so trust your plugin developer or don't use it.
-</p>
+<p><b>Functions &gt; Plugins</b>. TEA (Qt5-builds) can run the plugins written in QML (see the source code tarball/manuals/plugins for the details how to write TEA plugins). The plugins are snipped as archived directories (TEA itself can unpack ZIPped plugin to plugins folder if you try open such archive in TEA). To install the plugin. just unpack it WITH its directory to $HOME/.config/tea/plugins (UNIX-way) or drive:\Documents and Settings\username\tea\plugins (Windows-way). Then restart TEA to rescan the plugins list. Delete plugin's directory to uninstall it. I am not responsible on how plugin work - it can do everything just like the normal stand-alone program,  so trust your plugin developer or don't use it.</p>
+
+<p>As for TEA 49+, QML plugins became deprecated for a several reasons (architecture, low popularity, no feedback - frankly, plugins are unneeded by users). TEA can be built with plugins support, but the plugins supporting code is unmaintained.</p>
 
 
 <br><br>

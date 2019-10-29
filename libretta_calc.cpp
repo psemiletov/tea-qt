@@ -173,8 +173,6 @@ double calculate (string expression)
   while (p != items.end());
 
 
-
-
 //умножаем и делим
   p = items.begin();
 
@@ -250,3 +248,4 @@ double calculate (string expression)
 
   return item.val;
 }
+

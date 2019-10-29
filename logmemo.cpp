@@ -146,3 +146,4 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 
   event->accept();
 }
+

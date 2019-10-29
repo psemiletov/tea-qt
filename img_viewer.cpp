@@ -2,6 +2,7 @@
 this code is Public Domain
 */
 
+//NEED TO REFACTOR
 
 #include <QDebug>
 #include <QApplication>
@@ -59,7 +60,6 @@ void CImgViewer::set_image_mini (const QString &fname)
 void CImgViewer::set_image_full (const QString &fname)
 {
   window_full.load_image (fname);
-  //qDebug() << "get_exif_orintation " << get_exif_orintation (fname);
 }
 
 
@@ -376,8 +376,6 @@ void CZORWindow::load_image (const QString &fname)
 {
   if (! file_exists (fname))
      return;
-
- // qDebug() << "CZORWindow::load_image " << fname;
  
   if (! source_image.load (fname))
      qDebug() << "cannot load " << fname;
@@ -387,7 +385,6 @@ void CZORWindow::load_image (const QString &fname)
   bool orientation_portrait = false; 
   
   int exif_orientation = get_exif_orientation (fname);
- // qDebug() << "exif_orientation: " << exif_orientation;
   
   if (settings->value ("zor_use_exif_orientation", 0).toInt())
       if (exif_orientation == 6 || exif_orientation == 8)

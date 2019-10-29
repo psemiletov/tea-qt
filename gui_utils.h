@@ -26,7 +26,6 @@ QImage image_scale_by (const QImage &source,
                        int value,
                        Qt::TransformationMode mode);
 
-
 QLineEdit* new_line_edit (QBoxLayout *layout, const QString &label, const QString &def_value);
 
 QSpinBox* new_spin_box (QBoxLayout *layout, const QString &label, int min, int max, int value, int step = 1);
@@ -42,3 +41,4 @@ QComboBox* new_combobox (QBoxLayout *layout,
                          int index);
 
 #endif // GUI_UTILS_H
+

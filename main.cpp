@@ -57,7 +57,7 @@ int main (int argc, char *argv[])
       if (argc > 1)
          for (int i = 1; i < argc; i++) 
               app.sendMessage (QString(argv[i]));
-       return 0;
+      return 0;
      }
 
 #endif
@@ -68,19 +68,19 @@ int main (int argc, char *argv[])
  
  bool single_mode = true;
  
- if (argc > 1)
-    if (strcmp(argv[1], "--m") == 0)
-       single_mode = false;
+  if (argc > 1)
+     if (strcmp(argv[1], "--m") == 0)
+        single_mode = false;
     
     
- if (single_mode && app.alreadyExists())
-    {
-     if (argc > 1)
-        for (int i = 1; i < argc; i++) 
-             app.sendMessage (QString(argv[i]));
+  if (single_mode && app.alreadyExists())
+     {
+      if (argc > 1)
+         for (int i = 1; i < argc; i++) 
+              app.sendMessage (QString(argv[i]));
              
-     return 0;
-    }
+      return 0;
+     }
     
 #endif     
     
@@ -103,3 +103,4 @@ int main (int argc, char *argv[])
   
   return app.exec();   
 }
+

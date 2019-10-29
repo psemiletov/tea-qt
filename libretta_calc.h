@@ -8,3 +8,4 @@ using namespace std;
 double calculate (string expression);
 
 #endif
+

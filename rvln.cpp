@@ -10567,7 +10567,7 @@ void rvln::fn_anagram()
   if (t.isEmpty())
      return;
 
-  QString txt = anagram (t).join('\n');
+  QString txt = anagram (t).join("\n");
 
   d = documents->create_new();
   if (d)

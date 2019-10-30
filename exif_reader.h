@@ -1,5 +1,5 @@
-#ifndef EXIF_H
-#define EXIF_H
+#ifndef EXIF_READER_H
+#define EXIF_READER_H
 
 // This implementation is based on http://www.sentex.net/~mwandel/jhead/
 // Rewritten and published in public domain like
@@ -61,4 +61,6 @@ public:
 
 int get_exif_orientation (const QString &fname);
 
-#endif // EXIF_H
+#endif // EXIF_READER_H
+
+

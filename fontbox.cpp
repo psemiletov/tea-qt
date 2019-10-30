@@ -3,10 +3,7 @@ this code is Public Domain
 */
 
 #include <QVBoxLayout>
-#include <QDebug>
-#include <QSpinBox>
 #include <QFont>
-#include <QFontComboBox>
 
 #include "fontbox.h"
 

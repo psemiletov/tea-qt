@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QByteArray>
 
-#include "exif.h"
+#include "exif_reader.h"
 
 
 rint8u readByte (QFile &file)

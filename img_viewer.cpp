@@ -16,7 +16,9 @@ this code is Public Domain
 #include <QSettings>
 
 #include "img_viewer.h"
+#include "exif_reader.h"
 #include "exif.h"
+
 #include "utils.h"
 
 extern QSettings *settings;
@@ -383,9 +385,24 @@ void CZORWindow::load_image (const QString &fname)
   fname_image = fname;
   
   bool orientation_portrait = false; 
-  
+
   int exif_orientation = get_exif_orientation (fname);
+
+
+/*
+  easyexif::EXIFInfo ei;
+  QByteArray b = file_load (fname);
+  ei.parseFrom ((unsigned char *)b.data(), b.length());
+
   
+  int exif_orientation = ei.Orientation;//get_exif_orientation (fname);
+  */
+
+  //qDebug() << "exif_orientation: " << exif_orientation;
+//  qDebug() << "ei: " << ei.Orientation;
+ // std::cout << ei.Make;
+
+
   if (settings->value ("zor_use_exif_orientation", 0).toInt())
       if (exif_orientation == 6 || exif_orientation == 8)
           orientation_portrait = true;

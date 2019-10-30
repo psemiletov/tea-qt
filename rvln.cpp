@@ -81,7 +81,9 @@ started at 08 November 2007
 #include "logmemo.h"
 #include "tzipper.h"
 #include "wavinfo.h"
+#include "exif_reader.h"
 #include "exif.h"
+
 #include "fontbox.h"
 
 #include "spellchecker.h"

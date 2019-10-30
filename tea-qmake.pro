@@ -126,7 +126,7 @@ SOURCES += rvln.cpp \
     tzipper.cpp \
     single_application.cpp \
     single_application_shared.cpp \
-    exif.cpp \
+    exif_reader.cpp \
     myjoystick.cpp
 
 
@@ -149,7 +149,7 @@ HEADERS += rvln.h \
     tzipper.h \
     single_application.h \
     single_application_shared.h \
-    exif.h \
+    exif_reader.h \
     myjoystick.h
 
 

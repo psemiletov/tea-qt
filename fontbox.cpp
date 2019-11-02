@@ -20,13 +20,13 @@ CFontBox::CFontBox (QWidget *parent): QWidget (parent)
 
   spb_font_size->setValue (12);
   connect (spb_font_size, SIGNAL(valueChanged (int)), this, SLOT(slot_font_size_changed (int )));
-  
+
   h_box->addWidget (cf);
   h_box->addWidget (spb_font_size);
   h_box->addWidget (&edit);
-  
+
   edit.setPlainText (tr ("Example string"));
-   
+
   connect (cf, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(slot_fontname_changed(const QString &)));
 
@@ -45,4 +45,3 @@ void CFontBox::slot_font_size_changed (int i)
 {
   edit.setFont (QFont (cf->currentText(), spb_font_size->value()));
 }
-

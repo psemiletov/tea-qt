@@ -1,14 +1,14 @@
 =====NEWS ABOUT TEA====
-TEA 48.0.0, september, 2019
----------------------------------------
-http://semiletov.org/tea - official size #1
-http://tea.ourproject.org - official size #1
-https://github.com/psemiletov/tea-qt - development
-https://vk.com/teaeditor - VK-community
-https://www.facebook.com/groups/766324686841748/ - FB-community
+TEA 49.0.0, november 2019
 ---------------------------------------
   
-   After a long time. Moon calendar has been fixed, as well as a coup of things. The main changes of 48 are under the hood, because I began to prepare TEA source to upcoming Qt 6. The goal is to have compatibility with Qt 4 (still in use in Slackware and OS/2), 5 and 6. 
+   THE INNER CHANGES
+
+   In this version I rewrote the many portions of the core code that is related to the containers (i.e. data arrays). The files lists, the syntax highlighting rules, etc. - almost all those things are re-implemented from Qt library containers to STL library containers. Also, the magic Qt's macro "foreach" was eliminated from TEA code. It makes TEA ready for the upcoming Qt 6 and simplify to maintain code between Qt 4, 5 and 6.
+   The Qt 4 compatibility is still important for TEA because of OS/2, Slackware and old distros.
+   The containers question caused line by line review of the code. I've found some ancient errors and fixed them. Some stuff has been improved and added.
+
+  
 
 
    Stay tuned.

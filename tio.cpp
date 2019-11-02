@@ -428,7 +428,7 @@ CCharsetMagic::CCharsetMagic()
        if (fn == "KOI8-U")
           koi8u = sl;
 
-          
+
        //fill with signatures 
        for (int i = 0; i < bsl.count(); i++)
            sl->words.append (bsl[i]);
@@ -438,8 +438,8 @@ CCharsetMagic::CCharsetMagic()
 
 //the following is needed to correct detection KOI8-R/U
 
-  std::vector<CSignaturesList*>::iterator it1 = std::find(signatures.begin(), signatures.end(), koi8u);  
-  std::vector<CSignaturesList*>::iterator it2 = std::find(signatures.begin(), signatures.end(), koi8r);  
+  std::vector<CSignaturesList*>::iterator it1 = std::find(signatures.begin(), signatures.end(), koi8u);
+  std::vector<CSignaturesList*>::iterator it2 = std::find(signatures.begin(), signatures.end(), koi8r);
   std::swap (*it1, *it2);
 
 

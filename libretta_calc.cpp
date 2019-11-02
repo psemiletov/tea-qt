@@ -224,11 +224,11 @@ double calculate (string expression)
          {
           if (current.op == '+')
              {
-              next.val = current.val + next.val;             
+              next.val = current.val + next.val;
               *t = next;
              }
-          else    
-              if (current.op == '-') 
+          else
+              if (current.op == '-')
                  {
                   next.val = current.val - next.val;             
                   *t = next; 

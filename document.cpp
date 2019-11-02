@@ -236,7 +236,7 @@ CDocument::CDocument (QObject *parent): QObject (parent)
 
 CDocument::~CDocument()
 {
-  qDebug() << "CDocument::~CDocument()";
+//  qDebug() << "CDocument::~CDocument()";
 
   if (file_name.endsWith (".notes") && textEdit->document()->isModified())
      save_with_name_plain (file_name);
@@ -1175,7 +1175,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); it++)
       {
        QRegularExpressionMatch m = it->pattern.match (text);
-       if (! m.isValid())  
+       if (! m.isValid())
            continue;
 
        int index = m.capturedStart();
@@ -1398,6 +1398,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
          int endIndex = commentEndExpression.indexIn (text, startIndex);
 
          int commentLength;
+
          if (endIndex == -1)
             {
              setCurrentBlockState (1);

@@ -82,7 +82,6 @@ started at 08 November 2007
 #include "tzipper.h"
 #include "wavinfo.h"
 #include "exif_reader.h"
-#include "exif.h"
 
 #include "fontbox.h"
 
@@ -6955,7 +6954,7 @@ void rvln::fman_convert_images (bool by_side, int value)
 
   pb_status->setRange (0, li.size() - 1 );
   int i = 0;
-  
+
   for (QList <QString>::iterator fname = li.begin(); fname != li.end(); fname++)
       {
        if (! is_image ((*fname)))

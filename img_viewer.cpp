@@ -17,7 +17,6 @@ this code is Public Domain
 
 #include "img_viewer.h"
 #include "exif_reader.h"
-#include "exif.h"
 
 #include "utils.h"
 

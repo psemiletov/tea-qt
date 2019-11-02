@@ -337,14 +337,17 @@ void rvln::writeSettings()
 
 void rvln::create_main_widget()
 {
+
   QWidget *main_widget = new QWidget;
   QVBoxLayout *v_box = new QVBoxLayout;
   main_widget->setLayout (v_box);
+
 
   main_tab_widget = new QTabWidget;
   main_tab_widget->setObjectName ("main_tab_widget");
 
   main_tab_widget->setTabShape (QTabWidget::Triangular);
+
 
   tab_editor = new QTabWidget;
   tab_editor->setUsesScrollButtons (true);
@@ -357,9 +360,11 @@ void rvln::create_main_widget()
   tab_editor->setObjectName ("tab_editor");
 
 
+
   QPushButton *bt_close = new QPushButton ("X", this);
   connect (bt_close, SIGNAL(clicked()), this, SLOT(close_current()));
   tab_editor->setCornerWidget (bt_close);
+
 
   log = new CLogMemo;
 
@@ -380,6 +385,7 @@ void rvln::create_main_widget()
 
 // FIF creation code
 
+
   if (! settings->value ("fif_at_toolbar", 0).toBool())
      {
       cmb_fif = new QComboBox;
@@ -394,6 +400,7 @@ void rvln::create_main_widget()
 
       QHBoxLayout *lt_fte = new QHBoxLayout;
       v_box->addLayout (lt_fte);
+
 
       QToolButton *bt_find = new QToolButton (this);
       QToolButton *bt_prev = new QToolButton (this);
@@ -419,10 +426,10 @@ void rvln::create_main_widget()
 
   mainSplitter->setStretchFactor (1, 1);
 
+
   idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
   setCentralWidget (main_widget);
 
-  //tab_widget->resize (tab_widget->width(), width() - 100);
   connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
 }
 
@@ -2948,7 +2955,6 @@ void rvln::createOptions()
 
 
   page_images->setLayout (page_images_layout);
-  //page_images->show();
 
   QScrollArea *scra_images = new QScrollArea;
   scra_images->setWidgetResizable (true);
@@ -2957,7 +2963,6 @@ void rvln::createOptions()
   tab_options->addTab (scra_images, tr ("Images"));
 
 
-//  tab_options->addTab (page_images, tr ("Images"));
 ////////////////////////////
 
   QWidget *page_keyboard = new QWidget (tab_options);
@@ -3143,52 +3148,6 @@ void rvln::nav_goto_pos()
   d->textEdit->setTextCursor (cr);
 }
 
-/*
-void rvln::slot_editor_fontname_changed (const QString &text)
-{
-  settings->setValue ("editor_font_name", text);
-  update_stylesheet (fname_stylesheet);
-}
-*/
-/*
-void rvln::slot_logmemo_fontname_changed (const QString &text)
-{
-  settings->setValue ("logmemo_font", text);
-  update_stylesheet (fname_stylesheet);
-}
-*/
-
-/*
-void rvln::slot_app_fontname_changed (const QString &text)
-{
-  settings->setValue ("app_font_name", text);
-  update_stylesheet (fname_stylesheet);
-}
-*/
-
-/*
-void rvln::slot_app_font_size_changed (int i)
-{
-  settings->setValue("app_font_size", i);
-  update_stylesheet (fname_stylesheet);
-}
-*/
-
-/*
-void rvln::slot_font_size_changed (int i)
-{
-  settings->setValue("editor_font_size", i);
-  update_stylesheet (fname_stylesheet);
-}
-*/
-
-/*
-void rvln::slot_logmemo_font_size_changed (int i)
-{
-  settings->setValue("logmemo_font_size", i);
-  update_stylesheet (fname_stylesheet);
-}
-*/
 
 void rvln::mrkup_color()
 {
@@ -3225,8 +3184,6 @@ void rvln::nav_goto_line()
 
   QTextCursor cr = d->textEdit->textCursor();
   cr.movePosition (QTextCursor::Start);
-  //cr.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, fif_get_text().toInt());
-
   cr.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, fif_get_text().toInt() - 1);
 
   d->textEdit->setTextCursor (cr);
@@ -3353,19 +3310,15 @@ void rvln::fn_apply_to_each_line()
      }
 
 
-//заковыристо, переписать попроще
-  QMutableListIterator <QString> i (sl);
+  for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+      {
+       QString ts (t);
+       (*i) = ts.replace ("%s", (*i)); 
+      } 
 
-  while (i.hasNext())
-        {
-         QString ts (t);
-         QString s = i.next();
-         i.setValue (ts.replace ("%s", s));
-        }
+  QString x = sl.join ("\n");
 
-   QString x = sl.join ("\n");
-
-   d->textEdit->textCursor().insertText (x);
+  d->textEdit->textCursor().insertText (x);
 }
 
 
@@ -6901,25 +6854,20 @@ void rvln::fn_rm_trailing_spaces()
 
   QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
 
-  QMutableListIterator <QString> i (sl);
+  for (QList <QString>::iterator s = sl.begin(); s != sl.end(); s++)
+      {
+       if (s->isEmpty())
+          continue;
+     
+      if (s->at (s->size() - 1).isSpace())
+         {
+          int index = s->size() - 1;
+          while (s->at (--index).isSpace())
+                ;
 
-  while (i.hasNext())
-        {
-         QString s = i.next();
-
-         if (s.isEmpty())
-            continue;
-
-         if (s.at (s.size() - 1).isSpace())
-            {
-             int index = s.size() - 1;
-             while (s.at (--index).isSpace())
-                   ;
-
-             s.truncate (index + 1);
-             i.setValue (s);
-            }
-        }
+          s->truncate (index + 1);
+         } 
+     }
 
   QString x = sl.join ("\n");
 

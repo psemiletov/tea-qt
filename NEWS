@@ -4,11 +4,23 @@ TEA 49.0.0, november 2019
   
    THE INNER CHANGES
 
-   In this version I rewrote the many portions of the core code that is related to the containers (i.e. data arrays). The files lists, the syntax highlighting rules, etc. - almost all those things are re-implemented from Qt library containers to STL library containers. Also, the magic Qt's macro "foreach" was eliminated from TEA code. It makes TEA ready for the upcoming Qt 6 and simplify to maintain code between Qt 4, 5 and 6.
-   The Qt 4 compatibility is still important for TEA because of OS/2, Slackware and old distros.
-   The containers question caused line by line review of the code. I've found some ancient errors and fixed them. Some stuff has been improved and added.
+   For this version I rewrote the many portions of the core code that is related to the containers (i.e. data arrays). The files lists, the syntax highlighting rules, etc. - almost all those things are moved from Qt library containers to STL library containers. Also, the magic Qt's macro "foreach" was replaced with traditional iterators. It makes TEA ready for the upcoming Qt 6 and simplify to maintain code between Qt 4, 5 and 6. The Qt 4 compatibility is still important for TEA because of OS/2, Slackware and old distros.
+   The containers question caused the line by line review of the code. In process, many bugs has been fixed, including the drag and drop.
 
+   THE VISIBLE CHANGES
+
+  + The Fm menu now has Chechsum submenu with 
+MD4, MD5, SHA1, SHA 224, all SHA-2, 3, Keccak. 
+  + Functions - Text - Anagram. Can be very CPU and memory angry.
+  * Nav - Prev/Next tab, now circled.
+  * When open the recent file, editor tab is activated.
+  * Built-in UTF-8 detection has been improved.
+  + Tune - Common - Use Enca for charset detection.
+Enca binary can be used to detect encoding. TEA's own detection engine works with Russian/Ukrainian charsets, so Enca is the better option, when installed.
   
+   QML PLUGINS STATUS
+
+   As far I know, no one 
 
 
    Stay tuned.

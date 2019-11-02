@@ -22,13 +22,11 @@
 #ifndef RVLN_H
 #define RVLN_H
 
-
 #include <QListWidget>
 #include <QComboBox>
 #include <QProgressBar>
 #include <QCheckBox>
 #include <QSpinBox>
-//#include <QFontComboBox>
 #include <QSessionManager>
 #include <QApplication>
 #include <QCoreApplication>

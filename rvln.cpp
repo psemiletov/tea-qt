@@ -3968,7 +3968,7 @@ void rvln::search_replace_all_at_ofiles()
      return;
 
   int c = documents->items.size();
-  if (c < 0)
+  if (c == 0)
      return;
 
   Qt::CaseSensitivity cs = Qt::CaseInsensitive;
@@ -5390,7 +5390,7 @@ void rvln::session_save_as()
 {
   last_action = qobject_cast<QAction *>(sender());
 
-  if (documents->items.size() < 0)
+  if (documents->items.size() == 0)
      return;
 
   bool ok;

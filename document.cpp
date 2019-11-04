@@ -1415,7 +1415,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 
 void CDox::save_to_session (const QString &fileName)
 {
-  if (items.size() < 0)
+  if (items.size() == 0)
      return;
 
   fname_current_session = fileName;

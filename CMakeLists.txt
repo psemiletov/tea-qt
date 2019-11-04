@@ -36,21 +36,11 @@ endif()
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network)
 
 
-if(NOT DEFINED USE_QML)
-message("QML IS NOT SUPPORTED")
-endif(NOT DEFINED USE_QML)
-
-message("USE_QML=${USE_QML}")
-if( USE_QML ) 
-    message("USE_QML evaluates to True")
-endif()
-
 if(DEFINED USE_QML)
 message("QML IS SUPPORTED")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG OPTIONAL_COMPONENTS Qml Quick)
 add_definitions(-DUSE_QML_STUFF)
 endif(DEFINED USE_QML)
-
 
 
 if(BUILD_TESTING)

@@ -739,18 +739,6 @@ Do you want to overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MD5 checksum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MD4 checksum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA1 checksum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>ZIP</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1083,10 +1071,6 @@ opera=opera %s</source>
     </message>
     <message>
         <source>MD4 checksum for %1 is %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA1 checksum for %1 is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1738,10 +1722,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Copy block</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1834,15 +1814,151 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The famous input field. Use for search/replace, function parameters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Guess encoding!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>last modified: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The famous input field. Use for search/replace, function parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;Sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: https://aur.archlinux.org/packages/tea-qt/&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Anagram</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Checksum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MD5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MD4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-2 SHA-224</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-2 SHA-256</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-2 SHA-384</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-2 SHA-512</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-3 SHA-224</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-3 SHA-256</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-3 SHA-384</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-3 SHA-512</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keccak-224</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keccak-256</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keccak-384</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keccak-512</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use Enca for charset detection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot unzip and install plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-1 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-2 SHA-224 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-2 SHA-384 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-2 SHA-256 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-2 SHA-512 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-3 224 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-3 256 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-3 384 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SHA-3 512 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keccak 224 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keccak 256 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keccak 384 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keccak 512 checksum for %1 is %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -21,17 +21,14 @@ QString guess_enc_for_file (const QString &fname)
   QString enc = "UTF-8";
 
   QProcess p;
-    
   p.start ("enca", QStringList() << "-i" << fname);
 
-  if( !p.waitForStarted() || !p.waitForFinished() ) 
-       return enc;
+  if (! p.waitForStarted() || ! p.waitForFinished() ) 
+     return enc;
 
   QString s = p.readAllStandardOutput();
   if (! s.isEmpty())
      enc = s.trimmed();
-
-//  qDebug() << enc;
 
   return enc;
 }

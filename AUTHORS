@@ -22,17 +22,6 @@ English documentation (the terrible one): Peter  Semiletov
 German UI translation: Tobias Quathamer <toddy@debian.org>
 Frech UI translation: gholafox <gholafox@free.fr>
 
-//GTK version localizations (unsupported in Qt-branch):
-Czech translation: Zbyněk Mrkvička <zbynek@mrkvicka.eu>
-French translation: Sylvain Cresto  <scresto@gmail.com>, Michèle Garoche <michele.garoche@easyconnect.fr> 
-Latvian translation: Andrejs Meinerts <inni96@inbox.lv>
-Spanish translation: Miguel Latorre <kuan@graffiti.net>
-German translation: Ruediger Arp <ruediger@gmx.net>
-Polish translation: Wit Wiliński <madman@linux.bydg.org>
-Serbian translation: Dejan Čabrilo <dcabrilo@gmail.com>
-Japanese translation: UTUMI Hirosi <utuhiro78@yahoo.co.jp>
-Spanish documentation: Miguel Latorre <kuan@graffiti.net>
-Ukrainian translation:  Peter Semiletov Previous ukrainian translators: Vlad Svetlichny, Rudyy 'black fire' Andriy, Oleg Matviychuk, Taras Jahnjuk
 
 ##
 Packages and ports:
@@ -44,32 +33,6 @@ Mandriva:  Funda Wang <fundawang@mandriva.org>
 Crux: Ivan Rodionov <jean@mosk.ru>
 Frugalware Linux: Priyank Gosalia <priyankmg@gmail.com>
 
-//GTK  branch
-Frugalware Linux: Priyank M. Gosalia <priyankmg@gmail.com>
-Fink port: Michèle Garoche <michele.garoche@easyconnect.fr>
-Crux port: acrux <acrux AT linuxmail DOT org>
-Darwin port: Ole Guldberg Jensen <olegb@opendarwin.org>
-ALT Linux: Vitaly Lipatov <www.sisyphus.ru/packager/lav> 
-Zenwalk: Paul Marwick <paulm@waitrose.com>
-Zenwalk (previous maintainers): Jean-Philippe Guillemin, Mike Verret, Fred Broders
-Ubuntu: Joao Pinto <joao.pinto@getdeb.net>
-prev. Ubuntu packages: Chaigneau Vincent
-FreeBSD: Danfe <danfe@FreeBSD.org> 
-Slackware: Yanmarshus
-Fresh Debian Package: Oisn Mac Fheara
-Debian: Lior Kaplan <kaplan@debian.org>, Marco Rodrigues <gothicx@sapo.pt>
-SUSE: Detlef Reichelt <detlef@die-mafia.de>
-(was - Pascal Bleser)
-Arch Linux: Roman Kyrylych 
-Mandriva Linux: Lenny Cartier <lenny@mandriva.com>
-Mandriva: Steffen Van Roosbroeck <dansmug@mandrakeclub.nl>, MandrivaClub.NL 
-Mandrake Linux SRC package: UTUMI Hirosi <utuhiro78@yahoo.co.jp> 
-Mandrake Linux: Paul Smith <phhs80@gmail.com>
-Fedora: Michael Krylov
-Gentoo ebuild: Peter Weller <welp@gentoo.org>
-old Gentoo ebuilds: Maciej Szumieluk, Serg, Miguel Latorre <kuan@graffiti.net>
-old packages for Slackware: Fred Broders, Anton Ivanov
-old Slax package: Ivan Andronov
 ##
 Acknowledgements:
 

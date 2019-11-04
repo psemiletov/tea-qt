@@ -9,7 +9,7 @@ TEA 49.0.0, november 2019
 
    THE VISIBLE CHANGES
 
-  + The Fm menu now has Chechsum submenu with 
+  + The Fm menu now has Checksum submenu with 
 MD4, MD5, SHA1, SHA 224, all SHA-2, 3, Keccak. 
   + Functions - Text - Anagram. Can be very CPU and memory angry.
   * Nav - Prev/Next tab, now circled.
@@ -20,7 +20,25 @@ Enca binary can be used to detect encoding. TEA's own detection engine works wit
   
    QML PLUGINS STATUS
 
-   As far I know, no one 
+   As far I know, no one make or use TEA QML/JavaScript plugins. Since TEA 49, the plugins are deprecated. You still can build TEA with plugins support (see README), but I will not maintain plugins support anymore. There are more reasons for that (not just "no one use")
+
+  NOTES FOR PACKAGE MAINTAINERS
+
+0. Thank you for packaging TEA!
+
+1. Although TEA has two home sites, it is better to use Github releases as the source:
+https://github.com/psemiletov/tea-qt/archive/$pkgver.tar.gz
+   
+Please note, that TEA source dir after unpacking will be tea-qt-${pkgver}
+
+2. TEA after the compilation is a single binary file (with embedded resources).
+
+3. TEA supports 3 build systems:
+
+  * qmake - the traditional one, good for Qt4-Win32-OS/2-Slackware builds. TEA's qmake project file is old and obscure. QML plugins are enabled by default, that is not wise.
+  * cmake - for Qt5 build, the reference one for TEA, has more options than meson support. I recommend to use cmake to build TEA package.
+  * meson - I use it internally. Has no option to enable QML plugins.
+
 
 
    Stay tuned.

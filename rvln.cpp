@@ -26,9 +26,7 @@ started at 08 November 2007
 #include <algorithm>
 #include <iostream>
 
-#include <QCompleter>
 #include <QFileSystemModel>
-
 #include <QMimeData>
 #include <QStyleFactory>
 #include <QLabel>
@@ -40,7 +38,7 @@ started at 08 November 2007
 #include <QMenuBar>
 #include <QGroupBox>
 #include <QImageWriter>
-#include <QDesktopServices>
+//#include <QDesktopServices>
 #include <QColorDialog>
 #include <QTextCodec>
 #include <QMimeData>
@@ -1658,7 +1656,7 @@ void rvln::createMenus()
   add_to_menu (menu_view, tr ("Toggle fullscreen"), SLOT(view_toggle_fs()));
   add_to_menu (menu_view, tr ("Stay on top"), SLOT(view_stay_on_top()));
   add_to_menu (menu_view, tr ("Darker"), SLOT(darker()));
-  add_to_menu (menu_view, tr ("Preview with default browser"), SLOT(view_preview_in_bro()));
+//  add_to_menu (menu_view, tr ("Preview with default browser"), SLOT(view_preview_in_bro()));
 
   helpMenu = menuBar()->addMenu ("?");
   helpMenu->setTearOffEnabled (true);
@@ -3111,7 +3109,7 @@ void rvln::toggle_wrap()
      d->textEdit->set_word_wrap (! d->textEdit->get_word_wrap());
 }
 
-
+/*
 void rvln::view_preview_in_bro()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -3123,7 +3121,7 @@ void rvln::view_preview_in_bro()
       QDesktopServices::openUrl (cm);
      }  
 }
-
+*/
 
 void rvln::nav_save_pos()
 {

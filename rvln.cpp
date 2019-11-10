@@ -542,6 +542,22 @@ rvln::rvln()
   QString sfilename = dir_config + "/tea.conf";
   settings = new QSettings (sfilename, QSettings::IniFormat);
 
+
+  QString lng = settings->value ("lng", QLocale::system().name()).toString().left(2).toLower();
+
+ // qDebug() << "LNG:" << lng;
+
+  if (! file_exists (":/translations/" + lng + ".qm"))
+     lng = "en";
+
+  qtTranslator.load (QString ("qt_%1").arg (lng),
+                     QLibraryInfo::location (QLibraryInfo::TranslationsPath));
+  qApp->installTranslator (&qtTranslator);
+
+  myappTranslator.load (":/translations/" + lng);
+  qApp->installTranslator (&myappTranslator);
+
+/*
   if (settings->value ("override_locale", 0).toBool())
      {
       QString ts = settings->value ("override_locale_val", "en").toString();
@@ -566,7 +582,7 @@ rvln::rvln()
        myappTranslator.load (":/translations/tea_" + QLocale::system().name());
        qApp->installTranslator (&myappTranslator);
       }
-
+*/
 
   fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
   theme_dir = get_file_path (fname_stylesheet) + "/";
@@ -2330,6 +2346,27 @@ void rvln::createOptions()
   page_interface_layout->setAlignment (Qt::AlignTop);
 
 
+  QStringList sl_lngs = read_dir_entries (":/translations");
+
+  for (QList <QString>::iterator i = sl_lngs.begin(); i != sl_lngs.end(); i++)
+      {
+       (*i) = i->left(2);
+      }
+
+  sl_lngs.append ("en");
+
+  QString lng = settings->value ("lng", QLocale::system().name()).toString().left(2).toLower();
+
+
+  if (! file_exists (":/translations/" + lng + ".qm"))
+     lng = "en";
+
+  cmb_lng = new_combobox (page_interface_layout,
+                          tr ("UI language (restart needed)"),
+                          sl_lngs,
+                          settings->value ("lng", lng).toString());
+
+
   QString default_style = qApp->style()->objectName();
   if (default_style == "GTK+") //can be buggy
      default_style = "Cleanlooks";
@@ -2344,32 +2381,6 @@ void rvln::createOptions()
   connect (cmb_styles, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(slot_style_currentIndexChanged (const QString &)));
 
-/*
-  QHBoxLayout *lt_h = new QHBoxLayout;
-
-  QLabel *l_font = new QLabel (tr ("Editor font"));
-
-  cmb_font_name = new QFontComboBox (page_interface);
-  cmb_font_name->setCurrentFont (QFont (settings->value ("editor_font_name", "Serif").toString()));
-
-
-  spb_font_size = new QSpinBox (page_interface);
-  spb_font_size->setRange (6, 64);
-  spb_font_size->setValue (settings->value ("editor_font_size", "16").toInt());
-
-
-  connect (cmb_font_name, SIGNAL(currentIndexChanged (const QString &)),
-           this, SLOT(slot_editor_fontname_changed(const QString &)));
-
-  connect (spb_font_size, SIGNAL(valueChanged (int)), this, SLOT(slot_font_size_changed (int )));
-*/
-
-
-//  QLabel *l_font_logmemo = new QLabel (tr ("Logmemo font"));
-
-  
-  //QPushButton *bt_font_logmemo = new QPushButton (settings->value ("logmemo_font", "Monospace").toString() + "," + settings->value ("logmemo_font_size", "12").toString(), this);
-
 
   QPushButton *bt_font_interface = new QPushButton (tr ("Interface font"), this);
   connect (bt_font_interface, SIGNAL(clicked()), this, SLOT(slot_font_interface_select()));
@@ -2381,68 +2392,10 @@ void rvln::createOptions()
   connect (bt_font_logmemo, SIGNAL(clicked()), this, SLOT(slot_font_logmemo_select()));
 
 
-
-
-/*
-  cmb_logmemo_font_name = new QFontComboBox (page_interface);
-  cmb_logmemo_font_name->setCurrentFont (QFont (settings->value ("logmemo_font", "Monospace").toString()));
-
-  spb_logmemo_font_size = new QSpinBox (page_interface);
-  spb_logmemo_font_size->setRange (6, 64);
-  spb_logmemo_font_size->setValue (settings->value ("logmemo_font_size", "12").toInt());
-
-
-  connect (cmb_logmemo_font_name, SIGNAL(currentIndexChanged (const QString &)),
-           this, SLOT(slot_logmemo_fontname_changed(const QString &)));
-
-  connect (spb_logmemo_font_size, SIGNAL(valueChanged (int)), this, SLOT(slot_logmemo_font_size_changed (int )));
-*/
-/*
-  QLabel *l_app_font = new QLabel (tr ("Interface font"));
-
-  cmb_app_font_name = new QFontComboBox (page_interface);
-  cmb_app_font_name->setCurrentFont (QFont (settings->value ("app_font_name", qApp->font().family()).toString()));
-
-  spb_app_font_size = new QSpinBox (page_interface);
-  spb_app_font_size->setRange (6, 64);
-  QFontInfo fi = QFontInfo (qApp->font());
-
-  spb_app_font_size->setValue (settings->value ("app_font_size", fi.pointSize()).toInt());
-  connect (spb_app_font_size, SIGNAL(valueChanged (int)), this, SLOT(slot_app_font_size_changed (int )));
-
-  connect (cmb_app_font_name, SIGNAL(currentIndexChanged ( const QString & )),
-           this, SLOT(slot_app_fontname_changed(const QString & )));
-
-
-  lt_h->addWidget (l_font);
-  lt_h->addWidget (cmb_font_name);
-  lt_h->addWidget (spb_font_size);
-
-  page_interface_layout->addLayout (lt_h, 1);
-*/
- // lt_h = new QHBoxLayout;
-
-//  lt_h->addWidget (l_font_logmemo);
-//  lt_h->addWidget (bt_font_logmemo);
-
- // lt_h->addWidget (cmb_logmemo_font_name);
-//  lt_h->addWidget (spb_logmemo_font_size);
-
- // page_interface_layout->addLayout (lt_h);
-
   page_interface_layout->addWidget (bt_font_interface);
   page_interface_layout->addWidget (bt_font_editor);
   page_interface_layout->addWidget (bt_font_logmemo);
 
-/*
-  lt_h = new QHBoxLayout;
-
-  lt_h->addWidget (l_app_font);
-  lt_h->addWidget (cmb_app_font_name);
-  lt_h->addWidget (spb_app_font_size);
-
-  page_interface_layout->addLayout (lt_h);
-*/
 
 
   QStringList sl_tabs_align;
@@ -2640,19 +2593,17 @@ void rvln::createOptions()
   cb_session_restore = new QCheckBox (tr ("Restore the last session on start-up"), tab_options);
   cb_session_restore->setCheckState (Qt::CheckState (settings->value ("session_restore", "0").toInt()));
 
-  cb_override_locale = new QCheckBox (tr ("Override locale"), tab_options);
-  cb_override_locale->setCheckState (Qt::CheckState (settings->value ("override_locale", 0).toInt()));
+//  cb_override_locale = new QCheckBox (tr ("Override locale"), tab_options);
+//  cb_override_locale->setCheckState (Qt::CheckState (settings->value ("override_locale", 0).toInt()));
 
-  ed_locale_override = new QLineEdit (this);
-  ed_locale_override->setText (settings->value ("override_locale_val", "en").toString());
+//  ed_locale_override = new QLineEdit (this);
+//  ed_locale_override->setText (settings->value ("override_locale_val", "en").toString());
 
-  QHBoxLayout *hb_locovr = new QHBoxLayout;
+  //QHBoxLayout *hb_locovr = new QHBoxLayout;
 
-  //hb_locovr->addWidget (cb_override_locale);
-  //hb_locovr->addWidget (ed_locale_override);
-
-  hb_locovr->insertWidget (-1, cb_override_locale, 0, Qt::AlignLeft);
-  hb_locovr->insertWidget (-1, ed_locale_override, 1, Qt::AlignLeft);
+  
+//  hb_locovr->insertWidget (-1, cb_override_locale, 0, Qt::AlignLeft);
+//  hb_locovr->insertWidget (-1, ed_locale_override, 1, Qt::AlignLeft);
 
 
   cb_use_enca_for_charset_detection = new QCheckBox (tr ("Use Enca for charset detection"), tab_options);
@@ -2744,7 +2695,7 @@ void rvln::createOptions()
 
  // page_common_layout->addLayout (hb_moon_phase_algo);
 
-  page_common_layout->addLayout (hb_locovr);
+//  page_common_layout->addLayout (hb_locovr);
   page_common_layout->addLayout (hb_imgvovr);
 
 
@@ -8546,7 +8497,7 @@ void rvln::leaving_tune()
 {
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
-  settings->setValue ("override_locale_val", ed_locale_override->text());
+ // settings->setValue ("override_locale_val", ed_locale_override->text());
   settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
   settings->setValue ("wasd", cb_wasd->checkState());
 
@@ -8584,7 +8535,7 @@ void rvln::leaving_tune()
   settings->setValue ("cursor_width", spb_cursor_width->value());
   settings->setValue ("override_img_viewer", cb_override_img_viewer->checkState());
   settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->checkState());
-  settings->setValue ("override_locale", cb_override_locale->checkState());
+//  settings->setValue ("override_locale", cb_override_locale->checkState());
   settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->checkState());
   settings->setValue ("start_week_on_sunday", cb_start_on_sunday->checkState());
   settings->setValue ("northern_hemisphere", cb_northern_hemisphere->checkState());
@@ -8594,6 +8545,8 @@ void rvln::leaving_tune()
   int i = moon_phase_algos.key (cmb_moon_phase_algos->currentText());
   settings->setValue ("moon_phase_algo", i);
   calendar->moon_phase_algo = i;
+
+  settings->setValue ("lng", cmb_lng->currentText());
 
   settings->setValue ("zip_charset_in", cmb_zip_charset_in->currentText());
   settings->setValue ("zip_charset_out", cmb_zip_charset_out->currentText());

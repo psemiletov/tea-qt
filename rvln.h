@@ -27,7 +27,7 @@
 #include <QProgressBar>
 #include <QCheckBox>
 #include <QSpinBox>
-#include <QSessionManager>
+//#include <QSessionManager>
 #include <QApplication>
 #include <QCoreApplication>
 #include <QSplitter>
@@ -968,6 +968,8 @@ main window widgets
   QComboBox *cb_fman_drives;
   QComboBox *cmb_spellcheckers;
   QComboBox *cmb_styles;
+  QComboBox *cmb_lng;
+
   QComboBox *cmb_icon_size;
 
 
@@ -987,7 +989,7 @@ prefs window widgets
   QLineEdit *ed_cols_per_row;
 
 
-  QLineEdit *ed_locale_override;
+//  QLineEdit *ed_locale_override;
   QLineEdit *ed_img_viewer_override;
 
   QSpinBox *spb_cursor_blink_time;
@@ -1015,7 +1017,7 @@ prefs window widgets
 
 
   QCheckBox *cb_auto_img_preview;
-  QCheckBox *cb_override_locale;
+//  QCheckBox *cb_override_locale;
 
   QCheckBox *cb_override_img_viewer;
   QCheckBox *cb_use_enca_for_charset_detection;

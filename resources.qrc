@@ -31,9 +31,9 @@
     <file>icons/tea-icon-v3-03.png</file>
     <file>icons/labels.png</file>
 
-    <file>translations/tea_ru.qm</file>
-    <file>translations/tea_de.qm</file>
-    <file>translations/tea_fr.qm</file>
+    <file>translations/ru.qm</file>
+    <file>translations/de.qm</file>
+    <file>translations/fr.qm</file>
 
     <file>images/happy-people-bw.png</file>
     <file>images/mister.png</file>

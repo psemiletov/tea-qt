@@ -53,6 +53,7 @@ zlib_dep = dependency('zlib', required : true)
 
 #qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network', 'Qml', 'Quick']) 
 qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network']) 
+
 qt5 = import('qt5') 
 
 

@@ -7710,7 +7710,7 @@ void rvln::view_use_profile()
   QPoint pos = s.value ("pos", QPoint (1, 200)).toPoint();
   QSize size = s.value ("size", QSize (600, 420)).toSize();
 
-  if (mainSplitter && ettings->value ("ui_splitter", 1).toBool())
+  if (mainSplitter && settings->value ("ui_splitter", 1).toBool())
      mainSplitter->restoreState (s.value ("splitterSizes").toByteArray());
 
   resize (size);

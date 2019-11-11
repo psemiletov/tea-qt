@@ -1,5 +1,8 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ Tune::Interface::UI with splitter (traditional mode, restart on change)
+  //if turned off and restart, TEA will be in the docked UI mode
+
 - Tune::Interface::Override locale
 + Tune::Interface::UI Language list
 

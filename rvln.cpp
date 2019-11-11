@@ -357,8 +357,6 @@ void rvln::create_main_widget()
 
   tab_editor->setObjectName ("tab_editor");
 
-
-
   QPushButton *bt_close = new QPushButton ("X", this);
   connect (bt_close, SIGNAL(clicked()), this, SLOT(close_current()));
   tab_editor->setCornerWidget (bt_close);

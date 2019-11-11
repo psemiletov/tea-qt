@@ -858,7 +858,7 @@ public:
 main window widgets
 *************************/
 
-  QSplitter *mainSplitter;
+//  QSplitter *mainSplitter;
   QTextBrowser *man;
   QString charset;
 

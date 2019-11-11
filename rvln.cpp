@@ -26,6 +26,7 @@ started at 08 November 2007
 #include <algorithm>
 #include <iostream>
 
+#include <QDockWidget>
 #include <QFileSystemModel>
 #include <QMimeData>
 #include <QStyleFactory>
@@ -306,7 +307,7 @@ void rvln::readSettings()
   fname_def_palette = settings->value ("fname_def_palette", ":/palettes/TEA").toString();
   QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
   QSize size = settings->value ("size", QSize (600, 420)).toSize();
-  mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
+//  mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
 
   resize (size);
   move (pos);
@@ -318,7 +319,7 @@ void rvln::writeSettings()
   settings->setValue ("pos", pos());
   settings->setValue ("size", size());
   settings->setValue ("charset", charset);
-  settings->setValue ("splitterSizes", mainSplitter->saveState());
+//  settings->setValue ("splitterSizes", mainSplitter->saveState());
   settings->setValue ("spl_fman", spl_fman->saveState());
   settings->setValue ("dir_last", dir_last);
   settings->setValue ("fname_def_palette", fname_def_palette);
@@ -336,13 +337,20 @@ void rvln::writeSettings()
 void rvln::create_main_widget()
 {
 
+//  setDockNestingEnabled (true);
+
+  setDockOptions (QMainWindow::AnimatedDocks | QMainWindow::AllowNestedDocks);
+
   QWidget *main_widget = new QWidget;
   QVBoxLayout *v_box = new QVBoxLayout;
   main_widget->setLayout (v_box);
+  setCentralWidget (main_widget);
 
 
   main_tab_widget = new QTabWidget;
   main_tab_widget->setObjectName ("main_tab_widget");
+  v_box->addWidget (main_tab_widget);
+
 
   main_tab_widget->setTabShape (QTabWidget::Triangular);
 
@@ -362,30 +370,41 @@ void rvln::create_main_widget()
   tab_editor->setCornerWidget (bt_close);
 
 
-  log = new CLogMemo;
+  QDockWidget *dock_logmemo = new QDockWidget (tr ("Logmemo"), this);
+  dock_logmemo->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+
+//  dock_logmemo->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+
+  log = new CLogMemo (dock_logmemo);
 
   connect (log, SIGNAL(double_click (const QString &)),
            this, SLOT(logmemo_double_click (const QString &)));
 
 
+  dock_logmemo->setWidget (log);
+  dock_logmemo->setObjectName ("dock_log");
+  addDockWidget (Qt::BottomDockWidgetArea, dock_logmemo);
 
-  mainSplitter = new QSplitter (Qt::Vertical);
-  v_box->addWidget (mainSplitter);
-
-  main_tab_widget->setMinimumHeight (10);
-  log->setMinimumHeight (10);
-
-
-  mainSplitter->addWidget (main_tab_widget);
-  mainSplitter->addWidget (log);
-
+  
 // FIF creation code
 
 
   if (! settings->value ("fif_at_toolbar", 0).toBool())
      {
+      QDockWidget *dock_fif = new QDockWidget (tr ("Famous Input Field"), this);
+   //   dock_fif->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+      dock_fif->setObjectName ("dock_fif");
+      dock_fif->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+//      dock_fif->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Minimum);
+      //dock_fif->setMinimumWidth(100);
+
+      QWidget *w_fif = new QWidget (dock_fif);  
+      w_fif->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
+//      w_fif->setMinimumHeight(100);
+
+
       cmb_fif = new QComboBox;
-      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
+  //    cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
       cmb_fif->setObjectName ("FIF");
 
       cmb_fif->setEditable (true);
@@ -395,7 +414,8 @@ void rvln::create_main_widget()
       connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
 
       QHBoxLayout *lt_fte = new QHBoxLayout;
-      v_box->addLayout (lt_fte);
+      w_fif->setLayout (lt_fte);
+
 
 
       QToolButton *bt_find = new QToolButton (this);
@@ -418,13 +438,13 @@ void rvln::create_main_widget()
       lt_fte->addWidget (bt_find);
       lt_fte->addWidget (bt_prev);
       lt_fte->addWidget (bt_next);
-     }
 
-  mainSplitter->setStretchFactor (1, 1);
+      dock_fif->setWidget (w_fif);
+      addDockWidget (Qt::BottomDockWidgetArea, dock_fif);
+     }
 
 
   idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
-  setCentralWidget (main_widget);
 
   connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
 }
@@ -7584,7 +7604,7 @@ void rvln::view_use_profile()
   QPoint pos = s.value ("pos", QPoint (1, 200)).toPoint();
   QSize size = s.value ("size", QSize (600, 420)).toSize();
 
-  mainSplitter->restoreState (s.value ("splitterSizes").toByteArray());
+//  mainSplitter->restoreState (s.value ("splitterSizes").toByteArray());
   resize (size);
   move (pos);
 
@@ -7648,7 +7668,7 @@ void rvln::profile_save_as()
 
   s.setValue ("pos", pos());
   s.setValue ("size", size());
-  s.setValue ("splitterSizes", mainSplitter->saveState());
+//  s.setValue ("splitterSizes", mainSplitter->saveState());
 
   s.setValue ("editor_font_name", settings->value ("editor_font_name", "Monospace").toString());
   s.setValue ("editor_font_size", settings->value ("editor_font_size", "16").toInt());

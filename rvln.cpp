@@ -307,7 +307,9 @@ void rvln::readSettings()
   fname_def_palette = settings->value ("fname_def_palette", ":/palettes/TEA").toString();
   QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
   QSize size = settings->value ("size", QSize (600, 420)).toSize();
-//  mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
+
+  if (mainSplitter && settings->value ("ui_splitter", 1).toBool())
+      mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
 
   resize (size);
   move (pos);
@@ -319,7 +321,10 @@ void rvln::writeSettings()
   settings->setValue ("pos", pos());
   settings->setValue ("size", size());
   settings->setValue ("charset", charset);
-//  settings->setValue ("splitterSizes", mainSplitter->saveState());
+
+  if (mainSplitter && settings->value ("ui_splitter", 1).toBool())
+     settings->setValue ("splitterSizes", mainSplitter->saveState());
+
   settings->setValue ("spl_fman", spl_fman->saveState());
   settings->setValue ("dir_last", dir_last);
   settings->setValue ("fname_def_palette", fname_def_palette);
@@ -334,10 +339,104 @@ void rvln::writeSettings()
 }
 
 
-void rvln::create_main_widget()
-{
 
-//  setDockNestingEnabled (true);
+void rvln::create_main_widget_splitter()
+{
+  QWidget *main_widget = new QWidget;
+  QVBoxLayout *v_box = new QVBoxLayout;
+  main_widget->setLayout (v_box);
+
+  main_tab_widget = new QTabWidget;
+  main_tab_widget->setObjectName ("main_tab_widget");
+
+  main_tab_widget->setTabShape (QTabWidget::Triangular);
+
+
+  tab_editor = new QTabWidget;
+  tab_editor->setUsesScrollButtons (true);
+
+//#if QT_VERSION >= 0x040500
+#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
+  tab_editor->setMovable (true);
+#endif
+
+  tab_editor->setObjectName ("tab_editor");
+
+  QPushButton *bt_close = new QPushButton ("X", this);
+  connect (bt_close, SIGNAL(clicked()), this, SLOT(close_current()));
+  tab_editor->setCornerWidget (bt_close);
+
+
+  log = new CLogMemo;
+
+  connect (log, SIGNAL(double_click (const QString &)),
+           this, SLOT(logmemo_double_click (const QString &)));
+
+
+
+  mainSplitter = new QSplitter (Qt::Vertical);
+  v_box->addWidget (mainSplitter);
+
+  main_tab_widget->setMinimumHeight (10);
+  log->setMinimumHeight (10);
+
+
+  mainSplitter->addWidget (main_tab_widget);
+  mainSplitter->addWidget (log);
+
+// FIF creation code
+
+
+  if (! settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      cmb_fif = new QComboBox;
+      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
+      cmb_fif->setObjectName ("FIF");
+
+      cmb_fif->setEditable (true);
+      fif = cmb_fif->lineEdit();
+      fif->setStatusTip (tr ("The famous input field. Use for search/replace, function parameters"));
+
+      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
+
+      QHBoxLayout *lt_fte = new QHBoxLayout;
+      v_box->addLayout (lt_fte);
+
+
+      QToolButton *bt_find = new QToolButton (this);
+      QToolButton *bt_prev = new QToolButton (this);
+      QToolButton *bt_next = new QToolButton (this);
+      bt_next->setArrowType (Qt::RightArrow);
+      bt_prev->setArrowType (Qt::LeftArrow);
+
+      connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
+      connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
+      connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
+
+      bt_find->setIcon (get_theme_icon ("search_find.png"));
+
+      QLabel *l_fif = new QLabel (tr ("FIF"));
+
+      lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
+      lt_fte->addWidget (cmb_fif, 1);
+
+      lt_fte->addWidget (bt_find);
+      lt_fte->addWidget (bt_prev);
+      lt_fte->addWidget (bt_next);
+     }
+
+  mainSplitter->setStretchFactor (1, 1);
+
+
+  idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
+  setCentralWidget (main_widget);
+
+  connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
+}
+
+
+void rvln::create_main_widget_docked()
+{
 
   setDockOptions (QMainWindow::AnimatedDocks | QMainWindow::AllowNestedDocks);
 
@@ -530,6 +629,8 @@ void rvln::init_styles()
 
 rvln::rvln()
 {
+  mainSplitter = 0;
+
   ui_update = true;
 
   b_destroying_all = false;
@@ -622,7 +723,6 @@ rvln::rvln()
   createActions();
   createMenus();
   createToolBars();
- // createStatusBar();
 
   init_styles();
 
@@ -647,7 +747,10 @@ rvln::rvln()
 
   setMinimumSize (12, 12);
 
-  create_main_widget();
+  if (settings->value ("ui_splitter", 1).toBool())
+     create_main_widget_splitter();
+  else
+      create_main_widget_docked();
 
   idx_prev = 0;
   connect (main_tab_widget, SIGNAL(currentChanged(int)), this, SLOT(main_tab_page_changed(int)));
@@ -2362,6 +2465,11 @@ void rvln::createOptions()
 
   QVBoxLayout *page_interface_layout = new QVBoxLayout;
   page_interface_layout->setAlignment (Qt::AlignTop);
+
+
+  cb_ui_splitter = new QCheckBox (tr ("UI with splitter (traditional mode, restart on change)"), tab_options);
+  cb_ui_splitter->setChecked (settings->value ("ui_splitter", "1").toBool());
+  page_interface_layout->addWidget (cb_ui_splitter);
 
 
   QStringList sl_lngs = read_dir_entries (":/translations");
@@ -5883,8 +5991,6 @@ void rvln::createFman()
   spl_fman = new QSplitter (this);
   spl_fman->setChildrenCollapsible (true);
 
-//  spl_fman->setStretchFactor (1, 1);
-
   spl_fman->addWidget (fman);
   spl_fman->addWidget (w_right);
 
@@ -7604,7 +7710,9 @@ void rvln::view_use_profile()
   QPoint pos = s.value ("pos", QPoint (1, 200)).toPoint();
   QSize size = s.value ("size", QSize (600, 420)).toSize();
 
-//  mainSplitter->restoreState (s.value ("splitterSizes").toByteArray());
+  if (mainSplitter && ettings->value ("ui_splitter", 1).toBool())
+     mainSplitter->restoreState (s.value ("splitterSizes").toByteArray());
+
   resize (size);
   move (pos);
 
@@ -7668,7 +7776,9 @@ void rvln::profile_save_as()
 
   s.setValue ("pos", pos());
   s.setValue ("size", size());
-//  s.setValue ("splitterSizes", mainSplitter->saveState());
+
+  if (mainSplitter && settings->value ("ui_splitter", 1).toBool())
+     s.setValue ("splitterSizes", mainSplitter->saveState());
 
   s.setValue ("editor_font_name", settings->value ("editor_font_name", "Monospace").toString());
   s.setValue ("editor_font_size", settings->value ("editor_font_size", "16").toInt());
@@ -8518,6 +8628,8 @@ void rvln::leaving_tune()
  // settings->setValue ("override_locale_val", ed_locale_override->text());
   settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
   settings->setValue ("wasd", cb_wasd->checkState());
+  settings->setValue ("ui_splitter", cb_ui_splitter->isChecked());
+
 
 #if defined(JOYSTICK_SUPPORTED)
   settings->setValue ("use_joystick", cb_use_joystick->checkState());

@@ -359,6 +359,8 @@ public:
 
   QCheckBox *cb_wordwrap;
 
+  QCheckBox *cb_ui_splitter;
+
   QCheckBox *cb_fif_at_toolbar;
   QCheckBox *cb_show_linenums;
   QCheckBox *cb_hl_current_line;
@@ -858,7 +860,7 @@ public:
 main window widgets
 *************************/
 
-//  QSplitter *mainSplitter;
+  QSplitter *mainSplitter;
   QTextBrowser *man;
   QString charset;
 
@@ -1062,7 +1064,9 @@ prefs window widgets
 
   void leaving_tune();
 
-  void create_main_widget();
+  void create_main_widget_splitter();
+  void create_main_widget_docked();
+
   void createActions();
   void createMenus();
   void createOptions();

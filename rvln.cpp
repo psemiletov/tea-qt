@@ -430,10 +430,10 @@ void rvln::create_main_widget()
 
       bt_find->setIcon (get_theme_icon ("search_find.png"));
 
-      QLabel *l_fif = new QLabel (tr ("FIF"));
+     // QLabel *l_fif = new QLabel (tr ("FIF"));
 
-      lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
-      lt_fte->addWidget (cmb_fif, 1);
+     // lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
+      lt_fte->addWidget (cmb_fif, 0);
 
       lt_fte->addWidget (bt_find);
       lt_fte->addWidget (bt_prev);

@@ -331,9 +331,9 @@ void rvln::writeSettings()
   settings->setValue ("markup_mode", markup_mode);
   settings->setValue ("VER_NUMBER", QString (current_version_number));
   settings->setValue ("state", saveState());
-  settings->setValue ("word_wrap", cb_wordwrap->checkState());
-  settings->setValue ("show_linenums", cb_show_linenums->checkState());
-  settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->checkState());
+  settings->setValue ("word_wrap", cb_wordwrap->isChecked());
+  settings->setValue ("show_linenums", cb_show_linenums->isChecked());
+  settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->isChecked());
 
   delete settings;
 }
@@ -471,8 +471,7 @@ void rvln::create_main_widget_docked()
 
   QDockWidget *dock_logmemo = new QDockWidget (tr ("Logmemo"), this);
   dock_logmemo->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-
-//  dock_logmemo->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+  dock_logmemo->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
 
   log = new CLogMemo (dock_logmemo);
 
@@ -491,7 +490,7 @@ void rvln::create_main_widget_docked()
   if (! settings->value ("fif_at_toolbar", 0).toBool())
      {
       QDockWidget *dock_fif = new QDockWidget (tr ("Famous Input Field"), this);
-   //   dock_fif->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+      dock_fif->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
       dock_fif->setObjectName ("dock_fif");
       dock_fif->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 //      dock_fif->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Minimum);
@@ -2467,7 +2466,7 @@ void rvln::createOptions()
   page_interface_layout->setAlignment (Qt::AlignTop);
 
 
-  cb_ui_splitter = new QCheckBox (tr ("UI with splitter (traditional mode, restart on change)"), tab_options);
+  cb_ui_splitter = new QCheckBox (tr ("UI with splitter (traditional mode, restart needed)"), tab_options);
   cb_ui_splitter->setChecked (settings->value ("ui_splitter", "1").toBool());
   page_interface_layout->addWidget (cb_ui_splitter);
 
@@ -2584,17 +2583,17 @@ void rvln::createOptions()
 
 
   cb_fif_at_toolbar = new QCheckBox (tr ("FIF at the top (restart needed)"), tab_options);
-  cb_fif_at_toolbar->setCheckState (Qt::CheckState (settings->value ("fif_at_toolbar", "0").toInt()));
+  cb_fif_at_toolbar->setChecked (settings->value ("fif_at_toolbar", "0").toBool());
   page_interface_layout->addWidget (cb_fif_at_toolbar);
 
 
   cb_show_linenums = new QCheckBox (tr ("Show line numbers"), tab_options);
-  cb_show_linenums->setCheckState (Qt::CheckState (settings->value ("show_linenums", "0").toInt()));
+  cb_show_linenums->setChecked (settings->value ("show_linenums", "0").toBool());
   page_interface_layout->addWidget (cb_show_linenums);
 
 
   cb_wordwrap = new QCheckBox (tr ("Word wrap"), tab_options);
-  cb_wordwrap->setCheckState (Qt::CheckState (settings->value ("word_wrap", "2").toInt()));
+  cb_wordwrap->setChecked (settings->value ("word_wrap", "1").toBool());
   page_interface_layout->addWidget (cb_wordwrap);
 
 /*
@@ -2604,7 +2603,7 @@ void rvln::createOptions()
 */
 
   cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
-  cb_hl_enabled->setCheckState (Qt::CheckState (settings->value ("hl_enabled", "2").toInt()));
+  cb_hl_enabled->setChecked (settings->value ("hl_enabled", "1").toBool());
   page_interface_layout->addWidget (cb_hl_enabled);
 
 
@@ -7732,7 +7731,9 @@ void rvln::view_use_profile()
   settings->setValue ("app_font_name", s.value ("app_font_name", "Sans").toString());
   settings->setValue ("app_font_size", s.value ("app_font_size", "12").toInt());
 
-  cb_wordwrap->setCheckState (Qt::CheckState (s.value ("word_wrap", "2").toInt()));
+//  cb_wordwrap->setCheckState (Qt::CheckState (s.value ("word_wrap", "2").toInt()));
+  cb_wordwrap->setChecked (s.value ("word_wrap", "1").toBool());
+
   cb_show_linenums->setCheckState (Qt::CheckState (s.value ("show_linenums", "0").toInt()));
   cb_hl_current_line->setCheckState (Qt::CheckState (s.value ("additional_hl", "0").toInt()));
   cb_show_margin->setCheckState (Qt::CheckState (s.value ("show_margin", "0").toInt()));
@@ -8646,7 +8647,7 @@ void rvln::leaving_tune()
   settings->setValue ("additional_hl", cb_hl_current_line->checkState());
   settings->setValue ("session_restore", cb_session_restore->checkState());
   settings->setValue ("show_linenums", cb_show_linenums->checkState());
-  settings->setValue ("hl_enabled", cb_hl_enabled->checkState());
+  settings->setValue ("hl_enabled", cb_hl_enabled->isChecked());
   settings->setValue ("hl_brackets", cb_hl_brackets->checkState());
   settings->setValue ("auto_indent", cb_auto_indent->checkState());
   settings->setValue ("spaces_instead_of_tabs", cb_spaces_instead_of_tabs->checkState());
@@ -8665,7 +8666,6 @@ void rvln::leaving_tune()
   settings->setValue ("cursor_width", spb_cursor_width->value());
   settings->setValue ("override_img_viewer", cb_override_img_viewer->checkState());
   settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->checkState());
-//  settings->setValue ("override_locale", cb_override_locale->checkState());
   settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->checkState());
   settings->setValue ("start_week_on_sunday", cb_start_on_sunday->checkState());
   settings->setValue ("northern_hemisphere", cb_northern_hemisphere->checkState());
@@ -8720,33 +8720,6 @@ QAction* rvln::add_to_menu (QMenu *menu,
   menu->addAction (act);
   return act;
 }
-
-/*
-void rvln::cmb_ui_langs_currentIndexChanged (const QString &text)
-{
-  if (text == "en")
-     {
-      qApp->removeTranslator (&myappTranslator);
-      qApp->removeTranslator (&qtTranslator);
-     }
-  else
-      {
-       qApp->removeTranslator (&myappTranslator);
-       qApp->removeTranslator (&qtTranslator);
-
-       QString ts = text;
-       if (ts.length() != 2)
-          ts = "en";
-
-       qtTranslator.load (QString ("qt_%1").arg (ts),
-                          QLibraryInfo::location (QLibraryInfo::TranslationsPath));
-       qApp->installTranslator (&qtTranslator);
-
-       myappTranslator.load (":/translations/tea_" + ts);
-       qApp->installTranslator (&myappTranslator);
-      }
-}
-*/
 
 
 void rvln::search_fuzzy_mode()

@@ -1701,8 +1701,6 @@ void rvln::createMenus()
   menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
   menu_fm_zip->setTearOffEnabled (true);
 
-  //add_to_menu (menu_fm_zip, tr ("Pack selected directory"), SLOT(fman_pack_sel_dir()));
-
   menu_fm_zip->addSeparator();
 
   add_to_menu (menu_fm_zip, tr ("Create new ZIP"), SLOT(fman_create_zip()));
@@ -1752,7 +1750,6 @@ void rvln::createMenus()
   add_to_menu (menu_view, tr ("Toggle fullscreen"), SLOT(view_toggle_fs()));
   add_to_menu (menu_view, tr ("Stay on top"), SLOT(view_stay_on_top()));
   add_to_menu (menu_view, tr ("Darker"), SLOT(darker()));
-//  add_to_menu (menu_view, tr ("Preview with default browser"), SLOT(view_preview_in_bro()));
 
   helpMenu = menuBar()->addMenu ("?");
   helpMenu->setTearOffEnabled (true);
@@ -2433,11 +2430,6 @@ void rvln::createOptions()
                               sl_ui_modes,
                               settings->value ("ui_mode", 0).toInt());
 
-/*
-  cb_ui_splitter = new QCheckBox (tr ("UI with splitter (traditional mode, restart needed)"), tab_options);
-  cb_ui_splitter->setChecked (settings->value ("ui_splitter", "1").toBool());
-  page_interface_layout->addWidget (cb_ui_splitter);
-*/
 
   QStringList sl_lngs = read_dir_entries (":/translations");
 
@@ -2488,7 +2480,6 @@ void rvln::createOptions()
   page_interface_layout->addWidget (bt_font_interface);
   page_interface_layout->addWidget (bt_font_editor);
   page_interface_layout->addWidget (bt_font_logmemo);
-
 
 
   QStringList sl_tabs_align;
@@ -2564,12 +2555,6 @@ void rvln::createOptions()
   cb_wordwrap->setChecked (settings->value ("word_wrap", "1").toBool());
   page_interface_layout->addWidget (cb_wordwrap);
 
-/*
-  cb_colored_console = new QCheckBox (tr ("Use colored console output (can crash)"), tab_options);
-  cb_colored_console->setCheckState (Qt::CheckState (settings->value ("colored_console", "0").toInt()));
-  page_interface_layout->addWidget (cb_colored_console);
-*/
-
   cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
   cb_hl_enabled->setChecked (settings->value ("hl_enabled", "1").toBool());
   page_interface_layout->addWidget (cb_hl_enabled);
@@ -2622,7 +2607,7 @@ void rvln::createOptions()
 
 
   cb_show_margin = new QCheckBox (tr ("Show margin at"), tab_options);
-  cb_show_margin->setCheckState (Qt::CheckState (settings->value ("show_margin", "0").toInt()));
+  cb_show_margin->setChecked (settings->value ("show_margin", "0").toBool());
 
   spb_margin_pos = new QSpinBox;
   spb_margin_pos->setValue (settings->value ("margin_pos", 72).toInt());
@@ -2683,15 +2668,7 @@ void rvln::createOptions()
   cb_session_restore = new QCheckBox (tr ("Restore the last session on start-up"), tab_options);
   cb_session_restore->setChecked (settings->value ("session_restore", "0").toBool());
 
-//  cb_override_locale = new QCheckBox (tr ("Override locale"), tab_options);
-//  cb_override_locale->setCheckState (Qt::CheckState (settings->value ("override_locale", 0).toInt()));
-
-//  ed_locale_override = new QLineEdit (this);
-//  ed_locale_override->setText (settings->value ("override_locale_val", "en").toString());
-
   //QHBoxLayout *hb_locovr = new QHBoxLayout;
-
-  
 //  hb_locovr->insertWidget (-1, cb_override_locale, 0, Qt::AlignLeft);
 //  hb_locovr->insertWidget (-1, ed_locale_override, 1, Qt::AlignLeft);
 
@@ -2780,7 +2757,6 @@ void rvln::createOptions()
   scra_common->setWidget (page_common);
 
   tab_options->addTab (scra_common, tr ("Common"));
-
   //tab_options->addTab (page_common, tr ("Common"));
 
 
@@ -2933,7 +2909,7 @@ void rvln::createOptions()
 
 
   cb_exif_rotate = new QCheckBox (tr ("Apply hard rotation by EXIF data"), this);
-  cb_exif_rotate->setChecked (settings->value ("cb_exif_rotate", 0).toBool());
+  cb_exif_rotate->setChecked (settings->value ("cb_exif_rotate", 1).toBool());
 
 
 
@@ -3132,19 +3108,6 @@ void rvln::toggle_wrap()
      d->textEdit->set_word_wrap (! d->textEdit->get_word_wrap());
 }
 
-/*
-void rvln::view_preview_in_bro()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     {
-      QString cm  = "file:///" + d->file_name;
-      QDesktopServices::openUrl (cm);
-     }  
-}
-*/
 
 void rvln::nav_save_pos()
 {
@@ -4059,12 +4022,6 @@ void rvln::search_replace_all()
         }
 }
 
-/*
-void CApplication::saveState (QSessionManager &manager)
-{
-  manager.setRestartHint (QSessionManager::RestartIfRunning);
-}
-*/
 
 void rvln::update_charsets()
 {
@@ -4103,8 +4060,7 @@ void rvln::fn_flip_a_list()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (
-                                                                 d->textEdit->textCursor().selectedText(),
+      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
                                                                  fif_get_text(),
                                                                  QSTRL_PROC_LIST_FLIP));
 }
@@ -4116,8 +4072,7 @@ void rvln::fn_flip_a_list_sep()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (
-                                                                d->textEdit->textCursor().selectedText(),
+     d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
                                                                 fif_get_text(),
                                                                 QSTRL_PROC_LIST_FLIP_SEP));
 }
@@ -4145,8 +4100,6 @@ void rvln::mrkup_tags_to_entities()
   CDocument *d = documents->get_current();
   if (d)
      d->textEdit->textCursor().insertText (str_to_entities (d->textEdit->textCursor().selectedText()));
-
-  //QT5 QString::toHtmlEscaped
 }
 
 
@@ -4269,10 +4222,9 @@ void rvln::fn_filter_rm_less_than()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (
-                                                                d->textEdit->textCursor().selectedText(),
+     d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
                                                                 fif_get_text(),
-                                                               QSTRL_PROC_FLT_LESS));
+                                                                QSTRL_PROC_FLT_LESS));
 }
 
 
@@ -4282,8 +4234,7 @@ void rvln::fn_filter_rm_greater_than()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (
-                                                                d->textEdit->textCursor().selectedText(),
+     d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
                                                                 fif_get_text(),
                                                                 QSTRL_PROC_FLT_GREATER));
 }
@@ -4295,8 +4246,7 @@ void rvln::fn_filter_rm_duplicates()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (
-                                                                d->textEdit->textCursor().selectedText(),
+     d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
                                                                 fif_get_text(),
                                                                 QSTRL_PROC_FLT_REMOVE_DUPS));
 }
@@ -4308,8 +4258,7 @@ void rvln::fn_filter_rm_empty()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (
-                                                                 d->textEdit->textCursor().selectedText(),
+      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
                                                                  fif_get_text(),
                                                                  QSTRL_PROC_FLT_REMOVE_EMPTY));
 }
@@ -4424,8 +4373,7 @@ QString morse_to_lang (const QString &s, const QString &lang)
 
   QString result;
 
-  int c = sl.size();
-  for (int i = 0; i < c; i++)
+  for (int i = 0; i < sl.size(); i++)
       {
        QString t = h.key (sl[i]);
        if (! t.isEmpty())
@@ -6926,7 +6874,7 @@ void rvln::fman_convert_images (bool by_side, int value)
       
        qApp->processEvents();
 
-       if (settings->value ("cb_exif_rotate", 0).toInt())
+       if (settings->value ("cb_exif_rotate", 1).toBool())
           {
            int exif_orientation = get_exif_orientation ((*fname));
 
@@ -7292,7 +7240,7 @@ void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
 
 #ifdef HUNSPELL_ENABLE
    if (cur_spellchecker == "Hunspell")
-      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), "/home/rox/devel/test/hunspell");
+      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), "/usr/share/hunspell/");
 #endif
 
  create_spellcheck_menu();
@@ -7302,7 +7250,7 @@ void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
 
 void rvln::pb_choose_hunspell_path_clicked()
 {
-  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/usr/share/hunspell",
+  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/usr/share/hunspell/",
                                                     QFileDialog::ShowDirsOnly |
                                                     QFileDialog::DontResolveSymlinks);
   if (path.isEmpty())
@@ -7661,7 +7609,7 @@ void rvln::view_use_profile()
   settings->setValue ("word_wrap", s.value ("word_wrap", "1").toBool());
   settings->setValue ("show_linenums", s.value ("show_linenums", "0").toBool());
   settings->setValue ("additional_hl", s.value ("additional_hl", "0").toBool());
-  settings->setValue ("show_margin", s.value ("show_margin", "0").toInt());
+  settings->setValue ("show_margin", s.value ("show_margin", "0").toBool());
 
   settings->setValue ("editor_font_name", s.value ("editor_font_name", "Serif").toString());
   settings->setValue ("editor_font_size", s.value ("editor_font_size", "14").toInt());
@@ -7678,16 +7626,6 @@ void rvln::view_use_profile()
 
   update_stylesheet (fname_stylesheet);
   documents->apply_settings();
-
-//  cmb_font_name->setCurrentFont (QFont (s.value ("editor_font_name", "Serif").toString()));
-//  spb_font_size->setValue (s.value ("editor_font_size", "16").toInt());
-
-//  cmb_logmemo_font_name->setCurrentFont (QFont (s.value ("logmemo_font", "Monospace").toString()));
-//  spb_logmemo_font_size->setValue (s.value ("logmemo_font_size", "12").toInt());
-
-//  QFontInfo fi = QFontInfo (qApp->font());
-//  spb_app_font_size->setValue (s.value ("app_font_size", fi.pointSize()).toInt());
-//  cmb_app_font_name->setCurrentFont (QFont (s.value ("app_font_name", qApp->font().family()).toString()));
 }
 
 
@@ -7841,14 +7779,22 @@ void rvln::guess_enc()
   QString fn = fman->get_sel_fname();
 
   if (settings->value ("use_enca_for_charset_detection", 0).toBool())
-      enc = guess_enc_for_file (fn);
+      {
+       enc = guess_enc_for_file (fn);
+       if (enc == "err")
+          {
+           log->log (tr ("Enca is not installed, falling back to the built-in detection"));
+           CCharsetMagic cm;
+           enc = cm.guess_for_file (fn);
+          }       
+      } 
   else
       {
        CCharsetMagic cm;
        enc = cm.guess_for_file (fn);
       }  
 
- cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
+  cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
 }
 
 
@@ -8307,13 +8253,12 @@ void rvln::mrkup_document_weight()
        }
 
   std::sort (lst.begin(), lst.end(), CFSizeFNameLessThan);
-//  qSort (lst.begin(), lst.end(), CFSizeFNameLessThan);
 
   for (int i = 0; i < lst.size(); i++)
-     {
-      result += tr ("%1 kbytes %2 <br>").arg (QString::number (lst[i]->size / 1024)).arg (lst[i]->fname);
-      delete lst[i];
-     }
+      {
+       result += tr ("%1 kbytes %2 <br>").arg (QString::number (lst[i]->size / 1024)).arg (lst[i]->fname);
+       delete lst[i];
+      }
 
   result.prepend (tr ("Total size = %1 kbytes in %2 files<br>").arg (QString::number (size_total / 1024))
                   .arg (QString::number (files_total)));
@@ -8371,25 +8316,6 @@ void rvln::fman_zip_info()
 
   log->log (sl.join("\n"));
 }
-
-/*
-void rvln::fman_pack_sel_dir()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QString fn = fman->get_sel_fname();
-  if (fn.isEmpty())
-     return;
-
-  QString fz = fn + ".zip";
-
-//
-  QuaZip::setDefaultFileNameCodec (QTextCodec::codecForName (settings->value ("zip_charset_out", "UTF-8").toString().toLatin1().data()));
-
-  if (JlCompress::compressDir (fz, fn))
-      log->log (fz + tr ("is created"));
-}
-*/
 
 
 void rvln::cmb_tea_icons_currentIndexChanged (const QString &text)
@@ -8565,38 +8491,37 @@ void rvln::leaving_tune()
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
   settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
-  settings->setValue ("wasd", cb_wasd->checkState());
-//  settings->setValue ("ui_splitter", cb_ui_splitter->isChecked());
+  settings->setValue ("wasd", cb_wasd->isChecked());
 
   settings->setValue ("ui_mode", cmb_ui_mode->currentIndex());
 
 
 
 #if defined(JOYSTICK_SUPPORTED)
-  settings->setValue ("use_joystick", cb_use_joystick->checkState());
+  settings->setValue ("use_joystick", cb_use_joystick->isChecked());
 #endif
 
-  settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->checkState());
-  settings->setValue ("word_wrap", cb_wordwrap->checkState());
+  settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->isChecked());
+  settings->setValue ("word_wrap", cb_wordwrap->isChecked());
 
 #if QT_VERSION >= 0x050000
 //#if QT_VERSION_MAJOR >= 5
-  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->checkState());
+  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->isChecked());
 #endif
 
-  settings->setValue ("additional_hl", cb_hl_current_line->checkState());
-  settings->setValue ("session_restore", cb_session_restore->checkState());
-  settings->setValue ("show_linenums", cb_show_linenums->checkState());
+  settings->setValue ("additional_hl", cb_hl_current_line->isChecked());
+  settings->setValue ("session_restore", cb_session_restore->isChecked());
+  settings->setValue ("show_linenums", cb_show_linenums->isChecked());
   settings->setValue ("hl_enabled", cb_hl_enabled->isChecked());
-  settings->setValue ("hl_brackets", cb_hl_brackets->checkState());
-  settings->setValue ("auto_indent", cb_auto_indent->checkState());
-  settings->setValue ("spaces_instead_of_tabs", cb_spaces_instead_of_tabs->checkState());
-  settings->setValue ("cursor_xy_visible", cb_cursor_xy_visible->checkState());
+  settings->setValue ("hl_brackets", cb_hl_brackets->isChecked());
+  settings->setValue ("auto_indent", cb_auto_indent->isChecked());
+  settings->setValue ("spaces_instead_of_tabs", cb_spaces_instead_of_tabs->isChecked());
+  settings->setValue ("cursor_xy_visible", cb_cursor_xy_visible->isChecked());
   settings->setValue ("tab_sp_width", spb_tab_sp_width->value());
-  settings->setValue ("center_on_scroll", cb_center_on_cursor->checkState());
-  settings->setValue ("show_margin", cb_show_margin->checkState());
+  settings->setValue ("center_on_scroll", cb_center_on_cursor->isChecked());
+  settings->setValue ("show_margin", cb_show_margin->isChecked());
   settings->setValue ("margin_pos", spb_margin_pos->value());
-  settings->setValue ("b_preview", cb_auto_img_preview->checkState());
+  settings->setValue ("b_preview", cb_auto_img_preview->isChecked());
   settings->setValue ("cursor_blink_time", spb_cursor_blink_time->value());
 
   MyProxyStyle::cursor_blink_time = spb_cursor_blink_time->value();
@@ -8604,13 +8529,13 @@ void rvln::leaving_tune()
   qApp->setCursorFlashTime (spb_cursor_blink_time->value());
 
   settings->setValue ("cursor_width", spb_cursor_width->value());
-  settings->setValue ("override_img_viewer", cb_override_img_viewer->checkState());
-  settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->checkState());
-  settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->checkState());
-  settings->setValue ("start_week_on_sunday", cb_start_on_sunday->checkState());
-  settings->setValue ("northern_hemisphere", cb_northern_hemisphere->checkState());
+  settings->setValue ("override_img_viewer", cb_override_img_viewer->isChecked());
+  settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->isChecked());
+  settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->isChecked());
+  settings->setValue ("start_week_on_sunday", cb_start_on_sunday->isChecked());
+  settings->setValue ("northern_hemisphere", cb_northern_hemisphere->isChecked());
 
-  calendar->northern_hemisphere = bool (cb_northern_hemisphere->checkState());
+  calendar->northern_hemisphere = bool (cb_northern_hemisphere->isChecked());
 
   int i = moon_phase_algos.key (cmb_moon_phase_algos->currentText());
   settings->setValue ("moon_phase_algo", i);
@@ -8624,12 +8549,12 @@ void rvln::leaving_tune()
   settings->setValue ("label_end", ed_label_end->text());
   settings->setValue ("label_start", ed_label_start->text());
   settings->setValue ("output_image_fmt", cmb_output_image_fmt->currentText());
-  settings->setValue ("img_filter", cb_output_image_flt->checkState());
+  settings->setValue ("img_filter", cb_output_image_flt->isChecked());
   settings->setValue("fuzzy_q", spb_fuzzy_q->value());
   settings->setValue("img_quality", spb_img_quality->value());
-  settings->setValue ("img_post_proc", cb_zip_after_scale->checkState());
-  settings->setValue ("cb_exif_rotate", cb_exif_rotate->checkState());
-  settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->checkState());
+  settings->setValue ("img_post_proc", cb_zip_after_scale->isChecked());
+  settings->setValue ("cb_exif_rotate", cb_exif_rotate->isChecked());
+  settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->isChecked());
   settings->setValue ("ed_side_size", ed_side_size->text());
   settings->setValue ("ed_link_options", ed_link_options->text());
   settings->setValue ("ed_cols_per_row", ed_cols_per_row->text());
@@ -9687,7 +9612,7 @@ void rvln::scale_image()
   if (source.isNull())
      return;
 
-  if (settings->value ("cb_exif_rotate", 0).toInt())
+  if (settings->value ("cb_exif_rotate", 1).toBool())
      {
       int exif_orientation = get_exif_orientation (fname);
 
@@ -10221,9 +10146,6 @@ void rvln::ide_build()
   QString command_build = hash_get_val (documents->hash_project,
                                        "command_build", "make");
 
- // if (settings->value ("colored_console", "0").toBool())
-   //  command_build = "unbuffer " + command_build;
-
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (dir_build);
 
@@ -10261,9 +10183,7 @@ void rvln::ide_clean()
 
     connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
 
-
     process->setProcessChannelMode (QProcess::MergedChannels) ;
-
     process->start (command_clean, QIODevice::ReadWrite);
 }
 

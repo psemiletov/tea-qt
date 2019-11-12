@@ -24,7 +24,7 @@ QString guess_enc_for_file (const QString &fname)
   p.start ("enca", QStringList() << "-i" << fname);
 
   if (! p.waitForStarted() || ! p.waitForFinished() ) 
-     return enc;
+     return "err";
 
   QString s = p.readAllStandardOutput();
   if (! s.isEmpty())

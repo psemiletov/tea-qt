@@ -359,7 +359,7 @@ public:
 
   QCheckBox *cb_wordwrap;
 
-  QCheckBox *cb_ui_splitter;
+//  QCheckBox *cb_ui_splitter;
 
   QCheckBox *cb_fif_at_toolbar;
   QCheckBox *cb_show_linenums;
@@ -386,6 +386,8 @@ public:
   QCheckBox *cb_center_on_cursor;
 
   QCheckBox *cb_full_path_at_window_title;
+
+  QComboBox *cmb_ui_mode;
 
 
   QCheckBox *cb_use_trad_dialogs;

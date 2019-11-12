@@ -308,7 +308,7 @@ void rvln::readSettings()
   QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
   QSize size = settings->value ("size", QSize (600, 420)).toSize();
 
-  if (mainSplitter && settings->value ("ui_splitter", 1).toBool())
+  if (mainSplitter/* && ! settings->value ("ui_mode", 0).toBool()*/)
       mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
 
   resize (size);
@@ -322,7 +322,7 @@ void rvln::writeSettings()
   settings->setValue ("size", size());
   settings->setValue ("charset", charset);
 
-  if (mainSplitter && settings->value ("ui_splitter", 1).toBool())
+  if (mainSplitter/*&& settings->value ("ui_mode", 0).toBool()*/)
      settings->setValue ("splitterSizes", mainSplitter->saveState());
 
   settings->setValue ("spl_fman", spl_fman->saveState());
@@ -437,7 +437,6 @@ void rvln::create_main_widget_splitter()
 
 void rvln::create_main_widget_docked()
 {
-
   setDockOptions (QMainWindow::AnimatedDocks | QMainWindow::AllowNestedDocks);
 
   QWidget *main_widget = new QWidget;
@@ -493,16 +492,11 @@ void rvln::create_main_widget_docked()
       dock_fif->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
       dock_fif->setObjectName ("dock_fif");
       dock_fif->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-//      dock_fif->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Minimum);
-      //dock_fif->setMinimumWidth(100);
 
       QWidget *w_fif = new QWidget (dock_fif);  
       w_fif->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
-//      w_fif->setMinimumHeight(100);
-
 
       cmb_fif = new QComboBox;
-  //    cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
       cmb_fif->setObjectName ("FIF");
 
       cmb_fif->setEditable (true);
@@ -513,8 +507,6 @@ void rvln::create_main_widget_docked()
 
       QHBoxLayout *lt_fte = new QHBoxLayout;
       w_fif->setLayout (lt_fte);
-
-
 
       QToolButton *bt_find = new QToolButton (this);
       QToolButton *bt_prev = new QToolButton (this);
@@ -528,9 +520,7 @@ void rvln::create_main_widget_docked()
 
       bt_find->setIcon (get_theme_icon ("search_find.png"));
 
-     // QLabel *l_fif = new QLabel (tr ("FIF"));
 
-     // lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
       lt_fte->addWidget (cmb_fif, 0);
 
       lt_fte->addWidget (bt_find);
@@ -663,8 +653,6 @@ rvln::rvln()
 
   QString lng = settings->value ("lng", QLocale::system().name()).toString().left(2).toLower();
 
- // qDebug() << "LNG:" << lng;
-
   if (! file_exists (":/translations/" + lng + ".qm"))
      lng = "en";
 
@@ -674,33 +662,6 @@ rvln::rvln()
 
   myappTranslator.load (":/translations/" + lng);
   qApp->installTranslator (&myappTranslator);
-
-/*
-  if (settings->value ("override_locale", 0).toBool())
-     {
-      QString ts = settings->value ("override_locale_val", "en").toString();
-      if (ts.length() != 2)
-         ts = "en";
-
-      qtTranslator.load (QString ("qt_%1").arg (ts),
-                         QLibraryInfo::location (QLibraryInfo::TranslationsPath));
-
-      qApp->installTranslator (&qtTranslator);
-
-      myappTranslator.load (":/translations/tea_" + ts);
-      qApp->installTranslator (&myappTranslator);
-     }
-  else
-      {
-       qtTranslator.load (QString ("qt_%1").arg (QLocale::system().name()),
-                          QLibraryInfo::location (QLibraryInfo::TranslationsPath));
-
-       qApp->installTranslator (&qtTranslator);
-
-       myappTranslator.load (":/translations/tea_" + QLocale::system().name());
-       qApp->installTranslator (&myappTranslator);
-      }
-*/
 
   fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
   theme_dir = get_file_path (fname_stylesheet) + "/";
@@ -746,7 +707,7 @@ rvln::rvln()
 
   setMinimumSize (12, 12);
 
-  if (settings->value ("ui_splitter", 1).toBool())
+  if (! settings->value ("ui_mode", 0).toBool())
      create_main_widget_splitter();
   else
       create_main_widget_docked();
@@ -954,7 +915,6 @@ void rvln::open()
   sidebarUrls.append (QUrl::fromLocalFile (dir_sessions));
   sidebarUrls.append (QUrl::fromLocalFile (dir_scripts));
   sidebarUrls.append (QUrl::fromLocalFile (dir_tables));
-  //sidebarUrls.append (QUrl::fromLocalFile (dir_variants));
 
 #ifdef Q_OS_UNIX
 
@@ -2465,11 +2425,19 @@ void rvln::createOptions()
   QVBoxLayout *page_interface_layout = new QVBoxLayout;
   page_interface_layout->setAlignment (Qt::AlignTop);
 
+  QStringList sl_ui_modes;
+  sl_ui_modes << "Classic" << "Docked";
 
+  cmb_ui_mode = new_combobox (page_interface_layout,
+                              tr ("UI mode (restart needed)"),
+                              sl_ui_modes,
+                              settings->value ("ui_mode", 0).toInt());
+
+/*
   cb_ui_splitter = new QCheckBox (tr ("UI with splitter (traditional mode, restart needed)"), tab_options);
   cb_ui_splitter->setChecked (settings->value ("ui_splitter", "1").toBool());
   page_interface_layout->addWidget (cb_ui_splitter);
-
+*/
 
   QStringList sl_lngs = read_dir_entries (":/translations");
 
@@ -2608,27 +2576,27 @@ void rvln::createOptions()
 
 
   cb_hl_current_line = new QCheckBox (tr ("Highlight current line"), tab_options);
-  cb_hl_current_line->setCheckState (Qt::CheckState (settings->value ("additional_hl", "0").toInt()));
+  cb_hl_current_line->setChecked (settings->value ("additional_hl", "0").toBool());
   page_interface_layout->addWidget (cb_hl_current_line);
 
 
   cb_hl_brackets = new QCheckBox (tr ("Highlight paired brackets"), tab_options);
-  cb_hl_brackets->setCheckState (Qt::CheckState (settings->value ("hl_brackets", "0").toInt()));
+  cb_hl_brackets->setChecked (settings->value ("hl_brackets", "0").toBool());
   page_interface_layout->addWidget (cb_hl_brackets);
 
 
   cb_auto_indent = new QCheckBox (tr ("Automatic indent"), tab_options);
-  cb_auto_indent->setCheckState (Qt::CheckState (settings->value ("auto_indent", "0").toInt()));
+  cb_auto_indent->setChecked (settings->value ("auto_indent", "0").toBool());
   page_interface_layout->addWidget (cb_auto_indent);
 
 
   cb_spaces_instead_of_tabs = new QCheckBox (tr ("Use spaces instead of tabs"), tab_options);
-  cb_spaces_instead_of_tabs->setCheckState (Qt::CheckState (settings->value ("spaces_instead_of_tabs", "2").toInt()));
+  cb_spaces_instead_of_tabs->setChecked (settings->value ("spaces_instead_of_tabs", "1").toBool());
   page_interface_layout->addWidget (cb_spaces_instead_of_tabs);
 
 
   cb_cursor_xy_visible = new QCheckBox (tr ("Show cursor position"), tab_options);
-  cb_cursor_xy_visible->setCheckState (Qt::CheckState (settings->value ("cursor_xy_visible", "2").toInt()));
+  cb_cursor_xy_visible->setChecked (settings->value ("cursor_xy_visible", "1").toBool());
   page_interface_layout->addWidget (cb_cursor_xy_visible);
 
 
@@ -2638,7 +2606,7 @@ void rvln::createOptions()
                                    settings->value ("tab_sp_width", 8).toInt());
 
   cb_center_on_cursor = new QCheckBox (tr ("Cursor center on scroll"), tab_options);
-  cb_center_on_cursor->setCheckState (Qt::CheckState (settings->value ("center_on_scroll", "2").toInt()));
+  cb_center_on_cursor->setChecked (settings->value ("center_on_scroll", "1").toBool());
   page_interface_layout->addWidget (cb_center_on_cursor);
 
 
@@ -2667,7 +2635,7 @@ void rvln::createOptions()
   page_interface_layout->addLayout (lt_margin);
 
   cb_full_path_at_window_title = new QCheckBox (tr ("Show full path at window title"), tab_options);
-  cb_full_path_at_window_title->setCheckState (Qt::CheckState (settings->value ("full_path_at_window_title", "2").toInt()));
+  cb_full_path_at_window_title->setChecked (settings->value ("full_path_at_window_title", "1").toBool());
   page_interface_layout->addWidget (cb_full_path_at_window_title);
 
   page_interface->setLayout (page_interface_layout);
@@ -2686,22 +2654,19 @@ void rvln::createOptions()
   page_common_layout->setAlignment (Qt::AlignTop);
 
   cb_altmenu = new QCheckBox (tr ("Use Alt key to access main menu"), tab_options);
-  if (MyProxyStyle::b_altmenu)
-    cb_altmenu->setCheckState (Qt::Checked);
-  else
-      cb_altmenu->setCheckState (Qt::Unchecked);
+  cb_altmenu->setChecked (MyProxyStyle::b_altmenu);
 
   connect (cb_altmenu, SIGNAL(stateChanged (int)),
            this, SLOT(cb_altmenu_stateChanged (int)));
 
   cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
-  cb_wasd->setCheckState (Qt::CheckState (settings->value ("wasd", "0").toInt()));
+  cb_wasd->setChecked (settings->value ("wasd", "0").toBool());
 
 
 #if defined(JOYSTICK_SUPPORTED)
 
   cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
-  cb_use_joystick->setCheckState (Qt::CheckState (settings->value ("use_joystick", "0").toInt()));
+  cb_use_joystick->setChecked (settings->value ("use_joystick", "0").toBool());
   connect (cb_use_joystick, SIGNAL(stateChanged (int)),
            this, SLOT(cb_use_joystick_stateChanged (int)));
 #endif
@@ -2709,14 +2674,14 @@ void rvln::createOptions()
 
 #if QT_VERSION >= 0x050000
   cb_use_qregexpsyntaxhl = new QCheckBox (tr ("Old syntax hl engine (restart TEA to apply)"), tab_options);
-  cb_use_qregexpsyntaxhl->setCheckState (Qt::CheckState (settings->value ("qregexpsyntaxhl", 0).toInt()));
+  cb_use_qregexpsyntaxhl->setChecked (settings->value ("qregexpsyntaxhl", 0).toBool());
 #endif
 
   cb_auto_img_preview = new QCheckBox (tr ("Automatic preview images at file manager"), tab_options);
-  cb_auto_img_preview->setCheckState (Qt::CheckState (settings->value ("b_preview", "0").toInt()));
+  cb_auto_img_preview->setChecked (settings->value ("b_preview", "0").toBool());
 
   cb_session_restore = new QCheckBox (tr ("Restore the last session on start-up"), tab_options);
-  cb_session_restore->setCheckState (Qt::CheckState (settings->value ("session_restore", "0").toInt()));
+  cb_session_restore->setChecked (settings->value ("session_restore", "0").toBool());
 
 //  cb_override_locale = new QCheckBox (tr ("Override locale"), tab_options);
 //  cb_override_locale->setCheckState (Qt::CheckState (settings->value ("override_locale", 0).toInt()));
@@ -2732,10 +2697,10 @@ void rvln::createOptions()
 
 
   cb_use_enca_for_charset_detection = new QCheckBox (tr ("Use Enca for charset detection"), tab_options);
-  cb_use_enca_for_charset_detection->setCheckState (Qt::CheckState (settings->value ("use_enca_for_charset_detection", 0).toInt()));
+  cb_use_enca_for_charset_detection->setChecked (settings->value ("use_enca_for_charset_detection", 0).toBool());
 
   cb_override_img_viewer = new QCheckBox (tr ("Use external image viewer for F2"), tab_options);
-  cb_override_img_viewer->setCheckState (Qt::CheckState (settings->value ("override_img_viewer", 0).toInt()));
+  cb_override_img_viewer->setChecked (settings->value ("override_img_viewer", 0).toBool());
 
   ed_img_viewer_override = new QLineEdit (this);
   ed_img_viewer_override->setText (settings->value ("img_viewer_override_command", "display %s").toString());
@@ -2748,29 +2713,15 @@ void rvln::createOptions()
   hb_imgvovr->insertWidget (-1, cb_override_img_viewer, 0, Qt::AlignLeft);
   hb_imgvovr->insertWidget (-1, ed_img_viewer_override, 1, Qt::AlignLeft);
 
-/*
-  QStringList sl_ui_langs;
-  sl_ui_langs << "en" << "ru" << "de" << "fr";
-
-  cmb_ui_langs = new_combobox (page_common_layout,
-                                tr ("UI language"),
-                                sl_ui_langs,
-                                settings->value ("ui_lang", QLocale::system().name()).toString());
-
-  connect (cmb_ui_langs, SIGNAL(currentIndexChanged (const QString &)),
-           this, SLOT(cmb_ui_langs_currentIndexChanged (const QString &)));
-
-*/
-
 
   cb_use_trad_dialogs = new QCheckBox (tr ("Use traditional File Save/Open dialogs"), tab_options);
-  cb_use_trad_dialogs->setCheckState (Qt::CheckState (settings->value ("use_trad_dialogs", "0").toInt()));
+  cb_use_trad_dialogs->setChecked (settings->value ("use_trad_dialogs", "0").toBool());
 
   cb_start_on_sunday = new QCheckBox (tr ("Start week on Sunday"), tab_options);
-  cb_start_on_sunday->setCheckState (Qt::CheckState (settings->value ("start_week_on_sunday", "0").toInt()));
+  cb_start_on_sunday->setChecked (settings->value ("start_week_on_sunday", "0").toBool());
 
   cb_northern_hemisphere = new QCheckBox (tr ("Northern hemisphere"), this);
-  cb_northern_hemisphere->setCheckState (Qt::CheckState (settings->value ("northern_hemisphere", "2").toInt()));
+  cb_northern_hemisphere->setChecked (settings->value ("northern_hemisphere", "1").toBool());
 
 
   page_common_layout->addWidget (cb_start_on_sunday);
@@ -2818,9 +2769,6 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_use_trad_dialogs);
   page_common_layout->addWidget (cb_use_enca_for_charset_detection);
 
- // page_common_layout->addLayout (hb_moon_phase_algo);
-
-//  page_common_layout->addLayout (hb_locovr);
   page_common_layout->addLayout (hb_imgvovr);
 
 
@@ -2854,7 +2802,6 @@ void rvln::createOptions()
   QGroupBox *gb_datetime = new QGroupBox (tr ("Date and time"));
   QVBoxLayout *vb_datetime = new QVBoxLayout;
   gb_datetime->setLayout (vb_datetime);
-
 
   ed_date_format  = new_line_edit (vb_datetime, tr ("Date format"), settings->value ("date_format", "dd/MM/yyyy").toString());
   ed_time_format  = new_line_edit (vb_datetime, tr ("Time format"), settings->value ("time_format", "hh:mm:ss").toString());
@@ -2978,7 +2925,7 @@ void rvln::createOptions()
                                        settings->value ("output_image_fmt", "jpg").toString());
 
   cb_output_image_flt = new QCheckBox (tr ("Scale images with bilinear filtering"), this);
-  cb_output_image_flt->setCheckState (Qt::CheckState (settings->value ("img_filter", 0).toInt()));
+  cb_output_image_flt->setChecked (settings->value ("img_filter", 0).toBool());
 
   vb_images->addWidget (cb_output_image_flt);
 
@@ -2986,17 +2933,17 @@ void rvln::createOptions()
 
 
   cb_exif_rotate = new QCheckBox (tr ("Apply hard rotation by EXIF data"), this);
-  cb_exif_rotate->setCheckState (Qt::CheckState (settings->value ("cb_exif_rotate", 0).toInt()));
+  cb_exif_rotate->setChecked (settings->value ("cb_exif_rotate", 0).toBool());
 
 
 
   cb_output_image_flt = new QCheckBox (tr ("Scale images with bilinear filtering"), this);
-  cb_output_image_flt->setCheckState (Qt::CheckState (settings->value ("img_filter", 0).toInt()));
+  cb_output_image_flt->setChecked (settings->value ("img_filter", 0).toBool());
 
   vb_images->addWidget (cb_output_image_flt);
 
   cb_zip_after_scale = new QCheckBox (tr ("Zip directory with processed images"), this);
-  cb_zip_after_scale->setCheckState (Qt::CheckState (settings->value ("img_post_proc", 0).toInt()));
+  cb_zip_after_scale->setChecked (settings->value ("img_post_proc", 0).toBool());
 
   vb_images->addWidget (cb_zip_after_scale);
 
@@ -3024,7 +2971,7 @@ void rvln::createOptions()
   page_images_layout->addWidget (gb_exif);
 
   cb_zor_use_exif= new QCheckBox (tr ("Use EXIF orientation at image viewer"), this);
-  cb_zor_use_exif->setCheckState (Qt::CheckState (settings->value ("zor_use_exif_orientation", 0).toInt()));
+  cb_zor_use_exif->setChecked (settings->value ("zor_use_exif_orientation", 0).toBool());
   vb_exif->addWidget (cb_zor_use_exif);
 
 
@@ -3302,18 +3249,12 @@ void rvln::createManual()
 
   QVBoxLayout *lv_t = new QVBoxLayout;
 
-  QString loc = QLocale::system().name().left (2);
+  QString loc = QLocale::system().name().left (2).toLower();
 
-  if (settings->value ("override_locale", 0).toBool())
-     {
-      QString ts = settings->value ("override_locale_val", "en").toString();
-      if (ts.length() != 2)
-          ts = "en";
-      loc = ts;
-     }
+  QString ts = settings->value ("lng", loc).toString();
 
   QString filename (":/manuals/");
-  filename = filename + loc + ".html";
+  filename = ts + ".html";
 
   if (! file_exists (filename))
       filename = ":/manuals/en.html";
@@ -6104,8 +6045,6 @@ void rvln::fman_current_file_changed (const QString &full_path, const QString &j
   else
       ed_fman_fname->setText ("");
 
- // qDebug() << "is dir " << is_dir (full_path);
-
   if (b_preview && is_image (full_path))
      {
       if (! img_viewer->window_mini.isVisible())
@@ -7709,7 +7648,7 @@ void rvln::view_use_profile()
   QPoint pos = s.value ("pos", QPoint (1, 200)).toPoint();
   QSize size = s.value ("size", QSize (600, 420)).toSize();
 
-  if (mainSplitter && settings->value ("ui_splitter", 1).toBool())
+  if (mainSplitter/* && ! settings->value ("ui_mode", 0).toBool()*/)
      mainSplitter->restoreState (s.value ("splitterSizes").toByteArray());
 
   resize (size);
@@ -7719,9 +7658,9 @@ void rvln::view_use_profile()
   load_palette (fname_def_palette);
 
   settings->setValue ("fname_def_palette", fname_def_palette);
-  settings->setValue ("word_wrap", s.value ("word_wrap", "2").toInt());
-  settings->setValue ("show_linenums", s.value ("show_linenums", "0").toInt());
-  settings->setValue ("additional_hl", s.value ("additional_hl", "0").toInt());
+  settings->setValue ("word_wrap", s.value ("word_wrap", "1").toBool());
+  settings->setValue ("show_linenums", s.value ("show_linenums", "0").toBool());
+  settings->setValue ("additional_hl", s.value ("additional_hl", "0").toBool());
   settings->setValue ("show_margin", s.value ("show_margin", "0").toInt());
 
   settings->setValue ("editor_font_name", s.value ("editor_font_name", "Serif").toString());
@@ -7731,12 +7670,11 @@ void rvln::view_use_profile()
   settings->setValue ("app_font_name", s.value ("app_font_name", "Sans").toString());
   settings->setValue ("app_font_size", s.value ("app_font_size", "12").toInt());
 
-//  cb_wordwrap->setCheckState (Qt::CheckState (s.value ("word_wrap", "2").toInt()));
   cb_wordwrap->setChecked (s.value ("word_wrap", "1").toBool());
 
-  cb_show_linenums->setCheckState (Qt::CheckState (s.value ("show_linenums", "0").toInt()));
-  cb_hl_current_line->setCheckState (Qt::CheckState (s.value ("additional_hl", "0").toInt()));
-  cb_show_margin->setCheckState (Qt::CheckState (s.value ("show_margin", "0").toInt()));
+  cb_show_linenums->setChecked (s.value ("show_linenums", "0").toBool());
+  cb_hl_current_line->setChecked (s.value ("additional_hl", "0").toBool());
+  cb_show_margin->setChecked (s.value ("show_margin", "0").toBool());
 
   update_stylesheet (fname_stylesheet);
   documents->apply_settings();
@@ -7771,14 +7709,14 @@ void rvln::profile_save_as()
 
   s.setValue ("fname_def_palette", fname_def_palette);
 
-  s.setValue ("word_wrap", settings->value ("word_wrap", "2").toInt());
-  s.setValue ("show_linenums", settings->value ("show_linenums", "0").toInt());
-  s.setValue ("additional_hl", settings->value ("additional_hl", "0").toInt());
+  s.setValue ("word_wrap", settings->value ("word_wrap", "1").toBool());
+  s.setValue ("show_linenums", settings->value ("show_linenums", "0").toBool());
+  s.setValue ("additional_hl", settings->value ("additional_hl", "0").toBool());
 
   s.setValue ("pos", pos());
   s.setValue ("size", size());
 
-  if (mainSplitter && settings->value ("ui_splitter", 1).toBool())
+  if (mainSplitter /*&& ! settings->value ("ui_mode", 0).toBool()*/)
      s.setValue ("splitterSizes", mainSplitter->saveState());
 
   s.setValue ("editor_font_name", settings->value ("editor_font_name", "Monospace").toString());
@@ -8626,10 +8564,12 @@ void rvln::leaving_tune()
 {
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
- // settings->setValue ("override_locale_val", ed_locale_override->text());
   settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
   settings->setValue ("wasd", cb_wasd->checkState());
-  settings->setValue ("ui_splitter", cb_ui_splitter->isChecked());
+//  settings->setValue ("ui_splitter", cb_ui_splitter->isChecked());
+
+  settings->setValue ("ui_mode", cmb_ui_mode->currentIndex());
+
 
 
 #if defined(JOYSTICK_SUPPORTED)

@@ -4626,7 +4626,10 @@ void rvln::file_open_program()
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
       if (! file_exists (d->file_name))
-         return;
+         {
+          QMessageBox::critical (this, "!", tr ("Save the file first!"), QMessageBox::Ok, QMessageBox::Ok); 
+          return;
+         } 
 
       QFileInfo fi (d->file_name);
 

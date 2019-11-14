@@ -3217,7 +3217,7 @@ void rvln::createManual()
   QString ts = settings->value ("lng", loc).toString();
 
   QString filename (":/manuals/");
-  filename = ts + ".html";
+  filename = filename + ts + ".html";
 
   if (! file_exists (filename))
       filename = ":/manuals/en.html";
@@ -4589,7 +4589,7 @@ void rvln::file_open_programs_file()
 #else
 
   if (! file_exists (fname_programs))
-     qstring_save (fname_programs, tr ("#external programs list. example:\nopera=opera %s"));
+     qstring_save (fname_programs, tr ("#external programs list. example:\nff=firefox file:///%s"));
 
 #endif
 

@@ -468,7 +468,7 @@ void rvln::create_main_widget_docked()
   tab_editor->setCornerWidget (bt_close);
 
 
-  QDockWidget *dock_logmemo = new QDockWidget (tr ("Logmemo"), this);
+  QDockWidget *dock_logmemo = new QDockWidget (tr ("logmemo"), this);
   dock_logmemo->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
   dock_logmemo->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
 
@@ -488,7 +488,7 @@ void rvln::create_main_widget_docked()
 
   if (! settings->value ("fif_at_toolbar", 0).toBool())
      {
-      QDockWidget *dock_fif = new QDockWidget (tr ("Famous Input Field"), this);
+      QDockWidget *dock_fif = new QDockWidget (tr ("famous input field"), this);
       dock_fif->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
       dock_fif->setObjectName ("dock_fif");
       dock_fif->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
@@ -1673,29 +1673,29 @@ void rvln::createMenus()
   menu_fm_checksums = menu_fm->addMenu (tr ("Checksum"));
   menu_fm_checksums->setTearOffEnabled (true);
 
-  add_to_menu (menu_fm_checksums, tr ("MD5"), SLOT(fm_hashsum_md5()));
-  add_to_menu (menu_fm_checksums, tr ("MD4"), SLOT(fm_hashsum_md4()));
-  add_to_menu (menu_fm_checksums, tr ("SHA-1"), SLOT(fm_hashsum_sha1()));
+  add_to_menu (menu_fm_checksums, "MD5", SLOT(fm_hashsum_md5()));
+  add_to_menu (menu_fm_checksums, "MD4", SLOT(fm_hashsum_md4()));
+  add_to_menu (menu_fm_checksums, "SHA-1", SLOT(fm_hashsum_sha1()));
 
 #if QT_VERSION >= 0x050000
-  add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-224"), SLOT(fm_hashsum_sha224()));
-  add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-256"), SLOT(fm_hashsum_sha256()));
-  add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-384"), SLOT(fm_hashsum_sha384()));
-  add_to_menu (menu_fm_checksums, tr ("SHA-2 SHA-512"), SLOT(fm_hashsum_sha512()));
+  add_to_menu (menu_fm_checksums, "SHA-2 SHA-224", SLOT(fm_hashsum_sha224()));
+  add_to_menu (menu_fm_checksums, "SHA-2 SHA-256", SLOT(fm_hashsum_sha256()));
+  add_to_menu (menu_fm_checksums, "SHA-2 SHA-384", SLOT(fm_hashsum_sha384()));
+  add_to_menu (menu_fm_checksums, "SHA-2 SHA-512", SLOT(fm_hashsum_sha512()));
 #endif
 
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
- add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-224"), SLOT(fm_hashsum_sha3_224()));
- add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-256"), SLOT(fm_hashsum_sha3_256()));
- add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-384"), SLOT(fm_hashsum_sha3_384()));
- add_to_menu (menu_fm_checksums, tr ("SHA-3 SHA-512"), SLOT(fm_hashsum_sha3_512()));
+ add_to_menu (menu_fm_checksums, "SHA-3 SHA-224", SLOT(fm_hashsum_sha3_224()));
+ add_to_menu (menu_fm_checksums, "SHA-3 SHA-256", SLOT(fm_hashsum_sha3_256()));
+ add_to_menu (menu_fm_checksums, "SHA-3 SHA-384", SLOT(fm_hashsum_sha3_384()));
+ add_to_menu (menu_fm_checksums, "SHA-3 SHA-512", SLOT(fm_hashsum_sha3_512()));
 #endif
 
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 10)
- add_to_menu (menu_fm_checksums, tr ("Keccak-224"), SLOT(fm_hashsum_keccak_224()));
- add_to_menu (menu_fm_checksums, tr ("Keccak-256"), SLOT(fm_hashsum_keccak_256()));
- add_to_menu (menu_fm_checksums, tr ("Keccak-384"), SLOT(fm_hashsum_keccak_384()));
- add_to_menu (menu_fm_checksums, tr ("Keccak-512"), SLOT(fm_hashsum_keccak_512()));
+ add_to_menu (menu_fm_checksums, "Keccak-224", SLOT(fm_hashsum_keccak_224()));
+ add_to_menu (menu_fm_checksums, "Keccak-256", SLOT(fm_hashsum_keccak_256()));
+ add_to_menu (menu_fm_checksums, "Keccak-384", SLOT(fm_hashsum_keccak_384()));
+ add_to_menu (menu_fm_checksums, "Keccak-512", SLOT(fm_hashsum_keccak_512()));
 #endif
 
   menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
@@ -2426,7 +2426,7 @@ void rvln::createOptions()
   sl_ui_modes << "Classic" << "Docked";
 
   cmb_ui_mode = new_combobox (page_interface_layout,
-                              tr ("UI mode (restart needed)"),
+                              tr ("UI mode (TEA restart needed)"),
                               sl_ui_modes,
                               settings->value ("ui_mode", 0).toInt());
 
@@ -2447,7 +2447,7 @@ void rvln::createOptions()
      lng = "en";
 
   cmb_lng = new_combobox (page_interface_layout,
-                          tr ("UI language (restart needed)"),
+                          tr ("UI language (TEA restart needed)"),
                           sl_lngs,
                           settings->value ("lng", lng).toString());
 
@@ -2458,7 +2458,7 @@ void rvln::createOptions()
 
 
   cmb_styles = new_combobox (page_interface_layout,
-                             tr ("UI style (restart needed)"),
+                             tr ("UI style (TEA restart needed)"),
                              QStyleFactory::keys(),
                              settings->value ("ui_style", default_style).toString());
 

@@ -803,10 +803,6 @@ Do you want to overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Preview with default browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Help</source>
         <translation type="obsolete">Hilfe</translation>
     </message>
@@ -884,10 +880,6 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Restore the last session on start-up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Override locale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -981,11 +973,6 @@ Do you want to overwrite?</source>
     <message>
         <source>#external programs list. example:
 opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>#external programs list. example:
-opera=opera %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1810,10 +1797,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>UI style (restart needed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Guess encoding!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1839,66 +1822,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Checksum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MD5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MD4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-224</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-256</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-384</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-512</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-3 SHA-224</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-3 SHA-256</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-3 SHA-384</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-3 SHA-512</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keccak-224</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keccak-256</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keccak-384</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keccak-512</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1959,6 +1882,39 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Keccak 512 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>#external programs list. example:
+ff=firefox file:///%s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save the file first!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enca is not installed, falling back to the built-in detection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI mode (TEA restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI language (TEA restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI style (TEA restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>logmemo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>famous input field</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -844,7 +844,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Preview with default browser</source>
-        <translation>Prévisualiser avec le navigateur web par défaut</translation>
+        <translation type="vanished">Prévisualiser avec le navigateur web par défaut</translation>
     </message>
     <message>
         <source>Help</source>
@@ -940,7 +940,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Override locale</source>
-        <translation>Outrepasser les locales</translation>
+        <translation type="vanished">Outrepasser les locales</translation>
     </message>
     <message>
         <source>Use traditional File Save/Open dialogs</source>
@@ -1047,7 +1047,7 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
     <message>
         <source>#external programs list. example:
 opera=opera %s</source>
-        <translation>#list des programmes externes. exemple : opera=opera %s</translation>
+        <translation type="vanished">#list des programmes externes. exemple : opera=opera %s</translation>
     </message>
     <message>
         <source>templates</source>
@@ -1939,10 +1939,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>UI style (restart needed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Guess encoding!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1964,66 +1960,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Checksum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MD5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MD4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-224</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-256</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-384</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-512</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-3 SHA-224</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-3 SHA-256</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-3 SHA-384</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SHA-3 SHA-512</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keccak-224</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keccak-256</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keccak-384</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Keccak-512</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2084,6 +2020,39 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Keccak 512 checksum for %1 is %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>#external programs list. example:
+ff=firefox file:///%s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save the file first!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enca is not installed, falling back to the built-in detection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI mode (TEA restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI language (TEA restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI style (TEA restart needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>logmemo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>famous input field</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -6,7 +6,7 @@ add_definitions(${Qt5Widgets_DEFINITIONS})
 add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
 
 
-set(PROJECT "tea")
+set(PROJECT "tea-qt")
 project ($PROJECT VERSION 49.0.0)
 
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
@@ -91,14 +91,14 @@ WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
 
-add_executable(${PROJECT} ${tea_SRCS} ${QT_RESOURCES})
+add_executable(tea ${tea_SRCS} ${QT_RESOURCES})
 
 
 find_package(Qt5PrintSupport)
 if (Qt5PrintSupport_FOUND)
    Message ("+ printer support")
    add_definitions(-DPRINTER_ENABLE)
-   target_link_libraries(${PROJECT} Qt5::PrintSupport)
+   target_link_libraries(tea Qt5::PrintSupport)
 endif()
 
 
@@ -115,7 +115,7 @@ find_path(ASPELL_INLCUDES aspell.h
 
 if(ASPELL_INLCUDES)
   add_definitions(-DASPELL_ENABLE)
-  target_link_libraries(${PROJECT} libaspell.so)
+  target_link_libraries(tea libaspell.so)
   message("+ aspell support")
 endif()
 
@@ -124,7 +124,7 @@ find_package(PkgConfig)
 pkg_check_modules(popplerqt5 poppler-qt5)
 if(popplerqt5_FOUND)
   add_definitions(-DPOPPLER_ENABLE)
-  target_link_libraries(${PROJECT} ${popplerqt5_LIBRARIES})
+  target_link_libraries(tea ${popplerqt5_LIBRARIES})
   include_directories(${popplerqt5_INCLUDE_DIRS})
   message("+ poppler support")
 endif()
@@ -134,7 +134,7 @@ find_package(PkgConfig)
 pkg_check_modules(ddjvuapi ddjvuapi)
 if(ddjvuapi_FOUND)
   add_definitions(-DDJVU_ENABLE)
-  target_link_libraries(${PROJECT} ${ddjvuapi_LIBRARIES})
+  target_link_libraries(tea ${ddjvuapi_LIBRARIES})
   include_directories(${ddjvuapi_INCLUDE_DIRS})
 
   message("+ djvuapi support")
@@ -154,22 +154,22 @@ endif(UNIX OR MINGW)
 
 if (ZLIB_FOUND)
     include_directories(${ZLIB_INCLUDE_DIRS} )
-    target_link_libraries(${PROJECT} ${ZLIB_LIBRARIES} )
+    target_link_libraries(tea ${ZLIB_LIBRARIES} )
 endif( ZLIB_FOUND )
 
 if(hunspell_FOUND)
   include_directories(${hunspell_INCLUDE_DIRS} )
-  target_link_libraries(${PROJECT} ${hunspell_LIBRARIES} )
+  target_link_libraries(tea ${hunspell_LIBRARIES} )
 endif()
 
-target_link_libraries(${PROJECT} Qt5::Widgets Qt5::Core Qt5::Network)
+target_link_libraries(tea Qt5::Widgets Qt5::Core Qt5::Network)
 
 if(DEFINED USE_QML)
-target_link_libraries(${PROJECT} Qt5::Qml Qt5::Quick)
+target_link_libraries(tea Qt5::Qml Qt5::Quick)
 endif()
 
 
-install (TARGETS ${PROJECT} DESTINATION bin)
+install (TARGETS tea DESTINATION bin)
 install (FILES ${tea_ICONSVG} DESTINATION share/icons/hicolor/scalable/apps)
 install (FILES ${tea_ICONPNG32} DESTINATION share/icons/hicolor/32x32/apps)
 install (FILES ${tea_ICONPNG48} DESTINATION share/icons/hicolor/48x48/apps)

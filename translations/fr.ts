@@ -2055,5 +2055,13 @@ ff=firefox file:///%s</source>
         <source>famous input field</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Classic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Docked</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

@@ -2423,7 +2423,7 @@ void rvln::createOptions()
   page_interface_layout->setAlignment (Qt::AlignTop);
 
   QStringList sl_ui_modes;
-  sl_ui_modes << "Classic" << "Docked";
+  sl_ui_modes << tr ("Classic") << tr ("Docked");
 
   cmb_ui_mode = new_combobox (page_interface_layout,
                               tr ("UI mode (TEA restart needed)"),

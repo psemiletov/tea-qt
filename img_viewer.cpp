@@ -446,12 +446,12 @@ void CZORWindow::load_image (const QString &fname)
      }
   
   if (need_to_scale)
-    {  
-     if (orientation_portrait)
-        source_image = source_image.scaled (QSize (600, 800), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-     else
+     {  
+      if (orientation_portrait)
+         source_image = source_image.scaled (QSize (600, 800), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+      else
          source_image = source_image.scaled (QSize (800, 600), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
+     }
   
   resize (source_image.size());
     

@@ -2422,6 +2422,16 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
         <translation>Темнее</translation>
     </message>
     <message>
+        <location filename="../rvln.cpp" line="2426"/>
+        <source>Classic</source>
+        <translation>Классический</translation>
+    </message>
+    <message>
+        <location filename="../rvln.cpp" line="2426"/>
+        <source>Docked</source>
+        <translation>Стыкуемый</translation>
+    </message>
+    <message>
         <location filename="../rvln.cpp" line="2429"/>
         <source>UI mode (TEA restart needed)</source>
         <translation>Режим интерфейса (ТИА надо будет перезапустить)</translation>

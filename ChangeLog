@@ -1,7 +1,8 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
-+ Tune::Interface::UI with splitter (traditional mode, restart on change)
-  //if turned off and restart, TEA will be in the docked UI mode
+* cmake's make dist creates tarball with dirname as at github, i.e. tea-qt-<ver>
+
++ Tune::UI Mode:: Classic/Docked
 
 - Tune::Interface::Override locale
 + Tune::Interface::UI Language list

@@ -358,7 +358,7 @@ CDocument* CDox::get_document_by_fname (const QString &fileName)
   for (vector <CDocument *>::iterator i = items.begin(); i != items.end(); i++)
        if ((*i)->file_name == fileName)
           return *i;
- 
+
   return NULL;
 }
 
@@ -1185,7 +1185,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
               int length = m.capturedLength();
               setFormat (index, length, it->format);
               m = it->pattern.match (text, index + length);
-              if (! m.isValid())  
+              if (! m.isValid())
                   break;
 
               index = m.capturedStart();
@@ -1554,30 +1554,14 @@ void CTEAEdit::indent()
 
 void CTEAEdit::un_indent()
 {
-  if (! textCursor().hasSelection())
-     {
-      QString t = textCursor().selectedText();
-      if (! t.isEmpty() && (t.size() > 1) && t[0].isSpace())
-         t = t.mid (1);
-
-      return;
-     }
-
   QStringList l = textCursor().selectedText().split (QChar::ParagraphSeparator);
 
-  QMutableListIterator <QString> i (l);
-
-  while (i.hasNext())
-        {
-         QString t = i.next();
-
-         if (! t.isEmpty() && (t.size() > 1))
-             if (t[0] == '\t' || t[0].isSpace())
-                {
-                 t = t.mid (1);
-                 i.setValue (t);
-                }
-         }
+  for (QList <QString>::iterator t = l.begin(); t != l.end(); t++)
+      {
+       if (! t->isEmpty())
+          if (t->at(0) == '\t' || t->at(0) == ' ')
+            (*t) = t->mid (1);//eat first
+      }
 
   textCursor().insertText (l.join ("\n"));
 

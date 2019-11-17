@@ -39,7 +39,6 @@ started at 08 November 2007
 #include <QMenuBar>
 #include <QGroupBox>
 #include <QImageWriter>
-//#include <QDesktopServices>
 #include <QColorDialog>
 #include <QTextCodec>
 #include <QMimeData>
@@ -482,9 +481,8 @@ void rvln::create_main_widget_docked()
   dock_logmemo->setObjectName ("dock_log");
   addDockWidget (Qt::BottomDockWidgetArea, dock_logmemo);
 
-  
-// FIF creation code
 
+// FIF creation code
 
   if (! settings->value ("fif_at_toolbar", 0).toBool())
      {
@@ -493,7 +491,7 @@ void rvln::create_main_widget_docked()
       dock_fif->setObjectName ("dock_fif");
       dock_fif->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 
-      QWidget *w_fif = new QWidget (dock_fif);  
+      QWidget *w_fif = new QWidget (dock_fif);
       w_fif->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
 
       cmb_fif = new QComboBox;
@@ -858,7 +856,7 @@ void rvln::closeEvent (QCloseEvent *event)
 
   QList<CMarkupPair *> l = hs_markup.values();
 
-  for (QList <CMarkupPair *>::iterator i = l.begin(); i != l.end(); i++)
+  for (QList <CMarkupPair *>::iterator i = l.begin(); i != l.end(); ++i)
       delete (*i);
 
   if (text_window_list.size() > 0)
@@ -972,7 +970,7 @@ void rvln::open()
 
       fileNames = dialog.selectedFiles();
 
-      for (int i = 0; i < fileNames.size(); i++)  
+      for (int i = 0; i < fileNames.size(); i++)
           {
            CDocument *d = documents->open_file (fileNames.at(i), cb_codecs->currentText());
            if (d)
@@ -2433,7 +2431,7 @@ void rvln::createOptions()
 
   QStringList sl_lngs = read_dir_entries (":/translations");
 
-  for (QList <QString>::iterator i = sl_lngs.begin(); i != sl_lngs.end(); i++)
+  for (QList <QString>::iterator i = sl_lngs.begin(); i != sl_lngs.end(); ++i)
       {
        (*i) = i->left(2);
       }
@@ -3288,11 +3286,11 @@ void rvln::fn_apply_to_each_line()
      }
 
 
-  for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+  for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
       {
        QString ts (t);
-       (*i) = ts.replace ("%s", (*i)); 
-      } 
+       (*i) = ts.replace ("%s", (*i));
+      }
 
   QString x = sl.join ("\n");
 
@@ -3743,7 +3741,7 @@ void rvln::dropEvent (QDropEvent *event)
 
   QList<QUrl> l = event->mimeData()->urls();
 
-  for (QList <QUrl>::iterator u = l.begin(); u != l.end(); u++)
+  for (QList <QUrl>::iterator u = l.begin(); u != l.end(); ++u)
       {
        fName = u->toLocalFile();
 
@@ -3780,7 +3778,7 @@ void rvln::fn_sort_casecare()
   CDocument *d = documents->get_current();
   if (d)
       d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
-                                                                 fif_get_text(), 
+                                                                 fif_get_text(),
                                                                  QSTRL_PROC_FLT_WITH_SORTCASECARE));
 }
 
@@ -3793,7 +3791,7 @@ void rvln::fn_sort_casecare_sep()
   if (d)
       d->textEdit->textCursor().insertText (qstringlist_process (
                                                                  d->textEdit->textCursor().selectedText(),
-                                                                 fif_get_text(), 
+                                                                 fif_get_text(),
                                                                  QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP));
 }
 
@@ -3839,7 +3837,7 @@ void rvln::mrkup_text_to_html()
   for (int i = 0; i < l.size(); i++)
       {
        QString t = l.at(i).simplified();
- 
+
        if (t.isEmpty())
           {
            if (d->markup_mode == "HTML")
@@ -4006,7 +4004,7 @@ void rvln::search_replace_all()
 
           char *charset = cb_fman_codecs->currentText().toLatin1().data();
 
-          for (QList <QString>::iterator fname = sl.begin(); fname != sl.end(); fname++)
+          for (QList <QString>::iterator fname = sl.begin(); fname != sl.end(); ++fname)
                   {
                    QString f = qstring_load ((*fname), charset);
                    QString r;
@@ -4032,9 +4030,9 @@ void rvln::update_charsets()
 
   sl_last_used_charsets = qstring_load (fname).split ("\n");
 
-  QList<QByteArray> acodecs = QTextCodec::availableCodecs(); 
+  QList<QByteArray> acodecs = QTextCodec::availableCodecs();
 
-  for (QList <QByteArray>::iterator codec = acodecs.begin(); codec != acodecs.end(); codec++)
+  for (QList <QByteArray>::iterator codec = acodecs.begin(); codec != acodecs.end(); ++codec)
       sl_charsets.prepend ((*codec));
 
   sl_charsets.sort();
@@ -4192,7 +4190,7 @@ void rvln::nav_goto_right_tab()
 
   if (tab_editor->currentIndex() == (tab_editor->count() - 1))
      i = 0;
-  else 
+  else
       i = tab_editor->currentIndex() + 1;
 
   if (tab_editor->count() > 0)
@@ -4209,7 +4207,7 @@ void rvln::nav_goto_left_tab()
   if (tab_editor->currentIndex() == 0)
      i = tab_editor->count() - 1;
   else
-      i = tab_editor->currentIndex() - 1;  
+      i = tab_editor->currentIndex() - 1;
 
   if (tab_editor->count() > 0)
       tab_editor->setCurrentIndex (i);
@@ -4627,9 +4625,9 @@ void rvln::file_open_program()
      {
       if (! file_exists (d->file_name))
          {
-          QMessageBox::critical (this, "!", tr ("Save the file first!"), QMessageBox::Ok, QMessageBox::Ok); 
+          QMessageBox::critical (this, "!", tr ("Save the file first!"), QMessageBox::Ok, QMessageBox::Ok);
           return;
-         } 
+         }
 
       QFileInfo fi (d->file_name);
 
@@ -5769,7 +5767,7 @@ void rvln::createFman()
   lah_topbar->addWidget (cb_fman_drives);
 
   QFileInfoList l_drives = QDir::drives();
-  for (QList <QFileInfo>::iterator fi = l_drives.begin(); fi != l_drives.end(); fi++)
+  for (QList <QFileInfo>::iterator fi = l_drives.begin(); fi != l_drives.end(); ++fi)
        cb_fman_drives->addItem (fi->path());
 
 #endif
@@ -6399,7 +6397,7 @@ CTextListWnd::~CTextListWnd()
 //  int i = text_window_list.indexOf (this);
 //  text_window_list.removeAt (i);
 
-  std::vector<CTextListWnd*>::iterator it = std::find (text_window_list.begin(), text_window_list.end(), this); 
+  std::vector<CTextListWnd*>::iterator it = std::find (text_window_list.begin(), text_window_list.end(), this);
   text_window_list.erase (it);
 }
 
@@ -6816,11 +6814,11 @@ void rvln::fn_rm_trailing_spaces()
 
   QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
 
-  for (QList <QString>::iterator s = sl.begin(); s != sl.end(); s++)
+  for (QList <QString>::iterator s = sl.begin(); s != sl.end(); ++s)
       {
        if (s->isEmpty())
           continue;
-     
+
       if (s->at (s->size() - 1).isSpace())
          {
           int index = s->size() - 1;
@@ -6828,7 +6826,7 @@ void rvln::fn_rm_trailing_spaces()
                 ;
 
           s->truncate (index + 1);
-         } 
+         }
      }
 
   QString x = sl.join ("\n");
@@ -6865,7 +6863,7 @@ void rvln::fman_convert_images (bool by_side, int value)
   pb_status->setRange (0, li.size() - 1 );
   int i = 0;
 
-  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); fname++)
+  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); ++fname)
       {
        if (! is_image ((*fname)))
            continue;
@@ -6874,7 +6872,7 @@ void rvln::fman_convert_images (bool by_side, int value)
 
        if (source.isNull())
           continue;
-      
+
        qApp->processEvents();
 
        if (settings->value ("cb_exif_rotate", 1).toBool())
@@ -7190,7 +7188,7 @@ void rvln::fn_use_table()
 
           char *charset = cb_fman_codecs->currentText().toLatin1().data();
 
-          for (QList <QString>::const_iterator fname = sl.begin(); fname != sl.end(); fname++)
+          for (QList <QString>::const_iterator fname = sl.begin(); fname != sl.end(); ++fname)
               {
                QString f = qstring_load ((*fname), charset);
                QString r = apply_table (f, a->data().toString(), menu_find_regexp->isChecked());
@@ -7789,13 +7787,13 @@ void rvln::guess_enc()
            log->log (tr ("Enca is not installed, falling back to the built-in detection"));
            CCharsetMagic cm;
            enc = cm.guess_for_file (fn);
-          }       
-      } 
+          }
+      }
   else
       {
        CCharsetMagic cm;
        enc = cm.guess_for_file (fn);
-      }  
+      }
 
   cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
 }
@@ -8294,7 +8292,7 @@ void rvln::fman_unpack_zip()
       return;
      }
 
-  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); fname++)
+  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); ++fname)
       {
        z.unzip ((*fname), fman->dir.path());
        log->log ((*fname) + tr (" is unpacked"));
@@ -8894,7 +8892,7 @@ void create_menu_from_themes (QObject *handler,
   QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
                                           QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
 
-  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); fi++)
+  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); ++fi)
       {
        if (fi->isDir())
           {
@@ -9037,7 +9035,7 @@ void create_menu_from_plugins (QObject *handler,
                                           QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
 
 
-  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); fi++)
+  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); ++fi)
          {
           if (fi->isDir())
              {
@@ -9160,7 +9158,7 @@ void rvln::fn_sort_latex_table_by_col_abc()
 
   QList <QStringList> output;
 
-  for (QList <QString>::iterator s = sl_temp.begin(); s != sl_temp.end(); s++)
+  for (QList <QString>::iterator s = sl_temp.begin(); s != sl_temp.end(); ++s)
       {
        if (! s->isEmpty())
           {
@@ -9217,7 +9215,7 @@ void rvln::fn_table_swap_cells()
 
   QList <QStringList> output;
 
-  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
       {
        if (! v->isEmpty())
           {
@@ -9277,7 +9275,7 @@ void rvln::fn_table_delete_cells()
 
   QList <QStringList> output;
 
-  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
       {
        if (! v->isEmpty())
           {
@@ -9336,7 +9334,7 @@ void rvln::fn_table_copy_cells()
   QList <QStringList> output;
 
   if (col2 > 0)
-  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
       {
        if (! v->isEmpty())
           {
@@ -9349,7 +9347,7 @@ void rvln::fn_table_copy_cells()
           }
       }
   else
-  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); v++)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
       {
        if (! v->isEmpty())
           {
@@ -9366,7 +9364,7 @@ void rvln::fn_table_copy_cells()
 
   for (int i = 0; i < output.size(); i++)
        sl_temp.append (output.at(i).join (sep));
- 
+
   t = sl_temp.join ("\n");
 
   QApplication::clipboard()->setText (t);
@@ -9805,7 +9803,7 @@ void rvln::fman_del_n_first_chars()
   for (int i = 0; i < sl.size(); i++)
       {
        QFileInfo fi (sl.at(i));
-   
+
        if (fi.exists() && fi.isWritable())
           {
            QString newname = fi.fileName();
@@ -9836,7 +9834,7 @@ void rvln::fman_multreplace()
   for (int i = 0; i < sl.size(); i++)
       {
        QFileInfo fi (sl.at(i));
- 
+
        if (fi.exists() && fi.isWritable())
           {
            QString newname = fi.fileName();
@@ -10455,7 +10453,7 @@ void rvln::slot_font_logmemo_select()
 {
   bool ok;
   QFont font = QFontDialog::getFont(&ok, QFont(settings->value ("logmemo_font", "Monospace").toString(), settings->value ("logmemo_font_size", "12").toInt()), this);
-  if (! ok) 
+  if (! ok)
      return;
 
   //  qDebug() << font.toString();
@@ -10469,7 +10467,7 @@ void rvln::slot_font_editor_select()
 {
   bool ok;
   QFont font = QFontDialog::getFont(&ok, QFont(settings->value ("editor_font_name", "Serif").toString(), settings->value ("editor_font_size", "16").toInt()), this);
-  if (! ok) 
+  if (! ok)
      return;
 
   settings->setValue ("editor_font_name", font.family());
@@ -10488,7 +10486,7 @@ void rvln::slot_font_interface_select()
   QFontInfo fi = QFontInfo (qApp->font());
 //fi.pointSize()).toInt()
   QFont font = QFontDialog::getFont (&ok, QFont (settings->value ("app_font_name", "Sans").toString(), settings->value ("app_font_size", fi.pointSize()).toInt()), this);
-  if (! ok) 
+  if (! ok)
      return;
 
   settings->setValue ("app_font_name", font.family());
@@ -10500,7 +10498,7 @@ void rvln::slot_font_interface_select()
 
 void rvln::test()
 {
- 
+
 //anagram (fif_get_text().toStdString());
 
 //anagram (fif_get_text());

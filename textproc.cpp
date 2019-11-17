@@ -398,7 +398,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                      
                                                   for (QMap<QString, QString>::const_iterator i = map.constBegin();
                                                        i != map.constEnd();
-                                                       i++)
+                                                       ++i)
                                                        l.append (i.value());
 
                                                   break;
@@ -406,7 +406,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
 
           case QSTRL_PROC_FLT_REMOVE_EMPTY:
                                            {
-                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
                                                 if (! i->isEmpty())
                                                    l.append (*i);
 
@@ -416,7 +416,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
 
           case QSTRL_PROC_FLT_REMOVE_DUPS:
                                           {
-                                           for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                           for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
                                                if (! l.contains (*i))
                                                   l.append (*i);
                                            break;
@@ -424,7 +424,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
 
           case QSTRL_PROC_REMOVE_FORMATTING:
                                            {
-                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
                                                  l.append (i->simplified());
                                            
                                             break;
@@ -446,7 +446,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
 
            case QSTRL_PROC_LIST_FLIP:
                                      {
-                                      for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                      for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
                                            l.prepend (*i);
 
                                       break;
@@ -456,7 +456,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                     {
                                      int t = params.toInt();
 
-                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
                                           if (i->size() > t)
                                              l.append (*i);
 
@@ -467,7 +467,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                     {
                                      int t = params.toInt();
 
-                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); i++)
+                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
                                           if (i->size() < t)
                                              l.append (*i);
 

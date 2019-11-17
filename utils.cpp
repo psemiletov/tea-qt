@@ -267,7 +267,7 @@ bool is_image (const QString &filename)
 
   QList <QByteArray> a = QImageReader::supportedImageFormats();
 
-  for (QList <QByteArray>::iterator i = a.begin(); i != a.end(); i++)
+  for (QList <QByteArray>::iterator i = a.begin(); i != a.end(); ++i)
       {
        QString t (i->data());
        if (filename.endsWith (t.prepend ("."), Qt::CaseInsensitive))

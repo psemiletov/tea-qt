@@ -23,7 +23,7 @@ void create_menu_from_list (QObject *handler,
 {
   menu->setTearOffEnabled (true);
 
-  for (QList <QString>::const_iterator i = list.begin(); i != list.end(); i++)
+  for (QList <QString>::const_iterator i = list.begin(); i != list.end(); ++i)
       {
        if (! i->startsWith ("#"))
           {
@@ -51,7 +51,7 @@ void create_menu_from_dir (QObject *handler,
                                           QDir::DirsFirst | QDir::IgnoreCase |
                                           QDir::LocaleAware | QDir::Name);
 
-  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); fi++)
+  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); ++fi)
       {
        if (fi->isDir())
           {
@@ -106,9 +106,9 @@ QLineEdit* new_line_edit (QBoxLayout *layout, const QString &label, const QStrin
   QHBoxLayout *lt_h = new QHBoxLayout;
   QLabel *l = new QLabel (label);
   QLineEdit *r = new QLineEdit;
-  
+
   r->setText (def_value);
-  
+
   lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
   lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
 
@@ -153,7 +153,7 @@ QComboBox* new_combobox (QBoxLayout *layout,
   lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
 
   layout->addLayout (lt_h);
-  
+
   return r;
 }
 

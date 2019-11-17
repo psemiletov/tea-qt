@@ -123,7 +123,7 @@ CShortcuts::CShortcuts (QWidget *widget)
 }
 
 
-//FIXME:
+//FIXME
 void CShortcuts::captions_iterate()
 {
   captions.clear();

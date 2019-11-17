@@ -294,7 +294,7 @@ QStringList CFMan::get_sel_fnames()
   QStringList li;
 
   QList<QModelIndex>::iterator i;
-  for (i = il.begin(); i != il.end(); i++)
+  for (i = il.begin(); i != il.end(); ++i)
       {
        QString item_string = i->data().toString();
        if (item_string != "..")

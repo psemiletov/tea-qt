@@ -45,3 +45,4 @@ void CFontBox::slot_font_size_changed (int i)
 {
   edit.setFont (QFont (cf->currentText(), spb_font_size->value()));
 }
+

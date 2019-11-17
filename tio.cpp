@@ -97,7 +97,7 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
 
          QString tag_name = xml.qualifiedName().toString().toLower();
 
-         for (QList <QString>::const_iterator ts = tags.begin(); ts != tags.end(); ts++)
+         for (QList <QString>::const_iterator ts = tags.begin(); ts != tags.end(); ++ts)
              {
               if (xml.isStartElement() && tag_name == *ts)
                   tt = true;
@@ -1051,7 +1051,7 @@ QStringList CTioHandler::get_supported_exts()
 {
   QStringList l;
 
-  for (std::vector <CTio*>::iterator t = list.begin(); t != list.end(); t++)
+  for (std::vector <CTio*>::iterator t = list.begin(); t != list.end(); ++t)
        for (int i = 0; i < (*t)->extensions.size(); i++)
            l.append ((*t)->extensions[i]);
 

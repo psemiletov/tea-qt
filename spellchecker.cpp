@@ -323,7 +323,6 @@ CHunspellChecker::~CHunspellChecker()
 #else
       qstring_save (filename, user_words.join ("\n"), str_encoding.data());
 #endif
-
      }
 
   delete speller;

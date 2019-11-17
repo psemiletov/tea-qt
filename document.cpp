@@ -215,6 +215,7 @@ CDocument::CDocument (QObject *parent): QObject (parent)
 {
   QString fname = tr ("new[%1]").arg (QTime::currentTime().toString ("hh-mm-ss"));
 
+  textEdit = 0;
   markup_mode = "HTML";
   file_name = fname;
   cursor_xy_visible = true;
@@ -355,7 +356,7 @@ CDocument* CDox::get_document_by_fname (const QString &fileName)
   if (fileName.isEmpty() || items.size() == 0)
      return NULL;
 
-  for (vector <CDocument *>::iterator i = items.begin(); i != items.end(); i++)
+  for (vector <CDocument *>::iterator i = items.begin(); i != items.end(); ++i)
        if ((*i)->file_name == fileName)
           return *i;
 
@@ -1172,7 +1173,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   if (highlightingRules.size() == 0)
      return;
 
-  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); it++)
+  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
       {
        QRegularExpressionMatch m = it->pattern.match (text);
        if (! m.isValid())
@@ -1371,7 +1372,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
   if (highlightingRules.size() == 0)
      return;
 
-  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); it++)
+  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
       {
        int index = text.indexOf (it->pattern);
 
@@ -1421,7 +1422,7 @@ void CDox::save_to_session (const QString &fileName)
   fname_current_session = fileName;
   QString l;
 
-  for (vector <CDocument*>::iterator i = items.begin(); i != items.end(); i++)
+  for (vector <CDocument*>::iterator i = items.begin(); i != items.end(); ++i)
       {
        QString t = (*i)->get_triplex();
        if (! t.isEmpty())
@@ -1531,16 +1532,13 @@ void CTEAEdit::indent()
   QString fl;
   fl = fl.fill (' ', tab_sp_width);
 
-  QMutableListIterator <QString> i (l);
-
-  while (i.hasNext())
-        {
-         QString s = i.next();
-         if (spaces_instead_of_tabs)
-            i.setValue (s.prepend (fl));
+  for (QList <QString>::iterator i = l.begin(); i != l.end(); ++i)
+      {
+       if (spaces_instead_of_tabs)
+           i->prepend (fl);
          else
-             i.setValue (s.prepend ("\t"));
-         }
+             i->prepend ("\t");
+      }
 
   textCursor().insertText (l.join ("\n"));
 
@@ -1556,7 +1554,7 @@ void CTEAEdit::un_indent()
 {
   QStringList l = textCursor().selectedText().split (QChar::ParagraphSeparator);
 
-  for (QList <QString>::iterator t = l.begin(); t != l.end(); t++)
+  for (QList <QString>::iterator t = l.begin(); t != l.end(); ++t)
       {
        if (! t->isEmpty())
           if (t->at(0) == '\t' || t->at(0) == ' ')
@@ -2091,7 +2089,7 @@ void CTEAEdit::insertFromMimeData (const QMimeData *source)
 
    QList<QUrl> l = source->urls();
 
-   for (QList <QUrl>::iterator u = l.begin(); u != l.end(); u++)
+   for (QList <QUrl>::iterator u = l.begin(); u != l.end(); ++u)
        {
         fName = u->toLocalFile();
         info.setFile(fName);

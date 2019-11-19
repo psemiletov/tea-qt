@@ -2424,12 +2424,12 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
     <message>
         <location filename="../rvln.cpp" line="2426"/>
         <source>Classic</source>
-        <translation>Классический</translation>
+        <translation>Классика</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="2426"/>
         <source>Docked</source>
-        <translation>Стыкуемый</translation>
+        <translation>Стыковка</translation>
     </message>
     <message>
         <location filename="../rvln.cpp" line="2429"/>

@@ -45,7 +45,7 @@ public:
 
   CSpellchecker (const QString &lang,
                  const QString &path,
-                 const QString &user) {};
+                 const QString &user): initialized {false} {};
 
   virtual ~CSpellchecker() {};
 
@@ -70,7 +70,7 @@ public:
   AspellConfig *spell_config;
   AspellCanHaveError *ret;
   AspellSpeller *speller;
-  
+
   CAspellchecker (const QString &lang, const QString &path = "", const QString &user_path = "");
   ~CAspellchecker();
 
@@ -96,13 +96,13 @@ public:
 
   Hunspell *speller;
 
-  QStringList user_words;  
+  QStringList user_words;
   QString user_dir;
   QString lng;
 
   const char *encoding;
   std::string str_encoding;
-  
+
   QString dict_dir;
 
   CHunspellChecker (const QString &lang, const QString &path = "", const QString &user_path = "");

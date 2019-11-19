@@ -9,12 +9,12 @@
 #define SINGLE_APP_H
 
 #include <QApplication>
+#include <QLocalServer>
 
 #ifndef Q_OS_OS2
 #include <QSharedMemory>
 #endif
 
-#include <QLocalServer>
 
 class CSingleApplication : public QApplication
 {

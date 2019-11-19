@@ -409,7 +409,7 @@ CCharsetMagic::CCharsetMagic()
   CSignaturesList *koi8u = NULL;
   CSignaturesList *koi8r = NULL;
 
-  for (int i = 0; i < fnames.size(); i++) 
+  for (int i = 0; i < fnames.size(); i++)
       {
 
        QString fn = fnames.at(i);
@@ -429,9 +429,9 @@ CCharsetMagic::CCharsetMagic()
           koi8u = sl;
 
 
-       //fill with signatures 
-       for (int i = 0; i < bsl.count(); i++)
-           sl->words.append (bsl[i]);
+       //fill with signatures
+       for (int j = 0; j < bsl.count(); j++)
+           sl->words.append (bsl[j]);
 
        signatures.push_back (sl);
       }
@@ -480,25 +480,25 @@ bool is_valid_utf8(const char * string)
     {
         if ((*bytes & 0x80) == 0x00)
         {
-            // U+0000 to U+007F 
+            // U+0000 to U+007F
             cp = (*bytes & 0x7F);
             num = 1;
         }
         else if ((*bytes & 0xE0) == 0xC0)
         {
-            // U+0080 to U+07FF 
+            // U+0080 to U+07FF
             cp = (*bytes & 0x1F);
             num = 2;
         }
         else if ((*bytes & 0xF0) == 0xE0)
         {
-            // U+0800 to U+FFFF 
+            // U+0800 to U+FFFF
             cp = (*bytes & 0x0F);
             num = 3;
         }
         else if ((*bytes & 0xF8) == 0xF0)
         {
-            // U+10000 to U+10FFFF 
+            // U+10000 to U+10FFFF
             cp = (*bytes & 0x07);
             num = 4;
         }

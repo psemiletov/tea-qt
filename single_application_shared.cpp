@@ -111,3 +111,4 @@ bool CSingleApplicationShared::sendMessage (const QString &message)
 
  return true;
 }
+

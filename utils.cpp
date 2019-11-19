@@ -23,7 +23,7 @@ QString guess_enc_for_file (const QString &fname)
   QProcess p;
   p.start ("enca", QStringList() << "-i" << fname);
 
-  if (! p.waitForStarted() || ! p.waitForFinished() ) 
+  if (! p.waitForStarted() || ! p.waitForFinished() )
      return "err";
 
   QString s = p.readAllStandardOutput();
@@ -206,8 +206,8 @@ void qstring_list_print (const QStringList &l)
 QStringList bytearray_to_stringlist (const QList<QByteArray> &a)
 {
   QStringList r;
- 
-  for (int i = 0; i < a.size(); i++) 
+
+  for (int i = 0; i < a.size(); i++)
        r.append (a.at(i).data());
 
   return r;
@@ -247,7 +247,7 @@ QHash <QString, QString> hash_load_keyval (const QString &fname)
 
   QStringList l = qstring_load (fname).split ("\n");
 
-  for (QList <QString>::iterator i = l.begin(); i != l.end(); i++)
+  for (QList <QString>::iterator i = l.begin(); i != l.end(); ++i)
       {
        QStringList sl = i->split ("=");
        if (sl.size() > 1)
@@ -358,7 +358,8 @@ bool CFTypeChecker::check (const QString &fname) const
 #endif
 
   if (! result)
-  result = lnames.contains (fname.toLower());
+      result = lnames.contains (fname.toLower());
+
   if (! result)
      {
       QString ext = file_get_ext (fname);

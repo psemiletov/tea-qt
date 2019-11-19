@@ -145,8 +145,8 @@ void CFMan::tv_activated (const QModelIndex &index)
   if (is_dir (full_path))
      {
       nav (full_path);
-      QModelIndex index = mymodel->index (0, 0);
-      selectionModel()->setCurrentIndex (index, QItemSelectionModel::Select |
+      QModelIndex idx = mymodel->index (0, 0);
+      selectionModel()->setCurrentIndex (idx, QItemSelectionModel::Select |
                                          QItemSelectionModel::Rows);
      }
   else

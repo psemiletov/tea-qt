@@ -305,7 +305,7 @@ public:
 
   QLabel *l_status_bar;
   QLabel *l_charset;
-  QStatusBar *status_bar;
+ // QStatusBar *status_bar;
   CLogMemo *log;
   QMainWindow *parent_wnd;
   QTabWidget *tab_widget;

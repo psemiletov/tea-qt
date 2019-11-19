@@ -79,7 +79,7 @@ bool CSingleApplication::sendMessage(const QString &message)
   if (! _isRunning)
      return false;
   
-  if (message.isNull() || message.isEmpty())
+  if (message.isEmpty())
      return false;
         
   QLocalSocket localSocket (this);

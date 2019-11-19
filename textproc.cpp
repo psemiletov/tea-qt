@@ -368,9 +368,9 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                                      if (s.indexOf (params) == -1)
                                                         return s;
 
-                                                     QStringList sl = s.split (params);
-                                                     sl.sort();
-                                                     result = sl.join (params);
+                                                     QStringList t = s.split (params);
+                                                     t.sort();
+                                                     result = t.join (params);
                                                      return result;
                                                     };
 
@@ -378,11 +378,11 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                            if (s.indexOf (params) == -1)
                                               return s;
 
-                                           QStringList sl = s.split (params);
-                                           sl.sort();
+                                           QStringList t = s.split (params);
+                                           t.sort();
 
-                                           for (int i = 0; i < sl.size(); i++)
-                                                l.prepend (sl.at(i));
+                                           for (int i = 0; i < t.size(); i++)
+                                                l.prepend (t.at(i));
 
                                            result = l.join (params);
                                            return result;
@@ -395,7 +395,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
 
                                                   for (int i = 0; i < sl.size(); i++)
                                                       map.insert (sl[i].toLower(), sl[i]);
-                     
+
                                                   for (QMap<QString, QString>::const_iterator i = map.constBegin();
                                                        i != map.constEnd();
                                                        ++i)
@@ -426,7 +426,7 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
                                            {
                                             for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
                                                  l.append (i->simplified());
-                                           
+
                                             break;
                                            };
 

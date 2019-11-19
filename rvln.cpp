@@ -726,7 +726,7 @@ rvln::rvln()
   documents->reload_recent_list();
   documents->update_recent_menu();
   documents->log = log;
-  documents->status_bar = statusBar();
+//  documents->status_bar = statusBar();
   documents->markup_mode = markup_mode;
   documents->dir_config = dir_config;
   documents->todo.dir_days = dir_days;
@@ -972,11 +972,11 @@ void rvln::open()
 
       for (int i = 0; i < fileNames.size(); i++)
           {
-           CDocument *d = documents->open_file (fileNames.at(i), cb_codecs->currentText());
-           if (d)
+           CDocument *dc = documents->open_file (fileNames.at(i), cb_codecs->currentText());
+           if (dc)
               {
-               dir_last = get_file_path (d->file_name);
-               charset = d->charset;
+               dir_last = get_file_path (dc->file_name);
+               charset = dc->charset;
               }
 
            add_to_last_used_charsets (cb_codecs->currentText());
@@ -5613,10 +5613,10 @@ void rvln::update_hls_noncached()
        if (! exts.isEmpty())
           {
            QStringList l = exts.split (";");
-           for (int i = 0; i < l.size(); i++)
+           for (int j = 0; j < l.size(); j++)
                {
-                documents->hls.insert (l[i], fname);
-                lsupported_exts.append (l[i]);
+                documents->hls.insert (l[j], fname);
+                lsupported_exts.append (l[j]);
                }
            }
       }
@@ -6680,7 +6680,6 @@ void rvln::create_markup_hash()
   p->pattern["Lout"] = "@LLP";
   p->pattern["MediaWiki"] = "<br />";
   p->pattern["DokuWiki"] = "\\\\ ";
-  p->pattern["DokuWiki"] = "  ";
 
   hs_markup.insert ("newline", p);
 }
@@ -9417,7 +9416,7 @@ void rvln::fn_sum_by_last_col()
   t = t.replace (",", ".");
 
   if (t.isEmpty())
-	 return;
+      return;
 
   double sum = 0.0f;
 
@@ -9428,10 +9427,10 @@ void rvln::fn_sum_by_last_col()
        if (l[i].startsWith ("//") ||  l[i].startsWith ("#") || l[i].startsWith (";"))
           continue;
 
-       QStringList t = l[i].split (" ");
-       if (t.size() > 0)
+       QStringList lt = l[i].split (" ");
+       if (lt.size() > 0)
           {
-           QString s = t[t.size() - 1];
+           QString s = lt.at(lt.size() - 1);
            std::string utf8_text = s.toUtf8().constData();
            double f = calculate (utf8_text);
            sum += f;
@@ -9535,11 +9534,11 @@ void rvln::search_mark_all()
          if (! cr.isNull())
             {
              d->textEdit->setTextCursor (cr);
-             QTextCharFormat f = cr.blockCharFormat();
-             f.setBackground (QColor (hash_get_val (global_palette, "backgroundmark", "red")));
-             f.setForeground (QColor (hash_get_val (global_palette, "foregroundmark", "blue")));
+             QTextCharFormat fm = cr.blockCharFormat();
+             fm.setBackground (QColor (hash_get_val (global_palette, "backgroundmark", "red")));
+             fm.setForeground (QColor (hash_get_val (global_palette, "foregroundmark", "blue")));
 
-             cr.mergeCharFormat (f);
+             cr.mergeCharFormat (fm);
              d->textEdit->setTextCursor (cr);
             }
          else

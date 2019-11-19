@@ -216,6 +216,10 @@ CDocument::CDocument (QObject *parent): QObject (parent)
   QString fname = tr ("new[%1]").arg (QTime::currentTime().toString ("hh-mm-ss"));
 
   textEdit = 0;
+  holder = 0;
+  highlighter = 0;
+  tab_page = 0;
+
   markup_mode = "HTML";
   file_name = fname;
   cursor_xy_visible = true;
@@ -518,10 +522,10 @@ QString CDocument::get_filename_at_cursor()
 }
 
 
-CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent)
+CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent), document {doc}
 {
-  document = doc;
   xml_format = 0;
+  casecare = true;
 }
 
 
@@ -529,7 +533,6 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
                                                       CSyntaxHighlighter (parent, doc, fname)
 {
   document = doc;
-  casecare = true;
   load_from_xml (fname);
 }
 
@@ -930,6 +933,15 @@ CDox::CDox()
   markup_modes.insert ("mediawiki", "MediaWiki");
   markup_modes.insert ("md", "Markdown");
   markup_modes.insert ("markdown", "Markdown");
+
+  recent_menu = 0;
+  main_tab_widget = 0;
+  tab_widget = 0;
+  parent_wnd = 0;
+  log = 0;
+  l_status_bar = 0;
+  l_charset = 0;
+  //status_bar = 0;
 
   timer = new QTimer (this);
   timer->setInterval (100);

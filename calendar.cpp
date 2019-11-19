@@ -186,9 +186,9 @@ int moon_phase_by_algo (int v, int year, int month, int day)
 }
 
 
-CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): QCalendarWidget (parent)
+CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): QCalendarWidget (parent), dir_days {a_dir_days}
 {
-  dir_days = a_dir_days;
+  //dir_days = a_dir_days;
   moon_phase_algo = MOON_PHASE_TRIG2;
   moon_mode = false;
   moon_tiles.load (":/images/moon-phases.png");

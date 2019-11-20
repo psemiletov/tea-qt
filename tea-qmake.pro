@@ -124,7 +124,6 @@ SOURCES += rvln.cpp \
     fontbox.cpp \
     tio.cpp \
     tzipper.cpp \
-    single_application.cpp \
     single_application_shared.cpp \
     exif_reader.cpp \
     myjoystick.cpp
@@ -147,7 +146,6 @@ HEADERS += rvln.h \
     tio.h \
     fontbox.h \
     tzipper.h \
-    single_application.h \
     single_application_shared.h \
     exif_reader.h \
     myjoystick.h
@@ -195,7 +193,7 @@ CONFIG += warn_on \
 
 QT += core
 QT += gui
-QT += network
+#QT += network
 
 CONFIG-=qml_debug
 

@@ -33,7 +33,7 @@ if(hunspell_FOUND)
 endif()
 
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets Network)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets)
 
 
 if(DEFINED USE_QML)
@@ -168,7 +168,7 @@ if(hunspell_FOUND)
   target_link_libraries(tea ${hunspell_LIBRARIES} )
 endif()
 
-target_link_libraries(tea Qt5::Widgets Qt5::Core Qt5::Network)
+target_link_libraries(tea Qt5::Widgets Qt5::Core)
 
 if(DEFINED USE_QML)
 target_link_libraries(tea Qt5::Qml Qt5::Quick)

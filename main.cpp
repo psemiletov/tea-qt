@@ -24,7 +24,6 @@
 #include <QDebug>
 
 #include "rvln.h"
-#include "single_application.h"
 
 #ifndef Q_OS_OS2
 #include "single_application_shared.h"
@@ -48,21 +47,9 @@ int main (int argc, char *argv[])
   
 #endif
 
-#if defined(Q_OS_WIN) && ! defined (NO_SINGLE_APP)
-  
-  CSingleApplication app (argc, argv, "tea unique id 1977");
-  
-  if (app.isRunning())
-     {
-      if (argc > 1)
-         for (int i = 1; i < argc; i++) 
-              app.sendMessage (QString(argv[i]));
-      return 0;
-     }
 
-#endif
 
-#if defined(Q_OS_UNIX) && ! defined (NO_SINGLE_APP)
+#if ! defined (NO_SINGLE_APP)
 
  CSingleApplicationShared app (argc, argv, "tea unique id 1977");
  
@@ -83,16 +70,14 @@ int main (int argc, char *argv[])
      }
     
 #endif     
+
     
 
   mainWindow = new rvln();
 
-#if defined(Q_OS_WIN)
- QObject::connect(&app, SIGNAL(messageAvailable(QString)), mainWindow, SLOT(receiveMessage(QString)));
-#endif
 
 
-#if defined(Q_OS_UNIX)
+#if ! defined (NO_SINGLE_APP)
  QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), mainWindow, SLOT(receiveMessageShared(QStringList)));
 // QObject::connect(&app, SIGNAL(signal_commit_data()), mainWindow, SLOT(app_commit_data()));
 // QObject::connect(&app, SIGNAL(commitDataRequest(QSessionManager & )), mainWindow, SLOT(slot_commitDataRequest(QSessionManager & )));

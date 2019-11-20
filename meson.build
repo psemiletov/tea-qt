@@ -52,7 +52,7 @@ endif
 zlib_dep = dependency('zlib', required : true)
 
 #qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network', 'Qml', 'Quick']) 
-qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network']) 
+qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets']) 
 
 qt5 = import('qt5') 
 
@@ -72,7 +72,6 @@ tea_headers_moc = [
     'tio.h',
     'fontbox.h',
     'tzipper.h',
-    'single_application.h',
     'single_application_shared.h',
     'myjoystick.h']
 
@@ -102,7 +101,6 @@ tea_source = ['rvln.cpp',
     'fontbox.cpp',
     'tio.cpp',
     'tzipper.cpp',
-    'single_application.cpp',
     'single_application_shared.cpp',
     'exif_reader.cpp',
     'myjoystick.cpp',

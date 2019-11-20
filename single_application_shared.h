@@ -10,7 +10,6 @@
 
 #include <QApplication>
 #include <QStringList>
-#include <QLocalServer>
 
 #ifndef Q_OS_OS2
 #include <QSharedMemory>
@@ -20,7 +19,6 @@
 class CSingleApplicationShared: public QApplication
 {
   Q_OBJECT
-
 
 private:
 
@@ -33,7 +31,7 @@ private:
 public:
 
   CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey);
-  ~CSingleApplicationShared() {qDebug() << "~CSingleApplicationShared";};  
+  ~CSingleApplicationShared() {/*qDebug() << "~CSingleApplicationShared";*/};  
 
   static int cursorFlashTime() 
              {

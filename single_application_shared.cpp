@@ -24,7 +24,7 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
   sharedMemory.setKey(uniqueKey);
  
   // when can create it only if it doesn't exist
-  if (sharedMemory.create(5000))
+  if (sharedMemory.create (8192))
      {
       sharedMemory.lock();
       *(char*)sharedMemory.data() = '\0';
@@ -35,7 +35,7 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
       // start checking for messages of other instances.
       QTimer *timer = new QTimer(this);
       connect(timer, SIGNAL(timeout()), this, SLOT(checkForMessage()));
-      timer->start(200);
+      timer->start (200);
      }
        
   // it exits, so we can attach it?!
@@ -84,7 +84,7 @@ bool CSingleApplicationShared::sendMessage (const QString &message)
 {
 #ifndef Q_OS_OS2
 
- //we cannot send mess if we are master process!
+ //we cannot send message if we are master process!
   if (isMasterApp())
      return false;
  

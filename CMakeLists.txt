@@ -7,7 +7,7 @@ add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea-qt")
-project ($PROJECT VERSION 49.0.0)
+project ($PROJECT VERSION 50.0.0)
 
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 
@@ -96,7 +96,6 @@ WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
 
-
 add_executable(tea ${tea_SRCS} ${QT_RESOURCES})
 
 
@@ -142,7 +141,6 @@ if(ddjvuapi_FOUND)
   add_definitions(-DDJVU_ENABLE)
   target_link_libraries(tea ${ddjvuapi_LIBRARIES})
   include_directories(${ddjvuapi_INCLUDE_DIRS})
-
   message("+ djvuapi support")
 endif()
 

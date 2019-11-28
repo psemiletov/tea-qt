@@ -1,9 +1,9 @@
 project('tea', ['cpp','c'],
          default_options : ['cpp_std=c++11'],
-         version : '49.0.0',
+         version : '50.0.0',
          license : 'GPLv3')
 
-add_global_arguments('-DVERSION_NUMBER="49.0.0"', language : 'cpp')
+add_global_arguments('-DVERSION_NUMBER="50.0.0"', language : 'cpp')
 #add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 #harcoded for now
@@ -142,3 +142,4 @@ install_data(['icons/svg/tea.svg'],
 
 install_data(['desktop/tea.desktop'],
              install_dir : 'share/applications')
+

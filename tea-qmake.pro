@@ -1,7 +1,7 @@
-VERSION = 49.0.0
+VERSION = 50.0.0
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"49.0.0"\''
+DEFINES += 'VERSION_NUMBER=\'"50.0.0"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -104,8 +104,6 @@ useclang{
     QMAKE_CXXFLAGS += -std=c++11
 }
 
-#include(quazip.pri)
-
 SOURCES += rvln.cpp \
     main.cpp \
     todo.cpp \
@@ -182,7 +180,6 @@ SOURCES += qioapi.cpp \
            zip.c
 
 
-
 TEMPLATE = app
 
 CONFIG += warn_on \
@@ -193,7 +190,6 @@ CONFIG += warn_on \
 
 QT += core
 QT += gui
-#QT += network
 
 CONFIG-=qml_debug
 
@@ -365,14 +361,12 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                           message ("ASpell enabled")
                           LIBS += -laspell-15
                           DEFINES += ASPELL_ENABLE
-#                          DEFINES += SPELLCHECK_ENABLE
                           }
                   }
 
 
         contains(USE_HUNSPELL,true)
                  {
-#                  exists ("C:\\Qt\\Qt5.3.1\\Tools\\mingw482_32\\include\\hunspell\\hunspell.hxx")
                   exists ("c:\\Qt\\Qt5.3.1\\5.3\\mingw482_32\\include\\hunspell\\hunspell.hxx")
 
                          {
@@ -386,7 +380,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 
                           DEFINES += HUNSPELL_ENABLE
- #                         DEFINES += SPELLCHECK_ENABLE
                          }
                 }
 
@@ -458,3 +451,4 @@ exists("c:/extras/include/hunspell/hunspell.hxx") {
       DEFINES += HUNSPELL_ENABLE
 }
 }
+

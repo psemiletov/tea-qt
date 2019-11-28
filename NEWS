@@ -1,43 +1,28 @@
 =====NEWS ABOUT TEA====
-TEA 49.0.0, november 2019
+TEA 50.0.0, november 2019
 ---------------------------------------
-  
-   THE INNER CHANGES
 
-   For this version I rewrote the many portions of the core code that is related to the containers (i.e. data arrays). The files lists, the syntax highlighting rules, etc. - almost all those things are moved from Qt library containers to STL library containers. Also, the magic Qt's macro "foreach" was replaced with traditional iterators. It makes TEA ready for the upcoming Qt 6 and simplify to maintain code between Qt 4, 5 and 6. The Qt 4 compatibility is still important for TEA because of OS/2, Slackware and old distros.
-   The containers question caused the line by line review of the code. In process, many bugs has been fixed, including the drag and drop.
+   VISIBLE
 
-   THE VISIBLE CHANGES
+   Meet the new, alternative Docked interface. Switch between two UI's using Tune::Interface::UI Mode - Classic/Docked. With the Docked one, you can move FIF and Logmemo freely inside or outside the main window.
+   Another new option is Tune::Interface::UI Language list, which come instead of the removed "Override locale" option.  
+   All those options requires to restart TEA to be applied.
 
-  + The Fm menu now has Checksum submenu with 
-MD4, MD5, SHA1, SHA 224, all SHA-2, 3, Keccak. 
-  + Functions - Text - Anagram. Can be very CPU and memory angry.
-  * Nav - Prev/Next tab, now circled.
-  * When open the recent file, editor tab is activated.
-  * Built-in UTF-8 detection has been improved.
-  + Tune - Common - Use Enca for charset detection.
-Enca binary can be used to detect encoding. TEA's own detection engine works with Russian/Ukrainian charsets, so Enca is the better option, when installed.
-  
-   QML PLUGINS STATUS
+   UNDER THE HOOD
 
-   As far I know, no one make or use TEA QML/JavaScript plugins. Since TEA 49, the plugins are deprecated. You still can build TEA with plugins support (see README), but I will not maintain plugins support anymore. There are more reasons for that (not just "no one use")
+   Some parts of TEA now work faster due to iterator-based cycles optimization.
+   The Windows-specific module (with the local server) for the "single application" mode has been removed, now TEA uses shared memory based module for all systems excepting OS/2. So QtNetwork dependency has been dropped.
 
-  NOTES FOR PACKAGE MAINTAINERS
+    TEA RELEASE URL
 
-0. Thank you for packaging TEA!
+   Note for the package mainteiners - fresh TEA releases now available at github:
+https://github.com/psemiletov/tea-qt/releases
+   The traditional good old almost hand-made tarballs from semiletov.org and tea.ourproject.org were be sacrificed to the unification and modern frameworks.
 
-1. Although TEA has two home sites, it is better to use Github releases as the source:
-https://github.com/psemiletov/tea-qt/archive/$pkgver.tar.gz
-   
-Please note, that TEA source dir after unpacking will be tea-qt-${pkgver}
+   OTHER CHANGES/FIXES
 
-2. TEA after the compilation is a single binary file (with embedded resources).
-
-3. TEA supports 3 build systems:
-
-  * qmake - the traditional one, good for Qt4-Win32-OS/2-Slackware builds. TEA's qmake project file is old and obscure. QML plugins are enabled by default, that is not wise.
-  * cmake - for Qt5 build, the reference one for TEA, has more options than meson support. I recommend to use cmake to build TEA package.
-  * meson - I use it internally. Has no option to enable QML plugins.
+* cmake's make dist creates tarball with dirname as at github, i.e. tea-qt-<ver>
+* code cleanup after cppcheck advices
 
 
 

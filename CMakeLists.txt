@@ -7,7 +7,7 @@ add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea-qt")
-project ($PROJECT VERSION 50.0.0)
+project ($PROJECT VERSION 50.0.1)
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 
 
@@ -56,31 +56,31 @@ file(GLOB tea_SRCS "*.c" "*.cpp")
 file(GLOB tea_HEADERS "*.h")
 
 
-set(${PROJECT}_ICONPNG32
-    ./icons/32/${PROJECT}.png
+set(tea_ICONPNG32
+    ./icons/32/tea.png
 )
 
 
-set(${PROJECT}_ICONPNG48
-    ./icons/48/${PROJECT}.png
+set(tea_ICONPNG48
+    ./icons/48/tea.png
 )
 
 
-set(${PROJECT}_ICONPNG64
-    ./icons/64/${PROJECT}.png
+set(tea_ICONPNG64
+    ./icons/64/tea.png
 )
 
 
-set(${PROJECT}_ICONPNG128
-    ./icons/128/${PROJECT}.png
+set(tea_ICONPNG128
+    ./icons/128/tea.png
 )
 
-set(${PROJECT}_ICONSVG
-    ./icons/svg/${PROJECT}.svg
+set(tea_ICONSVG
+    ./icons/svg/tea.svg
 )
 
-set(${PROJECT}_DESKTOP
-    ./desktop/${PROJECT}.desktop
+set(tea_DESKTOP
+    ./desktop/tea.desktop
 )
 
 

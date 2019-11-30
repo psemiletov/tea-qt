@@ -112,12 +112,12 @@ if (EXISTS "/usr/include/linux/joystick.h")
 endif()
 
 
-find_path(ASPELL_INLCUDES aspell.h
+find_path(ASPELL_INCLUDES aspell.h
          "/usr/include/"
          "/usr/local/"
         )
 
-if(ASPELL_INLCUDES)
+if(ASPELL_INCLUDES)
   add_definitions(-DASPELL_ENABLE)
   target_link_libraries(tea libaspell.so)
   message("+ aspell support")

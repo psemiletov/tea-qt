@@ -111,8 +111,6 @@ int QuaZIODevicePrivate::doFlush(QString &error)
 
 /// \endcond
 
-// #define QUAZIP_ZIODEVICE_DEBUG_OUTPUT
-// #define QUAZIP_ZIODEVICE_DEBUG_INPUT
 #ifdef QUAZIP_ZIODEVICE_DEBUG_OUTPUT
 #include <QFile>
 static QFile debug;

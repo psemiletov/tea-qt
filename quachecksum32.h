@@ -49,7 +49,7 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
  * resoultB = crc32->value();
  * \endcode
  */
-class QUAZIP_EXPORT QuaChecksum32
+class QuaChecksum32
 {
 
 public:

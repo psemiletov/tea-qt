@@ -38,7 +38,7 @@ class QuaZIODevicePrivate;
   decompress it back. Compressing data sent over a QTcpSocket is a good
   example.
   */
-class QUAZIP_EXPORT QuaZIODevice: public QIODevice {
+class QuaZIODevice: public QIODevice {
   Q_OBJECT
 public:
   /// Constructor.

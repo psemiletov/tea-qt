@@ -47,7 +47,7 @@ quazip/(un)zip.h files for details, basically it's zlib license.
  * in the future though, if there is a demand for the raw mode with zip64
  * archives.
  **/
-struct QUAZIP_EXPORT QuaZipNewInfo {
+struct QuaZipNewInfo {
   /// File name.
   /** This field holds file name inside archive, including path relative
    * to archive root.

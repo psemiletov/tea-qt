@@ -51,7 +51,7 @@ class QuaZipDirPrivate;
 * Note that since ZIP uses '/' on all platforms, the '\' separator is
 * not supported.
 */
-class QUAZIP_EXPORT QuaZipDir {
+class QuaZipDir {
 private:
     QSharedDataPointer<QuaZipDirPrivate> d;
 public:

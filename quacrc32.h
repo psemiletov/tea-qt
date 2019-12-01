@@ -32,7 +32,7 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 * This class wrappers the crc32 function with the QuaChecksum32 interface.
 * See QuaChecksum32 for more info.
 */
-class QUAZIP_EXPORT QuaCrc32 : public QuaChecksum32 {
+class QuaCrc32 : public QuaChecksum32 {
 
 public:
 	QuaCrc32();

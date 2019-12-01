@@ -36,7 +36,7 @@ class QuaGzipFilePrivate;
 /**
   This class is a wrapper around GZIP file access functions in zlib. Unlike QuaZip classes, it doesn't allow reading from a GZIP file opened as QIODevice, for example, if your GZIP file is in QBuffer. It only provides QIODevice access to a GZIP file contents, but the GZIP file itself must be identified by its name on disk or by descriptor id.
   */
-class QUAZIP_EXPORT QuaGzipFile: public QIODevice {
+class QuaGzipFile: public QIODevice {
   Q_OBJECT
 public:
   /// Empty constructor.

@@ -693,17 +693,18 @@ main window callbacks
   void fn_spell_suggest();
   void cmb_spellchecker_currentIndexChanged (const QString &text);
 
+#endif // SPELLCHECKERS ENABLED
+
 #ifdef HUNSPELL_ENABLE
   void pb_choose_hunspell_path_clicked();
 #endif
 
 #ifdef ASPELL_ENABLE
-#if defined(Q_OS_WIN) || defined (Q_OS_OS2)
+//#if defined(Q_OS_WIN) || defined (Q_OS_OS2)
   void pb_choose_aspell_path_clicked();
-#endif
+//#endif
 #endif
 
-#endif // SPELLCHECKERS ENABLED
 
   void scale_image();
 

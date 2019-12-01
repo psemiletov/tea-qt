@@ -7245,9 +7245,10 @@ void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
 
  create_spellcheck_menu();
 }
+#endif
+
 
 #ifdef HUNSPELL_ENABLE
-
 void rvln::pb_choose_hunspell_path_clicked()
 {
   QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/usr/share/hunspell/",
@@ -7265,12 +7266,11 @@ void rvln::pb_choose_hunspell_path_clicked()
   setup_spellcheckers();
   create_spellcheck_menu();
 }
-
 #endif
 
 
 #ifdef ASPELL_ENABLE
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+//#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
 void rvln::pb_choose_aspell_path_clicked()
 {
@@ -7289,10 +7289,9 @@ void rvln::pb_choose_aspell_path_clicked()
   setup_spellcheckers();
   create_spellcheck_menu();
 }
-#endif
+//#endif
 #endif
 
-#endif
 
 
 void rvln::file_find_obsolete_paths()

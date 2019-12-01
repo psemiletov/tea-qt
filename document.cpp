@@ -84,9 +84,10 @@ void CDocument::update_status()
   int x = textEdit->textCursor().position() - textEdit->textCursor().block().position() + 1;
   int y = textEdit->textCursor().block().blockNumber() + 1;
 
-  holder->l_status_bar->setText (QString ("%1:%2").arg (
-                                 QString::number (y)).arg (
-                                 QString::number (x)));
+  holder->l_status_bar->setText (QString ("%1%2[%3]").arg (
+                                 QString::number (y), -10).arg (
+                                 QString::number (x), -10).arg (
+                                 QString::number (textEdit->blockCount(), 10)));
 
   holder->l_charset->setText (charset);
 }

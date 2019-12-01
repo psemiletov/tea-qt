@@ -7,7 +7,7 @@ add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea-qt")
-project ($PROJECT VERSION 50.0.1)
+project ($PROJECT VERSION 50.0.2)
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 
 
@@ -117,10 +117,18 @@ find_path(ASPELL_INCLUDES aspell.h
          "/usr/local/"
         )
 
+
 if(ASPELL_INCLUDES)
-  add_definitions(-DASPELL_ENABLE)
-  target_link_libraries(tea libaspell.so)
+
   message("+ aspell support")
+  add_definitions(-DASPELL_ENABLE)
+
+if(OS2)
+  target_link_libraries(tea aspell_dll.a)
+else()
+  target_link_libraries(tea libaspell.so)
+endif()
+
 endif()
 
 
@@ -144,7 +152,7 @@ if(ddjvuapi_FOUND)
 endif()
 
 
-if(UNIX OR MINGW)
+if(UNIX OR MINGW OR OS2)
     find_package(ZLIB REQUIRED)
 else(UNIX OR MINGW)
     set(ZLIB_INCLUDE_DIRS "${QT_ROOT}/src/3rdparty/zlib" CACHE STRING "Path to ZLIB headers of Qt")
@@ -152,7 +160,7 @@ else(UNIX OR MINGW)
     if(NOT EXISTS "${ZLIB_INCLUDE_DIRS}/zlib.h")
         message("Please specify a valid zlib include dir")
     endif(NOT EXISTS "${ZLIB_INCLUDE_DIRS}/zlib.h")
-endif(UNIX OR MINGW)
+endif(UNIX OR MINGW OR OS2)
 
 
 if (ZLIB_FOUND)

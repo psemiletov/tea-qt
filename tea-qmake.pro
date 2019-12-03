@@ -217,6 +217,13 @@ noqml{
        message ("QML stuff is off")
 }
 
+os2: {
+       QT -= qml
+       QT -= quick
+       DEFINES -= USE_QML_STUFF
+       message ("QML stuff is off")
+}
+
 
 nosingleapp{
        DEFINES += NO_SINGLE_APP

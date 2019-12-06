@@ -948,13 +948,14 @@ CDox::CDox()
   timer->setInterval (100);
 
 #if defined(JOYSTICK_SUPPORTED)
+
   joystick = new CJoystick (0, this);
 
   if (joystick->initialized)
      {
       connect(timer, SIGNAL(timeout()), joystick, SLOT(read_joystick()));
 
-      if (settings->value ("use_joystick", "0").toInt())
+      if (settings->value ("use_joystick", "0").toBool())
          timer->start();
      }
 #endif
@@ -1610,7 +1611,7 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
 //LALT = 3
   //LWIN = 6
 
-  if (settings->value ("wasd", "0").toInt())
+  if (settings->value ("wasd", "0").toBool())
      {
       std::bitset<32> btst (event->nativeModifiers());
       QTextCursor cr = textCursor();

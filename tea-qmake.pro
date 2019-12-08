@@ -421,12 +421,17 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 os2: {
 
+system(pkg-config --exists zlib) {
+    message ("Zlib found")
+        PKGCONFIG += zlib
+        }
+
 
 usepoppler{
 exists("C:/usr/include/poppler/qt4/poppler-qt4.h") {
      message ("PDF enabled")
-         PKGCONFIG += poppler-qt4
-             DEFINES += POPPLER_ENABLE
+     PKGCONFIG += poppler-qt4
+     DEFINES += POPPLER_ENABLE
 }
 }
 

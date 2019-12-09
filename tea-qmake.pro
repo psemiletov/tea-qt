@@ -427,40 +427,44 @@ system(pkg-config --exists zlib) {
         }
 
 
-usepoppler{
-exists("C:/usr/include/poppler/qt4/poppler-qt4.h") {
-     message ("PDF enabled")
-     PKGCONFIG += poppler-qt4
-     DEFINES += POPPLER_ENABLE
-}
-}
 
-
-usedjvu{
-exists("C:/usr/include/libdjvu/ddjvuapi.h") {
-exists("C:/usr/include/libdjvu/miniexp.h") {
-     message ("djvu enabled")
-         PKGCONFIG += ddjvuapi
-             DEFINES += DJVU_ENABLE
-}
-}
-}
 
 contains(USE_ASPELL,true){
 exists("c:/usr/include/aspell.h") {
       message ("ASpell enabled")
       LIBS += -laspell_dll
       DEFINES += ASPELL_ENABLE
-contains(USE_HUNSPELL,true)
 }
 }
 
 
-exists("c:/extras/include/hunspell/hunspell.hxx") {
-      message ("hunspell enabled")
-      LIBS += -lhunspell-1.4
-      PKGCONFIG += hunspell
-      DEFINES += HUNSPELL_ENABLE
+
+contains(USE_HUNSPELL,true){
+system(pkg-config --exists hunspell) {
+message ("hunspell enabled")
+        PKGCONFIG += hunspell
+            DEFINES += HUNSPELL_ENABLE
+                }
+                }
+
+usepoppler{
+system(pkg-config --exists poppler-qt5) {
+    message ("Poppler enabled")
+        PKGCONFIG += poppler-qt5
+        DEFINES += POPPLER_ENABLE
+        }
 }
+
+
+usedjvu{
+system(pkg-config --exists ddjvuapi) {
+    message ("djvu enabled")
+        PKGCONFIG += ddjvuapi
+            DEFINES += DJVU_ENABLE
+        }
+}
+
+
+
 }
 

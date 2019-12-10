@@ -17,8 +17,6 @@
  
 CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey): QApplication (argc, argv)
 {
-#ifndef Q_OS_OS2
-
 //  qDebug() << "CSingleApplicationShared::CSingleApplicationShared";
 
   sharedMemory.setKey(uniqueKey);
@@ -44,8 +42,7 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
          bAlreadyExists = true;
      //else
        //  ;// error
-   
-#endif 
+  
 }
  
  
@@ -53,7 +50,6 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
  
 void CSingleApplicationShared::checkForMessage()
 {
-#ifndef Q_OS_OS2
     
   QStringList arguments;
  
@@ -76,13 +72,11 @@ void CSingleApplicationShared::checkForMessage()
   sharedMemory.unlock();
  
   if (arguments.size()) emit messageAvailable (arguments);
-#endif    
 }
  
 
 bool CSingleApplicationShared::sendMessage (const QString &message)
 {
-#ifndef Q_OS_OS2
 
  //we cannot send message if we are master process!
   if (isMasterApp())
@@ -107,7 +101,6 @@ bool CSingleApplicationShared::sendMessage (const QString &message)
   memcpy (to, from, qMin(sharedMemory.size(), byteArray.size()));
   sharedMemory.unlock();
     
-#endif 
 
  return true;
 }

@@ -25,9 +25,7 @@
 
 #include "rvln.h"
 
-#ifndef Q_OS_OS2
 #include "single_application_shared.h"
-#endif
 
 
 extern rvln *mainWindow; 
@@ -35,7 +33,7 @@ extern rvln *mainWindow;
 int main (int argc, char *argv[])
 {
    
-#if defined(Q_OS_OS2) || defined (NO_SINGLE_APP)
+#if defined (NO_SINGLE_APP)
 
   QApplication app (argc, argv);
   qApp->setApplicationName ("TEA");
@@ -48,8 +46,6 @@ int main (int argc, char *argv[])
 #endif
 
 
-
-#if !defined(Q_OS_OS2) || defined (NO_SINGLE_APP)
 
 
  CSingleApplicationShared app (argc, argv, "tea unique id 1977");
@@ -70,7 +66,6 @@ int main (int argc, char *argv[])
       return 0;
      }
     
-#endif     
 
     
 
@@ -78,7 +73,7 @@ int main (int argc, char *argv[])
 
 
 
-#if !defined(Q_OS_OS2) || defined (NO_SINGLE_APP)
+#if !defined (NO_SINGLE_APP)
  QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), mainWindow, SLOT(receiveMessageShared(QStringList)));
 // QObject::connect(&app, SIGNAL(signal_commit_data()), mainWindow, SLOT(app_commit_data()));
 // QObject::connect(&app, SIGNAL(commitDataRequest(QSessionManager & )), mainWindow, SLOT(slot_commitDataRequest(QSessionManager & )));

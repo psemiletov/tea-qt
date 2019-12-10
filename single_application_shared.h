@@ -11,9 +11,7 @@
 #include <QApplication>
 #include <QStringList>
 
-#ifndef Q_OS_OS2
 #include <QSharedMemory>
-#endif
 
 
 class CSingleApplicationShared: public QApplication
@@ -22,9 +20,7 @@ class CSingleApplicationShared: public QApplication
 
 private:
 
-#ifndef Q_OS_OS2
   QSharedMemory sharedMemory;
-#endif        
 
   bool bAlreadyExists;
 

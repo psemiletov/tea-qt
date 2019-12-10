@@ -1,28 +1,19 @@
 =====NEWS ABOUT TEA====
-TEA 50.0.0, november 2019
+TEA 50.0.4, december 2019
 ---------------------------------------
 
-   VISIBLE
+    HELLO WORLD
 
-   Meet the new, alternative Docked interface. Switch between two UI's using Tune::Interface::UI Mode - Classic/Docked. With the Docked one, you can move FIF and Logmemo freely inside or outside the main window.
-   Another new option is Tune::Interface::UI Language list, which come instead of the removed "Override locale" option.  
-   All those options requires to restart TEA to be applied.
+    All plaforms:: single application mode - fixed.
 
-   UNDER THE HOOD
+    OS/2::  single application mode - works. qmake project is for Qt5 now.
 
-   Some parts of TEA now work faster due to iterator-based cycles optimization.
-   The Windows-specific module (with the local server) for the "single application" mode has been removed, now TEA uses shared memory based module for all systems excepting OS/2. So QtNetwork dependency has been dropped.
 
     TEA RELEASE URL
 
    Note for the package maintainers - fresh TEA releases now available at github:
 https://github.com/psemiletov/tea-qt/releases
    The traditional good old almost hand-made tarballs from semiletov.org and tea.ourproject.org were be sacrificed to the unification and modern frameworks.
-
-   OTHER CHANGES/FIXES
-
-* cmake's make dist creates tarball with dirname as at github, i.e. tea-qt-<ver>
-* code cleanup after cppcheck advices
 
 
 

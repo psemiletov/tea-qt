@@ -1,5 +1,9 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ os2:: single application mode
+* so2:: tea-qmake.pro is destined to Qt5 now
+* single application mode - fixed on UNIX/Win
+
 * fixes cmake file for install icons and desktop file
 * OS/2 fix
 

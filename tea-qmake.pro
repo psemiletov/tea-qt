@@ -1,7 +1,7 @@
-VERSION = 50.0.3
+VERSION = 50.0.4
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"50.0.3"\''
+DEFINES += 'VERSION_NUMBER=\'"50.0.4"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -427,8 +427,6 @@ system(pkg-config --exists zlib) {
         }
 
 
-
-
 contains(USE_ASPELL,true){
 exists("c:/usr/include/aspell.h") {
       message ("ASpell enabled")
@@ -463,7 +461,6 @@ system(pkg-config --exists ddjvuapi) {
             DEFINES += DJVU_ENABLE
         }
 }
-
 
 
 }

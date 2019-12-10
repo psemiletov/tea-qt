@@ -43,11 +43,7 @@ int main (int argc, char *argv[])
 
   return app.exec();
   
-#endif
-
-
-
-
+#else
  CSingleApplicationShared app (argc, argv, "tea unique id 1977");
  
  bool single_mode = true;
@@ -66,11 +62,11 @@ int main (int argc, char *argv[])
       return 0;
      }
     
+#endif
 
     
 
   mainWindow = new rvln();
-
 
 
 #if !defined (NO_SINGLE_APP)

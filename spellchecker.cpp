@@ -38,6 +38,27 @@
 
 #ifdef ASPELL_ENABLE
 
+
+QString aspell_default_dict_path()
+{
+  QString r;
+  r = "/usr/lib/aspell-0.60";
+
+#if defined(Q_OS_OS2)
+
+  r = "C:\\usr\\lib\\aspell-0.60";
+
+#endif
+
+#if defined(Q_OS_WIN) 
+
+  r = "C:\\Program Files\\Aspell";
+
+#endif
+
+  return r;
+}
+
 CAspellchecker::CAspellchecker (const QString &lang, const QString &path,
                                 const QString &user_path):
                                 CSpellchecker (lang, path, user_path)
@@ -519,4 +540,24 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
   return sl;
 }
 
+
+QString hunspell_default_dict_path() 
+{
+  QString r;
+  r = "/usr/share/hunspell";
+
+#if defined(Q_OS_OS2)
+
+  r = "C:\\usr\\share\\myspell";
+
 #endif
+
+#if defined(Q_OS_WIN) 
+#endif
+
+  return r;
+}
+
+
+#endif
+

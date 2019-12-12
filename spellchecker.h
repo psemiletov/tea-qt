@@ -84,6 +84,9 @@ public:
   QStringList get_suggestions_list (const QString &word);
 };
 
+
+QString aspell_default_dict_path();
+
 #endif
 
 
@@ -118,6 +121,11 @@ public:
   QStringList get_suggestions_list (const QString &word);
 };
 
+QString hunspell_default_dict_path(); 
+
+
 #endif
+
+
 
 #endif

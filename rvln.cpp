@@ -561,7 +561,7 @@ void rvln::setup_spellcheckers()
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
-      QString win32_aspell_path = settings->value ("win32_aspell_path", "C:\\Program Files\\Aspell").toString();
+      QString win32_aspell_path = settings->value ("win32_aspell_path", aspell_default_dict_path()).toString();
       spellchecker = new CAspellchecker (lang, win32_aspell_path);
 
 #else
@@ -576,7 +576,7 @@ void rvln::setup_spellcheckers()
 
 #ifdef HUNSPELL_ENABLE
    if (cur_spellchecker == "Hunspell")
-      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", "/usr/share/hunspell").toString(), dir_user_dict);
+      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
 
 #endif
 
@@ -2807,7 +2807,7 @@ void rvln::createOptions()
 
   ed_spellcheck_path = new QLineEdit (this);
 
-  ed_spellcheck_path->setText (settings->value ("hunspell_dic_path", "/usr/share/hunspell").toString());/*QDir::homePath ()).toString()*/
+  ed_spellcheck_path->setText (settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString());/*QDir::homePath ()).toString()*/
   ed_spellcheck_path->setReadOnly (true);
 
   QPushButton *pb_choose_path = new QPushButton (tr ("Select"), this);
@@ -2831,7 +2831,7 @@ void rvln::createOptions()
   l_t = new QLabel (tr ("Aspell directory"));
 
   ed_aspellcheck_path = new QLineEdit (this);
-  ed_aspellcheck_path->setText (settings->value ("win32_aspell_path", "C:\\Program Files\\Aspell").toString());
+  ed_aspellcheck_path->setText (settings->value ("win32_aspell_path", aspell_default_dict_path()).toString());
   ed_aspellcheck_path->setReadOnly (true);
 
   QPushButton *pb_choose_path2 = new QPushButton (tr ("Select"), this);
@@ -5027,7 +5027,7 @@ void rvln::fman_home()
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
-  fman->nav ("c:/");
+  fman->nav ("c:\\");
 
 #else
 
@@ -7240,7 +7240,7 @@ void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
 
 #ifdef HUNSPELL_ENABLE
    if (cur_spellchecker == "Hunspell")
-      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), "/usr/share/hunspell/");
+      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), hunspell_default_dict_path());
 #endif
 
  create_spellcheck_menu();
@@ -7251,7 +7251,7 @@ void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
 #ifdef HUNSPELL_ENABLE
 void rvln::pb_choose_hunspell_path_clicked()
 {
-  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/usr/share/hunspell/",
+  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), hunspell_default_dict_path(),
                                                     QFileDialog::ShowDirsOnly |
                                                     QFileDialog::DontResolveSymlinks);
   if (path.isEmpty())

@@ -46,7 +46,7 @@ QString aspell_default_dict_path()
 
 #if defined(Q_OS_OS2)
 
-  r = "C:\\usr\\lib\\aspell-0.60";
+  r = qEnvironmentVariable ("unixroot", "c:") + "\\usr\\lib\\aspell-0.60";
 
 #endif
 
@@ -548,7 +548,7 @@ QString hunspell_default_dict_path()
 
 #if defined(Q_OS_OS2)
 
-  r = "C:\\usr\\share\\myspell";
+  r = qEnvironmentVariable ("unixroot", "c:") + "\\usr\\share\\myspell";
 
 #endif
 

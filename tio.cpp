@@ -550,7 +550,7 @@ QString CCharsetMagic::guess_for_file (const QString &fname)
      for (vector <size_t>::size_type i = 0; i < signatures.size(); i++)
           for (int x = 0; x < signatures[i]->words.count(); x++)
               {
-               if (bafile.contains (signatures[i]->words[x]) > 0)
+               if (bafile.contains (signatures[i]->words[x]))
                   {
                    enc = signatures[i]->encname;
                    return enc;

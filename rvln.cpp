@@ -7944,7 +7944,15 @@ void rvln::calendar_update()
       {
        QDate date (year, month, day);
        QString sdate;
-       sdate = sdate.sprintf ("%02d-%02d-%02d", year, month, day);
+
+//       sdate = sdate.sprintf ("%02d-%02d-%02d", year, month, day);
+
+      sdate += QString("%1").arg (year, 2, 10, QChar('0'));
+      sdate += "-";
+      sdate += QString("%1").arg (month, 2, 10, QChar('0'));
+      sdate += "-";
+      sdate += QString("%1").arg (day, 2, 10, QChar('0'));
+
        QString fname  = dir_days + "/" + sdate;
 
        if (file_exists (fname))
@@ -10122,7 +10130,7 @@ void rvln::ide_run()
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
   process->setProcessChannelMode (QProcess::MergedChannels) ;
 
-  process->start (command_run, QIODevice::ReadWrite);
+  process->start (command_run, QStringList());
 }
 
 
@@ -10151,7 +10159,7 @@ void rvln::ide_build()
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
 
   process->setProcessChannelMode (QProcess::MergedChannels) ;
-  process->start (command_build, QIODevice::ReadWrite);
+  process->start (command_build, QStringList());
 }
 
 
@@ -10183,7 +10191,7 @@ void rvln::ide_clean()
     connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
 
     process->setProcessChannelMode (QProcess::MergedChannels) ;
-    process->start (command_clean, QIODevice::ReadWrite);
+    process->start (command_clean, QStringList());
 }
 
 

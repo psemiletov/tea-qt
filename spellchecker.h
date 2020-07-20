@@ -45,7 +45,7 @@ public:
 
   CSpellchecker (const QString &lang,
                  const QString &path,
-                 const QString &user): initialized {false} {};
+                 const QString &user): initialized (false) {};
 
   virtual ~CSpellchecker() {};
 

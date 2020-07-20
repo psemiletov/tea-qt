@@ -38,7 +38,6 @@
 
 #ifdef ASPELL_ENABLE
 
-
 QString aspell_default_dict_path()
 {
   QString r;

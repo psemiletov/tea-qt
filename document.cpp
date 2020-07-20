@@ -523,8 +523,9 @@ QString CDocument::get_filename_at_cursor()
 }
 
 
-CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent), document {doc}
+CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent)
 {
+  document = doc;
   xml_format = 0;
   casecare = true;
 }

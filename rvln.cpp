@@ -25,7 +25,9 @@ started at 08 November 2007
 #include <math.h>
 #include <algorithm>
 #include <iostream>
+#include <stdlib.h> 
 
+#include <QElapsedTimer>
 #include <QDockWidget>
 #include <QFileSystemModel>
 #include <QMimeData>
@@ -2066,7 +2068,7 @@ void rvln::mrkup_nbsp()
 
 QTextDocument::FindFlags rvln::get_search_options()
 {
-  QTextDocument::FindFlags flags = 0;
+  QTextDocument::FindFlags flags; //= 0;
 
   if (menu_find_whole_words->isChecked())
      flags = flags | QTextDocument::FindWholeWords;
@@ -3051,7 +3053,7 @@ void rvln::open_at_cursor()
          {
           QString command = settings->value ("img_viewer_override_command", "display %s").toString();
           command = command.replace ("%s", fname);
-          QProcess::startDetached (command);
+          QProcess::startDetached (command, QStringList());
           return;
          }
       else
@@ -3183,10 +3185,10 @@ void rvln::man_find_find()
 {
   QString fiftxt = fif_get_text();
 
-  if (man_search_value == fiftxt)
-      man->find (fiftxt);
-  else
-      man->find (fiftxt, 0);
+ // if (man_search_value == fiftxt)
+      man->find (fiftxt, get_search_options());
+//  else
+  //    man->find (fiftxt, 0);
 
   man_search_value = fiftxt;
 }
@@ -3407,7 +3409,7 @@ void rvln::fn_spell_check()
 
   QColor color_error = QColor (hash_get_val (global_palette, "error", "red"));
 
-  QTime time_start;
+  QElapsedTimer time_start;
   time_start.start();
 
   pb_status->show();
@@ -4650,7 +4652,7 @@ void rvln::file_open_program()
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
   process->setProcessChannelMode (QProcess::MergedChannels) ;
 
-  process->start (command, QIODevice::ReadWrite);
+  process->start (command, QStringList());
 }
 
 
@@ -4815,7 +4817,7 @@ void CAboutWindow::update_image()
       {
        QColor color;
 
-       int i = qrand() % 5;
+       int i = rand() % 5;
 
        switch (i)
               {
@@ -4977,7 +4979,7 @@ void rvln::fn_run_script()
   QProcess *process = new QProcess (this);
   connect(process, SIGNAL(finished ( int, QProcess::ExitStatus )), this, SLOT(cb_script_finished (int, QProcess::ExitStatus )));
 
-  process->start (command);
+  process->start (command, QStringList());
 }
 
 
@@ -6836,11 +6838,11 @@ void rvln::fn_rm_trailing_spaces()
 
 void rvln::fman_convert_images (bool by_side, int value)
 {
-  qsrand (QTime::currentTime().msec());
+  srand (QTime::currentTime().msec());
 
   QString dir_out ("images-out-");
 
-  dir_out.append (QString::number (qrand() % 777));
+  dir_out.append (QString::number (rand() % 777));
   dir_out.prepend ("/");
   dir_out.prepend (fman->dir.absolutePath());
 

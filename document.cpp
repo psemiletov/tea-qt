@@ -1035,7 +1035,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
   casecare = true;
   exts = "default";
   langs = "default";
-  pattern_opts = 0;
+//  pattern_opts = 0;
 
   int darker_val = settings->value ("darker_val", 100).toInt();
 

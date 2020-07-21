@@ -66,7 +66,7 @@ void CFMan::nav (const QString &path)
 
   setModel (0);
 
-  QDir::SortFlags sort_flags = 0;
+  QDir::SortFlags sort_flags;// = 0;
 
   if (sort_order == Qt::DescendingOrder)
      sort_flags |= QDir::Reversed;

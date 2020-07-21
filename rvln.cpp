@@ -7080,7 +7080,9 @@ void rvln::update_view_hls()
 {
   menu_view_hl->clear();
 
-  QStringList l = documents->hls.uniqueKeys();
+//  QStringList l = documents->hls.uniqueKeys();
+  QStringList l = documents->hls.keys();
+
   l.sort();
 
   create_menu_from_list (this, menu_view_hl,
@@ -7522,7 +7524,9 @@ void rvln::search_in_files()
 
   fc.lexts += lsupported_exts;
 
-  QStringList l = documents->hls.uniqueKeys();
+ // QStringList l = documents->hls.uniqueKeys();
+  QStringList l = documents->hls.keys();
+
   fc.lexts.append (l);
 
   log->log (tr ("Getting files list..."));

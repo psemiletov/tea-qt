@@ -194,7 +194,6 @@ CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): Q
   moon_mode = false;
   moon_tiles.load (":/images/moon-phases.png");
   northern_hemisphere = true;
-
   //setHeaderTextFormat (const QTextCharFormat & format);
 
   QTextCharFormat tformat;

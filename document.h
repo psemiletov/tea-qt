@@ -44,6 +44,7 @@ code from qwriter:
 #include <QTabWidget>
 #include <QPlainTextEdit>
 #include <QSyntaxHighlighter>
+#include <QMultiHash> 
 
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
@@ -297,7 +298,7 @@ public:
   QString markup_mode;
   QString recent_list_fname;
 
-  QHash <QString, QString> hls;
+  QMultiHash <QString, QString> hls;
   QHash <QString, QString> markup_modes;
   QHash <QString, QString> hash_project;
 

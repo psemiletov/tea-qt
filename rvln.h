@@ -670,6 +670,8 @@ main window callbacks
 
   void fn_get_words_count();
   void fn_unitaz_abc();
+  void fn_unitaz_len();
+
   void fn_extract_words();
   void fn_morse_from_en();
   void fn_morse_to_en();

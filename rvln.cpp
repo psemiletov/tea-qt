@@ -1542,6 +1542,7 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Count the substring (regexp)"), SLOT(fn_count_rx()));
   add_to_menu (tm, tr ("UNITAZ quantity sorting"), SLOT(fn_get_words_count()));
   add_to_menu (tm, tr ("UNITAZ sorting alphabet"), SLOT(fn_unitaz_abc()));
+  add_to_menu (tm, tr ("UNITAZ sorting length"), SLOT(fn_unitaz_len()));
 
 
   tm = menu_functions->addMenu (tr ("Text"));
@@ -6510,6 +6511,12 @@ bool CStrIntPair_bigger_than_str (CStrIntPair *o1, CStrIntPair *o2)
   return o1->string_value < o2->string_value;
 }
 
+bool CStrIntPair_bigger_than_str_len (CStrIntPair *o1, CStrIntPair *o2)
+{
+  return o1->string_value.size() < o2->string_value.size();
+}
+
+
 
 void rvln::run_unitaz (int mode)
 {
@@ -6552,6 +6559,9 @@ void rvln::run_unitaz (int mode)
     std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than);
   if (mode == 1)
      std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than_str);
+  if (mode == 2)
+     std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than_str_len);
+
 
   QStringList outp;
 
@@ -6589,6 +6599,13 @@ void rvln::fn_unitaz_abc()
 {
   last_action = qobject_cast<QAction *>(sender());
   run_unitaz (1);
+}
+
+
+void rvln::fn_unitaz_len()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  run_unitaz (2);
 }
 
 
@@ -10531,7 +10548,6 @@ void rvln::fn_filter_by_repetitions()
   if (! d)
      return;
 
-
   QString result;
 
   QString pattern = fif_get_text();
@@ -10546,27 +10562,26 @@ void rvln::fn_filter_by_repetitions()
        m[pattern[i]].push_back (i);
       }
 
-//test keys
+/* test keys
 
     QList <QChar> k = m.keys();
 
-  for (int i = 0; i < k.size(); ++i)
-      //qDebug() << k[i]; 
+    for (int i = 0; i < k.size(); ++i)
        qDebug() << m[k[i]].size();
-
+*/
 
 
   QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
 
-   for (int i = 0; i < sl.size(); ++i)
-       {
-        QString wrd = sl[i]; 
-        if (pattern.size() != wrd.size())
-           continue; 
+  for (int i = 0; i < sl.size(); ++i)
+      {
+       QString wrd = sl[i]; 
+       if (pattern.size() != wrd.size())
+          continue; 
 
-        bool yes; 
+       bool yes; 
 
-         for (int j = 0; j < wrd.size(); ++j) 
+       for (int j = 0; j < wrd.size(); ++j) 
             {
 
              //смотрим соответствие паттерну
@@ -10584,15 +10599,15 @@ void rvln::fn_filter_by_repetitions()
                   if (wrd[m[c][z]] == c)
                      count++;
                  }
-            yes = (count == m[c].size()); 
-            
+
+             yes = (count == m[c].size()); 
             }  
 
             if (yes)
                {
                 result += wrd;
                 result += "\n";
-                }
+               }
  
 /*             if (yes) 
                 qDebug() << "pattern: " << pattern << " word: " << wrd << " is OK";
@@ -10601,8 +10616,6 @@ void rvln::fn_filter_by_repetitions()
 
 */
        }
-
-
 
       if (! result.isEmpty())  
          d->textEdit->textCursor().insertText (result);

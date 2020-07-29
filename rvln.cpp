@@ -1478,6 +1478,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Sort case sensitively"), SLOT(fn_sort_casecare()));
   add_to_menu (tm, tr ("Sort case insensitively"), SLOT(fn_sort_casecareless()));
   add_to_menu (tm, tr ("Sort case sensitively, with separator"), SLOT(fn_sort_casecare_sep()));
+  add_to_menu (tm, tr ("Sort by length"), SLOT(fn_sort_length()));
+
   add_to_menu (tm, tr ("Flip a list"), SLOT(fn_flip_a_list()));
   add_to_menu (tm, tr ("Flip a list with separator"), SLOT(fn_flip_a_list_sep()));
 
@@ -1502,6 +1504,7 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Remove after delimiter at each line"), SLOT(fn_filter_delete_after_sep()));
 
   add_to_menu (tm, tr ("Filter with regexp"), SLOT(fn_filter_with_regexp()));
+  add_to_menu (tm, tr ("Filter by repetitions"), SLOT(fn_filter_by_repetitions()));
 
 
 
@@ -3770,6 +3773,18 @@ void rvln::fn_evaluate()
   QString fs = s.setNum (f);
 
   log->log (fs);
+}
+
+
+void rvln::fn_sort_length()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+                                                                 fif_get_text(),
+                                                                 QSTRL_PROC_FLT_WITH_SORTLEN));
 }
 
 
@@ -10504,6 +10519,93 @@ void rvln::slot_font_interface_select()
   settings->setValue ("app_font_name", font.family());
   settings->setValue("app_font_size", font.pointSize());
   update_stylesheet (fname_stylesheet);
+}
+
+
+
+void rvln::fn_filter_by_repetitions()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+
+  QString result;
+
+  QString pattern = fif_get_text();
+
+  //разобрать pattern
+
+  QMap <QChar, vector <int>> m;
+
+  for (int i = 0; i < pattern.size(); ++i)
+      {
+       //add indexes of the char to vector 
+       m[pattern[i]].push_back (i);
+      }
+
+//test keys
+
+    QList <QChar> k = m.keys();
+
+  for (int i = 0; i < k.size(); ++i)
+      //qDebug() << k[i]; 
+       qDebug() << m[k[i]].size();
+
+
+
+  QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+
+   for (int i = 0; i < sl.size(); ++i)
+       {
+        QString wrd = sl[i]; 
+        if (pattern.size() != wrd.size())
+           continue; 
+
+        bool yes; 
+
+         for (int j = 0; j < wrd.size(); ++j) 
+            {
+
+             //смотрим соответствие паттерну
+             QChar c = wrd[j];   
+               
+             if (! m.contains(c))
+                continue; 
+                  
+             //проходим все позиции где встречается символ
+
+             size_t count = 0; //количество совпадений
+
+             for (size_t z = 0; z < m[c].size(); ++z)
+                 {
+                  if (wrd[m[c][z]] == c)
+                     count++;
+                 }
+            yes = (count == m[c].size()); 
+            
+            }  
+
+            if (yes)
+               {
+                result += wrd;
+                result += "\n";
+                }
+ 
+/*             if (yes) 
+                qDebug() << "pattern: " << pattern << " word: " << wrd << " is OK";
+             else
+                 qDebug() << "pattern: " << pattern << " word: " << wrd << " is !OK";
+
+*/
+       }
+
+
+
+      if (! result.isEmpty())  
+         d->textEdit->textCursor().insertText (result);
 }
 
 

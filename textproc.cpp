@@ -352,6 +352,12 @@ int romanToDecimal (const char *roman)
 }
 
 
+bool qstring_length_less_than (const QString& v1, const QString& v2)
+{
+   return v1.length() < v2.length();
+}
+
+
 QString qstringlist_process (const QString &s, const QString &params, int mode)
 {
   QStringList sl;
@@ -403,6 +409,14 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
 
                                                   break;
                                                  }
+
+          case QSTRL_PROC_FLT_WITH_SORTLEN:
+                                                 {
+                                                  l = sl;  
+                                                  std::sort (l.begin(), l.end(), qstring_length_less_than);
+                                                  break;
+                                                 }
+
 
           case QSTRL_PROC_FLT_REMOVE_EMPTY:
                                            {

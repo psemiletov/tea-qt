@@ -15,6 +15,7 @@ enum
      QSTRL_PROC_FLT_WITH_SORTNOCASECARE,
      QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP,
      QSTRL_PROC_LIST_FLIP_SEP,
+     QSTRL_PROC_FLT_WITH_SORTLEN
     };
 
 int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_pos, double q);

@@ -610,6 +610,9 @@ main window callbacks
   void fn_count_rx();
 
   void fn_enum();
+
+  void fn_filter_by_repetitions();
+
   void fn_filter_with_regexp();
   void fn_text_stat();
   void fn_antispam_email();
@@ -618,6 +621,7 @@ main window callbacks
   void fn_escape();
 
   void fn_evaluate();
+  void fn_sort_length();
   void fn_sort_casecare();
   void fn_sort_casecareless();
   void fn_sort_casecare_sep();

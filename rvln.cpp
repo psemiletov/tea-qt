@@ -10539,6 +10539,72 @@ void rvln::slot_font_interface_select()
 }
 
 
+void rvln::fn_filter_by_repetitions()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString result;
+
+  QString pattern = fif_get_text();
+
+  vector <int> positions;
+
+  for (int i = 0; i < pattern.size(); ++i)
+      {
+       if (pattern[i] == '1')
+          positions.push_back (i);
+      } 
+
+ 
+
+  QStringList words = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+
+  for (int i = 0; i < words.size(); ++i)
+      {
+       QString wrd = words[i]; 
+
+       if (pattern.size() > wrd.size())
+          continue;
+
+      // qDebug() << "----------- WORD: " << wrd;
+       
+       QChar ch = wrd [positions[0]];
+
+       size_t count = 0;
+
+       for (size_t j = 0; j < positions.size(); ++j) 
+           {
+          //  qDebug() << "position #: " << j << " = " << positions[j];
+            if (wrd[positions[j]] == ch)
+                count++;
+           }
+
+//         qDebug() << "count: " << count;
+  //       qDebug() << "positions.size: " << positions.size();
+
+       if (count == positions.size())
+           {
+            result += wrd;
+            result += "\n";
+           }
+     /*     qDebug() << "wrd: " << wrd << " is ok";
+       else
+          qDebug() << "wrd: " << wrd << " is ! ok";
+  */
+
+    //   qDebug() << "-----------";
+      }
+
+      if (! result.isEmpty())  
+         d->textEdit->textCursor().insertText (result);
+
+}
+
+/*
 
 void rvln::fn_filter_by_repetitions()
 {
@@ -10559,16 +10625,18 @@ void rvln::fn_filter_by_repetitions()
   for (int i = 0; i < pattern.size(); ++i)
       {
        //add indexes of the char to vector 
+         //ТУТ ОШИБКА!Ё!!!!!!
+
        m[pattern[i]].push_back (i);
       }
 
-/* test keys
+// test keys
 
-    QList <QChar> k = m.keys();
+    QList <QChar> keys = m.keys();
 
-    for (int i = 0; i < k.size(); ++i)
-       qDebug() << m[k[i]].size();
-*/
+  //  for (int i = 0; i < k.size(); ++i)
+    //   qDebug() << m[k[i]].size();
+
 
 
   QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
@@ -10579,49 +10647,67 @@ void rvln::fn_filter_by_repetitions()
        if (pattern.size() != wrd.size())
           continue; 
 
-       bool yes; 
+       bool yes = false; 
 
-       for (int j = 0; j < wrd.size(); ++j) 
-            {
+       //смотрим соответствие wrd паттерну pattern
 
-             //смотрим соответствие паттерну
-             QChar c = wrd[j];   
+//       for (int j = 0; j < pattern.size(); ++j) 
+  //         {
+    //        QChar c = pattern[j];   
                
-             if (! m.contains(c))
-                continue; 
+            //if (! wrd.contains(c))
+             //  continue; 
                   
-             //проходим все позиции где встречается символ
+             //проходим все позиции где встречается символ c
 
-             size_t count = 0; //количество совпадений
+            //size_t count = 0; //количество совпадений
 
-             for (size_t z = 0; z < m[c].size(); ++z)
-                 {
-                  if (wrd[m[c][z]] == c)
-                     count++;
-                 }
+            for (size_t z = 0; z < keys.size(); ++z)
+ 
+           {
+           for (size_t x = 0; x < m[keys[z]].size(); ++x)
+                {
+                 //если в wrd по позиции из m[c][z] есть символ c, то    
+                 int pos = m[keys[z]][x];
 
-             yes = (count == m[c].size()); 
-            }  
+                 qDebug() << "c: " << c << " pos:" << pos; 
+
+                 if (wrd[pos] == c)
+                    yes = true;
+                 else
+                     yes = false;
+//                    count++;
+                }
+
+
+         }
+
+//             if ((count == m[c].size()) && (count >= 2))
+  //              yes = true;
+ 
+     //       }  
 
             if (yes)
                {
                 result += wrd;
                 result += "\n";
                }
+
+
  
-/*             if (yes) 
+             if (yes) 
                 qDebug() << "pattern: " << pattern << " word: " << wrd << " is OK";
              else
                  qDebug() << "pattern: " << pattern << " word: " << wrd << " is !OK";
 
-*/
+
        }
 
       if (! result.isEmpty())  
          d->textEdit->textCursor().insertText (result);
 }
 
-
+*/
 
 void rvln::test()
 {

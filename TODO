@@ -1,12 +1,13 @@
+*вернуться к SVG-иконкам?
+
 ПЕЧАТЬ НЕ РАБОТАЕТ!
 
-Фильтр - Больше размера > - удаляет всё
+Фильтр - Больше размера > - удаляет всё?
 
 OS/2::File manager, double click on folders work with the right double click only
 
 
 
-галерея шрифтов не работает в Qt 5.13+ Arch/Manjaro
 shift-up/dn для выделения в ФП не работает, и никогда не работала
 cmake dist creates wrong tarball that cannot be build with meson
 

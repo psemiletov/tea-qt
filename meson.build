@@ -1,6 +1,6 @@
 project('tea', ['cpp','c'],
          default_options : ['cpp_std=c++11'],
-         version : '50.0.4',
+         version : '50.1.0',
          license : 'GPLv3')
 
 add_global_arguments('-DVERSION_NUMBER="50.1.0"', language : 'cpp')

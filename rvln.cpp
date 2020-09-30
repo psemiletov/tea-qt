@@ -1541,8 +1541,8 @@ void rvln::createMenus()
   add_to_menu (tm, tr ("Count the substring"), SLOT(fn_count()));
   add_to_menu (tm, tr ("Count the substring (regexp)"), SLOT(fn_count_rx()));
   add_to_menu (tm, tr ("UNITAZ quantity sorting"), SLOT(fn_get_words_count()));
-  add_to_menu (tm, tr ("UNITAZ sorting alphabet"), SLOT(fn_unitaz_abc()));
-  add_to_menu (tm, tr ("UNITAZ sorting length"), SLOT(fn_unitaz_len()));
+  add_to_menu (tm, tr ("UNITAZ sorting by alphabet"), SLOT(fn_unitaz_abc()));
+  add_to_menu (tm, tr ("UNITAZ sorting by length"), SLOT(fn_unitaz_len()));
 
 
   tm = menu_functions->addMenu (tr ("Text"));

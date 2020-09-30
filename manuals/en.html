@@ -493,6 +493,8 @@ sed 's/dog/cat/g' /tmp/xyz.xyz > $1</pre>
 
 <p><b>Sort  &gt;  Sort case sensitively, with separator</b> - sorts substring those separated by the delimiter. Put the delimiter into the FIF, then use this function on the text. Thus, you can sort "three|four|one|two" with the "|" as the delimiter.</p>
 
+<p><b>Sort  &gt;  Sort by length</b> - sorts selected lines by the size. Provide the size at FIF.</p>
+
 <p><b>Sort  &gt;  Flip a list</b> - reverses lines order. Was:</p>
 
 <p>Dog<br>
@@ -514,6 +516,11 @@ Dog</p>
 <p><b>Filter &gt; Remove lines &lt; N size</b> - remove lines with the length less than N. N is the number of characters. Write the number into the Famous input field.</p>
 
 <p><b>Filter &gt; Remove lines &gt; N size</b> - acts like the previous function, but removes all strings those larger than N characters.</p>
+
+<p><b>Filter &gt; by repetitions</b> - leaves strings with the pattern, where "0" is any character, and "1" is the same character.</p>
+
+<p>For example, the pattern for "kitten" will be "001100", where "11" is for "tt".</p>
+
 
 <p><b>Filter &gt; Filter with regexp</b> - filter a list using the regular expression. For more info, see <a href="http://www.regular-expressions.info">www.regular-expressions.info</a>. However, here is a brief example. Let's presume you have a list:</p>
 

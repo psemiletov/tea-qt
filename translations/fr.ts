@@ -635,7 +635,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>UNITAZ sorting alphabet</source>
-        <translation>Alphabet de tri UNITAZ</translation>
+        <translation type="vanished">Alphabet de tri UNITAZ</translation>
     </message>
     <message>
         <source>Count the substring</source>
@@ -2061,6 +2061,22 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>Docked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort by length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filter by repetitions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UNITAZ sorting by alphabet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UNITAZ sorting by length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -10,6 +10,12 @@ set(PROJECT "tea-qt")
 project ($PROJECT VERSION 50.0.4)
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 
+option(USE_ASPELL "Use Aspell" OFF)
+option(USE_PRINTER "Use printer support" OFF)
+option(USE_PDF "Use libpoppler" OFF)
+option(USE_DJVU "Use djvu support" OFF)
+option(USE_QML "Use QML support" OFF)
+
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    add_definitions(-DQ_OS_LINUX)
@@ -35,11 +41,14 @@ endif()
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets)
 
 
-if(DEFINED USE_QML)
+#if(DEFINED USE_QML)
+if(USE_QML)
 message("QML IS SUPPORTED")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG OPTIONAL_COMPONENTS Qml Quick)
 add_definitions(-DUSE_QML_STUFF)
-endif(DEFINED USE_QML)
+endif()
+
+#endif(DEFINED USE_QML)
 
 
 if(BUILD_TESTING)
@@ -98,11 +107,13 @@ WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 add_executable(tea ${tea_SRCS} ${QT_RESOURCES})
 
 
+if(USE_PRINTER)
 find_package(Qt5PrintSupport)
 if (Qt5PrintSupport_FOUND)
    Message ("+ printer support")
    add_definitions(-DPRINTER_ENABLE)
    target_link_libraries(tea Qt5::PrintSupport)
+endif()
 endif()
 
 
@@ -112,6 +123,7 @@ if (EXISTS "/usr/include/linux/joystick.h")
 endif()
 
 
+if(USE_ASPELL)
 find_path(ASPELL_INCLUDES aspell.h
          "/usr/include/"
          "/usr/local/"
@@ -131,7 +143,10 @@ endif()
 
 endif()
 
+endif()
 
+
+if(USE_PDF)
 find_package(PkgConfig)
 pkg_check_modules(popplerqt5 poppler-qt5)
 if(popplerqt5_FOUND)
@@ -140,8 +155,9 @@ if(popplerqt5_FOUND)
   include_directories(${popplerqt5_INCLUDE_DIRS})
   message("+ poppler support")
 endif()
+endif()
 
-
+if(USE_DJVU)
 find_package(PkgConfig)
 pkg_check_modules(ddjvuapi ddjvuapi)
 if(ddjvuapi_FOUND)
@@ -149,6 +165,7 @@ if(ddjvuapi_FOUND)
   target_link_libraries(tea ${ddjvuapi_LIBRARIES})
   include_directories(${ddjvuapi_INCLUDE_DIRS})
   message("+ djvuapi support")
+endif()
 endif()
 
 
@@ -175,7 +192,8 @@ endif()
 
 target_link_libraries(tea Qt5::Widgets Qt5::Core)
 
-if(DEFINED USE_QML)
+#if(DEFINED USE_QML)
+if(USE_QML)
 target_link_libraries(tea Qt5::Qml Qt5::Quick)
 endif()
 

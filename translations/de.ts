@@ -611,10 +611,6 @@ Do you want to overwrite?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>UNITAZ sorting alphabet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Count the substring</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1923,6 +1919,22 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>Docked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort by length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filter by repetitions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UNITAZ sorting by alphabet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UNITAZ sorting by length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

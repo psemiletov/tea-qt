@@ -1,0 +1,3 @@
+option('pdf', type : 'feature', value : 'disabled')
+option('djvu', type : 'feature', value : 'disabled')
+option('aspell', type : 'feature', value : 'disabled')

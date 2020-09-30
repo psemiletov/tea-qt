@@ -1,20 +1,16 @@
 =====NEWS ABOUT TEA====
-TEA 50.0.4, december 2019
+TEA 50.1.0, october 2020
 ---------------------------------------
 
-    HELLO WORLD
-
-    All plaforms:: single application mode - fixed.
-
-    OS/2::  single application mode - works. qmake project is for Qt5 now.
+   For the centuries of the development, TEA gains a thousands of features. Some of them becomes used rarely, some needs more dependencies, so I've decide to make a some sort of clean-up without the actual removing of such functions. Now they are just disabled by default at the build level, when you compile TEA with cmake and meson. The qmake subsystem still loves all TEA non-mandatory deps. 
+   So, by default, with meson and cmake, TEA does not search and build with: QML, Aspell, libpopplerqt5, ddjvuapi. You can enable all that stuff (see README). I don't know the decisions of packagers, their choice of TEA features, now I'm speaking just about the build from the source.
+ 
 
 
-    TEA RELEASE URL
-
-   Note for the package maintainers - fresh TEA releases now available at github:
-https://github.com/psemiletov/tea-qt/releases
-   The traditional good old almost hand-made tarballs from semiletov.org and tea.ourproject.org were be sacrificed to the unification and modern frameworks.
-
+   A lot of fixes for Clang/Mac build. New functions:
++ Functions - Analysis - UNITAZ sorting length
++ Functions - Filter - Filter by repetitions
++ Functions - Sort - Sort by length
 
 
    Stay tuned.

@@ -3,7 +3,7 @@ project('tea', ['cpp','c'],
          version : '50.0.4',
          license : 'GPLv3')
 
-add_global_arguments('-DVERSION_NUMBER="50.0.4"', language : 'cpp')
+add_global_arguments('-DVERSION_NUMBER="50.1.0"', language : 'cpp')
 #add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 #harcoded for now
@@ -24,10 +24,11 @@ endif
 
 
 aspell_dep = compiler.find_library('aspell', required : false)
+if get_option('aspell').enabled()
 if aspell_dep.found()
    add_global_arguments('-DASPELL_ENABLE=1', language : 'cpp')
    moc_params += ['-DASPELL_ENABLE=1']
-
+endif
 endif
 
 hunspell_dep = dependency('hunspell', required : false)
@@ -36,16 +37,21 @@ if hunspell_dep.found()
    moc_params += ['-DHUNSPELL_ENABLE=1']
 endif
 
+
 poppler_dep = dependency('poppler-qt5', required : false)
+if get_option('pdf').enabled()
 if poppler_dep.found()
    add_global_arguments('-DPOPPLER_ENABLE=1', language : 'cpp')
    moc_params += ['-DPOPPLER_ENABLE=1']
 endif
+endif
 
 ddjvuapi_dep = dependency('ddjvuapi', required : false)
+if get_option('djvu').enabled()
 if ddjvuapi_dep.found()
    add_global_arguments('-DDJVU_ENABLE=1', language : 'cpp')
    moc_params += ['-DDJVU_ENABLE=1']
+endif
 endif
 
 

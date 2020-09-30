@@ -10,6 +10,7 @@ https://github.com/psemiletov/tea-qt
 AUR > https://aur.archlinux.org/packages/tea-qt/
 
 Communities >
+https://t.me/teaqt
 https://vk.com/teaeditor
 https://www.facebook.com/groups/766324686841748/
 
@@ -45,7 +46,15 @@ ddjvuap (to read the text from DJVU)
 Note for FreeBSD users: you need the pkgconf package - pkg install pkgconf
 
 
-If you want to build and install TEA with cmake + make, run at the source dir:
+Which build system you should use?
+
+Use qmake for old distros and Windows.
+Use meson or cmake for modern distros. cmake is the mainline build system for TEA. meson is almost the same, but builds TEA without the printer support.
+
+ 
+01.01 CMAKE
+
+If you want to build and install TEA with cmake + make, run at the TEA source dir:
 
 mkdir b
 cd b
@@ -62,9 +71,14 @@ cmake -GNinja ..
 ninja
 ninja install
 
+By default, cmake builds TEA without some features: QML, printer and aspell support, libpoppler and djvuapi. To enable them, use from the build directory:
+
+cmake .. -DUSE_ASPELL=ON -DUSE_PRINTER=ON -DUSE_PDF=ON -DUSE_DJVU=ON -DUSE_QML=ON 
+
+
+01.02 MESON
 
 To build and install TEA with meson/ninja and GCC, do:
-
 
 mkdir b
 meson
@@ -80,8 +94,19 @@ cd b
 ninja
 ninja install
 
+To enable PDF and DJVU text extraction support use, and Aspell support (disabled by default as well as the printing support):
 
-With qmake it is even more simplier:
+mkdir b
+meson b
+meson configure -Dpdf=enabled -Ddjvu=enabled -Daspell=enabled b
+cd b
+ninja
+ninja install
+
+
+01.03 QMAKE
+
+With qmake to build is even more simplier:
 
 qmake
 make
@@ -108,9 +133,8 @@ Notes:
 
 1. If you have installed both Qt4 and Qt5, use the qmake from Qt4 or Qt5 to configure TEA with exact version of QT. The common solution is to make symlink to qmake from Qt5 and name it qmake5, then use qmake5 instead of the usual qmake.
 
-2. If the context menus in TEA are not localized, install the qttranslations package from your distro's repository.
+2. If the context menus in TEA are not localized, install the qttranslations or qt-translations package from your distro's repository.
 
-3. With cmake, there are no way to disable some TEA features manually - they will be compiled if TEA found the libs those needed.
 
 /*
 Basic snippet for Ubuntu users (Qt5 build) - run this from Terminal at the TEA source directory (unpacked):
@@ -149,8 +173,8 @@ Please note, that TEA source dir after unpacking will be tea-qt-${pkgver}
 3. TEA supports 3 build systems:
 
   * qmake - the traditional one, good for Qt4-Win32-OS/2-Slackware builds. TEA's qmake project file is old and obscure. QML plugins are enabled by deafault, that is not wise.
-  * cmake - good for Qt5 build, the reference one for TEA, has more options than meson support. I recommend to use cmake to build TEA package.
-  * meson - I use it internally. Has no option to enable QML plugins.
+  * cmake - good for Qt5 build, the reference one for TEA. I recommend to use cmake to build TEA package.
+  * meson - I use it internally. Has no option to enable QML plugins and does not have the printer support.
 
 4. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
 
@@ -158,7 +182,7 @@ qmake PREFIX=your_path
 make
 make install
 
-5. QML plugins. Altough you can enable it for cmake with cmake -DUSE_QML=True, or use qmake-based build, I hope you don't enable them, because starting from TEA 49, QML-support at TEA is frozen and unmaintained, and will be removed if no one use it.
+5. QML plugins. Altough you can enable it for cmake with cmake -DUSE_QML=ON, or use qmake-based build, I hope you don't enable them, because starting from TEA 49, QML-support at TEA is frozen and unmaintained, and will be removed if no one use it.
 
 
 ==03: NOTE FOR UBUNTU USERS==
@@ -178,6 +202,5 @@ TEA code is licensed under GPL V3 and, partially, as a Public Domain. TEA media 
 
 ==05: DONATE==
 
-If you want to support TEA via donation, better give your support to the Ukrainian dog shelter Lyubas House - http://lyubas.pp.ua. There are lot of dogs with disabilities, and they need help more than TEA. To donate via PayPal, please see http://www.ukraineanimalrescue.org/#!lyubas-house/cxfj. Please specify "For Lyubas's House" in the comments of donation, because there are other projects uses that PayPal account.
 
 Ежели вы хотите как-то поддержать разработку TEA денежно, лучше поддержите киевский приют для собак Дом Любчика - http://lyubas.pp.ua. Любчик - это пёс на инвалидной коляске. У него много друзей, которым всегда нужна помощь.

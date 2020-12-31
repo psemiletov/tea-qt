@@ -2662,8 +2662,8 @@ void rvln::createOptions()
 
 
 #if QT_VERSION >= 0x050000
-  cb_use_qregexpsyntaxhl = new QCheckBox (tr ("Old syntax hl engine (restart TEA to apply)"), tab_options);
-  cb_use_qregexpsyntaxhl->setChecked (settings->value ("qregexpsyntaxhl", 0).toBool());
+//  cb_use_qregexpsyntaxhl = new QCheckBox (tr ("Old syntax hl engine (restart TEA to apply)"), tab_options);
+//  cb_use_qregexpsyntaxhl->setChecked (settings->value ("qregexpsyntaxhl", 0).toBool());
 #endif
 
   cb_auto_img_preview = new QCheckBox (tr ("Automatic preview images at file manager"), tab_options);
@@ -2742,7 +2742,7 @@ void rvln::createOptions()
 #endif
 
 #if QT_VERSION >= 0x050000
-  page_common_layout->addWidget (cb_use_qregexpsyntaxhl);
+ // page_common_layout->addWidget (cb_use_qregexpsyntaxhl);
 #endif
 
   page_common_layout->addWidget (cb_auto_img_preview);
@@ -8550,8 +8550,7 @@ void rvln::leaving_tune()
   settings->setValue ("word_wrap", cb_wordwrap->isChecked());
 
 #if QT_VERSION >= 0x050000
-//#if QT_VERSION_MAJOR >= 5
-  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->isChecked());
+//  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->isChecked());
 #endif
 
   settings->setValue ("additional_hl", cb_hl_current_line->isChecked());

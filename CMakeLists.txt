@@ -1,13 +1,41 @@
 cmake_minimum_required(VERSION 3.0)
 set (QT_MIN_VERSION "5.4.0")
 
-include_directories(${Qt5Widgets_INCLUDE_DIRS})
-add_definitions(${Qt5Widgets_DEFINITIONS})
-add_definitions(${Qt5Widgets_COMPILE_DEFINITIONS})
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+enable_language(CXX)
+enable_language(C)
+
+#set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+#find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+
+
+if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt6")
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Core5Compat REQUIRED)
+endif()
+
+
+if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt5")
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+endif()
+
+
+message(Qt${QT_VERSION_MAJOR} " found")
+
+
+include_directories(${Qt${QT_VERSION_MAJOR}Widgets_INCLUDE_DIRS})
+add_definitions(${Qt${QT_VERSION_MAJOR}Widgets_DEFINITIONS})
+add_definitions(${Qt${QT_VERSION_MAJOR}Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea-qt")
-project ($PROJECT VERSION 50.1.0)
+project ($PROJECT VERSION 50.1.0 LANGUAGES CXX C)
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 
 option(USE_ASPELL "Use Aspell" OFF)
@@ -22,10 +50,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    add_definitions(-DQ_OS_UNIX)
 endif()
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
 
 message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 
@@ -38,27 +62,37 @@ if(hunspell_FOUND)
 endif()
 
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets)
+find_package(Qt${QT_VERSION_MAJOR} CONFIG REQUIRED Core Widgets)
 
 
-#if(DEFINED USE_QML)
 if(USE_QML)
 message("QML IS SUPPORTED")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG OPTIONAL_COMPONENTS Qml Quick)
+find_package(Qt${QT_VERSION_MAJOR} CONFIG OPTIONAL_COMPONENTS Qml Quick)
 add_definitions(-DUSE_QML_STUFF)
 endif()
 
-#endif(DEFINED USE_QML)
 
 
 if(BUILD_TESTING)
-  find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
+  find_package(Qt${Test}${QT_VERSION_MAJOR} CONFIG REQUIRED)
 endif()
 
 
-qt5_add_resources(QT_RESOURCES resources.qrc)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt6")
+qt6_add_resources(QT_RESOURCES resources.qrc)
+endif()
+
+if (Qt${QT_VERSION_MAJOR} MATCHES "Qt5")
+qt5_add_resources(QT_RESOURCES resources.qrc)
+endif()
+
+
+#qt6_add_resources(QT_RESOURCES resources.qrc)
+#Qt${QT_VERSION_MAJOR}_add_resources(QT_RESOURCES resources.qrc)
+
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt${QT_VERSION_MAJOR}Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 
 file(GLOB tea_SRCS "*.c" "*.cpp")
@@ -108,11 +142,11 @@ add_executable(tea ${tea_SRCS} ${QT_RESOURCES})
 
 
 if(USE_PRINTER)
-find_package(Qt5PrintSupport)
-if (Qt5PrintSupport_FOUND)
+find_package(Qt${QT_VERSION_MAJOR}PrintSupport)
+if (Qt${PrintSupport}_FOUND)
    Message ("+ printer support")
    add_definitions(-DPRINTER_ENABLE)
-   target_link_libraries(tea Qt5::PrintSupport)
+   target_link_libraries(tea Qt${QT_VERSION_MAJOR}::PrintSupport)
 endif()
 endif()
 
@@ -190,11 +224,19 @@ if(hunspell_FOUND)
   target_link_libraries(tea ${hunspell_LIBRARIES} )
 endif()
 
-target_link_libraries(tea Qt5::Widgets Qt5::Core)
 
-#if(DEFINED USE_QML)
+if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt6")
+   target_link_libraries(tea Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core Qt6::Core5Compat)
+endif()
+
+
+if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt5")
+target_link_libraries(tea Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core)
+endif()
+
+
 if(USE_QML)
-target_link_libraries(tea Qt5::Qml Qt5::Quick)
+target_link_libraries(tea Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick)
 endif()
 
 

@@ -531,12 +531,14 @@ CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, c
 }
 
 
+#if QT_VERSION < 0x050000
 CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDocument *doc, const QString &fname):
                                                       CSyntaxHighlighter (parent, doc, fname)
 {
   document = doc;
   load_from_xml (fname);
 }
+#endif
 
 
 #if QT_VERSION >= 0x050000
@@ -573,9 +575,9 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #if QT_VERSION >= 0x050000
 
-  if (settings->value ("qregexpsyntaxhl", 0).toBool())
-     highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
-  else
+//  if (settings->value ("qregexpsyntaxhl", 0).toBool())
+//     highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
+//  else
      highlighter = new CSyntaxHighlighterQRegularExpression (textEdit->document(), this, fname);
 
 #else
@@ -1245,6 +1247,8 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 
 #endif
 
+
+#if QT_VERSION < 0x050000
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
   //qDebug() << "CSyntaxHighlighter::load_from_xml - start";
@@ -1427,6 +1431,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
          startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
         }
 }
+#endif
 
 
 void CDox::save_to_session (const QString &fileName)

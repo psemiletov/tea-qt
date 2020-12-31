@@ -170,6 +170,7 @@ public:
 };
 
 
+#if QT_VERSION < 0x050000
 class CSyntaxHighlighterQRegExp: public CSyntaxHighlighter
 {
   Q_OBJECT
@@ -196,6 +197,7 @@ public:
   CSyntaxHighlighterQRegExp (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);
 };
+#endif
 
 
 #if QT_VERSION >= 0x050000

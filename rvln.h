@@ -697,7 +697,10 @@ main window callbacks
   void fn_spell_add_to_dict();
   void fn_remove_from_dict();
   void fn_spell_suggest();
-  void cmb_spellchecker_currentIndexChanged (const QString &text);
+//  void cmb_spellchecker_currentIndexChanged (const QString &text);
+
+  void cmb_spellchecker_currentIndexChanged (int);
+
 
 #endif // SPELLCHECKERS ENABLED
 
@@ -833,8 +836,12 @@ prefs window callbacks
   void cmb_ui_tabs_currentIndexChanged (int i);
   void cmb_docs_tabs_currentIndexChanged (int i);
 
-  void cmb_icon_sizes_currentIndexChanged (const QString &text);
-  void cmb_tea_icons_currentIndexChanged  (const QString &text);
+  void cmb_icon_sizes_currentIndexChanged (int index);
+//  void cmb_icon_sizes_currentIndexChanged (const QString &text);
+
+//  void cmb_tea_icons_currentIndexChanged  (const QString &text);
+  void cmb_tea_icons_currentIndexChanged  (int);
+
 
   void pb_assign_hotkey_clicked();
   void pb_remove_hotkey_clicked();
@@ -855,7 +862,9 @@ prefs window callbacks
 
 //  void slot_app_font_size_changed (int i);
 
-  void slot_style_currentIndexChanged (const QString &text);
+//  void slot_style_currentIndexChanged (const QString &text);
+
+  void slot_style_currentIndexChanged (int);
 
 
 #ifdef USE_QML_STUFF

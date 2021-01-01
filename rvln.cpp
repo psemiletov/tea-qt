@@ -2533,8 +2533,11 @@ void rvln::createOptions()
                              settings->value ("ui_style", default_style).toString());
 
 
-  connect (cmb_styles, SIGNAL(currentIndexChanged (const QString &)),
-           this, SLOT(slot_style_currentIndexChanged (const QString &)));
+//  connect (cmb_styles, SIGNAL(currentIndexChanged (const QString &)),
+  //         this, SLOT(slot_style_currentIndexChanged (const QString &)));
+
+  connect (cmb_styles, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(slot_style_currentIndexChanged (int)));
 
 
   QPushButton *bt_font_interface = new QPushButton (tr ("Interface font"), this);
@@ -2593,8 +2596,11 @@ void rvln::createOptions()
                                 sl_icon_sizes,
                                 settings->value ("icon_size", "32").toString());
 
-  connect (cmb_icon_size, SIGNAL(currentIndexChanged (const QString &)),
-           this, SLOT(cmb_icon_sizes_currentIndexChanged (const QString &)));
+//  connect (cmb_icon_size, SIGNAL(currentIndexChanged (const QString &)),
+  //         this, SLOT(cmb_icon_sizes_currentIndexChanged (const QString &)));
+
+  connect (cmb_icon_size, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_icon_sizes_currentIndexChanged (int)));
 
 
   QStringList sl_tea_icons;
@@ -2607,8 +2613,13 @@ void rvln::createOptions()
                                 sl_tea_icons,
                                 settings->value ("icon_fname", "1").toString());
 
+/*
   connect (cmb_tea_icons, SIGNAL(currentIndexChanged (const QString &)),
            this, SLOT(cmb_tea_icons_currentIndexChanged (const QString &)));
+*/
+
+  connect (cmb_tea_icons, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_tea_icons_currentIndexChanged (int)));
 
 
   cb_fif_at_toolbar = new QCheckBox (tr ("FIF at the top (restart needed)"), tab_options);
@@ -2920,8 +2931,8 @@ void rvln::createOptions()
 
 #endif
 
-  connect (cmb_spellcheckers, SIGNAL(currentIndexChanged (const QString&)),
-           this, SLOT(cmb_spellchecker_currentIndexChanged (const QString &)));
+  connect (cmb_spellcheckers, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_spellchecker_currentIndexChanged (int)));
 
   page_functions_layout->addWidget (gb_spell);
 
@@ -3086,9 +3097,26 @@ void rvln::opt_update_keyb()
   lv_menuitems->addItems (shortcuts->captions);
 }
 
-
+/*
 void rvln::slot_style_currentIndexChanged (const QString &text)
 {
+   if (text == "GTK+") //because it is buggy with some Qt versions. sorry!
+     return;
+
+  QStyle *style = QStyleFactory::create (text);
+  if (style == 0)
+     return;
+
+  settings->setValue ("ui_style", text);
+}
+*/
+
+
+void rvln::slot_style_currentIndexChanged (int)
+{
+ QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+ QString text = cmb->currentText(); 
+
    if (text == "GTK+") //because it is buggy with some Qt versions. sorry!
      return;
 
@@ -7381,8 +7409,11 @@ void rvln::fn_binary_to_decimal()
 }
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-void rvln::cmb_spellchecker_currentIndexChanged (const QString &text)
+void rvln::cmb_spellchecker_currentIndexChanged (int)
 {
+  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+  QString text = cmb->currentText(); 
+
   cur_spellchecker = text;
 
   settings->setValue ("cur_spellchecker", cur_spellchecker);
@@ -8493,8 +8524,11 @@ void rvln::fman_zip_info()
 }
 
 
-void rvln::cmb_tea_icons_currentIndexChanged (const QString &text)
+void rvln::cmb_tea_icons_currentIndexChanged (int)
 {
+  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+  QString text = cmb->currentText(); 
+
   settings->setValue ("icon_fname", text);
 
   QString icon_fname = ":/icons/tea-icon-v3-0" + text + ".png";
@@ -8502,9 +8536,28 @@ void rvln::cmb_tea_icons_currentIndexChanged (const QString &text)
   qApp->setWindowIcon (QIcon (icon_fname));
 }
 
-
+/*
 void rvln::cmb_icon_sizes_currentIndexChanged (const QString &text)
 {
+  settings->setValue ("icon_size", text);
+
+  icon_size = settings->value ("icon_size", "32").toInt();
+
+  setIconSize (QSize (text.toInt(), text.toInt()));
+  tb_fman_dir->setIconSize (QSize (text.toInt(), text.toInt()));
+  filesToolBar->setIconSize (QSize (text.toInt(), text.toInt()));
+}
+*/
+
+
+
+void rvln::cmb_icon_sizes_currentIndexChanged (int index)
+{
+
+ QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+
+ QString text = cmb->currentText(); 
+
   settings->setValue ("icon_size", text);
 
   icon_size = settings->value ("icon_size", "32").toInt();

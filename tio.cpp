@@ -125,13 +125,13 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
 }
 
 
-
-
 bool CTioPlainText::load (const QString &fname)
 {
   QFile file (fname);
 
-  if (! file.open (QFile::ReadOnly | QIODevice::Text))
+//  if (! file.open (QFile::ReadOnly | QIODevice::Text))
+  if (! file.open (QFile::ReadOnly))
+
      {
       error_string = file.errorString();
       return false;

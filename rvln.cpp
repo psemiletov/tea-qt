@@ -6022,7 +6022,8 @@ void rvln::createFman()
 
   lw_right->addLayout (vbox);
 
-  fman->setSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+//commented out with Qt6
+ // fman->setSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
 
   spl_fman = new QSplitter (this);
   spl_fman->setChildrenCollapsible (true);

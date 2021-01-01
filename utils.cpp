@@ -141,7 +141,8 @@ QString qstring_load (const QString &fileName, const char *enc)
 
   QFile file (fileName);
 
-  if (! file.open (QFile::ReadOnly | QIODevice::Text))
+//  if (! file.open (QFile::ReadOnly | QIODevice::Text))
+  if (! file.open (QFile::ReadOnly))
       return QString();
 
 //  QTextStream in (&file);

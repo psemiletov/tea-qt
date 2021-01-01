@@ -4,7 +4,9 @@ Peter Semiletov
 */
 
 
+
 #include <QTextStream>
+#include <QTextCodec>
 #include <QDebug>
 #include <QDir>
 #include <QImageReader>
@@ -103,13 +105,23 @@ QStringList read_dir_entries (const QString &path)
 
 bool qstring_save (const QString &fileName, const QString &data, const char *enc)
 {
-  QFile file (fileName);
+/*  QFile file (fileName);
   if (! file.open (QFile::WriteOnly | QFile::Text))
       return false;
 
   QTextStream out (&file);
   out.setCodec (enc);
   out << data;
+*/
+  QFile file (fileName);
+  if (! file.open (QFile::WriteOnly))
+      return false;
+
+  QTextCodec *codec = QTextCodec::codecForName (enc);
+  QByteArray ba = codec->fromUnicode(data);
+
+  file.write(ba);
+  file.close();
 
   return true;
 }
@@ -117,7 +129,7 @@ bool qstring_save (const QString &fileName, const QString &data, const char *enc
 
 QString qstring_load (const QString &fileName, const char *enc)
 {
-  QFile file (fileName);
+ /* QFile file (fileName);
 
   if (! file.open (QFile::ReadOnly | QFile::Text))
      return QString();
@@ -125,7 +137,23 @@ QString qstring_load (const QString &fileName, const char *enc)
   QTextStream in(&file);
   in.setCodec (enc);
 
-  return in.readAll();
+  return in.readAll();*/
+
+  QFile file (fileName);
+
+  if (! file.open (QFile::ReadOnly | QIODevice::Text))
+      return QString();
+
+//  QTextStream in (&file);
+ // in.setCodec (charset.toUtf8().data());
+
+  QByteArray ba = file.readAll();
+  QTextCodec *codec = QTextCodec::codecForName(enc);
+
+  file.close();
+
+  return codec->toUnicode(ba);
+
 }
 
 

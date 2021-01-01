@@ -7,7 +7,11 @@ this code is Public Domain
 #include <QDebug>
 #include <QApplication>
 #include <QPainter>
-#include <QDesktopWidget>
+
+#if (QT_VERSION_MAJOR <= 5)
+//#include <QDesktopWidget>
+#endif
+
 #include <QVBoxLayout>
 #include <QCryptographicHash>
 #include <QDir>

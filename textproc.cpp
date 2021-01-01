@@ -40,6 +40,15 @@ some code is taken from Scribus::util.cpp:
 #include <QMap>
 #include <QDebug>
 
+
+#if QT_VERSION < 0x050000
+#include <QRegExp>
+#else
+#include <QRegularExpression>
+#endif
+
+
+
 #include "textproc.h"
 #include "utils.h"
 
@@ -91,8 +100,14 @@ QString apply_table (const QString &s, const QString &fname, bool use_regexp)
   for (int i = 0; i < h.size(); i++)
       {
        QString key = h.keys()[i];
+
        if (use_regexp)
+#if QT_VERSION < 0x050000
            result.replace (QRegExp (key), h.value (key));
+#else
+           result.replace (QRegularExpression (key), h.value (key));
+#endif
+
        else
            result.replace (key, h.value (key));
       }
@@ -446,7 +461,11 @@ QString qstringlist_process (const QString &s, const QString &params, int mode)
 
            case QSTRL_PROC_FLT_WITH_REGEXP:
                                           {
+#if QT_VERSION < 0x050000
                                            l = sl.filter (QRegExp (params));
+#else
+                                           l = sl.filter (QRegularExpression (params));
+#endif
                                            break;
                                           }
 

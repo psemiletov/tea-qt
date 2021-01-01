@@ -27,6 +27,12 @@ started at 08 November 2007
 #include <iostream>
 #include <stdlib.h> 
 
+#if QT_VERSION < 0x050000
+#include <QRegExp>
+#else
+#include <QRegularExpression>
+#endif
+
 #include <QElapsedTimer>
 #include <QDockWidget>
 #include <QFileSystemModel>
@@ -90,6 +96,15 @@ started at 08 November 2007
 #ifdef USE_QML_STUFF
 std::vector <CPluginListItem *> plugins_list;
 #endif
+
+
+//′
+const int UQS = 8242;
+//″
+const int UQD = 8243;
+//°
+const int UQDG = 176;
+
 
 
 bool MyProxyStyle::b_altmenu = false;
@@ -656,8 +671,15 @@ rvln::rvln()
   if (! file_exists (":/translations/" + lng + ".qm"))
      lng = "en";
 
-  qtTranslator.load (QString ("qt_%1").arg (lng),
-                     QLibraryInfo::location (QLibraryInfo::TranslationsPath));
+#if QT_VERSION >= 0x060000
+  qtTranslator.load (QString ("qt_%1").arg (lng), QLibraryInfo::path (QLibraryInfo::TranslationsPath));
+
+#else
+
+  qtTranslator.load (QString ("qt_%1").arg (lng), QLibraryInfo::location (QLibraryInfo::TranslationsPath));
+
+#endif
+
   qApp->installTranslator (&qtTranslator);
 
   myappTranslator.load (":/translations/" + lng);
@@ -2104,7 +2126,13 @@ void rvln::search_find()
       d->text_to_search = fif_get_text();
 
       if (menu_find_regexp->isChecked())
+
+#if QT_VERSION < 0x050000
          cr = d->textEdit->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+#else
+         cr = d->textEdit->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
+#endif
+
       else
           if (menu_find_fuzzy->isChecked())
              {
@@ -2202,7 +2230,13 @@ void rvln::search_find_next()
 
       QTextCursor cr;
       if (menu_find_regexp->isChecked())
-         cr = d->textEdit->document()->find (QRegExp (d->text_to_search), d->textEdit->textCursor().position(), get_search_options());
+#if QT_VERSION < 0x050000
+         cr = d->textEdit->document()->find (QRegExp (d->text_to_search), d->textEdit->textCursor().position(),
+#else
+         cr = d->textEdit->document()->find (QRegularExpression (d->text_to_search), d->textEdit->textCursor().position(),
+#endif
+
+ get_search_options());
       if (menu_find_fuzzy->isChecked())
          {
           int pos = str_fuzzy_search (d->textEdit->toPlainText(), d->text_to_search, d->textEdit->textCursor().position(), settings->value ("fuzzy_q", "60").toInt());
@@ -2246,8 +2280,14 @@ void rvln::search_find_prev()
       QTextCursor cr;
 
       if (menu_find_regexp->isChecked())
+#if QT_VERSION < 0x050000
          cr = d->textEdit->document()->find (QRegExp (d->text_to_search),
                                              d->textEdit->textCursor(),
+#else
+         cr = d->textEdit->document()->find (QRegularExpression (d->text_to_search),
+                                             d->textEdit->textCursor(),
+#endif
+
                                              get_search_options() | QTextDocument::FindBackward);
       else
           cr = d->textEdit->document()->find (d->text_to_search,
@@ -2283,8 +2323,15 @@ void rvln::opt_shortcuts_find()
   if (from == -1)
       from = 0;
 
+#if QT_VERSION < 0x050000
   int index = shortcuts->captions.indexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
                                                     Qt::CaseInsensitive), from);
+#else
+  int index = shortcuts->captions.indexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
+                                           QRegularExpression::CaseInsensitiveOption), from);
+
+#endif
+
   if (index != -1)
      lv_menuitems->setCurrentRow (index);
 }
@@ -2296,8 +2343,16 @@ void rvln::opt_shortcuts_find_next()
   if (from == -1)
      from = 0;
 
+#if QT_VERSION < 0x050000
   int index = shortcuts->captions.indexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
                                                     Qt::CaseInsensitive), from + 1);
+#else
+  int index = shortcuts->captions.indexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
+                                                    QRegularExpression::CaseInsensitiveOption), from + 1);
+
+
+#endif
+
   if (index != -1)
     lv_menuitems->setCurrentRow (index);
 }
@@ -2309,8 +2364,19 @@ void rvln::opt_shortcuts_find_prev()
   if (from == -1)
      from = 0;
 
+#if QT_VERSION < 0x050000
+
   int index = shortcuts->captions.lastIndexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
-                                                        Qt::CaseInsensitive), from - 1);
+                                                  Qt::CaseInsensitive), from - 1);
+
+#else
+
+  int index = shortcuts->captions.lastIndexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
+                                                 QRegularExpression::CaseInsensitiveOption), from - 1);
+
+
+#endif
+
   if (index != -1)
      lv_menuitems->setCurrentRow (index);
 }
@@ -3479,17 +3545,17 @@ void rvln::fn_spell_check()
         {
          f = cr.blockCharFormat();
 
-#if QT_VERSION >= 0x050000
+//#if QT_VERSION >= 0x050000
 
-         f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
-         f.setUnderlineColor (color_error);
+//         f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
+  //       f.setUnderlineColor (color_error);
 
-#else
+//#else
 
          f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
          f.setUnderlineColor (color_error);
 
-#endif
+//#endif
 
          cr.mergeCharFormat (f);
         }
@@ -3974,10 +4040,23 @@ void rvln::search_replace_all_at_ofiles()
        CDocument *d = documents->items[i];
        QString s;
 
+#if QT_VERSION < 0x050000
+
        if (menu_find_regexp->isChecked())
           s = d->textEdit->toPlainText().replace (QRegExp (l[0]), l[1]);
        else
            s = d->textEdit->toPlainText().replace (l[0], l[1], cs);
+
+#else
+
+       if (menu_find_regexp->isChecked())
+          s = d->textEdit->toPlainText().replace (QRegularExpression (l[0]), l[1]);
+       else
+           s = d->textEdit->toPlainText().replace (l[0], l[1], cs);
+
+
+#endif
+
 
        d->textEdit->selectAll();
        d->textEdit->textCursor().insertText (s);
@@ -4005,10 +4084,20 @@ void rvln::search_replace_all()
 
       QString s = d->textEdit->textCursor().selectedText();
 
+#if (QT_VERSION_MAJOR < 5)
       if (menu_find_regexp->isChecked())
          s = s.replace (QRegExp (l[0]), l[1]);
       else
           s = s.replace (l[0], l[1], cs);
+#else
+
+      if (menu_find_regexp->isChecked())
+         s = s.replace (QRegularExpression (l[0]), l[1]);
+      else
+          s = s.replace (l[0], l[1], cs);
+
+
+#endif
 
       d->textEdit->textCursor().insertText (s);
      }
@@ -4027,10 +4116,22 @@ void rvln::search_replace_all()
                    QString f = qstring_load ((*fname), charset);
                    QString r;
 
+#if (QT_VERSION_MAJOR < 5)
+
                    if (menu_find_regexp->isChecked())
                       r = f.replace (QRegExp (l[0]), l[1]);
                    else
                        r = f.replace (l[0], l[1], cs);
+
+#else
+
+                   if (menu_find_regexp->isChecked())
+                      r = f.replace (QRegularExpression (l[0]), l[1]);
+                   else
+                       r = f.replace (l[0], l[1], cs);
+
+
+#endif
 
                    qstring_save ((*fname), r, charset);
                    log->log (tr ("%1 is processed and saved").arg ((*fname)));
@@ -6738,10 +6839,24 @@ void rvln::count_substring (bool use_regexp)
   if (menu_find_case->isChecked())
      cs = Qt::CaseSensitive;
 
+#if (QT_VERSION_MAJOR < 5)
+
   if (use_regexp)
      count = text.count (QRegExp (fif_get_text()));
   else
       count = text.count (fif_get_text(), cs);
+
+
+#else
+
+  if (use_regexp)
+     count = text.count (QRegularExpression (fif_get_text()));
+  else
+      count = text.count (fif_get_text(), cs);
+
+
+#endif
+
 
   log->log (tr ("%1 number of occurrences of %2 is found").arg (count).arg (fif->text()));
 }
@@ -6983,8 +7098,18 @@ void rvln::fn_escape()
   last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
+
+#if (QT_VERSION_MAJOR < 5)
   if (d)
      d->textEdit->textCursor().insertText (QRegExp::escape (d->textEdit->textCursor().selectedText()));
+
+#else
+
+  if (d)
+     d->textEdit->textCursor().insertText (QRegularExpression::escape (d->textEdit->textCursor().selectedText()));
+
+#endif
+
 }
 
 
@@ -7727,7 +7852,12 @@ void rvln::fman_items_select_by_regexp (bool mode)
   if (ft.isEmpty())
       return;
 
+#if QT_VERSION >= 0x050000
+  l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegularExpression);
+#else
   l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegExp);
+#endif
+
 
   if (l_fman_find.size() < 1)
      return;
@@ -8442,11 +8572,25 @@ void rvln::fn_remove_by_regexp()
      return;
 
   QString t = d->textEdit->textCursor().selectedText();
+
+
+#if (QT_VERSION_MAJOR < 5)
+
   QRegExp r (fif_get_text());
   if (! r.isValid())
      return;
-
   t.remove (r);
+
+#else
+
+  QRegularExpression r (fif_get_text());
+  if (! r.isValid())
+     return;
+  t.remove (r);
+
+
+#endif
+
   d->textEdit->textCursor().insertText (t);
 }
 
@@ -9552,8 +9696,18 @@ void rvln::search_mark_all()
 
   while (cont_search)
         {
+
+#if (QT_VERSION_MAJOR < 5)
+
          if (menu_find_regexp->isChecked())
             cr = d->textEdit->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+#else
+
+         if (menu_find_regexp->isChecked())
+            cr = d->textEdit->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
+
+
+#endif
          else
              if (menu_find_fuzzy->isChecked()) //fuzzy search
                 {
@@ -9808,7 +9962,15 @@ void rvln::fman_zeropad()
            QString newname = fi.baseName();
            QString ext = file_get_ext (fname);
 
+#if (QT_VERSION_MAJOR < 5)
+
            newname.remove(QRegExp("[a-zA-Z\\s]"));
+
+#else
+
+           newname.remove(QRegularExpression("[a-zA-Z\\s]"));
+
+#endif
 
            if (newname.isEmpty())
               continue;
@@ -9928,11 +10090,11 @@ void rvln::fman_apply_template()
 
 //UTF-16BE, UTF-32BE
 //′
-#define UQS 8242
+//#define UQS 8242
 //″
-#define UQD 8243 //0x00B3
+//#define UQD 8243
 //°
-#define UQDG 176
+//#define UQDG 176
 
 //degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
 //to
@@ -10033,7 +10195,7 @@ void rvln::fn_number_dd2dms()
 
   QString t = d->textEdit->textCursor().selectedText();
   t = t.remove (" ");
-  t = t.remove (UQDG);
+  t = t.remove (QChar (UQDG));
 
   QChar north_or_south = ('N');
   if (t.contains ('S'))
@@ -10046,7 +10208,13 @@ void rvln::fn_number_dd2dms()
   QStringList l = t.split (north_or_south);
 
   QString latitude = l[0];
+
+#if QT_VERSION < 0x050000
   QString longtitude = l[1].remove (QRegExp("[a-zA-Z\\s]"));
+#else
+  QString longtitude = l[1].remove (QRegularExpression("[a-zA-Z\\s]"));
+#endif
+
 
 //  qDebug() << "latitude " << latitude;
 //  qDebug() << "longtitude " << longtitude;

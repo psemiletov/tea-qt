@@ -49,6 +49,7 @@ DJVU read code taken fromdvutxt.c:
 #include <QXmlStreamReader>
 #include <QTextStream>
 #include <QDebug>
+#include <QTextCodec>
 
 
 //FIXME: not good with cmake, cmake just use Qt5 here
@@ -124,6 +125,55 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
 }
 
 
+
+
+bool CTioPlainText::load (const QString &fname)
+{
+  QFile file (fname);
+
+  if (! file.open (QFile::ReadOnly | QIODevice::Text))
+     {
+      error_string = file.errorString();
+      return false;
+     }
+
+  QByteArray block = file.read (4096);
+
+  eol = "\n";
+
+  if (block.indexOf ("\r\n") != -1)
+     eol = "\r\n";
+  else
+  if (block.indexOf ('\n') != -1)
+     eol = "\n";
+  else
+  if (block.indexOf ('\r') != -1)
+     eol = "\r";
+
+  file.seek(0);
+
+
+
+//  QTextStream in (&file);
+ // in.setCodec (charset.toUtf8().data());
+
+  QByteArray ba = file.readAll();
+  QTextCodec *codec = QTextCodec::codecForName(charset.toUtf8().data());
+  data = codec->toUnicode(ba);
+
+  if (eol == "\r\n")
+     data.replace (eol, "\n");
+  else
+  if (eol == "\r")
+     data.replace (eol, "\n");
+
+   file.close();
+
+  return true;
+}
+
+
+/*
 bool CTioPlainText::load (const QString &fname)
 {
   QFile feol_detector (fname);
@@ -147,15 +197,6 @@ bool CTioPlainText::load (const QString &fname)
   if (block.indexOf ('\r') != -1)
      eol = "\r";
 
-/*
-   if (eol == "\n")
-     qDebug() << "LF";
-   if (eol == "\r\n")
-     qDebug() << "CRLF";
-   if (eol == "\r")
-     qDebug() << "CR";
-*/
-
   feol_detector.close();
 
   QFile file (fname);
@@ -178,8 +219,9 @@ bool CTioPlainText::load (const QString &fname)
 
   return true;
 }
+*/
 
-
+/*
 bool CTioPlainText::save (const QString &fname)
 {
   QFile file (fname);
@@ -195,6 +237,36 @@ bool CTioPlainText::save (const QString &fname)
 
   return true;
 }
+*/
+
+
+
+/*
+
+QString string = "...";
+QTextCodec *codec = QTextCodec::codecForName("KOI8-R");
+QByteArray encodedString = codec->fromUnicode(string);
+
+*/
+
+bool CTioPlainText::save (const QString &fname)
+{
+  QFile file (fname);
+  if (! file.open (QFile::WriteOnly))
+     {
+      error_string = file.errorString();
+      return false;
+     }
+
+  QTextCodec *codec = QTextCodec::codecForName(charset.toUtf8().data());
+  QByteArray ba = codec->fromUnicode(data);
+
+  file.write(ba);
+  file.close();
+
+  return true;
+}
+
 
 
 CTioHandler::CTioHandler()

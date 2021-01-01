@@ -41,6 +41,8 @@ code from qwriter:
 #include <bitset>
 #include <algorithm>
 
+#include <QTextCodec>
+
 #include <QApplication>
 #include <QClipboard>
 #include <QSettings>
@@ -436,7 +438,7 @@ CDocument* CDox::get_current()
 
 bool CDocument::save_with_name_plain (const QString &fileName)
 {
-  QFile file (fileName);
+ /* QFile file (fileName);
   if (! file.open (QFile::WriteOnly | QFile::Text))
       return false;
 
@@ -446,7 +448,25 @@ bool CDocument::save_with_name_plain (const QString &fileName)
 
   holder->update_current_files_menu();
 
+  return true;*/
+
+  QFile file (fileName);
+  if (! file.open (QFile::WriteOnly))
+     {
+//      error_string = file.errorString();
+      return false;
+     }
+
+  QTextCodec *codec = QTextCodec::codecForName(charset.toUtf8().data());
+  QByteArray ba = codec->fromUnicode(textEdit->toPlainText());
+
+  file.write(ba);
+  file.close();
+
+  holder->update_current_files_menu();
+
   return true;
+
 }
 
 
@@ -612,14 +632,14 @@ void CDox::apply_settings_single (CDocument *d)
   d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
-//#if QT_VERSION >= 0x051000
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 10)
 
-  d->textEdit->setTabStopDistance (d->textEdit->tab_sp_width * d->textEdit->brace_width);
+#if (QT_VERSION_MAJOR <= 5 && QT_VERSION_MINOR < 10)
+
+  d->textEdit->setTabStopWidth (d->textEdit->tab_sp_width * d->textEdit->brace_width);
 
 #else
 
-  d->textEdit->setTabStopWidth (d->textEdit->tab_sp_width * d->textEdit->brace_width);
+  d->textEdit->setTabStopDistance (d->textEdit->tab_sp_width * d->textEdit->brace_width);
 
 #endif
 

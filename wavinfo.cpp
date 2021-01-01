@@ -56,7 +56,7 @@ bool CWavReader::get_info (const QString fname)
                   sqr_sum += (ch_both[i] * ch_both[i]);
 
              double srms = sqrt (sqr_sum / nsamples);
-             rms = 20 * log10 (srms / SHRT_MAX);
+             rms = 20 * log10 (srms / 32767);
 
              delete [] ch_both;
              return true;

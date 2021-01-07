@@ -119,7 +119,6 @@ SOURCES += rvln.cpp \
     shortcuts.cpp \
     logmemo.cpp \
     img_viewer.cpp \
-    fontbox.cpp \
     tio.cpp \
     tzipper.cpp \
     single_application_shared.cpp \
@@ -142,7 +141,6 @@ HEADERS += rvln.h \
     gui_utils.h \
     wavinfo.h \
     tio.h \
-    fontbox.h \
     tzipper.h \
     single_application_shared.h \
     exif_reader.h \

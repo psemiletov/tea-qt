@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2019 by Peter Semiletov                                          *
+ *   2007-2021 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -55,9 +55,6 @@ code from qwriter:
 #include <QMimeData>
 #include <QTimer>
 
-#if QT_VERSION >= 0x050000
-#include <QRegularExpression>
-#endif
 
 #include "document.h"
 #include "utils.h"
@@ -244,8 +241,6 @@ CDocument::CDocument (QObject *parent): QObject (parent)
 
 CDocument::~CDocument()
 {
-//  qDebug() << "CDocument::~CDocument()";
-
   if (file_name.endsWith (".notes") && textEdit->document()->isModified())
      save_with_name_plain (file_name);
   else
@@ -438,26 +433,14 @@ CDocument* CDox::get_current()
 
 bool CDocument::save_with_name_plain (const QString &fileName)
 {
- /* QFile file (fileName);
-  if (! file.open (QFile::WriteOnly | QFile::Text))
-      return false;
-
-  QTextStream out (&file);
-  out.setCodec (charset.toUtf8().data());
-  out << textEdit->toPlainText();
-
-  holder->update_current_files_menu();
-
-  return true;*/
-
   QFile file (fileName);
   if (! file.open (QFile::WriteOnly))
-     {
-//      error_string = file.errorString();
       return false;
-     }
 
   QTextCodec *codec = QTextCodec::codecForName(charset.toUtf8().data());
+  if (! codec)
+     return false;
+
   QByteArray ba = codec->fromUnicode(textEdit->toPlainText());
 
   file.write(ba);
@@ -466,7 +449,6 @@ bool CDocument::save_with_name_plain (const QString &fileName)
   holder->update_current_files_menu();
 
   return true;
-
 }
 
 
@@ -595,10 +577,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #if QT_VERSION >= 0x050000
 
-//  if (settings->value ("qregexpsyntaxhl", 0).toBool())
-//     highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
-//  else
-     highlighter = new CSyntaxHighlighterQRegularExpression (textEdit->document(), this, fname);
+   highlighter = new CSyntaxHighlighterQRegularExpression (textEdit->document(), this, fname);
 
 #else
 
@@ -965,7 +944,6 @@ CDox::CDox()
   log = 0;
   l_status_bar = 0;
   l_charset = 0;
-  //status_bar = 0;
 
   timer = new QTimer (this);
   timer->setInterval (100);
@@ -1058,7 +1036,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
   casecare = true;
   exts = "default";
   langs = "default";
-//  pattern_opts = 0;
 
   int darker_val = settings->value ("darker_val", 100).toInt();
 
@@ -1271,8 +1248,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 #if QT_VERSION < 0x050000
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
-  //qDebug() << "CSyntaxHighlighter::load_from_xml - start";
-
   int darker_val = settings->value ("darker_val", 100).toInt();
 
   exts = "default";
@@ -1718,16 +1693,6 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
       event->accept();
       return;
      }
-/*   else
-   if (event->key() == doc->holder->gamepadnav.leftKey())
-      {
-       qDebug() << "left";
-      event->accept();
-
-       return;
-
-      }
-*/
 
   QPlainTextEdit::keyPressEvent (event);
 }
@@ -1793,17 +1758,8 @@ void CTEAEdit::lineNumberAreaPaintEvent (QPaintEvent *event)
          if (block.isVisible() && bottom >= event->rect().top())
             {
              QString number = QString::number (blockNumber + 1) + " ";
-//             painter.setPen (text_color);
              painter.drawText (0, top, w, h, Qt::AlignRight, number);
-             /*int index = bookMark.indexOf(number.toInt());
-
-             if (index != -1)
-                {
-                //painter.drawText(0, top, 30, fontMetrics().height(), Qt::AlignCenter, "+");
-                 painter.setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
-                 painter.drawEllipse(5, top + (fontMetrics().height()/4), fontMetrics().height()/2, fontMetrics().height()/2);
-                }*/
-             }
+            }
 
          block = block.next();
          top = bottom;
@@ -2035,9 +1991,6 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
 
-//  int how_many_copy_from_source = ydiff;
-//  int lines_to_end = blockCount() - y1;
-
   QStringList sl_source;
 
   for (int line = y1; line <= y2; line++)
@@ -2073,7 +2026,6 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
       }
 
   QString new_text = sl_dest.join ("\n");
-  //new_text += "\n";
 
 //теперь выделить при помощи курсора всё от y1 до y2 и обычным способом заменить текст
 
@@ -2243,13 +2195,6 @@ void CTEAEdit::rect_sel_cut (bool just_del)
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
 
-//  int how_many_copy_from_source = ydiff;
-
-  //int lines_to_end = blockCount() - y1;
-
-//  if (ydiff > lines_to_end)
-  //   how_many_copy_from_source = lines_to_end;
-
   QStringList sl_source;
 
   for (int line = y1; line <= y2; line++)
@@ -2408,9 +2353,5 @@ void CTEAEdit::set_word_wrap (bool wrap)
 bool CTEAEdit::get_word_wrap()
 {
   return wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere;
-  /*if (wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere)
-      return true;
-  else
-      return false;*/
 }
 

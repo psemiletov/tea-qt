@@ -89,7 +89,6 @@ started at 08 November 2007
 #include "wavinfo.h"
 #include "exif_reader.h"
 
-#include "fontbox.h"
 
 #include "spellchecker.h"
 
@@ -1462,7 +1461,6 @@ void rvln::createMenus()
 
   menu_instr = menu_functions->addMenu (tr ("Tools"));
   menu_instr->setTearOffEnabled (true);
-  add_to_menu (menu_instr, tr ("Font gallery"), SLOT(instr_font_gallery()));
   add_to_menu (menu_instr, tr ("Scale image"), SLOT(scale_image()));
 
 
@@ -8851,15 +8849,6 @@ void rvln::search_whole_words_mode()
 void rvln::search_from_cursor_mode()
 {
   settings->setValue ("find_from_cursor", menu_find_from_cursor->isChecked());
-}
-
-
-void rvln::instr_font_gallery()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CFontBox *fb = new CFontBox;
-  fb->show();
 }
 
 

@@ -760,11 +760,9 @@ main window callbacks
   void search_replace_all();
   void search_replace_all_at_ofiles();
 
-//  void view_preview_in_bro();
   void view_hide_error_marks();
   void view_toggle_fs();
   void view_stay_on_top();
-  void instr_font_gallery();
 
 
   void nav_goto_line();

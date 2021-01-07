@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2019 by Peter Semiletov <peter.semiletov@gmail.com>                            *
+ *   2007-2021 by Peter Semiletov <peter.semiletov@gmail.com>                            *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -48,6 +48,8 @@ code from qwriter:
 
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
+#else
+#include <QRegExp>
 #endif
 
 #if defined (JOYSTICK_SUPPORTED)
@@ -308,7 +310,6 @@ public:
 
   QLabel *l_status_bar;
   QLabel *l_charset;
- // QStatusBar *status_bar;
   CLogMemo *log;
   QMainWindow *parent_wnd;
   QTabWidget *tab_widget;

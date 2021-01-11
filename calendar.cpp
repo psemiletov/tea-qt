@@ -191,7 +191,9 @@ CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): Q
   dir_days = a_dir_days;
   moon_phase_algo = MOON_PHASE_TRIG2;
   moon_mode = false;
-  moon_tiles.load (":/images/moon-phases.png");
+  if (! moon_tiles.load (":/images/moon-phases.png"))
+     qDebug() << ":/images/moon-phases.png" << " is not loaded";
+
   northern_hemisphere = true;
   //setHeaderTextFormat (const QTextCharFormat & format);
 
@@ -210,9 +212,14 @@ CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): Q
 }
 
 
+#if QT_VERSION < 0x060000
 void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, const QDate &date) const
+#else
+void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, QDate date) const
+#endif
 {
   QSize fsize = fontMetrics().size (Qt::TextSingleLine, "A");
+
 
   if (moon_mode)
      {

@@ -2,15 +2,11 @@
 this code is Public Domain
 */
 
-//NEED TO REFACTOR
 
 #include <QDebug>
 #include <QApplication>
 #include <QPainter>
 
-#if (QT_VERSION_MAJOR <= 5)
-//#include <QDesktopWidget>
-#endif
 
 #include <QVBoxLayout>
 #include <QCryptographicHash>
@@ -71,7 +67,6 @@ void CImgViewer::set_image_full (const QString &fname)
 QString CImgViewer::get_the_thumb_name (const QString &img_fname)
 {
 
-//FIXME: add OS2 tweak!
 #if !defined(Q_OS_WIN) || !defined(Q_OS_OS2)
 
   QCryptographicHash h (QCryptographicHash::Md5); 
@@ -101,210 +96,6 @@ QString CImgViewer::get_the_thumb_name (const QString &img_fname)
   return QString();
 }
 
-/*
-CViewerWindow::CViewerWindow (QWidget *parent): QWidget (parent)
-{
-  current_index = 0;
-  angle = 0.0;
-  scale = 100;
-
-  img_full = new QLabel (tr ("preview"));
-  img_full->setAlignment (Qt::AlignCenter);
-  QVBoxLayout *lt = new QVBoxLayout;
-  lt->addWidget (img_full);
-  setLayout (lt);
-}
-
-
-void CViewerWindow::show_image (const QString &fname)
-{
-  if (fname.isEmpty())
-     return;
-  
-  if (! file_exists (fname))
-      return; 
-  
-  QPixmap pm (fname);
-
-  if (file_name != fname)
-     scale = 100;
-
-  if (scale != 100)
-     pm = pm.scaledToWidth (get_value (pm.width(), scale));
-  
-  resize (pm.width() + 5, pm.height() + 5);
-  img_full->setPixmap (pm);
-
-  if (get_file_path (file_name) != get_file_path (fname))
-  //re-read dir contents if the new file is at the another dir
-  //than the previous one  
-     {
-      QStringList filters;
-  
-      QList <QByteArray> a = QImageReader::supportedImageFormats();
-
-      foreach (QByteArray x, a)
-              {
-               QString t (x.data());
-               t.prepend ("*.");
-               filters.append (t);
-              }; 
-  
-     QDir dir (get_file_path (fname));
-     fi = dir.entryInfoList (filters, 
-                             QDir::Files | QDir::Readable, 
-                             QDir::Name); 
-    }
-
-  file_name = fname;
-  
-  for (int i = 0; i < fi.size(); i++)
-       if (fi.at(i).filePath() == file_name)
-          {  
-           current_index = i;
-           break;
-          };
-  
-  QString s_wnd_title (QFileInfo (fname).fileName());
-  s_wnd_title.append (QString (" - %1x%2").arg (pm.width()).arg(pm.height()));
-  setWindowTitle (s_wnd_title);
-}
-
-
-void CViewerWindow::show_again()
-{
-  if (file_name.isEmpty())
-     return;
-  
-  QImage pm (file_name);
-  if (scale != 100)
-     pm = pm.scaledToWidth (get_value (pm.width(), scale));
-                           
-  QTransform transform;
-  transform.rotate (angle);
-    
-  QPixmap pixmap = QPixmap::fromImage (pm.transformed (transform));
-  
-  resize (pixmap.width() + 5, pixmap.height() + 5);
-  img_full->setPixmap (pixmap);
-  
-  QString s_wnd_title (QFileInfo (file_name).fileName());
-  s_wnd_title.append (QString (" - %1x%2").arg (pm.width()).arg(pm.height()));
-  setWindowTitle (s_wnd_title);
-}
-
-
-void CViewerWindow::keyPressEvent (QKeyEvent *event)    
-{
-  if (event->key() == Qt::Key_Escape)
-     {
-      event->accept();
-      close();
-     }
-
-  if ((event->key() == Qt::Key_Space) ||
-      event->key() == Qt::Key_PageDown)
-     {
-      if (current_index < (fi.size() - 1))
-          show_image (fi.at(++current_index).filePath());        
-    
-      event->accept();
-      return;
-     }
-
-  if (event->key() == Qt::Key_PageUp)
-     {
-      if (current_index != 0)
-         show_image (fi.at(--current_index).filePath());        
-    
-      event->accept();
-      return;
-     }
-
-  if (event->key() == Qt::Key_Home)
-     {
-      current_index = 0;
-      show_image (fi.at(current_index).filePath());        
-      event->accept();
-      return;
-     }
-
-  if (event->key() == Qt::Key_End)
-     {
-      current_index = fi.size() - 1;
-      show_image (fi.at(current_index).filePath());        
-      event->accept();
-      return;
-     }
-
-  if (event->key() == Qt::Key_BracketRight)
-     {
-      angle += 90.0;
-      if (angle >= 360.0)
-         angle = 0.0;
-      
-      show_again();
-      event->accept();
-      return;
-     }
-  
-  if (event->key() == Qt::Key_BracketLeft)
-     {
-      angle -= 90.0;
-      if (angle <= 0)
-         angle = 360;
-      
-      show_again();
-      event->accept();
-      return;
-     }
-
-  if (event->key() == Qt::Key_Plus)
-     {
-      scale += 10;
-          
-      show_again();
-      event->accept();
-      return;
-     }
-
-  if (event->key() == Qt::Key_Minus)
-     {
-      if (scale > 10)
-         scale -= 10;
-          
-      show_again();
-      event->accept();
-      return;
-     }
-  
-  QWidget::keyPressEvent (event);
-}
-*/
-/*
-void CViewerWindow::show_image_from_clipboard()
-{
-  
-  QClipboard *clipboard = QApplication::clipboard();
-  const QMimeData *mimeData = clipboard->mimeData();
-
-  if (! mimeData->hasImage()) 
-     return;
-          
-  QPixmap pm (qvariant_cast<QPixmap>(mimeData->imageData()));
-  if (scale != 100)
-     pm = pm.scaledToWidth (get_value (pm.width(), scale));
-  
-  resize (pm.width() + 5, pm.height() + 5);
-  img_full->setPixmap (pm);
-  
-  file_name = "";
-  
-  QString s_wnd_title (tr ("Clipboard"));
-  s_wnd_title.append (QString (" - %1x%2").arg (pm.width()).arg(pm.height()));
-  setWindowTitle (s_wnd_title);
-}
-*/
 
 
 void CZORWindow::closeEvent (QCloseEvent *event)
@@ -315,43 +106,12 @@ void CZORWindow::closeEvent (QCloseEvent *event)
 
 CZORWindow::CZORWindow (QWidget *parent): QWidget (parent)
 {
-  /*settings = new QSettings (QSettings::NativeFormat,
-                            QSettings::UserScope,
-                            "zor",
-                            "zor");
-
-*/
-  //fname_image = settings->value ("fname_image", "none").toString();
-
-  //if (fname_image != "none")
-    //  load_image (fname_image);
-
-
- // setWindowTitle (tr ("ZOR. Press F1 for help"));
-  //setWindowOpacity (0.5f);
-
-//  setWindowOpacity (1.0f);
   setMinimumSize (16, 16);
-
-  
-  //setAttribute (Qt::WA_QuitOnClose,true);
-  
-//  setWindowFlags (Qt::WindowStaysOnTopHint);
-
-
-  //QAction *quitAction = new QAction (tr ("E&xit"), this);
-  //quitAction->setShortcut (tr ("Ctrl+Q"));
-  //connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-  //addAction(quitAction);
 }
 
 
 CZORWindow::~CZORWindow()
 {
-  //qDebug() << "~CZORWindow()";
-
-  //settings->setValue ("fname_image", fname_image);
-  //delete settings;
 }
 
 
@@ -361,21 +121,6 @@ void CZORWindow::paintEvent (QPaintEvent *event)
   painter.drawImage (0, 0, source_image);
 }
 
-/*
-void CZORWindow::resizeEvent(QResizeEvent *event)
-{
-  if (transform.isRotating())
-     {
-      QImage tmp = source_image.transformed (transform);
-      transformed_image = tmp.scaled (size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-     }
-  else
-  transformed_image = source_image.scaled (size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-  update();
-}
-
-*/
 
 void CZORWindow::load_image (const QString &fname)
 {
@@ -388,23 +133,7 @@ void CZORWindow::load_image (const QString &fname)
   fname_image = fname;
   
   bool orientation_portrait = false; 
-
   int exif_orientation = get_exif_orientation (fname);
-
-
-/*
-  easyexif::EXIFInfo ei;
-  QByteArray b = file_load (fname);
-  ei.parseFrom ((unsigned char *)b.data(), b.length());
-
-  
-  int exif_orientation = ei.Orientation;//get_exif_orientation (fname);
-  */
-
-  //qDebug() << "exif_orientation: " << exif_orientation;
-//  qDebug() << "ei: " << ei.Orientation;
- // std::cout << ei.Make;
-
 
   if (settings->value ("zor_use_exif_orientation", 0).toInt())
       if (exif_orientation == 6 || exif_orientation == 8)

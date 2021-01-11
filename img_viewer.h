@@ -46,33 +46,6 @@ public:
   void closeEvent (QCloseEvent *event);
 };
 
-/*
-class CViewerWindow: public QWidget
-{  
-  Q_OBJECT
-
-public:
-
-   qreal angle;
-   int scale;
-   
-   QFileInfoList fi;
-   QString file_name;
-   int current_index;
-   
-   QLabel *img_full;
-   
-   CViewerWindow (QWidget *parent = 0);
-   void show_image (const QString &fname);
-
-   void show_again();
-   
-protected:
-
-  void keyPressEvent (QKeyEvent *event);    
-};
-
-*/
 
 class CImgViewer: public QObject
 {

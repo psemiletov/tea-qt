@@ -64,7 +64,6 @@ double calculate (string expression)
   if (end_pos != string::npos)
       do 
         {
-//         for (size_t i = end_pos; i >= 0; i--)
          for (size_t i = end_pos; i-- > 0 ;)
              {
               if (expression[i] == '(')
@@ -74,7 +73,6 @@ double calculate (string expression)
                  }
              }
      
-         //end_pos = expression.find (")"); 
          string s_temp_value = expression.substr (start_pos + 1, end_pos - start_pos - 1); 
  
         //cout << "start_pos = " << start_pos << " end pos = " << end_pos << endl;    

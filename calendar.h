@@ -8,6 +8,22 @@ class CCalendarWidget: public QCalendarWidget
 {
 Q_OBJECT
 
+
+protected:
+
+
+//FIXME overrided paintCell is not called on Qt6, why
+
+#if QT_VERSION < 0x060000
+
+  void paintCell (QPainter *painter, const QRect &rect, const QDate &date) const;
+
+#else
+
+  void paintCell (QPainter *painter, const QRect &rect, QDate date) const;
+
+#endif
+
 public:
 
   QImage moon_tiles;
@@ -16,8 +32,9 @@ public:
   bool northern_hemisphere;
   int moon_phase_algo;
 
+
   CCalendarWidget (QWidget *parent, const QString &a_dir_days);
-  void paintCell (QPainter *painter, const QRect &rect, const QDate &date) const;
+
   void do_update();
 };
 

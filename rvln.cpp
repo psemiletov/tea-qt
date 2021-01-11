@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2019 by Peter Semiletov                                          *
+ *   2007-2021 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
 
 started at 08 November 2007
@@ -8092,6 +8092,9 @@ void rvln::createCalendar()
   calendar = new CCalendarWidget (this, dir_days);
 
   calendar->moon_mode = settings->value ("moon_mode", "0").toBool();
+
+  qDebug() << "calendar->moon_mode: " << calendar->moon_mode;  
+
   calendar->northern_hemisphere = settings->value ("northern_hemisphere", "1").toBool();
   calendar->moon_phase_algo = settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt();
 

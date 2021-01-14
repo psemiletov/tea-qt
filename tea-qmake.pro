@@ -148,7 +148,6 @@ HEADERS += rvln.h \
 
 
 HEADERS += \
-        minizip_crypt.h \
         ioapi.h \
         quaadler32.h \
         quachecksum32.h \

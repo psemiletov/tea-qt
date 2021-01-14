@@ -91,6 +91,8 @@ typedef uLongf z_crc_t;
 #endif
 
 
+#define NOUNCRYPT 1
+
 #ifndef local
 #  define local static
 #endif

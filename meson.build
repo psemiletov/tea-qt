@@ -4,6 +4,11 @@ project('tea', ['cpp','c'],
          license : 'GPLv3')
 
 add_global_arguments('-DVERSION_NUMBER="50.1.0"', language : 'cpp')
+add_global_arguments('-DNOCRYPT="1"', language : 'cpp')
+add_global_arguments('-DNOUNCRYPT="1"', language : 'cpp')
+add_global_arguments('-DQUAZIP_STATIC="1"', language : 'cpp')
+
+   
 #add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 #harcoded for now

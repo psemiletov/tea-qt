@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyleft 2007-2019 by Peter Semiletov <peter.semiletov@gmail.com>     *
+ *   Copyleft 2007-2021 by Peter Semiletov <peter.semiletov@gmail.com>     *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,7 +52,6 @@ int main (int argc, char *argv[])
      if (strcmp(argv[1], "--m") == 0)
         single_mode = false;
     
-    
   if (single_mode && app.alreadyExists())
      {
       if (argc > 1)
@@ -63,7 +62,6 @@ int main (int argc, char *argv[])
      }
     
 #endif
-
     
 
   mainWindow = new rvln();
@@ -71,8 +69,6 @@ int main (int argc, char *argv[])
 
 #if !defined (NO_SINGLE_APP)
  QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), mainWindow, SLOT(receiveMessageShared(QStringList)));
-// QObject::connect(&app, SIGNAL(signal_commit_data()), mainWindow, SLOT(app_commit_data()));
-// QObject::connect(&app, SIGNAL(commitDataRequest(QSessionManager & )), mainWindow, SLOT(slot_commitDataRequest(QSessionManager & )));
 #endif
 
    

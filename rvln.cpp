@@ -323,7 +323,7 @@ void rvln::readSettings()
   QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
   QSize size = settings->value ("size", QSize (600, 420)).toSize();
 
-  if (mainSplitter/* && ! settings->value ("ui_mode", 0).toBool()*/)
+  if (mainSplitter)
       mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
 
   resize (size);
@@ -337,7 +337,7 @@ void rvln::writeSettings()
   settings->setValue ("size", size());
   settings->setValue ("charset", charset);
 
-  if (mainSplitter/*&& settings->value ("ui_mode", 0).toBool()*/)
+  if (mainSplitter)
      settings->setValue ("splitterSizes", mainSplitter->saveState());
 
   settings->setValue ("spl_fman", spl_fman->saveState());
@@ -352,7 +352,6 @@ void rvln::writeSettings()
 
   delete settings;
 }
-
 
 
 void rvln::create_main_widget_splitter()
@@ -386,7 +385,6 @@ void rvln::create_main_widget_splitter()
 
   connect (log, SIGNAL(double_click (const QString &)),
            this, SLOT(logmemo_double_click (const QString &)));
-
 
 
   mainSplitter = new QSplitter (Qt::Vertical);
@@ -2611,10 +2609,6 @@ void rvln::createOptions()
                                 sl_tea_icons,
                                 settings->value ("icon_fname", "1").toString());
 
-/*
-  connect (cmb_tea_icons, SIGNAL(currentIndexChanged (const QString &)),
-           this, SLOT(cmb_tea_icons_currentIndexChanged (const QString &)));
-*/
 
   connect (cmb_tea_icons, SIGNAL(currentIndexChanged (int)),
            this, SLOT(cmb_tea_icons_currentIndexChanged (int)));
@@ -2658,16 +2652,15 @@ void rvln::createOptions()
   cb_spaces_instead_of_tabs->setChecked (settings->value ("spaces_instead_of_tabs", "1").toBool());
   page_interface_layout->addWidget (cb_spaces_instead_of_tabs);
 
+  spb_tab_sp_width = new_spin_box (page_interface_layout,
+                                   tr ("Tab width in spaces"), 1, 64,
+                                   settings->value ("tab_sp_width", 8).toInt());
+
 
   cb_cursor_xy_visible = new QCheckBox (tr ("Show cursor position"), tab_options);
   cb_cursor_xy_visible->setChecked (settings->value ("cursor_xy_visible", "1").toBool());
   page_interface_layout->addWidget (cb_cursor_xy_visible);
 
-
-
-  spb_tab_sp_width = new_spin_box (page_interface_layout,
-                                   tr ("Tab width in spaces"), 1, 64,
-                                   settings->value ("tab_sp_width", 8).toInt());
 
   cb_center_on_cursor = new QCheckBox (tr ("Cursor center on scroll"), tab_options);
   cb_center_on_cursor->setChecked (settings->value ("center_on_scroll", "1").toBool());
@@ -2736,10 +2729,6 @@ void rvln::createOptions()
 #endif
 
 
-#if QT_VERSION >= 0x050000
-//  cb_use_qregexpsyntaxhl = new QCheckBox (tr ("Old syntax hl engine (restart TEA to apply)"), tab_options);
-//  cb_use_qregexpsyntaxhl->setChecked (settings->value ("qregexpsyntaxhl", 0).toBool());
-#endif
 
   cb_auto_img_preview = new QCheckBox (tr ("Automatic preview images at file manager"), tab_options);
   cb_auto_img_preview->setChecked (settings->value ("b_preview", "0").toBool());
@@ -2747,9 +2736,6 @@ void rvln::createOptions()
   cb_session_restore = new QCheckBox (tr ("Restore the last session on start-up"), tab_options);
   cb_session_restore->setChecked (settings->value ("session_restore", "0").toBool());
 
-  //QHBoxLayout *hb_locovr = new QHBoxLayout;
-//  hb_locovr->insertWidget (-1, cb_override_locale, 0, Qt::AlignLeft);
-//  hb_locovr->insertWidget (-1, ed_locale_override, 1, Qt::AlignLeft);
 
 
   cb_use_enca_for_charset_detection = new QCheckBox (tr ("Use Enca for charset detection"), tab_options);
@@ -2816,10 +2802,6 @@ void rvln::createOptions()
   page_common_layout->addWidget (cb_use_joystick);
 #endif
 
-#if QT_VERSION >= 0x050000
- // page_common_layout->addWidget (cb_use_qregexpsyntaxhl);
-#endif
-
   page_common_layout->addWidget (cb_auto_img_preview);
   page_common_layout->addWidget (cb_session_restore);
   page_common_layout->addWidget (cb_use_trad_dialogs);
@@ -2836,7 +2818,6 @@ void rvln::createOptions()
   scra_common->setWidget (page_common);
 
   tab_options->addTab (scra_common, tr ("Common"));
-  //tab_options->addTab (page_common, tr ("Common"));
 
 
   QWidget *page_functions = new QWidget (tab_options);
@@ -2958,7 +2939,6 @@ void rvln::createOptions()
 
   tab_options->addTab (scra_functions, tr ("Functions"));
 
-  //tab_options->addTab (page_functions, tr ("Functions"));
 
 /////////////
 

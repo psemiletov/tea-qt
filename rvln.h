@@ -27,7 +27,6 @@
 #include <QProgressBar>
 #include <QCheckBox>
 #include <QSpinBox>
-//#include <QSessionManager>
 #include <QApplication>
 #include <QCoreApplication>
 #include <QSplitter>
@@ -84,7 +83,6 @@ public:
 
 
 #if QT_VERSION >= 0x050000
-//#if QT_VERSION_MAJOR >= 5
 class QStyleHints
 {
 public:
@@ -254,7 +252,6 @@ public:
   CLogMemo *log;
   QAction *last_action;
 
-
   CShortcuts *shortcuts;
   CFMan *fman;
   CImgViewer *img_viewer;
@@ -338,72 +335,144 @@ public:
   QString fname_tempparamfile;
 
 
+/*
+==============================
+Main tab UI elements
+==============================
+*/
+
   QComboBox *cmb_fif;
-  QToolBar *tb_fman_dir;
-  QLabel *l_fman_preview;
-
-  QLabel *l_charset;
-
   QLabel *l_status;
   QProgressBar *pb_status;
-  QLineEdit *ed_spellcheck_path;
-  QLineEdit *ed_aspellcheck_path;
 
-  QCheckBox *cb_use_qregexpsyntaxhl;
+/*
+==============================
+FileManager tab UI elements
+==============================
+*/
+
+
+  QToolBar *tb_fman_dir;
+  QLabel *l_fman_preview;
+  QLabel *l_charset;
+
+
+/*
+=============================================
+Preferences tab :: Interface page UI elements
+=============================================
+*/
+
+
+  QComboBox *cmb_ui_mode;
+  QComboBox *cmb_lng;
+  QComboBox *cmb_styles;
+ 
+  QCheckBox *cb_fif_at_toolbar;
+  QComboBox *cmb_icon_size;
+  QComboBox *cmb_tea_icons;
+
+  QCheckBox *cb_show_linenums;
+  QCheckBox *cb_wordwrap;
+  QCheckBox *cb_hl_enabled;
+  QCheckBox *cb_hl_current_line;
+  QCheckBox *cb_hl_brackets;
+  QCheckBox *cb_auto_indent;
+  QCheckBox *cb_spaces_instead_of_tabs;
+  QSpinBox *spb_tab_sp_width;
+  QCheckBox *cb_cursor_xy_visible;
+  QCheckBox *cb_center_on_cursor;
+  QSpinBox *spb_cursor_blink_time;
+  QSpinBox *spb_cursor_width;
+  QCheckBox *cb_show_margin;
+  QSpinBox *spb_margin_pos;
+  QCheckBox *cb_use_hl_wrap;
+  QCheckBox *cb_full_path_at_window_title;
+
+
+/*
+=============================================
+Preferences tab :: Common page UI elements
+=============================================
+*/
+
+
+  QCheckBox *cb_start_on_sunday;
+  QCheckBox *cb_northern_hemisphere;
+  QComboBox *cmb_moon_phase_algos;
+  QComboBox *cmb_cmdline_default_charset;
+
+  QComboBox *cmb_zip_charset_in;
+  QComboBox *cmb_zip_charset_out;
+
+  QCheckBox *cb_altmenu;
+  QCheckBox *cb_wasd;
 
 #if defined(JOYSTICK_SUPPORTED)
   QCheckBox *cb_use_joystick;
 #endif
 
-  QCheckBox *cb_right_to_left;
+  QCheckBox *cb_auto_img_preview;
+  QCheckBox *cb_session_restore;
+  QCheckBox *cb_use_trad_dialogs;
+  QCheckBox *cb_use_enca_for_charset_detection;
+  QCheckBox *cb_override_img_viewer;
+  QLineEdit *ed_img_viewer_override;
 
-  QCheckBox *cb_wordwrap;
 
-//  QCheckBox *cb_ui_splitter;
 
-  QCheckBox *cb_fif_at_toolbar;
-  QCheckBox *cb_show_linenums;
-  QCheckBox *cb_hl_current_line;
-  QCheckBox *cb_show_margin;
-  QSpinBox *spb_margin_pos;
-
-  QSpinBox *spb_fuzzy_q;
+/*
+=============================================
+Preferences tab :: Functions page UI elements
+=============================================
+*/
 
   QLineEdit *ed_label_end;
   QLineEdit *ed_label_start;
 
+  QLineEdit *ed_date_format;
+  QLineEdit *ed_time_format;
 
-  QCheckBox *cb_session_restore;
-  QCheckBox *cb_use_hl_wrap;
-  QCheckBox *cb_hl_enabled;
+  QComboBox *cmb_spellcheckers;
+  QLineEdit *ed_spellcheck_path;
+  QLineEdit *ed_aspellcheck_path;
 
-  QCheckBox *cb_hl_brackets;
-  QCheckBox *cb_auto_indent;
-  QCheckBox *cb_spaces_instead_of_tabs;
-  QCheckBox *cb_cursor_xy_visible;
-
-  QSpinBox *spb_tab_sp_width;
-  QCheckBox *cb_center_on_cursor;
-
-  QCheckBox *cb_full_path_at_window_title;
-
-  QComboBox *cmb_ui_mode;
+  QSpinBox *spb_fuzzy_q;
 
 
-  QCheckBox *cb_use_trad_dialogs;
-  QCheckBox *cb_start_on_sunday;
-  QCheckBox *cb_northern_hemisphere;
-  QComboBox *cmb_moon_phase_algos;
+ 
+
+
+/*
+=============================================
+Preferences tab :: Images page UI elements
+=============================================
+*/
+
   QComboBox *cmb_output_image_fmt;
   QCheckBox *cb_output_image_flt;
 
-  QComboBox *cmb_tea_icons;
-//  QComboBox *cmb_ui_langs;
-
   QSpinBox *spb_img_quality;
+
   QCheckBox *cb_zip_after_scale;
   QCheckBox *cb_exif_rotate;
+
+
   QCheckBox *cb_zor_use_exif;
+
+
+
+/*
+=============================================
+Preferences tab :: Keyboard page UI elements
+=============================================
+*/
+
+
+
+
+
+
 
 
 protected:
@@ -500,7 +569,6 @@ main window callbacks
   void cb_button_saves_as();
 
   void pageChanged (int index);
-//  void tab_options_pageChanged (int index);
 
 #ifdef PRINTER_ENABLE
   void file_print();
@@ -598,13 +666,6 @@ main window callbacks
   void ide_run();
   void ide_build();
   void ide_clean();
-/*
-  void ide_ctags();
-
-  void ide_gtags();
-  void ide_global_definition();
-  void ide_global_references();
-*/
 
   void fn_count();
   void fn_count_rx();
@@ -697,7 +758,6 @@ main window callbacks
   void fn_spell_add_to_dict();
   void fn_remove_from_dict();
   void fn_spell_suggest();
-//  void cmb_spellchecker_currentIndexChanged (const QString &text);
 
   void cmb_spellchecker_currentIndexChanged (int);
 
@@ -709,9 +769,7 @@ main window callbacks
 #endif
 
 #ifdef ASPELL_ENABLE
-//#if defined(Q_OS_WIN) || defined (Q_OS_OS2)
   void pb_choose_aspell_path_clicked();
-//#endif
 #endif
 
 
@@ -827,7 +885,6 @@ prefs window callbacks
   void cb_use_joystick_stateChanged (int state);
 #endif
 
-//  void cmb_ui_langs_currentIndexChanged (const QString &text);
 
   void cb_altmenu_stateChanged (int state);
 
@@ -835,9 +892,7 @@ prefs window callbacks
   void cmb_docs_tabs_currentIndexChanged (int i);
 
   void cmb_icon_sizes_currentIndexChanged (int index);
-//  void cmb_icon_sizes_currentIndexChanged (const QString &text);
 
-//  void cmb_tea_icons_currentIndexChanged  (const QString &text);
   void cmb_tea_icons_currentIndexChanged  (int);
 
 
@@ -846,21 +901,12 @@ prefs window callbacks
 
   void slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QListWidgetItem *previous);
   
- // void slot_app_fontname_changed (const QString &text);
-//  void slot_editor_fontname_changed (const QString &text);
- // void slot_font_size_changed (int i);
-
-//  void slot_logmemo_fontname_changed (const QString &text);
-//  void slot_logmemo_font_size_changed (int i);
 
   void slot_font_logmemo_select();
   void slot_font_interface_select();
   void slot_font_editor_select();
 
 
-//  void slot_app_font_size_changed (int i);
-
-//  void slot_style_currentIndexChanged (const QString &text);
 
   void slot_style_currentIndexChanged (int);
 
@@ -984,11 +1030,6 @@ main window widgets
   QLineEdit *ed_fman_fname;
   QComboBox *cb_fman_codecs;
   QComboBox *cb_fman_drives;
-  QComboBox *cmb_spellcheckers;
-  QComboBox *cmb_styles;
-  QComboBox *cmb_lng;
-
-  QComboBox *cmb_icon_size;
 
 
   CCalendarWidget *calendar;
@@ -999,52 +1040,25 @@ prefs window widgets
 
   QLineEdit *ed_img_post_proc;
 
-  QLineEdit *ed_date_format;
-  QLineEdit *ed_time_format;
-
   QLineEdit *ed_side_size;
   QLineEdit *ed_link_options;
   QLineEdit *ed_cols_per_row;
 
 
-//  QLineEdit *ed_locale_override;
-  QLineEdit *ed_img_viewer_override;
 
-  QSpinBox *spb_cursor_blink_time;
-  QSpinBox *spb_cursor_width;
 
   CShortcutEntry *ent_shtcut;
   QListWidget *lv_menuitems;
 
-//  QFontComboBox *cmb_font_name;
-//  QSpinBox *spb_font_size;
 
-//  QFontComboBox *cmb_logmemo_font_name;
-//  QSpinBox *spb_logmemo_font_size;
-
-
-//  QFontComboBox *cmb_app_font_name;
-//  QSpinBox *spb_app_font_size;
 
   QLineEdit *ed_fman_path;
   QListWidget *lv_places;
   QSplitter *spl_fman;
 
-  QCheckBox *cb_altmenu;
-  QCheckBox *cb_wasd;
 
 
-  QCheckBox *cb_auto_img_preview;
-//  QCheckBox *cb_override_locale;
-
-  QCheckBox *cb_override_img_viewer;
-  QCheckBox *cb_use_enca_for_charset_detection;
-
-  QComboBox *cmb_cmdline_default_charset;
-
-
-  QComboBox *cmb_zip_charset_in;
-  QComboBox *cmb_zip_charset_out;
+  
 
 //main window functions
 

@@ -19,8 +19,8 @@
  ***************************************************************************/
 
 
-#ifndef RVLN_H
-#define RVLN_H
+#ifndef TEA_H
+#define TEA_H
 
 #include <QListWidget>
 #include <QComboBox>
@@ -222,19 +222,26 @@ protected:
 };
 
 
-class rvln: public QMainWindow
+class CTEA: public QMainWindow
 {
 Q_OBJECT
 
 public:
 
-  rvln();
-  ~rvln();
+  CTEA();
+  ~CTEA();
+
+/*
+=========================
+Variables
+=========================
+*/
 
 #ifdef USE_QML_STUFF
   QQmlEngine *qml_engine;
 #endif
 
+  QString charset;
 
   QStringList sl_places_bmx;
   QStringList sl_urls;
@@ -259,6 +266,8 @@ public:
   CSpellchecker *spellchecker;
   QStringList spellcheckers;
   QString cur_spellchecker;
+
+  QString theme_dir;
 
   int icon_size;
 
@@ -335,6 +344,134 @@ public:
   QString fname_tempparamfile;
 
 
+
+
+/*
+===========================
+Main menu items
+===========================
+*/
+
+
+  QMenu *fileMenu;
+  QMenu *editMenu;
+
+  QMenu *menu_ide;
+
+
+  QMenu *menu_cal;
+
+  QMenu *menu_cal_add;
+  QMenu *menu_cal_sub;
+  QMenu *menu_cal_diff;
+
+
+  QMenu *menu_file_edit_bookmarks;
+  QMenu *menu_file_configs;
+  QMenu *menu_file_sessions;
+  QMenu *menu_file_actions;
+  QMenu *menu_file_bookmarks;
+  QMenu *menu_file_templates;
+  QMenu *menu_programs;
+  QMenu *menu_fn_snippets;
+  QMenu *menu_fn_tables;
+  QMenu *menu_view_palettes;
+  QMenu *menu_view_hl;
+  QMenu *menu_view_profiles;
+
+  QMenu *menu_fn_sessions;
+  QMenu *menu_fn_scripts;
+
+
+#ifdef USE_QML_STUFF
+  QMenu *menu_fn_plugins;
+#endif
+
+  QMenu *menu_view_themes;
+
+  QMenu *menu_markup;
+  QMenu *menu_functions;
+  QMenu *menu_functions_case;
+
+  QMenu *menu_file_recent;
+  QMenu *menu_search;
+  QMenu *menu_nav;
+  QMenu *menu_instr;
+
+  QMenu *menu_fm;
+  QMenu *menu_fm_file_ops;
+  QMenu *menu_fm_multi_rename;
+
+  QMenu *menu_fm_file_infos;
+  QMenu *menu_fm_img_conv;
+  QMenu *menu_fm_zip;
+  QMenu *menu_fm_checksums;
+
+  QMenu *menu_view;
+  QMenu *menu_spell_langs;
+  QMenu *helpMenu;
+
+  QMenu *menu_labels;
+
+
+  QToolBar *fileToolBar;
+  QToolBar *editToolBar;
+  QToolBar *filesToolBar;
+  QToolBar *statusToolBar;
+  QToolBar *fifToolBar;
+
+  QAction *act_labels;
+
+  QAction *act_test;
+  QAction *filesAct;
+
+  QAction *newAct;
+  QAction *openAct;
+  QAction *saveAct;
+  QAction *saveAsAct;
+  QAction *exitAct;
+  QAction *cutAct;
+  QAction *copyAct;
+  QAction *closeAct;
+  QAction *undoAct;
+  QAction *redoAct;
+  QAction *pasteAct;
+  QAction *aboutAct;
+  QAction *aboutQtAct;
+  QAction *menu_find_whole_words;
+  QAction *menu_find_from_cursor;
+
+  QAction *menu_find_case;
+  QAction *menu_find_regexp;
+  QAction *menu_find_fuzzy;
+
+  QAction *menu_recent_off;
+
+
+
+
+
+
+/*
+=========================
+Main window widgets
+=========================
+*/
+
+  QSplitter *mainSplitter;
+  QTextBrowser *man;
+  QTabWidget *main_tab_widget;
+  QTabWidget *tab_options;
+  QTabWidget *tab_browser;
+  QTabWidget *tab_editor;
+  QLineEdit *fif;
+  QWidget *w_right;
+  QLineEdit *ed_fman_fname;
+  QComboBox *cb_fman_codecs;
+  QComboBox *cb_fman_drives;
+  CCalendarWidget *calendar;
+
+
 /*
 ==============================
 Main tab UI elements
@@ -351,6 +488,10 @@ FileManager tab UI elements
 ==============================
 */
 
+
+  QLineEdit *ed_fman_path;
+  QListWidget *lv_places;
+  QSplitter *spl_fman;
 
   QToolBar *tb_fman_dir;
   QLabel *l_fman_preview;
@@ -451,16 +592,13 @@ Preferences tab :: Images page UI elements
 
   QComboBox *cmb_output_image_fmt;
   QCheckBox *cb_output_image_flt;
-
   QSpinBox *spb_img_quality;
-
   QCheckBox *cb_zip_after_scale;
   QCheckBox *cb_exif_rotate;
-
-
+  QLineEdit *ed_side_size;
+  QLineEdit *ed_link_options;
+  QLineEdit *ed_cols_per_row;
   QCheckBox *cb_zor_use_exif;
-
-
 
 /*
 =============================================
@@ -468,10 +606,125 @@ Preferences tab :: Keyboard page UI elements
 =============================================
 */
 
+  CShortcutEntry *ent_shtcut;
+  QListWidget *lv_menuitems;
 
 
 
 
+
+
+/*
+====================================
+Application stuff inits and updates
+====================================
+*/
+
+
+public:
+
+  void init_styles();
+  void update_dyn_menus();
+  void create_paths();
+  void calendar_update();
+
+
+#ifdef USE_QML_STUFF
+  void plugins_init();
+  void plugins_done();
+#endif
+
+
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+  void setup_spellcheckers();
+  void create_spellcheck_menu();
+#endif
+
+  void handle_args();
+  void create_moon_phase_algos();
+
+
+  void update_labels_menu();
+
+  void opt_update_keyb();
+
+  void createFman();
+  void create_markup_hash();
+
+  void create_main_widget_splitter();
+  void create_main_widget_docked();
+
+  void createActions();
+  void createMenus();
+  void createOptions();
+  void createCalendar();
+
+  void createManual();
+  void updateFonts();
+  void update_bookmarks();
+  void update_templates();
+  void update_snippets();
+  void update_sessions();
+  void update_palettes();
+  void update_view_hls();
+
+#ifdef USE_QML_STUFF
+  void update_plugins();
+#endif
+
+  void update_themes();
+
+
+  void update_hls_noncached();
+
+  void update_tables();
+  void update_scripts();
+  void update_places_bookmarks();
+  void update_programs();
+  void update_logmemo_palette();
+
+  void update_charsets();
+  void update_profiles();
+
+
+  void createToolBars();
+  void readSettings();
+  void writeSettings();
+
+  void read_search_options();
+  void write_search_options();
+
+
+/*
+===========================
+Application misc. methods
+===========================
+*/
+
+
+  QHash <QString, QString> load_eclipse_theme_xml (const QString &fname);
+  void load_palette (const QString &fileName);
+  void fman_convert_images (bool by_side, int value);
+  QTextDocument::FindFlags get_search_options();
+  Q_INVOKABLE QString fif_get_text();
+
+  QAction* add_to_menu (QMenu *menu,
+                        const QString &caption,
+                        const char *method,
+                        const QString &shortkt = QString(),
+                        const QString &iconpath = QString()
+                        );
+
+
+  void update_stylesheet (const QString &f);
+
+  QIcon get_theme_icon (const QString &name);
+  QString get_theme_icon_fname (const QString &name);
+
+  void leaving_tune();
+  void add_to_last_used_charsets (const QString &s);
+  void count_substring (bool use_regexp);
+  void run_unitaz (int mode);
 
 
 
@@ -479,77 +732,34 @@ protected:
 
   void closeEvent (QCloseEvent *event);
   bool fman_tv_eventFilter (QObject *obj, QEvent *event);
+  void dragEnterEvent (QDragEnterEvent *event);
+  void dropEvent (QDropEvent *event);
+
+
 
 
 public slots:
 
 
-/*************************
-main window callbacks
-*************************/
+/*
+===========================
+Main window slots
+===========================
+*/
 
+
+  void pageChanged (int index);
   void logmemo_double_click (const QString &txt);
-
-
-  void repeat();
-
   void receiveMessage (const QString &msg);
   void receiveMessageShared (const QStringList& msg);
-
-  void view_use_theme();
-
-  void select_label();
-  void update_labels_menu();
   void update_labels_list();
 
 
-  void fm_full_info();
-
-  void fm_hashsum_md5();
-  void fm_hashsum_md4();
-  void fm_hashsum_sha1();
-
-
-#if QT_VERSION >= 0x050000
-
-  void fm_hashsum_sha224();
-  void fm_hashsum_sha384();
-  void fm_hashsum_sha256();
-  void fm_hashsum_sha512();
-
-
-#endif
-
-
-//#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
-
-  void fm_hashsum_sha3_224();
-  void fm_hashsum_sha3_256();
-  void fm_hashsum_sha3_384();
-  void fm_hashsum_sha3_512();
-
-//#endif
-
-
-  void fm_hashsum_keccak_256();
-  void fm_hashsum_keccak_224();
-  void fm_hashsum_keccak_384();
-  void fm_hashsum_keccak_512();
-
-
-
-
-  void fman_unpack_zip();
-  void fman_zip_info();
-
-  void fman_refresh();
-  void fman_rename();
-  void fman_delete();
-  void fman_zeropad();
-  void fman_del_n_first_chars();
-  void fman_multreplace();
-  void fman_apply_template();
-
+/*
+===================
+File manager slots
+===================
+*/
 
   void fman_drives_changed (const QString & path);
   void fman_current_file_changed (const QString &full_path, const QString &just_name);
@@ -565,10 +775,68 @@ main window callbacks
   void fman_select_by_regexp();
   void fman_deselect_by_regexp();
   void fman_count_lines_in_selected_files();
-
   void cb_button_saves_as();
 
-  void pageChanged (int index);
+
+
+
+/*
+===================
+Main menu callbacks
+===================
+*/
+
+
+  void repeat();
+
+  void view_use_theme();
+
+  void select_label();
+
+  void fm_full_info();
+
+  void fm_hashsum_md5();
+  void fm_hashsum_md4();
+  void fm_hashsum_sha1();
+
+
+#if QT_VERSION >= 0x050000
+
+  void fm_hashsum_sha224();
+  void fm_hashsum_sha384();
+  void fm_hashsum_sha256();
+  void fm_hashsum_sha512();
+
+#endif
+
+
+
+  void fm_hashsum_sha3_224();
+  void fm_hashsum_sha3_256();
+  void fm_hashsum_sha3_384();
+  void fm_hashsum_sha3_512();
+
+
+
+  void fm_hashsum_keccak_256();
+  void fm_hashsum_keccak_224();
+  void fm_hashsum_keccak_384();
+  void fm_hashsum_keccak_512();
+
+
+  void fman_unpack_zip();
+  void fman_zip_info();
+
+  void fman_refresh();
+  void fman_rename();
+  void fman_delete();
+  void fman_zeropad();
+  void fman_del_n_first_chars();
+  void fman_multreplace();
+  void fman_apply_template();
+
+
+
 
 #ifdef PRINTER_ENABLE
   void file_print();
@@ -877,9 +1145,11 @@ main window callbacks
   void recentoff();
 
 
-/*************************
-prefs window callbacks
-*************************/
+/*
+====================
+Tune page callbacks
+====================
+*/
 
 #if defined(JOYSTICK_SUPPORTED)
   void cb_use_joystick_stateChanged (int state);
@@ -918,251 +1188,10 @@ prefs window callbacks
 
 public:
 
-/*************************
-main window widgets
-*************************/
-
-  QSplitter *mainSplitter;
-  QTextBrowser *man;
-  QString charset;
-
-  QTabWidget *main_tab_widget;
-  QTabWidget *tab_options;
-  QTabWidget *tab_browser;
-  QTabWidget *tab_editor;
-  QLineEdit *fif;
-
-  QMenu *fileMenu;
-  QMenu *editMenu;
-
-  QMenu *menu_ide;
-
-
-  QMenu *menu_cal;
-
-  QMenu *menu_cal_add;
-  QMenu *menu_cal_sub;
-  QMenu *menu_cal_diff;
-
-
-  QMenu *menu_file_edit_bookmarks;
-  QMenu *menu_file_configs;
-  QMenu *menu_file_sessions;
-  QMenu *menu_file_actions;
-  QMenu *menu_file_bookmarks;
-  QMenu *menu_file_templates;
-  QMenu *menu_programs;
-  QMenu *menu_fn_snippets;
-  QMenu *menu_fn_tables;
-  QMenu *menu_view_palettes;
-  QMenu *menu_view_hl;
-  QMenu *menu_view_profiles;
-
-  QMenu *menu_fn_sessions;
-  QMenu *menu_fn_scripts;
-
-
-#ifdef USE_QML_STUFF
-  QMenu *menu_fn_plugins;
-#endif
-
-  QMenu *menu_view_themes;
-
-  QMenu *menu_markup;
-  QMenu *menu_functions;
-  QMenu *menu_functions_case;
-
-  QMenu *menu_file_recent;
-  QMenu *menu_search;
-  QMenu *menu_nav;
-  QMenu *menu_instr;
-
-  QMenu *menu_fm;
-  QMenu *menu_fm_file_ops;
-  QMenu *menu_fm_multi_rename;
-
-  QMenu *menu_fm_file_infos;
-  QMenu *menu_fm_img_conv;
-  QMenu *menu_fm_zip;
-  QMenu *menu_fm_checksums;
-
-  QMenu *menu_view;
-  QMenu *menu_spell_langs;
-  QMenu *helpMenu;
-
-  QMenu *menu_labels;
-
-
-  QToolBar *fileToolBar;
-  QToolBar *editToolBar;
-  QToolBar *filesToolBar;
-  QToolBar *statusToolBar;
-  QToolBar *fifToolBar;
-
-  QAction *act_labels;
-
-  QAction *act_test;
-  QAction *filesAct;
-
-  QAction *newAct;
-  QAction *openAct;
-  QAction *saveAct;
-  QAction *saveAsAct;
-  QAction *exitAct;
-  QAction *cutAct;
-  QAction *copyAct;
-  QAction *closeAct;
-  QAction *undoAct;
-  QAction *redoAct;
-  QAction *pasteAct;
-  QAction *aboutAct;
-  QAction *aboutQtAct;
-  QAction *menu_find_whole_words;
-  QAction *menu_find_from_cursor;
-
-  QAction *menu_find_case;
-  QAction *menu_find_regexp;
-  QAction *menu_find_fuzzy;
-
-  QAction *menu_recent_off;
-
-  QWidget *w_right;
-  QLineEdit *ed_fman_fname;
-  QComboBox *cb_fman_codecs;
-  QComboBox *cb_fman_drives;
-
-
-  CCalendarWidget *calendar;
-
-/*************************
-prefs window widgets
-*************************/
-
-  QLineEdit *ed_img_post_proc;
-
-  QLineEdit *ed_side_size;
-  QLineEdit *ed_link_options;
-  QLineEdit *ed_cols_per_row;
-
-
-
-
-  CShortcutEntry *ent_shtcut;
-  QListWidget *lv_menuitems;
-
-
-
-  QLineEdit *ed_fman_path;
-  QListWidget *lv_places;
-  QSplitter *spl_fman;
-
-
 
   
 
-//main window functions
 
-  QAction* add_to_menu (QMenu *menu,
-                        const QString &caption,
-                        const char *method,
-                        const QString &shortkt = QString(),
-                        const QString &iconpath = QString()
-                        );
-
-
-  void update_stylesheet (const QString &f);
-
-  QString theme_dir;
-
-  QIcon get_theme_icon (const QString &name);
-  QString get_theme_icon_fname (const QString &name);
-
-  void update_dyn_menus();
-  void create_paths();
-
-  void calendar_update();
-
-
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-  void setup_spellcheckers();
-  void create_spellcheck_menu();
-#endif
-
-  void init_styles();
-
-  void handle_args();
-
-  void leaving_tune();
-
-  void create_main_widget_splitter();
-  void create_main_widget_docked();
-
-  void createActions();
-  void createMenus();
-  void createOptions();
-  void createCalendar();
-
-  void createManual();
-  void updateFonts();
-  void update_bookmarks();
-  void update_templates();
-  void update_snippets();
-  void update_sessions();
-  void update_palettes();
-  void update_view_hls();
-
-#ifdef USE_QML_STUFF
-  void update_plugins();
-#endif
-
-  void update_themes();
-
-
-  //void update_hls (bool force = false);
-  void update_hls_noncached();
-
-  void update_tables();
-  void update_scripts();
-  void update_places_bookmarks();
-  void update_programs();
-  void update_logmemo_palette();
-
-  void update_charsets();
-  void update_profiles();
-
-
-  void createToolBars();
-//  void createStatusBar();
-  void readSettings();
-  void writeSettings();
-
-  void read_search_options();
-  void write_search_options();
-
-  void dragEnterEvent (QDragEnterEvent *event);
-  void dropEvent (QDropEvent *event);
-  void add_to_last_used_charsets (const QString &s);
-
-  void createFman();
-  void create_markup_hash();
-
-  void count_substring (bool use_regexp);
-
-  void run_unitaz (int mode);
-
-  void create_moon_phase_algos();
-
-
-  QHash <QString, QString> load_eclipse_theme_xml (const QString &fname);
-
-  void load_palette (const QString &fileName);
-
-
-  QTextDocument::FindFlags get_search_options();
-
-  void fman_convert_images (bool by_side, int value);
-
-  Q_INVOKABLE QString fif_get_text();
 
 
   void fn_filter_delete_by_sep (bool mode);
@@ -1172,7 +1201,6 @@ prefs window widgets
   void fman_find_next();
   void fman_find_prev();
 
-  void opt_update_keyb();
 
   void opt_shortcuts_find();
   void opt_shortcuts_find_next();
@@ -1183,11 +1211,6 @@ prefs window widgets
   void idx_tab_tune_activate();
   void idx_tab_fman_activate();
   void idx_tab_learn_activate();
-
-#ifdef USE_QML_STUFF
-  void plugins_init();
-  void plugins_done();
-#endif
 
   void markup_text (const QString &mode);
 };

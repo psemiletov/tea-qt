@@ -23,12 +23,12 @@
 #include <QApplication>
 #include <QDebug>
 
-#include "rvln.h"
+#include "tea.h"
 
 #include "single_application_shared.h"
 
 
-extern rvln *mainWindow; 
+extern CTEA *main_window; 
 
 int main (int argc, char *argv[])
 {
@@ -38,8 +38,8 @@ int main (int argc, char *argv[])
   QApplication app (argc, argv);
   qApp->setApplicationName ("TEA");
     
-  mainWindow = new rvln();
-  mainWindow->show();
+  main_window = new CTEA();
+  main_window->show();
 
   return app.exec();
   
@@ -63,16 +63,13 @@ int main (int argc, char *argv[])
     
 #endif
     
-
-  mainWindow = new rvln();
-
+  main_window = new CTEA();
 
 #if !defined (NO_SINGLE_APP)
- QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), mainWindow, SLOT(receiveMessageShared(QStringList)));
+ QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), main_window, SLOT(receiveMessageShared(QStringList)));
 #endif
-
    
-  mainWindow->show();
+  main_window->show();
   
   return app.exec();   
 }

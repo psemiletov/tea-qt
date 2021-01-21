@@ -72,7 +72,7 @@ tea_headers_moc = [
         'quagzipfile.h',
         'quaziodevice.h',
         'quazipfile.h',
-        'rvln.h',
+        'tea.h',
     'todo.h',
     'document.h',
     'calendar.h',
@@ -93,7 +93,7 @@ src_processed = qt5.preprocess(
 )
 
 
-tea_source = ['rvln.cpp',
+tea_source = ['tea.cpp',
            'main.cpp',
            'todo.cpp',
            'textproc.cpp',

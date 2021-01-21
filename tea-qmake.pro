@@ -104,7 +104,7 @@ useclang{
     QMAKE_CXXFLAGS += -std=c++11
 }
 
-SOURCES += rvln.cpp \
+SOURCES += tea.cpp \
     main.cpp \
     todo.cpp \
     textproc.cpp \
@@ -126,7 +126,7 @@ SOURCES += rvln.cpp \
     myjoystick.cpp
 
 
-HEADERS += rvln.h \
+HEADERS += tea.h \
     todo.h \
     document.h \
     utils.h \

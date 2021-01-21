@@ -79,7 +79,7 @@ started at 08 November 2007
 #endif
 
 
-#include "rvln.h"
+#include "tea.h"
 #include "utils.h"
 #include "gui_utils.h"
 #include "libretta_calc.h"
@@ -119,7 +119,7 @@ extern bool b_recent_off;
 extern bool b_destroying_all;
 extern int recent_list_max_items;
 
-rvln *mainWindow;
+CTEA *main_window;
 CDox *documents;
 QVariantMap hs_path;
 
@@ -159,7 +159,7 @@ QTabWidget::TabPosition int_to_tabpos (int i)
 }
 
 
-void rvln::create_paths()
+void CTEA::create_paths()
 {
   portable_mode = false;
 
@@ -285,7 +285,7 @@ void rvln::create_paths()
 }
 
 
-void rvln::update_bookmarks()
+void CTEA::update_bookmarks()
 {
   if (! file_exists (fname_bookmarks))
      return;
@@ -301,7 +301,7 @@ void rvln::update_bookmarks()
 }
 
 
-void rvln::readSettings()
+void CTEA::readSettings()
 {
   MyProxyStyle::cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
 
@@ -331,7 +331,7 @@ void rvln::readSettings()
 }
 
 
-void rvln::writeSettings()
+void CTEA::writeSettings()
 {
   settings->setValue ("pos", pos());
   settings->setValue ("size", size());
@@ -354,7 +354,7 @@ void rvln::writeSettings()
 }
 
 
-void rvln::create_main_widget_splitter()
+void CTEA::create_main_widget_splitter()
 {
   QWidget *main_widget = new QWidget;
   QVBoxLayout *v_box = new QVBoxLayout;
@@ -448,7 +448,7 @@ void rvln::create_main_widget_splitter()
 }
 
 
-void rvln::create_main_widget_docked()
+void CTEA::create_main_widget_docked()
 {
   setDockOptions (QMainWindow::AnimatedDocks | QMainWindow::AllowNestedDocks);
 
@@ -552,7 +552,7 @@ void rvln::create_main_widget_docked()
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
-void rvln::setup_spellcheckers()
+void CTEA::setup_spellcheckers()
 {
 #ifdef ASPELL_ENABLE
   spellcheckers.append ("Aspell");
@@ -600,7 +600,7 @@ void rvln::setup_spellcheckers()
 #endif
 
 
-void rvln::init_styles()
+void CTEA::init_styles()
 {
 #if QT_VERSION >= 0x050000
   QString default_style = qApp->style()->objectName();
@@ -628,7 +628,7 @@ void rvln::init_styles()
 }
 
 
-rvln::rvln()
+CTEA::CTEA()
 {
   mainSplitter = 0;
 
@@ -842,7 +842,7 @@ rvln::rvln()
 }
 
 
-void rvln::closeEvent (QCloseEvent *event)
+void CTEA::closeEvent (QCloseEvent *event)
 {
   if (main_tab_widget->currentIndex() == idx_tab_tune)
      leaving_tune();
@@ -889,7 +889,7 @@ void rvln::closeEvent (QCloseEvent *event)
 }
 
 
-void rvln::newFile()
+void CTEA::newFile()
 {
   last_action = qobject_cast<QAction *>(sender());
   documents->create_new();
@@ -897,7 +897,7 @@ void rvln::newFile()
 }
 
 
-void rvln::open()
+void CTEA::open()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1011,7 +1011,7 @@ void rvln::open()
 }
 
 
-bool rvln::save()
+bool CTEA::save()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1040,7 +1040,7 @@ bool rvln::save()
 }
 
 
-bool rvln::saveAs()
+bool CTEA::saveAs()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1152,7 +1152,7 @@ bool rvln::saveAs()
 }
 
 
-void rvln::about()
+void CTEA::about()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1162,7 +1162,7 @@ void rvln::about()
 }
 
 
-void rvln::createActions()
+void CTEA::createActions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
 
@@ -1247,7 +1247,7 @@ void rvln::createActions()
 }
 
 
-void rvln::createMenus()
+void CTEA::createMenus()
 {
   fileMenu = menuBar()->addMenu (tr ("File"));
   fileMenu->setTearOffEnabled (true);
@@ -1785,7 +1785,7 @@ void rvln::createMenus()
 }
 
 
-void rvln::createToolBars()
+void CTEA::createToolBars()
 {
   openAct->setMenu (menu_file_recent);
   filesAct->setMenu (current_files_menu);
@@ -1865,7 +1865,7 @@ void rvln::createToolBars()
 }
 
 
-void rvln::pageChanged (int index)
+void CTEA::pageChanged (int index)
 {
   if (b_destroying_all)
       return;
@@ -1886,14 +1886,14 @@ void rvln::pageChanged (int index)
 }
 
 
-void rvln::close_current()
+void CTEA::close_current()
 {
   last_action = qobject_cast<QAction *>(sender());
   documents->close_current();
 }
 
 
-void rvln::ed_copy()
+void CTEA::ed_copy()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1909,7 +1909,7 @@ void rvln::ed_copy()
 }
 
 
-void rvln::ed_cut()
+void CTEA::ed_cut()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1919,7 +1919,7 @@ void rvln::ed_cut()
 }
 
 
-void rvln::ed_paste()
+void CTEA::ed_paste()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1929,7 +1929,7 @@ void rvln::ed_paste()
 }
 
 
-void rvln::ed_undo()
+void CTEA::ed_undo()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1939,7 +1939,7 @@ void rvln::ed_undo()
 }
 
 
-void rvln::ed_redo()
+void CTEA::ed_redo()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1949,7 +1949,7 @@ void rvln::ed_redo()
 }
 
 
-void rvln::ed_clear()
+void CTEA::ed_clear()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1959,7 +1959,7 @@ void rvln::ed_clear()
 }
 
 
-void rvln::upCase()
+void CTEA::upCase()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1969,7 +1969,7 @@ void rvln::upCase()
 }
 
 
-void rvln::dnCase()
+void CTEA::dnCase()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1979,7 +1979,7 @@ void rvln::dnCase()
 }
 
 
-void rvln::remove_formatting()
+void CTEA::remove_formatting()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1989,7 +1989,7 @@ void rvln::remove_formatting()
 }
 
 
-void rvln::markup_text (const QString &mode)
+void CTEA::markup_text (const QString &mode)
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -2007,35 +2007,35 @@ void rvln::markup_text (const QString &mode)
 }
 
 
-void rvln::mrkup_align_center()
+void CTEA::mrkup_align_center()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("align_center");
 }
 
 
-void rvln::mrkup_align_left()
+void CTEA::mrkup_align_left()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("align_left");
 }
 
 
-void rvln::mrkup_align_right()
+void CTEA::mrkup_align_right()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("align_right");
 }
 
 
-void rvln::mrkup_align_justify()
+void CTEA::mrkup_align_justify()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("align_justify");
 }
 
 
-void rvln::mrkup_bold()
+void CTEA::mrkup_bold()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -2043,42 +2043,42 @@ void rvln::mrkup_bold()
 }
 
 
-void rvln::mrkup_italic()
+void CTEA::mrkup_italic()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("italic");
 }
 
 
-void rvln::mrkup_underline()
+void CTEA::mrkup_underline()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("underline");
 }
 
 
-void rvln::mrkup_para()
+void CTEA::mrkup_para()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("para");
 }
 
 
-void rvln::mrkup_link()
+void CTEA::mrkup_link()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("link");
 }
 
 
-void rvln::mrkup_br()
+void CTEA::mrkup_br()
 {
   last_action = qobject_cast<QAction *>(sender());
   markup_text ("newline");
 }
 
 
-void rvln::mrkup_nbsp()
+void CTEA::mrkup_nbsp()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -2088,7 +2088,7 @@ void rvln::mrkup_nbsp()
 }
 
 
-QTextDocument::FindFlags rvln::get_search_options()
+QTextDocument::FindFlags CTEA::get_search_options()
 {
   QTextDocument::FindFlags flags; //= 0;
 
@@ -2102,7 +2102,7 @@ QTextDocument::FindFlags rvln::get_search_options()
 }
 
 
-void rvln::search_find()
+void CTEA::search_find()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -2166,7 +2166,7 @@ void rvln::search_find()
 }
 
 
-void rvln::fman_find()
+void CTEA::fman_find()
 {
   QString ft = fif_get_text();
   if (ft.isEmpty())
@@ -2182,7 +2182,7 @@ void rvln::fman_find()
 }
 
 
-void rvln::fman_find_next()
+void CTEA::fman_find_next()
 {
   QString ft = fif_get_text();
   if (ft.isEmpty())
@@ -2198,7 +2198,7 @@ void rvln::fman_find_next()
 }
 
 
-void rvln::fman_find_prev()
+void CTEA::fman_find_prev()
 {
   QString ft = fif_get_text();
   if (ft.isEmpty())
@@ -2214,7 +2214,7 @@ void rvln::fman_find_prev()
 }
 
 
-void rvln::search_find_next()
+void CTEA::search_find_next()
 {
 //  last_action = qobject_cast<QAction *>(sender());
 
@@ -2265,7 +2265,7 @@ void rvln::search_find_next()
 }
 
 
-void rvln::search_find_prev()
+void CTEA::search_find_prev()
 {
   if (main_tab_widget->currentIndex() == idx_tab_edit)
      {
@@ -2305,7 +2305,7 @@ void rvln::search_find_prev()
 }
 
 
-void rvln::opt_shortcuts_find()
+void CTEA::opt_shortcuts_find()
 {
   int from = 0;
 
@@ -2333,7 +2333,7 @@ void rvln::opt_shortcuts_find()
 }
 
 
-void rvln::opt_shortcuts_find_next()
+void CTEA::opt_shortcuts_find_next()
 {
   int from = lv_menuitems->currentRow();
   if (from == -1)
@@ -2354,7 +2354,7 @@ void rvln::opt_shortcuts_find_next()
 }
 
 
-void rvln::opt_shortcuts_find_prev()
+void CTEA::opt_shortcuts_find_prev()
 {
   int from = lv_menuitems->currentRow();
   if (from == -1)
@@ -2378,7 +2378,7 @@ void rvln::opt_shortcuts_find_prev()
 }
 
 
-void rvln::file_save_bak()
+void CTEA::file_save_bak()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -2395,7 +2395,7 @@ void rvln::file_save_bak()
 }
 
 
-void rvln::markup_ins_image()
+void CTEA::markup_ins_image()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -2410,7 +2410,7 @@ void rvln::markup_ins_image()
 }
 
 
-void rvln::slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QListWidgetItem *previous)
+void CTEA::slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QListWidgetItem *previous)
 {
   if (! current)
      return;
@@ -2421,7 +2421,7 @@ void rvln::slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QList
 }
 
 
-void rvln::pb_assign_hotkey_clicked()
+void CTEA::pb_assign_hotkey_clicked()
 {
   if (! lv_menuitems->currentItem())
      return;
@@ -2434,7 +2434,7 @@ void rvln::pb_assign_hotkey_clicked()
 }
 
 
-void rvln::pb_remove_hotkey_clicked()
+void CTEA::pb_remove_hotkey_clicked()
 {
   if (! lv_menuitems->currentItem())
      return;
@@ -2445,7 +2445,7 @@ void rvln::pb_remove_hotkey_clicked()
 }
 
 
-void rvln::cb_altmenu_stateChanged (int state)
+void CTEA::cb_altmenu_stateChanged (int state)
 {
   if (state == Qt::Unchecked)
       MyProxyStyle::b_altmenu = false;
@@ -2457,7 +2457,7 @@ void rvln::cb_altmenu_stateChanged (int state)
 
 #if defined(JOYSTICK_SUPPORTED)
 
-void rvln::cb_use_joystick_stateChanged (int state)
+void CTEA::cb_use_joystick_stateChanged (int state)
 {
   bool b;
   if (state == Qt::Unchecked)
@@ -2476,7 +2476,7 @@ void rvln::cb_use_joystick_stateChanged (int state)
 #endif
 
 
-void rvln::createOptions()
+void CTEA::createOptions()
 {
   tab_options = new QTabWidget;
 
@@ -3065,7 +3065,7 @@ void rvln::createOptions()
 }
 
 
-void rvln::opt_update_keyb()
+void CTEA::opt_update_keyb()
 {
   if (! lv_menuitems)
      return;
@@ -3076,7 +3076,7 @@ void rvln::opt_update_keyb()
 }
 
 /*
-void rvln::slot_style_currentIndexChanged (const QString &text)
+void CTEA::slot_style_currentIndexChanged (const QString &text)
 {
    if (text == "GTK+") //because it is buggy with some Qt versions. sorry!
      return;
@@ -3090,7 +3090,7 @@ void rvln::slot_style_currentIndexChanged (const QString &text)
 */
 
 
-void rvln::slot_style_currentIndexChanged (int)
+void CTEA::slot_style_currentIndexChanged (int)
 {
  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
  QString text = cmb->currentText(); 
@@ -3106,7 +3106,7 @@ void rvln::slot_style_currentIndexChanged (int)
 }
 
 
-void rvln::open_at_cursor()
+void CTEA::open_at_cursor()
 {
   if (main_tab_widget->currentIndex() == idx_tab_fman)
      {
@@ -3175,7 +3175,7 @@ void rvln::open_at_cursor()
 }
 
 
-void rvln::toggle_wrap()
+void CTEA::toggle_wrap()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3185,7 +3185,7 @@ void rvln::toggle_wrap()
 }
 
 
-void rvln::nav_save_pos()
+void CTEA::nav_save_pos()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3195,7 +3195,7 @@ void rvln::nav_save_pos()
 }
 
 
-void rvln::nav_goto_pos()
+void CTEA::nav_goto_pos()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3209,7 +3209,7 @@ void rvln::nav_goto_pos()
 }
 
 
-void rvln::mrkup_color()
+void CTEA::mrkup_color()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3234,7 +3234,7 @@ void rvln::mrkup_color()
 }
 
 
-void rvln::nav_goto_line()
+void CTEA::nav_goto_line()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3251,13 +3251,13 @@ void rvln::nav_goto_line()
 }
 
 
-void rvln::updateFonts()
+void CTEA::updateFonts()
 {
   documents->apply_settings();
 }
 
 
-void rvln::man_find_find()
+void CTEA::man_find_find()
 {
   QString fiftxt = fif_get_text();
 
@@ -3270,19 +3270,19 @@ void rvln::man_find_find()
 }
 
 
-void rvln::man_find_next()
+void CTEA::man_find_next()
 {
   man->find (man_search_value, get_search_options());
 }
 
 
-void rvln::man_find_prev()
+void CTEA::man_find_prev()
 {
   man->find (man_search_value, get_search_options() | QTextDocument::FindBackward);
 }
 
 
-void rvln::createManual()
+void CTEA::createManual()
 {
   QWidget *wd_man = new QWidget (this);
 
@@ -3324,7 +3324,7 @@ void rvln::createManual()
 }
 
 
-void rvln::file_crapbook()
+void CTEA::file_crapbook()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3335,7 +3335,7 @@ void rvln::file_crapbook()
 }
 
 
-void rvln::fn_apply_to_each_line()
+void CTEA::fn_apply_to_each_line()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3376,7 +3376,7 @@ void rvln::fn_apply_to_each_line()
 }
 
 
-void rvln::fn_filter_with_regexp()
+void CTEA::fn_filter_with_regexp()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3389,7 +3389,7 @@ void rvln::fn_filter_with_regexp()
 }
 
 
-void rvln::fn_reverse()
+void CTEA::fn_reverse()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3405,7 +3405,7 @@ void rvln::fn_reverse()
 
 
 #ifdef PRINTER_ENABLE
-void rvln::file_print()
+void CTEA::file_print()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3428,7 +3428,7 @@ void rvln::file_print()
 #endif
 
 
-void rvln::file_last_opened()
+void CTEA::file_last_opened()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3442,7 +3442,7 @@ void rvln::file_last_opened()
 
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-void rvln::fn_change_spell_lang()
+void CTEA::fn_change_spell_lang()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3453,7 +3453,7 @@ void rvln::fn_change_spell_lang()
 }
 
 
-void rvln::create_spellcheck_menu()
+void CTEA::create_spellcheck_menu()
 {
   menu_spell_langs->clear();
   create_menu_from_list (this, menu_spell_langs, spellchecker->get_speller_modules_list(), SLOT(fn_change_spell_lang()));
@@ -3475,7 +3475,7 @@ bool ends_with_badchar (const QString &s)
 }
 
 
-void rvln::fn_spell_check()
+void CTEA::fn_spell_check()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3584,7 +3584,7 @@ void rvln::fn_spell_check()
 }
 
 
-void rvln::fn_spell_add_to_dict()
+void CTEA::fn_spell_add_to_dict()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3601,7 +3601,7 @@ void rvln::fn_spell_add_to_dict()
 }
 
 
-void rvln::fn_remove_from_dict()
+void CTEA::fn_remove_from_dict()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3618,7 +3618,7 @@ void rvln::fn_remove_from_dict()
 }
 
 
-void rvln::fn_spell_suggest_callback()
+void CTEA::fn_spell_suggest_callback()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3644,7 +3644,7 @@ void rvln::fn_spell_suggest_callback()
 }
 
 
-void rvln::fn_spell_suggest()
+void CTEA::fn_spell_suggest()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3668,7 +3668,7 @@ void rvln::fn_spell_suggest()
 #endif
 
 
-void rvln::file_open_bookmark()
+void CTEA::file_open_bookmark()
 {
   last_action = qobject_cast<QAction *>(sender());
   QAction *a = qobject_cast<QAction *>(sender());
@@ -3678,7 +3678,7 @@ void rvln::file_open_bookmark()
 }
 
 
-void rvln::file_add_to_bookmarks()
+void CTEA::file_add_to_bookmarks()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3712,7 +3712,7 @@ void rvln::file_add_to_bookmarks()
 }
 
 
-void rvln::file_use_template()
+void CTEA::file_use_template()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3725,7 +3725,7 @@ void rvln::file_use_template()
 }
 
 
-void rvln::file_use_snippet()
+void CTEA::file_use_snippet()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3743,7 +3743,7 @@ void rvln::file_use_snippet()
 }
 
 
-void rvln::update_templates()
+void CTEA::update_templates()
 {
   menu_file_templates->clear();
 
@@ -3755,7 +3755,7 @@ void rvln::update_templates()
 }
 
 
-void rvln::update_snippets()
+void CTEA::update_snippets()
 {
    menu_fn_snippets->clear();
    create_menu_from_dir (this,
@@ -3766,7 +3766,7 @@ void rvln::update_snippets()
 }
 
 
-void rvln::file_save_version()
+void CTEA::file_save_version()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3802,14 +3802,14 @@ void rvln::file_save_version()
 }
 
 
-void rvln::dragEnterEvent (QDragEnterEvent *event)
+void CTEA::dragEnterEvent (QDragEnterEvent *event)
 {
   if (event->mimeData()->hasFormat ("text/uri-list"))
      event->acceptProposedAction();
 }
 
 
-void rvln::dropEvent (QDropEvent *event)
+void CTEA::dropEvent (QDropEvent *event)
 {
   if (! event->mimeData()->hasUrls())
      return;
@@ -3832,7 +3832,7 @@ void rvln::dropEvent (QDropEvent *event)
 }
 
 
-void rvln::fn_evaluate()
+void CTEA::fn_evaluate()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3849,7 +3849,7 @@ void rvln::fn_evaluate()
 }
 
 
-void rvln::fn_sort_length()
+void CTEA::fn_sort_length()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3861,7 +3861,7 @@ void rvln::fn_sort_length()
 }
 
 
-void rvln::fn_sort_casecare()
+void CTEA::fn_sort_casecare()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3873,7 +3873,7 @@ void rvln::fn_sort_casecare()
 }
 
 
-void rvln::fn_sort_casecare_sep()
+void CTEA::fn_sort_casecare_sep()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3886,7 +3886,7 @@ void rvln::fn_sort_casecare_sep()
 }
 
 
-void rvln::mrkup_text_to_html()
+void CTEA::mrkup_text_to_html()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3948,7 +3948,7 @@ void rvln::mrkup_text_to_html()
 }
 
 
-void rvln::fn_text_stat()
+void CTEA::fn_text_stat()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3997,7 +3997,7 @@ void rvln::fn_text_stat()
 }
 
 
-void rvln::fn_antispam_email()
+void CTEA::fn_antispam_email()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4015,7 +4015,7 @@ void rvln::fn_antispam_email()
 }
 
 
-void rvln::search_replace_with()
+void CTEA::search_replace_with()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4025,7 +4025,7 @@ void rvln::search_replace_with()
 }
 
 
-void rvln::search_replace_all_at_ofiles()
+void CTEA::search_replace_all_at_ofiles()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4070,7 +4070,7 @@ void rvln::search_replace_all_at_ofiles()
 }
 
 
-void rvln::search_replace_all()
+void CTEA::search_replace_all()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4146,7 +4146,7 @@ void rvln::search_replace_all()
 }
 
 
-void rvln::update_charsets()
+void CTEA::update_charsets()
 {
   QString fname  = dir_config + "/last_used_charsets";
 
@@ -4164,7 +4164,7 @@ void rvln::update_charsets()
 }
 
 
-void rvln::add_to_last_used_charsets (const QString &s)
+void CTEA::add_to_last_used_charsets (const QString &s)
 {
   int i = sl_last_used_charsets.indexOf (s);
   if (i == -1)
@@ -4177,7 +4177,7 @@ void rvln::add_to_last_used_charsets (const QString &s)
 }
 
 
-void rvln::fn_flip_a_list()
+void CTEA::fn_flip_a_list()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4189,7 +4189,7 @@ void rvln::fn_flip_a_list()
 }
 
 
-void rvln::fn_flip_a_list_sep()
+void CTEA::fn_flip_a_list_sep()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4216,7 +4216,7 @@ QString str_to_entities (const QString &s)
 }
 
 
-void rvln::mrkup_tags_to_entities()
+void CTEA::mrkup_tags_to_entities()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4226,7 +4226,7 @@ void rvln::mrkup_tags_to_entities()
 }
 
 
-void rvln::fn_insert_loremipsum()
+void CTEA::fn_insert_loremipsum()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4236,7 +4236,7 @@ void rvln::fn_insert_loremipsum()
 }
 
 
-void rvln::mrkup_mode_choosed()
+void CTEA::mrkup_mode_choosed()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4250,7 +4250,7 @@ void rvln::mrkup_mode_choosed()
 }
 
 
-void rvln::mrkup_header()
+void CTEA::mrkup_header()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4278,7 +4278,7 @@ void rvln::mrkup_header()
 }
 
 
-void rvln::mrkup_align()
+void CTEA::mrkup_align()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4307,7 +4307,7 @@ void rvln::mrkup_align()
 }
 
 
-void rvln::nav_goto_right_tab()
+void CTEA::nav_goto_right_tab()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4323,7 +4323,7 @@ void rvln::nav_goto_right_tab()
 }
 
 
-void rvln::nav_goto_left_tab()
+void CTEA::nav_goto_left_tab()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4339,7 +4339,7 @@ void rvln::nav_goto_left_tab()
 }
 
 
-void rvln::fn_filter_rm_less_than()
+void CTEA::fn_filter_rm_less_than()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4351,7 +4351,7 @@ void rvln::fn_filter_rm_less_than()
 }
 
 
-void rvln::fn_filter_rm_greater_than()
+void CTEA::fn_filter_rm_greater_than()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4363,7 +4363,7 @@ void rvln::fn_filter_rm_greater_than()
 }
 
 
-void rvln::fn_filter_rm_duplicates()
+void CTEA::fn_filter_rm_duplicates()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4375,7 +4375,7 @@ void rvln::fn_filter_rm_duplicates()
 }
 
 
-void rvln::fn_filter_rm_empty()
+void CTEA::fn_filter_rm_empty()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4387,7 +4387,7 @@ void rvln::fn_filter_rm_empty()
 }
 
 
-void rvln::fn_extract_words()
+void CTEA::fn_extract_words()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4456,7 +4456,7 @@ QString toggle_fname_header_source (const QString &fileName)
 }
 
 
-void rvln::nav_toggle_hs()
+void CTEA::nav_toggle_hs()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4507,7 +4507,7 @@ QString morse_to_lang (const QString &s, const QString &lang)
 }
 
 
-void rvln::fn_morse_from_en()
+void CTEA::fn_morse_from_en()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4517,7 +4517,7 @@ void rvln::fn_morse_from_en()
 }
 
 
-void rvln::fn_morse_to_en()
+void CTEA::fn_morse_to_en()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4527,7 +4527,7 @@ void rvln::fn_morse_to_en()
 }
 
 
-void rvln::fn_morse_from_ru()
+void CTEA::fn_morse_from_ru()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4537,7 +4537,7 @@ void rvln::fn_morse_from_ru()
 }
 
 
-void rvln::fn_morse_to_ru()
+void CTEA::fn_morse_to_ru()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4547,14 +4547,14 @@ void rvln::fn_morse_to_ru()
 }
 
 
-void rvln::nav_focus_to_fif()
+void CTEA::nav_focus_to_fif()
 {
   last_action = qobject_cast<QAction *>(sender());
   fif->setFocus (Qt::OtherFocusReason);
 }
 
 
-void rvln::nav_focus_to_editor()
+void CTEA::nav_focus_to_editor()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4564,7 +4564,7 @@ void rvln::nav_focus_to_editor()
 }
 
 
-void rvln::edit_copy_current_fname()
+void CTEA::edit_copy_current_fname()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4574,7 +4574,7 @@ void rvln::edit_copy_current_fname()
 }
 
 
-void rvln::fn_insert_date()
+void CTEA::fn_insert_date()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4584,7 +4584,7 @@ void rvln::fn_insert_date()
 }
 
 
-void rvln::fn_insert_time()
+void CTEA::fn_insert_time()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4594,7 +4594,7 @@ void rvln::fn_insert_time()
 }
 
 
-void rvln::fn_rm_formatting_at_each_line()
+void CTEA::fn_rm_formatting_at_each_line()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4649,7 +4649,7 @@ int get_arab_num (std::string rom_str)
 }
 
 
-void rvln::fn_number_arabic_to_roman()
+void CTEA::fn_number_arabic_to_roman()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4659,7 +4659,7 @@ void rvln::fn_number_arabic_to_roman()
 }
 
 
-void rvln::fn_number_roman_to_arabic()
+void CTEA::fn_number_roman_to_arabic()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4669,7 +4669,7 @@ void rvln::fn_number_roman_to_arabic()
 }
 
 
-void rvln::help_show_gpl()
+void CTEA::help_show_gpl()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4679,7 +4679,7 @@ void rvln::help_show_gpl()
 }
 
 
-void rvln::update_dyn_menus()
+void CTEA::update_dyn_menus()
 {
   update_templates();
   update_snippets();
@@ -4693,14 +4693,14 @@ void rvln::update_dyn_menus()
 }
 
 
-void rvln::file_open_bookmarks_file()
+void CTEA::file_open_bookmarks_file()
 {
   last_action = qobject_cast<QAction *>(sender());
   documents->open_file (fname_bookmarks, "UTF-8");
 }
 
 
-void rvln::file_open_programs_file()
+void CTEA::file_open_programs_file()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4720,7 +4720,7 @@ void rvln::file_open_programs_file()
 }
 
 
-void rvln::process_readyReadStandardOutput()
+void CTEA::process_readyReadStandardOutput()
 {
   QProcess *p = qobject_cast<QProcess *>(sender());
   QByteArray a = p->readAllStandardOutput().data();
@@ -4733,7 +4733,7 @@ void rvln::process_readyReadStandardOutput()
 }
 
 
-void rvln::file_open_program()
+void CTEA::file_open_program()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4779,7 +4779,7 @@ void rvln::file_open_program()
 }
 
 
-void rvln::update_programs()
+void CTEA::update_programs()
 {
   if (! file_exists (fname_programs))
      return;
@@ -4799,7 +4799,7 @@ void rvln::update_programs()
 }
 
 
-void rvln::fn_insert_template_html()
+void CTEA::fn_insert_template_html()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4809,7 +4809,7 @@ void rvln::fn_insert_template_html()
 }
 
 
-void rvln::fn_insert_template_tea()
+void CTEA::fn_insert_template_tea()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4819,7 +4819,7 @@ void rvln::fn_insert_template_tea()
 }
 
 
-void rvln::fn_insert_template_html5()
+void CTEA::fn_insert_template_html5()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4829,7 +4829,7 @@ void rvln::fn_insert_template_html5()
 }
 
 
-void rvln::view_hide_error_marks()
+void CTEA::view_hide_error_marks()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4849,7 +4849,7 @@ void rvln::view_hide_error_marks()
 }
 
 
-void rvln::fn_rm_formatting()
+void CTEA::fn_rm_formatting()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4859,7 +4859,7 @@ void rvln::fn_rm_formatting()
 }
 
 
-void rvln::fn_rm_compress()
+void CTEA::fn_rm_compress()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4877,7 +4877,7 @@ void rvln::fn_rm_compress()
 }
 
 
-void rvln::view_toggle_fs()
+void CTEA::view_toggle_fs()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4885,7 +4885,7 @@ void rvln::view_toggle_fs()
 }
 
 
-void rvln::help_show_news()
+void CTEA::help_show_news()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4899,7 +4899,7 @@ void rvln::help_show_news()
 }
 
 
-void rvln::help_show_changelog()
+void CTEA::help_show_changelog()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4909,7 +4909,7 @@ void rvln::help_show_changelog()
 }
 
 
-void rvln::help_show_todo()
+void CTEA::help_show_todo()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5028,7 +5028,7 @@ CAboutWindow::CAboutWindow()
 }
 
 
-void rvln::cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus)
+void CTEA::cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus)
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -5045,7 +5045,7 @@ void rvln::cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus)
 }
 
 
-void rvln::update_scripts()
+void CTEA::update_scripts()
 {
   menu_fn_scripts->clear();
 
@@ -5057,7 +5057,7 @@ void rvln::update_scripts()
 }
 
 
-void rvln::fn_run_script()
+void CTEA::fn_run_script()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5106,7 +5106,7 @@ void rvln::fn_run_script()
 }
 
 
-void rvln::cb_button_saves_as()
+void CTEA::cb_button_saves_as()
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -5146,7 +5146,7 @@ void rvln::cb_button_saves_as()
 }
 
 
-void rvln::fman_home()
+void CTEA::fman_home()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5162,7 +5162,7 @@ void rvln::fman_home()
 }
 
 
-void rvln::fman_add_bmk()
+void CTEA::fman_add_bmk()
 {
   sl_places_bmx.prepend (ed_fman_path->text());
   qstring_save (fname_places_bookmarks, sl_places_bmx.join ("\n"));
@@ -5170,7 +5170,7 @@ void rvln::fman_add_bmk()
 }
 
 
-void rvln::fman_del_bmk()
+void CTEA::fman_del_bmk()
 {
   int i = lv_places->currentRow();
   if (i < 5)
@@ -5187,13 +5187,13 @@ void rvln::fman_del_bmk()
 }
 
 
-void rvln::fman_naventry_confirm()
+void CTEA::fman_naventry_confirm()
 {
   fman->nav (ed_fman_path->text());
 }
 
 
-void rvln::fman_places_itemActivated (QListWidgetItem *item)
+void CTEA::fman_places_itemActivated (QListWidgetItem *item)
 {
   int index = lv_places->currentRow();
 
@@ -5231,7 +5231,7 @@ void rvln::fman_places_itemActivated (QListWidgetItem *item)
 }
 
 
-void rvln::update_places_bookmarks()
+void CTEA::update_places_bookmarks()
 {
   lv_places->clear();
 
@@ -5260,7 +5260,7 @@ void rvln::update_places_bookmarks()
 }
 
 
-void rvln::fman_open()
+void CTEA::fman_open()
 {
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
@@ -5312,7 +5312,7 @@ void rvln::fman_open()
 }
 
 
-void rvln::fman_create_dir()
+void CTEA::fman_create_dir()
 {
   bool ok;
   QString newdir = QInputDialog::getText (this, tr ("Enter the name"),
@@ -5329,7 +5329,7 @@ void rvln::fman_create_dir()
 }
 
 
-void rvln::fn_convert_quotes_angle()
+void CTEA::fn_convert_quotes_angle()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5343,7 +5343,7 @@ void rvln::fn_convert_quotes_angle()
 }
 
 
-void rvln::fn_convert_quotes_curly()
+void CTEA::fn_convert_quotes_curly()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5357,7 +5357,7 @@ void rvln::fn_convert_quotes_curly()
 }
 
 
-void rvln::fn_convert_quotes_tex_curly()
+void CTEA::fn_convert_quotes_tex_curly()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5371,7 +5371,7 @@ void rvln::fn_convert_quotes_tex_curly()
 }
 
 
-void rvln::fn_convert_quotes_tex_angle_01()
+void CTEA::fn_convert_quotes_tex_angle_01()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5385,7 +5385,7 @@ void rvln::fn_convert_quotes_tex_angle_01()
 }
 
 
-void rvln::fn_convert_quotes_tex_angle_02()
+void CTEA::fn_convert_quotes_tex_angle_02()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5399,7 +5399,7 @@ void rvln::fn_convert_quotes_tex_angle_02()
 }
 
 
-void rvln::fn_enum()
+void CTEA::fn_enum()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5443,7 +5443,7 @@ void rvln::fn_enum()
 }
 
 
-void rvln::view_stay_on_top()
+void CTEA::view_stay_on_top()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5455,7 +5455,7 @@ void rvln::view_stay_on_top()
 }
 
 
-void rvln::update_sessions()
+void CTEA::update_sessions()
 {
   menu_file_sessions->clear();
   create_menu_from_dir (this,
@@ -5466,7 +5466,7 @@ void rvln::update_sessions()
 }
 
 
-void rvln::file_open_session()
+void CTEA::file_open_session()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5475,7 +5475,7 @@ void rvln::file_open_session()
 }
 
 
-void rvln::session_save_as()
+void CTEA::session_save_as()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5495,7 +5495,7 @@ void rvln::session_save_as()
 }
 
 
-QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
+QHash <QString, QString> CTEA::load_eclipse_theme_xml (const QString &fname)
 {
   QHash <QString, QString> result;
 
@@ -5638,7 +5638,7 @@ QHash <QString, QString> rvln::load_eclipse_theme_xml (const QString &fname)
 }
 
 
-void rvln::load_palette (const QString &fileName)
+void CTEA::load_palette (const QString &fileName)
 {
   if (! file_exists (fileName))
       return;
@@ -5652,7 +5652,7 @@ void rvln::load_palette (const QString &fileName)
 }
 
 
-void rvln::file_use_palette()
+void CTEA::file_use_palette()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5670,7 +5670,7 @@ void rvln::file_use_palette()
 }
 
 
-void rvln::update_logmemo_palette()
+void CTEA::update_logmemo_palette()
 {
   int darker_val = settings->value ("darker_val", 100).toInt();
 
@@ -5702,7 +5702,7 @@ void rvln::update_logmemo_palette()
 }
 
 
-void rvln::update_palettes()
+void CTEA::update_palettes()
 {
   menu_view_palettes->clear();
 
@@ -5716,7 +5716,7 @@ void rvln::update_palettes()
 }
 
 
-void rvln::update_hls_noncached()
+void CTEA::update_hls_noncached()
 {
   documents->hls.clear();
 
@@ -5750,7 +5750,7 @@ void rvln::update_hls_noncached()
 
 //весь этот механизм отключен и требует изучения
 /*
-void rvln::update_hls (bool force)
+void CTEA::update_hls (bool force)
 {
   QTime tm;
   tm.start();
@@ -5818,7 +5818,7 @@ void rvln::update_hls (bool force)
 }
 */
 
-void rvln::mrkup_preview_color()
+void CTEA::mrkup_preview_color()
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -5846,14 +5846,14 @@ void rvln::mrkup_preview_color()
 }
 
 
-void rvln::fman_drives_changed (const QString & path)
+void CTEA::fman_drives_changed (const QString & path)
 {
   if (! ui_update)
      fman->nav (path);
 }
 
 
-void rvln::createFman()
+void CTEA::createFman()
 {
   QWidget *wd_fman = new QWidget (this);
 
@@ -6022,7 +6022,7 @@ void rvln::createFman()
 }
 
 
-void rvln::fman_file_activated (const QString &full_path)
+void CTEA::fman_file_activated (const QString &full_path)
 {
   if (file_get_ext (full_path) == ("zip"))
      {
@@ -6098,7 +6098,7 @@ void rvln::fman_file_activated (const QString &full_path)
 }
 
 
-void rvln::fman_dir_changed (const QString &full_path)
+void CTEA::fman_dir_changed (const QString &full_path)
 {
   ui_update = true;
   ed_fman_path->setText (full_path);
@@ -6113,7 +6113,7 @@ void rvln::fman_dir_changed (const QString &full_path)
 }
 
 
-void rvln::fman_current_file_changed (const QString &full_path, const QString &just_name)
+void CTEA::fman_current_file_changed (const QString &full_path, const QString &just_name)
 {
   if (! is_dir (full_path))
      ed_fman_fname->setText (just_name);
@@ -6134,7 +6134,7 @@ void rvln::fman_current_file_changed (const QString &full_path, const QString &j
 }
 
 
-void rvln::fman_rename()
+void CTEA::fman_rename()
 {
   QString fname = fman->get_sel_fname();
   if (fname.isEmpty())
@@ -6162,7 +6162,7 @@ void rvln::fman_rename()
 }
 
 
-void rvln::fman_delete()
+void CTEA::fman_delete()
 {
   QString fname = fman->get_sel_fname();
   if (fname.isEmpty())
@@ -6194,7 +6194,7 @@ void rvln::fman_delete()
 }
 
 
-void rvln::fm_hashsum_md5()
+void CTEA::fm_hashsum_md5()
 {
   QString filename = fman->get_sel_fname();
   if (! file_exists (filename))
@@ -6208,7 +6208,7 @@ void rvln::fm_hashsum_md5()
 }
 
 
-void rvln::fm_hashsum_md4()
+void CTEA::fm_hashsum_md4()
 {
   QCryptographicHash h (QCryptographicHash::Md4);
   QString filename = fman->get_sel_fname();
@@ -6222,7 +6222,7 @@ void rvln::fm_hashsum_md4()
 }
 
 
-void rvln::fm_hashsum_sha1()
+void CTEA::fm_hashsum_sha1()
 {
   QString filename = fman->get_sel_fname();
   if (! file_exists (filename))
@@ -6237,7 +6237,7 @@ void rvln::fm_hashsum_sha1()
 
 
 #if QT_VERSION >= 0x050000
-void rvln::fm_hashsum_sha224()
+void CTEA::fm_hashsum_sha224()
 {
   QString filename = fman->get_sel_fname();
   if (! file_exists (filename))
@@ -6251,7 +6251,7 @@ void rvln::fm_hashsum_sha224()
 }
 
 
-void rvln::fm_hashsum_sha384()
+void CTEA::fm_hashsum_sha384()
 {
   QString filename = fman->get_sel_fname();
   if (! file_exists (filename))
@@ -6265,7 +6265,7 @@ void rvln::fm_hashsum_sha384()
 }
 
 
-void rvln::fm_hashsum_sha256()
+void CTEA::fm_hashsum_sha256()
 {
   QString filename = fman->get_sel_fname();
   if (! file_exists (filename))
@@ -6279,7 +6279,7 @@ void rvln::fm_hashsum_sha256()
 }
 
 
-void rvln::fm_hashsum_sha512()
+void CTEA::fm_hashsum_sha512()
 {
   QString filename = fman->get_sel_fname();
   if (! file_exists (filename))
@@ -6297,7 +6297,7 @@ void rvln::fm_hashsum_sha512()
 
 
 
-void rvln::fm_hashsum_sha3_224()
+void CTEA::fm_hashsum_sha3_224()
 {
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
   QString filename = fman->get_sel_fname();
@@ -6314,7 +6314,7 @@ void rvln::fm_hashsum_sha3_224()
 }
 
 
-void rvln::fm_hashsum_sha3_256()
+void CTEA::fm_hashsum_sha3_256()
 {
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
   QString filename = fman->get_sel_fname();
@@ -6331,7 +6331,7 @@ void rvln::fm_hashsum_sha3_256()
 }
 
 
-void rvln::fm_hashsum_sha3_384()
+void CTEA::fm_hashsum_sha3_384()
 {
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
   QString filename = fman->get_sel_fname();
@@ -6348,7 +6348,7 @@ void rvln::fm_hashsum_sha3_384()
 }
 
 
-void rvln::fm_hashsum_sha3_512()
+void CTEA::fm_hashsum_sha3_512()
 {
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
   QString filename = fman->get_sel_fname();
@@ -6365,7 +6365,7 @@ void rvln::fm_hashsum_sha3_512()
 }
 
 
-void rvln::fm_hashsum_keccak_224()
+void CTEA::fm_hashsum_keccak_224()
 {
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
   QString filename = fman->get_sel_fname();
@@ -6382,7 +6382,7 @@ void rvln::fm_hashsum_keccak_224()
 }
 
 
-void rvln::fm_hashsum_keccak_256()
+void CTEA::fm_hashsum_keccak_256()
 {
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
   QString filename = fman->get_sel_fname();
@@ -6399,7 +6399,7 @@ void rvln::fm_hashsum_keccak_256()
 }
 
 
-void rvln::fm_hashsum_keccak_384()
+void CTEA::fm_hashsum_keccak_384()
 {
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
   QString filename = fman->get_sel_fname();
@@ -6416,7 +6416,7 @@ void rvln::fm_hashsum_keccak_384()
 }
 
 
-void rvln::fm_hashsum_keccak_512()
+void CTEA::fm_hashsum_keccak_512()
 {
 #if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 10)
   QString filename = fman->get_sel_fname();
@@ -6433,13 +6433,13 @@ void rvln::fm_hashsum_keccak_512()
 }
 
 
-void rvln::fman_refresh()
+void CTEA::fman_refresh()
 {
   fman->refresh();
 }
 
 
-void rvln::fm_full_info()
+void CTEA::fm_full_info()
 {
   QString fname;
 
@@ -6502,7 +6502,7 @@ void rvln::fm_full_info()
 }
 
 
-void rvln::file_reload()
+void CTEA::file_reload()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6547,7 +6547,7 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
 }
 
 
-void rvln::file_reload_enc_itemDoubleClicked (QListWidgetItem *item)
+void CTEA::file_reload_enc_itemDoubleClicked (QListWidgetItem *item)
 {
   CDocument *d = documents->get_current();
   if (d)
@@ -6555,7 +6555,7 @@ void rvln::file_reload_enc_itemDoubleClicked (QListWidgetItem *item)
 }
 
 
-void rvln::file_reload_enc()
+void CTEA::file_reload_enc()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6573,7 +6573,7 @@ void rvln::file_reload_enc()
 }
 
 
-void rvln::handle_args()
+void CTEA::handle_args()
 {
   QStringList l = qApp->arguments();
   int size = l.size();
@@ -6626,7 +6626,7 @@ bool CStrIntPair_bigger_than_str_len (CStrIntPair *o1, CStrIntPair *o2)
 
 
 
-void rvln::run_unitaz (int mode)
+void CTEA::run_unitaz (int mode)
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -6696,21 +6696,21 @@ void rvln::run_unitaz (int mode)
 }
 
 
-void rvln::fn_get_words_count()
+void CTEA::fn_get_words_count()
 {
   last_action = qobject_cast<QAction *>(sender());
   run_unitaz (0);
 }
 
 
-void rvln::fn_unitaz_abc()
+void CTEA::fn_unitaz_abc()
 {
   last_action = qobject_cast<QAction *>(sender());
   run_unitaz (1);
 }
 
 
-void rvln::fn_unitaz_len()
+void CTEA::fn_unitaz_len()
 {
   last_action = qobject_cast<QAction *>(sender());
   run_unitaz (2);
@@ -6724,7 +6724,7 @@ CStrIntPair::CStrIntPair (const QString &s, int i): QObject()
 }
 
 
-void rvln::create_markup_hash()
+void CTEA::create_markup_hash()
 {
   CMarkupPair *p = new CMarkupPair;
 
@@ -6827,7 +6827,7 @@ void rvln::create_markup_hash()
 }
 
 
-void rvln::count_substring (bool use_regexp)
+void CTEA::count_substring (bool use_regexp)
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -6869,21 +6869,21 @@ void rvln::count_substring (bool use_regexp)
 }
 
 
-void rvln::fn_count()
+void CTEA::fn_count()
 {
   last_action = qobject_cast<QAction *>(sender());
   count_substring (false);
 }
 
 
-void rvln::fn_count_rx()
+void CTEA::fn_count_rx()
 {
   last_action = qobject_cast<QAction *>(sender());
   count_substring (true);
 }
 
 
-void rvln::read_search_options()
+void CTEA::read_search_options()
 {
   menu_find_whole_words->setChecked (settings->value ("find_whole_words", "0").toBool());
   menu_find_case->setChecked (settings->value ("find_case", "0").toBool());
@@ -6893,7 +6893,7 @@ void rvln::read_search_options()
 }
 
 
-void rvln::write_search_options()
+void CTEA::write_search_options()
 {
   settings->setValue ("find_whole_words", menu_find_whole_words->isChecked());
   settings->setValue ("find_case", menu_find_case->isChecked());
@@ -6903,7 +6903,7 @@ void rvln::write_search_options()
 }
 
 
-void rvln::main_tab_page_changed (int index)
+void CTEA::main_tab_page_changed (int index)
 {
   if (idx_prev == idx_tab_fman)
      if (img_viewer && img_viewer->window_mini.isVisible())
@@ -6938,7 +6938,7 @@ void rvln::main_tab_page_changed (int index)
 }
 
 
-QString rvln::fif_get_text()
+QString CTEA::fif_get_text()
 {
   QString t = fif->text();
 
@@ -6959,7 +6959,7 @@ QString rvln::fif_get_text()
 }
 
 
-void rvln::fn_rm_trailing_spaces()
+void CTEA::fn_rm_trailing_spaces()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6990,7 +6990,7 @@ void rvln::fn_rm_trailing_spaces()
 }
 
 
-void rvln::fman_convert_images (bool by_side, int value)
+void CTEA::fman_convert_images (bool by_side, int value)
 {
   srand (QTime::currentTime().msec());
 
@@ -7080,7 +7080,7 @@ void rvln::fman_convert_images (bool by_side, int value)
 }
 
 
-void rvln::fman_img_conv_by_side()
+void CTEA::fman_img_conv_by_side()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7090,7 +7090,7 @@ void rvln::fman_img_conv_by_side()
 }
 
 
-void rvln::fman_img_conv_by_percent()
+void CTEA::fman_img_conv_by_percent()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7100,7 +7100,7 @@ void rvln::fman_img_conv_by_percent()
 }
 
 
-void rvln::fn_escape()
+void CTEA::fn_escape()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7120,7 +7120,7 @@ void rvln::fn_escape()
 }
 
 
-void rvln::fman_add_to_zip()
+void CTEA::fman_add_to_zip()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7146,7 +7146,7 @@ void rvln::fman_add_to_zip()
 }
 
 
-void rvln::fman_create_zip()
+void CTEA::fman_create_zip()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7169,14 +7169,14 @@ void rvln::fman_create_zip()
 }
 
 
-void rvln::fman_save_zip()
+void CTEA::fman_save_zip()
 {
   fman->zipper.pack_prepared();
   fman->refresh();
 }
 
 
-void rvln::fman_preview_image()
+void CTEA::fman_preview_image()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7199,7 +7199,7 @@ void rvln::fman_preview_image()
 }
 
 
-void rvln::ed_indent()
+void CTEA::ed_indent()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7209,7 +7209,7 @@ void rvln::ed_indent()
 }
 
 
-void rvln::ed_unindent()
+void CTEA::ed_unindent()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7219,7 +7219,7 @@ void rvln::ed_unindent()
 }
 
 
-void rvln::fn_sort_casecareless()
+void CTEA::fn_sort_casecareless()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7232,7 +7232,7 @@ void rvln::fn_sort_casecareless()
 }
 
 
-void rvln::fman_fname_entry_confirm()
+void CTEA::fman_fname_entry_confirm()
 {
   if (fm_entry_mode == FM_ENTRY_MODE_OPEN)
      fman_open();
@@ -7242,7 +7242,7 @@ void rvln::fman_fname_entry_confirm()
 }
 
 
-void rvln::update_view_hls()
+void CTEA::update_view_hls()
 {
   menu_view_hl->clear();
 
@@ -7257,7 +7257,7 @@ void rvln::update_view_hls()
 }
 
 
-void rvln::file_use_hl()
+void CTEA::file_use_hl()
 {
   last_action = qobject_cast<QAction *>(sender());
   QAction *a = qobject_cast<QAction *>(sender());
@@ -7268,7 +7268,7 @@ void rvln::file_use_hl()
 }
 
 
-void rvln::fn_strip_html_tags()
+void CTEA::fn_strip_html_tags()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7290,7 +7290,7 @@ void rvln::fn_strip_html_tags()
 }
 
 
-void rvln::fn_number_decimal_to_binary()
+void CTEA::fn_number_decimal_to_binary()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7300,7 +7300,7 @@ void rvln::fn_number_decimal_to_binary()
 }
 
 
-void rvln::fn_number_flip_bits()
+void CTEA::fn_number_flip_bits()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7322,7 +7322,7 @@ void rvln::fn_number_flip_bits()
 }
 
 
-void rvln::fn_use_table()
+void CTEA::fn_use_table()
 {
   last_action = qobject_cast<QAction *>(sender());
   QAction *a = qobject_cast<QAction *>(sender());
@@ -7366,7 +7366,7 @@ void rvln::fn_use_table()
 }
 
 
-void rvln::update_tables()
+void CTEA::update_tables()
 {
   menu_fn_tables->clear();
 
@@ -7378,7 +7378,7 @@ void rvln::update_tables()
 }
 
 
-void rvln::fn_binary_to_decimal()
+void CTEA::fn_binary_to_decimal()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7388,7 +7388,7 @@ void rvln::fn_binary_to_decimal()
 }
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-void rvln::cmb_spellchecker_currentIndexChanged (int)
+void CTEA::cmb_spellchecker_currentIndexChanged (int)
 {
   QComboBox *cmb = qobject_cast<QComboBox*>(sender());
   QString text = cmb->currentText(); 
@@ -7420,7 +7420,7 @@ void rvln::cmb_spellchecker_currentIndexChanged (int)
 
 
 #ifdef HUNSPELL_ENABLE
-void rvln::pb_choose_hunspell_path_clicked()
+void CTEA::pb_choose_hunspell_path_clicked()
 {
   QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), hunspell_default_dict_path(),
                                                     QFileDialog::ShowDirsOnly |
@@ -7443,7 +7443,7 @@ void rvln::pb_choose_hunspell_path_clicked()
 #ifdef ASPELL_ENABLE
 //#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
-void rvln::pb_choose_aspell_path_clicked()
+void CTEA::pb_choose_aspell_path_clicked()
 {
   QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/",
                                                     QFileDialog::ShowDirsOnly |
@@ -7465,7 +7465,7 @@ void rvln::pb_choose_aspell_path_clicked()
 
 
 
-void rvln::file_find_obsolete_paths()
+void CTEA::file_find_obsolete_paths()
 {
   QStringList l_bookmarks = qstring_load (fname_bookmarks).split ("\n");
 
@@ -7483,7 +7483,7 @@ void rvln::file_find_obsolete_paths()
 }
 
 
-void rvln::fn_filter_delete_by_sep (bool mode)
+void CTEA::fn_filter_delete_by_sep (bool mode)
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -7513,21 +7513,21 @@ void rvln::fn_filter_delete_by_sep (bool mode)
 }
 
 
-void rvln::fn_filter_delete_before_sep()
+void CTEA::fn_filter_delete_before_sep()
 {
   last_action = qobject_cast<QAction *>(sender());
   fn_filter_delete_by_sep (true);
 }
 
 
-void rvln::fn_filter_delete_after_sep()
+void CTEA::fn_filter_delete_after_sep()
 {
   last_action = qobject_cast<QAction *>(sender());
   fn_filter_delete_by_sep (false);
 }
 
 
-void rvln::fman_mk_gallery()
+void CTEA::fman_mk_gallery()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7630,7 +7630,7 @@ void rvln::fman_mk_gallery()
 }
 
 
-void rvln::indent_by_first_line()
+void CTEA::indent_by_first_line()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7670,14 +7670,14 @@ void rvln::indent_by_first_line()
 }
 
 
-void rvln::search_in_files_results_dclicked (QListWidgetItem *item)
+void CTEA::search_in_files_results_dclicked (QListWidgetItem *item)
 {
   documents->open_file_triplex (item->text());
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
 
-void rvln::search_in_files()
+void CTEA::search_in_files()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7758,7 +7758,7 @@ void rvln::search_in_files()
 }
 
 
-void rvln::view_use_profile()
+void CTEA::view_use_profile()
 {
   last_action = qobject_cast<QAction *>(sender());
   QAction *a = qobject_cast<QAction *>(sender());
@@ -7801,7 +7801,7 @@ void rvln::view_use_profile()
 }
 
 
-void rvln::profile_save_as()
+void CTEA::profile_save_as()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7845,7 +7845,7 @@ void rvln::profile_save_as()
 }
 
 
-void rvln::update_profiles()
+void CTEA::update_profiles()
 {
   menu_view_profiles->clear();
   create_menu_from_dir (this,
@@ -7856,7 +7856,7 @@ void rvln::update_profiles()
 }
 
 
-void rvln::fman_items_select_by_regexp (bool mode)
+void CTEA::fman_items_select_by_regexp (bool mode)
 {
   QString ft = fif_get_text();
   if (ft.isEmpty())
@@ -7881,21 +7881,21 @@ void rvln::fman_items_select_by_regexp (bool mode)
 }
 
 
-void rvln::fman_select_by_regexp()
+void CTEA::fman_select_by_regexp()
 {
   last_action = qobject_cast<QAction *>(sender());
   fman_items_select_by_regexp (true);
 }
 
 
-void rvln::fman_deselect_by_regexp()
+void CTEA::fman_deselect_by_regexp()
 {
   last_action = qobject_cast<QAction *>(sender());
   fman_items_select_by_regexp (false);
 }
 
 
-void rvln::fman_count_lines_in_selected_files()
+void CTEA::fman_count_lines_in_selected_files()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7920,7 +7920,7 @@ void rvln::fman_count_lines_in_selected_files()
 }
 
 
-void rvln::set_eol_unix()
+void CTEA::set_eol_unix()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7930,7 +7930,7 @@ void rvln::set_eol_unix()
 }
 
 
-void rvln::set_eol_win()
+void CTEA::set_eol_win()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7940,7 +7940,7 @@ void rvln::set_eol_win()
 }
 
 
-void rvln::set_eol_mac()
+void CTEA::set_eol_mac()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7950,7 +7950,7 @@ void rvln::set_eol_mac()
 }
 
 
-void rvln::guess_enc()
+void CTEA::guess_enc()
 {
   QString enc;
   QString fn = fman->get_sel_fname();
@@ -7975,7 +7975,7 @@ void rvln::guess_enc()
 }
 
 
-void rvln::ed_comment()
+void CTEA::ed_comment()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8023,7 +8023,7 @@ void rvln::ed_comment()
 }
 
 
-void rvln::calendar_clicked (const QDate &date)
+void CTEA::calendar_clicked (const QDate &date)
 {
   QString fname = dir_days + "/" + date.toString ("yyyy-MM-dd");
 
@@ -8035,7 +8035,7 @@ void rvln::calendar_clicked (const QDate &date)
 }
 
 
-void rvln::calendar_activated (const QDate &date)
+void CTEA::calendar_activated (const QDate &date)
 {
   QString fname = dir_days + "/" + date.toString ("yyyy-MM-dd");
 
@@ -8067,7 +8067,7 @@ void rvln::calendar_activated (const QDate &date)
 }
 
 
-void rvln::createCalendar()
+void CTEA::createCalendar()
 {
   calendar = new CCalendarWidget (this, dir_days);
 
@@ -8094,13 +8094,13 @@ void rvln::createCalendar()
 }
 
 
-void rvln::calendar_currentPageChanged (int year, int month)
+void CTEA::calendar_currentPageChanged (int year, int month)
 {
   calendar_update();
 }
 
 
-void rvln::calendar_update()
+void CTEA::calendar_update()
 {
   if (settings->value ("start_week_on_sunday", "0").toBool())
      calendar->setFirstDayOfWeek (Qt::Sunday);
@@ -8150,7 +8150,7 @@ void rvln::calendar_update()
 }
 
 
-void rvln::idx_tab_edit_activate()
+void CTEA::idx_tab_edit_activate()
 {
   fileMenu->menuAction()->setVisible (true);
   editMenu->menuAction()->setVisible (true);
@@ -8166,7 +8166,7 @@ void rvln::idx_tab_edit_activate()
 }
 
 
-void rvln::idx_tab_calendar_activate()
+void CTEA::idx_tab_calendar_activate()
 {
   fileMenu->menuAction()->setVisible (true);
   editMenu->menuAction()->setVisible (false);
@@ -8182,7 +8182,7 @@ void rvln::idx_tab_calendar_activate()
 }
 
 
-void rvln::idx_tab_tune_activate()
+void CTEA::idx_tab_tune_activate()
 {
   opt_update_keyb();
 
@@ -8200,7 +8200,7 @@ void rvln::idx_tab_tune_activate()
 }
 
 
-void rvln::idx_tab_fman_activate()
+void CTEA::idx_tab_fman_activate()
 {
   fileMenu->menuAction()->setVisible (true);
   editMenu->menuAction()->setVisible (false);
@@ -8216,7 +8216,7 @@ void rvln::idx_tab_fman_activate()
 }
 
 
-void rvln::idx_tab_learn_activate()
+void CTEA::idx_tab_learn_activate()
 {
   fileMenu->menuAction()->setVisible (true);
   editMenu->menuAction()->setVisible (false);
@@ -8232,7 +8232,7 @@ void rvln::idx_tab_learn_activate()
 }
 
 
-void rvln::cal_add_days()
+void CTEA::cal_add_days()
 {
   QDate selected = calendar->selectedDate();
   selected = selected.addDays (fif_get_text().toInt());
@@ -8240,7 +8240,7 @@ void rvln::cal_add_days()
 }
 
 
-void rvln::cal_add_months()
+void CTEA::cal_add_months()
 {
   QDate selected = calendar->selectedDate();
   selected = selected.addMonths (fif_get_text().toInt());
@@ -8248,7 +8248,7 @@ void rvln::cal_add_months()
 }
 
 
-void rvln::cal_add_years()
+void CTEA::cal_add_years()
 {
   QDate selected = calendar->selectedDate();
   selected = selected.addYears (fif_get_text().toInt());
@@ -8256,19 +8256,19 @@ void rvln::cal_add_years()
 }
 
 
-void rvln::cal_set_date_a()
+void CTEA::cal_set_date_a()
 {
   date1 = calendar->selectedDate();
 }
 
 
-void rvln::cal_set_date_b()
+void CTEA::cal_set_date_b()
 {
   date2 = calendar->selectedDate();
 }
 
 
-void rvln::cal_diff_days()
+void CTEA::cal_diff_days()
 {
   int days = date2.daysTo (date1);
   if (days < 0)
@@ -8278,7 +8278,7 @@ void rvln::cal_diff_days()
 }
 
 
-void rvln::cal_remove()
+void CTEA::cal_remove()
 {
   QString fname = dir_days + "/" + calendar->selectedDate().toString ("yyyy-MM-dd");
   QFile::remove (fname);
@@ -8286,7 +8286,7 @@ void rvln::cal_remove()
 }
 
 
-void rvln::rename_selected()
+void CTEA::rename_selected()
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -8333,7 +8333,7 @@ void rvln::rename_selected()
 }
 
 
-void rvln::update_labels_menu()
+void CTEA::update_labels_menu()
 {
   menu_labels->clear();
 
@@ -8343,7 +8343,7 @@ void rvln::update_labels_menu()
 }
 
 
-void rvln::update_labels_list()
+void CTEA::update_labels_list()
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -8354,7 +8354,7 @@ void rvln::update_labels_list()
 }
 
 
-void rvln::select_label()
+void CTEA::select_label()
 {
   last_action = qobject_cast<QAction *>(sender());
   QAction *Act = qobject_cast<QAction *>(sender());
@@ -8376,7 +8376,7 @@ void rvln::select_label()
 }
 
 
-void rvln::fn_insert_cpp()
+void CTEA::fn_insert_cpp()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8386,7 +8386,7 @@ void rvln::fn_insert_cpp()
 }
 
 
-void rvln::fn_insert_c()
+void CTEA::fn_insert_c()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8402,7 +8402,7 @@ inline bool CFSizeFNameLessThan (CFSizeFName *v1, CFSizeFName *v2)
 }
 
 
-void rvln::mrkup_document_weight()
+void CTEA::mrkup_document_weight()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8455,7 +8455,7 @@ void rvln::mrkup_document_weight()
 }
 
 
-void rvln::fman_unpack_zip()
+void CTEA::fman_unpack_zip()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8487,7 +8487,7 @@ void rvln::fman_unpack_zip()
 }
 
 
-void rvln::fman_zip_info()
+void CTEA::fman_zip_info()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8506,7 +8506,7 @@ void rvln::fman_zip_info()
 }
 
 
-void rvln::cmb_tea_icons_currentIndexChanged (int)
+void CTEA::cmb_tea_icons_currentIndexChanged (int)
 {
   QComboBox *cmb = qobject_cast<QComboBox*>(sender());
   QString text = cmb->currentText(); 
@@ -8519,7 +8519,7 @@ void rvln::cmb_tea_icons_currentIndexChanged (int)
 }
 
 /*
-void rvln::cmb_icon_sizes_currentIndexChanged (const QString &text)
+void CTEA::cmb_icon_sizes_currentIndexChanged (const QString &text)
 {
   settings->setValue ("icon_size", text);
 
@@ -8533,7 +8533,7 @@ void rvln::cmb_icon_sizes_currentIndexChanged (const QString &text)
 
 
 
-void rvln::cmb_icon_sizes_currentIndexChanged (int index)
+void CTEA::cmb_icon_sizes_currentIndexChanged (int index)
 {
 
  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
@@ -8550,14 +8550,14 @@ void rvln::cmb_icon_sizes_currentIndexChanged (int index)
 }
 
 
-void rvln::cmb_ui_tabs_currentIndexChanged (int i)
+void CTEA::cmb_ui_tabs_currentIndexChanged (int i)
 {
   main_tab_widget->setTabPosition (int_to_tabpos (i));
   settings->setValue ("ui_tabs_align", i);
 }
 
 
-void rvln::cmb_docs_tabs_currentIndexChanged (int i)
+void CTEA::cmb_docs_tabs_currentIndexChanged (int i)
 {
   tab_editor->setTabPosition (int_to_tabpos (i));
 
@@ -8565,14 +8565,14 @@ void rvln::cmb_docs_tabs_currentIndexChanged (int i)
 }
 
 
-void rvln::cal_set_to_current()
+void CTEA::cal_set_to_current()
 {
   calendar->showToday();
   calendar->setSelectedDate (QDate::currentDate());
 }
 
 
-void rvln::clipboard_dataChanged()
+void CTEA::clipboard_dataChanged()
 {
   if (! capture_to_storage_file)
      return;
@@ -8598,7 +8598,7 @@ void rvln::clipboard_dataChanged()
 }
 
 
-void rvln::fn_remove_by_regexp()
+void CTEA::fn_remove_by_regexp()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8630,14 +8630,14 @@ void rvln::fn_remove_by_regexp()
 }
 
 
-void rvln::capture_clipboard_to_storage_file()
+void CTEA::capture_clipboard_to_storage_file()
 {
   last_action = qobject_cast<QAction *>(sender());
   capture_to_storage_file = ! capture_to_storage_file;
 }
 
 
-void rvln::set_as_storage_file()
+void CTEA::set_as_storage_file()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8647,7 +8647,7 @@ void rvln::set_as_storage_file()
 }
 
 
-void rvln::copy_to_storage_file()
+void CTEA::copy_to_storage_file()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8665,7 +8665,7 @@ void rvln::copy_to_storage_file()
 }
 
 
-void rvln::cal_moon_mode()
+void CTEA::cal_moon_mode()
 {
   calendar->moon_mode = ! calendar->moon_mode;
   calendar->do_update();
@@ -8674,7 +8674,7 @@ void rvln::cal_moon_mode()
 }
 
 
-void rvln::create_moon_phase_algos()
+void CTEA::create_moon_phase_algos()
 {
   moon_phase_algos.insert (MOON_PHASE_TRIG2, tr ("Trigonometric 2"));
   moon_phase_algos.insert (MOON_PHASE_TRIG1, tr ("Trigonometric 1"));
@@ -8684,7 +8684,7 @@ void rvln::create_moon_phase_algos()
 }
 
 
-void rvln::cal_gen_mooncal()
+void CTEA::cal_gen_mooncal()
 {
   int jdate1 = date1.toJulianDay();
   int jdate2 = date2.toJulianDay();
@@ -8710,7 +8710,7 @@ void rvln::cal_gen_mooncal()
 }
 
 
-void rvln::leaving_tune()
+void CTEA::leaving_tune()
 {
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
@@ -8789,7 +8789,7 @@ void rvln::leaving_tune()
 }
 
 
-QAction* rvln::add_to_menu (QMenu *menu,
+QAction* CTEA::add_to_menu (QMenu *menu,
                             const QString &caption,
                             const char *method,
                             const QString &shortkt,
@@ -8810,26 +8810,26 @@ QAction* rvln::add_to_menu (QMenu *menu,
 }
 
 
-void rvln::search_fuzzy_mode()
+void CTEA::search_fuzzy_mode()
 {
   menu_find_whole_words->setChecked (false);
   menu_find_regexp->setChecked (false);;
 }
 
 
-void rvln::search_regexp_mode()
+void CTEA::search_regexp_mode()
 {
   menu_find_fuzzy->setChecked (false);
 }
 
 
-void rvln::search_whole_words_mode()
+void CTEA::search_whole_words_mode()
 {
   menu_find_fuzzy->setChecked (false);
 }
 
 
-void rvln::search_from_cursor_mode()
+void CTEA::search_from_cursor_mode()
 {
   settings->setValue ("find_from_cursor", menu_find_from_cursor->isChecked());
 }
@@ -8870,11 +8870,11 @@ void CDarkerWindow::slot_valueChanged (int value)
   settings->setValue ("darker_val", corrected_val);
 
   documents->apply_settings();
-  mainWindow->update_stylesheet (mainWindow->fname_stylesheet);
+  main_window->update_stylesheet (main_window->fname_stylesheet);
 }
 
 
-void rvln::darker()
+void CTEA::darker()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8883,7 +8883,7 @@ void rvln::darker()
 }
 
 
-void rvln::fn_stat_words_lengths()
+void CTEA::fn_stat_words_lengths()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8922,7 +8922,7 @@ void rvln::fn_stat_words_lengths()
 }
 
 
-void rvln::file_notes()
+void CTEA::file_notes()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8942,7 +8942,7 @@ void rvln::file_notes()
 }
 
 
-void rvln::update_stylesheet (const QString &f)
+void CTEA::update_stylesheet (const QString &f)
 {
 //Update paletted
 
@@ -9038,7 +9038,7 @@ void rvln::update_stylesheet (const QString &f)
 }
 
 
-QIcon rvln::get_theme_icon (const QString &name)
+QIcon CTEA::get_theme_icon (const QString &name)
 {
   QString fname = theme_dir + "icons/" + name;
 
@@ -9049,7 +9049,7 @@ QIcon rvln::get_theme_icon (const QString &name)
 }
 
 
-QString rvln::get_theme_icon_fname (const QString &name)
+QString CTEA::get_theme_icon_fname (const QString &name)
 {
   QString fname = theme_dir + "icons/" + name;
 
@@ -9060,7 +9060,7 @@ QString rvln::get_theme_icon_fname (const QString &name)
 }
 
 
-void rvln::view_use_theme()
+void CTEA::view_use_theme()
 {
   last_action = qobject_cast<QAction *>(sender());
   QAction *a = qobject_cast<QAction *>(sender());
@@ -9127,7 +9127,7 @@ void create_menu_from_themes (QObject *handler,
 }
 
 
-void rvln::update_themes()
+void CTEA::update_themes()
 {
   menu_view_themes->clear();
 
@@ -9147,7 +9147,7 @@ void rvln::update_themes()
 
 #ifdef USE_QML_STUFF
 
-void rvln::fn_use_plugin()
+void CTEA::fn_use_plugin()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9270,7 +9270,7 @@ void create_menu_from_plugins (QObject *handler,
 }
 
 
-void rvln::update_plugins()
+void CTEA::update_plugins()
 {
   menu_fn_plugins->clear();
 
@@ -9282,7 +9282,7 @@ void rvln::update_plugins()
 }
 
 
-void rvln::plugins_init()
+void CTEA::plugins_init()
 {
   qml_engine = new QQmlEngine;
 
@@ -9301,9 +9301,9 @@ void rvln::plugins_init()
 }
 
 
-void rvln::plugins_done()
+void CTEA::plugins_done()
 {
-// qDebug() << "rvln::plugins_done()";
+// qDebug() << "CTEA::plugins_done()";
 //закрыть все плагины из списка (при созд. плагина добавляем указатель в список)
 //и потом
 
@@ -9324,7 +9324,7 @@ CPluginListItem::CPluginListItem (const QString &plid, CQQuickWindow *wnd)
 #endif
 
 
-void rvln::receiveMessage (const QString &msg)
+void CTEA::receiveMessage (const QString &msg)
 {
   if (msg.isEmpty())
      return;
@@ -9342,7 +9342,7 @@ bool latex_table_sort_fn (const QStringList &l1, const QStringList &l2)
 }
 
 
-void rvln::fn_sort_latex_table_by_col_abc()
+void CTEA::fn_sort_latex_table_by_col_abc()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9396,7 +9396,7 @@ void rvln::fn_sort_latex_table_by_col_abc()
 }
 
 
-void rvln::fn_table_swap_cells()
+void CTEA::fn_table_swap_cells()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9458,7 +9458,7 @@ void rvln::fn_table_swap_cells()
 }
 
 
-void rvln::fn_table_delete_cells()
+void CTEA::fn_table_delete_cells()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9512,7 +9512,7 @@ void rvln::fn_table_delete_cells()
 }
 
 
-void rvln::fn_table_copy_cells()
+void CTEA::fn_table_copy_cells()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9601,7 +9601,7 @@ MyProxyStyle::MyProxyStyle (const QString & key)
 
 
 /*
-void rvln::keyPressEvent (QKeyEvent *event)
+void CTEA::keyPressEvent (QKeyEvent *event)
 {
    if (event->key() == Qt::Key_F10)
       //fileMenu->setFocus(Qt::PopupFocusReason);
@@ -9618,7 +9618,7 @@ void rvln::keyPressEvent (QKeyEvent *event)
 
 
 
-void rvln::fn_sum_by_last_col()
+void CTEA::fn_sum_by_last_col()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9655,7 +9655,7 @@ void rvln::fn_sum_by_last_col()
 }
 
 
-void rvln::search_unmark()
+void CTEA::search_unmark()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9681,7 +9681,7 @@ void rvln::search_unmark()
 }
 
 
-void rvln::search_mark_all()
+void CTEA::search_mark_all()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9776,7 +9776,7 @@ void rvln::search_mark_all()
 }
 
 
-void rvln::scale_image()
+void CTEA::scale_image()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9877,7 +9877,7 @@ void rvln::scale_image()
 }
 
 
-void rvln::recentoff()
+void CTEA::recentoff()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9886,14 +9886,14 @@ void rvln::recentoff()
 }
 
 
-void rvln::repeat()
+void CTEA::repeat()
 {
   if (last_action)
       last_action->trigger();
 }
 
 
-void rvln::ed_block_start()
+void CTEA::ed_block_start()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9911,7 +9911,7 @@ void rvln::ed_block_start()
 }
 
 
-void rvln::ed_block_end()
+void CTEA::ed_block_end()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9929,7 +9929,7 @@ void rvln::ed_block_end()
 }
 
 
-void rvln::ed_block_copy()
+void CTEA::ed_block_copy()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9944,7 +9944,7 @@ void rvln::ed_block_copy()
 }
 
 
-void rvln::ed_block_paste()
+void CTEA::ed_block_paste()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9954,7 +9954,7 @@ void rvln::ed_block_paste()
 }
 
 
-void rvln::ed_block_cut()
+void CTEA::ed_block_cut()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9964,7 +9964,7 @@ void rvln::ed_block_cut()
 }
 
 
-void rvln::fman_zeropad()
+void CTEA::fman_zeropad()
 {
   QString fiftxt = fif_get_text();
   int finalsize = fiftxt.toInt();
@@ -10019,7 +10019,7 @@ void rvln::fman_zeropad()
 }
 
 
-void rvln::fman_del_n_first_chars()
+void CTEA::fman_del_n_first_chars()
 {
   QString fiftxt = fif_get_text();
   int todel = fiftxt.toInt();
@@ -10051,7 +10051,7 @@ void rvln::fman_del_n_first_chars()
 }
 
 
-void rvln::fman_multreplace()
+void CTEA::fman_multreplace()
 {
   QStringList l = fif_get_text().split ("~");
   if (l.size() < 2)
@@ -10082,7 +10082,7 @@ void rvln::fman_multreplace()
 }
 
 
-void rvln::fman_apply_template()
+void CTEA::fman_apply_template()
 {
   QString fiftxt = fif_get_text();
 
@@ -10125,7 +10125,7 @@ void rvln::fman_apply_template()
 //degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
 //to
 //decimal degrees: 40.446° N 79.982° W
-void rvln::fn_number_dms2dc()
+void CTEA::fn_number_dms2dc()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -10211,7 +10211,7 @@ seconds = 3600 * (decimal_degrees - degrees) - 60 * minites
 //to
 //degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
 
-void rvln::fn_number_dd2dms()
+void CTEA::fn_number_dd2dms()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -10298,7 +10298,7 @@ void rvln::fn_number_dd2dms()
 }
 
 
-void rvln::receiveMessageShared (const QStringList &msg)
+void CTEA::receiveMessageShared (const QStringList &msg)
 {
   for (int i = 0; i < msg.size(); i++)
       documents->open_file (msg[i], "UTF-8");
@@ -10309,7 +10309,7 @@ void rvln::receiveMessageShared (const QStringList &msg)
 }
 
 
-void rvln::text_compare_two_strings()
+void CTEA::text_compare_two_strings()
 {
   last_action = qobject_cast <QAction *>(sender());
 
@@ -10334,7 +10334,7 @@ void rvln::text_compare_two_strings()
 }
 
 
-void rvln::ide_run()
+void CTEA::ide_run()
 {
   if (documents->hash_project.isEmpty())
      return;
@@ -10365,7 +10365,7 @@ void rvln::ide_run()
 }
 
 
-void rvln::ide_build()
+void CTEA::ide_build()
 {
   if (documents->hash_project.isEmpty())
      return;
@@ -10394,7 +10394,7 @@ void rvln::ide_build()
 }
 
 
-void rvln::ide_clean()
+void CTEA::ide_clean()
 {
     if (documents->hash_project.isEmpty())
        return;
@@ -10427,7 +10427,7 @@ void rvln::ide_clean()
 
 
 /*
-void rvln::ide_ctags()
+void CTEA::ide_ctags()
 {
   if (documents->hash_project.isEmpty())
      return;
@@ -10456,7 +10456,7 @@ void rvln::ide_ctags()
 
 
 
-void rvln::ide_gtags()
+void CTEA::ide_gtags()
 {
   if (documents->hash_project.isEmpty())
      return;
@@ -10489,7 +10489,7 @@ void rvln::ide_gtags()
 
 }
 
-void rvln::ide_global_definition()
+void CTEA::ide_global_definition()
 {
   if (documents->hash_project.isEmpty())
      return;
@@ -10576,7 +10576,7 @@ qDebug() << "3";
 }
 
 
-void rvln::ide_global_references()
+void CTEA::ide_global_references()
 {
 
 
@@ -10584,9 +10584,9 @@ void rvln::ide_global_references()
 */
 
 
-void rvln::logmemo_double_click (const QString &txt)
+void CTEA::logmemo_double_click (const QString &txt)
 {
- // std::cout << "rvln::logmemo_double_click txt:" << txt.toStdString() << std::endl;
+ // std::cout << "CTEA::logmemo_double_click txt:" << txt.toStdString() << std::endl;
 
   if (documents->hash_project.isEmpty())
       return;
@@ -10644,9 +10644,9 @@ void rvln::logmemo_double_click (const QString &txt)
 }
 
 
-rvln::~rvln()
+CTEA::~CTEA()
 {
-  cout << "rvln::~rvln()" << endl;
+  cout << "CTEA::~CTEA()" << endl;
 /*
   foreach (CTextListWnd *w, text_window_list)
           {
@@ -10656,7 +10656,7 @@ rvln::~rvln()
 }
 
 
-void rvln::fn_anagram()
+void CTEA::fn_anagram()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -10686,7 +10686,7 @@ void anagram(string input){
 */
 
 
-void rvln::slot_font_logmemo_select()
+void CTEA::slot_font_logmemo_select()
 {
   bool ok;
   QFont font = QFontDialog::getFont(&ok, QFont(settings->value ("logmemo_font", "Monospace").toString(), settings->value ("logmemo_font_size", "12").toInt()), this);
@@ -10700,7 +10700,7 @@ void rvln::slot_font_logmemo_select()
 }
 
 
-void rvln::slot_font_editor_select()
+void CTEA::slot_font_editor_select()
 {
   bool ok;
   QFont font = QFontDialog::getFont(&ok, QFont(settings->value ("editor_font_name", "Serif").toString(), settings->value ("editor_font_size", "16").toInt()), this);
@@ -10713,9 +10713,9 @@ void rvln::slot_font_editor_select()
 }
 
 
-void rvln::slot_font_interface_select()
+void CTEA::slot_font_interface_select()
 {
-  qDebug() << "rvln::slot_font_interface_select()";
+  qDebug() << "CTEA::slot_font_interface_select()";
 
 
 
@@ -10732,7 +10732,7 @@ void rvln::slot_font_interface_select()
 }
 
 
-void rvln::fn_filter_by_repetitions()
+void CTEA::fn_filter_by_repetitions()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -10799,7 +10799,7 @@ void rvln::fn_filter_by_repetitions()
 
 /*
 
-void rvln::fn_filter_by_repetitions()
+void CTEA::fn_filter_by_repetitions()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -10902,7 +10902,7 @@ void rvln::fn_filter_by_repetitions()
 
 */
 
-void rvln::test()
+void CTEA::test()
 {
 
 //anagram (fif_get_text().toStdString());
@@ -10943,7 +10943,7 @@ void rvln::test()
  // int x = str_fuzzy_search_bytwo ("rampage tri sugar freee", "tri", 0);
   //std::cout << x << endl;
 
-  //std::cout << "rvln::test()" << endl;
+  //std::cout << "CTEA::test()" << endl;
 //  CDocument *d = documents->get_current();
   //if (! d)
     // return;

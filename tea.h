@@ -352,9 +352,21 @@ Main menu items
 ===========================
 */
 
+  QMenu *menu_file;
 
-  QMenu *fileMenu;
-  QMenu *editMenu;
+  QMenu *menu_file_actions;
+  QMenu *menu_file_recent;
+
+  QMenu *menu_file_bookmarks;
+  QMenu *menu_file_edit_bookmarks;
+
+  QMenu *menu_file_templates;
+  QMenu *menu_file_sessions;
+  QMenu *menu_file_configs;
+//  QAction *menu_recent_off;
+
+
+  QMenu *menu_edit;
 
   QMenu *menu_ide;
 
@@ -366,12 +378,6 @@ Main menu items
   QMenu *menu_cal_diff;
 
 
-  QMenu *menu_file_edit_bookmarks;
-  QMenu *menu_file_configs;
-  QMenu *menu_file_sessions;
-  QMenu *menu_file_actions;
-  QMenu *menu_file_bookmarks;
-  QMenu *menu_file_templates;
   QMenu *menu_programs;
   QMenu *menu_fn_snippets;
   QMenu *menu_fn_tables;
@@ -393,7 +399,6 @@ Main menu items
   QMenu *menu_functions;
   QMenu *menu_functions_case;
 
-  QMenu *menu_file_recent;
   QMenu *menu_search;
   QMenu *menu_nav;
   QMenu *menu_instr;
@@ -421,10 +426,8 @@ Main menu items
   QToolBar *fifToolBar;
 
   QAction *act_labels;
-
   QAction *act_test;
   QAction *filesAct;
-
   QAction *newAct;
   QAction *openAct;
   QAction *saveAct;
@@ -440,12 +443,10 @@ Main menu items
   QAction *aboutQtAct;
   QAction *menu_find_whole_words;
   QAction *menu_find_from_cursor;
-
   QAction *menu_find_case;
   QAction *menu_find_regexp;
   QAction *menu_find_fuzzy;
 
-  QAction *menu_recent_off;
 
 
 
@@ -725,8 +726,23 @@ Application misc. methods
   void add_to_last_used_charsets (const QString &s);
   void count_substring (bool use_regexp);
   void run_unitaz (int mode);
+  void markup_text (const QString &mode);
+  void fman_items_select_by_regexp (bool mode);
+  void fn_filter_delete_by_sep (bool mode);
 
+  void fman_find();
+  void fman_find_next();
+  void fman_find_prev();
 
+  void opt_shortcuts_find();
+  void opt_shortcuts_find_next();
+  void opt_shortcuts_find_prev();
+
+  void idx_tab_edit_activate();
+  void idx_tab_calendar_activate();
+  void idx_tab_tune_activate();
+  void idx_tab_fman_activate();
+  void idx_tab_learn_activate();
 
 protected:
 
@@ -780,12 +796,73 @@ File manager slots
 
 
 
+
 /*
 ===================
 Main menu callbacks
 ===================
 */
 
+
+/*
+===================
+File menu callbacks
+===================
+*/
+
+
+  void file_new();
+  void file_open();
+  void file_open_at_cursor();
+  void file_last_opened();
+
+  void file_crapbook();
+  void file_notes();
+
+  bool file_save();
+  bool file_save_as();
+
+  void file_save_bak();
+  void file_save_version();
+
+  void file_reload();
+  void file_reload_enc_itemDoubleClicked (QListWidgetItem *item);
+  void file_reload_enc();
+
+  void file_set_eol_unix();
+  void file_set_eol_win();
+  void file_set_eol_mac();
+
+
+  void file_close();
+
+
+  void rename_selected();
+
+  void file_open_bookmarks_file();
+  void file_open_programs_file();
+  void file_find_obsolete_paths();
+
+
+  void file_open_bookmark();
+  void file_open_program();
+  void file_add_to_bookmarks();
+
+  void file_use_template();
+  void file_use_snippet();
+  void file_use_palette();
+  void file_use_hl();
+  void file_open_session();
+
+  void test();
+
+
+
+#ifdef USE_QML_STUFF
+  void fn_use_plugin();
+#endif
+
+  
 
   void repeat();
 
@@ -837,41 +914,10 @@ Main menu callbacks
 
 
 
-
 #ifdef PRINTER_ENABLE
   void file_print();
 #endif
 
-
-  void newFile();
-  void open();
-  void open_at_cursor();
-  void rename_selected();
-
-  void file_reload();
-  void file_reload_enc_itemDoubleClicked (QListWidgetItem *item);
-  void file_reload_enc();
-  void file_open_bookmarks_file();
-  void file_open_programs_file();
-  void file_find_obsolete_paths();
-
-
-  void file_last_opened();
-  void file_open_bookmark();
-  void file_open_program();
-  void file_add_to_bookmarks();
-  void file_crapbook();
-
-  void file_notes();
-
-  void file_use_template();
-  void file_use_snippet();
-  void file_use_palette();
-  void file_use_hl();
-  void file_open_session();
-  void file_save_version();
-  void file_save_bak();
-  void test();
 
   void clipboard_dataChanged();
 
@@ -895,14 +941,11 @@ Main menu callbacks
   void fn_insert_template_html5();
   void fn_insert_template_tea();
 
-  bool save();
-  bool saveAs();
 
   void toggle_wrap();
   void darker();
 
   void about();
-  void close_current();
 
   void ed_block_start();
   void ed_block_end();
@@ -1130,9 +1173,6 @@ Main menu callbacks
   void fman_save_zip();
   void fman_preview_image();
 
-  void set_eol_unix();
-  void set_eol_win();
-  void set_eol_mac();
 
   void fn_stat_words_lengths();
 
@@ -1160,10 +1200,8 @@ Tune page callbacks
 
   void cmb_ui_tabs_currentIndexChanged (int i);
   void cmb_docs_tabs_currentIndexChanged (int i);
-
-  void cmb_icon_sizes_currentIndexChanged (int index);
-
-  void cmb_tea_icons_currentIndexChanged  (int);
+  void cmb_icon_sizes_currentIndexChanged (int i);
+  void cmb_tea_icons_currentIndexChanged  (int i);
 
 
   void pb_assign_hotkey_clicked();
@@ -1177,42 +1215,8 @@ Tune page callbacks
   void slot_font_editor_select();
 
 
-
   void slot_style_currentIndexChanged (int);
 
-
-#ifdef USE_QML_STUFF
-  void fn_use_plugin();
-
-#endif
-
-public:
-
-
-  
-
-
-
-
-  void fn_filter_delete_by_sep (bool mode);
-
-  void fman_items_select_by_regexp (bool mode);
-  void fman_find();
-  void fman_find_next();
-  void fman_find_prev();
-
-
-  void opt_shortcuts_find();
-  void opt_shortcuts_find_next();
-  void opt_shortcuts_find_prev();
-
-  void idx_tab_edit_activate();
-  void idx_tab_calendar_activate();
-  void idx_tab_tune_activate();
-  void idx_tab_fman_activate();
-  void idx_tab_learn_activate();
-
-  void markup_text (const QString &mode);
 };
 
 

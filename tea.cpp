@@ -377,7 +377,7 @@ void CTEA::create_main_widget_splitter()
   tab_editor->setObjectName ("tab_editor");
 
   QPushButton *bt_close = new QPushButton ("X", this);
-  connect (bt_close, SIGNAL(clicked()), this, SLOT(close_current()));
+  connect (bt_close, SIGNAL(clicked()), this, SLOT(file_close()));
   tab_editor->setCornerWidget (bt_close);
 
 
@@ -477,7 +477,7 @@ void CTEA::create_main_widget_docked()
   tab_editor->setObjectName ("tab_editor");
 
   QPushButton *bt_close = new QPushButton ("X", this);
-  connect (bt_close, SIGNAL(clicked()), this, SLOT(close_current()));
+  connect (bt_close, SIGNAL(clicked()), this, SLOT(file_close()));
   tab_editor->setCornerWidget (bt_close);
 
 
@@ -747,7 +747,6 @@ CTEA::CTEA()
   documents->reload_recent_list();
   documents->update_recent_menu();
   documents->log = log;
-//  documents->status_bar = statusBar();
   documents->markup_mode = markup_mode;
   documents->dir_config = dir_config;
   documents->todo.dir_days = dir_days;
@@ -889,7 +888,7 @@ void CTEA::closeEvent (QCloseEvent *event)
 }
 
 
-void CTEA::newFile()
+void CTEA::file_new()
 {
   last_action = qobject_cast<QAction *>(sender());
   documents->create_new();
@@ -897,7 +896,7 @@ void CTEA::newFile()
 }
 
 
-void CTEA::open()
+void CTEA::file_open()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1011,7 +1010,7 @@ void CTEA::open()
 }
 
 
-bool CTEA::save()
+bool CTEA::file_save()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1028,7 +1027,7 @@ bool CTEA::save()
   if (file_exists (d->file_name))
      d->save_with_name (d->file_name, d->charset);
   else
-      return saveAs();
+      return file_save_as();
 
   if (d->file_name == fname_bookmarks)
      update_bookmarks();
@@ -1040,7 +1039,7 @@ bool CTEA::save()
 }
 
 
-bool CTEA::saveAs()
+bool CTEA::file_save_as()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -1179,7 +1178,7 @@ void CTEA::createActions()
 
   newAct->setShortcut (QKeySequence ("Ctrl+N"));
   newAct->setStatusTip (tr ("Create a new file"));
-  connect (newAct, SIGNAL(triggered()), this, SLOT(newFile()));
+  connect (newAct, SIGNAL(triggered()), this, SLOT(file_new()));
 
   QIcon ic_file_open = get_theme_icon ("file-open.png");
   ic_file_open.addFile (get_theme_icon_fname ("file-open-active.png"), QSize(), QIcon::Active);
@@ -1187,7 +1186,7 @@ void CTEA::createActions()
   openAct = new QAction (ic_file_open, tr ("Open file"), this);
 
   openAct->setStatusTip (tr ("Open an existing file"));
-  connect (openAct, SIGNAL(triggered()), this, SLOT(open()));
+  connect (openAct, SIGNAL(triggered()), this, SLOT(file_open()));
 
   QIcon ic_file_save = get_theme_icon ("file-save.png");
   ic_file_save.addFile (get_theme_icon_fname ("file-save-active.png"), QSize(), QIcon::Active);
@@ -1195,11 +1194,11 @@ void CTEA::createActions()
   saveAct = new QAction (ic_file_save, tr ("Save"), this);
   saveAct->setShortcut (QKeySequence ("Ctrl+S"));
   saveAct->setStatusTip (tr ("Save the document to disk"));
-  connect (saveAct, SIGNAL(triggered()), this, SLOT(save()));
+  connect (saveAct, SIGNAL(triggered()), this, SLOT(file_save()));
 
   saveAsAct = new QAction (get_theme_icon ("file-save-as.png"), tr ("Save As"), this);
   saveAsAct->setStatusTip (tr ("Save the document under a new name"));
-  connect (saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
+  connect (saveAsAct, SIGNAL(triggered()), this, SLOT(file_save()));
 
   exitAct = new QAction (tr ("Exit"), this);
   exitAct->setShortcut (QKeySequence ("Ctrl+Q"));
@@ -1249,109 +1248,109 @@ void CTEA::createActions()
 
 void CTEA::createMenus()
 {
-  fileMenu = menuBar()->addMenu (tr ("File"));
-  fileMenu->setTearOffEnabled (true);
+  menu_file = menuBar()->addMenu (tr ("File"));
+  menu_file->setTearOffEnabled (true);
 
-  //fileMenu->addAction (act_test);
+  //menu_file->addAction (act_test);
 
-  fileMenu->addAction (newAct);
-  add_to_menu (fileMenu, tr ("Open"), SLOT(open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
-  add_to_menu (fileMenu, tr ("Last closed file"), SLOT(file_last_opened()));
-  add_to_menu (fileMenu, tr ("Open at cursor"), SLOT(open_at_cursor()), "F2");
-  add_to_menu (fileMenu, tr ("Crapbook"), SLOT(file_crapbook()), "Alt+M");
-  add_to_menu (fileMenu, tr ("Notes"), SLOT(file_notes()));
+  menu_file->addAction (newAct);
+  add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
+  add_to_menu (menu_file, tr ("Last closed file"), SLOT(file_last_opened()));
+  add_to_menu (menu_file, tr ("Open at cursor"), SLOT(file_open_at_cursor()), "F2");
+  add_to_menu (menu_file, tr ("Crapbook"), SLOT(file_crapbook()), "Alt+M");
+  add_to_menu (menu_file, tr ("Notes"), SLOT(file_notes()));
 
-  fileMenu->addSeparator();
+  menu_file->addSeparator();
 
-  fileMenu->addAction (saveAct);
-  fileMenu->addAction (saveAsAct);
+  menu_file->addAction (saveAct);
+  menu_file->addAction (saveAsAct);
 
-  QMenu *tm = fileMenu->addMenu (tr ("Save as different"));
+  QMenu *tm = menu_file->addMenu (tr ("Save as different"));
   tm->setTearOffEnabled (true);
 
   add_to_menu (tm, tr ("Save .bak"), SLOT(file_save_bak()), "Ctrl+B");
   add_to_menu (tm, tr ("Save timestamped version"), SLOT(file_save_version()));
   add_to_menu (tm, tr ("Save session"), SLOT(session_save_as()));
 
-  fileMenu->addSeparator();
+  menu_file->addSeparator();
 
-  menu_file_actions = fileMenu->addMenu (tr ("File actions"));
+  menu_file_actions = menu_file->addMenu (tr ("File actions"));
   add_to_menu (menu_file_actions, tr ("Reload"), SLOT(file_reload()));
   add_to_menu (menu_file_actions, tr ("Reload with encoding"), SLOT(file_reload_enc()));
   menu_file_actions->addSeparator();
-  add_to_menu (menu_file_actions, tr ("Set UNIX end of line"), SLOT(set_eol_unix()));
-  add_to_menu (menu_file_actions, tr ("Set Windows end of line"), SLOT(set_eol_win()));
-  add_to_menu (menu_file_actions, tr ("Set old Mac end of line (CR)"), SLOT(set_eol_mac()));
+  add_to_menu (menu_file_actions, tr ("Set UNIX end of line"), SLOT(file_set_eol_unix()));
+  add_to_menu (menu_file_actions, tr ("Set Windows end of line"), SLOT(file_set_eol_win()));
+  add_to_menu (menu_file_actions, tr ("Set old Mac end of line (CR)"), SLOT(file_set_eol_mac()));
 
 
-  menu_file_recent = fileMenu->addMenu (tr ("Recent files"));
+  menu_file_recent = menu_file->addMenu (tr ("Recent files"));
 
-  menu_file_bookmarks = fileMenu->addMenu (tr ("Bookmarks"));
+  menu_file_bookmarks = menu_file->addMenu (tr ("Bookmarks"));
 
-  menu_file_edit_bookmarks = fileMenu->addMenu (tr ("Edit bookmarks"));
+  menu_file_edit_bookmarks = menu_file->addMenu (tr ("Edit bookmarks"));
   add_to_menu (menu_file_edit_bookmarks, tr ("Add to bookmarks"), SLOT(file_add_to_bookmarks()));
   add_to_menu (menu_file_edit_bookmarks, tr ("Find obsolete paths"), SLOT(file_find_obsolete_paths()));
 
-  menu_file_templates = fileMenu->addMenu (tr ("Templates"));
-  menu_file_sessions = fileMenu->addMenu (tr ("Sessions"));
+  menu_file_templates = menu_file->addMenu (tr ("Templates"));
+  menu_file_sessions = menu_file->addMenu (tr ("Sessions"));
 
-  menu_file_configs = fileMenu->addMenu (tr ("Configs"));
+  menu_file_configs = menu_file->addMenu (tr ("Configs"));
   add_to_menu (menu_file_configs, tr ("Bookmarks list"), SLOT(file_open_bookmarks_file()));
   add_to_menu (menu_file_configs, tr ("Programs list"), SLOT(file_open_programs_file()));
 
-  fileMenu->addSeparator();
+  menu_file->addSeparator();
 
-  menu_recent_off = add_to_menu (fileMenu, tr ("Do not add to recent"), SLOT(recentoff()));
-  menu_recent_off->setCheckable (true);
+  /*menu_recent_off = */add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(recentoff()))->setCheckable (true);
+//  menu_recent_off->setCheckable (true);
 
 #ifdef PRINTER_ENABLE
-  add_to_menu (fileMenu, tr ("Print"), SLOT(file_print()));
+  add_to_menu (menu_file, tr ("Print"), SLOT(file_print()));
 #endif
 
-  add_to_menu (fileMenu, tr ("Close current"), SLOT(close_current()), "Ctrl+W");
+  add_to_menu (menu_file, tr ("Close current"), SLOT(file_close()), "Ctrl+W");
 
-  fileMenu->addAction (exitAct);
+  menu_file->addAction (exitAct);
 
 
-  editMenu = menuBar()->addMenu (tr ("Edit"));
-  editMenu->setTearOffEnabled (true);
+  menu_edit = menuBar()->addMenu (tr ("Edit"));
+  menu_edit->setTearOffEnabled (true);
 
-  editMenu->addAction (cutAct);
-  editMenu->addAction (copyAct);
-  editMenu->addAction (pasteAct);
+  menu_edit->addAction (cutAct);
+  menu_edit->addAction (copyAct);
+  menu_edit->addAction (pasteAct);
 
-  editMenu->addSeparator();
+  menu_edit->addSeparator();
 
-  add_to_menu (editMenu, tr ("Block start"), SLOT(ed_block_start()));
-  add_to_menu (editMenu, tr ("Block end"), SLOT(ed_block_end()));
-  add_to_menu (editMenu, tr ("Copy block"), SLOT(ed_block_copy()));
-  add_to_menu (editMenu, tr ("Paste block"), SLOT(ed_block_paste()));
-  add_to_menu (editMenu, tr ("Cut block"), SLOT(ed_block_cut()));
+  add_to_menu (menu_edit, tr ("Block start"), SLOT(ed_block_start()));
+  add_to_menu (menu_edit, tr ("Block end"), SLOT(ed_block_end()));
+  add_to_menu (menu_edit, tr ("Copy block"), SLOT(ed_block_copy()));
+  add_to_menu (menu_edit, tr ("Paste block"), SLOT(ed_block_paste()));
+  add_to_menu (menu_edit, tr ("Cut block"), SLOT(ed_block_cut()));
 
-  editMenu->addSeparator();
+  menu_edit->addSeparator();
 
-  add_to_menu (editMenu, tr ("Copy current file name"), SLOT(edit_copy_current_fname()));
+  add_to_menu (menu_edit, tr ("Copy current file name"), SLOT(edit_copy_current_fname()));
 
-  editMenu->addSeparator();
+  menu_edit->addSeparator();
 
-  editMenu->addAction (undoAct);
-  editMenu->addAction (redoAct);
+  menu_edit->addAction (undoAct);
+  menu_edit->addAction (redoAct);
 
-  editMenu->addSeparator();
+  menu_edit->addSeparator();
 
-  add_to_menu (editMenu, tr ("Indent (tab)"), SLOT(ed_indent()));
-  add_to_menu (editMenu, tr ("Un-indent (shift+tab)"), SLOT(ed_unindent()));
-  add_to_menu (editMenu, tr ("Indent by first line"), SLOT(indent_by_first_line()));
+  add_to_menu (menu_edit, tr ("Indent (tab)"), SLOT(ed_indent()));
+  add_to_menu (menu_edit, tr ("Un-indent (shift+tab)"), SLOT(ed_unindent()));
+  add_to_menu (menu_edit, tr ("Indent by first line"), SLOT(indent_by_first_line()));
 
-  editMenu->addSeparator();
+  menu_edit->addSeparator();
 
-  add_to_menu (editMenu, tr ("Comment selection"), SLOT(ed_comment()));
+  add_to_menu (menu_edit, tr ("Comment selection"), SLOT(ed_comment()));
 
-  editMenu->addSeparator();
+  menu_edit->addSeparator();
 
-  add_to_menu (editMenu, tr ("Set as storage file"), SLOT(set_as_storage_file()));
-  add_to_menu (editMenu, tr ("Copy to storage file"), SLOT(copy_to_storage_file()));
-  add_to_menu (editMenu, tr ("Start/stop capture clipboard to storage file"), SLOT(capture_clipboard_to_storage_file()));
+  add_to_menu (menu_edit, tr ("Set as storage file"), SLOT(set_as_storage_file()));
+  add_to_menu (menu_edit, tr ("Copy to storage file"), SLOT(copy_to_storage_file()));
+  add_to_menu (menu_edit, tr ("Start/stop capture clipboard to storage file"), SLOT(capture_clipboard_to_storage_file()));
 
 
 
@@ -1886,7 +1885,7 @@ void CTEA::pageChanged (int index)
 }
 
 
-void CTEA::close_current()
+void CTEA::file_close()
 {
   last_action = qobject_cast<QAction *>(sender());
   documents->close_current();
@@ -3060,8 +3059,6 @@ void CTEA::createOptions()
   page_keyboard->show();
 
   idx_tab_keyboard = tab_options->addTab (page_keyboard, tr ("Keyboard"));
-
-//  connect (tab_options, SIGNAL(currentChanged(int)), this, SLOT(tab_options_pageChanged(int)));
 }
 
 
@@ -3075,19 +3072,6 @@ void CTEA::opt_update_keyb()
   lv_menuitems->addItems (shortcuts->captions);
 }
 
-/*
-void CTEA::slot_style_currentIndexChanged (const QString &text)
-{
-   if (text == "GTK+") //because it is buggy with some Qt versions. sorry!
-     return;
-
-  QStyle *style = QStyleFactory::create (text);
-  if (style == 0)
-     return;
-
-  settings->setValue ("ui_style", text);
-}
-*/
 
 
 void CTEA::slot_style_currentIndexChanged (int)
@@ -3106,7 +3090,7 @@ void CTEA::slot_style_currentIndexChanged (int)
 }
 
 
-void CTEA::open_at_cursor()
+void CTEA::file_open_at_cursor()
 {
   if (main_tab_widget->currentIndex() == idx_tab_fman)
      {
@@ -7920,7 +7904,7 @@ void CTEA::fman_count_lines_in_selected_files()
 }
 
 
-void CTEA::set_eol_unix()
+void CTEA::file_set_eol_unix()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7930,7 +7914,7 @@ void CTEA::set_eol_unix()
 }
 
 
-void CTEA::set_eol_win()
+void CTEA::file_set_eol_win()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7940,7 +7924,7 @@ void CTEA::set_eol_win()
 }
 
 
-void CTEA::set_eol_mac()
+void CTEA::file_set_eol_mac()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8152,8 +8136,8 @@ void CTEA::calendar_update()
 
 void CTEA::idx_tab_edit_activate()
 {
-  fileMenu->menuAction()->setVisible (true);
-  editMenu->menuAction()->setVisible (true);
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (true);
   menu_programs->menuAction()->setVisible (true);
   menu_cal->menuAction()->setVisible (false);
   menu_markup->menuAction()->setVisible (true);
@@ -8168,8 +8152,8 @@ void CTEA::idx_tab_edit_activate()
 
 void CTEA::idx_tab_calendar_activate()
 {
-  fileMenu->menuAction()->setVisible (true);
-  editMenu->menuAction()->setVisible (false);
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (false);
   menu_cal->menuAction()->setVisible (true);
   menu_programs->menuAction()->setVisible (true);
   menu_markup->menuAction()->setVisible (false);
@@ -8186,8 +8170,8 @@ void CTEA::idx_tab_tune_activate()
 {
   opt_update_keyb();
 
-  fileMenu->menuAction()->setVisible (true);
-  editMenu->menuAction()->setVisible (false);
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (false);
   menu_programs->menuAction()->setVisible (true);
   menu_markup->menuAction()->setVisible (false);
   menu_functions->menuAction()->setVisible (true);
@@ -8202,8 +8186,8 @@ void CTEA::idx_tab_tune_activate()
 
 void CTEA::idx_tab_fman_activate()
 {
-  fileMenu->menuAction()->setVisible (true);
-  editMenu->menuAction()->setVisible (false);
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (false);
   menu_programs->menuAction()->setVisible (true);
   menu_markup->menuAction()->setVisible (false);
   menu_functions->menuAction()->setVisible (true);
@@ -8218,8 +8202,8 @@ void CTEA::idx_tab_fman_activate()
 
 void CTEA::idx_tab_learn_activate()
 {
-  fileMenu->menuAction()->setVisible (true);
-  editMenu->menuAction()->setVisible (false);
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (false);
   menu_programs->menuAction()->setVisible (true);
   menu_markup->menuAction()->setVisible (false);
   menu_functions->menuAction()->setVisible (false);
@@ -9604,7 +9588,7 @@ MyProxyStyle::MyProxyStyle (const QString & key)
 void CTEA::keyPressEvent (QKeyEvent *event)
 {
    if (event->key() == Qt::Key_F10)
-      //fileMenu->setFocus(Qt::PopupFocusReason);
+      //menu_file->setFocus(Qt::PopupFocusReason);
       qDebug() << "F10";
 
 
@@ -9880,9 +9864,9 @@ void CTEA::scale_image()
 void CTEA::recentoff()
 {
   last_action = qobject_cast<QAction *>(sender());
-
   b_recent_off = ! b_recent_off;
-  menu_recent_off->setChecked (b_recent_off);
+//  menu_recent_off->setChecked (b_recent_off);
+ // qobject_cast<QAction *>(sender())->setChecked (b_recent_off);
 }
 
 
@@ -10242,17 +10226,11 @@ void CTEA::fn_number_dd2dms()
 #endif
 
 
-//  qDebug() << "latitude " << latitude;
-//  qDebug() << "longtitude " << longtitude;
-
   double degrees = floor (latitude.toDouble());
   double minutes = floor (60 * (latitude.toDouble() - degrees));
   double seconds = round (3600 * (latitude.toDouble() - degrees) - 60 * minutes);
 
-  //qDebug() << "degrees : " << degrees;
-  //qDebug() << "minutes : " << minutes;
-  //qDebug() << "seconds : " << seconds;
-
+ 
   double degrees2 = floor (longtitude.toDouble());
   double minutes2 = floor (60 * (longtitude.toDouble() - degrees2));
   double seconds2 = round (3600 * (longtitude.toDouble() - degrees2) - 60 * minutes2);
@@ -10693,7 +10671,6 @@ void CTEA::slot_font_logmemo_select()
   if (! ok)
      return;
 
-  //  qDebug() << font.toString();
   settings->setValue ("logmemo_font", font.family());
   settings->setValue("logmemo_font_size", font.pointSize());
   update_stylesheet (fname_stylesheet);

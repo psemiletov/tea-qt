@@ -1018,7 +1018,7 @@ bool CTEA::file_save()
   if (! d)
      return false;
 
-  if (d->textEdit->isReadOnly())
+  if (d->isReadOnly())
      {
       log->log (tr ("This file is open in the read-only mode. You can save it with another name using <b>Save as</b>"));
       return false;
@@ -1890,7 +1890,7 @@ void CTEA::ed_copy()
      {
       CDocument *d = documents->get_current();
       if (d)
-          d->textEdit->copy();
+          d->copy();
      }
   else
       if (main_tab_widget->currentIndex() == idx_tab_learn)
@@ -1904,7 +1904,7 @@ void CTEA::ed_cut()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->cut();
+      d->cut();
 }
 
 
@@ -1914,7 +1914,7 @@ void CTEA::ed_paste()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->paste();
+      d->paste();
 }
 
 
@@ -1924,7 +1924,7 @@ void CTEA::ed_undo()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->undo();
+      d->undo();
 }
 
 
@@ -1934,7 +1934,7 @@ void CTEA::ed_redo()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->redo();
+      d->redo();
 }
 
 
@@ -1944,7 +1944,7 @@ void CTEA::ed_clear()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->clear();
+      d->clear();
 }
 
 
@@ -1954,7 +1954,7 @@ void CTEA::upCase()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().toUpper());
+      d->textCursor().insertText (d->textCursor().selectedText().toUpper());
 }
 
 
@@ -1964,7 +1964,7 @@ void CTEA::dnCase()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().toLower());
+      d->textCursor().insertText (d->textCursor().selectedText().toLower());
 }
 
 
@@ -1974,7 +1974,7 @@ void CTEA::remove_formatting()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().simplified());
+     d->textCursor().insertText (d->textCursor().selectedText().simplified());
 }
 
 
@@ -1992,7 +1992,7 @@ void CTEA::markup_text (const QString &mode)
   QString t = p->pattern[d->markup_mode];
 
   if (! t.isEmpty())
-      d->textEdit->textCursor().insertText (t.replace ("%s", d->textEdit->textCursor().selectedText()));
+      d->textCursor().insertText (t.replace ("%s", d->textCursor().selectedText()));
 }
 
 
@@ -2073,7 +2073,7 @@ void CTEA::mrkup_nbsp()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText ("&nbsp;");
+     d->textCursor().insertText ("&nbsp;");
 }
 
 
@@ -2106,40 +2106,40 @@ void CTEA::search_find()
       int from = 0;
 
       if (settings->value ("find_from_cursor", "1").toBool())
-          from = d->textEdit->textCursor().position();
+          from = d->textCursor().position();
 
       d->text_to_search = fif_get_text();
 
       if (menu_find_regexp->isChecked())
 
 #if QT_VERSION < 0x050000
-         cr = d->textEdit->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+         cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
 #else
-         cr = d->textEdit->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
+         cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
 #endif
 
       else
           if (menu_find_fuzzy->isChecked())
              {
-              int pos = str_fuzzy_search (d->textEdit->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
+              int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
               if (pos != -1)
                  {
                   from = pos + d->text_to_search.length() - 1;
                   //set selection:
-                  cr = d->textEdit->textCursor();
+                  cr = d->textCursor();
                   cr.setPosition (pos, QTextCursor::MoveAnchor);
                   cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
 
                   if (! cr.isNull())
-                      d->textEdit->setTextCursor (cr);
+                      d->setTextCursor (cr);
                  }
               return;
              }
       else //normal search
-          cr = d->textEdit->document()->find (d->text_to_search, from, get_search_options());
+          cr = d->document()->find (d->text_to_search, from, get_search_options());
 
       if (! cr.isNull())
-          d->textEdit->setTextCursor (cr);
+          d->setTextCursor (cr);
       else
            log->log(tr ("not found!"));
      }
@@ -2216,31 +2216,31 @@ void CTEA::search_find_next()
       QTextCursor cr;
       if (menu_find_regexp->isChecked())
 #if QT_VERSION < 0x050000
-         cr = d->textEdit->document()->find (QRegExp (d->text_to_search), d->textEdit->textCursor().position(),
+         cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(),
 #else
-         cr = d->textEdit->document()->find (QRegularExpression (d->text_to_search), d->textEdit->textCursor().position(),
+         cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(),
 #endif
 
  get_search_options());
       if (menu_find_fuzzy->isChecked())
          {
-          int pos = str_fuzzy_search (d->textEdit->toPlainText(), d->text_to_search, d->textEdit->textCursor().position(), settings->value ("fuzzy_q", "60").toInt());
+          int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, d->textCursor().position(), settings->value ("fuzzy_q", "60").toInt());
           if (pos != -1)
              {
-              cr = d->textEdit->textCursor();
+              cr = d->textCursor();
               cr.setPosition (pos, QTextCursor::MoveAnchor);
               cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
 
               if (! cr.isNull())
-                  d->textEdit->setTextCursor (cr);
+                  d->setTextCursor (cr);
              }
           return;
          }
       else
-          cr = d->textEdit->document()->find (d->text_to_search, d->textEdit->textCursor().position(), get_search_options());
+          cr = d->document()->find (d->text_to_search, d->textCursor().position(), get_search_options());
 
       if (! cr.isNull())
-          d->textEdit->setTextCursor (cr);
+          d->setTextCursor (cr);
      }
    else
    if (main_tab_widget->currentIndex() == idx_tab_learn)
@@ -2266,21 +2266,21 @@ void CTEA::search_find_prev()
 
       if (menu_find_regexp->isChecked())
 #if QT_VERSION < 0x050000
-         cr = d->textEdit->document()->find (QRegExp (d->text_to_search),
-                                             d->textEdit->textCursor(),
+         cr = d->document()->find (QRegExp (d->text_to_search),
+                                             d->textCursor(),
 #else
-         cr = d->textEdit->document()->find (QRegularExpression (d->text_to_search),
-                                             d->textEdit->textCursor(),
+         cr = d->document()->find (QRegularExpression (d->text_to_search),
+                                             d->textCursor(),
 #endif
 
                                              get_search_options() | QTextDocument::FindBackward);
       else
-          cr = d->textEdit->document()->find (d->text_to_search,
-                                              d->textEdit->textCursor(),
+          cr = d->document()->find (d->text_to_search,
+                                              d->textCursor(),
                                               get_search_options() | QTextDocument::FindBackward);
 
       if (! cr.isNull())
-          d->textEdit->setTextCursor (cr);
+          d->setTextCursor (cr);
      }
   else
   if (main_tab_widget->currentIndex() == idx_tab_learn)
@@ -3134,13 +3134,13 @@ void CTEA::file_open_at_cursor()
       QString t = fname;
       t.remove (0, 1);
       t.prepend ("name=\"");
-      if (d->textEdit->find (t))
+      if (d->find (t))
          return;
 
       t = fname;
       t.remove (0, 1);
       t.prepend ("id=\"");
-      d->textEdit->find (t);
+      d->find (t);
 
       return;
      }
@@ -3155,7 +3155,7 @@ void CTEA::toggle_wrap()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->set_word_wrap (! d->textEdit->get_word_wrap());
+     d->set_word_wrap (! d->get_word_wrap());
 }
 
 
@@ -3165,7 +3165,7 @@ void CTEA::nav_save_pos()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->position = d->textEdit->textCursor().position();
+     d->position = d->textCursor().position();
 }
 
 
@@ -3177,9 +3177,9 @@ void CTEA::nav_goto_pos()
   if (! d)
      return;
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
   cr.setPosition (d->position);
-  d->textEdit->setTextCursor (cr);
+  d->setTextCursor (cr);
 }
 
 
@@ -3197,14 +3197,14 @@ void CTEA::mrkup_color()
 
   QString s;
 
-  if (d->textEdit->textCursor().hasSelection())
+  if (d->textCursor().hasSelection())
       s = QString ("<span style=\"color:%1;\">%2</span>")
                    .arg (color.name())
-                   .arg (d->textEdit->textCursor().selectedText());
+                   .arg (d->textCursor().selectedText());
   else
       s = color.name();
 
-  d->textEdit->textCursor().insertText (s);
+  d->textCursor().insertText (s);
 }
 
 
@@ -3216,12 +3216,12 @@ void CTEA::nav_goto_line()
   if (! d)
      return;
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
   cr.movePosition (QTextCursor::Start);
   cr.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, fif_get_text().toInt() - 1);
 
-  d->textEdit->setTextCursor (cr);
-  d->textEdit->setFocus();
+  d->setTextCursor (cr);
+  d->setFocus();
 }
 
 
@@ -3317,7 +3317,7 @@ void CTEA::fn_apply_to_each_line()
   if (! d)
      return;
 
-  QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+  QStringList sl = d->textCursor().selectedText().split (QChar::ParagraphSeparator);
   QString t = fif_get_text();
 
   if (t.isEmpty())
@@ -3346,7 +3346,7 @@ void CTEA::fn_apply_to_each_line()
 
   QString x = sl.join ("\n");
 
-  d->textEdit->textCursor().insertText (x);
+  d->textCursor().insertText (x);
 }
 
 
@@ -3356,8 +3356,8 @@ void CTEA::fn_filter_with_regexp()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (
-                                            d->textEdit->textCursor().selectedText(),
+      d->textCursor().insertText (qstringlist_process (
+                                            d->textCursor().selectedText(),
                                             fif_get_text(),
                                             QSTRL_PROC_FLT_WITH_REGEXP));
 }
@@ -3371,10 +3371,10 @@ void CTEA::fn_reverse()
   if (! d)
      return;
 
-  QString s = d->textEdit->textCursor().selectedText();
+  QString s = d->textCursor().selectedText();
 
   if (! s.isEmpty())
-      d->textEdit->textCursor().insertText (string_reverse (s));
+      d->textCursor().insertText (string_reverse (s));
 }
 
 
@@ -3391,13 +3391,13 @@ void CTEA::file_print()
 
   dialog->setWindowTitle (tr ("Print document"));
 
-  if (d->textEdit->textCursor().hasSelection())
+  if (d->textCursor().hasSelection())
       dialog->addEnabledOption (QAbstractPrintDialog::PrintSelection);
 
   if (dialog->exec() != QDialog::Accepted)
       return;
 
-  d->textEdit->print (&printer);
+  d->print (&printer);
 }
 #endif
 
@@ -3463,18 +3463,18 @@ void CTEA::fn_spell_check()
   time_start.start();
 
   pb_status->show();
-  pb_status->setRange (0, d->textEdit->toPlainText().size() - 1);
+  pb_status->setRange (0, d->toPlainText().size() - 1);
   pb_status->setFormat (tr ("%p% completed"));
   pb_status->setTextVisible (true);
 
   int i = 0;
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
 
   int pos = cr.position();
   int savepos = pos;
 
-  QString text = d->textEdit->toPlainText();
+  QString text = d->toPlainText();
   int text_size = text.size();
 
 //delete all underlines
@@ -3550,7 +3550,7 @@ void CTEA::fn_spell_check()
 
 
   cr.setPosition (savepos);
-  d->textEdit->document()->setModified (false);
+  d->document()->setModified (false);
 
   pb_status->hide();
 
@@ -3566,7 +3566,7 @@ void CTEA::fn_spell_add_to_dict()
   if (! d)
      return;
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
   cr.select (QTextCursor::WordUnderCursor); //плохо работает
   QString s = cr.selectedText();
 
@@ -3583,7 +3583,7 @@ void CTEA::fn_remove_from_dict()
   if (! d)
      return;
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
   cr.select (QTextCursor::WordUnderCursor);
   QString s = cr.selectedText();
 
@@ -3603,7 +3603,7 @@ void CTEA::fn_spell_suggest_callback()
   QAction *act = qobject_cast<QAction *>(sender());
   QString new_text = act->text();
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
 
   cr.select (QTextCursor::WordUnderCursor);
   QString s = cr.selectedText();
@@ -3614,7 +3614,7 @@ void CTEA::fn_spell_suggest_callback()
      new_text[0] = new_text[0].toUpper();
 
   cr.insertText (new_text);
-  d->textEdit->setTextCursor (cr);
+  d->setTextCursor (cr);
 }
 
 
@@ -3626,7 +3626,7 @@ void CTEA::fn_spell_suggest()
   if (! d)
      return;
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
   cr.select (QTextCursor::WordUnderCursor);
   QString s = cr.selectedText();
   if (s.isEmpty())
@@ -3636,7 +3636,7 @@ void CTEA::fn_spell_suggest()
 
   QMenu *m = new QMenu (this);
   create_menu_from_list (this, m, l, SLOT (fn_spell_suggest_callback()));
-  m->popup (mapToGlobal (d->textEdit->cursorRect().topLeft()));
+  m->popup (mapToGlobal (d->cursorRect().topLeft()));
 }
 
 #endif
@@ -3695,7 +3695,7 @@ void CTEA::file_use_template()
 
   CDocument *d = documents->create_new();
   if (d)
-     d->textEdit->textCursor().insertText (txt);
+     d->textCursor().insertText (txt);
 }
 
 
@@ -3711,9 +3711,9 @@ void CTEA::fn_use_snippet()
   QString s = qstring_load (a->data().toString());
 
   if (s.contains ("%s"))
-     s = s.replace ("%s", d->textEdit->textCursor().selectedText());
+     s = s.replace ("%s", d->textCursor().selectedText());
 
-  d->textEdit->textCursor().insertText (s);
+  d->textCursor().insertText (s);
 }
 
 
@@ -3814,7 +3814,7 @@ void CTEA::fn_evaluate()
   if (! d)
      return;
 
-  QString s = d->textEdit->textCursor().selectedText();
+  QString s = d->textCursor().selectedText();
   std::string utf8_text = s.toUtf8().constData();
   double f = calculate (utf8_text);
   QString fs = s.setNum (f);
@@ -3829,7 +3829,7 @@ void CTEA::fn_sort_length()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+      d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                  fif_get_text(),
                                                                  QSTRL_PROC_FLT_WITH_SORTLEN));
 }
@@ -3841,7 +3841,7 @@ void CTEA::fn_sort_casecare()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+      d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                  fif_get_text(),
                                                                  QSTRL_PROC_FLT_WITH_SORTCASECARE));
 }
@@ -3853,8 +3853,8 @@ void CTEA::fn_sort_casecare_sep()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (
-                                                                 d->textEdit->textCursor().selectedText(),
+      d->textCursor().insertText (qstringlist_process (
+                                                                 d->textCursor().selectedText(),
                                                                  fif_get_text(),
                                                                  QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP));
 }
@@ -3870,10 +3870,10 @@ void CTEA::mrkup_text_to_html()
 
   QStringList l;
 
-  if (d->textEdit->textCursor().hasSelection())
-     l = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+  if (d->textCursor().hasSelection())
+     l = d->textCursor().selectedText().split (QChar::ParagraphSeparator);
   else
-      l = d->textEdit->toPlainText().split("\n");
+      l = d->toPlainText().split("\n");
 
   QString result;
 
@@ -3918,7 +3918,7 @@ void CTEA::mrkup_text_to_html()
   CDocument *doc = documents->create_new();
 
   if (doc)
-     doc->textEdit->textCursor().insertText (result);
+     doc->textCursor().insertText (result);
 }
 
 
@@ -3930,14 +3930,14 @@ void CTEA::fn_text_stat()
   if (! d)
      return;
 
-  bool b_sel = d->textEdit->textCursor().hasSelection();
+  bool b_sel = d->textCursor().hasSelection();
 
   QString s;
 
   if (b_sel)
-     s = d->textEdit->textCursor().selectedText();
+     s = d->textCursor().selectedText();
   else
-      s = d->textEdit->toPlainText();
+      s = d->toPlainText();
 
   int c = s.length();
   int purechars = 0;
@@ -3979,13 +3979,13 @@ void CTEA::fn_antispam_email()
   if (! d)
      return;
 
-  QString s = d->textEdit->textCursor().selectedText();
+  QString s = d->textCursor().selectedText();
   QString result;
 
   for (int i = 0; i < s.size(); i++)
       result = "&#" + QString::number (s.at (i).unicode()) + ";";
 
-  d->textEdit->textCursor().insertText (result);
+  d->textCursor().insertText (result);
 }
 
 
@@ -3995,7 +3995,7 @@ void CTEA::search_replace_with()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (fif_get_text());
+     d->textCursor().insertText (fif_get_text());
 }
 
 
@@ -4023,23 +4023,23 @@ void CTEA::search_replace_all_at_ofiles()
 #if QT_VERSION < 0x050000
 
        if (menu_find_regexp->isChecked())
-          s = d->textEdit->toPlainText().replace (QRegExp (l[0]), l[1]);
+          s = d->toPlainText().replace (QRegExp (l[0]), l[1]);
        else
-           s = d->textEdit->toPlainText().replace (l[0], l[1], cs);
+           s = d->toPlainText().replace (l[0], l[1], cs);
 
 #else
 
        if (menu_find_regexp->isChecked())
-          s = d->textEdit->toPlainText().replace (QRegularExpression (l[0]), l[1]);
+          s = d->toPlainText().replace (QRegularExpression (l[0]), l[1]);
        else
-           s = d->textEdit->toPlainText().replace (l[0], l[1], cs);
+           s = d->toPlainText().replace (l[0], l[1], cs);
 
 
 #endif
 
 
-       d->textEdit->selectAll();
-       d->textEdit->textCursor().insertText (s);
+       d->selectAll();
+       d->textCursor().insertText (s);
       }
 }
 
@@ -4062,7 +4062,7 @@ void CTEA::search_replace_all()
       if (! d)
          return;
 
-      QString s = d->textEdit->textCursor().selectedText();
+      QString s = d->textCursor().selectedText();
 
 #if (QT_VERSION_MAJOR < 5)
       if (menu_find_regexp->isChecked())
@@ -4079,7 +4079,7 @@ void CTEA::search_replace_all()
 
 #endif
 
-      d->textEdit->textCursor().insertText (s);
+      d->textCursor().insertText (s);
      }
   else
       if (main_tab_widget->currentIndex() == idx_tab_fman)
@@ -4157,7 +4157,7 @@ void CTEA::fn_flip_a_list()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+      d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                  fif_get_text(),
                                                                  QSTRL_PROC_LIST_FLIP));
 }
@@ -4169,7 +4169,7 @@ void CTEA::fn_flip_a_list_sep()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+     d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                 fif_get_text(),
                                                                 QSTRL_PROC_LIST_FLIP_SEP));
 }
@@ -4196,7 +4196,7 @@ void CTEA::mrkup_tags_to_entities()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (str_to_entities (d->textEdit->textCursor().selectedText()));
+     d->textCursor().insertText (str_to_entities (d->textCursor().selectedText()));
 }
 
 
@@ -4206,7 +4206,7 @@ void CTEA::fn_insert_loremipsum()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstring_load (":/text-data/lorem-ipsum"));
+     d->textCursor().insertText (qstring_load (":/text-data/lorem-ipsum"));
 }
 
 
@@ -4241,14 +4241,14 @@ void CTEA::mrkup_header()
       QString t;
       int n = a->text().toLower()[1].digitValue();
       t.fill ('#', n);
-      r = t + " " + d->textEdit->textCursor().selectedText();
+      r = t + " " + d->textCursor().selectedText();
      }
   else
       r = QString ("<%1>%2</%1>").arg (
                    a->text().toLower()).arg (
-                   d->textEdit->textCursor().selectedText());
+                   d->textCursor().selectedText());
 
-  d->textEdit->textCursor().insertText (r);
+  d->textCursor().insertText (r);
 }
 
 
@@ -4265,7 +4265,7 @@ void CTEA::mrkup_align()
   QString r;
 
   if (d->markup_mode == "LaTeX")
-      r = QString ("\\begin{%1}\n%2\\end{%1}").arg (a->text().toLower()).arg (d->textEdit->textCursor().selectedText());
+      r = QString ("\\begin{%1}\n%2\\end{%1}").arg (a->text().toLower()).arg (d->textCursor().selectedText());
   //if (d->markup_mode == "MediaWiki")
     // {
 //FIXME write code here
@@ -4274,10 +4274,10 @@ void CTEA::mrkup_align()
       r = "<p style=\"text-align:" +
            a->text().toLower() +
            ";\">" +
-            d->textEdit->textCursor().selectedText() +
+            d->textCursor().selectedText() +
            "</p>";
 
-  d->textEdit->textCursor().insertText (r);
+  d->textCursor().insertText (r);
 }
 
 
@@ -4319,7 +4319,7 @@ void CTEA::fn_filter_rm_less_than()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+     d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                 fif_get_text(),
                                                                 QSTRL_PROC_FLT_LESS));
 }
@@ -4331,7 +4331,7 @@ void CTEA::fn_filter_rm_greater_than()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+     d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                 fif_get_text(),
                                                                 QSTRL_PROC_FLT_GREATER));
 }
@@ -4343,7 +4343,7 @@ void CTEA::fn_filter_rm_duplicates()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+     d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                 fif_get_text(),
                                                                 QSTRL_PROC_FLT_REMOVE_DUPS));
 }
@@ -4355,7 +4355,7 @@ void CTEA::fn_filter_rm_empty()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+      d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                  fif_get_text(),
                                                                  QSTRL_PROC_FLT_REMOVE_EMPTY));
 }
@@ -4373,7 +4373,7 @@ void CTEA::fn_extract_words()
 
   CDocument *nd = documents->create_new();
   if (nd)
-     nd->textEdit->textCursor().insertText (w.join("\n"));
+     nd->textCursor().insertText (w.join("\n"));
 }
 
 
@@ -4487,7 +4487,7 @@ void CTEA::fn_morse_from_en()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (morse_from_lang (d->textEdit->textCursor().selectedText().toUpper(), "en"));
+     d->textCursor().insertText (morse_from_lang (d->textCursor().selectedText().toUpper(), "en"));
 }
 
 
@@ -4497,7 +4497,7 @@ void CTEA::fn_morse_to_en()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (morse_to_lang (d->textEdit->textCursor().selectedText(), "en"));
+     d->textCursor().insertText (morse_to_lang (d->textCursor().selectedText(), "en"));
 }
 
 
@@ -4507,7 +4507,7 @@ void CTEA::fn_morse_from_ru()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (morse_from_lang (d->textEdit->textCursor().selectedText().toUpper(), "ru"));
+     d->textCursor().insertText (morse_from_lang (d->textCursor().selectedText().toUpper(), "ru"));
 }
 
 
@@ -4517,7 +4517,7 @@ void CTEA::fn_morse_to_ru()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (morse_to_lang (d->textEdit->textCursor().selectedText(), "ru"));
+     d->textCursor().insertText (morse_to_lang (d->textCursor().selectedText(), "ru"));
 }
 
 
@@ -4534,7 +4534,7 @@ void CTEA::nav_focus_to_editor()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->setFocus (Qt::OtherFocusReason);
+     d->setFocus (Qt::OtherFocusReason);
 }
 
 
@@ -4554,7 +4554,7 @@ void CTEA::fn_insert_date()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (QDate::currentDate ().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
+     d->textCursor().insertText (QDate::currentDate ().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
 }
 
 
@@ -4564,7 +4564,7 @@ void CTEA::fn_insert_time()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (QTime::currentTime ().toString (settings->value("time_format", "hh:mm:ss").toString()));
+     d->textCursor().insertText (QTime::currentTime ().toString (settings->value("time_format", "hh:mm:ss").toString()));
 }
 
 
@@ -4574,7 +4574,7 @@ void CTEA::fn_rm_formatting_at_each_line()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->textCursor().insertText (qstringlist_process (d->textEdit->textCursor().selectedText(),
+      d->textCursor().insertText (qstringlist_process (d->textCursor().selectedText(),
                                                                  "",
                                                                  QSTRL_PROC_REMOVE_FORMATTING));
 }
@@ -4629,7 +4629,7 @@ void CTEA::fn_number_arabic_to_roman()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (arabicToRoman (d->textEdit->textCursor().selectedText().toUInt()));
+     d->textCursor().insertText (arabicToRoman (d->textCursor().selectedText().toUInt()));
 }
 
 
@@ -4639,7 +4639,7 @@ void CTEA::fn_number_roman_to_arabic()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (QString::number(get_arab_num (d->textEdit->textCursor().selectedText().toUpper().toStdString())));
+     d->textCursor().insertText (QString::number(get_arab_num (d->textCursor().selectedText().toUpper().toStdString())));
 }
 
 
@@ -4649,7 +4649,7 @@ void CTEA::help_show_gpl()
 
   CDocument *d = documents->open_file (":/COPYING", "UTF-8");
   if (d)
-     d->textEdit->setReadOnly (true);
+     d->setReadOnly (true);
 }
 
 
@@ -4779,7 +4779,7 @@ void CTEA::fn_insert_template_html()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstring_load (":/text-data/template-html"));
+     d->textCursor().insertText (qstring_load (":/text-data/template-html"));
 }
 
 
@@ -4789,7 +4789,7 @@ void CTEA::fn_insert_template_tea()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstring_load (":/text-data/template-teaproject"));
+     d->textCursor().insertText (qstring_load (":/text-data/template-teaproject"));
 }
 
 
@@ -4799,7 +4799,7 @@ void CTEA::fn_insert_template_html5()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstring_load (":/text-data/template-html5"));
+     d->textCursor().insertText (qstring_load (":/text-data/template-html5"));
 }
 
 
@@ -4811,7 +4811,7 @@ void CTEA::view_hide_error_marks()
   if (! d)
      return;
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
 
 //delete all underlines
   cr.setPosition (0);
@@ -4819,7 +4819,7 @@ void CTEA::view_hide_error_marks()
   QTextCharFormat f = cr.blockCharFormat();
   f.setFontUnderline (false);
   cr.mergeCharFormat (f);
-  d->textEdit->document()->setModified (false);
+  d->document()->setModified (false);
 }
 
 
@@ -4829,7 +4829,7 @@ void CTEA::fn_rm_formatting()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (d->textEdit->textCursor().selectedText().simplified());
+     d->textCursor().insertText (d->textCursor().selectedText().simplified());
 }
 
 
@@ -4841,13 +4841,13 @@ void CTEA::fn_rm_compress()
   if (! d)
      return;
 
-  QString s = d->textEdit->textCursor().selectedText();
+  QString s = d->textCursor().selectedText();
 
   s = s.remove ('\n');
   s = s.remove ('\t');
   s = s.remove (' ');
   s = s.remove (QChar::ParagraphSeparator);
-  d->textEdit->textCursor().insertText (s);
+  d->textCursor().insertText (s);
 }
 
 
@@ -4869,7 +4869,7 @@ void CTEA::help_show_news()
 
   CDocument *d = documents->open_file (fname, "UTF-8");
   if (d)
-     d->textEdit->setReadOnly (true);
+     d->setReadOnly (true);
 }
 
 
@@ -4879,7 +4879,7 @@ void CTEA::help_show_changelog()
 
   CDocument *d = documents->open_file (":/ChangeLog", "UTF-8");
   if (d)
-     d->textEdit->setReadOnly (true);
+     d->setReadOnly (true);
 }
 
 
@@ -4889,7 +4889,7 @@ void CTEA::help_show_todo()
 
   CDocument *d = documents->open_file (":/TODO", "UTF-8");
   if (d)
-     d->textEdit->setReadOnly (true);
+     d->setReadOnly (true);
 }
 
 
@@ -5010,7 +5010,7 @@ void CTEA::cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus)
 
   QString s = qstring_load (fname_tempfile);
   if (! s.isEmpty())
-     d->textEdit->textCursor().insertText(s);
+     d->textCursor().insertText(s);
 
   QFile f (fname_tempfile);
   f.remove();
@@ -5044,7 +5044,7 @@ void CTEA::fn_run_script()
   QString fname = a->data().toString();
   QString ext = file_get_ext (fname);
 
-  if (! d->textEdit->textCursor().hasSelection())
+  if (! d->textCursor().hasSelection())
      return;
 
   QString intrp;
@@ -5064,7 +5064,7 @@ void CTEA::fn_run_script()
   if (intrp.isEmpty())
       return;
 
-  qstring_save (fname_tempfile, d->textEdit->textCursor().selectedText());
+  qstring_save (fname_tempfile, d->textCursor().selectedText());
   qstring_save (fname_tempparamfile, fif_get_text());
 
   QString command = QString ("%1 %2 %3 %4").arg (
@@ -5311,9 +5311,9 @@ void CTEA::fn_convert_quotes_angle()
   if (! d)
      return;
 
-  QString source = d->textEdit->textCursor().selectedText();
+  QString source = d->textCursor().selectedText();
   if (! source.isEmpty())
-     d->textEdit->textCursor().insertText (conv_quotes (source, "\u00AB", "\u00BB"));
+     d->textCursor().insertText (conv_quotes (source, "\u00AB", "\u00BB"));
 }
 
 
@@ -5325,9 +5325,9 @@ void CTEA::fn_convert_quotes_curly()
   if (! d)
      return;
 
-  QString source = d->textEdit->textCursor().selectedText();
+  QString source = d->textCursor().selectedText();
   if (! source.isEmpty())
-      d->textEdit->textCursor().insertText (conv_quotes (source, "\u201C", "\u201D"));
+      d->textCursor().insertText (conv_quotes (source, "\u201C", "\u201D"));
 }
 
 
@@ -5339,9 +5339,9 @@ void CTEA::fn_convert_quotes_tex_curly()
   if (! d)
      return;
 
-  QString source = d->textEdit->textCursor().selectedText();
+  QString source = d->textCursor().selectedText();
   if (! source.isEmpty())
-     d->textEdit->textCursor().insertText (conv_quotes (source, "``", "\'\'"));
+     d->textCursor().insertText (conv_quotes (source, "``", "\'\'"));
 }
 
 
@@ -5353,9 +5353,9 @@ void CTEA::fn_convert_quotes_tex_angle_01()
   if (! d)
      return;
 
-  QString source = d->textEdit->textCursor().selectedText();
+  QString source = d->textCursor().selectedText();
   if (! source.isEmpty())
-     d->textEdit->textCursor().insertText (conv_quotes (source, "<<", ">>"));
+     d->textCursor().insertText (conv_quotes (source, "<<", ">>"));
 }
 
 
@@ -5367,9 +5367,9 @@ void CTEA::fn_convert_quotes_tex_angle_02()
   if (! d)
      return;
 
-  QString source = d->textEdit->textCursor().selectedText();
+  QString source = d->textCursor().selectedText();
   if (! source.isEmpty())
-     d->textEdit->textCursor().insertText (conv_quotes (source, "\\glqq", "\\grqq"));
+     d->textCursor().insertText (conv_quotes (source, "\\glqq", "\\grqq"));
 }
 
 
@@ -5381,7 +5381,7 @@ void CTEA::fn_enum()
   if (! d)
      return;
 
-  QStringList source = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+  QStringList source = d->textCursor().selectedText().split (QChar::ParagraphSeparator);
 
   int pad = 0;
   int end = source.size() - 1;
@@ -5413,7 +5413,7 @@ void CTEA::fn_enum()
        result = result + n + prefix +  source.at(c) + '\n';
       }
 
-  d->textEdit->textCursor().insertText (result);
+  d->textCursor().insertText (result);
 }
 
 
@@ -5798,10 +5798,10 @@ void CTEA::mrkup_preview_color()
   if (! d)
      return;
 
-  if (! d->textEdit->textCursor().hasSelection())
+  if (! d->textCursor().hasSelection())
      return;
 
-  QString color = d->textEdit->textCursor().selectedText();
+  QString color = d->textCursor().selectedText();
 
   if (QColor::colorNames().indexOf (color) == -1)
      {
@@ -6661,7 +6661,7 @@ void CTEA::run_unitaz (int mode)
   outp.prepend (tr ("UNITAZ: UNIverlsal Text AnalyZer"));
 
   CDocument *nd = documents->create_new();
-  nd->textEdit->textCursor().insertText (outp.join ("\n"));
+  nd->textCursor().insertText (outp.join ("\n"));
 
   while (! uwords.isEmpty())
         delete uwords.takeFirst();
@@ -6809,10 +6809,10 @@ void CTEA::count_substring (bool use_regexp)
 
   QString text;
 
-  if (d->textEdit->textCursor().hasSelection())
-     text = d->textEdit->textCursor().selectedText();
+  if (d->textCursor().hasSelection())
+     text = d->textCursor().selectedText();
   else
-      text = d->textEdit->toPlainText();
+      text = d->toPlainText();
 
   int count = 0;
   Qt::CaseSensitivity cs = Qt::CaseInsensitive;
@@ -6941,7 +6941,7 @@ void CTEA::fn_rm_trailing_spaces()
   if (! d)
      return;
 
-  QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+  QStringList sl = d->textCursor().selectedText().split (QChar::ParagraphSeparator);
 
   for (QList <QString>::iterator s = sl.begin(); s != sl.end(); ++s)
       {
@@ -6960,7 +6960,7 @@ void CTEA::fn_rm_trailing_spaces()
 
   QString x = sl.join ("\n");
 
-  d->textEdit->textCursor().insertText (x);
+  d->textCursor().insertText (x);
 }
 
 
@@ -7082,12 +7082,12 @@ void CTEA::fn_escape()
 
 #if (QT_VERSION_MAJOR < 5)
   if (d)
-     d->textEdit->textCursor().insertText (QRegExp::escape (d->textEdit->textCursor().selectedText()));
+     d->textCursor().insertText (QRegExp::escape (d->textCursor().selectedText()));
 
 #else
 
   if (d)
-     d->textEdit->textCursor().insertText (QRegularExpression::escape (d->textEdit->textCursor().selectedText()));
+     d->textCursor().insertText (QRegularExpression::escape (d->textCursor().selectedText()));
 
 #endif
 
@@ -7179,7 +7179,7 @@ void CTEA::ed_indent()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->indent();
+     d->indent();
 }
 
 
@@ -7189,7 +7189,7 @@ void CTEA::ed_unindent()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->un_indent();
+     d->un_indent();
 }
 
 
@@ -7199,8 +7199,8 @@ void CTEA::fn_sort_casecareless()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstringlist_process (
-                                                                d->textEdit->textCursor().selectedText(),
+     d->textCursor().insertText (qstringlist_process (
+                                                                d->textCursor().selectedText(),
                                                                 fif_get_text(),
                                                                 QSTRL_PROC_FLT_WITH_SORTNOCASECARE));
 }
@@ -7251,15 +7251,15 @@ void CTEA::fn_strip_html_tags()
 
   QString text;
 
-  if (d->textEdit->textCursor().hasSelection())
-     text = d->textEdit->textCursor().selectedText();
+  if (d->textCursor().hasSelection())
+     text = d->textCursor().selectedText();
   else
-      text = d->textEdit->toPlainText();
+      text = d->toPlainText();
 
-  if (d->textEdit->textCursor().hasSelection())
-     d->textEdit->textCursor().insertText (strip_html (text));
+  if (d->textCursor().hasSelection())
+     d->textCursor().insertText (strip_html (text));
   else
-      d->textEdit->setPlainText (strip_html (text));
+      d->setPlainText (strip_html (text));
 }
 
 
@@ -7269,7 +7269,7 @@ void CTEA::fn_number_decimal_to_binary()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (int_to_binary (d->textEdit->textCursor().selectedText().toInt()));
+     d->textCursor().insertText (int_to_binary (d->textCursor().selectedText().toInt()));
 }
 
 
@@ -7281,7 +7281,7 @@ void CTEA::fn_number_flip_bits()
   if (!d)
      return;
 
-  QString s = d->textEdit->textCursor().selectedText();
+  QString s = d->textCursor().selectedText();
   for (int i = 0; i < s.size(); i++)
       {
        if (s[i] == '1')
@@ -7291,7 +7291,7 @@ void CTEA::fn_number_flip_bits()
           s[i] = '1';
       }
 
-  d->textEdit->textCursor().insertText (s);
+  d->textCursor().insertText (s);
 }
 
 
@@ -7308,15 +7308,15 @@ void CTEA::fn_use_table()
 
       QString text;
 
-      if (d->textEdit->textCursor().hasSelection())
-         text = d->textEdit->textCursor().selectedText();
+      if (d->textCursor().hasSelection())
+         text = d->textCursor().selectedText();
       else
-          text = d->textEdit->toPlainText();
+          text = d->toPlainText();
 
-      if (d->textEdit->textCursor().hasSelection())
-         d->textEdit->textCursor().insertText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
+      if (d->textCursor().hasSelection())
+         d->textCursor().insertText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
       else
-         d->textEdit->setPlainText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
+         d->setPlainText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
       }
   else
       if (main_tab_widget->currentIndex() == idx_tab_fman)
@@ -7357,7 +7357,7 @@ void CTEA::fn_binary_to_decimal()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (QString::number (bin_to_decimal (d->textEdit->textCursor().selectedText())));
+     d->textCursor().insertText (QString::number (bin_to_decimal (d->textCursor().selectedText())));
 }
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
@@ -7462,7 +7462,7 @@ void CTEA::fn_filter_delete_by_sep (bool mode)
   if (! d)
      return;
 
-  QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+  QStringList sl = d->textCursor().selectedText().split (QChar::ParagraphSeparator);
 
   QString t = fif_get_text();
 
@@ -7482,7 +7482,7 @@ void CTEA::fn_filter_delete_by_sep (bool mode)
 
   QString x = sl.join ("\n");
 
-  d->textEdit->textCursor().insertText (x);
+  d->textCursor().insertText (x);
 }
 
 
@@ -7599,7 +7599,7 @@ void CTEA::fman_mk_gallery()
   table += "</table>\n";
 
   if (d)
-     d->textEdit->textCursor().insertText (table);
+     d->textCursor().insertText (table);
 }
 
 
@@ -7611,7 +7611,7 @@ void CTEA::indent_by_first_line()
   if (! d)
      return;
 
-  QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+  QStringList sl = d->textCursor().selectedText().split (QChar::ParagraphSeparator);
   if (sl.size() == 0)
     return;
 
@@ -7639,7 +7639,7 @@ void CTEA::indent_by_first_line()
 
   QString t = sl.join ("\n");
 
-  d->textEdit->textCursor().insertText (t);
+  d->textCursor().insertText (t);
 }
 
 
@@ -7987,12 +7987,12 @@ void CTEA::ed_comment()
           }
 
       QString z = sl.join("\n");
-      d->textEdit->textCursor().insertText (z);
+      d->textCursor().insertText (z);
 
       return;
      }
 
-  d->textEdit->textCursor().insertText (result.replace ("%s", t));
+  d->textCursor().insertText (result.replace ("%s", t));
 }
 
 
@@ -8034,7 +8034,7 @@ void CTEA::calendar_activated (const QDate &date)
      return;
 
   if (fresh)
-     d->textEdit->selectAll();
+     d->selectAll();
 
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
@@ -8265,7 +8265,7 @@ void CTEA::rename_selected()
   if (! d)
      return;
 
-  if (! d->textEdit->textCursor().hasSelection())
+  if (! d->textCursor().hasSelection())
      {
       log->log (tr ("Select the file name first!"));
       return;
@@ -8295,13 +8295,13 @@ void CTEA::rename_selected()
   if (new_name.startsWith (".."))
      new_name = new_name.remove (0, 1);
 
-  if (d->textEdit->textCursor().selectedText().startsWith ("./") && ! new_name.startsWith ("./"))
+  if (d->textCursor().selectedText().startsWith ("./") && ! new_name.startsWith ("./"))
      new_name = "./" + new_name;
 
-  if (! d->textEdit->textCursor().selectedText().startsWith ("./") && new_name.startsWith ("./"))
+  if (! d->textCursor().selectedText().startsWith ("./") && new_name.startsWith ("./"))
      new_name = new_name.remove (0, 2);
 
-  if (d->textEdit->textCursor().hasSelection())
+  if (d->textCursor().hasSelection())
      d->set_selected_text (new_name.trimmed());
 }
 
@@ -8342,10 +8342,10 @@ void CTEA::select_label()
                          + Act->text()
                          + settings->value ("label_end", "?]").toString();
 
-  cr = d->textEdit->document()->find (text_to_find);
+  cr = d->document()->find (text_to_find);
 
   if (! cr.isNull())
-     d->textEdit->setTextCursor (cr);
+     d->setTextCursor (cr);
 }
 
 
@@ -8355,7 +8355,7 @@ void CTEA::fn_insert_cpp()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstring_load (":/text-data/tpl_cpp.cpp"));
+     d->textCursor().insertText (qstring_load (":/text-data/tpl_cpp.cpp"));
 }
 
 
@@ -8365,7 +8365,7 @@ void CTEA::fn_insert_c()
 
   CDocument *d = documents->get_current();
   if (d)
-     d->textEdit->textCursor().insertText (qstring_load (":/text-data/tpl_c.c"));
+     d->textCursor().insertText (qstring_load (":/text-data/tpl_c.c"));
 }
 
 
@@ -8384,7 +8384,7 @@ void CTEA::mrkup_document_weight()
      return;
 
   QString result;
-  QStringList l = html_get_by_patt (d->textEdit->toPlainText(), "src=\"");
+  QStringList l = html_get_by_patt (d->toPlainText(), "src=\"");
 
   QFileInfo f (d->file_name);
   QUrl baseUrl (d->file_name);
@@ -8566,7 +8566,7 @@ void CTEA::clipboard_dataChanged()
 
       QString text_to_insert = tpl.replace ("%s", t);
 
-      ddest->textEdit->textCursor().insertText (text_to_insert);
+      ddest->textCursor().insertText (text_to_insert);
      }
 }
 
@@ -8579,7 +8579,7 @@ void CTEA::fn_remove_by_regexp()
   if (! d)
      return;
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
 
 
 #if (QT_VERSION_MAJOR < 5)
@@ -8599,7 +8599,7 @@ void CTEA::fn_remove_by_regexp()
 
 #endif
 
-  d->textEdit->textCursor().insertText (t);
+  d->textCursor().insertText (t);
 }
 
 
@@ -8631,9 +8631,9 @@ void CTEA::copy_to_storage_file()
   CDocument *ddest = documents->get_document_by_fname (fname_storage_file);
   if (ddest)
      {
-      QString t = dsource->textEdit->textCursor().selectedText();
-      ddest->textEdit->textCursor().insertText (t);
-      ddest->textEdit->textCursor().insertText ("\n");
+      QString t = dsource->textCursor().selectedText();
+      ddest->textCursor().insertText (t);
+      ddest->textCursor().insertText ("\n");
      }
 }
 
@@ -8678,7 +8678,7 @@ void CTEA::cal_gen_mooncal()
      }
 
   CDocument *nd = documents->create_new();
-  nd->textEdit->textCursor().insertText (s);
+  nd->textCursor().insertText (s);
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
@@ -8891,7 +8891,7 @@ void CTEA::fn_stat_words_lengths()
 
   CDocument *nd = documents->create_new();
   if (nd)
-     nd->textEdit->textCursor().insertText (l.join("\n"));
+     nd->textCursor().insertText (l.join("\n"));
 }
 
 
@@ -9323,7 +9323,7 @@ void CTEA::fn_sort_latex_table_by_col_abc()
   if (! d)
      return;
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
 
   if (t.isEmpty())
      return;
@@ -9365,7 +9365,7 @@ void CTEA::fn_sort_latex_table_by_col_abc()
 
   t = sl_temp.join ("\n");
 
-  d->textEdit->textCursor().insertText (t);
+  d->textCursor().insertText (t);
 }
 
 
@@ -9387,7 +9387,7 @@ void CTEA::fn_table_swap_cells()
 
   QString sep = fiftxt[0];
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
 
   if (t.isEmpty())
      return;
@@ -9427,7 +9427,7 @@ void CTEA::fn_table_swap_cells()
 
   t = sl_temp.join ("\n");
 
-  d->textEdit->textCursor().insertText (t);
+  d->textCursor().insertText (t);
 }
 
 
@@ -9448,7 +9448,7 @@ void CTEA::fn_table_delete_cells()
 
   QString sep = fiftxt[0];
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
 
   if (t.isEmpty())
       return;
@@ -9481,7 +9481,7 @@ void CTEA::fn_table_delete_cells()
 
   t = sl_temp.join ("\n");
 
-  d->textEdit->textCursor().insertText (t);
+  d->textCursor().insertText (t);
 }
 
 
@@ -9507,7 +9507,7 @@ void CTEA::fn_table_copy_cells()
      col2 = fiftxt[2].toInt();
 
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
 
   if (t.isEmpty())
       return;
@@ -9599,7 +9599,7 @@ void CTEA::fn_sum_by_last_col()
   if (! d)
       return;
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
   t = t.replace (",", ".");
 
   if (t.isEmpty())
@@ -9644,13 +9644,13 @@ void CTEA::search_unmark()
   QString t_text_color = QColor (text_color).darker(darker_val).name();
   QString t_back_color = QColor (back_color).darker(darker_val).name();
 
-  d->textEdit->selectAll();
+  d->selectAll();
 
-  QTextCharFormat f =  d->textEdit->currentCharFormat();
+  QTextCharFormat f =  d->currentCharFormat();
   f.setBackground (QColor (t_back_color));
   f.setForeground (QColor (t_text_color));
-  d->textEdit->mergeCurrentCharFormat (f);
-  d->textEdit->textCursor().clearSelection();
+  d->mergeCurrentCharFormat (f);
+  d->textCursor().clearSelection();
 }
 
 
@@ -9673,21 +9673,21 @@ void CTEA::search_mark_all()
 
   QTextCursor cr;
 
-  int pos_save = d->textEdit->textCursor().position();
+  int pos_save = d->textCursor().position();
 
-  d->textEdit->selectAll();
+  d->selectAll();
 
-  QTextCharFormat f = d->textEdit->currentCharFormat();
+  QTextCharFormat f = d->currentCharFormat();
   f.setBackground (QColor (t_back_color));
   f.setForeground (QColor (t_text_color));
-  d->textEdit->mergeCurrentCharFormat (f);
+  d->mergeCurrentCharFormat (f);
 
-  d->textEdit->textCursor().clearSelection();
+  d->textCursor().clearSelection();
 
   int from;
 
   if (settings->value ("find_from_cursor", "1").toBool())
-      from = d->textEdit->textCursor().position();
+      from = d->textCursor().position();
   else
       from = 0;
 
@@ -9699,52 +9699,52 @@ void CTEA::search_mark_all()
 #if (QT_VERSION_MAJOR < 5)
 
          if (menu_find_regexp->isChecked())
-            cr = d->textEdit->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+            cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
 #else
 
          if (menu_find_regexp->isChecked())
-            cr = d->textEdit->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
+            cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
 
 
 #endif
          else
              if (menu_find_fuzzy->isChecked()) //fuzzy search
                 {
-                 int pos = str_fuzzy_search (d->textEdit->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
+                 int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
                  if (pos != -1)
                     {
                      //set selection:
-                     cr = d->textEdit->textCursor();
+                     cr = d->textCursor();
                      cr.setPosition (pos, QTextCursor::MoveAnchor);
                      cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
 
                      if (! cr.isNull())
-                         d->textEdit->setTextCursor (cr);
+                         d->setTextCursor (cr);
                     }
                  else
                      cont_search = false;
                 }
             else //normal search
-                 cr = d->textEdit->document()->find (d->text_to_search, from, get_search_options());
+                 cr = d->document()->find (d->text_to_search, from, get_search_options());
 
 
          if (! cr.isNull())
             {
-             d->textEdit->setTextCursor (cr);
+             d->setTextCursor (cr);
              QTextCharFormat fm = cr.blockCharFormat();
              fm.setBackground (QColor (hash_get_val (global_palette, "backgroundmark", "red")));
              fm.setForeground (QColor (hash_get_val (global_palette, "foregroundmark", "blue")));
 
              cr.mergeCharFormat (fm);
-             d->textEdit->setTextCursor (cr);
+             d->setTextCursor (cr);
             }
          else
              cont_search = false;
 
-         from = d->textEdit->textCursor().position();
+         from = d->textCursor().position();
         }
 
-  d->textEdit->document()->setModified (false);
+  d->document()->setModified (false);
   d->goto_pos (pos_save);
 }
 
@@ -9874,13 +9874,13 @@ void CTEA::ed_block_start()
   if (! d)
      return;
 
-  int x = d->textEdit->textCursor().position() - d->textEdit->textCursor().block().position();
-  int y = d->textEdit->textCursor().block().blockNumber();
+  int x = d->textCursor().position() - d->textCursor().block().position();
+  int y = d->textCursor().block().blockNumber();
 
-  d->textEdit->rect_sel_start.setX (x);
-  d->textEdit->rect_sel_start.setY (y);
+  d->rect_sel_start.setX (x);
+  d->rect_sel_start.setY (y);
 
-  d->textEdit->update_ext_selections();
+  d->update_ext_selections();
 }
 
 
@@ -9892,13 +9892,13 @@ void CTEA::ed_block_end()
   if (! d)
      return;
 
-  int x = d->textEdit->textCursor().position() - d->textEdit->textCursor().block().position();
-  int y = d->textEdit->textCursor().block().blockNumber();
+  int x = d->textCursor().position() - d->textCursor().block().position();
+  int y = d->textCursor().block().blockNumber();
 
-  d->textEdit->rect_sel_end.setX (x);
-  d->textEdit->rect_sel_end.setY (y);
+  d->rect_sel_end.setX (x);
+  d->rect_sel_end.setY (y);
 
-  d->textEdit->update_ext_selections();
+  d->update_ext_selections();
 }
 
 
@@ -9910,10 +9910,10 @@ void CTEA::ed_block_copy()
   if (! d)
      return;
 
-  if (! d->textEdit->has_rect_selection())
+  if (! d->has_rect_selection())
      return;
 
-  QApplication::clipboard()->setText (d->textEdit->get_rect_sel());
+  QApplication::clipboard()->setText (d->get_rect_sel());
 }
 
 
@@ -9923,7 +9923,7 @@ void CTEA::ed_block_paste()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->rect_sel_replace (QApplication::clipboard()->text());
+      d->rect_sel_replace (QApplication::clipboard()->text());
 }
 
 
@@ -9933,7 +9933,7 @@ void CTEA::ed_block_cut()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->textEdit->rect_sel_cut();
+      d->rect_sel_cut();
 }
 
 
@@ -10106,7 +10106,7 @@ void CTEA::fn_number_dms2dc()
   if (! d)
       return;
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
   t = t.remove (" ");
 
   t = t.replace ('\'', QChar (UQS));
@@ -10192,7 +10192,7 @@ void CTEA::fn_number_dd2dms()
   if (! d)
       return;
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
   t = t.remove (" ");
   t = t.remove (QChar (UQDG));
 
@@ -10261,7 +10261,7 @@ void CTEA::fn_number_dd2dms()
 //  qDebug() << "decimal_degrees " << decimal_degrees;
 //  qDebug() << "decimal_degrees_N " << decimal_degrees_N;
 */
-//     d->textEdit->textCursor().insertText (int_to_binary (d->textEdit->textCursor().selectedText().toInt()));
+//     d->textCursor().insertText (int_to_binary (d->textCursor().selectedText().toInt()));
 }
 
 
@@ -10468,7 +10468,7 @@ void CTEA::ide_global_definition()
   if (! d)
       return;
 
-  QString sel_text = d->textEdit->textCursor().selectedText();
+  QString sel_text = d->textCursor().selectedText();
 
   QFileInfo source_dir (documents->fname_current_project);
 
@@ -10598,7 +10598,7 @@ void CTEA::logmemo_double_click (const QString &txt)
   if (! d)
      return;
 
-  QTextCursor cur = d->textEdit->textCursor();
+  QTextCursor cur = d->textCursor();
   if (cur.isNull())
      return;
 
@@ -10606,8 +10606,8 @@ void CTEA::logmemo_double_click (const QString &txt)
   cur.movePosition (QTextCursor::Down, QTextCursor::MoveAnchor, source_line.toInt() - 1);
   cur.movePosition (QTextCursor::Right, QTextCursor::MoveAnchor, source_col.toInt() - 1);
   cur.select (QTextCursor::WordUnderCursor);
-  d->textEdit->setTextCursor (cur);
-  d->textEdit->setFocus();
+  d->setTextCursor (cur);
+  d->setFocus();
 }
 
 
@@ -10631,7 +10631,7 @@ void CTEA::fn_anagram()
   if (! d)
       return;
 
-  QString t = d->textEdit->textCursor().selectedText();
+  QString t = d->textCursor().selectedText();
   if (t.isEmpty())
      return;
 
@@ -10639,7 +10639,7 @@ void CTEA::fn_anagram()
 
   d = documents->create_new();
   if (d)
-     d->textEdit->textCursor().insertText (txt);
+     d->textCursor().insertText (txt);
 
 }
 
@@ -10720,7 +10720,7 @@ void CTEA::fn_filter_by_repetitions()
 
  
 
-  QStringList words = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+  QStringList words = d->textCursor().selectedText().split (QChar::ParagraphSeparator);
 
   for (int i = 0; i < words.size(); ++i)
       {
@@ -10759,7 +10759,7 @@ void CTEA::fn_filter_by_repetitions()
       }
 
       if (! result.isEmpty())  
-         d->textEdit->textCursor().insertText (result);
+         d->textCursor().insertText (result);
 
 }
 
@@ -10798,7 +10798,7 @@ void CTEA::fn_filter_by_repetitions()
 
 
 
-  QStringList sl = d->textEdit->textCursor().selectedText().split (QChar::ParagraphSeparator);
+  QStringList sl = d->textCursor().selectedText().split (QChar::ParagraphSeparator);
 
   for (int i = 0; i < sl.size(); ++i)
       {
@@ -10863,7 +10863,7 @@ void CTEA::fn_filter_by_repetitions()
        }
 
       if (! result.isEmpty())  
-         d->textEdit->textCursor().insertText (result);
+         d->textCursor().insertText (result);
 }
 
 */
@@ -10928,7 +10928,7 @@ void CTEA::test()
     time_start.start();
 
   pb_status->show();
-  pb_status->setRange (0, d->textEdit->toPlainText().size() - 1);
+  pb_status->setRange (0, d->toPlainText().size() - 1);
   pb_status->setFormat (tr ("%p% completed"));
   pb_status->setTextVisible (true);
 
@@ -10938,7 +10938,7 @@ void CTEA::test()
 
    d->text_to_search = fiftxt;
 
-   QTextCursor cr = d->textEdit->document()->find (d->text_to_search, 0, get_search_options());
+   QTextCursor cr = d->document()->find (d->text_to_search, 0, get_search_options());
    cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.size());
 8779797
 
@@ -10957,8 +10957,8 @@ void CTEA::test()
     while (cr.movePosition (QTextCursor::NextWord));
 
     cr.setPosition (pos);
-    d->textEdit->setTextCursor (cr);
-    d->textEdit->document()->setModified (false);
+    d->setTextCursor (cr);
+    d->document()->setModified (false);
 
     pb_status->hide();
 
@@ -10979,7 +10979,7 @@ void CTEA::test()
   if (! d)
      return;
 
-  QStringList l = text_get_bookmarks (d->textEdit->toPlainText());
+  QStringList l = text_get_bookmarks (d->toPlainText());
   qstring_list_print (l);
 */
 

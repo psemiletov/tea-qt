@@ -580,7 +580,7 @@ Preferences tab :: Functions page UI elements
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
   QComboBox *cmb_spellcheckers;
-  void cmb_spellchecker_currentIndexChanged (int);
+//  void cmb_spellchecker_currentIndexChanged (int index);
 
 #endif // SPELLCHECKERS ENABLED
 
@@ -1004,6 +1004,16 @@ Fn menu callbacks
 
   void remove_formatting();
 
+
+  void fn_sum_by_last_col();
+  void fn_anagram();
+
+  void fn_insert_cpp();
+  void fn_insert_c();
+  void fn_insert_template_html5();
+  void fn_insert_template_tea();
+
+
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
   void fn_change_spell_lang();
@@ -1014,15 +1024,7 @@ Fn menu callbacks
   void fn_spell_suggest();
 
 
-  void fn_sum_by_last_col();
-  void fn_anagram();
-
-  void fn_insert_cpp();
-  void fn_insert_c();
-  void fn_insert_template_html5();
-  void fn_insert_template_tea();
-
-  void cmb_spellchecker_currentIndexChanged (int);
+ void cmb_spellchecker_currentIndexChanged (int);
 
 
 #endif // SPELLCHECKERS ENABLED

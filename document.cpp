@@ -80,13 +80,13 @@ void CDocument::update_status()
       return;
      }
 
-  int x = textEdit->textCursor().position() - textEdit->textCursor().block().position() + 1;
-  int y = textEdit->textCursor().block().blockNumber() + 1;
+  int x = textCursor().position() - textCursor().block().position() + 1;
+  int y = textCursor().block().blockNumber() + 1;
 
   holder->l_status_bar->setText (QString ("%1%2[%3]").arg (
                                  QString::number (y), -10).arg (
                                  QString::number (x), -10).arg (
-                                 QString::number (textEdit->blockCount(), 10)));
+                                 QString::number (blockCount(), 10)));
 
   holder->l_charset->setText (charset);
 }
@@ -136,7 +136,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
   charset = tio->charset;
   eol = tio->eol;
 
-  textEdit->setPlainText (tio->data);
+  setPlainText (tio->data);
 
   file_name = fileName;
 
@@ -146,7 +146,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
   set_hl();
 
   set_markup_mode();
-  textEdit->document()->setModified (false);
+  document()->setModified (false);
 
   holder->log->log (tr ("%1 is open").arg (file_name));
 
@@ -176,7 +176,7 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
   else
       tio->charset = codec;
 
-  tio->data = textEdit->toPlainText();
+  tio->data = toPlainText();
 
   if (eol != "\n")
       tio->data.replace ("\n", eol);
@@ -201,7 +201,7 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
       update_title (settings->value ("full_path_at_window_title", 1).toBool());
       update_status();
 
-      textEdit->document()->setModified (false);
+      document()->setModified (false);
 
       holder->update_current_files_menu();
       holder->update_project (file_name);
@@ -211,12 +211,18 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
 }
 
 
-CDocument::CDocument (QObject *parent): QObject (parent)
+//CDocument::CDocument (QObject *parent): QObject (parent)
+CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 {
+
+  holder = hldr;
+
+  if (!holder)
+     qDebug() << "NOT HOLDER";
+
   QString fname = tr ("new[%1]").arg (QTime::currentTime().toString ("hh-mm-ss"));
 
-  textEdit = 0;
-  holder = 0;
+ // holder = 0;
   highlighter = 0;
   tab_page = 0;
 
@@ -227,6 +233,16 @@ CDocument::CDocument (QObject *parent): QObject (parent)
   text_to_search = "";
   position = 0;
 
+
+  margin_pos = 72;
+  margin_x = brace_width * margin_pos;
+  draw_margin = false;
+  hl_brackets = false;
+  auto_indent = false;
+  tab_sp_width = 8;
+  spaces_instead_of_tabs = true;
+
+
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
   eol = "\r\n";
@@ -236,18 +252,74 @@ CDocument::CDocument (QObject *parent): QObject (parent)
   eol = "\n";
 
 #endif
+
+
+  rect_sel_reset();
+
+  highlight_current_line = false;
+  setup_brace_width();
+
+  lineNumberArea = new CLineNumberArea (this);
+
+  connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
+  connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
+  connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
+
+  updateLineNumberAreaWidth (0);
+
+
+  document()->setUseDesignMetrics (true);
+
+  QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
+  QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  sel_text_color = QColor (s_sel_text_color).darker(darker_val).name();
+  sel_back_color = QColor (s_sel_back_color).darker(darker_val).name();
+
+  connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
+
+
+
+   current_line_color = QColor (hash_get_val (global_palette,
+                                         "cur_line_color",
+                                         "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
+
+
+  qDebug() << "CDocument::CDocument --00000000000000 1";
+
+  // if (! holder->tab_widget)
+    // qDebug() << "AAAAAAAAAAAAAAa";
+
+  holder->items.push_back (this);
+
+  int tab_index = holder->tab_widget->addTab (this, file_name);
+
+  qDebug() << "CDocument::CDocument --00000000000000 2";
+
+
+  tab_page = holder->tab_widget->widget (tab_index);
+
+
+
+  setFocus (Qt::OtherFocusReason);
+
+  qDebug() << "CDocument::CDocument --00000000000000 3";
+
+
 }
 
 
 CDocument::~CDocument()
 {
-  if (file_name.endsWith (".notes") && textEdit->document()->isModified())
+  if (file_name.endsWith (".notes") && document()->isModified())
      save_with_name_plain (file_name);
   else
-  if (file_name.startsWith (holder->dir_config) && textEdit->document()->isModified())
+  if (file_name.startsWith (holder->dir_config) && document()->isModified())
      save_with_name_plain (file_name);
   else
-  if (textEdit->document()->isModified() && file_exists (file_name))
+  if (document()->isModified() && file_exists (file_name))
      {
       if (QMessageBox::warning (0, "TEA",
                                 tr ("%1 has been modified.\n"
@@ -276,6 +348,7 @@ CDocument::~CDocument()
 }
 
 
+/*
 void CDocument::create_new()
 {
   textEdit = new CTEAEdit;
@@ -292,7 +365,7 @@ void CDocument::create_new()
 
   textEdit->setFocus (Qt::OtherFocusReason);
 }
-
+*/
 
 int CDocument::get_tab_idx()
 {
@@ -333,13 +406,16 @@ CDox::~CDox()
 
 CDocument* CDox::create_new()
 {
-  CDocument *doc = new CDocument;
+  qDebug() << "CDocument* CDox::create_new() - 1";
 
-  doc->holder = this;
+  CDocument *doc = new CDocument (this, 0);
+
+
+  qDebug() << "CDocument* CDox::create_new() - 2";
+
+//  doc->holder = this;
   doc->markup_mode = markup_mode;
-  items.push_back (doc);
-
-  doc->create_new();
+  //items.push_back (doc);
 
   tab_widget->setCurrentIndex (tab_widget->indexOf (doc->tab_page));
   apply_settings_single (doc);
@@ -348,6 +424,9 @@ CDocument* CDox::create_new()
   doc->update_status();
 
   update_current_files_menu();
+
+//  qDebug() << "CDocument* CDox::create_new() - 3";
+
 
   return doc;
 }
@@ -377,7 +456,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
       if (td)
          {
           td->insert_image (fileName);
-          td->textEdit->setFocus (Qt::OtherFocusReason);
+          td->setFocus (Qt::OtherFocusReason);
          }
       return td;
      }
@@ -441,7 +520,7 @@ bool CDocument::save_with_name_plain (const QString &fileName)
   if (! codec)
      return false;
 
-  QByteArray ba = codec->fromUnicode(textEdit->toPlainText());
+  QByteArray ba = codec->fromUnicode(toPlainText());
 
   file.write(ba);
   file.close();
@@ -454,14 +533,14 @@ bool CDocument::save_with_name_plain (const QString &fileName)
 
 QString CDocument::get_filename_at_cursor()
 {
-  if (textEdit->textCursor().hasSelection())
+  if (textCursor().hasSelection())
      {
       QFileInfo nf (file_name);
       QDir cd (nf.absolutePath());
-      return cd.cleanPath (cd.absoluteFilePath (textEdit->textCursor().selectedText()));
+      return cd.cleanPath (cd.absoluteFilePath (textCursor().selectedText()));
      }
 
-  QString s = textEdit->textCursor().block().text();
+  QString s = textCursor().block().text();
   if (s.isEmpty())
      return QString ("");
 
@@ -469,7 +548,7 @@ QString CDocument::get_filename_at_cursor()
 
   if (markup_mode == "LaTeX")
      {
-      int pos = textEdit->textCursor().positionInBlock();
+      int pos = textCursor().positionInBlock();
 
       int end = s.indexOf ("}", pos);
       if (end == -1)
@@ -502,7 +581,7 @@ QString CDocument::get_filename_at_cursor()
      }
   else
       {
-       int pos = textEdit->textCursor().positionInBlock();
+       int pos = textCursor().positionInBlock();
 
        int end = s.indexOf ("\"", pos);
        if (end == -1)
@@ -577,11 +656,11 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #if QT_VERSION >= 0x050000
 
-   highlighter = new CSyntaxHighlighterQRegularExpression (textEdit->document(), this, fname);
+   highlighter = new CSyntaxHighlighterQRegularExpression (document(), this, fname);
 
 #else
 
-  highlighter = new CSyntaxHighlighterQRegExp (textEdit->document(), this, fname);
+  highlighter = new CSyntaxHighlighterQRegExp (document(), this, fname);
 
 #endif
 }
@@ -589,9 +668,9 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 void CDocument::goto_pos (int pos)
 {
-  QTextCursor cr = textEdit->textCursor();
+  QTextCursor cr = textCursor();
   cr.setPosition (pos);
-  textEdit->setTextCursor (cr);
+  setTextCursor (cr);
 }
 
 
@@ -599,52 +678,52 @@ void CDox::apply_settings_single (CDocument *d)
 {
   int darker_val = settings->value ("darker_val", 100).toInt();
 
-  d->textEdit->setCursorWidth (settings->value ("cursor_width", 2).toInt());
-  d->textEdit->setCenterOnScroll (settings->value ("center_on_scroll", true).toBool());
+  d->setCursorWidth (settings->value ("cursor_width", 2).toInt());
+  d->setCenterOnScroll (settings->value ("center_on_scroll", true).toBool());
 
   QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
   QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
 
-  d->textEdit->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name();
-  d->textEdit->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name();
+  d->sel_text_color = QColor (s_sel_text_color).darker(darker_val).name();
+  d->sel_back_color = QColor (s_sel_back_color).darker(darker_val).name();
 
-  d->textEdit->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
-  d->textEdit->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
+  d->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
+  d->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
 
 #if (QT_VERSION_MAJOR <= 5 && QT_VERSION_MINOR < 10)
 
-  d->textEdit->setTabStopWidth (d->textEdit->tab_sp_width * d->textEdit->brace_width);
+  d->setTabStopWidth (d->tab_sp_width * d->brace_width);
 
 #else
 
-  d->textEdit->setTabStopDistance (d->textEdit->tab_sp_width * d->textEdit->brace_width);
+  d->setTabStopDistance (d->tab_sp_width * d->brace_width);
 
 #endif
 
-  d->textEdit->setup_brace_width();
+  d->setup_brace_width();
 
-  d->textEdit->set_show_linenums (settings->value ("show_linenums", false).toBool());
-  d->textEdit->set_show_margin (settings->value ("show_margin", false).toBool());
-  d->textEdit->set_margin_pos (settings->value ("margin_pos", 72).toInt());
-  d->textEdit->highlight_current_line = settings->value ("additional_hl", false).toBool();
-  d->textEdit->hl_brackets = settings->value ("hl_brackets", false).toBool();
-  d->textEdit->brackets_color = QColor (hash_get_val (global_palette, "brackets", "yellow")).darker (darker_val);
-  d->textEdit->current_line_color = QColor (hash_get_val (global_palette, "cur_line_color", "#EEF6FF")).darker (darker_val);
+  d->set_show_linenums (settings->value ("show_linenums", false).toBool());
+  d->set_show_margin (settings->value ("show_margin", false).toBool());
+  d->set_margin_pos (settings->value ("margin_pos", 72).toInt());
+  d->highlight_current_line = settings->value ("additional_hl", false).toBool();
+  d->hl_brackets = settings->value ("hl_brackets", false).toBool();
+  d->brackets_color = QColor (hash_get_val (global_palette, "brackets", "yellow")).darker (darker_val);
+  d->current_line_color = QColor (hash_get_val (global_palette, "cur_line_color", "#EEF6FF")).darker (darker_val);
 
   d->cursor_xy_visible = settings->value ("cursor_xy_visible", "2").toBool();
-  d->textEdit->auto_indent = settings->value ("auto_indent", false).toBool();
+  d->auto_indent = settings->value ("auto_indent", false).toBool();
 
   QString text_color = hash_get_val (global_palette, "text", "black");
   QString t_text_color = QColor (text_color).darker(darker_val).name();
-  d->textEdit->text_color = QColor (t_text_color);
+  d->text_color = QColor (t_text_color);
 
   QString back_color = hash_get_val (global_palette, "background", "white");
-  d->textEdit->margin_color = QColor (hash_get_val (global_palette, "margin_color", text_color)).darker(darker_val);
-  d->textEdit->linenums_bg = QColor (hash_get_val (global_palette, "linenums_bg", back_color)).darker(darker_val);
-  d->textEdit->set_word_wrap (settings->value ("word_wrap", true).toBool());
+  d->margin_color = QColor (hash_get_val (global_palette, "margin_color", text_color)).darker(darker_val);
+  d->linenums_bg = QColor (hash_get_val (global_palette, "linenums_bg", back_color)).darker(darker_val);
+  d->set_word_wrap (settings->value ("word_wrap", true).toBool());
 
-  d->textEdit->repaint();
+  d->repaint();
   d->set_hl();
 }
 
@@ -671,10 +750,10 @@ void CDox::add_to_recent (CDocument *d)
   s += ",";
   s += d->charset;
   s += ",";
-  s += QString::number (d->textEdit->textCursor().position());
+  s += QString::number (d->textCursor().position());
   s += ",";
 
-  if (! d->textEdit->get_word_wrap())
+  if (! d->get_word_wrap())
      s+="0";
   else
       s+="1";
@@ -720,9 +799,9 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
   if (sl.size() >= 4)
      {
       if (sl[3] == "1")
-         d->textEdit->set_word_wrap (true);
+         d->set_word_wrap (true);
       else
-         d->textEdit->set_word_wrap (false);
+         d->set_word_wrap (false);
      }
 
   return d;
@@ -738,10 +817,10 @@ QString CDocument::get_triplex()
   s += ",";
   s += charset;
   s += ",";
-  s += QString::number (textEdit->textCursor().position());
+  s += QString::number (textCursor().position());
   s += ",";
 
-  if (! textEdit->get_word_wrap())
+  if (! get_word_wrap())
      s+="0";
   else
       s+="1";
@@ -762,56 +841,55 @@ void CDocument::set_markup_mode()
 }
 
 
-void CTEAEdit::cb_cursorPositionChanged()
+void CDocument::cb_cursorPositionChanged()
 {
   viewport()->update();
 
-  if (doc)
-     doc->update_status();
+  update_status();
 
   if (hl_brackets)
      update_ext_selections();
 }
 
 
-void CTEAEdit::set_hl_cur_line (bool enable)
+void CDocument::set_hl_cur_line (bool enable)
 {
   highlight_current_line = enable;
-  emit repaint();
+  /*emit */repaint();
 }
 
 
-void CTEAEdit::set_hl_brackets (bool enable)
+void CDocument::set_hl_brackets (bool enable)
 {
   hl_brackets = enable;
-  emit repaint();
+  /*emit */repaint();
 }
 
 
-void CTEAEdit::set_show_margin (bool enable)
+void CDocument::set_show_margin (bool enable)
 {
   draw_margin = enable;
-  emit repaint();
+  /*emit */repaint();
 }
 
 
-void CTEAEdit::set_show_linenums (bool enable)
+void CDocument::set_show_linenums (bool enable)
 {
   draw_linenums = enable;
   updateLineNumberAreaWidth (0);
-  emit repaint();
+  /*emit*/ repaint();
 }
 
 
-void CTEAEdit::set_margin_pos (int mp)
+void CDocument::set_margin_pos (int mp)
 {
   margin_pos = mp;
   margin_x = brace_width * margin_pos;
-  emit repaint();
+  /*emit */repaint();
 }
 
 
-void CTEAEdit::paintEvent (QPaintEvent *event)
+void CDocument::paintEvent (QPaintEvent *event)
 {
   if (draw_margin || highlight_current_line)
      {
@@ -838,14 +916,14 @@ void CTEAEdit::paintEvent (QPaintEvent *event)
 }
 
 
-void CTEAEdit::setup_brace_width()
+void CDocument::setup_brace_width()
 {
   QFontMetrics *fm = new QFontMetrics (font());
   brace_width = fm->averageCharWidth();
 }
 
 
-CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
+/*CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 {
   rect_sel_reset();
 
@@ -880,7 +958,7 @@ CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
 
   connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
 }
-
+*/
 
 void CDox::move_cursor_up()
 {
@@ -967,9 +1045,9 @@ QStringList CDocument::get_words()
 {
   QStringList result;
 
-  QTextCursor cr = textEdit->textCursor();
+  QTextCursor cr = textCursor();
 
-  QString text = textEdit->toPlainText();
+  QString text = toPlainText();
 
   cr.setPosition (0);
   cr.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
@@ -1026,7 +1104,6 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 
   return tformat;
 }
-
 
 
 #if QT_VERSION >= 0x050000
@@ -1470,24 +1547,24 @@ void CDox::load_from_session (const QString &fileName)
 
 QString CDocument::get_selected_text() const
 {
-  return textEdit->textCursor().selectedText();
+  return textCursor().selectedText();
 }
 
 
 void CDocument::set_selected_text (const QString &value)
 {
-  textEdit->textCursor().insertText (value);
+  textCursor().insertText (value);
 }
 
 
 void CDocument::insert_image (const QString &full_path)
 {
-  textEdit->textCursor().insertText (get_insert_image (file_name, full_path, markup_mode));
+  textCursor().insertText (get_insert_image (file_name, full_path, markup_mode));
 }
 
 
 //если строка пустая - пофиг, а надо бы смотреть тогда строку выше
-void CTEAEdit::calc_auto_indent()
+void CDocument::calc_auto_indent()
 {
   QTextCursor cur = textCursor();
   cur.movePosition (QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
@@ -1527,7 +1604,7 @@ void CTEAEdit::calc_auto_indent()
 }
 
 
-void CTEAEdit::indent()
+void CDocument::indent()
 {
   if (! textCursor().hasSelection())
      {
@@ -1565,7 +1642,7 @@ void CTEAEdit::indent()
 }
 
 
-void CTEAEdit::un_indent()
+void CDocument::un_indent()
 {
   QStringList l = textCursor().selectedText().split (QChar::ParagraphSeparator);
 
@@ -1594,7 +1671,7 @@ void CTEAEdit::un_indent()
 #define SK_C 54
 
 
-void CTEAEdit::keyPressEvent (QKeyEvent *event)
+void CDocument::keyPressEvent (QKeyEvent *event)
 {
  // qDebug() << event->nativeScanCode() ;
 
@@ -1698,7 +1775,7 @@ void CTEAEdit::keyPressEvent (QKeyEvent *event)
 }
 
 
-int CTEAEdit::lineNumberAreaWidth()
+int CDocument::lineNumberAreaWidth()
 {
   if (! draw_linenums)
      return 0;
@@ -1718,13 +1795,13 @@ int CTEAEdit::lineNumberAreaWidth()
 }
 
 
-void CTEAEdit::updateLineNumberAreaWidth (int newBlockCount)
+void CDocument::updateLineNumberAreaWidth (int newBlockCount)
 {
   setViewportMargins (lineNumberAreaWidth(), 0, 0, 0);
 }
 
 
-void CTEAEdit::updateLineNumberArea (const QRect &rect, int dy)
+void CDocument::updateLineNumberArea (const QRect &rect, int dy)
 {
   if (dy)
      lineNumberArea->scroll (0, dy);
@@ -1736,7 +1813,7 @@ void CTEAEdit::updateLineNumberArea (const QRect &rect, int dy)
 }
 
 
-void CTEAEdit::lineNumberAreaPaintEvent (QPaintEvent *event)
+void CDocument::lineNumberAreaPaintEvent (QPaintEvent *event)
 {
   if (! draw_linenums)
      return;
@@ -1769,7 +1846,7 @@ void CTEAEdit::lineNumberAreaPaintEvent (QPaintEvent *event)
 }
 
 
-void CTEAEdit::resizeEvent (QResizeEvent *e)
+void CDocument::resizeEvent (QResizeEvent *e)
 {
   QPlainTextEdit::resizeEvent (e);
   QRect cr = contentsRect();
@@ -1777,7 +1854,7 @@ void CTEAEdit::resizeEvent (QResizeEvent *e)
 }
 
 
-void CTEAEdit::braceHighlight()
+void CDocument::braceHighlight()
 {
   brace_selection.format.setBackground (brackets_color);
 
@@ -1908,7 +1985,7 @@ void CTEAEdit::braceHighlight()
 }
 
 
-bool CTEAEdit::has_rect_selection()
+bool CDocument::has_rect_selection()
 {
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
      return false;
@@ -1917,7 +1994,7 @@ bool CTEAEdit::has_rect_selection()
 }
 
 
-void CTEAEdit::update_rect_sel()
+void CDocument::update_rect_sel()
 {
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
      return;
@@ -1972,7 +2049,7 @@ void CTEAEdit::update_rect_sel()
 }
 
 
-void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
+void CDocument::rect_sel_replace (const QString &s, bool insert)
 {
 /*
 
@@ -2042,7 +2119,7 @@ void CTEAEdit::rect_sel_replace (const QString &s, bool insert)
 }
 
 
-bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
+bool CDocument::canInsertFromMimeData (const QMimeData *source)
 {
 //  if (source->hasFormat ("text/uri-list"))
   //    return true;
@@ -2051,7 +2128,7 @@ bool CTEAEdit::canInsertFromMimeData (const QMimeData *source)
 }
 
 
-QMimeData* CTEAEdit::createMimeDataFromSelection()
+QMimeData* CDocument::createMimeDataFromSelection()
 {
   if (has_rect_selection())
      {
@@ -2064,7 +2141,7 @@ QMimeData* CTEAEdit::createMimeDataFromSelection()
 }
 
 
-void CTEAEdit::insertFromMimeData (const QMimeData *source)
+void CDocument::insertFromMimeData (const QMimeData *source)
 {
   QString fName;
   QFileInfo info;
@@ -2086,7 +2163,7 @@ void CTEAEdit::insertFromMimeData (const QMimeData *source)
         fName = u->toLocalFile();
         info.setFile(fName);
         if (info.isFile())
-           doc->holder->open_file (fName, "UTF-8");
+           holder->open_file (fName, "UTF-8");
        }
 }
 
@@ -2121,7 +2198,7 @@ QStringList text_get_bookmarks (const QString &s, const QString &sstart, const Q
 void CDocument::update_labels()
 {
   labels.clear();
-  labels = text_get_bookmarks (textEdit->toPlainText(),
+  labels = text_get_bookmarks (toPlainText(),
                                settings->value ("label_start", "[?").toString(),
                                settings->value ("label_end", "?]").toString());
 }
@@ -2150,7 +2227,7 @@ void CDox::update_current_files_menu()
 }
 
 
-void CTEAEdit::rect_sel_reset()
+void CDocument::rect_sel_reset()
 {
   rect_sel_start.setX (-1);
   rect_sel_start.setY (-1);
@@ -2159,7 +2236,7 @@ void CTEAEdit::rect_sel_reset()
 }
 
 
-QString CTEAEdit::get_rect_sel()
+QString CDocument::get_rect_sel()
 {
   QString result;
 
@@ -2186,7 +2263,7 @@ QString CTEAEdit::get_rect_sel()
 }
 
 
-void CTEAEdit::rect_sel_cut (bool just_del)
+void CDocument::rect_sel_cut (bool just_del)
 {
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
@@ -2241,7 +2318,7 @@ void CTEAEdit::rect_sel_cut (bool just_del)
 }
 
 
-void CTEAEdit::update_ext_selections()
+void CDocument::update_ext_selections()
 {
   extraSelections.clear();
   setExtraSelections (extraSelections);
@@ -2250,7 +2327,7 @@ void CTEAEdit::update_ext_selections()
 }
 
 
-void CTEAEdit::slot_selectionChanged()
+void CDocument::slot_selectionChanged()
 {
   QTextCursor cursor = this->textCursor();
 
@@ -2263,7 +2340,7 @@ void CTEAEdit::slot_selectionChanged()
 }
 
 
-void CTEAEdit::text_replace (const QString &s)
+void CDocument::text_replace (const QString &s)
 {
   if (has_rect_selection())
      rect_sel_replace (s, false);
@@ -2279,14 +2356,14 @@ void CDox::move_cursor (QTextCursor::MoveOperation mo)
   if (! d)
      return;
 
-  QTextCursor cr = d->textEdit->textCursor();
+  QTextCursor cr = d->textCursor();
   if (cr.isNull())
      return;
 
   if (mo != QTextCursor::NoMove)
      {
       cr.movePosition (mo, QTextCursor::MoveAnchor);
-      d->textEdit->setTextCursor (cr);
+      d->setTextCursor (cr);
      }
 }
 
@@ -2341,7 +2418,7 @@ void CDox::update_project (const QString &fileName)
 }
 
 
-void CTEAEdit::set_word_wrap (bool wrap)
+void CDocument::set_word_wrap (bool wrap)
 {
   if (wrap)
      setWordWrapMode (QTextOption::WrapAtWordBoundaryOrAnywhere);
@@ -2350,7 +2427,7 @@ void CTEAEdit::set_word_wrap (bool wrap)
 }
 
 
-bool CTEAEdit::get_word_wrap()
+bool CDocument::get_word_wrap()
 {
   return wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere;
 }

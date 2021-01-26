@@ -1300,7 +1300,7 @@ void CTEA::createMenus()
 
   menu_file->addSeparator();
 
-  /*menu_recent_off = */add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(recentoff()))->setCheckable (true);
+  /*menu_recent_off = */add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(menu_file_recent_off()))->setCheckable (true);
 //  menu_recent_off->setCheckable (true);
 
 #ifdef PRINTER_ENABLE
@@ -1637,16 +1637,6 @@ void CTEA::createMenus()
   menu_ide->addSeparator();
 
   add_to_menu (menu_ide, tr ("Toggle header/source"), SLOT(nav_toggle_hs()));
-/*
-  menu_ide->addSeparator();
-
-  add_to_menu (menu_ide, tr ("Run gtags"), SLOT(ide_gtags()));
-  add_to_menu (menu_ide, tr ("global definition"), SLOT(ide_global_definition()));
-  add_to_menu (menu_ide, tr ("global references"), SLOT(ide_global_references()));
-  menu_ide->addSeparator();
-  add_to_menu (menu_ide, tr ("Run ctags"), SLOT(ide_ctags()));
-
-*/
 
   menu_nav = menuBar()->addMenu (tr ("Nav"));
   menu_nav->setTearOffEnabled (true);
@@ -3709,7 +3699,7 @@ void CTEA::file_use_template()
 }
 
 
-void CTEA::file_use_snippet()
+void CTEA::fn_use_snippet()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3745,7 +3735,7 @@ void CTEA::update_snippets()
    create_menu_from_dir (this,
                          menu_fn_snippets,
                          dir_snippets,
-                         SLOT (file_use_snippet())
+                         SLOT (fn_use_snippet())
                         );
 }
 
@@ -4717,7 +4707,7 @@ void CTEA::process_readyReadStandardOutput()
 }
 
 
-void CTEA::file_open_program()
+void CTEA::run_program()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4779,7 +4769,7 @@ void CTEA::update_programs()
 
   create_menu_from_list (this, menu_programs,
                          sl,
-                         SLOT (file_open_program()));
+                         SLOT (run_program()));
 }
 
 
@@ -5636,7 +5626,7 @@ void CTEA::load_palette (const QString &fileName)
 }
 
 
-void CTEA::file_use_palette()
+void CTEA::view_use_palette()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -5696,7 +5686,7 @@ void CTEA::update_palettes()
 
   create_menu_from_list (this, menu_view_palettes,
                          l1,
-                         SLOT (file_use_palette()));
+                         SLOT (view_use_palette()));
 }
 
 
@@ -7230,18 +7220,17 @@ void CTEA::update_view_hls()
 {
   menu_view_hl->clear();
 
-//  QStringList l = documents->hls.uniqueKeys();
   QStringList l = documents->hls.keys();
 
   l.sort();
 
   create_menu_from_list (this, menu_view_hl,
                          l,
-                         SLOT (file_use_hl()));
+                         SLOT (view_use_hl()));
 }
 
 
-void CTEA::file_use_hl()
+void CTEA::view_use_hl()
 {
   last_action = qobject_cast<QAction *>(sender());
   QAction *a = qobject_cast<QAction *>(sender());
@@ -9861,7 +9850,7 @@ void CTEA::scale_image()
 }
 
 
-void CTEA::recentoff()
+void CTEA::menu_file_recent_off()
 {
   last_action = qobject_cast<QAction *>(sender());
   b_recent_off = ! b_recent_off;

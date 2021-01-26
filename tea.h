@@ -1,5 +1,5 @@
 /**************************************************************************
- *   2007-2019 by Peter Semiletov                            *
+ *   2007-2021 by Peter Semiletov                            *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -575,7 +575,16 @@ Preferences tab :: Functions page UI elements
   QLineEdit *ed_date_format;
   QLineEdit *ed_time_format;
 
+
+
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+
   QComboBox *cmb_spellcheckers;
+  void cmb_spellchecker_currentIndexChanged (int);
+
+#endif // SPELLCHECKERS ENABLED
+
+
   QLineEdit *ed_spellcheck_path;
   QLineEdit *ed_aspellcheck_path;
 
@@ -810,6 +819,7 @@ File menu callbacks
 ===================
 */
 
+  void test();
 
   void file_new();
   void file_open();
@@ -834,118 +844,35 @@ File menu callbacks
   void file_set_eol_mac();
 
 
-  void file_close();
-
-
-  void rename_selected();
-
-  void file_open_bookmarks_file();
-  void file_open_programs_file();
-  void file_find_obsolete_paths();
-
-
-  void file_open_bookmark();
-  void file_open_program();
-  void file_add_to_bookmarks();
-
-  void file_use_template();
-  void file_use_snippet();
-  void file_use_palette();
-  void file_use_hl();
-  void file_open_session();
-
-  void test();
-
-
-
-#ifdef USE_QML_STUFF
-  void fn_use_plugin();
-#endif
-
-  
-
-  void repeat();
-
-  void view_use_theme();
-
-  void select_label();
-
-  void fm_full_info();
-
-  void fm_hashsum_md5();
-  void fm_hashsum_md4();
-  void fm_hashsum_sha1();
-
-
-#if QT_VERSION >= 0x050000
-
-  void fm_hashsum_sha224();
-  void fm_hashsum_sha384();
-  void fm_hashsum_sha256();
-  void fm_hashsum_sha512();
-
-#endif
-
-
-
-  void fm_hashsum_sha3_224();
-  void fm_hashsum_sha3_256();
-  void fm_hashsum_sha3_384();
-  void fm_hashsum_sha3_512();
-
-
-
-  void fm_hashsum_keccak_256();
-  void fm_hashsum_keccak_224();
-  void fm_hashsum_keccak_384();
-  void fm_hashsum_keccak_512();
-
-
-  void fman_unpack_zip();
-  void fman_zip_info();
-
-  void fman_refresh();
-  void fman_rename();
-  void fman_delete();
-  void fman_zeropad();
-  void fman_del_n_first_chars();
-  void fman_multreplace();
-  void fman_apply_template();
-
-
-
 #ifdef PRINTER_ENABLE
   void file_print();
 #endif
 
 
-  void clipboard_dataChanged();
+  void menu_file_recent_off();
 
-  void view_use_profile();
-
-  void cal_set_date_a();
-  void cal_set_date_b();
-  void cal_set_to_current();
-  void cal_moon_mode();
-  void cal_gen_mooncal();
-  void cal_diff_days();
+  void file_add_to_bookmarks();
+  void file_find_obsolete_paths();
 
 
-  void cal_remove();
-  void fn_sum_by_last_col();
+  void file_open_bookmarks_file();
+  void file_open_programs_file();
+  void file_open_bookmark();
 
-  void fn_anagram();
-
-  void fn_insert_cpp();
-  void fn_insert_c();
-  void fn_insert_template_html5();
-  void fn_insert_template_tea();
+  void file_use_template();
+  void file_open_session();
 
 
-  void toggle_wrap();
-  void darker();
 
-  void about();
+  void file_close();
+
+
+/*
+===================
+Edit menu callbacks
+===================
+*/
+
 
   void ed_block_start();
   void ed_block_end();
@@ -965,19 +892,35 @@ File menu callbacks
   void ed_unindent();
   void ed_comment();
 
-  void set_as_storage_file();
-  void copy_to_storage_file();
-  void capture_clipboard_to_storage_file();
 
-  void upCase();
-  void dnCase();
 
-  void edit_copy_current_fname();
+/*
+===================
+Markup menu callbacks
+===================
+*/
 
-  void ide_run();
-  void ide_build();
-  void ide_clean();
 
+
+
+
+/*
+===================
+Search menu callbacks
+===================
+*/
+
+
+
+
+/*
+===================
+Fn menu callbacks
+===================
+*/
+
+
+  void fn_use_snippet();
   void fn_count();
   void fn_count_rx();
 
@@ -1070,6 +1013,15 @@ File menu callbacks
   void fn_remove_from_dict();
   void fn_spell_suggest();
 
+
+  void fn_sum_by_last_col();
+  void fn_anagram();
+
+  void fn_insert_cpp();
+  void fn_insert_c();
+  void fn_insert_template_html5();
+  void fn_insert_template_tea();
+
   void cmb_spellchecker_currentIndexChanged (int);
 
 
@@ -1082,6 +1034,141 @@ File menu callbacks
 #ifdef ASPELL_ENABLE
   void pb_choose_aspell_path_clicked();
 #endif
+
+
+/*
+===================
+Run menu callbacks
+===================
+*/
+
+
+
+/*
+===================
+IDE menu callbacks
+===================
+*/
+
+  void ide_run();
+  void ide_build();
+  void ide_clean();
+
+
+
+/*
+===================
+Nav menu callbacks
+===================
+*/
+
+
+
+
+/*
+===================
+View menu callbacks
+===================
+*/
+
+  void view_use_profile();
+  void view_use_palette();
+  void view_use_hl();
+  void view_use_theme();
+
+
+  void rename_selected();
+
+
+
+
+#ifdef USE_QML_STUFF
+  void fn_use_plugin();
+#endif
+
+  
+
+  void repeat();
+
+
+  void select_label();
+
+  void fm_full_info();
+
+  void fm_hashsum_md5();
+  void fm_hashsum_md4();
+  void fm_hashsum_sha1();
+
+
+#if QT_VERSION >= 0x050000
+
+  void fm_hashsum_sha224();
+  void fm_hashsum_sha384();
+  void fm_hashsum_sha256();
+  void fm_hashsum_sha512();
+
+#endif
+
+
+
+  void fm_hashsum_sha3_224();
+  void fm_hashsum_sha3_256();
+  void fm_hashsum_sha3_384();
+  void fm_hashsum_sha3_512();
+
+
+
+  void fm_hashsum_keccak_256();
+  void fm_hashsum_keccak_224();
+  void fm_hashsum_keccak_384();
+  void fm_hashsum_keccak_512();
+
+
+  void fman_unpack_zip();
+  void fman_zip_info();
+
+  void fman_refresh();
+  void fman_rename();
+  void fman_delete();
+  void fman_zeropad();
+  void fman_del_n_first_chars();
+  void fman_multreplace();
+  void fman_apply_template();
+
+
+
+
+
+  void clipboard_dataChanged();
+
+
+  void cal_set_date_a();
+  void cal_set_date_b();
+  void cal_set_to_current();
+  void cal_moon_mode();
+  void cal_gen_mooncal();
+  void cal_diff_days();
+
+
+  void cal_remove();
+
+
+  void toggle_wrap();
+  void darker();
+
+  void about();
+
+
+  void set_as_storage_file();
+  void copy_to_storage_file();
+  void capture_clipboard_to_storage_file();
+
+  void upCase();
+  void dnCase();
+
+  void edit_copy_current_fname();
+
+
 
 
   void scale_image();
@@ -1182,7 +1269,7 @@ File menu callbacks
   void cal_add_months();
   void cal_add_years();
 
-  void recentoff();
+  void run_program();
 
 
 /*

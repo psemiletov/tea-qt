@@ -1545,13 +1545,13 @@ void CDox::load_from_session (const QString &fileName)
 }
 
 
-QString CDocument::get_selected_text() const
+QString CDocument::get() const
 {
   return textCursor().selectedText();
 }
 
 
-void CDocument::set_selected_text (const QString &value)
+void CDocument::put (const QString &value)
 {
   textCursor().insertText (value);
 }
@@ -1985,7 +1985,7 @@ void CDocument::braceHighlight()
 }
 
 
-bool CDocument::has_rect_selection()
+bool CDocument::has_rect_selection() const
 {
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
      return false;
@@ -2119,7 +2119,7 @@ void CDocument::rect_sel_replace (const QString &s, bool insert)
 }
 
 
-bool CDocument::canInsertFromMimeData (const QMimeData *source)
+bool CDocument::canInsertFromMimeData (const QMimeData *source) const
 {
 //  if (source->hasFormat ("text/uri-list"))
   //    return true;
@@ -2128,7 +2128,7 @@ bool CDocument::canInsertFromMimeData (const QMimeData *source)
 }
 
 
-QMimeData* CDocument::createMimeDataFromSelection()
+QMimeData* CDocument::createMimeDataFromSelection() const
 {
   if (has_rect_selection())
      {
@@ -2236,7 +2236,7 @@ void CDocument::rect_sel_reset()
 }
 
 
-QString CDocument::get_rect_sel()
+QString CDocument::get_rect_sel() const
 {
   QString result;
 

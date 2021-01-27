@@ -65,96 +65,6 @@ class CDox;
 class CDocument;
 class CLineNumberArea;
 
-/*
-class CTEAEdit: public QPlainTextEdit
-{
-  Q_OBJECT
-
-public:
-
-  bool highlight_current_line;
-  bool hl_brackets;
-  bool draw_margin;
-  bool draw_linenums;
-  bool auto_indent;
-  bool spaces_instead_of_tabs;
-  int tab_sp_width; //in spaces
-  int brace_width; //in pixels
-  int margin_pos; //in chars
-  int margin_x;  //in pixels
-
-  QString indent_val;
-  QList <QTextEdit::ExtraSelection> extraSelections;
-  QTextEdit::ExtraSelection brace_selection;
-
-  QPoint rect_sel_start; //rect selection
-  QPoint rect_sel_end;   //rect selection
-
-  CDocument *doc; //uplink
-
-  QColor current_line_color;
-  QColor brackets_color;
-  QColor margin_color;
-  QColor linenums_bg;
-  QColor text_color;
-
-  QColor sel_text_color;
-  QColor sel_back_color;
-
-  QWidget *lineNumberArea;
-
-
-  CTEAEdit (QWidget *parent = 0);
-
-  void set_show_linenums (bool enable);
-  void set_show_margin (bool enable);
-  void set_margin_pos (int mp);
-  void set_hl_cur_line (bool enable);
-  void set_hl_brackets (bool enable);
-
-  void set_word_wrap (bool wrap);
-  bool get_word_wrap();
-
-  void indent();
-  void un_indent();
-
-  void calc_auto_indent();
-  void setup_brace_width();
-  void braceHighlight();
-
-  void lineNumberAreaPaintEvent(QPaintEvent *event);
-  int lineNumberAreaWidth();
-
-  void text_replace (const QString &s);
-  void rect_sel_reset();
-  void rect_sel_replace (const QString &s, bool insert = false);
-  void update_ext_selections();
-  void update_rect_sel();
-  QString get_rect_sel();
-  void rect_sel_cut (bool just_del = false);
-  Q_INVOKABLE bool has_rect_selection();
-
-
-protected:
-
-  QMimeData* createMimeDataFromSelection();
-  bool canInsertFromMimeData (const QMimeData *source);
-  void insertFromMimeData (const QMimeData *source);
-  void paintEvent(QPaintEvent *event);
-  void keyPressEvent (QKeyEvent *event);
-  void resizeEvent(QResizeEvent *event);
-
-public slots:
-
-  void updateLineNumberAreaWidth (int newBlockCount);
-  void cb_cursorPositionChanged();
-  void updateLineNumberArea (const QRect &, int);
-  void slot_selectionChanged();
-};
-*/
-
-
-
 
 class CSyntaxHighlighter: public QSyntaxHighlighter
 {
@@ -264,10 +174,9 @@ public:
   CDocument (CDox *hldr, QWidget *parent = 0);
   ~CDocument();
 
-  Q_INVOKABLE QString get_selected_text() const;
-  Q_INVOKABLE void set_selected_text (const QString &value);
+  Q_INVOKABLE QString get() const; //return selected text
+  Q_INVOKABLE void put (const QString &value); //replace selection or insert text at cursor
 
-  //void create_new();
   Q_INVOKABLE void set_tab_caption (const QString &fileName);
   Q_INVOKABLE bool save_with_name (const QString &fileName, const QString &codec);
   Q_INVOKABLE bool save_with_name_plain (const QString &fileName);
@@ -306,8 +215,6 @@ public:
   QPoint rect_sel_start; //rect selection
   QPoint rect_sel_end;   //rect selection
 
-//  CDocument *doc; //uplink
-
   QColor current_line_color;
   QColor brackets_color;
   QColor margin_color;
@@ -344,15 +251,15 @@ public:
   void rect_sel_replace (const QString &s, bool insert = false);
   void update_ext_selections();
   void update_rect_sel();
-  QString get_rect_sel();
+  QString get_rect_sel() const;
   void rect_sel_cut (bool just_del = false);
-  Q_INVOKABLE bool has_rect_selection();
+  Q_INVOKABLE bool has_rect_selection() const;
 
 
 protected:
 
-  QMimeData* createMimeDataFromSelection();
-  bool canInsertFromMimeData (const QMimeData *source);
+  QMimeData* createMimeDataFromSelection() const;
+  bool canInsertFromMimeData (const QMimeData *source) const;
   void insertFromMimeData (const QMimeData *source);
   void paintEvent(QPaintEvent *event);
   void keyPressEvent (QKeyEvent *event);

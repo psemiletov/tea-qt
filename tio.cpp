@@ -1058,9 +1058,6 @@ bool CTioEpub::load (const QString &fname)
 
   QStringList html_files;
 
-  QString source_fname;
-  QString ts;
-
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
        return false;

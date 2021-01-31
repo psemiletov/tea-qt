@@ -145,7 +145,6 @@ public:
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);
 };
-
 #endif
 
 
@@ -153,49 +152,29 @@ class CDocument: public QPlainTextEdit
 {
   Q_OBJECT
 
+private:
+
+  QWidget *lineNumberArea;
+  QList <QTextEdit::ExtraSelection> extra_selections;
+  QTextEdit::ExtraSelection brace_selection;
+
 public:
+
+  CDox *holder; //uplink
+  QWidget *tab_page; //pointer
+
+  CSyntaxHighlighter *highlighter;
 
   bool cursor_xy_visible;
 
   QString eol;
-
-  CDox *holder;
-  CSyntaxHighlighter *highlighter;
-
   QStringList labels;
 
   QString markup_mode;
   QString file_name;
   QString text_to_search;
   QString charset;
-  QWidget *tab_page;
   int position;
-
-  CDocument (CDox *hldr, QWidget *parent = 0);
-  ~CDocument();
-
-  Q_INVOKABLE QString get() const; //return selected text
-  Q_INVOKABLE void put (const QString &value); //replace selection or insert text at cursor
-
-  Q_INVOKABLE void set_tab_caption (const QString &fileName);
-  Q_INVOKABLE bool save_with_name (const QString &fileName, const QString &codec);
-  Q_INVOKABLE bool save_with_name_plain (const QString &fileName);
-  Q_INVOKABLE void goto_pos (int pos);
-  Q_INVOKABLE QString get_filename_at_cursor();
-  Q_INVOKABLE QStringList get_words();
-  Q_INVOKABLE void set_hl (bool mode_auto = true, const QString &theext = "txt");
-  Q_INVOKABLE bool open_file (const QString &fileName, const QString &codec);
-  Q_INVOKABLE void insert_image (const QString &full_path);
-  Q_INVOKABLE void set_markup_mode();
-  Q_INVOKABLE void reload (const QString &enc);
-  Q_INVOKABLE int get_tab_idx();
-  Q_INVOKABLE QString get_triplex();
-  Q_INVOKABLE void update_status();
-  Q_INVOKABLE void update_title (bool fullname = true);
-  Q_INVOKABLE void update_labels();
-
-
-public:
 
   bool highlight_current_line;
   bool hl_brackets;
@@ -209,8 +188,6 @@ public:
   int margin_x;  //in pixels
 
   QString indent_val;
-  QList <QTextEdit::ExtraSelection> extraSelections;
-  QTextEdit::ExtraSelection brace_selection;
 
   QPoint rect_sel_start; //rect selection
   QPoint rect_sel_end;   //rect selection
@@ -224,7 +201,36 @@ public:
   QColor sel_text_color;
   QColor sel_back_color;
 
-  QWidget *lineNumberArea;
+
+  CDocument (CDox *hldr, QWidget *parent = 0);
+  ~CDocument();
+
+  Q_INVOKABLE QString get() const; //return selected text
+  Q_INVOKABLE void put (const QString &value); //replace selection or insert text at cursor
+
+
+  Q_INVOKABLE bool open_file (const QString &fileName, const QString &codec);
+  Q_INVOKABLE bool save_with_name (const QString &fileName, const QString &codec);
+  Q_INVOKABLE bool save_with_name_plain (const QString &fileName);
+
+  Q_INVOKABLE QString get_filename_at_cursor();
+  Q_INVOKABLE QString get_triplex();
+  Q_INVOKABLE QStringList get_words();
+
+  Q_INVOKABLE void set_tab_caption (const QString &fileName);
+
+  Q_INVOKABLE void set_hl (bool mode_auto = true, const QString &theext = "txt");
+  Q_INVOKABLE void insert_image (const QString &full_path);
+  Q_INVOKABLE void set_markup_mode();
+  Q_INVOKABLE void reload (const QString &enc);
+  Q_INVOKABLE int get_tab_idx();
+
+  Q_INVOKABLE void update_status();
+  Q_INVOKABLE void update_title (bool fullname = true);
+  Q_INVOKABLE void update_labels();
+
+
+  Q_INVOKABLE void goto_pos (int pos);
 
 
   void set_show_linenums (bool enable);
@@ -241,10 +247,10 @@ public:
 
   void calc_auto_indent();
   void setup_brace_width();
-  void braceHighlight();
+  void brace_highlight();
 
-  void lineNumberAreaPaintEvent(QPaintEvent *event);
-  int lineNumberAreaWidth();
+  void lineNumberAreaPaintEvent (QPaintEvent *event);
+  int line_number_area_width();
 
   void text_replace (const QString &s);
   void rect_sel_reset();
@@ -365,7 +371,7 @@ public:
   CLineNumberArea (CDocument *editor = 0): QWidget (editor), code_editor (editor) {}
 
   QSize sizeHint() const {
-                          return QSize(code_editor->lineNumberAreaWidth(), 0);
+                          return QSize(code_editor->line_number_area_width(), 0);
                          }
 
 protected:

@@ -888,267 +888,6 @@ void CTEA::closeEvent (QCloseEvent *event)
 }
 
 
-void CTEA::file_new()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  documents->create_new();
-  main_tab_widget->setCurrentIndex (idx_tab_edit);
-}
-
-
-void CTEA::file_open()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  if (! settings->value ("use_trad_dialogs", "0").toBool())
-     {
-      CDocument *d = documents->get_current();
-
-      if (d)
-         {
-          if (file_exists (d->file_name))
-             fman->nav (get_file_path (d->file_name));
-         }
-      else
-          fman->nav (dir_last);
-
-      main_tab_widget->setCurrentIndex (idx_tab_fman);
-      fm_entry_mode = FM_ENTRY_MODE_OPEN;
-
-      return;
-     }
-
-  QFileDialog dialog (this);
-  QSize size = settings->value ("dialog_size", QSize (width(), height())).toSize();
-  dialog.resize (size);
-
-  dialog.setFilter (QDir::AllEntries | QDir::Hidden);
-  dialog.setOption (QFileDialog::DontUseNativeDialog, true);
-
-  QList<QUrl> sidebarUrls = dialog.sidebarUrls();
-  QList<QUrl> sidebarUrls_old = dialog.sidebarUrls();
-
-  sidebarUrls.append (QUrl::fromLocalFile (dir_templates));
-  sidebarUrls.append (QUrl::fromLocalFile (dir_snippets));
-  sidebarUrls.append (QUrl::fromLocalFile (dir_sessions));
-  sidebarUrls.append (QUrl::fromLocalFile (dir_scripts));
-  sidebarUrls.append (QUrl::fromLocalFile (dir_tables));
-
-#ifdef Q_OS_UNIX
-
-  QDir volDir ("/mnt");
-  QStringList volumes (volDir.entryList (volDir.filter() | QDir::NoDotAndDotDot));
-
-  QDir volDir2 ("/media");
-  QStringList volumes2 (volDir2.entryList (volDir.filter() | QDir::NoDotAndDotDot));
-
-  for (int i = 0; i < volumes.size(); i++)
-      sidebarUrls.append (QUrl::fromLocalFile ("/mnt/" + volumes.at(i)));
-
-  for (int i = 0; i < volumes2.size(); i++)
-      sidebarUrls.append (QUrl::fromLocalFile ("/media/" + volumes2.at(i)));
-
-#endif
-
-  dialog.setSidebarUrls (sidebarUrls);
-
-  dialog.setFileMode (QFileDialog::ExistingFiles);
-  dialog.setAcceptMode (QFileDialog::AcceptOpen);
-
-
-  CDocument *d = documents->get_current();
-  if (d)
-     {
-      if (file_exists (d->file_name))
-          dialog.setDirectory (get_file_path (d->file_name));
-      else
-          dialog.setDirectory (dir_last);
-     }
-  else
-      dialog.setDirectory (dir_last);
-
-  dialog.setNameFilter (tr ("All (*);;Text files (*.txt);;Markup files (*.xml *.html *.htm *.);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)"));
-
-  QLabel *l = new QLabel (tr ("Charset"));
-  QComboBox *cb_codecs = new QComboBox (&dialog);
-  dialog.layout()->addWidget (l);
-  dialog.layout()->addWidget (cb_codecs);
-
-  if (sl_last_used_charsets.size () > 0)
-     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
-  else
-     {
-      cb_codecs->addItems (sl_charsets);
-      cb_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
-     }
-
-  QStringList fileNames;
-
-  if (dialog.exec())
-     {
-      dialog.setSidebarUrls (sidebarUrls_old);
-
-      fileNames = dialog.selectedFiles();
-
-      for (int i = 0; i < fileNames.size(); i++)
-          {
-           CDocument *dc = documents->open_file (fileNames.at(i), cb_codecs->currentText());
-           if (dc)
-              {
-               dir_last = get_file_path (dc->file_name);
-               charset = dc->charset;
-              }
-
-           add_to_last_used_charsets (cb_codecs->currentText());
-          }
-     }
-  else
-      dialog.setSidebarUrls (sidebarUrls_old);
-
-  settings->setValue ("dialog_size", dialog.size());
-  update_dyn_menus();
-}
-
-
-bool CTEA::file_save()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return false;
-
-  if (d->isReadOnly())
-     {
-      log->log (tr ("This file is open in the read-only mode. You can save it with another name using <b>Save as</b>"));
-      return false;
-     }
-
-  if (file_exists (d->file_name))
-     d->save_with_name (d->file_name, d->charset);
-  else
-      return file_save_as();
-
-  if (d->file_name == fname_bookmarks)
-     update_bookmarks();
-
-  if (d->file_name == fname_programs)
-     update_programs();
-
-  return true;
-}
-
-
-bool CTEA::file_save_as()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return false;
-
-  if (! settings->value ("use_trad_dialogs", "0").toBool())
-     {
-      main_tab_widget->setCurrentIndex (idx_tab_fman);
-      fm_entry_mode = FM_ENTRY_MODE_SAVE;
-
-      if (file_exists (d->file_name))
-         fman->nav (get_file_path (d->file_name));
-      else
-          fman->nav (dir_last);
-
-      ed_fman_fname->setFocus();
-
-      return true;
-     }
-
-  QFileDialog dialog (this);
-  QSize size = settings->value ("dialog_size", QSize (width(), height())).toSize();
-  dialog.resize (size);
-
-  dialog.setFilter (QDir::AllEntries | QDir::Hidden);
-  dialog.setOption (QFileDialog::DontUseNativeDialog, true);
-
-  QList<QUrl> sidebarUrls = dialog.sidebarUrls();
-  QList<QUrl> sidebarUrls_old = dialog.sidebarUrls();
-
-  sidebarUrls.append (QUrl::fromLocalFile(dir_templates));
-  sidebarUrls.append (QUrl::fromLocalFile(dir_snippets));
-  sidebarUrls.append (QUrl::fromLocalFile(dir_sessions));
-  sidebarUrls.append (QUrl::fromLocalFile(dir_scripts));
-  sidebarUrls.append (QUrl::fromLocalFile(dir_tables));
-
-#ifdef Q_OS_LINUX
-
-  QDir volDir ("/mnt");
-  QStringList volumes (volDir.entryList (volDir.filter() | QDir::NoDotAndDotDot));
-
-  QDir volDir2 ("/media");
-  QStringList volumes2 (volDir2.entryList (volDir2.filter() | QDir::NoDotAndDotDot));
-
-  for (int i = 0; i < volumes.size(); i++)
-      sidebarUrls.append (QUrl::fromLocalFile ("/mnt/" + volumes.at(i)));
-
-  for (int i = 0; i < volumes2.size(); i++)
-      sidebarUrls.append (QUrl::fromLocalFile ("/media/" + volumes2.at(i)));
-
-
-#endif
-
-  dialog.setSidebarUrls (sidebarUrls);
-
-  dialog.setFileMode (QFileDialog::AnyFile);
-  dialog.setAcceptMode (QFileDialog::AcceptSave);
-  dialog.setDirectory (dir_last);
-
-  QLabel *l = new QLabel (tr ("Charset"));
-  QComboBox *cb_codecs = new QComboBox (&dialog);
-  dialog.layout()->addWidget (l);
-  dialog.layout()->addWidget (cb_codecs);
-
-  if (sl_last_used_charsets.size () > 0)
-     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
-  else
-     {
-      cb_codecs->addItems (sl_charsets);
-      cb_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
-     }
-
-  if (dialog.exec())
-     {
-      dialog.setSidebarUrls (sidebarUrls_old);
-
-      QString fileName = dialog.selectedFiles().at(0);
-
-      if (file_exists (fileName))
-         {
-          int ret = QMessageBox::warning (this, "TEA",
-                                          tr ("%1 already exists\n"
-                                          "Do you want to overwrite?")
-                                           .arg (fileName),
-                                          QMessageBox::Yes | QMessageBox::Default,
-                                          QMessageBox::Cancel | QMessageBox::Escape);
-
-          if (ret == QMessageBox::Cancel)
-             return false;
-         }
-
-      d->save_with_name (fileName, cb_codecs->currentText());
-      d->set_markup_mode();
-      d->set_hl();
-
-      add_to_last_used_charsets (cb_codecs->currentText());
-      update_dyn_menus();
-
-      QFileInfo f (d->file_name);
-      dir_last = f.path();
-     }
-   else
-       dialog.setSidebarUrls (sidebarUrls_old);
-
-  settings->setValue ("dialog_size", dialog.size());
-  return true;
-}
 
 
 void CTEA::about()
@@ -1300,8 +1039,7 @@ void CTEA::createMenus()
 
   menu_file->addSeparator();
 
-  /*menu_recent_off = */add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(menu_file_recent_off()))->setCheckable (true);
-//  menu_recent_off->setCheckable (true);
+  add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(menu_file_recent_off()))->setCheckable (true);
 
 #ifdef PRINTER_ENABLE
   add_to_menu (menu_file, tr ("Print"), SLOT(file_print()));
@@ -1329,7 +1067,7 @@ void CTEA::createMenus()
 
   menu_edit->addSeparator();
 
-  add_to_menu (menu_edit, tr ("Copy current file name"), SLOT(edit_copy_current_fname()));
+  add_to_menu (menu_edit, tr ("Copy current file name"), SLOT(ed_copy_current_fname()));
 
   menu_edit->addSeparator();
 
@@ -1340,7 +1078,7 @@ void CTEA::createMenus()
 
   add_to_menu (menu_edit, tr ("Indent (tab)"), SLOT(ed_indent()));
   add_to_menu (menu_edit, tr ("Un-indent (shift+tab)"), SLOT(ed_unindent()));
-  add_to_menu (menu_edit, tr ("Indent by first line"), SLOT(indent_by_first_line()));
+  add_to_menu (menu_edit, tr ("Indent by first line"), SLOT(ed_indent_by_first_line()));
 
   menu_edit->addSeparator();
 
@@ -1937,7 +1675,7 @@ void CTEA::ed_redo()
       d->redo();
 }
 
-
+/*
 void CTEA::ed_clear()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -1946,7 +1684,7 @@ void CTEA::ed_clear()
   if (d)
       d->clear();
 }
-
+*/
 
 void CTEA::upCase()
 {
@@ -2364,23 +2102,6 @@ void CTEA::opt_shortcuts_find_prev()
 
   if (index != -1)
      lv_menuitems->setCurrentRow (index);
-}
-
-
-void CTEA::file_save_bak()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! file_exists (d->file_name))
-     return;
-
-  QString fname  = d->file_name + ".bak";
-  d->save_with_name_plain (fname);
-  log->log (tr ("%1 is saved").arg (fname));
 }
 
 
@@ -3080,73 +2801,6 @@ void CTEA::slot_style_currentIndexChanged (int)
 }
 
 
-void CTEA::file_open_at_cursor()
-{
-  if (main_tab_widget->currentIndex() == idx_tab_fman)
-     {
-      fman_preview_image();
-      return;
-     }
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString fname = d->get_filename_at_cursor();
-
-  if (fname.isEmpty())
-     return;
-
-  if (is_image (fname))
-     {
-      if (settings->value ("override_img_viewer", 0).toBool())
-         {
-          QString command = settings->value ("img_viewer_override_command", "display %s").toString();
-          command = command.replace ("%s", fname);
-          QProcess::startDetached (command, QStringList());
-          return;
-         }
-      else
-          {
-           if (file_get_ext (fname) == "gif")
-              {
-               CGIFWindow *w = new CGIFWindow;
-               w->load_image (fname);
-               return;
-              }
-           else
-               {
-                if (! img_viewer->window_full.isVisible())
-                   {
-                    img_viewer->window_full.show();
-                    activateWindow();
-                   }
-
-                img_viewer->set_image_full (fname);
-                return;
-               }
-          }
-      }
-
-
-  if (fname.startsWith ("#"))
-     {
-      QString t = fname;
-      t.remove (0, 1);
-      t.prepend ("name=\"");
-      if (d->find (t))
-         return;
-
-      t = fname;
-      t.remove (0, 1);
-      t.prepend ("id=\"");
-      d->find (t);
-
-      return;
-     }
-
-  documents->open_file (fname, d->charset);
-}
 
 
 void CTEA::toggle_wrap()
@@ -3298,17 +2952,6 @@ void CTEA::createManual()
 }
 
 
-void CTEA::file_crapbook()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  if (! QFile::exists (fname_crapbook))
-      qstring_save (fname_crapbook, tr ("you can put here notes, etc"));
-
-  documents->open_file (fname_crapbook, "UTF-8");
-}
-
-
 void CTEA::fn_apply_to_each_line()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -3375,43 +3018,6 @@ void CTEA::fn_reverse()
 
   if (! s.isEmpty())
       d->put (string_reverse (s));
-}
-
-
-#ifdef PRINTER_ENABLE
-void CTEA::file_print()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QPrintDialog *dialog = new QPrintDialog (&printer, this);
-
-  dialog->setWindowTitle (tr ("Print document"));
-
-  if (d->textCursor().hasSelection())
-      dialog->addEnabledOption (QAbstractPrintDialog::PrintSelection);
-
-  if (dialog->exec() != QDialog::Accepted)
-      return;
-
-  d->print (&printer);
-}
-#endif
-
-
-void CTEA::file_last_opened()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  if (documents->recent_files.size() > 0)
-     {
-      documents->open_file_triplex (documents->recent_files[0]);
-      documents->recent_files.removeAt (0);
-      documents->update_recent_menu();
-     }
 }
 
 
@@ -3651,41 +3257,6 @@ void CTEA::file_open_bookmark()
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
-
-void CTEA::file_add_to_bookmarks()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! file_exists (d->file_name))
-     return;
-
-  bool found = false;
-  QStringList l_bookmarks = qstring_load (fname_bookmarks).split("\n");
-
-  for (int i = 0; i < l_bookmarks.size(); i++)
-      {
-       if (l_bookmarks.at(i).contains (d->file_name))
-          {
-           l_bookmarks[i] = d->get_triplex();
-           found = true;
-           break;
-          }
-      }
-
-  if (! found)
-      l_bookmarks.prepend (d->get_triplex());
-
-  bookmarks = l_bookmarks.join ("\n").trimmed();
-
-  qstring_save (fname_bookmarks, bookmarks);
-  update_bookmarks();
-}
-
-
 void CTEA::file_use_template()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -3737,42 +3308,6 @@ void CTEA::update_snippets()
                          dir_snippets,
                          SLOT (fn_use_snippet())
                         );
-}
-
-
-void CTEA::file_save_version()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! file_exists (d->file_name))
-     return;
-
-  QDate date = QDate::currentDate();
-  QFileInfo fi;
-  fi.setFile (d->file_name);
-
-  QString version_timestamp_fmt = settings->value ("version_timestamp_fmt", "yyyy-MM-dd").toString();
-  QTime t = QTime::currentTime();
-
-  QString fname = fi.absoluteDir().absolutePath() +
-                  "/" +
-                  fi.baseName() +
-                  "-" +
-                  date.toString (version_timestamp_fmt) +
-                  "-" +
-                  t.toString ("hh-mm-ss") +
-                  "." +
-                  fi.suffix();
-
-
-  if (d->save_with_name_plain (fname))
-     log->log (tr ("%1 - saved").arg (fname));
-  else
-     log->log (tr ("Cannot save %1").arg (fname));
 }
 
 
@@ -4538,7 +4073,7 @@ void CTEA::nav_focus_to_editor()
 }
 
 
-void CTEA::edit_copy_current_fname()
+void CTEA::ed_copy_current_fname()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4664,13 +4199,6 @@ void CTEA::update_dyn_menus()
   update_tables();
   update_profiles();
   update_labels_menu();
-}
-
-
-void CTEA::file_open_bookmarks_file()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  documents->open_file (fname_bookmarks, "UTF-8");
 }
 
 
@@ -5903,9 +5431,12 @@ void CTEA::createFman()
 
   QPushButton *bt_fman_open = new QPushButton (tr ("Open"), this);
   connect (bt_fman_open, SIGNAL(clicked()), this, SLOT(fman_open()));
+  bt_fman_open->setToolTip (tr ("Open a file from the file name provided above"));
+
 
   QPushButton *bt_fman_save_as = new QPushButton (tr ("Save as"), this);
   connect (bt_fman_save_as, SIGNAL(clicked()), this, SLOT(cb_button_saves_as()));
+  bt_fman_save_as->setToolTip (tr ("Save the current opened file with the name provided above"));
 
   lah_controls->addWidget (l_t);
 
@@ -6476,16 +6007,6 @@ void CTEA::fm_full_info()
 }
 
 
-void CTEA::file_reload()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->reload (d->charset);
-}
-
-
 void CTextListWnd::closeEvent (QCloseEvent *event)
 {
   event->accept();
@@ -6520,31 +6041,6 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
   text_window_list.push_back (this);
 }
 
-
-void CTEA::file_reload_enc_itemDoubleClicked (QListWidgetItem *item)
-{
-  CDocument *d = documents->get_current();
-  if (d)
-     d->reload (item->text());
-}
-
-
-void CTEA::file_reload_enc()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CTextListWnd *w = new CTextListWnd (tr ("Reload with encoding"), tr ("Charset"));
-
-  if (sl_last_used_charsets.size () > 0)
-     w->list->addItems (sl_last_used_charsets + sl_charsets);
-  else
-      w->list->addItems (sl_charsets);
-
-  connect (w->list, SIGNAL(itemDoubleClicked ( QListWidgetItem *)),
-           this, SLOT(file_reload_enc_itemDoubleClicked ( QListWidgetItem *)));
-
-  w->show();
-}
 
 
 void CTEA::handle_args()
@@ -7387,7 +6883,7 @@ void CTEA::cmb_spellchecker_currentIndexChanged (int)
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), hunspell_default_dict_path());
 #endif
 
- create_spellcheck_menu();
+  create_spellcheck_menu();
 }
 #endif
 
@@ -7435,25 +6931,6 @@ void CTEA::pb_choose_aspell_path_clicked()
 }
 //#endif
 #endif
-
-
-
-void CTEA::file_find_obsolete_paths()
-{
-  QStringList l_bookmarks = qstring_load (fname_bookmarks).split ("\n");
-
-  for (int i = 0; i < l_bookmarks.size(); i++)
-      {
-       QStringList t = l_bookmarks[i].split (",");
-       if (! file_exists (t[0]))
-          l_bookmarks[i] = "#" + l_bookmarks[i];
-      }
-
-  bookmarks = l_bookmarks.join ("\n").trimmed();
-
-  qstring_save (fname_bookmarks, bookmarks);
-  update_bookmarks();
-}
 
 
 void CTEA::fn_filter_delete_by_sep (bool mode)
@@ -7603,7 +7080,7 @@ void CTEA::fman_mk_gallery()
 }
 
 
-void CTEA::indent_by_first_line()
+void CTEA::ed_indent_by_first_line()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7890,36 +7367,6 @@ void CTEA::fman_count_lines_in_selected_files()
       }
 
   log->log (tr ("There are %1 lines at %2 files").arg (sum).arg (sl.size()));
-}
-
-
-void CTEA::file_set_eol_unix()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->eol = "\n";
-}
-
-
-void CTEA::file_set_eol_win()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->eol = "\r\n";
-}
-
-
-void CTEA::file_set_eol_mac()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->eol = "\r";
 }
 
 
@@ -8895,26 +8342,6 @@ void CTEA::fn_stat_words_lengths()
 }
 
 
-void CTEA::file_notes()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! file_exists  (d->file_name))
-     return;
-
-  QString fname = d->file_name + ".notes";
-
-  if (! file_exists (fname))
-      qstring_save (fname, tr ("put your notes (for this file) here and they will be saved automatically"));
-
-  documents->open_file (fname, "UTF-8");
-}
-
-
 void CTEA::update_stylesheet (const QString &f)
 {
 //Update paletted
@@ -9850,19 +9277,11 @@ void CTEA::scale_image()
 }
 
 
-void CTEA::menu_file_recent_off()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  b_recent_off = ! b_recent_off;
-//  menu_recent_off->setChecked (b_recent_off);
- // qobject_cast<QAction *>(sender())->setChecked (b_recent_off);
-}
-
-
 void CTEA::repeat()
 {
   if (last_action)
-      last_action->trigger();
+     qobject_cast<QAction *>(last_action)->trigger();
+
 }
 
 
@@ -10643,15 +10062,6 @@ void CTEA::fn_anagram()
 
 }
 
-/*
-void anagram(string input){
-    sort(input.begin(), input.end());
-    do
-        cout << input << endl;
-    while(next_permutation(input.begin(), input.end()));
-}
-*/
-
 
 void CTEA::slot_font_logmemo_select()
 {
@@ -10729,291 +10139,642 @@ void CTEA::fn_filter_by_repetitions()
        if (pattern.size() > wrd.size())
           continue;
 
-      // qDebug() << "----------- WORD: " << wrd;
-       
        QChar ch = wrd [positions[0]];
 
        size_t count = 0;
 
        for (size_t j = 0; j < positions.size(); ++j) 
            {
-          //  qDebug() << "position #: " << j << " = " << positions[j];
             if (wrd[positions[j]] == ch)
                 count++;
            }
 
-//         qDebug() << "count: " << count;
-  //       qDebug() << "positions.size: " << positions.size();
 
        if (count == positions.size())
            {
             result += wrd;
             result += "\n";
            }
-     /*     qDebug() << "wrd: " << wrd << " is ok";
-       else
-          qDebug() << "wrd: " << wrd << " is ! ok";
-  */
-
-    //   qDebug() << "-----------";
       }
 
       if (! result.isEmpty())  
          d->put (result);
-
 }
+
+
+
+
+
+
 
 /*
-
-void CTEA::fn_filter_by_repetitions()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString result;
-
-  QString pattern = fif_get_text();
-
-  //разобрать pattern
-
-  QMap <QChar, vector <int>> m;
-
-  for (int i = 0; i < pattern.size(); ++i)
-      {
-       //add indexes of the char to vector 
-         //ТУТ ОШИБКА!Ё!!!!!!
-
-       m[pattern[i]].push_back (i);
-      }
-
-// test keys
-
-    QList <QChar> keys = m.keys();
-
-  //  for (int i = 0; i < k.size(); ++i)
-    //   qDebug() << m[k[i]].size();
-
-
-
-  QStringList sl = d->get().split (QChar::ParagraphSeparator);
-
-  for (int i = 0; i < sl.size(); ++i)
-      {
-       QString wrd = sl[i]; 
-       if (pattern.size() != wrd.size())
-          continue; 
-
-       bool yes = false; 
-
-       //смотрим соответствие wrd паттерну pattern
-
-//       for (int j = 0; j < pattern.size(); ++j) 
-  //         {
-    //        QChar c = pattern[j];   
-               
-            //if (! wrd.contains(c))
-             //  continue; 
-                  
-             //проходим все позиции где встречается символ c
-
-            //size_t count = 0; //количество совпадений
-
-            for (size_t z = 0; z < keys.size(); ++z)
- 
-           {
-           for (size_t x = 0; x < m[keys[z]].size(); ++x)
-                {
-                 //если в wrd по позиции из m[c][z] есть символ c, то    
-                 int pos = m[keys[z]][x];
-
-                 qDebug() << "c: " << c << " pos:" << pos; 
-
-                 if (wrd[pos] == c)
-                    yes = true;
-                 else
-                     yes = false;
-//                    count++;
-                }
-
-
-         }
-
-//             if ((count == m[c].size()) && (count >= 2))
-  //              yes = true;
- 
-     //       }  
-
-            if (yes)
-               {
-                result += wrd;
-                result += "\n";
-               }
-
-
- 
-             if (yes) 
-                qDebug() << "pattern: " << pattern << " word: " << wrd << " is OK";
-             else
-                 qDebug() << "pattern: " << pattern << " word: " << wrd << " is !OK";
-
-
-       }
-
-      if (! result.isEmpty())  
-         d->put (result);
-}
-
+===================
+File menu callbacks
+===================
 */
 
 void CTEA::test()
 {
 
-//anagram (fif_get_text().toStdString());
-
-//anagram (fif_get_text());
-//std::string subject("aaaa ../document.cpp:2366:7: warning nnnnnn");
-//std::string result;
-
-//try {
-
-//  std::regex re("\b[A-Za-z]+\b:[0-9]:[0-9]:");
+}
 
 
-//[a-zA-Z]+\.[a-zA-Z]+:\d+:\d+:
+
+void CTEA::file_new()
+{
+//  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
+  documents->create_new();
+  main_tab_widget->setCurrentIndex (idx_tab_edit);
+}
 
 
-/*
-  std::regex re ("[a-zA-Z]+\\.[a-zA-Z]+:\\d+:\\d+:");
+void CTEA::file_open()
+{
+  last_action = sender();
 
-  std::smatch match;
-  if (std::regex_search (subject, match, re))
+  if (! settings->value ("use_trad_dialogs", "0").toBool())
      {
-      std::cout << "ms:" << match.size() << std::endl;
-      result = match.str(0);
-      std::cout << "result:" << result << std::endl;
+      CDocument *d = documents->get_current();
+
+      if (d)
+         {
+          if (file_exists (d->file_name))
+             fman->nav (get_file_path (d->file_name));
+         }
+      else
+          fman->nav (dir_last);
+
+      main_tab_widget->setCurrentIndex (idx_tab_fman);
+      fm_entry_mode = FM_ENTRY_MODE_OPEN;
+
+      return;
+     }
+
+  //ELSE use the traditional dialog
+
+  QFileDialog dialog (this);
+  QSize size = settings->value ("dialog_size", QSize (width(), height())).toSize();
+  dialog.resize (size);
+
+  dialog.setFilter (QDir::AllEntries | QDir::Hidden);
+  dialog.setOption (QFileDialog::DontUseNativeDialog, true);
+
+  QList<QUrl> sidebarUrls = dialog.sidebarUrls();
+  QList<QUrl> sidebarUrls_old = dialog.sidebarUrls();
+
+  sidebarUrls.append (QUrl::fromLocalFile (dir_templates));
+  sidebarUrls.append (QUrl::fromLocalFile (dir_snippets));
+  sidebarUrls.append (QUrl::fromLocalFile (dir_sessions));
+  sidebarUrls.append (QUrl::fromLocalFile (dir_scripts));
+  sidebarUrls.append (QUrl::fromLocalFile (dir_tables));
+
+#ifdef Q_OS_UNIX
+
+  QDir volDir ("/mnt");
+  QStringList volumes (volDir.entryList (volDir.filter() | QDir::NoDotAndDotDot));
+
+  QDir volDir2 ("/media");
+  QStringList volumes2 (volDir2.entryList (volDir.filter() | QDir::NoDotAndDotDot));
+
+  for (int i = 0; i < volumes.size(); i++)
+      sidebarUrls.append (QUrl::fromLocalFile ("/mnt/" + volumes.at(i)));
+
+  for (int i = 0; i < volumes2.size(); i++)
+      sidebarUrls.append (QUrl::fromLocalFile ("/media/" + volumes2.at(i)));
+
+#endif
+
+  dialog.setSidebarUrls (sidebarUrls);
+
+  dialog.setFileMode (QFileDialog::ExistingFiles);
+  dialog.setAcceptMode (QFileDialog::AcceptOpen);
 
 
-  } else {
-    result = std::string("");
-  }
-} catch (std::regex_error& e) {
-  // Syntax error in the regular expression
-}
-*/
+  CDocument *d = documents->get_current();
+  if (d)
+     {
+      if (file_exists (d->file_name))
+          dialog.setDirectory (get_file_path (d->file_name));
+      else
+          dialog.setDirectory (dir_last);
+     }
+  else
+      dialog.setDirectory (dir_last);
 
+  dialog.setNameFilter (tr ("All (*);;Text files (*.txt);;Markup files (*.xml *.html *.htm *.);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)"));
 
+  QLabel *l = new QLabel (tr ("Charset"));
+  QComboBox *cb_codecs = new QComboBox (&dialog);
+  dialog.layout()->addWidget (l);
+  dialog.layout()->addWidget (cb_codecs);
 
- // int x = str_fuzzy_search_bytwo ("rampage tri sugar freee", "tri", 0);
-  //std::cout << x << endl;
+  if (sl_last_used_charsets.size () > 0)
+     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
+  else
+     {
+      cb_codecs->addItems (sl_charsets);
+      cb_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
+     }
 
-  //std::cout << "CTEA::test()" << endl;
-//  CDocument *d = documents->get_current();
-  //if (! d)
-    // return;
+  QStringList fileNames;
 
+  if (dialog.exec())
+     {
+      dialog.setSidebarUrls (sidebarUrls_old);
 
+      fileNames = dialog.selectedFiles();
 
-
-//parse
-
-
-/*  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-    QTime time_start;
-    time_start.start();
-
-  pb_status->show();
-  pb_status->setRange (0, d->toPlainText().size() - 1);
-  pb_status->setFormat (tr ("%p% completed"));
-  pb_status->setTextVisible (true);
-
-   int i = 0;
-
-   QString fiftxt = fif_get_text();
-
-   d->text_to_search = fiftxt;
-
-   QTextCursor cr = d->document()->find (d->text_to_search, 0, get_search_options());
-   cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.size());
-8779797
-
-    do
-      {
-
+      for (int i = 0; i < fileNames.size(); i++)
           {
-           f = cr.blockCharFormat();
-           f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
-           f.setUnderlineColor (QColor (hash_get_val (documents->palette, "error", "red")));
-           cr.mergeCharFormat (f);
+           CDocument *dc = documents->open_file (fileNames.at(i), cb_codecs->currentText());
+           if (dc)
+              {
+               dir_last = get_file_path (dc->file_name);
+               charset = dc->charset;
+              }
+
+           add_to_last_used_charsets (cb_codecs->currentText());
           }
+     }
+  else
+      dialog.setSidebarUrls (sidebarUrls_old);
 
-        pb_status->setValue (i++);
-       }
-    while (cr.movePosition (QTextCursor::NextWord));
-
-    cr.setPosition (pos);
-    d->setTextCursor (cr);
-    d->document()->setModified (false);
-
-    pb_status->hide();
-
-    log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
-//  CDocument *d = documents->get_current();
-//  if (! d)
-  //   return;
+  settings->setValue ("dialog_size", dialog.size());
+  update_dyn_menus();
+}
 
 
-//  QLabel *l_font_demo = new QLabel (d->get_all_text());
-//  l_font_demo->setFont (QFont (sl[0]));
-//  l_font_demo->show();
 
+void CTEA::file_open_at_cursor()
+{
+  if (main_tab_widget->currentIndex() == idx_tab_fman)
+     {
+      fman_preview_image();
+      return;
+     }
 
-*/
-
-/*  CDocument *d = documents->get_current();
+  CDocument *d = documents->get_current();
   if (! d)
      return;
 
-  QStringList l = text_get_bookmarks (d->toPlainText());
-  qstring_list_print (l);
-*/
+  QString fname = d->get_filename_at_cursor();
+
+  if (fname.isEmpty())
+     return;
+
+  if (is_image (fname))
+     {
+      if (settings->value ("override_img_viewer", 0).toBool())
+         {
+          QString command = settings->value ("img_viewer_override_command", "display %s").toString();
+          command = command.replace ("%s", fname);
+          QProcess::startDetached (command, QStringList());
+          return;
+         }
+      else
+          {
+           if (file_get_ext (fname) == "gif")
+              {
+               CGIFWindow *w = new CGIFWindow;
+               w->load_image (fname);
+               return;
+              }
+           else
+               {
+                if (! img_viewer->window_full.isVisible())
+                   {
+                    img_viewer->window_full.show();
+                    activateWindow();
+                   }
+
+                img_viewer->set_image_full (fname);
+                return;
+               }
+          }
+      }
 
 
-/*
-  QRegExp e ("([0-1][0-9]|2[0-3]):([0-5][0-9])");
-  QString s ("aaa 22:13 bbb");
-  qDebug() << s.indexOf (e);
-  */
-/*
-  QString source = "aaa 22:13 bbb 44:56";
-  QRegExp e ("([0-1][0-9]|2[0-3]):([0-5][0-9])");
+  if (fname.startsWith ("#"))
+     {
+      QString t = fname;
+      t.remove (0, 1);
+      t.prepend ("name=\"");
+      if (d->find (t))
+         return;
 
-  QString sl_parsed;
+      t = fname;
+      t.remove (0, 1);
+      t.prepend ("id=\"");
+      d->find (t);
 
-  int i = 0;
-  int x = 0;
+      return;
+     }
 
-  while (x != -1)
-       {
-        qDebug() << "i=" << i;
-        x = source.indexOf (e, i);
-        qDebug() << "x=" << x;
-        if (x != -1)
-           i += (x + 4);
-        //else
-          //  i += 4;
-       }
-*/
-
-//    WId wid = QxtWindowSystem::findWindow("Mail - Kontact");
-  //  QPixmap screenshot = QPixmap::grabWindow(wid);
-
-//full desktop:
-//originalPixmap = QPixmap::grabWindow(QApplication::desktop()->winId());
-
+  documents->open_file (fname, d->charset);
 }
+
+
+void CTEA::file_last_opened()
+{
+  last_action = sender();
+
+  if (documents->recent_files.size() > 0)
+     {
+      documents->open_file_triplex (documents->recent_files[0]);
+      documents->recent_files.removeAt (0);
+      documents->update_recent_menu();
+     }
+}
+
+
+void CTEA::file_crapbook()
+{
+  last_action = sender();
+
+  if (! QFile::exists (fname_crapbook))
+      qstring_save (fname_crapbook, tr ("you can put here notes, etc"));
+
+  documents->open_file (fname_crapbook, "UTF-8");
+}
+
+
+void CTEA::file_notes()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! file_exists  (d->file_name))
+     return;
+
+  QString fname = d->file_name + ".notes";
+
+  if (! file_exists (fname))
+      qstring_save (fname, tr ("put your notes (for this file) here and they will be saved automatically"));
+
+  documents->open_file (fname, "UTF-8");
+}
+
+
+bool CTEA::file_save()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return false;
+
+  if (d->isReadOnly())
+     {
+      log->log (tr ("This file is opened in the read-only mode. You can save it with another name using <b>Save as</b>"));
+      return false;
+     }
+
+  if (file_exists (d->file_name))
+     d->save_with_name (d->file_name, d->charset);
+  else
+      return file_save_as();
+
+  if (d->file_name == fname_bookmarks)
+     update_bookmarks();
+
+  if (d->file_name == fname_programs)
+     update_programs();
+
+  return true;
+}
+
+
+bool CTEA::file_save_as()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return false;
+
+  if (! settings->value ("use_trad_dialogs", "0").toBool())
+     {
+      main_tab_widget->setCurrentIndex (idx_tab_fman);
+      fm_entry_mode = FM_ENTRY_MODE_SAVE;
+
+      if (file_exists (d->file_name))
+         fman->nav (get_file_path (d->file_name));
+      else
+          fman->nav (dir_last);
+
+      ed_fman_fname->setFocus();
+
+      return true;
+     }
+
+
+  //ELSE standard dialog
+
+  QFileDialog dialog (this);
+  QSize size = settings->value ("dialog_size", QSize (width(), height())).toSize();
+  dialog.resize (size);
+
+  dialog.setFilter (QDir::AllEntries | QDir::Hidden);
+  dialog.setOption (QFileDialog::DontUseNativeDialog, true);
+
+  QList<QUrl> sidebarUrls = dialog.sidebarUrls();
+  QList<QUrl> sidebarUrls_old = dialog.sidebarUrls();
+
+  sidebarUrls.append (QUrl::fromLocalFile(dir_templates));
+  sidebarUrls.append (QUrl::fromLocalFile(dir_snippets));
+  sidebarUrls.append (QUrl::fromLocalFile(dir_sessions));
+  sidebarUrls.append (QUrl::fromLocalFile(dir_scripts));
+  sidebarUrls.append (QUrl::fromLocalFile(dir_tables));
+
+#ifdef Q_OS_LINUX
+
+  QDir volDir ("/mnt");
+  QStringList volumes (volDir.entryList (volDir.filter() | QDir::NoDotAndDotDot));
+
+  QDir volDir2 ("/media");
+  QStringList volumes2 (volDir2.entryList (volDir2.filter() | QDir::NoDotAndDotDot));
+
+  for (int i = 0; i < volumes.size(); i++)
+      sidebarUrls.append (QUrl::fromLocalFile ("/mnt/" + volumes.at(i)));
+
+  for (int i = 0; i < volumes2.size(); i++)
+      sidebarUrls.append (QUrl::fromLocalFile ("/media/" + volumes2.at(i)));
+
+
+#endif
+
+  dialog.setSidebarUrls (sidebarUrls);
+
+  dialog.setFileMode (QFileDialog::AnyFile);
+  dialog.setAcceptMode (QFileDialog::AcceptSave);
+  dialog.setDirectory (dir_last);
+
+  QLabel *l = new QLabel (tr ("Charset"));
+  QComboBox *cb_codecs = new QComboBox (&dialog);
+  dialog.layout()->addWidget (l);
+  dialog.layout()->addWidget (cb_codecs);
+
+  if (sl_last_used_charsets.size () > 0)
+     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
+  else
+     {
+      cb_codecs->addItems (sl_charsets);
+      cb_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
+     }
+
+  if (dialog.exec())
+     {
+      dialog.setSidebarUrls (sidebarUrls_old);
+
+      QString fileName = dialog.selectedFiles().at(0);
+
+      if (file_exists (fileName))
+         {
+          int ret = QMessageBox::warning (this, "TEA",
+                                          tr ("%1 already exists\n"
+                                          "Do you want to overwrite?")
+                                           .arg (fileName),
+                                          QMessageBox::Yes | QMessageBox::Default,
+                                          QMessageBox::Cancel | QMessageBox::Escape);
+
+          if (ret == QMessageBox::Cancel)
+             return false;
+         }
+
+      d->save_with_name (fileName, cb_codecs->currentText());
+      d->set_markup_mode();
+      d->set_hl();
+
+      add_to_last_used_charsets (cb_codecs->currentText());
+      update_dyn_menus();
+
+      QFileInfo f (d->file_name);
+      dir_last = f.path();
+     }
+   else
+       dialog.setSidebarUrls (sidebarUrls_old);
+
+  settings->setValue ("dialog_size", dialog.size());
+  return true;
+}
+
+
+void CTEA::file_save_bak()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! file_exists (d->file_name))
+     return;
+
+  QString fname  = d->file_name + ".bak";
+  d->save_with_name_plain (fname);
+  log->log (tr ("%1 is saved").arg (fname));
+}
+
+
+void CTEA::file_save_version()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! file_exists (d->file_name))
+     return;
+
+  QDate date = QDate::currentDate();
+  QFileInfo fi;
+  fi.setFile (d->file_name);
+
+  QString version_timestamp_fmt = settings->value ("version_timestamp_fmt", "yyyy-MM-dd").toString();
+  QTime t = QTime::currentTime();
+
+  QString fname = fi.absoluteDir().absolutePath() +
+                  "/" +
+                  fi.baseName() +
+                  "-" +
+                  date.toString (version_timestamp_fmt) +
+                  "-" +
+                  t.toString ("hh-mm-ss") +
+                  "." +
+                  fi.suffix();
+
+
+  if (d->save_with_name_plain (fname))
+     log->log (tr ("%1 - saved").arg (fname));
+  else
+     log->log (tr ("Cannot save %1").arg (fname));
+}
+
+
+void CTEA::file_reload()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->reload (d->charset);
+}
+
+
+void CTEA::file_reload_enc_itemDoubleClicked (QListWidgetItem *item)
+{
+  CDocument *d = documents->get_current();
+  if (d)
+     d->reload (item->text());
+}
+
+
+void CTEA::file_reload_enc()
+{
+  last_action = sender();
+
+  CTextListWnd *w = new CTextListWnd (tr ("Reload with encoding"), tr ("Charset"));
+
+  if (sl_last_used_charsets.size () > 0)
+     w->list->addItems (sl_last_used_charsets + sl_charsets);
+  else
+      w->list->addItems (sl_charsets);
+
+  connect (w->list, SIGNAL(itemDoubleClicked ( QListWidgetItem *)),
+           this, SLOT(file_reload_enc_itemDoubleClicked ( QListWidgetItem *)));
+
+  w->show();
+}
+
+
+void CTEA::file_set_eol_unix()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->eol = "\n";
+}
+
+
+void CTEA::file_set_eol_win()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->eol = "\r\n";
+}
+
+
+void CTEA::file_set_eol_mac()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->eol = "\r";
+}
+
+
+
+#ifdef PRINTER_ENABLE
+void CTEA::file_print()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QPrintDialog *dialog = new QPrintDialog (&printer, this);
+
+  dialog->setWindowTitle (tr ("Print document"));
+
+  if (d->textCursor().hasSelection())
+      dialog->addEnabledOption (QAbstractPrintDialog::PrintSelection);
+
+  if (dialog->exec() != QDialog::Accepted)
+      return;
+
+  d->print (&printer);
+}
+#endif
+
+
+void CTEA::menu_file_recent_off()
+{
+  last_action = sender();
+  b_recent_off = ! b_recent_off;
+}
+
+
+void CTEA::file_add_to_bookmarks()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! file_exists (d->file_name))
+     return;
+
+  bool found = false;
+  QStringList l_bookmarks = qstring_load (fname_bookmarks).split("\n");
+
+  for (int i = 0; i < l_bookmarks.size(); i++)
+      {
+       if (l_bookmarks.at(i).contains (d->file_name))
+          {
+           l_bookmarks[i] = d->get_triplex();
+           found = true;
+           break;
+          }
+      }
+
+  if (! found)
+      l_bookmarks.prepend (d->get_triplex());
+
+  bookmarks = l_bookmarks.join ("\n").trimmed();
+
+  qstring_save (fname_bookmarks, bookmarks);
+  update_bookmarks();
+}
+
+
+void CTEA::file_find_obsolete_paths()
+{
+  QStringList l_bookmarks = qstring_load (fname_bookmarks).split ("\n");
+
+  for (int i = 0; i < l_bookmarks.size(); i++)
+      {
+       QStringList t = l_bookmarks[i].split (",");
+       if (! file_exists (t[0]))
+          l_bookmarks[i] = "#" + l_bookmarks[i];
+      }
+
+  bookmarks = l_bookmarks.join ("\n").trimmed();
+
+  qstring_save (fname_bookmarks, bookmarks);
+  update_bookmarks();
+}
+
+
+void CTEA::file_open_bookmarks_file()
+{
+  last_action = sender();
+  documents->open_file (fname_bookmarks, "UTF-8");
+}
+
+/*
+===================
+Edit menu callbacks
+===================
+*/
+

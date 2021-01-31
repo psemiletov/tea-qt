@@ -282,32 +282,20 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 
 
 
-   current_line_color = QColor (hash_get_val (global_palette,
-                                         "cur_line_color",
-                                         "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
+  current_line_color = QColor (hash_get_val (global_palette,
+                               "cur_line_color",
+                               "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
 
 
-  qDebug() << "CDocument::CDocument --00000000000000 1";
 
-  // if (! holder->tab_widget)
-    // qDebug() << "AAAAAAAAAAAAAAa";
 
   holder->items.push_back (this);
 
   int tab_index = holder->tab_widget->addTab (this, file_name);
 
-  qDebug() << "CDocument::CDocument --00000000000000 2";
-
-
   tab_page = holder->tab_widget->widget (tab_index);
 
-
-
   setFocus (Qt::OtherFocusReason);
-
-  qDebug() << "CDocument::CDocument --00000000000000 3";
-
-
 }
 
 
@@ -348,25 +336,6 @@ CDocument::~CDocument()
 }
 
 
-/*
-void CDocument::create_new()
-{
-  textEdit = new CTEAEdit;
-
-  textEdit->doc = this;
-
-  textEdit->current_line_color = QColor (hash_get_val (global_palette,
-                                         "cur_line_color",
-                                         "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
-
-  highlighter = NULL;
-  int tab_index = holder->tab_widget->addTab (textEdit, file_name);
-  tab_page = holder->tab_widget->widget (tab_index);
-
-  textEdit->setFocus (Qt::OtherFocusReason);
-}
-*/
-
 int CDocument::get_tab_idx()
 {
   return holder->tab_widget->indexOf (tab_page);
@@ -406,16 +375,8 @@ CDox::~CDox()
 
 CDocument* CDox::create_new()
 {
-  qDebug() << "CDocument* CDox::create_new() - 1";
-
   CDocument *doc = new CDocument (this, 0);
-
-
-  qDebug() << "CDocument* CDox::create_new() - 2";
-
-//  doc->holder = this;
   doc->markup_mode = markup_mode;
-  //items.push_back (doc);
 
   tab_widget->setCurrentIndex (tab_widget->indexOf (doc->tab_page));
   apply_settings_single (doc);
@@ -424,9 +385,6 @@ CDocument* CDox::create_new()
   doc->update_status();
 
   update_current_files_menu();
-
-//  qDebug() << "CDocument* CDox::create_new() - 3";
-
 
   return doc;
 }
@@ -922,43 +880,6 @@ void CDocument::setup_brace_width()
   brace_width = fm->averageCharWidth();
 }
 
-
-/*CTEAEdit::CTEAEdit (QWidget *parent): QPlainTextEdit (parent)
-{
-  rect_sel_reset();
-
-  highlight_current_line = false;
-  setup_brace_width();
-
-  lineNumberArea = new CLineNumberArea (this);
-
-  connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
-  connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
-  connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
-
-  updateLineNumberAreaWidth (0);
-
-  margin_pos = 72;
-  margin_x = brace_width * margin_pos;
-  draw_margin = false;
-  hl_brackets = false;
-  auto_indent = false;
-  tab_sp_width = 8;
-  spaces_instead_of_tabs = true;
-
-  document()->setUseDesignMetrics (true);
-
-  QString s_sel_back_color = hash_get_val (global_palette, "sel-background", "black");
-  QString s_sel_text_color = hash_get_val (global_palette, "sel-text", "white");
-
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
-  sel_text_color = QColor (s_sel_text_color).darker(darker_val).name();
-  sel_back_color = QColor (s_sel_back_color).darker(darker_val).name();
-
-  connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
-}
-*/
 
 void CDox::move_cursor_up()
 {
@@ -1775,7 +1696,7 @@ void CDocument::keyPressEvent (QKeyEvent *event)
 }
 
 
-int CDocument::lineNumberAreaWidth()
+int CDocument::line_number_area_width()
 {
   if (! draw_linenums)
      return 0;
@@ -1797,7 +1718,7 @@ int CDocument::lineNumberAreaWidth()
 
 void CDocument::updateLineNumberAreaWidth (int newBlockCount)
 {
-  setViewportMargins (lineNumberAreaWidth(), 0, 0, 0);
+  setViewportMargins (line_number_area_width(), 0, 0, 0);
 }
 
 
@@ -1850,11 +1771,11 @@ void CDocument::resizeEvent (QResizeEvent *e)
 {
   QPlainTextEdit::resizeEvent (e);
   QRect cr = contentsRect();
-  lineNumberArea->setGeometry (QRect (cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+  lineNumberArea->setGeometry (QRect (cr.left(), cr.top(), line_number_area_width(), cr.height()));
 }
 
 
-void CDocument::braceHighlight()
+void CDocument::brace_highlight()
 {
   brace_selection.format.setBackground (brackets_color);
 
@@ -1928,10 +1849,10 @@ void CDocument::braceHighlight()
       if (cursor2.isNull())
          {
           brace_selection.cursor = cursor;
-          extraSelections.append (brace_selection);
+          extra_selections.append (brace_selection);
           brace_selection.cursor = cursor1;
-          extraSelections.append (brace_selection);
-          setExtraSelections (extraSelections);
+          extra_selections.append (brace_selection);
+          setExtraSelections (extra_selections);
          }
       else
           {
@@ -1944,10 +1865,10 @@ void CDocument::braceHighlight()
                  }
 
            brace_selection.cursor = cursor;
-           extraSelections.append (brace_selection);
+           extra_selections.append (brace_selection);
            brace_selection.cursor = cursor1;
-           extraSelections.append (brace_selection);
-           setExtraSelections (extraSelections);
+           extra_selections.append (brace_selection);
+           setExtraSelections (extra_selections);
           }
        }
    else
@@ -1959,10 +1880,10 @@ void CDocument::braceHighlight()
             if (cursor2.isNull())
                {
                 brace_selection.cursor = cursor;
-                extraSelections.append (brace_selection);
+                extra_selections.append (brace_selection);
                 brace_selection.cursor = cursor1;
-                extraSelections.append (brace_selection);
-                setExtraSelections (extraSelections);
+                extra_selections.append (brace_selection);
+                setExtraSelections (extra_selections);
                }
             else
                 {
@@ -1975,10 +1896,10 @@ void CDocument::braceHighlight()
                        }
 
                  brace_selection.cursor = cursor;
-                 extraSelections.append (brace_selection);
+                 extra_selections.append (brace_selection);
                  brace_selection.cursor = cursor1;
-                 extraSelections.append (brace_selection);
-                 setExtraSelections (extraSelections);
+                 extra_selections.append (brace_selection);
+                 setExtraSelections (extra_selections);
                 }
              }
      }
@@ -2037,7 +1958,7 @@ void CDocument::update_rect_sel()
        rect_selection.format.setBackground (sel_back_color);
        rect_selection.format.setForeground (sel_text_color);
 
-       extraSelections.append (rect_selection);
+       extra_selections.append (rect_selection);
 
        cursor.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor);
 
@@ -2045,7 +1966,7 @@ void CDocument::update_rect_sel()
            correction = 0;
       }
 
-  setExtraSelections (extraSelections);
+  setExtraSelections (extra_selections);
 }
 
 
@@ -2320,10 +2241,10 @@ void CDocument::rect_sel_cut (bool just_del)
 
 void CDocument::update_ext_selections()
 {
-  extraSelections.clear();
-  setExtraSelections (extraSelections);
+  extra_selections.clear();
+  setExtraSelections (extra_selections);
   update_rect_sel();
-  braceHighlight();
+  brace_highlight();
 }
 
 

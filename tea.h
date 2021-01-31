@@ -257,7 +257,10 @@ Variables
   bool portable_mode;
 
   CLogMemo *log;
-  QAction *last_action;
+  //QAction *last_action;
+
+  QObject *last_action;
+
 
   CShortcuts *shortcuts;
   CFMan *fman;
@@ -854,7 +857,6 @@ File menu callbacks
   void file_add_to_bookmarks();
   void file_find_obsolete_paths();
 
-
   void file_open_bookmarks_file();
   void file_open_programs_file();
   void file_open_bookmark();
@@ -873,6 +875,10 @@ Edit menu callbacks
 ===================
 */
 
+  void ed_copy();
+  void ed_paste();
+  void ed_cut();
+
 
   void ed_block_start();
   void ed_block_end();
@@ -880,18 +886,21 @@ Edit menu callbacks
   void ed_block_paste();
   void ed_block_cut();
 
-  void ed_copy();
-  void ed_paste();
-  void ed_cut();
+  void ed_copy_current_fname();
 
   void ed_undo();
   void ed_redo();
-  void ed_clear();
 
   void ed_indent();
   void ed_unindent();
+  void ed_indent_by_first_line();
+
   void ed_comment();
 
+
+  void set_as_storage_file();
+  void copy_to_storage_file();
+  void capture_clipboard_to_storage_file();
 
 
 /*
@@ -1161,14 +1170,11 @@ View menu callbacks
   void about();
 
 
-  void set_as_storage_file();
-  void copy_to_storage_file();
-  void capture_clipboard_to_storage_file();
+
 
   void upCase();
   void dnCase();
 
-  void edit_copy_current_fname();
 
 
 
@@ -1248,7 +1254,6 @@ View menu callbacks
 
   void profile_save_as();
   void fman_mk_gallery();
-  void indent_by_first_line();
 
   void process_readyReadStandardOutput();
   void fn_remove_by_regexp();

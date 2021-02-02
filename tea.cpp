@@ -399,7 +399,61 @@ void CTEA::create_main_widget_splitter()
 
 // FIF creation code
 
+  if (! settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      cmb_fif = new QComboBox;
+      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
+      cmb_fif->setObjectName ("FIF");
 
+      cmb_fif->setEditable (true);
+      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+      fif = cmb_fif->lineEdit();
+      fif->setStatusTip (tr ("The famous input field. Use for search/replace, function parameters"));
+
+      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
+
+      QHBoxLayout *lt_fte = new QHBoxLayout;
+
+      
+      v_box->addLayout (lt_fte, 0);
+
+
+      int tleft = 1;
+      int tright = 1;
+      int ttop = 1;
+      int tbottom = 1;
+
+      v_box->getContentsMargins(&tleft, &ttop, &tright, &tbottom); 
+
+//      v_box->setContentsMargins (1, 1, 1, 1);  
+      v_box->setContentsMargins(tleft, 1, tright, 1);
+
+      QToolBar *tb_fif = new QToolBar;
+
+      QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), tr ("Find"));
+      connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
+
+     QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), tr ("Find next"));
+     connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
+
+     QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), tr ("Find previous"));
+     connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
+
+//     tb_fif->addAction (act_fif_find);
+  //   tb_fif->addAction (act_fif_find_next);
+    // tb_fif->addAction (act_fif_find_prev);
+
+
+      QLabel *l_fif = new QLabel (tr ("FIF"));
+
+      lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
+      lt_fte->addWidget (cmb_fif, 0);
+
+      lt_fte->addWidget (tb_fif, 0);
+     }
+
+/*
   if (! settings->value ("fif_at_toolbar", 0).toBool())
      {
       cmb_fif = new QComboBox;
@@ -437,7 +491,7 @@ void CTEA::create_main_widget_splitter()
       lt_fte->addWidget (bt_prev);
       lt_fte->addWidget (bt_next);
      }
-
+*/
   mainSplitter->setStretchFactor (1, 1);
 
 

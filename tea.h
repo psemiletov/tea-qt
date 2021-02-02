@@ -852,8 +852,6 @@ File menu callbacks
 #endif
 
 
-  void menu_file_recent_off();
-
   void file_add_to_bookmarks();
   void file_find_obsolete_paths();
 
@@ -864,8 +862,7 @@ File menu callbacks
   void file_use_template();
   void file_open_session();
 
-
-
+  void file_recent_off();
   void file_close();
 
 

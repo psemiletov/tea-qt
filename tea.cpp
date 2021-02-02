@@ -1039,7 +1039,7 @@ void CTEA::createMenus()
 
   menu_file->addSeparator();
 
-  add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(menu_file_recent_off()))->setCheckable (true);
+  add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(file_recent_off()))->setCheckable (true);
 
 #ifdef PRINTER_ENABLE
   add_to_menu (menu_file, tr ("Print"), SLOT(file_print()));
@@ -1610,13 +1610,6 @@ void CTEA::pageChanged (int index)
   documents->update_project (d->file_name);
 
   update_labels_menu();
-}
-
-
-void CTEA::file_close()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  documents->close_current();
 }
 
 
@@ -3247,27 +3240,6 @@ void CTEA::fn_spell_suggest()
 
 #endif
 
-
-void CTEA::file_open_bookmark()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  documents->open_file_triplex (a->text());
-  main_tab_widget->setCurrentIndex (idx_tab_edit);
-}
-
-void CTEA::file_use_template()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QAction *a = qobject_cast<QAction *>(sender());
-  QString txt = qstring_load (a->data().toString());
-
-  CDocument *d = documents->create_new();
-  if (d)
-     d->put (txt);
-}
 
 
 void CTEA::fn_use_snippet()
@@ -4968,15 +4940,6 @@ void CTEA::update_sessions()
 }
 
 
-void CTEA::file_open_session()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QAction *a = qobject_cast<QAction *>(sender());
-  documents->load_from_session (a->data().toString());
-}
-
-
 void CTEA::session_save_as()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -5372,7 +5335,7 @@ void CTEA::createFman()
 
   tb_fman_dir = new QToolBar;
   tb_fman_dir->setObjectName ("tb_fman_dir");
-
+/*
   QAction *act_fman_go = new QAction (get_theme_icon("go.png"), tr ("Go"), this);
   connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
 
@@ -5382,7 +5345,32 @@ void CTEA::createFman()
   QAction *act_fman_refresh = new QAction (get_theme_icon ("refresh.png"), tr ("Refresh"), this);
   QAction *act_fman_ops = new QAction (get_theme_icon ("create-dir.png"), tr ("Operations"), this);
   act_fman_ops->setMenu (menu_fm_file_ops);
+*/
 
+
+  QAction *act_fman_go = new QAction (style()->standardIcon(QStyle::SP_ArrowForward), tr ("Go"), this);
+  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
+
+  QAction *act_fman_home = new QAction (style()->standardIcon(QStyle::SP_DirHomeIcon), tr ("Home"), this);
+  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
+
+  QAction *act_fman_refresh = new QAction (style()->standardIcon(QStyle::SP_BrowserReload), tr ("Refresh"), this);
+  QAction *act_fman_ops = new QAction (style()->standardIcon(QStyle::SP_DriveHDIcon), tr ("Actions"), this);
+  act_fman_ops->setMenu (menu_fm_file_ops);
+
+
+
+/*
+  QAction *act_fman_go = new QAction (tr ("[>]"), this);
+  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
+
+  QAction *act_fman_home = new QAction (tr ("[=]"), this);
+  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
+
+  QAction *act_fman_refresh = new QAction (tr ("[*]"), this);
+  QAction *act_fman_ops = new QAction (tr ("[^]"), this);
+  act_fman_ops->setMenu (menu_fm_file_ops);
+*/
   tb_fman_dir->addAction (act_fman_go);
   tb_fman_dir->addAction (act_fman_home);
   tb_fman_dir->addAction (act_fman_refresh);
@@ -10706,14 +10694,6 @@ void CTEA::file_print()
 }
 #endif
 
-
-void CTEA::menu_file_recent_off()
-{
-  last_action = sender();
-  b_recent_off = ! b_recent_off;
-}
-
-
 void CTEA::file_add_to_bookmarks()
 {
   last_action = sender();
@@ -10770,6 +10750,51 @@ void CTEA::file_open_bookmarks_file()
 {
   last_action = sender();
   documents->open_file (fname_bookmarks, "UTF-8");
+}
+
+
+void CTEA::file_open_bookmark()
+{
+  last_action = sender();
+  documents->open_file_triplex (qobject_cast<QAction *>(last_action)->text());
+  main_tab_widget->setCurrentIndex (idx_tab_edit);
+}
+
+
+void CTEA::file_use_template()
+{
+  last_action = sender();
+
+  QAction *a = qobject_cast<QAction *>(sender());
+  QString txt = qstring_load (a->data().toString());
+
+  CDocument *d = documents->create_new();
+  if (d)
+     d->put (txt);
+}
+
+
+void CTEA::file_open_session()
+{
+  last_action = sender();
+
+  QAction *a = qobject_cast<QAction *>(sender());
+  documents->load_from_session (a->data().toString());
+}
+
+
+void CTEA::file_recent_off()
+{
+  last_action = sender();
+  b_recent_off = ! b_recent_off;
+}
+
+
+
+void CTEA::file_close()
+{
+  last_action = sender();
+  documents->close_current();
 }
 
 /*

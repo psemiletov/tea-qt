@@ -25,7 +25,7 @@ started at 08 November 2007
 #include <math.h>
 #include <algorithm>
 #include <iostream>
-#include <stdlib.h> 
+#include <stdlib.h>
 
 #if QT_VERSION < 0x050000
 #include <QRegExp>
@@ -415,7 +415,7 @@ void CTEA::create_main_widget_splitter()
 
       QHBoxLayout *lt_fte = new QHBoxLayout;
 
-      
+
       v_box->addLayout (lt_fte, 0);
 
 
@@ -424,9 +424,9 @@ void CTEA::create_main_widget_splitter()
       int ttop = 1;
       int tbottom = 1;
 
-      v_box->getContentsMargins(&tleft, &ttop, &tright, &tbottom); 
+      v_box->getContentsMargins(&tleft, &ttop, &tright, &tbottom);
 
-//      v_box->setContentsMargins (1, 1, 1, 1);  
+//      v_box->setContentsMargins (1, 1, 1, 1);
       v_box->setContentsMargins(tleft, 1, tright, 1);
 
       QToolBar *tb_fif = new QToolBar;
@@ -1667,71 +1667,6 @@ void CTEA::pageChanged (int index)
 }
 
 
-void CTEA::ed_copy()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  if (main_tab_widget->currentIndex() == idx_tab_edit)
-     {
-      CDocument *d = documents->get_current();
-      if (d)
-          d->copy();
-     }
-  else
-      if (main_tab_widget->currentIndex() == idx_tab_learn)
-          man->copy();
-}
-
-
-void CTEA::ed_cut()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->cut();
-}
-
-
-void CTEA::ed_paste()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->paste();
-}
-
-
-void CTEA::ed_undo()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->undo();
-}
-
-
-void CTEA::ed_redo()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->redo();
-}
-
-/*
-void CTEA::ed_clear()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->clear();
-}
-*/
 
 void CTEA::upCase()
 {
@@ -2835,7 +2770,7 @@ void CTEA::opt_update_keyb()
 void CTEA::slot_style_currentIndexChanged (int)
 {
  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
- QString text = cmb->currentText(); 
+ QString text = cmb->currentText();
 
    if (text == "GTK+") //because it is buggy with some Qt versions. sorry!
      return;
@@ -6902,7 +6837,7 @@ void CTEA::fn_binary_to_decimal()
 void CTEA::cmb_spellchecker_currentIndexChanged (int)
 {
   QComboBox *cmb = qobject_cast<QComboBox*>(sender());
-  QString text = cmb->currentText(); 
+  QString text = cmb->currentText();
 
   cur_spellchecker = text;
 
@@ -7535,7 +7470,7 @@ void CTEA::createCalendar()
 
   calendar->moon_mode = settings->value ("moon_mode", "0").toBool();
 
-  qDebug() << "calendar->moon_mode: " << calendar->moon_mode;  
+  qDebug() << "calendar->moon_mode: " << calendar->moon_mode;
 
   calendar->northern_hemisphere = settings->value ("northern_hemisphere", "1").toBool();
   calendar->moon_phase_algo = settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt();
@@ -7971,7 +7906,7 @@ void CTEA::fman_zip_info()
 void CTEA::cmb_tea_icons_currentIndexChanged (int)
 {
   QComboBox *cmb = qobject_cast<QComboBox*>(sender());
-  QString text = cmb->currentText(); 
+  QString text = cmb->currentText();
 
   settings->setValue ("icon_fname", text);
 
@@ -8000,7 +7935,7 @@ void CTEA::cmb_icon_sizes_currentIndexChanged (int index)
 
  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
 
- QString text = cmb->currentText(); 
+ QString text = cmb->currentText();
 
   settings->setValue ("icon_size", text);
 
@@ -9327,75 +9262,6 @@ void CTEA::repeat()
 }
 
 
-void CTEA::ed_block_start()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  int x = d->textCursor().position() - d->textCursor().block().position();
-  int y = d->textCursor().block().blockNumber();
-
-  d->rect_sel_start.setX (x);
-  d->rect_sel_start.setY (y);
-
-  d->update_ext_selections();
-}
-
-
-void CTEA::ed_block_end()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  int x = d->textCursor().position() - d->textCursor().block().position();
-  int y = d->textCursor().block().blockNumber();
-
-  d->rect_sel_end.setX (x);
-  d->rect_sel_end.setY (y);
-
-  d->update_ext_selections();
-}
-
-
-void CTEA::ed_block_copy()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! d->has_rect_selection())
-     return;
-
-  QApplication::clipboard()->setText (d->get_rect_sel());
-}
-
-
-void CTEA::ed_block_paste()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->rect_sel_replace (QApplication::clipboard()->text());
-}
-
-
-void CTEA::ed_block_cut()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->rect_sel_cut();
-}
 
 
 void CTEA::fman_zeropad()
@@ -9680,7 +9546,7 @@ void CTEA::fn_number_dd2dms()
   double minutes = floor (60 * (latitude.toDouble() - degrees));
   double seconds = round (3600 * (latitude.toDouble() - degrees) - 60 * minutes);
 
- 
+
   double degrees2 = floor (longtitude.toDouble());
   double minutes2 = floor (60 * (longtitude.toDouble() - degrees2));
   double seconds2 = round (3600 * (longtitude.toDouble() - degrees2) - 60 * minutes2);
@@ -10168,15 +10034,15 @@ void CTEA::fn_filter_by_repetitions()
       {
        if (pattern[i] == '1')
           positions.push_back (i);
-      } 
+      }
 
- 
+
 
   QStringList words = d->get().split (QChar::ParagraphSeparator);
 
   for (int i = 0; i < words.size(); ++i)
       {
-       QString wrd = words[i]; 
+       QString wrd = words[i];
 
        if (pattern.size() > wrd.size())
           continue;
@@ -10185,7 +10051,7 @@ void CTEA::fn_filter_by_repetitions()
 
        size_t count = 0;
 
-       for (size_t j = 0; j < positions.size(); ++j) 
+       for (size_t j = 0; j < positions.size(); ++j)
            {
             if (wrd[positions[j]] == ch)
                 count++;
@@ -10199,7 +10065,7 @@ void CTEA::fn_filter_by_repetitions()
            }
       }
 
-      if (! result.isEmpty())  
+      if (! result.isEmpty())
          d->put (result);
 }
 
@@ -10856,4 +10722,132 @@ void CTEA::file_close()
 Edit menu callbacks
 ===================
 */
+
+
+void CTEA::ed_copy()
+{
+  last_action = sender();
+
+  if (main_tab_widget->currentIndex() == idx_tab_edit)
+     {
+      CDocument *d = documents->get_current();
+      if (d)
+          d->copy();
+     }
+  else
+      if (main_tab_widget->currentIndex() == idx_tab_learn)
+          man->copy();
+}
+
+
+
+void CTEA::ed_paste()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->paste();
+}
+
+
+void CTEA::ed_cut()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->cut();
+}
+
+
+void CTEA::ed_block_start()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  int x = d->textCursor().position() - d->textCursor().block().position();
+  int y = d->textCursor().block().blockNumber();
+
+  d->rect_sel_start.setX (x);
+  d->rect_sel_start.setY (y);
+
+  d->update_ext_selections();
+}
+
+
+void CTEA::ed_block_end()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  int x = d->textCursor().position() - d->textCursor().block().position();
+  int y = d->textCursor().block().blockNumber();
+
+  d->rect_sel_end.setX (x);
+  d->rect_sel_end.setY (y);
+
+  d->update_ext_selections();
+}
+
+
+void CTEA::ed_block_copy()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! d->has_rect_selection())
+     return;
+
+  QApplication::clipboard()->setText (d->get_rect_sel());
+}
+
+
+void CTEA::ed_block_paste()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->rect_sel_replace (QApplication::clipboard()->text());
+}
+
+
+void CTEA::ed_block_cut()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->rect_sel_cut();
+}
+
+
+void CTEA::ed_undo()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->undo();
+}
+
+
+void CTEA::ed_redo()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->redo();
+}
 

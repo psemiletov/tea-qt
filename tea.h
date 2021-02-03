@@ -512,7 +512,7 @@ Preferences tab :: Interface page UI elements
   QComboBox *cmb_ui_mode;
   QComboBox *cmb_lng;
   QComboBox *cmb_styles;
- 
+
   QCheckBox *cb_fif_at_toolbar;
   QComboBox *cmb_icon_size;
   QComboBox *cmb_tea_icons;
@@ -594,7 +594,7 @@ Preferences tab :: Functions page UI elements
   QSpinBox *spb_fuzzy_q;
 
 
- 
+
 
 
 /*
@@ -1094,7 +1094,7 @@ View menu callbacks
   void fn_use_plugin();
 #endif
 
-  
+
 
   void repeat();
 
@@ -1167,13 +1167,8 @@ View menu callbacks
   void about();
 
 
-
-
   void upCase();
   void dnCase();
-
-
-
 
 
   void scale_image();
@@ -1299,7 +1294,7 @@ Tune page callbacks
   void pb_remove_hotkey_clicked();
 
   void slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QListWidgetItem *previous);
-  
+
 
   void slot_font_logmemo_select();
   void slot_font_interface_select();

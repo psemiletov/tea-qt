@@ -1140,9 +1140,9 @@ void CTEA::createMenus()
 
   menu_edit->addSeparator();
 
-  add_to_menu (menu_edit, tr ("Set as storage file"), SLOT(set_as_storage_file()));
-  add_to_menu (menu_edit, tr ("Copy to storage file"), SLOT(copy_to_storage_file()));
-  add_to_menu (menu_edit, tr ("Start/stop capture clipboard to storage file"), SLOT(capture_clipboard_to_storage_file()));
+  add_to_menu (menu_edit, tr ("Set as storage file"), SLOT(ed_set_as_storage_file()));
+  add_to_menu (menu_edit, tr ("Copy to storage file"), SLOT(ed_copy_to_storage_file()));
+  add_to_menu (menu_edit, tr ("Start/stop capture clipboard to storage file"), SLOT(ed_capture_clipboard_to_storage_file()))->setCheckable (true);
 
 
 
@@ -4033,17 +4033,6 @@ void CTEA::nav_focus_to_editor()
      d->setFocus (Qt::OtherFocusReason);
 }
 
-
-void CTEA::ed_copy_current_fname()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     QApplication::clipboard()->setText (d->file_name);
-}
-
-
 void CTEA::fn_insert_date()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -6646,25 +6635,6 @@ void CTEA::fman_preview_image()
 }
 
 
-void CTEA::ed_indent()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->indent();
-}
-
-
-void CTEA::ed_unindent()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->un_indent();
-}
-
 
 void CTEA::fn_sort_casecareless()
 {
@@ -7057,46 +7027,6 @@ void CTEA::fman_mk_gallery()
 }
 
 
-void CTEA::ed_indent_by_first_line()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QStringList sl = d->get().split (QChar::ParagraphSeparator);
-  if (sl.size() == 0)
-    return;
-
-  QString x = sl[0];
-  QChar c = x[0];
-  int pos = 0;
-
-  if (c == ' ' || c == '\t')
-     for (int i = 0; i < x.size(); i++)
-         if (x[i] != c)
-            {
-             pos = i;
-             break;
-            }
-
-  QString fill_string;
-  fill_string.fill (c, pos);
-
-  for (int i = 0; i < sl.size(); i++)
-      {
-       QString s = sl[i].trimmed();
-       s.prepend (fill_string);
-       sl[i] = s;
-      }
-
-  QString t = sl.join ("\n");
-
-  d->put (t);
-}
-
-
 void CTEA::search_in_files_results_dclicked (QListWidgetItem *item)
 {
   documents->open_file_triplex (item->text());
@@ -7369,54 +7299,6 @@ void CTEA::guess_enc()
       }
 
   cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
-}
-
-
-void CTEA::ed_comment()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! d->highlighter)
-     return;
-
-  if (d->highlighter->cm_mult.isEmpty() && d->highlighter->cm_single.isEmpty())
-     return;
-
-  QString t = d->get();
-  QString result;
-
-  bool is_multiline = true;
-
-  int sep_pos = t.indexOf (QChar::ParagraphSeparator);
-  if (sep_pos == -1 || sep_pos == t.size() - 1)
-     is_multiline = false;
-
-  if (is_multiline)
-      result = d->highlighter->cm_mult;
-  else
-      result = d->highlighter->cm_single;
-
-
-  if (is_multiline && result.isEmpty())
-     {
-      QStringList sl = t.split (QChar::ParagraphSeparator);
-      for (int i = 0; i < sl.size(); i++)
-          {
-           QString x = d->highlighter->cm_single;
-           sl[i] = x.replace ("%s", sl[i]);
-          }
-
-      QString z = sl.join("\n");
-      d->put (z);
-
-      return;
-     }
-
-  d->put (result.replace ("%s", t));
 }
 
 
@@ -8025,42 +7907,6 @@ void CTEA::fn_remove_by_regexp()
 
   d->put (t);
 }
-
-
-void CTEA::capture_clipboard_to_storage_file()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  capture_to_storage_file = ! capture_to_storage_file;
-}
-
-
-void CTEA::set_as_storage_file()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     fname_storage_file = d->file_name;
-}
-
-
-void CTEA::copy_to_storage_file()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *dsource = documents->get_current();
-  if (! dsource)
-     return;
-
-  CDocument *ddest = documents->get_document_by_fname (fname_storage_file);
-  if (ddest)
-     {
-      QString t = dsource->get();
-      ddest->put (t);
-      ddest->put ("\n");
-     }
-}
-
 
 void CTEA::cal_moon_mode()
 {
@@ -10763,7 +10609,7 @@ void CTEA::ed_cut()
 
 void CTEA::ed_block_start()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -10799,7 +10645,7 @@ void CTEA::ed_block_end()
 
 void CTEA::ed_block_copy()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -10814,7 +10660,7 @@ void CTEA::ed_block_copy()
 
 void CTEA::ed_block_paste()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (d)
@@ -10824,7 +10670,7 @@ void CTEA::ed_block_paste()
 
 void CTEA::ed_block_cut()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (d)
@@ -10832,9 +10678,19 @@ void CTEA::ed_block_cut()
 }
 
 
+void CTEA::ed_copy_current_fname()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     QApplication::clipboard()->setText (d->file_name);
+}
+
+
 void CTEA::ed_undo()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (d)
@@ -10844,10 +10700,152 @@ void CTEA::ed_undo()
 
 void CTEA::ed_redo()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (d)
       d->redo();
 }
 
+
+void CTEA::ed_indent()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->indent();
+}
+
+
+void CTEA::ed_unindent()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->un_indent();
+}
+
+
+void CTEA::ed_indent_by_first_line()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QStringList sl = d->get().split (QChar::ParagraphSeparator);
+  if (sl.size() == 0)
+    return;
+
+  QString x = sl[0];
+  QChar c = x[0];
+  int pos = 0;
+
+  if (c == ' ' || c == '\t')
+     for (int i = 0; i < x.size(); i++)
+         if (x[i] != c)
+            {
+             pos = i;
+             break;
+            }
+
+  QString fill_string;
+  fill_string.fill (c, pos);
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QString s = sl[i].trimmed();
+       s.prepend (fill_string);
+       sl[i] = s;
+      }
+
+  QString t = sl.join ("\n");
+
+  d->put (t);
+}
+
+
+void CTEA::ed_comment()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! d->highlighter)
+     return;
+
+  if (d->highlighter->cm_mult.isEmpty() && d->highlighter->cm_single.isEmpty())
+     return;
+
+  QString t = d->get();
+  QString result;
+
+  bool is_multiline = true;
+
+  int sep_pos = t.indexOf (QChar::ParagraphSeparator);
+  if (sep_pos == -1 || sep_pos == t.size() - 1)
+     is_multiline = false;
+
+  if (is_multiline)
+      result = d->highlighter->cm_mult;
+  else
+      result = d->highlighter->cm_single;
+
+
+  if (is_multiline && result.isEmpty())
+     {
+      QStringList sl = t.split (QChar::ParagraphSeparator);
+      for (int i = 0; i < sl.size(); i++)
+          {
+           QString x = d->highlighter->cm_single;
+           sl[i] = x.replace ("%s", sl[i]);
+          }
+
+      QString z = sl.join("\n");
+      d->put (z);
+
+      return;
+     }
+
+  d->put (result.replace ("%s", t));
+}
+
+
+void CTEA::ed_set_as_storage_file()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+     fname_storage_file = d->file_name;
+}
+
+
+void CTEA::ed_copy_to_storage_file()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *dsource = documents->get_current();
+  if (! dsource)
+     return;
+
+  CDocument *ddest = documents->get_document_by_fname (fname_storage_file);
+  if (ddest)
+     {
+      QString t = dsource->get();
+      ddest->put (t);
+      ddest->put ("\n");
+     }
+}
+
+
+void CTEA::ed_capture_clipboard_to_storage_file()
+{
+  last_action = sender();
+  capture_to_storage_file = qobject_cast<QAction *>(sender())->isChecked(); //! capture_to_storage_file;
+}

@@ -876,7 +876,6 @@ Edit menu callbacks
   void ed_paste();
   void ed_cut();
 
-
   void ed_block_start();
   void ed_block_end();
   void ed_block_copy();
@@ -894,10 +893,9 @@ Edit menu callbacks
 
   void ed_comment();
 
-
-  void set_as_storage_file();
-  void copy_to_storage_file();
-  void capture_clipboard_to_storage_file();
+  void ed_set_as_storage_file();
+  void ed_copy_to_storage_file();
+  void ed_capture_clipboard_to_storage_file();
 
 
 /*

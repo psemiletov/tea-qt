@@ -1188,11 +1188,11 @@ void CTEA::createMenus()
 
   add_to_menu (tm, tr ("Text to [X]HTML"), SLOT(mrkup_text_to_html()));
   add_to_menu (tm, tr ("Convert tags to entities"), SLOT(mrkup_tags_to_entities()));
-  add_to_menu (tm, tr ("Antispam e-mail"), SLOT(fn_antispam_email()));
+  add_to_menu (tm, tr ("Antispam e-mail"), SLOT(mrkup_antispam_email()));
   add_to_menu (tm, tr ("Document weight"), SLOT(mrkup_document_weight()));
   add_to_menu (tm, tr ("Preview selected color"), SLOT(mrkup_preview_color()));
-  add_to_menu (tm, tr ("Strip HTML tags"), SLOT(fn_strip_html_tags()));
-  add_to_menu (tm, tr ("Rename selected file"), SLOT(rename_selected()));
+  add_to_menu (tm, tr ("Strip HTML tags"), SLOT(mrkup_strip_html_tags()));
+  add_to_menu (tm, tr ("Rename selected file"), SLOT(mrkup_rename_selected()));
 
 
   menu_search = menuBar()->addMenu (tr ("Search"));
@@ -3467,7 +3467,7 @@ void CTEA::fn_text_stat()
 }
 
 
-void CTEA::fn_antispam_email()
+void CTEA::mrkup_antispam_email()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3743,35 +3743,6 @@ void CTEA::mrkup_header()
       r = QString ("<%1>%2</%1>").arg (
                    a->text().toLower()).arg (
                    d->get());
-
-  d->put (r);
-}
-
-
-void CTEA::mrkup_align()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  QString r;
-
-  if (d->markup_mode == "LaTeX")
-      r = QString ("\\begin{%1}\n%2\\end{%1}").arg (a->text().toLower()).arg (d->get());
-  //if (d->markup_mode == "MediaWiki")
-    // {
-//FIXME write code here
-     //}
-  else
-      r = "<p style=\"text-align:" +
-           a->text().toLower() +
-           ";\">" +
-            d->get() +
-           "</p>";
 
   d->put (r);
 }
@@ -6684,7 +6655,7 @@ void CTEA::view_use_hl()
 }
 
 
-void CTEA::fn_strip_html_tags()
+void CTEA::mrkup_strip_html_tags()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7565,7 +7536,7 @@ void CTEA::cal_remove()
 }
 
 
-void CTEA::rename_selected()
+void CTEA::mrkup_rename_selected()
 {
   CDocument *d = documents->get_current();
   if (! d)
@@ -10818,7 +10789,7 @@ void CTEA::ed_comment()
 
 void CTEA::ed_set_as_storage_file()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (d)

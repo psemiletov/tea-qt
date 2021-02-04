@@ -904,9 +904,34 @@ Markup menu callbacks
 ===================
 */
 
+  void mrkup_mode_choosed();
+  void mrkup_header();
+
+  void mrkup_align_center();
+  void mrkup_align_left();
+  void mrkup_align_right();
+  void mrkup_align_justify();
+
+  void mrkup_bold();
+  void mrkup_italic();
+  void mrkup_underline();
+
+  void mrkup_link();
+  void mrkup_para();
+  void mrkup_color();
+
+  void mrkup_br();
+  void mrkup_nbsp();
+  void markup_ins_image();
 
 
-
+  void mrkup_text_to_html();
+  void mrkup_tags_to_entities();
+  void mrkup_antispam_email();
+  void mrkup_document_weight();
+  void mrkup_preview_color();
+  void mrkup_strip_html_tags();
+  void mrkup_rename_selected();
 
 /*
 ===================
@@ -934,7 +959,6 @@ Fn menu callbacks
 
   void fn_filter_with_regexp();
   void fn_text_stat();
-  void fn_antispam_email();
   void fn_apply_to_each_line();
   void fn_reverse();
   void fn_escape();
@@ -1001,7 +1025,6 @@ Fn menu callbacks
   void fn_rm_formatting_at_each_line();
   void fn_rm_trailing_spaces();
 
-  void fn_strip_html_tags();
   void fn_number_decimal_to_binary();
   void fn_number_flip_bits();
   void fn_binary_to_decimal();
@@ -1081,10 +1104,6 @@ View menu callbacks
   void view_use_palette();
   void view_use_hl();
   void view_use_theme();
-
-
-  void rename_selected();
-
 
 
 
@@ -1179,28 +1198,6 @@ View menu callbacks
   void calendar_clicked (const QDate &date);
   void calendar_activated (const QDate &date);
 
-  void mrkup_bold();
-  void mrkup_italic();
-  void mrkup_underline();
-  void mrkup_link();
-  void mrkup_para();
-  void mrkup_preview_color();
-  void mrkup_br();
-  void mrkup_nbsp();
-  void mrkup_tags_to_entities();
-  void mrkup_mode_choosed();
-  void mrkup_header();
-  void mrkup_align();
-
-  void mrkup_align_center();
-  void mrkup_align_left();
-  void mrkup_align_right();
-  void mrkup_align_justify();
-
-  void mrkup_document_weight();
-  void markup_ins_image();
-  void mrkup_color();
-  void mrkup_text_to_html();
 
   void search_fuzzy_mode();
   void search_regexp_mode();

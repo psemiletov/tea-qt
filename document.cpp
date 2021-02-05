@@ -2353,3 +2353,27 @@ bool CDocument::get_word_wrap()
   return wordWrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere;
 }
 
+
+void CDocument::wheelEvent(QWheelEvent *e)
+{
+  if (e->modifiers() & Qt::ControlModifier) 
+    {
+#if QT_VERSION < 0x050000
+     const int delta = e->delta();
+#else
+    const int delta = e->angleDelta().y();
+
+#endif
+    
+    if (delta < 0)
+       zoomOut();
+    else 
+        if (delta > 0)
+          zoomIn();
+    return;
+   }
+
+  QPlainTextEdit::wheelEvent(e);
+}
+
+

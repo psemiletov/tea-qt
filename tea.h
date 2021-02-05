@@ -939,6 +939,23 @@ Search menu callbacks
 ===================
 */
 
+  void search_find();
+  void search_find_next();
+  void search_find_prev();
+
+  void search_mark_all();
+  void search_unmark();
+
+  void search_in_files_results_dclicked (QListWidgetItem *item);
+  void search_in_files();
+  void search_fuzzy_mode();
+  void search_regexp_mode();
+  void search_whole_words_mode();
+  void search_from_cursor_mode();
+
+  void search_replace_with();
+  void search_replace_all();
+  void search_replace_all_at_ofiles();
 
 
 
@@ -1190,26 +1207,10 @@ View menu callbacks
 
   void scale_image();
 
-  void search_mark_all();
-  void search_unmark();
-  void search_in_files_results_dclicked (QListWidgetItem *item);
-  void search_in_files();
 
   void calendar_clicked (const QDate &date);
   void calendar_activated (const QDate &date);
 
-
-  void search_fuzzy_mode();
-  void search_regexp_mode();
-  void search_whole_words_mode();
-  void search_from_cursor_mode();
-
-  void search_find();
-  void search_find_next();
-  void search_find_prev();
-  void search_replace_with();
-  void search_replace_all();
-  void search_replace_all_at_ofiles();
 
   void view_hide_error_marks();
   void view_toggle_fs();

@@ -1219,27 +1219,22 @@ void CTEA::createMenus()
 
   menu_search->addSeparator();
 
-  menu_find_case = new QAction (tr ("Case sensitive"), this);
-  menu_search->addAction (menu_find_case);
+  menu_find_case = menu_search->addAction (tr ("Case sensitive"));
   menu_find_case->setCheckable (true);
 
-  menu_find_whole_words = new QAction (tr ("Whole words"), this);
-  menu_search->addAction (menu_find_whole_words);
+  menu_find_whole_words = menu_search->addAction (tr ("Whole words"));
   menu_find_whole_words->setCheckable (true);
   connect (menu_find_whole_words, SIGNAL(triggered()), this, SLOT(search_whole_words_mode()));
 
-  menu_find_from_cursor = new QAction (tr ("From cursor"), this);
-  menu_search->addAction (menu_find_from_cursor);
+  menu_find_from_cursor = menu_search->addAction (tr ("From cursor"));
   menu_find_from_cursor->setCheckable (true);
   connect (menu_find_from_cursor, SIGNAL(triggered()), this, SLOT(search_from_cursor_mode()));
 
-  menu_find_regexp = new QAction (tr ("Regexp mode"), this);
-  menu_search->addAction (menu_find_regexp);
+  menu_find_regexp = menu_search->addAction (tr ("Regexp mode"));
   menu_find_regexp->setCheckable (true);
   connect (menu_find_regexp, SIGNAL(triggered()), this, SLOT(search_regexp_mode()));
 
-  menu_find_fuzzy = new QAction (tr ("Fuzzy mode"), this);
-  menu_search->addAction (menu_find_fuzzy);
+  menu_find_fuzzy = menu_search->addAction (tr ("Fuzzy mode"));
   menu_find_fuzzy->setCheckable (true);
   connect (menu_find_fuzzy, SIGNAL(triggered()), this, SLOT(search_fuzzy_mode()));
 

@@ -270,6 +270,7 @@ protected:
   void paintEvent(QPaintEvent *event);
   void keyPressEvent (QKeyEvent *event);
   void resizeEvent(QResizeEvent *event);
+  void wheelEvent(QWheelEvent *e);
 
 public slots:
 

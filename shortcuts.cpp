@@ -209,8 +209,16 @@ void CShortcuts::load_from_file (const QString &file_name)
   QList<QAction *> a = w->findChildren<QAction *>();
 
   for (int i = 0; i < a.size(); i++) 
-      if (hash.contains (a.at(i)->text()))
-         a[i]->setShortcut (QKeySequence (hash.value (a.at(i)->text())));
+     {
+      QAction *at = a.at(i);
+      if (! at->shortcut().isEmpty()) //don't assign if shortcut is already hardcoded/predefined
+         continue;
+
+      if (hash.contains (at->text()))
+         at->setShortcut (QKeySequence (hash.value (at->text())));
+ //     if (hash.contains (a.at(i)->text()))
+   //       a[i]->setShortcut (QKeySequence (hash.value (a.at(i)->text())));
+     }
 }
 
 

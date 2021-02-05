@@ -1050,7 +1050,7 @@ void CTEA::createMenus()
   add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
   add_to_menu (menu_file, tr ("Last closed file"), SLOT(file_last_opened()));
   add_to_menu (menu_file, tr ("Open at cursor"), SLOT(file_open_at_cursor()), "F2");
-  add_to_menu (menu_file, tr ("Crapbook"), SLOT(file_crapbook()), "Alt+M");
+  add_to_menu (menu_file, tr ("Crapbook"), SLOT(file_crapbook()));
   add_to_menu (menu_file, tr ("Notes"), SLOT(file_notes()));
 
   menu_file->addSeparator();
@@ -1198,7 +1198,7 @@ void CTEA::createMenus()
   menu_search = menuBar()->addMenu (tr ("Search"));
   menu_search->setTearOffEnabled (true);
 
-  add_to_menu (menu_search, tr ("Find"), SLOT(search_find()));
+  add_to_menu (menu_search, tr ("Find"), SLOT(search_find()), "Ctrl+F");
   add_to_menu (menu_search, tr ("Find next"), SLOT(search_find_next()),"F3");
   add_to_menu (menu_search, tr ("Find previous"), SLOT(search_find_prev()),"Ctrl+F3");
 
@@ -1936,7 +1936,7 @@ void CTEA::search_find_next()
          cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(),
 #endif
 
- get_search_options());
+      get_search_options());
       if (menu_find_fuzzy->isChecked())
          {
           int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, d->textCursor().position(), settings->value ("fuzzy_q", "60").toInt());

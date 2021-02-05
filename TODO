@@ -43,7 +43,6 @@ make max recent items user-modified
 units conversion
 unicode table window
 split document panel
-ANSI art support
 play the chords by name, i.e. select AmDm, then use something like "Play melody"
 chords to tabs, heh heh
 parse the compiler output, goto the error by clicking at logmemo

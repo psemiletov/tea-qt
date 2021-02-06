@@ -166,7 +166,7 @@ double calculate (string expression)
           continue;
          }
 
-      p++;
+      ++p;
      }
   while (p != items.end());
 
@@ -202,7 +202,7 @@ double calculate (string expression)
           continue;
          }
 
-      p++;
+      ++p;
      }
   while (p != items.end());
 
@@ -214,7 +214,7 @@ double calculate (string expression)
       CItem current = *p;
 
       list<CItem>::iterator t = p;
-      t++;
+      ++t;
 
       CItem next = *t;
 
@@ -237,7 +237,7 @@ double calculate (string expression)
            continue;
           }
 
-         p++;
+         ++p;
         }
   while (p != items.end());
 

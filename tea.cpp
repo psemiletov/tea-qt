@@ -1567,36 +1567,25 @@ void CTEA::createToolBars()
       cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
       cmb_fif->setObjectName ("FIF");
 
-      //cmb_fif->setMinimumWidth (200);
-      //cmb_fif->setSizePolicy (QSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Preferred, QSizePolicy::ComboBox));
       cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 
       cmb_fif->setEditable (true);
       fif = cmb_fif->lineEdit();
       connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
 
-      //QWidget *wd_fte = new QWidget;
-      //QHBoxLayout *lt_fte = new QHBoxLayout;
-      //wd_fte->setLayout (lt_fte);
-
       fifToolBar->addWidget (cmb_fif);
 
-
       QAction *act_fif_find = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
-           act_fif_find->setToolTip (tr ("Find"));
-           connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
+      act_fif_find->setToolTip (tr ("Find"));
+      connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
 
-           QAction *act_fif_find_next = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
-           act_fif_find_next->setToolTip (tr ("Find next"));
-           connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
+      QAction *act_fif_find_next = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
+      act_fif_find_next->setToolTip (tr ("Find next"));
+      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
 
-           QAction *act_fif_find_prev = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
-           act_fif_find_prev->setToolTip (tr ("Find previous"));
-           connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
-
-
-
-      //fifToolBar->addWidget (wd_fte);
+      QAction *act_fif_find_prev = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
+      act_fif_find_prev->setToolTip (tr ("Find previous"));
+      connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
      }
 }
 

@@ -2261,15 +2261,6 @@ void CDocument::slot_selectionChanged()
 }
 
 
-void CDocument::text_replace (const QString &s)
-{
-  if (has_rect_selection())
-     rect_sel_replace (s, false);
-  else
-      textCursor().insertText (s);
-}
-
-
 void CDox::move_cursor (QTextCursor::MoveOperation mo)
 {
   CDocument *d = get_current();
@@ -2362,7 +2353,6 @@ void CDocument::wheelEvent(QWheelEvent *e)
      const int delta = e->delta();
 #else
     const int delta = e->angleDelta().y();
-
 #endif
     
     if (delta < 0)

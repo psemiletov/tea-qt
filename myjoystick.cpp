@@ -53,30 +53,6 @@ CJoystick::CJoystick (uint idn, QObject *upper_link)
 }
 
 
-void CJoystick::read_joystick_depr()
-{
-  struct JS_DATA_TYPE js;
-  if (read (fd, &js, JS_RETURN) != JS_RETURN)
-     return; //error
-
-  CJoystickAxisEvent *event = new CJoystickAxisEvent (evtJoystickAxis);
-
-  if (js.y != 0)
-     {
-      event->axis = 0;
-      event->value = js.y;
-     }
-
-  if (js.x != 0)
-     {
-      event->axis = 1;
-      event->value = js.x;
-     }
-
-  QApplication::postEvent (receiver, reinterpret_cast<QEvent*>(event));
-}
-
-
 void CJoystick::read_joystick()
 {
   if (! initialized)

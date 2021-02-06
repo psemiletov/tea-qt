@@ -71,7 +71,6 @@ public:
 public slots:
 
   void read_joystick();
-  void read_joystick_depr();
 
 };
 

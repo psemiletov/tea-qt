@@ -252,7 +252,6 @@ public:
   void lineNumberAreaPaintEvent (QPaintEvent *event);
   int line_number_area_width();
 
-  void text_replace (const QString &s);
   void rect_sel_reset();
   void rect_sel_replace (const QString &s, bool insert = false);
   void update_ext_selections();

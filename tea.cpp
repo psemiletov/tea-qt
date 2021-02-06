@@ -415,9 +415,7 @@ void CTEA::create_main_widget_splitter()
 
       QHBoxLayout *lt_fte = new QHBoxLayout;
 
-
       v_box->addLayout (lt_fte, 0);
-
 
       int tleft = 1;
       int tright = 1;
@@ -426,24 +424,21 @@ void CTEA::create_main_widget_splitter()
 
       v_box->getContentsMargins(&tleft, &ttop, &tright, &tbottom);
 
-//      v_box->setContentsMargins (1, 1, 1, 1);
       v_box->setContentsMargins(tleft, 1, tright, 1);
 
       QToolBar *tb_fif = new QToolBar;
 
-      QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), tr ("Search"));
+      QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
+      act_fif_find->setToolTip (tr ("Find"));
       connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
 
-      QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), tr ("Search next"));
+      QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
+      act_fif_find_next->setToolTip (tr ("Find next"));
       connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
 
-      QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), tr ("Search previous"));
+      QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
+      act_fif_find_prev->setToolTip (tr ("Find previous"));
       connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
-
-//     tb_fif->addAction (act_fif_find);
-  //   tb_fif->addAction (act_fif_find_next);
-    // tb_fif->addAction (act_fif_find_prev);
-
 
       QLabel *l_fif = new QLabel (tr ("FIF"));
 
@@ -453,45 +448,6 @@ void CTEA::create_main_widget_splitter()
       lt_fte->addWidget (tb_fif, 0);
      }
 
-/*
-  if (! settings->value ("fif_at_toolbar", 0).toBool())
-     {
-      cmb_fif = new QComboBox;
-      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
-      cmb_fif->setObjectName ("FIF");
-
-      cmb_fif->setEditable (true);
-      fif = cmb_fif->lineEdit();
-      fif->setStatusTip (tr ("The famous input field. Use for search/replace, function parameters"));
-
-      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
-
-      QHBoxLayout *lt_fte = new QHBoxLayout;
-      v_box->addLayout (lt_fte);
-
-
-      QToolButton *bt_find = new QToolButton (this);
-      QToolButton *bt_prev = new QToolButton (this);
-      QToolButton *bt_next = new QToolButton (this);
-      bt_next->setArrowType (Qt::RightArrow);
-      bt_prev->setArrowType (Qt::LeftArrow);
-
-      connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
-      connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
-      connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
-
-      bt_find->setIcon (get_theme_icon ("search_find.png"));
-
-      QLabel *l_fif = new QLabel (tr ("FIF"));
-
-      lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
-      lt_fte->addWidget (cmb_fif, 1);
-
-      lt_fte->addWidget (bt_find);
-      lt_fte->addWidget (bt_prev);
-      lt_fte->addWidget (bt_next);
-     }
-*/
   mainSplitter->setStretchFactor (1, 1);
 
 
@@ -564,6 +520,8 @@ void CTEA::create_main_widget_docked()
 
       cmb_fif = new QComboBox;
       cmb_fif->setObjectName ("FIF");
+      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+
 
       cmb_fif->setEditable (true);
       fif = cmb_fif->lineEdit();
@@ -574,24 +532,26 @@ void CTEA::create_main_widget_docked()
       QHBoxLayout *lt_fte = new QHBoxLayout;
       w_fif->setLayout (lt_fte);
 
-      QToolButton *bt_find = new QToolButton (this);
-      QToolButton *bt_prev = new QToolButton (this);
-      QToolButton *bt_next = new QToolButton (this);
-      bt_next->setArrowType (Qt::RightArrow);
-      bt_prev->setArrowType (Qt::LeftArrow);
 
-      connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
-      connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
-      connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
+      QToolBar *tb_fif = new QToolBar;
 
-      bt_find->setIcon (get_theme_icon ("search_find.png"));
+        QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
+        act_fif_find->setToolTip (tr ("Find"));
+        connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
 
+        QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
+        act_fif_find_next->setToolTip (tr ("Find next"));
+        connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
 
-      lt_fte->addWidget (cmb_fif, 0);
+        QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
+        act_fif_find_prev->setToolTip (tr ("Find previous"));
+        connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
 
-      lt_fte->addWidget (bt_find);
-      lt_fte->addWidget (bt_prev);
-      lt_fte->addWidget (bt_next);
+        QLabel *l_fif = new QLabel (tr ("FIF"));
+
+        lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
+        lt_fte->addWidget (cmb_fif, 0);
+        lt_fte->addWidget (tb_fif, 0);
 
       dock_fif->setWidget (w_fif);
       addDockWidget (Qt::BottomDockWidgetArea, dock_fif);
@@ -1607,36 +1567,36 @@ void CTEA::createToolBars()
       cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
       cmb_fif->setObjectName ("FIF");
 
-      cmb_fif->setMinimumWidth (200);
-      cmb_fif->setSizePolicy (QSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Preferred, QSizePolicy::ComboBox));
+      //cmb_fif->setMinimumWidth (200);
+      //cmb_fif->setSizePolicy (QSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Preferred, QSizePolicy::ComboBox));
+      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
 
       cmb_fif->setEditable (true);
       fif = cmb_fif->lineEdit();
       connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
 
-      QWidget *wd_fte = new QWidget;
-      QHBoxLayout *lt_fte = new QHBoxLayout;
-      wd_fte->setLayout (lt_fte);
+      //QWidget *wd_fte = new QWidget;
+      //QHBoxLayout *lt_fte = new QHBoxLayout;
+      //wd_fte->setLayout (lt_fte);
 
-      QToolButton *bt_find = new QToolButton (this);
-      QToolButton *bt_prev = new QToolButton (this);
-      QToolButton *bt_next = new QToolButton (this);
-      bt_next->setArrowType (Qt::RightArrow);
-      bt_prev->setArrowType (Qt::LeftArrow);
+      fifToolBar->addWidget (cmb_fif);
 
-      connect (bt_find, SIGNAL(clicked()), this, SLOT(search_find()));
-      connect (bt_next, SIGNAL(clicked()), this, SLOT(search_find_next()));
-      connect (bt_prev, SIGNAL(clicked()), this, SLOT(search_find_prev()));
 
-      bt_find->setIcon (get_theme_icon ("search_find.png"));
+      QAction *act_fif_find = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
+           act_fif_find->setToolTip (tr ("Find"));
+           connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
 
-      lt_fte->addWidget (bt_find);
-      lt_fte->addWidget (bt_prev);
-      lt_fte->addWidget (bt_next);
+           QAction *act_fif_find_next = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
+           act_fif_find_next->setToolTip (tr ("Find next"));
+           connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
 
-      lt_fte->addWidget (cmb_fif);
+           QAction *act_fif_find_prev = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
+           act_fif_find_prev->setToolTip (tr ("Find previous"));
+           connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
 
-      fifToolBar->addWidget (wd_fte);
+
+
+      //fifToolBar->addWidget (wd_fte);
      }
 }
 

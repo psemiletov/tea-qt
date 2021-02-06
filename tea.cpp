@@ -431,14 +431,14 @@ void CTEA::create_main_widget_splitter()
 
       QToolBar *tb_fif = new QToolBar;
 
-      QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), tr ("Find"));
+      QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), tr ("Search"));
       connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
 
-     QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), tr ("Find next"));
-     connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
+      QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), tr ("Search next"));
+      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
 
-     QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), tr ("Find previous"));
-     connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
+      QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), tr ("Search previous"));
+      connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
 
 //     tb_fif->addAction (act_fif_find);
   //   tb_fif->addAction (act_fif_find_next);
@@ -1199,7 +1199,7 @@ void CTEA::createMenus()
   menu_search->setTearOffEnabled (true);
 
   add_to_menu (menu_search, tr ("Find"), SLOT(search_find()), "Ctrl+F");
-  add_to_menu (menu_search, tr ("Find next"), SLOT(search_find_next()),"F3");
+  add_to_menu (menu_search, tr ("Find next"), SLOT(search_find_next()), "F3");
   add_to_menu (menu_search, tr ("Find previous"), SLOT(search_find_prev()),"Ctrl+F3");
 
   menu_search->addSeparator();

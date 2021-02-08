@@ -35,7 +35,6 @@
 #include <QProcess>
 #include <QProxyStyle>
 
-
 #ifdef USE_QML_STUFF
 #include <QQmlEngine>
 #include <QQuickWindow>
@@ -779,7 +778,6 @@ Main window slots
   void logmemo_double_click (const QString &txt);
   void receiveMessage (const QString &msg);
   void receiveMessageShared (const QStringList& msg);
-  void update_labels_list();
 
 
 /*
@@ -968,6 +966,10 @@ Fn menu callbacks
   void fn_repeat();
   void fn_scale_image();
 
+#ifdef USE_QML_STUFF
+  void fn_use_plugin();
+#endif
+
   void fn_use_snippet();
   void fn_run_script();
   void cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus);
@@ -1032,8 +1034,6 @@ Fn menu callbacks
   void fn_analyze_unitaz_abc();
   void fn_analyze_unitaz_len();
 
-
-
   void fn_text_apply_to_each_line();
   void fn_text_reverse();
   void fn_text_escape();
@@ -1044,18 +1044,11 @@ Fn menu callbacks
   void fn_text_remove_trailing_spaces();
   void fn_text_anagram();
 
-
-
-  void fn_convert_quotes_angle();
-  void fn_convert_quotes_curly();
-  void fn_convert_quotes_tex_curly();
-  void fn_convert_quotes_tex_angle_01();
-  void fn_convert_quotes_tex_angle_02();
-
-
-
-
-
+  void fn_quotes_to_angle();
+  void fn_quotes_curly();
+  void fn_quotes_tex_curly();
+  void fn_quotes_tex_angle_01();
+  void fn_quotes_tex_angle_02();
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
@@ -1063,22 +1056,33 @@ Fn menu callbacks
   void fn_spell_check();
   void fn_spell_suggest_callback();
   void fn_spell_add_to_dict();
-  void fn_remove_from_dict();
+  void fn_spell_remove_from_dict();
   void fn_spell_suggest();
 
-  void cmb_spellchecker_currentIndexChanged (int);
-
+//  void cmb_spellchecker_currentIndexChanged (int);
 
 #endif // SPELLCHECKERS ENABLED
 
-#ifdef HUNSPELL_ENABLE
-  void pb_choose_hunspell_path_clicked();
-#endif
 
-#ifdef ASPELL_ENABLE
-  void pb_choose_aspell_path_clicked();
-#endif
 
+/*
+====================
+Cal menu
+===================
+*/
+
+  void cal_moon_mode();
+  void cal_set_date_a();
+  void cal_set_date_b();
+
+  void cal_add_days();
+  void cal_add_months();
+  void cal_add_years();
+
+  void cal_set_to_current();
+  void cal_gen_mooncal();
+  void cal_diff_days();
+  void cal_remove();
 
 /*
 ===================
@@ -1097,7 +1101,7 @@ IDE menu callbacks
   void ide_run();
   void ide_build();
   void ide_clean();
-
+  void ide_toggle_hs();
 
 
 /*
@@ -1106,6 +1110,22 @@ Nav menu callbacks
 ===================
 */
 
+  void nav_save_pos();
+  void nav_goto_pos();
+  void nav_goto_line();
+  void nav_goto_right_tab();
+  void nav_goto_left_tab();
+  void nav_focus_to_fif();
+  void nav_focus_to_editor();
+  void nav_labels_update_list();
+
+
+
+/*
+===================
+Fm menu callbacks
+===================
+*/
 
 
 
@@ -1120,11 +1140,6 @@ View menu callbacks
   void view_use_hl();
   void view_use_theme();
 
-
-
-#ifdef USE_QML_STUFF
-  void fn_use_plugin();
-#endif
 
 
 
@@ -1181,16 +1196,6 @@ View menu callbacks
   void clipboard_dataChanged();
 
 
-  void cal_set_date_a();
-  void cal_set_date_b();
-  void cal_set_to_current();
-  void cal_moon_mode();
-  void cal_gen_mooncal();
-  void cal_diff_days();
-
-
-  void cal_remove();
-
 
   void toggle_wrap();
   void darker();
@@ -1209,14 +1214,6 @@ View menu callbacks
   void view_stay_on_top();
 
 
-  void nav_goto_line();
-  void nav_goto_right_tab();
-  void nav_goto_left_tab();
-  void nav_toggle_hs();
-  void nav_save_pos();
-  void nav_goto_pos();
-  void nav_focus_to_fif();
-  void nav_focus_to_editor();
 
   void help_show_gpl();
   void help_show_news();
@@ -1249,9 +1246,6 @@ View menu callbacks
 
   void guess_enc();
 
-  void cal_add_days();
-  void cal_add_months();
-  void cal_add_years();
 
   void run_program();
 
@@ -1287,6 +1281,22 @@ Tune page callbacks
 
 
   void slot_style_currentIndexChanged (int);
+
+
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+
+  void cmb_spellchecker_currentIndexChanged (int);
+
+#endif
+
+#ifdef HUNSPELL_ENABLE
+  void pb_choose_hunspell_path_clicked();
+#endif
+
+#ifdef ASPELL_ENABLE
+  void pb_choose_aspell_path_clicked();
+#endif
+
 
 };
 

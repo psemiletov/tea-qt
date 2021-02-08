@@ -66,7 +66,7 @@ using namespace std;
 QHash <QString, QString> global_palette;
 QSettings *settings;
 
-QMenu *current_files_menu;
+QMenu *menu_current_files;
 int recent_list_max_items;
 bool b_recent_off;
 bool b_destroying_all;
@@ -2143,8 +2143,8 @@ void CDox::update_current_files_menu()
      for (vector <size_t>::size_type i = 0; i < items.size(); i++)
          current_files.prepend (items[i]->file_name);
 
-  current_files_menu->clear();
-  create_menu_from_list (this, current_files_menu, current_files, SLOT(open_current()));
+  menu_current_files->clear();
+  create_menu_from_list (this, menu_current_files, current_files, SLOT(open_current()));
 }
 
 

@@ -113,7 +113,7 @@ int MyProxyStyle::cursor_blink_time = 1;
 extern QSettings *settings;
 
 
-extern QMenu *current_files_menu;
+extern QMenu *menu_current_files;
 extern QHash <QString, QString> global_palette;
 extern bool b_recent_off;
 extern bool b_destroying_all;
@@ -924,7 +924,7 @@ void CTEA::createActions()
 
 
   act_labels = new QAction (get_theme_icon ("labels.png"), tr ("Labels"), this);
-  connect (act_labels, SIGNAL(triggered()), this, SLOT(update_labels_list()));
+  connect (act_labels, SIGNAL(triggered()), this, SLOT(nav_labels_update_list()));
 
   newAct = new QAction (get_theme_icon ("file-new.png"), tr ("New"), this);
 
@@ -1343,12 +1343,11 @@ Fn menu
   tm = menu_functions->addMenu (tr ("Quotes"));
   tm->setTearOffEnabled (true);
 
-  add_to_menu (tm, tr ("Straight to double angle quotes"), SLOT(fn_convert_quotes_angle()));
-  add_to_menu (tm, tr ("Straight to curly double quotes"), SLOT(fn_convert_quotes_curly()));
-
-  add_to_menu (tm, tr ("LaTeX: Straight to curly double quotes"), SLOT(fn_convert_quotes_tex_curly()));
-  add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes"), SLOT(fn_convert_quotes_tex_angle_01()));
-  add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes v2"), SLOT(fn_convert_quotes_tex_angle_02()));
+  add_to_menu (tm, tr ("Straight to double angle quotes"), SLOT(fn_quotes_to_angle()));
+  add_to_menu (tm, tr ("Straight to curly double quotes"), SLOT(fn_quotes_curly()));
+  add_to_menu (tm, tr ("LaTeX: Straight to curly double quotes"), SLOT(fn_quotes_tex_curly()));
+  add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes"), SLOT(fn_quotes_tex_angle_01()));
+  add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes v2"), SLOT(fn_quotes_tex_angle_02()));
 
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
@@ -1360,11 +1359,19 @@ Fn menu
   add_to_menu (menu_functions, tr ("Spell check"), SLOT(fn_spell_check()), "", get_theme_icon_fname ("fn-spell-check.png"));
   add_to_menu (menu_functions, tr ("Suggest"), SLOT(fn_spell_suggest()));
   add_to_menu (menu_functions, tr ("Add to dictionary"), SLOT(fn_spell_add_to_dict()));
-  add_to_menu (menu_functions, tr ("Remove from dictionary"), SLOT(fn_remove_from_dict()));
+  add_to_menu (menu_functions, tr ("Remove from dictionary"), SLOT(fn_spell_remove_from_dict()));
 
   menu_functions->addSeparator();
 
 #endif
+
+
+
+/*
+====================
+Cal menu
+===================
+*/
 
 
   menu_cal = menuBar()->addMenu (tr ("Calendar"));
@@ -1388,8 +1395,22 @@ Fn menu
   add_to_menu (menu_cal, tr ("Number of days between two dates"), SLOT(cal_diff_days()));
   add_to_menu (menu_cal, tr ("Remove day record"), SLOT(cal_remove()));
 
+/*
+====================
+Run menu
+===================
+*/
+
 
   menu_programs = menuBar()->addMenu (tr ("Run"));
+
+
+/*
+====================
+IDE menu
+===================
+*/
+
 
   menu_ide = menuBar()->addMenu (tr ("IDE"));;
   menu_ide->setTearOffEnabled (true);
@@ -1400,7 +1421,14 @@ Fn menu
 
   menu_ide->addSeparator();
 
-  add_to_menu (menu_ide, tr ("Toggle header/source"), SLOT(nav_toggle_hs()));
+  add_to_menu (menu_ide, tr ("Toggle header/source"), SLOT(ide_toggle_hs()));
+
+/*
+===================
+Nav menu callbacks
+===================
+*/
+
 
   menu_nav = menuBar()->addMenu (tr ("Nav"));
   menu_nav->setTearOffEnabled (true);
@@ -1414,9 +1442,17 @@ Fn menu
   add_to_menu (menu_nav, tr ("Focus the editor"), SLOT(nav_focus_to_editor()));
 
   menu_labels = menu_nav->addMenu (tr ("Labels"));
-  add_to_menu (menu_nav, tr ("Refresh labels"), SLOT(update_labels_list()));
+  add_to_menu (menu_nav, tr ("Refresh labels"), SLOT(nav_labels_update_list()));
 
-  current_files_menu = menu_nav->addMenu (tr ("Current files"));
+  menu_current_files = menu_nav->addMenu (tr ("Current files"));
+
+
+/*
+===================
+Fm menu callbacks
+===================
+*/
+
 
 
   menu_fm = menuBar()->addMenu (tr ("Fm"));
@@ -1541,7 +1577,7 @@ Fn menu
 void CTEA::createToolBars()
 {
   openAct->setMenu (menu_file_recent);
-  filesAct->setMenu (current_files_menu);
+  filesAct->setMenu (menu_current_files);
   act_labels->setMenu (menu_labels);
 
   fileToolBar = addToolBar (tr ("File"));
@@ -1571,7 +1607,7 @@ void CTEA::createToolBars()
   QToolButton *tb_current_list = new QToolButton();
   tb_current_list->setIcon (get_theme_icon ("current-list.png"));
 
-  tb_current_list->setMenu (current_files_menu);
+  tb_current_list->setMenu (menu_current_files);
   tb_current_list->setPopupMode(QToolButton::InstantPopup);
   filesToolBar->addWidget (tb_current_list);
 
@@ -3114,7 +3150,7 @@ void CTEA::fn_spell_add_to_dict()
 }
 
 
-void CTEA::fn_remove_from_dict()
+void CTEA::fn_spell_remove_from_dict()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3848,7 +3884,7 @@ QString toggle_fname_header_source (const QString &fileName)
 }
 
 
-void CTEA::nav_toggle_hs()
+void CTEA::ide_toggle_hs()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4703,7 +4739,7 @@ void CTEA::fman_create_dir()
 }
 
 
-void CTEA::fn_convert_quotes_angle()
+void CTEA::fn_quotes_to_angle()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4717,7 +4753,7 @@ void CTEA::fn_convert_quotes_angle()
 }
 
 
-void CTEA::fn_convert_quotes_curly()
+void CTEA::fn_quotes_curly()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4731,7 +4767,7 @@ void CTEA::fn_convert_quotes_curly()
 }
 
 
-void CTEA::fn_convert_quotes_tex_curly()
+void CTEA::fn_quotes_tex_curly()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4745,7 +4781,7 @@ void CTEA::fn_convert_quotes_tex_curly()
 }
 
 
-void CTEA::fn_convert_quotes_tex_angle_01()
+void CTEA::fn_quotes_tex_angle_01()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4759,7 +4795,7 @@ void CTEA::fn_convert_quotes_tex_angle_01()
 }
 
 
-void CTEA::fn_convert_quotes_tex_angle_02()
+void CTEA::fn_quotes_tex_angle_02()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7544,7 +7580,7 @@ void CTEA::update_labels_menu()
 }
 
 
-void CTEA::update_labels_list()
+void CTEA::nav_labels_update_list()
 {
   CDocument *d = documents->get_current();
   if (! d)

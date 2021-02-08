@@ -683,18 +683,19 @@ CTEA::CTEA()
      lng = "en";
 
 #if QT_VERSION >= 0x060000
-  qtTranslator.load (QString ("qt_%1").arg (lng), QLibraryInfo::path (QLibraryInfo::TranslationsPath));
+  if (transl_app.load (QString ("qt_%1").arg (lng), QLibraryInfo::path (QLibraryInfo::TranslationsPath)))
+     qApp->installTranslator (&transl_app);
 
 #else
 
-  qtTranslator.load (QString ("qt_%1").arg (lng), QLibraryInfo::location (QLibraryInfo::TranslationsPath));
+  if (transl_system.load (QString ("qt_%1").arg (lng), QLibraryInfo::location (QLibraryInfo::TranslationsPath)))
+    qApp->installTranslator (&transl_system);
 
 #endif
 
-  qApp->installTranslator (&qtTranslator);
 
-  myappTranslator.load (":/translations/" + lng);
-  qApp->installTranslator (&myappTranslator);
+  if (transl_app.load (":/translations/" + lng))
+      qApp->installTranslator (&transl_app);
 
   fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
   theme_dir = get_file_path (fname_stylesheet) + "/";
@@ -902,8 +903,6 @@ void CTEA::closeEvent (QCloseEvent *event)
 }
 
 
-
-
 void CTEA::about()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -1023,7 +1022,7 @@ void CTEA::createMenus()
 
   add_to_menu (tm, tr ("Save .bak"), SLOT(file_save_bak()), "Ctrl+B");
   add_to_menu (tm, tr ("Save timestamped version"), SLOT(file_save_version()));
-  add_to_menu (tm, tr ("Save session"), SLOT(session_save_as()));
+  add_to_menu (tm, tr ("Save session"), SLOT(file_session_save_as()));
 
   menu_file->addSeparator();
 
@@ -1105,6 +1104,12 @@ void CTEA::createMenus()
   add_to_menu (menu_edit, tr ("Start/stop capture clipboard to storage file"), SLOT(ed_capture_clipboard_to_storage_file()))->setCheckable (true);
 
 
+/*
+===================
+Markup menu callbacks
+===================
+*/
+
 
   menu_markup = menuBar()->addMenu (tr ("Markup"));
   menu_markup->setTearOffEnabled (true);
@@ -1154,6 +1159,11 @@ void CTEA::createMenus()
   add_to_menu (tm, tr ("Strip HTML tags"), SLOT(mrkup_strip_html_tags()));
   add_to_menu (tm, tr ("Rename selected file"), SLOT(mrkup_rename_selected()));
 
+/*
+===================
+Search menu
+===================
+*/
 
   menu_search = menuBar()->addMenu (tr ("Search"));
   menu_search->setTearOffEnabled (true);
@@ -1198,14 +1208,22 @@ void CTEA::createMenus()
   menu_find_fuzzy->setCheckable (true);
   connect (menu_find_fuzzy, SIGNAL(triggered()), this, SLOT(search_fuzzy_mode()));
 
+
+/*
+===================
+Fn menu
+===================
+*/
+
+
   menu_functions = menuBar()->addMenu (tr ("Functions"));
   menu_functions->setTearOffEnabled (true);
 
-  add_to_menu (menu_functions, tr ("Repeat last"), SLOT(repeat()));
+  add_to_menu (menu_functions, tr ("Repeat last"), SLOT(fn_repeat()));
 
   menu_instr = menu_functions->addMenu (tr ("Tools"));
   menu_instr->setTearOffEnabled (true);
-  add_to_menu (menu_instr, tr ("Scale image"), SLOT(scale_image()));
+  add_to_menu (menu_instr, tr ("Scale image"), SLOT(fn_scale_image()));
 
 
 #ifdef USE_QML_STUFF
@@ -1232,8 +1250,8 @@ void CTEA::createMenus()
   tm = menu_functions->addMenu (tr ("Case"));
   tm->setTearOffEnabled (true);
 
-  add_to_menu (tm, tr ("UPCASE"), SLOT(upCase()),"Ctrl+Up");
-  add_to_menu (tm, tr ("lower case"), SLOT(dnCase()),"Ctrl+Down");
+  add_to_menu (tm, tr ("UPCASE"), SLOT(fn_case_up()),"Ctrl+Up");
+  add_to_menu (tm, tr ("lower case"), SLOT(fn_case_down()),"Ctrl+Down");
 
 
   tm = menu_functions->addMenu (tr ("Sort"));
@@ -1251,10 +1269,10 @@ void CTEA::createMenus()
   tm = menu_functions->addMenu (tr ("Cells"));
   tm->setTearOffEnabled (true);
 
-  add_to_menu (tm, tr ("Sort table by column ABC"), SLOT(fn_sort_latex_table_by_col_abc()));
-  add_to_menu (tm, tr ("Swap cells"), SLOT(fn_table_swap_cells()));
-  add_to_menu (tm, tr ("Delete by column"), SLOT(fn_table_delete_cells()));
-  add_to_menu (tm, tr ("Copy by column[s]"), SLOT(fn_table_copy_cells()));
+  add_to_menu (tm, tr ("Sort table by column ABC"), SLOT(fn_cells_latex_table_sort_by_col_abc()));
+  add_to_menu (tm, tr ("Swap cells"), SLOT(fn_cells_swap_cells()));
+  add_to_menu (tm, tr ("Delete by column"), SLOT(fn_cells_delete_by_col()));
+  add_to_menu (tm, tr ("Copy by column[s]"), SLOT(fn_cells_copy_by_col()));
 
 
   tm = menu_functions->addMenu (tr ("Filter"));
@@ -1266,7 +1284,6 @@ void CTEA::createMenus()
   add_to_menu (tm, tr ("Remove lines > N size"), SLOT(fn_filter_rm_greater_than()));
   add_to_menu (tm, tr ("Remove before delimiter at each line"), SLOT(fn_filter_delete_before_sep()));
   add_to_menu (tm, tr ("Remove after delimiter at each line"), SLOT(fn_filter_delete_after_sep()));
-
   add_to_menu (tm, tr ("Filter with regexp"), SLOT(fn_filter_with_regexp()));
   add_to_menu (tm, tr ("Filter by repetitions"), SLOT(fn_filter_by_repetitions()));
 
@@ -1275,16 +1292,16 @@ void CTEA::createMenus()
   tm = menu_functions->addMenu (tr ("Math"));
   tm->setTearOffEnabled (true);
 
-  add_to_menu (tm, tr ("Evaluate"), SLOT(fn_evaluate()), "F4");
-  add_to_menu (tm, tr ("Arabic to Roman"), SLOT(fn_number_arabic_to_roman()));
-  add_to_menu (tm, tr ("Roman to Arabic"), SLOT(fn_number_roman_to_arabic()));
-  add_to_menu (tm, tr ("Decimal to binary"), SLOT(fn_number_decimal_to_binary()));
-  add_to_menu (tm, tr ("Binary to decimal"), SLOT(fn_binary_to_decimal()));
-  add_to_menu (tm, tr ("Flip bits (bitwise complement)"), SLOT(fn_number_flip_bits()));
-  add_to_menu (tm, tr ("Enumerate"), SLOT(fn_enum()));
-  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_sum_by_last_col()));
-  add_to_menu (tm, tr ("deg min sec > dec degrees"), SLOT(fn_number_dms2dc()));
-  add_to_menu (tm, tr ("dec degrees > deg min sec"), SLOT(fn_number_dd2dms()));
+  add_to_menu (tm, tr ("Evaluate"), SLOT(fn_math_evaluate()), "F4");
+  add_to_menu (tm, tr ("Arabic to Roman"), SLOT(fn_math_number_arabic_to_roman()));
+  add_to_menu (tm, tr ("Roman to Arabic"), SLOT(fn_math_number_roman_to_arabic()));
+  add_to_menu (tm, tr ("Decimal to binary"), SLOT(fn_math_number_dec_to_bin()));
+  add_to_menu (tm, tr ("Binary to decimal"), SLOT(fn_math_number_bin_to_dec()));
+  add_to_menu (tm, tr ("Flip bits (bitwise complement)"), SLOT(fn_math_number_flip_bits()));
+  add_to_menu (tm, tr ("Enumerate"), SLOT(fn_math_enum()));
+  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_math_sum_by_last_col()));
+  add_to_menu (tm, tr ("deg min sec > dec degrees"), SLOT(fn_math_number_dms2dc()));
+  add_to_menu (tm, tr ("dec degrees > deg min sec"), SLOT(fn_math_number_dd2dms()));
 
 
   tm = menu_functions->addMenu (tr ("Morse code"));
@@ -1299,28 +1316,28 @@ void CTEA::createMenus()
   tm = menu_functions->addMenu (tr ("Analyze"));
   tm->setTearOffEnabled (true);
 
-  add_to_menu (tm, tr ("Text statistics"), SLOT(fn_text_stat()));
-  add_to_menu (tm, tr ("Extract words"), SLOT(fn_extract_words()));
-  add_to_menu (tm, tr ("Words lengths"), SLOT(fn_stat_words_lengths()));
-  add_to_menu (tm, tr ("Count the substring"), SLOT(fn_count()));
-  add_to_menu (tm, tr ("Count the substring (regexp)"), SLOT(fn_count_rx()));
-  add_to_menu (tm, tr ("UNITAZ quantity sorting"), SLOT(fn_get_words_count()));
-  add_to_menu (tm, tr ("UNITAZ sorting by alphabet"), SLOT(fn_unitaz_abc()));
-  add_to_menu (tm, tr ("UNITAZ sorting by length"), SLOT(fn_unitaz_len()));
+  add_to_menu (tm, tr ("Text statistics"), SLOT(fn_analyze_text_stat()));
+  add_to_menu (tm, tr ("Extract words"), SLOT(fn_analyze_extract_words()));
+  add_to_menu (tm, tr ("Words lengths"), SLOT(fn_analyze_stat_words_lengths()));
+  add_to_menu (tm, tr ("Count the substring"), SLOT(fn_analyze_count()));
+  add_to_menu (tm, tr ("Count the substring (regexp)"), SLOT(fn_analyze_count_rx()));
+  add_to_menu (tm, tr ("UNITAZ quantity sorting"), SLOT(fn_analyze_get_words_count()));
+  add_to_menu (tm, tr ("UNITAZ sorting by alphabet"), SLOT(fn_analyze_unitaz_abc()));
+  add_to_menu (tm, tr ("UNITAZ sorting by length"), SLOT(fn_analyze_unitaz_len()));
 
 
   tm = menu_functions->addMenu (tr ("Text"));
   tm->setTearOffEnabled (true);
 
-  add_to_menu (tm, tr ("Apply to each line"), SLOT(fn_apply_to_each_line()),"Alt+E");
-  add_to_menu (tm, tr ("Remove formatting"), SLOT(fn_rm_formatting()));
-  add_to_menu (tm, tr ("Remove formatting at each line"), SLOT(fn_rm_formatting_at_each_line()));
-  add_to_menu (tm, tr ("Compress"), SLOT(fn_rm_compress()));
-  add_to_menu (tm, tr ("Anagram"), SLOT(fn_anagram()));
-  add_to_menu (tm, tr ("Remove trailing spaces"), SLOT(fn_rm_trailing_spaces()));
-  add_to_menu (tm, tr ("Escape regexp"), SLOT(fn_escape()));
-  add_to_menu (tm, tr ("Reverse"), SLOT(fn_reverse()));
-  add_to_menu (tm, tr ("Compare two strings"), SLOT(text_compare_two_strings()));
+  add_to_menu (tm, tr ("Apply to each line"), SLOT(fn_text_apply_to_each_line()),"Alt+E");
+  add_to_menu (tm, tr ("Remove formatting"), SLOT(fn_text_remove_formatting()));
+  add_to_menu (tm, tr ("Remove formatting at each line"), SLOT(fn_text_remove_formatting_at_each_line()));
+  add_to_menu (tm, tr ("Remove trailing spaces"), SLOT(fn_text_remove_trailing_spaces()));
+  add_to_menu (tm, tr ("Compress"), SLOT(fn_text_compress()));
+  add_to_menu (tm, tr ("Anagram"), SLOT(fn_text_anagram()));
+  add_to_menu (tm, tr ("Escape regexp"), SLOT(fn_text_escape()));
+  add_to_menu (tm, tr ("Reverse"), SLOT(fn_text_reverse()));
+  add_to_menu (tm, tr ("Compare two strings"), SLOT(fn_text_compare_two_strings()));
 
 
   tm = menu_functions->addMenu (tr ("Quotes"));
@@ -1612,9 +1629,9 @@ void CTEA::pageChanged (int index)
 
 
 
-void CTEA::upCase()
+void CTEA::fn_case_up()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (d)
@@ -1622,23 +1639,13 @@ void CTEA::upCase()
 }
 
 
-void CTEA::dnCase()
+void CTEA::fn_case_down()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (d)
       d->put (d->get().toLower());
-}
-
-
-void CTEA::remove_formatting()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (d->get().simplified());
 }
 
 
@@ -2878,7 +2885,7 @@ void CTEA::createManual()
 }
 
 
-void CTEA::fn_apply_to_each_line()
+void CTEA::fn_text_apply_to_each_line()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -2932,7 +2939,7 @@ void CTEA::fn_filter_with_regexp()
 }
 
 
-void CTEA::fn_reverse()
+void CTEA::fn_text_reverse()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3246,7 +3253,7 @@ void CTEA::dropEvent (QDropEvent *event)
 }
 
 
-void CTEA::fn_evaluate()
+void CTEA::fn_math_evaluate()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3362,7 +3369,7 @@ void CTEA::mrkup_text_to_html()
 }
 
 
-void CTEA::fn_text_stat()
+void CTEA::fn_analyze_text_stat()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3772,7 +3779,7 @@ void CTEA::fn_filter_rm_empty()
 }
 
 
-void CTEA::fn_extract_words()
+void CTEA::fn_analyze_extract_words()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -3968,7 +3975,7 @@ void CTEA::fn_insert_time()
 }
 
 
-void CTEA::fn_rm_formatting_at_each_line()
+void CTEA::fn_text_remove_formatting_at_each_line()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4023,7 +4030,7 @@ int get_arab_num (std::string rom_str)
 }
 
 
-void CTEA::fn_number_arabic_to_roman()
+void CTEA::fn_math_number_arabic_to_roman()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4033,7 +4040,7 @@ void CTEA::fn_number_arabic_to_roman()
 }
 
 
-void CTEA::fn_number_roman_to_arabic()
+void CTEA::fn_math_number_roman_to_arabic()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4216,7 +4223,7 @@ void CTEA::view_hide_error_marks()
 }
 
 
-void CTEA::fn_rm_formatting()
+void CTEA::fn_text_remove_formatting()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4226,7 +4233,7 @@ void CTEA::fn_rm_formatting()
 }
 
 
-void CTEA::fn_rm_compress()
+void CTEA::fn_text_compress()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4766,7 +4773,7 @@ void CTEA::fn_convert_quotes_tex_angle_02()
 }
 
 
-void CTEA::fn_enum()
+void CTEA::fn_math_enum()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -4833,7 +4840,7 @@ void CTEA::update_sessions()
 }
 
 
-void CTEA::session_save_as()
+void CTEA::file_session_save_as()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6047,21 +6054,21 @@ void CTEA::run_unitaz (int mode)
 }
 
 
-void CTEA::fn_get_words_count()
+void CTEA::fn_analyze_get_words_count()
 {
   last_action = qobject_cast<QAction *>(sender());
   run_unitaz (0);
 }
 
 
-void CTEA::fn_unitaz_abc()
+void CTEA::fn_analyze_unitaz_abc()
 {
   last_action = qobject_cast<QAction *>(sender());
   run_unitaz (1);
 }
 
 
-void CTEA::fn_unitaz_len()
+void CTEA::fn_analyze_unitaz_len()
 {
   last_action = qobject_cast<QAction *>(sender());
   run_unitaz (2);
@@ -6220,14 +6227,14 @@ void CTEA::count_substring (bool use_regexp)
 }
 
 
-void CTEA::fn_count()
+void CTEA::fn_analyze_count()
 {
   last_action = qobject_cast<QAction *>(sender());
   count_substring (false);
 }
 
 
-void CTEA::fn_count_rx()
+void CTEA::fn_analyze_count_rx()
 {
   last_action = qobject_cast<QAction *>(sender());
   count_substring (true);
@@ -6310,7 +6317,7 @@ QString CTEA::fif_get_text()
 }
 
 
-void CTEA::fn_rm_trailing_spaces()
+void CTEA::fn_text_remove_trailing_spaces()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6451,7 +6458,7 @@ void CTEA::fman_img_conv_by_percent()
 }
 
 
-void CTEA::fn_escape()
+void CTEA::fn_text_escape()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6621,7 +6628,7 @@ void CTEA::mrkup_strip_html_tags()
 }
 
 
-void CTEA::fn_number_decimal_to_binary()
+void CTEA::fn_math_number_dec_to_bin()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6631,7 +6638,7 @@ void CTEA::fn_number_decimal_to_binary()
 }
 
 
-void CTEA::fn_number_flip_bits()
+void CTEA::fn_math_number_flip_bits()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6709,7 +6716,7 @@ void CTEA::update_tables()
 }
 
 
-void CTEA::fn_binary_to_decimal()
+void CTEA::fn_math_number_bin_to_dec()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8041,7 +8048,7 @@ void CTEA::darker()
 }
 
 
-void CTEA::fn_stat_words_lengths()
+void CTEA::fn_analyze_stat_words_lengths()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8480,7 +8487,7 @@ bool latex_table_sort_fn (const QStringList &l1, const QStringList &l2)
 }
 
 
-void CTEA::fn_sort_latex_table_by_col_abc()
+void CTEA::fn_cells_latex_table_sort_by_col_abc()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8534,7 +8541,7 @@ void CTEA::fn_sort_latex_table_by_col_abc()
 }
 
 
-void CTEA::fn_table_swap_cells()
+void CTEA::fn_cells_swap_cells()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8596,7 +8603,7 @@ void CTEA::fn_table_swap_cells()
 }
 
 
-void CTEA::fn_table_delete_cells()
+void CTEA::fn_cells_delete_by_col()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8650,7 +8657,7 @@ void CTEA::fn_table_delete_cells()
 }
 
 
-void CTEA::fn_table_copy_cells()
+void CTEA::fn_cells_copy_by_col()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8756,7 +8763,7 @@ void CTEA::keyPressEvent (QKeyEvent *event)
 
 
 
-void CTEA::fn_sum_by_last_col()
+void CTEA::fn_math_sum_by_last_col()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -8914,9 +8921,9 @@ void CTEA::search_mark_all()
 }
 
 
-void CTEA::scale_image()
+void CTEA::fn_scale_image()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -9015,14 +9022,11 @@ void CTEA::scale_image()
 }
 
 
-void CTEA::repeat()
+void CTEA::fn_repeat()
 {
   if (last_action)
      qobject_cast<QAction *>(last_action)->trigger();
-
 }
-
-
 
 
 void CTEA::fman_zeropad()
@@ -9186,7 +9190,7 @@ void CTEA::fman_apply_template()
 //degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
 //to
 //decimal degrees: 40.446° N 79.982° W
-void CTEA::fn_number_dms2dc()
+void CTEA::fn_math_number_dms2dc()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9272,7 +9276,7 @@ seconds = 3600 * (decimal_degrees - degrees) - 60 * minites
 //to
 //degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
 
-void CTEA::fn_number_dd2dms()
+void CTEA::fn_math_number_dd2dms()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9364,7 +9368,7 @@ void CTEA::receiveMessageShared (const QStringList &msg)
 }
 
 
-void CTEA::text_compare_two_strings()
+void CTEA::fn_text_compare_two_strings()
 {
   last_action = qobject_cast <QAction *>(sender());
 
@@ -9711,7 +9715,7 @@ CTEA::~CTEA()
 }
 
 
-void CTEA::fn_anagram()
+void CTEA::fn_text_anagram()
 {
   last_action = qobject_cast<QAction *>(sender());
 

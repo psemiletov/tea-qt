@@ -257,7 +257,6 @@ Variables
   bool portable_mode;
 
   CLogMemo *log;
-  //QAction *last_action;
 
   QObject *last_action;
 
@@ -300,8 +299,8 @@ Variables
   QHash <QString, QString> places_bookmarks;
   QHash <int, QString> moon_phase_algos;
 
-  QTranslator myappTranslator;
-  QTranslator qtTranslator;
+  QTranslator transl_app;
+  QTranslator transl_system;
 
   QDir dir_lv;
 
@@ -837,6 +836,7 @@ File menu callbacks
 
   void file_save_bak();
   void file_save_version();
+  void file_session_save_as();
 
   void file_reload();
   void file_reload_enc_itemDoubleClicked (QListWidgetItem *item);
@@ -948,10 +948,10 @@ Search menu callbacks
 
   void search_in_files_results_dclicked (QListWidgetItem *item);
   void search_in_files();
-  void search_fuzzy_mode();
-  void search_regexp_mode();
   void search_whole_words_mode();
   void search_from_cursor_mode();
+  void search_regexp_mode();
+  void search_fuzzy_mode();
 
   void search_replace_with();
   void search_replace_all();
@@ -965,97 +965,96 @@ Fn menu callbacks
 ===================
 */
 
+  void fn_repeat();
+  void fn_scale_image();
 
   void fn_use_snippet();
-  void fn_count();
-  void fn_count_rx();
+  void fn_run_script();
+  void cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus);
+  void fn_use_table();
 
-  void fn_enum();
+  void fn_insert_loremipsum();
+  void fn_insert_template_tea();
+  void fn_insert_template_html();
+  void fn_insert_template_html5();
+  void fn_insert_cpp();
+  void fn_insert_c();
+  void fn_insert_date();
+  void fn_insert_time();
 
-  void fn_filter_by_repetitions();
+  void fn_case_up();
+  void fn_case_down();
 
-  void fn_filter_with_regexp();
-  void fn_text_stat();
-  void fn_apply_to_each_line();
-  void fn_reverse();
-  void fn_escape();
-
-  void fn_evaluate();
-  void fn_sort_length();
   void fn_sort_casecare();
   void fn_sort_casecareless();
   void fn_sort_casecare_sep();
-
-  void fn_sort_latex_table_by_col_abc();
-  void fn_table_swap_cells();
-  void fn_table_delete_cells();
-  void fn_table_copy_cells();
+  void fn_sort_length();
 
   void fn_flip_a_list();
   void fn_flip_a_list_sep();
 
-  void fn_insert_loremipsum();
-  void fn_insert_template_html();
-  void fn_run_script();
-  void cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus);
-  void fn_number_arabic_to_roman();
-  void fn_number_roman_to_arabic();
+  void fn_cells_latex_table_sort_by_col_abc();
+  void fn_cells_swap_cells();
+  void fn_cells_delete_by_col();
+  void fn_cells_copy_by_col();
 
-  void fn_number_dms2dc();
-  void fn_number_dd2dms();
-
-
-  void fn_filter_rm_less_than();
-  void fn_filter_rm_greater_than();
   void fn_filter_rm_duplicates();
   void fn_filter_rm_empty();
-
+  void fn_filter_rm_less_than();
+  void fn_filter_rm_greater_than();
   void fn_filter_delete_before_sep();
   void fn_filter_delete_after_sep();
+  void fn_filter_with_regexp();
+  void fn_filter_by_repetitions();
 
-  void fn_rm_formatting();
+  void fn_math_evaluate();
+  void fn_math_number_arabic_to_roman();
+  void fn_math_number_roman_to_arabic();
+  void fn_math_number_dec_to_bin();
+  void fn_math_number_bin_to_dec();
+  void fn_math_number_flip_bits();
+  void fn_math_sum_by_last_col();
+  void fn_math_enum();
+  void fn_math_number_dms2dc();
+  void fn_math_number_dd2dms();
 
-  void fn_rm_compress();
+  void fn_morse_from_ru();
+  void fn_morse_to_ru();
+  void fn_morse_from_en();
+  void fn_morse_to_en();
 
-  void text_compare_two_strings();
+  void fn_analyze_text_stat();
+  void fn_analyze_extract_words();
+  void fn_analyze_stat_words_lengths();
+  void fn_analyze_count();
+  void fn_analyze_count_rx();
+  void fn_analyze_get_words_count();
+  void fn_analyze_unitaz_abc();
+  void fn_analyze_unitaz_len();
+
+
+
+  void fn_text_apply_to_each_line();
+  void fn_text_reverse();
+  void fn_text_escape();
+  void fn_text_remove_formatting();
+  void fn_text_compress();
+  void fn_text_compare_two_strings();
+  void fn_text_remove_formatting_at_each_line();
+  void fn_text_remove_trailing_spaces();
+  void fn_text_anagram();
+
+
 
   void fn_convert_quotes_angle();
   void fn_convert_quotes_curly();
-
   void fn_convert_quotes_tex_curly();
-
   void fn_convert_quotes_tex_angle_01();
   void fn_convert_quotes_tex_angle_02();
 
 
-  void fn_get_words_count();
-  void fn_unitaz_abc();
-  void fn_unitaz_len();
-
-  void fn_extract_words();
-  void fn_morse_from_en();
-  void fn_morse_to_en();
-  void fn_morse_from_ru();
-  void fn_morse_to_ru();
-  void fn_insert_date();
-  void fn_insert_time();
-  void fn_rm_formatting_at_each_line();
-  void fn_rm_trailing_spaces();
-
-  void fn_number_decimal_to_binary();
-  void fn_number_flip_bits();
-  void fn_binary_to_decimal();
-
-  void remove_formatting();
 
 
-  void fn_sum_by_last_col();
-  void fn_anagram();
-
-  void fn_insert_cpp();
-  void fn_insert_c();
-  void fn_insert_template_html5();
-  void fn_insert_template_tea();
 
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
@@ -1067,8 +1066,7 @@ Fn menu callbacks
   void fn_remove_from_dict();
   void fn_spell_suggest();
 
-
- void cmb_spellchecker_currentIndexChanged (int);
+  void cmb_spellchecker_currentIndexChanged (int);
 
 
 #endif // SPELLCHECKERS ENABLED
@@ -1130,7 +1128,6 @@ View menu callbacks
 
 
 
-  void repeat();
 
 
   void select_label();
@@ -1201,11 +1198,6 @@ View menu callbacks
   void about();
 
 
-  void upCase();
-  void dnCase();
-
-
-  void scale_image();
 
 
   void calendar_clicked (const QDate &date);
@@ -1231,7 +1223,6 @@ View menu callbacks
   void help_show_changelog();
   void help_show_todo();
 
-  void session_save_as();
 
   void main_tab_page_changed (int index);
   void calendar_currentPageChanged (int year, int month);
@@ -1245,7 +1236,6 @@ View menu callbacks
 
   void process_readyReadStandardOutput();
   void fn_remove_by_regexp();
-  void fn_use_table();
 
   void fman_naventry_confirm();
   void fman_img_conv_by_side();
@@ -1256,7 +1246,6 @@ View menu callbacks
   void fman_preview_image();
 
 
-  void fn_stat_words_lengths();
 
   void guess_enc();
 

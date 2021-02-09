@@ -105,14 +105,6 @@ QStringList read_dir_entries (const QString &path)
 
 bool qstring_save (const QString &fileName, const QString &data, const char *enc)
 {
-/*  QFile file (fileName);
-  if (! file.open (QFile::WriteOnly | QFile::Text))
-      return false;
-
-  QTextStream out (&file);
-  out.setCodec (enc);
-  out << data;
-*/
   QFile file (fileName);
   if (! file.open (QFile::WriteOnly))
       return false;
@@ -129,24 +121,10 @@ bool qstring_save (const QString &fileName, const QString &data, const char *enc
 
 QString qstring_load (const QString &fileName, const char *enc)
 {
- /* QFile file (fileName);
-
-  if (! file.open (QFile::ReadOnly | QFile::Text))
-     return QString();
-
-  QTextStream in(&file);
-  in.setCodec (enc);
-
-  return in.readAll();*/
-
   QFile file (fileName);
 
-//  if (! file.open (QFile::ReadOnly | QIODevice::Text))
   if (! file.open (QFile::ReadOnly))
       return QString();
-
-//  QTextStream in (&file);
- // in.setCodec (charset.toUtf8().data());
 
   QByteArray ba = file.readAll();
   QTextCodec *codec = QTextCodec::codecForName(enc);
@@ -407,4 +385,3 @@ QStringList CFTypeChecker::get_supported_exts() const
   l.append ("txt");
   return l;
 }
-

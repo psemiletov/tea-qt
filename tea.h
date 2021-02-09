@@ -791,17 +791,12 @@ File manager slots
   void fman_file_activated (const QString &full_path);
   void fman_dir_changed (const QString &full_path);
   void fman_fname_entry_confirm();
-  void fman_create_dir();
+  void fman_naventry_confirm();
   void fman_add_bmk();
   void fman_del_bmk();
   void fman_open();
-  void fman_home();
   void fman_places_itemActivated (QListWidgetItem *item);
-  void fman_select_by_regexp();
-  void fman_deselect_by_regexp();
-  void fman_count_lines_in_selected_files();
   void cb_button_saves_as();
-
 
 
 
@@ -1127,6 +1122,34 @@ Fm menu callbacks
 ===================
 */
 
+  void fman_multi_rename_zeropad();
+  void fman_multi_rename_del_n_first_chars();
+  void fman_multi_rename_replace();
+  void fman_multi_rename_apply_template();
+
+  void fman_fileop_create_dir();
+  void fman_fileop_rename();
+  void fman_fileop_delete();
+
+  void fm_fileinfo_info();
+  void fman_fileinfo_count_lines_in_selected_files();
+
+
+  void fman_zip_create();
+  void fman_zip_add();
+  void fman_zip_save();
+  void fman_zip_info();
+  void fman_zip_unpack();
+
+  void fman_img_conv_by_side();
+  void fman_img_conv_by_percent();
+  void fman_img_make_gallery();
+
+  void fman_home();
+  void fman_refresh();
+  void fman_preview_image();
+  void fman_select_by_regexp();
+  void fman_deselect_by_regexp();
 
 
 /*
@@ -1135,72 +1158,40 @@ View menu callbacks
 ===================
 */
 
-  void view_use_profile();
+  void view_use_theme();
   void view_use_palette();
   void view_use_hl();
-  void view_use_theme();
+  void view_use_profile();
+  void view_profile_save_as();
+
+  void view_toggle_wrap();
+  void view_hide_error_marks();
+  void view_toggle_fs();
+  void view_stay_on_top();
+  void view_darker();
+
+/*-----------------------------*/
+
+/*
+===================
+? menu callbacks
+===================
+*/
+
+  void help_show_about();
+  void help_show_news();
+  void help_show_todo();
+  void help_show_changelog();
+  void help_show_gpl();
 
 
-
-
+/*-----------------------------*/
 
 
   void select_label();
-
-  void fm_full_info();
-
-  void fm_hashsum_md5();
-  void fm_hashsum_md4();
-  void fm_hashsum_sha1();
-
-
-#if QT_VERSION >= 0x050000
-
-  void fm_hashsum_sha224();
-  void fm_hashsum_sha384();
-  void fm_hashsum_sha256();
-  void fm_hashsum_sha512();
-
-#endif
-
-
-
-  void fm_hashsum_sha3_224();
-  void fm_hashsum_sha3_256();
-  void fm_hashsum_sha3_384();
-  void fm_hashsum_sha3_512();
-
-
-
-  void fm_hashsum_keccak_256();
-  void fm_hashsum_keccak_224();
-  void fm_hashsum_keccak_384();
-  void fm_hashsum_keccak_512();
-
-
-  void fman_unpack_zip();
-  void fman_zip_info();
-
-  void fman_refresh();
-  void fman_rename();
-  void fman_delete();
-  void fman_zeropad();
-  void fman_del_n_first_chars();
-  void fman_multreplace();
-  void fman_apply_template();
-
-
-
-
-
   void clipboard_dataChanged();
 
 
-
-  void toggle_wrap();
-  void darker();
-
-  void about();
 
 
 
@@ -1209,16 +1200,9 @@ View menu callbacks
   void calendar_activated (const QDate &date);
 
 
-  void view_hide_error_marks();
-  void view_toggle_fs();
-  void view_stay_on_top();
 
 
 
-  void help_show_gpl();
-  void help_show_news();
-  void help_show_changelog();
-  void help_show_todo();
 
 
   void main_tab_page_changed (int index);
@@ -1228,19 +1212,10 @@ View menu callbacks
   void man_find_next();
   void man_find_prev();
 
-  void profile_save_as();
-  void fman_mk_gallery();
+
 
   void process_readyReadStandardOutput();
-  void fn_remove_by_regexp();
 
-  void fman_naventry_confirm();
-  void fman_img_conv_by_side();
-  void fman_img_conv_by_percent();
-  void fman_create_zip();
-  void fman_add_to_zip();
-  void fman_save_zip();
-  void fman_preview_image();
 
 
 

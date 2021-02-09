@@ -57,7 +57,6 @@ started at 08 November 2007
 #include <QInputDialog>
 #include <QSettings>
 #include <QLibraryInfo>
-#include <QCryptographicHash>
 #include <QFontDialog>
 
 #ifdef USE_QML_STUFF
@@ -903,7 +902,7 @@ void CTEA::closeEvent (QCloseEvent *event)
 }
 
 
-void CTEA::about()
+void CTEA::help_show_about()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -991,7 +990,7 @@ void CTEA::createActions()
   connect (redoAct, SIGNAL(triggered()), this, SLOT(ed_redo()));
 
   aboutAct = new QAction (tr ("About"), this);
-  connect (aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+  connect (aboutAct, SIGNAL(triggered()), this, SLOT(help_show_about()));
 
   aboutQtAct = new QAction (tr ("About Qt"), this);
   connect (aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -1425,7 +1424,7 @@ IDE menu
 
 /*
 ===================
-Nav menu callbacks
+Nav menu
 ===================
 */
 
@@ -1454,74 +1453,46 @@ Fm menu callbacks
 */
 
 
-
   menu_fm = menuBar()->addMenu (tr ("Fm"));
   menu_fm->setTearOffEnabled (true);
 
   menu_fm_multi_rename = menu_fm->addMenu (tr ("Multi-rename"));
   menu_fm_multi_rename->setTearOffEnabled (true);
 
-  add_to_menu (menu_fm_multi_rename, tr ("Zero pad file names"), SLOT(fman_zeropad()));
-  add_to_menu (menu_fm_multi_rename, tr ("Delete N first chars at file names"), SLOT(fman_del_n_first_chars()));
-  add_to_menu (menu_fm_multi_rename, tr ("Replace in file names"), SLOT(fman_multreplace()));
-  add_to_menu (menu_fm_multi_rename, tr ("Apply template"), SLOT(fman_apply_template()));
+  add_to_menu (menu_fm_multi_rename, tr ("Zero pad file names"), SLOT(fman_multi_rename_zeropad()));
+  add_to_menu (menu_fm_multi_rename, tr ("Delete N first chars at file names"), SLOT(fman_multi_rename_del_n_first_chars()));
+  add_to_menu (menu_fm_multi_rename, tr ("Replace in file names"), SLOT(fman_multi_rename_replace()));
+  add_to_menu (menu_fm_multi_rename, tr ("Apply template"), SLOT(fman_multi_rename_apply_template()));
 
   menu_fm_file_ops = menu_fm->addMenu (tr ("File operations"));
   menu_fm_file_ops->setTearOffEnabled (true);
 
-  add_to_menu (menu_fm_file_ops, tr ("Create new directory"), SLOT(fman_create_dir()));
-  add_to_menu (menu_fm_file_ops, tr ("Rename"), SLOT(fman_rename()));
-  add_to_menu (menu_fm_file_ops, tr ("Delete file"), SLOT(fman_delete()));
+  add_to_menu (menu_fm_file_ops, tr ("Create new directory"), SLOT(fman_fileop_create_dir()));
+  add_to_menu (menu_fm_file_ops, tr ("Rename"), SLOT(fman_fileop_rename()));
+  add_to_menu (menu_fm_file_ops, tr ("Delete file"), SLOT(fman_fileop_delete()));
 
 
   menu_fm_file_infos = menu_fm->addMenu (tr ("File information"));
   menu_fm_file_infos->setTearOffEnabled (true);
 
 
-  add_to_menu (menu_fm_file_infos, tr ("Count lines in selected files"), SLOT(fman_count_lines_in_selected_files()));
-  add_to_menu (menu_fm_file_infos, tr ("Full info"), SLOT(fm_full_info()));
+  add_to_menu (menu_fm_file_infos, tr ("Count lines in selected files"), SLOT(fman_fileinfo_count_lines_in_selected_files()));
+  add_to_menu (menu_fm_file_infos, tr ("Full info"), SLOT(fm_fileinfo_info()));
 
-  menu_fm_checksums = menu_fm->addMenu (tr ("Checksum"));
-  menu_fm_checksums->setTearOffEnabled (true);
-
-  add_to_menu (menu_fm_checksums, "MD5", SLOT(fm_hashsum_md5()));
-  add_to_menu (menu_fm_checksums, "MD4", SLOT(fm_hashsum_md4()));
-  add_to_menu (menu_fm_checksums, "SHA-1", SLOT(fm_hashsum_sha1()));
-
-#if QT_VERSION >= 0x050000
-  add_to_menu (menu_fm_checksums, "SHA-2 SHA-224", SLOT(fm_hashsum_sha224()));
-  add_to_menu (menu_fm_checksums, "SHA-2 SHA-256", SLOT(fm_hashsum_sha256()));
-  add_to_menu (menu_fm_checksums, "SHA-2 SHA-384", SLOT(fm_hashsum_sha384()));
-  add_to_menu (menu_fm_checksums, "SHA-2 SHA-512", SLOT(fm_hashsum_sha512()));
-#endif
-
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
- add_to_menu (menu_fm_checksums, "SHA-3 SHA-224", SLOT(fm_hashsum_sha3_224()));
- add_to_menu (menu_fm_checksums, "SHA-3 SHA-256", SLOT(fm_hashsum_sha3_256()));
- add_to_menu (menu_fm_checksums, "SHA-3 SHA-384", SLOT(fm_hashsum_sha3_384()));
- add_to_menu (menu_fm_checksums, "SHA-3 SHA-512", SLOT(fm_hashsum_sha3_512()));
-#endif
-
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 10)
- add_to_menu (menu_fm_checksums, "Keccak-224", SLOT(fm_hashsum_keccak_224()));
- add_to_menu (menu_fm_checksums, "Keccak-256", SLOT(fm_hashsum_keccak_256()));
- add_to_menu (menu_fm_checksums, "Keccak-384", SLOT(fm_hashsum_keccak_384()));
- add_to_menu (menu_fm_checksums, "Keccak-512", SLOT(fm_hashsum_keccak_512()));
-#endif
 
   menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
   menu_fm_zip->setTearOffEnabled (true);
 
   menu_fm_zip->addSeparator();
 
-  add_to_menu (menu_fm_zip, tr ("Create new ZIP"), SLOT(fman_create_zip()));
-  add_to_menu (menu_fm_zip, tr ("Add to ZIP"), SLOT(fman_add_to_zip()));
-  add_to_menu (menu_fm_zip, tr ("Save ZIP"), SLOT(fman_save_zip()));
+  add_to_menu (menu_fm_zip, tr ("Create new ZIP"), SLOT(fman_zip_create()));
+  add_to_menu (menu_fm_zip, tr ("Add to ZIP"), SLOT(fman_zip_add()));
+  add_to_menu (menu_fm_zip, tr ("Save ZIP"), SLOT(fman_zip_save()));
 
   menu_fm_zip->addSeparator();
 
   add_to_menu (menu_fm_zip, tr ("List ZIP content"), SLOT(fman_zip_info()));
-  add_to_menu (menu_fm_zip, tr ("Unpack ZIP to current directory"), SLOT(fman_unpack_zip()));
+  add_to_menu (menu_fm_zip, tr ("Unpack ZIP to current directory"), SLOT(fman_zip_unpack()));
 
 
   menu_fm_img_conv = menu_fm->addMenu (tr ("Images"));
@@ -1529,8 +1500,7 @@ Fm menu callbacks
 
   add_to_menu (menu_fm_img_conv, tr ("Scale by side"), SLOT(fman_img_conv_by_side()));
   add_to_menu (menu_fm_img_conv, tr ("Scale by percentages"), SLOT(fman_img_conv_by_percent()));
-  add_to_menu (menu_fm_img_conv, tr ("Create web gallery"), SLOT(fman_mk_gallery()));
-
+  add_to_menu (menu_fm_img_conv, tr ("Create web gallery"), SLOT(fman_img_make_gallery()));
 
   add_to_menu (menu_fm, tr ("Go to home dir"), SLOT(fman_home()));
   add_to_menu (menu_fm, tr ("Refresh current dir"), SLOT(fman_refresh()));
@@ -1539,12 +1509,18 @@ Fm menu callbacks
   add_to_menu (menu_fm, tr ("Deselect by regexp"), SLOT(fman_deselect_by_regexp()));
 
 
+/*
+===================
+View menu
+===================
+*/
+
+
   menu_view = menuBar()->addMenu (tr ("View"));
   menu_view->setTearOffEnabled (true);
 
   menu_view_themes = menu_view->addMenu (tr ("Themes"));
   menu_view_themes->setTearOffEnabled (true);
-
 
   menu_view_palettes = menu_view->addMenu (tr ("Palettes"));
   menu_view_palettes->setTearOffEnabled (true);
@@ -1555,12 +1531,19 @@ Fm menu callbacks
   menu_view_profiles = menu_view->addMenu (tr ("Profiles"));
   menu_view_profiles->setTearOffEnabled (true);
 
-  add_to_menu (menu_view, tr ("Save profile"), SLOT(profile_save_as()));
-  add_to_menu (menu_view, tr ("Toggle word wrap"), SLOT(toggle_wrap()));
+  add_to_menu (menu_view, tr ("Save profile"), SLOT(view_profile_save_as()));
+  add_to_menu (menu_view, tr ("Toggle word wrap"), SLOT(view_toggle_wrap()));
   add_to_menu (menu_view, tr ("Hide error marks"), SLOT(view_hide_error_marks()));
   add_to_menu (menu_view, tr ("Toggle fullscreen"), SLOT(view_toggle_fs()));
   add_to_menu (menu_view, tr ("Stay on top"), SLOT(view_stay_on_top()));
-  add_to_menu (menu_view, tr ("Darker"), SLOT(darker()));
+  add_to_menu (menu_view, tr ("Darker"), SLOT(view_darker()));
+
+/*
+===================
+? menu
+===================
+*/
+
 
   helpMenu = menuBar()->addMenu ("?");
   helpMenu->setTearOffEnabled (true);
@@ -1703,85 +1686,6 @@ void CTEA::markup_text (const QString &mode)
 }
 
 
-void CTEA::mrkup_align_center()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("align_center");
-}
-
-
-void CTEA::mrkup_align_left()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("align_left");
-}
-
-
-void CTEA::mrkup_align_right()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("align_right");
-}
-
-
-void CTEA::mrkup_align_justify()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("align_justify");
-}
-
-
-void CTEA::mrkup_bold()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  markup_text ("bold");
-}
-
-
-void CTEA::mrkup_italic()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("italic");
-}
-
-
-void CTEA::mrkup_underline()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("underline");
-}
-
-
-void CTEA::mrkup_para()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("para");
-}
-
-
-void CTEA::mrkup_link()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("link");
-}
-
-
-void CTEA::mrkup_br()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  markup_text ("newline");
-}
-
-
-void CTEA::mrkup_nbsp()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put ("&nbsp;");
-}
 
 
 QTextDocument::FindFlags CTEA::get_search_options()
@@ -2073,20 +1977,6 @@ void CTEA::opt_shortcuts_find_prev()
      lv_menuitems->setCurrentRow (index);
 }
 
-
-void CTEA::markup_ins_image()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  main_tab_widget->setCurrentIndex (idx_tab_fman);
-
-  if (file_exists (d->file_name))
-     fman->nav (get_file_path (d->file_name));
-}
 
 
 void CTEA::slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QListWidgetItem *previous)
@@ -2772,7 +2662,7 @@ void CTEA::slot_style_currentIndexChanged (int)
 
 
 
-void CTEA::toggle_wrap()
+void CTEA::view_toggle_wrap()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -2804,32 +2694,6 @@ void CTEA::nav_goto_pos()
   cr.setPosition (d->position);
   d->setTextCursor (cr);
 }
-
-
-void CTEA::mrkup_color()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QColor color = QColorDialog::getColor (Qt::green, this);
-  if (! color.isValid())
-     return;
-
-  QString s;
-
-  if (d->textCursor().hasSelection())
-      s = QString ("<span style=\"color:%1;\">%2</span>")
-                   .arg (color.name())
-                   .arg (d->get());
-  else
-      s = color.name();
-
-  d->put (s);
-}
-
 
 void CTEA::nav_goto_line()
 {
@@ -2968,10 +2832,7 @@ void CTEA::fn_filter_with_regexp()
 
   CDocument *d = documents->get_current();
   if (d)
-      d->put (qstringlist_process (
-                                            d->get(),
-                                            fif_get_text(),
-                                            QSTRL_PROC_FLT_WITH_REGEXP));
+      d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_WITH_REGEXP));
 }
 
 
@@ -3343,66 +3204,6 @@ void CTEA::fn_sort_casecare_sep()
 }
 
 
-void CTEA::mrkup_text_to_html()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QStringList l;
-
-  if (d->textCursor().hasSelection())
-     l = d->get().split (QChar::ParagraphSeparator);
-  else
-      l = d->toPlainText().split("\n");
-
-  QString result;
-
-  if (d->markup_mode == "HTML")
-     result += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
-  else
-      result += "<!DOCTYPE html PUBLIC \"-//W3C//DTD  1.0 Transitional//EN\" \"http://www.w3.org/TR/1/DTD/1-transitional.dtd\">\n";
-
-  result += "<html>\n"
-            "<head>\n"
-            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
-            "<style type=\"text/css\">\n"
-            ".p1\n"
-            "{\n"
-            "margin: 0px 0px 0px 0px;\n"
-            "padding: 0px 0px 0px 0px;\n"
-            "text-indent: 1.5em;\n"
-            "text-align: justify;\n"
-            "}\n"
-            "</style>\n"
-            "<title></title>\n"
-            "</head>\n"
-            "<body>\n";
-
-  for (int i = 0; i < l.size(); i++)
-      {
-       QString t = l.at(i).simplified();
-
-       if (t.isEmpty())
-          {
-           if (d->markup_mode == "HTML")
-               result += "<br>\n";
-            else
-                result += "<br />\n";
-          }
-       else
-           result += "<p class=\"p1\">" + t + "</p>\n";
-      }
-
-  result += "</body>\n</html>";
-
-  CDocument *doc = documents->create_new();
-
-  if (doc)
-     doc->put (result);
-}
 
 
 void CTEA::fn_analyze_text_stat()
@@ -3673,16 +3474,6 @@ QString str_to_entities (const QString &s)
 }
 
 
-void CTEA::mrkup_tags_to_entities()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (str_to_entities (d->get()));
-}
-
-
 void CTEA::fn_insert_loremipsum()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -3693,46 +3484,6 @@ void CTEA::fn_insert_loremipsum()
 }
 
 
-void CTEA::mrkup_mode_choosed()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QAction *a = qobject_cast<QAction *>(sender());
-  markup_mode = a->text();
-  documents->markup_mode = markup_mode;
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->markup_mode = markup_mode;
-}
-
-
-void CTEA::mrkup_header()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  QString r;
-
-  if (documents->markup_mode == "Markdown")
-     {
-      QString t;
-      int n = a->text().toLower()[1].digitValue();
-      t.fill ('#', n);
-      r = t + " " + d->get();
-     }
-  else
-      r = QString ("<%1>%2</%1>").arg (
-                   a->text().toLower()).arg (
-                   d->get());
-
-  d->put (r);
-}
 
 
 void CTEA::nav_goto_right_tab()
@@ -4539,7 +4290,7 @@ void CTEA::cb_button_saves_as()
          return;
 
 
-  d->save_with_name (filename, cb_fman_codecs->currentText());
+  d->file_save_with_name (filename, cb_fman_codecs->currentText());
   d->set_markup_mode();
 
   add_to_last_used_charsets (cb_fman_codecs->currentText());
@@ -4722,7 +4473,7 @@ void CTEA::fman_open()
 }
 
 
-void CTEA::fman_create_dir()
+void CTEA::fman_fileop_create_dir()
 {
   bool ok;
   QString newdir = QInputDialog::getText (this, tr ("Enter the name"),
@@ -5219,32 +4970,6 @@ void CTEA::update_hls (bool force)
 }
 */
 
-void CTEA::mrkup_preview_color()
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! d->textCursor().hasSelection())
-     return;
-
-  QString color = d->get();
-
-  if (QColor::colorNames().indexOf (color) == -1)
-     {
-      color = color.remove (";");
-      if (! color.startsWith ("#"))
-          color = "#" + color;
-     }
-  else
-     {
-      QColor c (color);
-      color = c.name();
-     }
-
-  QString style = QString ("color:%1; font-weight:bold;").arg (color);
-  log->log (tr ("<span style=\"%1\">COLOR SAMPLE</span>").arg (style));
-}
 
 
 void CTEA::fman_drives_changed (const QString & path)
@@ -5563,7 +5288,7 @@ void CTEA::fman_current_file_changed (const QString &full_path, const QString &j
 }
 
 
-void CTEA::fman_rename()
+void CTEA::fman_fileop_rename()
 {
   QString fname = fman->get_sel_fname();
   if (fname.isEmpty())
@@ -5591,7 +5316,7 @@ void CTEA::fman_rename()
 }
 
 
-void CTEA::fman_delete()
+void CTEA::fman_fileop_delete()
 {
   QString fname = fman->get_sel_fname();
   if (fname.isEmpty())
@@ -5623,252 +5348,13 @@ void CTEA::fman_delete()
 }
 
 
-void CTEA::fm_hashsum_md5()
-{
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Md5);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("MD5 checksum for %1 is %2").arg (filename).arg (sm));
-}
-
-
-void CTEA::fm_hashsum_md4()
-{
-  QCryptographicHash h (QCryptographicHash::Md4);
-  QString filename = fman->get_sel_fname();
-
-  if (! file_exists (filename))
-      return;
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("MD4 checksum for %1 is %2").arg (filename).arg (sm));
-}
-
-
-void CTEA::fm_hashsum_sha1()
-{
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha1);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("SHA-1 checksum for %1 is %2").arg (filename).arg (sm));
-}
-
-
-#if QT_VERSION >= 0x050000
-void CTEA::fm_hashsum_sha224()
-{
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha224);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("SHA-2 SHA-224 checksum for %1 is %2").arg (filename).arg (sm));
-}
-
-
-void CTEA::fm_hashsum_sha384()
-{
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha384);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("SHA-2 SHA-384 checksum for %1 is %2").arg (filename).arg (sm));
-}
-
-
-void CTEA::fm_hashsum_sha256()
-{
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha256);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("SHA-2 SHA-256 checksum for %1 is %2").arg (filename).arg (sm));
-}
-
-
-void CTEA::fm_hashsum_sha512()
-{
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha512);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  QString s = tr ("SHA-2 SHA-512 checksum for %1 is %2").arg (filename).arg (sm);
-
-  log->log (s);
-}
-#endif
-
-
-
-void CTEA::fm_hashsum_sha3_224()
-{
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha3_224);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("SHA-3 224 checksum for %1 is %2").arg (filename).arg (sm));
-
-#endif
-}
-
-
-void CTEA::fm_hashsum_sha3_256()
-{
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha3_256);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("SHA-3 256 checksum for %1 is %2").arg (filename).arg (sm));
-
-#endif
-}
-
-
-void CTEA::fm_hashsum_sha3_384()
-{
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha3_384);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("SHA-3 384 checksum for %1 is %2").arg (filename).arg (sm));
-
-#endif
-}
-
-
-void CTEA::fm_hashsum_sha3_512()
-{
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 1)
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Sha3_512);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("SHA-3 512 checksum for %1 is %2").arg (filename).arg (sm));
-
-#endif
-}
-
-
-void CTEA::fm_hashsum_keccak_224()
-{
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Keccak_224);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("Keccak 224 checksum for %1 is %2").arg (filename).arg (sm));
-
-#endif
-}
-
-
-void CTEA::fm_hashsum_keccak_256()
-{
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Keccak_256);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("Keccak 256 checksum for %1 is %2").arg (filename).arg (sm));
-
-#endif
-}
-
-
-void CTEA::fm_hashsum_keccak_384()
-{
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 9 && QT_VERSION_PATCH >= 2)
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Keccak_384);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("Keccak 384 checksum for %1 is %2").arg (filename).arg (sm));
-
-#endif
-}
-
-
-void CTEA::fm_hashsum_keccak_512()
-{
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 10)
-  QString filename = fman->get_sel_fname();
-  if (! file_exists (filename))
-      return;
-
-  QCryptographicHash h (QCryptographicHash::Keccak_512);
-
-  h.addData (file_load (filename));
-  QString sm = h.result().toHex();
-  log->log (tr ("Keccak 512 checksum for %1 is %2").arg (filename).arg (sm));
-
-#endif
-}
-
-
 void CTEA::fman_refresh()
 {
   fman->refresh();
 }
 
 
-void CTEA::fm_full_info()
+void CTEA::fm_fileinfo_info()
 {
   QString fname;
 
@@ -6514,7 +6000,7 @@ void CTEA::fn_text_escape()
 }
 
 
-void CTEA::fman_add_to_zip()
+void CTEA::fman_zip_add()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6540,7 +6026,7 @@ void CTEA::fman_add_to_zip()
 }
 
 
-void CTEA::fman_create_zip()
+void CTEA::fman_zip_create()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -6563,7 +6049,7 @@ void CTEA::fman_create_zip()
 }
 
 
-void CTEA::fman_save_zip()
+void CTEA::fman_zip_save()
 {
   fman->zipper.pack_prepared();
   fman->refresh();
@@ -6641,27 +6127,6 @@ void CTEA::view_use_hl()
      d->set_hl (false, a->text());
 }
 
-
-void CTEA::mrkup_strip_html_tags()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString text;
-
-  if (d->textCursor().hasSelection())
-     text = d->get();
-  else
-      text = d->toPlainText();
-
-  if (d->textCursor().hasSelection())
-     d->put (strip_html (text));
-  else
-      d->setPlainText (strip_html (text));
-}
 
 
 void CTEA::fn_math_number_dec_to_bin()
@@ -6882,7 +6347,7 @@ void CTEA::fn_filter_delete_after_sep()
 }
 
 
-void CTEA::fman_mk_gallery()
+void CTEA::fman_img_make_gallery()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7116,7 +6581,7 @@ void CTEA::view_use_profile()
 }
 
 
-void CTEA::profile_save_as()
+void CTEA::view_profile_save_as()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7210,7 +6675,7 @@ void CTEA::fman_deselect_by_regexp()
 }
 
 
-void CTEA::fman_count_lines_in_selected_files()
+void CTEA::fman_fileinfo_count_lines_in_selected_files()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7523,51 +6988,6 @@ void CTEA::cal_remove()
 }
 
 
-void CTEA::mrkup_rename_selected()
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! d->textCursor().hasSelection())
-     {
-      log->log (tr ("Select the file name first!"));
-      return;
-     }
-
-  QString fname = d->get_filename_at_cursor();
-
-  if (fname.isEmpty())
-     return;
-
-  QString newname = fif_get_text();
-  if (newname.isEmpty())
-     return;
-
-  QFileInfo fi (fname);
-  if (! fi.exists() && ! fi.isWritable())
-     return;
-
-  QString newfpath = fi.path() + "/" + newname;
-  QFile::rename (fname, newfpath);
-  update_dyn_menus();
-  fman->refresh();
-
-  QDir dir (d->file_name);
-  QString new_name = dir.relativeFilePath (newfpath);
-
-  if (new_name.startsWith (".."))
-     new_name = new_name.remove (0, 1);
-
-  if (d->get().startsWith ("./") && ! new_name.startsWith ("./"))
-     new_name = "./" + new_name;
-
-  if (! d->get().startsWith ("./") && new_name.startsWith ("./"))
-     new_name = new_name.remove (0, 2);
-
-  if (d->textCursor().hasSelection())
-     d->put (new_name.trimmed());
-}
 
 
 void CTEA::update_labels_menu()
@@ -7639,60 +7059,9 @@ inline bool CFSizeFNameLessThan (CFSizeFName *v1, CFSizeFName *v2)
 }
 
 
-void CTEA::mrkup_document_weight()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString result;
-  QStringList l = html_get_by_patt (d->toPlainText(), "src=\"");
-
-  QFileInfo f (d->file_name);
-  QUrl baseUrl (d->file_name);
-
-//  result += tr ("%1 %2 kbytes<br>").arg (d->file_name).arg (QString::number (f.size() / 1024));
-
-  QList <CFSizeFName*> lst;
-  lst.append (new CFSizeFName (f.size(), d->file_name));
-
-  int size_total = 0;
-  int files_total = 1;
-
-  for (int i = 0; i < l.size(); i++)
-      {
-       QUrl relativeUrl (l.at(i));
-       QString resolved = baseUrl.resolved (relativeUrl).toString();
-       QFileInfo info (resolved);
-
-       if (! info.exists())
-           lst.append (new CFSizeFName (info.size(), tr ("%1 is not found<br>").arg (resolved)));
-       else
-           {
-            lst.append (new CFSizeFName (info.size(), resolved));
-            size_total += info.size();
-            ++files_total;
-           }
-       }
-
-  std::sort (lst.begin(), lst.end(), CFSizeFNameLessThan);
-
-  for (int i = 0; i < lst.size(); i++)
-      {
-       result += tr ("%1 kbytes %2 <br>").arg (QString::number (lst[i]->size / 1024)).arg (lst[i]->fname);
-       delete lst[i];
-      }
-
-  result.prepend (tr ("Total size = %1 kbytes in %2 files<br>").arg (QString::number (size_total / 1024))
-                  .arg (QString::number (files_total)));
-
-  log->log (result);
-}
 
 
-void CTEA::fman_unpack_zip()
+void CTEA::fman_zip_unpack()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -7834,37 +7203,6 @@ void CTEA::clipboard_dataChanged()
      }
 }
 
-
-void CTEA::fn_remove_by_regexp()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString t = d->get();
-
-
-#if (QT_VERSION_MAJOR < 5)
-
-  QRegExp r (fif_get_text());
-  if (! r.isValid())
-     return;
-  t.remove (r);
-
-#else
-
-  QRegularExpression r (fif_get_text());
-  if (! r.isValid())
-     return;
-  t.remove (r);
-
-
-#endif
-
-  d->put (t);
-}
 
 void CTEA::cal_moon_mode()
 {
@@ -8075,7 +7413,7 @@ void CDarkerWindow::slot_valueChanged (int value)
 }
 
 
-void CTEA::darker()
+void CTEA::view_darker()
 {
   last_action = qobject_cast<QAction *>(sender());
 
@@ -9065,7 +8403,7 @@ void CTEA::fn_repeat()
 }
 
 
-void CTEA::fman_zeropad()
+void CTEA::fman_multi_rename_zeropad()
 {
   QString fiftxt = fif_get_text();
   int finalsize = fiftxt.toInt();
@@ -9120,7 +8458,7 @@ void CTEA::fman_zeropad()
 }
 
 
-void CTEA::fman_del_n_first_chars()
+void CTEA::fman_multi_rename_del_n_first_chars()
 {
   QString fiftxt = fif_get_text();
   int todel = fiftxt.toInt();
@@ -9152,7 +8490,7 @@ void CTEA::fman_del_n_first_chars()
 }
 
 
-void CTEA::fman_multreplace()
+void CTEA::fman_multi_rename_replace()
 {
   QStringList l = fif_get_text().split ("~");
   if (l.size() < 2)
@@ -9183,7 +8521,7 @@ void CTEA::fman_multreplace()
 }
 
 
-void CTEA::fman_apply_template()
+void CTEA::fman_multi_rename_apply_template()
 {
   QString fiftxt = fif_get_text();
 
@@ -10143,7 +9481,7 @@ bool CTEA::file_save()
      }
 
   if (file_exists (d->file_name))
-     d->save_with_name (d->file_name, d->charset);
+     d->file_save_with_name (d->file_name, d->charset);
   else
       return file_save_as();
 
@@ -10254,7 +9592,7 @@ bool CTEA::file_save_as()
              return false;
          }
 
-      d->save_with_name (fileName, cb_codecs->currentText());
+      d->file_save_with_name (fileName, cb_codecs->currentText());
       d->set_markup_mode();
       d->set_hl();
 
@@ -10284,7 +9622,7 @@ void CTEA::file_save_bak()
      return;
 
   QString fname  = d->file_name + ".bak";
-  d->save_with_name_plain (fname);
+  d->file_save_with_name_plain (fname);
   log->log (tr ("%1 is saved").arg (fname));
 }
 
@@ -10318,7 +9656,7 @@ void CTEA::file_save_version()
                   fi.suffix();
 
 
-  if (d->save_with_name_plain (fname))
+  if (d->file_save_with_name_plain (fname))
      log->log (tr ("%1 - saved").arg (fname));
   else
      log->log (tr ("Cannot save %1").arg (fname));
@@ -10609,7 +9947,7 @@ void CTEA::ed_block_copy()
   if (! d->has_rect_selection())
      return;
 
-  QApplication::clipboard()->setText (d->get_rect_sel());
+  QApplication::clipboard()->setText (d->rect_sel_get());
 }
 
 
@@ -10802,5 +10140,396 @@ void CTEA::ed_copy_to_storage_file()
 void CTEA::ed_capture_clipboard_to_storage_file()
 {
   last_action = sender();
-  capture_to_storage_file = qobject_cast<QAction *>(sender())->isChecked(); //! capture_to_storage_file;
+  capture_to_storage_file = qobject_cast<QAction *>(sender())->isChecked();
+//was capture_to_storage_file = ! capture_to_storage_file;
+}
+
+
+/*
+===================
+Markup menu callbacks
+===================
+*/
+
+
+void CTEA::mrkup_mode_choosed()
+{
+  last_action = sender();
+
+  QAction *a = qobject_cast<QAction *>(sender());
+  markup_mode = a->text();
+  documents->markup_mode = markup_mode;
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->markup_mode = markup_mode;
+}
+
+
+void CTEA::mrkup_header()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QAction *a = qobject_cast<QAction *>(sender());
+
+  QString r;
+
+  if (documents->markup_mode == "Markdown")
+     {
+      QString t;
+      int n = a->text().toLower()[1].digitValue();
+      t.fill ('#', n);
+      r = t + " " + d->get();
+     }
+  else
+      r = QString ("<%1>%2</%1>").arg (
+                   a->text().toLower()).arg (
+                   d->get());
+
+  d->put (r);
+}
+
+
+void CTEA::mrkup_align_center()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("align_center");
+}
+
+
+void CTEA::mrkup_align_left()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("align_left");
+}
+
+
+void CTEA::mrkup_align_right()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("align_right");
+}
+
+
+void CTEA::mrkup_align_justify()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("align_justify");
+}
+
+
+void CTEA::mrkup_bold()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  markup_text ("bold");
+}
+
+
+void CTEA::mrkup_italic()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("italic");
+}
+
+
+void CTEA::mrkup_underline()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("underline");
+}
+
+void CTEA::mrkup_link()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("link");
+}
+
+
+void CTEA::mrkup_para()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("para");
+}
+
+
+void CTEA::mrkup_color()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QColor color = QColorDialog::getColor (Qt::green, this);
+  if (! color.isValid())
+     return;
+
+  QString s;
+
+  if (d->textCursor().hasSelection())
+      s = QString ("<span style=\"color:%1;\">%2</span>")
+                   .arg (color.name())
+                   .arg (d->get());
+  else
+      s = color.name();
+
+  d->put (s);
+}
+
+
+void CTEA::mrkup_br()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  markup_text ("newline");
+}
+
+
+void CTEA::mrkup_nbsp()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put ("&nbsp;");
+}
+
+
+void CTEA::markup_ins_image()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  main_tab_widget->setCurrentIndex (idx_tab_fman);
+
+  if (file_exists (d->file_name))
+     fman->nav (get_file_path (d->file_name));
+}
+
+
+void CTEA::mrkup_text_to_html()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QStringList l;
+
+  if (d->textCursor().hasSelection())
+     l = d->get().split (QChar::ParagraphSeparator);
+  else
+      l = d->toPlainText().split("\n");
+
+  QString result;
+
+  if (d->markup_mode == "HTML")
+     result += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
+  else
+      result += "<!DOCTYPE html PUBLIC \"-//W3C//DTD  1.0 Transitional//EN\" \"http://www.w3.org/TR/1/DTD/1-transitional.dtd\">\n";
+
+  result += "<html>\n"
+            "<head>\n"
+            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
+            "<style type=\"text/css\">\n"
+            ".p1\n"
+            "{\n"
+            "margin: 0px 0px 0px 0px;\n"
+            "padding: 0px 0px 0px 0px;\n"
+            "text-indent: 1.5em;\n"
+            "text-align: justify;\n"
+            "}\n"
+            "</style>\n"
+            "<title></title>\n"
+            "</head>\n"
+            "<body>\n";
+
+  for (int i = 0; i < l.size(); i++)
+      {
+       QString t = l.at(i).simplified();
+
+       if (t.isEmpty())
+          {
+           if (d->markup_mode == "HTML")
+               result += "<br>\n";
+            else
+                result += "<br />\n";
+          }
+       else
+           result += "<p class=\"p1\">" + t + "</p>\n";
+      }
+
+  result += "</body>\n</html>";
+
+  CDocument *doc = documents->create_new();
+
+  if (doc)
+     doc->put (result);
+}
+
+
+void CTEA::mrkup_tags_to_entities()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (str_to_entities (d->get()));
+}
+
+
+void CTEA::mrkup_document_weight()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString result;
+  QStringList l = html_get_by_patt (d->toPlainText(), "src=\"");
+
+  QFileInfo f (d->file_name);
+  QUrl baseUrl (d->file_name);
+
+//  result += tr ("%1 %2 kbytes<br>").arg (d->file_name).arg (QString::number (f.size() / 1024));
+
+  QList <CFSizeFName*> lst;
+  lst.append (new CFSizeFName (f.size(), d->file_name));
+
+  int size_total = 0;
+  int files_total = 1;
+
+  for (int i = 0; i < l.size(); i++)
+      {
+       QUrl relativeUrl (l.at(i));
+       QString resolved = baseUrl.resolved (relativeUrl).toString();
+       QFileInfo info (resolved);
+
+       if (! info.exists())
+           lst.append (new CFSizeFName (info.size(), tr ("%1 is not found<br>").arg (resolved)));
+       else
+           {
+            lst.append (new CFSizeFName (info.size(), resolved));
+            size_total += info.size();
+            ++files_total;
+           }
+       }
+
+  std::sort (lst.begin(), lst.end(), CFSizeFNameLessThan);
+
+  for (int i = 0; i < lst.size(); i++)
+      {
+       result += tr ("%1 kbytes %2 <br>").arg (QString::number (lst[i]->size / 1024)).arg (lst[i]->fname);
+       delete lst[i];
+      }
+
+  result.prepend (tr ("Total size = %1 kbytes in %2 files<br>").arg (QString::number (size_total / 1024))
+                  .arg (QString::number (files_total)));
+
+  log->log (result);
+}
+
+
+void CTEA::mrkup_preview_color()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! d->textCursor().hasSelection())
+     return;
+
+  QString color = d->get();
+
+  if (QColor::colorNames().indexOf (color) == -1)
+     {
+      color = color.remove (";");
+      if (! color.startsWith ("#"))
+          color = "#" + color;
+     }
+  else
+     {
+      QColor c (color);
+      color = c.name();
+     }
+
+  QString style = QString ("color:%1; font-weight:bold;").arg (color);
+  log->log (tr ("<span style=\"%1\">COLOR SAMPLE</span>").arg (style));
+}
+
+
+void CTEA::mrkup_strip_html_tags()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString text;
+
+  if (d->textCursor().hasSelection())
+     text = d->get();
+  else
+      text = d->toPlainText();
+
+  if (d->textCursor().hasSelection())
+     d->put (strip_html (text));
+  else
+      d->setPlainText (strip_html (text));
+}
+
+void CTEA::mrkup_rename_selected()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! d->textCursor().hasSelection())
+     {
+      log->log (tr ("Select the file name first!"));
+      return;
+     }
+
+  QString fname = d->get_filename_at_cursor();
+
+  if (fname.isEmpty())
+     return;
+
+  QString newname = fif_get_text();
+  if (newname.isEmpty())
+     return;
+
+  QFileInfo fi (fname);
+  if (! fi.exists() && ! fi.isWritable())
+     return;
+
+  QString newfpath = fi.path() + "/" + newname;
+  QFile::rename (fname, newfpath);
+  update_dyn_menus();
+  fman->refresh();
+
+  QDir dir (d->file_name);
+  QString new_name = dir.relativeFilePath (newfpath);
+
+  if (new_name.startsWith (".."))
+     new_name = new_name.remove (0, 1);
+
+  if (d->get().startsWith ("./") && ! new_name.startsWith ("./"))
+     new_name = "./" + new_name;
+
+  if (! d->get().startsWith ("./") && new_name.startsWith ("./"))
+     new_name = new_name.remove (0, 2);
+
+  if (d->textCursor().hasSelection())
+     d->put (new_name.trimmed());
 }

@@ -109,11 +109,11 @@ void CDocument::update_title (bool fullname)
 void CDocument::reload (const QString &enc)
 {
   if (file_exists (file_name))
-      open_file (file_name, enc);
+      file_open (file_name, enc);
 }
 
 
-bool CDocument::open_file (const QString &fileName, const QString &codec)
+bool CDocument::file_open (const QString &fileName, const QString &codec)
 {
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
 
@@ -164,7 +164,7 @@ bool CDocument::open_file (const QString &fileName, const QString &codec)
 }
 
 
-bool CDocument::save_with_name (const QString &fileName, const QString &codec)
+bool CDocument::file_save_with_name (const QString &fileName, const QString &codec)
 {
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
 
@@ -211,7 +211,6 @@ bool CDocument::save_with_name (const QString &fileName, const QString &codec)
 }
 
 
-//CDocument::CDocument (QObject *parent): QObject (parent)
 CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 {
 
@@ -222,7 +221,6 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 
   QString fname = tr ("new[%1]").arg (QTime::currentTime().toString ("hh-mm-ss"));
 
- // holder = 0;
   highlighter = 0;
   tab_page = 0;
 
@@ -259,13 +257,13 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
   highlight_current_line = false;
   setup_brace_width();
 
-  lineNumberArea = new CLineNumberArea (this);
+  line_num_area = new CLineNumberArea (this);
 
   connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
-  connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
+  connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
   connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
 
-  updateLineNumberAreaWidth (0);
+  updateLineNumberAreaWidth();
 
 
   document()->setUseDesignMetrics (true);
@@ -302,10 +300,10 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 CDocument::~CDocument()
 {
   if (file_name.endsWith (".notes") && document()->isModified())
-     save_with_name_plain (file_name);
+     file_save_with_name_plain (file_name);
   else
   if (file_name.startsWith (holder->dir_config) && document()->isModified())
-     save_with_name_plain (file_name);
+     file_save_with_name_plain (file_name);
   else
   if (document()->isModified() && file_exists (file_name))
      {
@@ -314,7 +312,7 @@ CDocument::~CDocument()
                                 "Do you want to save your changes?").arg (file_name),
                                 QMessageBox::Yes | QMessageBox::Default,
                                 QMessageBox::No | QMessageBox::Escape) == QMessageBox::Yes)
-         save_with_name (file_name, charset);
+         file_save_with_name (file_name, charset);
      }
 
   if (! file_name.startsWith (holder->dir_config) && ! file_name.endsWith (".notes"))
@@ -428,7 +426,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
      }
 
   CDocument *doc = create_new();
-  doc->open_file (fileName, codec);
+  doc->file_open (fileName, codec);
   doc->update_status();
   doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
@@ -468,7 +466,7 @@ CDocument* CDox::get_current()
 }
 
 
-bool CDocument::save_with_name_plain (const QString &fileName)
+bool CDocument::file_save_with_name_plain (const QString &fileName)
 {
   QFile file (fileName);
   if (! file.open (QFile::WriteOnly))
@@ -560,34 +558,6 @@ QString CDocument::get_filename_at_cursor()
        return cur_dir.cleanPath (cur_dir.absoluteFilePath(x));
       }
 }
-
-
-CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent)
-{
-  document = doc;
-  xml_format = 0;
-  casecare = true;
-}
-
-
-#if QT_VERSION < 0x050000
-CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDocument *doc, const QString &fname):
-                                                      CSyntaxHighlighter (parent, doc, fname)
-{
-  document = doc;
-  load_from_xml (fname);
-}
-#endif
-
-
-#if QT_VERSION >= 0x050000
-CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
-                                                                            CSyntaxHighlighter (parent, doc, fname)
-{
-  document = doc;
-  load_from_xml (fname);
-}
-#endif
 
 
 void CDocument::set_hl (bool mode_auto, const QString &theext)
@@ -813,29 +783,33 @@ void CDocument::cb_cursorPositionChanged()
 void CDocument::set_hl_cur_line (bool enable)
 {
   highlight_current_line = enable;
-  /*emit */repaint();
+//  repaint();
+  update();
 }
 
 
 void CDocument::set_hl_brackets (bool enable)
 {
   hl_brackets = enable;
-  /*emit */repaint();
+//  repaint();
+  update();
 }
 
 
 void CDocument::set_show_margin (bool enable)
 {
   draw_margin = enable;
-  /*emit */repaint();
+//  repaint();
+  update();
 }
 
 
 void CDocument::set_show_linenums (bool enable)
 {
   draw_linenums = enable;
-  updateLineNumberAreaWidth (0);
-  /*emit*/ repaint();
+  updateLineNumberAreaWidth();
+//  repaint();
+  update();
 }
 
 
@@ -843,7 +817,8 @@ void CDocument::set_margin_pos (int mp)
 {
   margin_pos = mp;
   margin_x = brace_width * margin_pos;
-  /*emit */repaint();
+  //repaint();
+  update();
 }
 
 
@@ -1027,404 +1002,6 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 }
 
 
-#if QT_VERSION >= 0x050000
-
-void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
-{
-  casecare = true;
-  exts = "default";
-  langs = "default";
-
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
-  if (! file_exists (fname))
-     return;
-
-  QString temp = qstring_load (fname);
-  if (temp.isEmpty())
-     return;
-
-  QXmlStreamReader xml (temp);
-
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.name().toString().toLower();
-
-         if (xml.isStartElement())
-            {
-
-             if (tag_name == "document")
-                {
-                 exts = xml.attributes().value ("exts").toString();
-                 langs = xml.attributes().value ("langs").toString();
-                }
-
-
-             if (tag_name == "item")
-                {
-                 QString attr_type = xml.attributes().value ("type").toString();
-                 QString attr_name = xml.attributes().value ("name").toString();
-
-                 if (attr_name == "options")
-                    {
-                     QString s_xml_format = xml.attributes().value ("xml_format").toString();
-                     if (! s_xml_format.isEmpty())
-                        xml_format = s_xml_format.toInt();
-
-                     QString s_casecare = xml.attributes().value ("casecare").toString();
-                     if (! s_casecare.isEmpty())
-                        if (s_casecare == "0" || s_casecare == "false")
-                           casecare = false;
-
-                     if (! casecare)
-                        pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;
-                     }
-
-                 if (attr_type == "keywords")
-                    {
-                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
-
-                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                     if (xml_format == 0) //old and ugly format
-                        {
-                         QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
-
-                         for (int i = 0; i < keywordPatterns.size(); i++)
-                              if (! keywordPatterns.at(i).isEmpty())
-                                 {
-                                  QRegularExpression rg = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
-
-                                  if (! rg.isValid())
-                                     qDebug() << "! valid " << rg.pattern();
-                                  else
-                                      {
-                                       HighlightingRule rule;
-                                       rule.pattern = rg;
-                                       rule.format = fmt;
-                                       highlightingRules.push_back (rule);
-                                      }
-                                  }
-                         }
-                      else //current, good format
-                      if (xml_format == 1)
-                         {
-                          HighlightingRule rule;
-                          QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
-
-                          if (! rg.isValid())
-                             qDebug() << "! valid " << rg.pattern();
-                          else
-                              {
-                               HighlightingRule rule;
-                               rule.pattern = rg;
-                               rule.format = fmt;
-                               highlightingRules.push_back (rule);
-                              }
-                         }
-
-                     } //keywords
-                 else
-                    if (attr_type == "item")
-                       {
-                        QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
-                        QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                       // qDebug() << "attr_type == item, attr_name == " << attr_name;
-
-                        QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
-                        if (! rg.isValid())
-                           qDebug() << "! valid " << rg.pattern();
-                        else
-                            {
-                             HighlightingRule rule;
-                             rule.pattern = rg;
-                             rule.format = fmt;
-                             highlightingRules.push_back (rule);
-                            }
-                       }
-                    else
-                        if (attr_type == "mcomment-start")
-                           {
-                            QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
-                            QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
-
-                            multiLineCommentFormat = fmt;
-                            commentStartExpression = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
-                           }
-                    else
-                        if (attr_type == "mcomment-end")
-                           {
-                            commentEndExpression = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
-                           }
-                    else
-                        if (attr_type == "comment")
-                           {
-                            if (xml.attributes().value ("name").toString() == "cm_mult")
-                               cm_mult = xml.readElementText().trimmed();
-                            else
-                            if (xml.attributes().value ("name").toString() == "cm_single")
-                               cm_single = xml.readElementText().trimmed();
-                          }
-
-                     }//item
-
-       }//end of "is start"
-
-   if (xml.hasError())
-      qDebug() << "xml parse error";
-
-  } //cycle
-}
-
-
-void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
-{
-  if (highlightingRules.size() == 0)
-     return;
-
-  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
-      {
-       QRegularExpressionMatch m = it->pattern.match (text);
-       if (! m.isValid())
-           continue;
-
-       int index = m.capturedStart();
-
-       while (index >= 0)
-             {
-              int length = m.capturedLength();
-              setFormat (index, length, it->format);
-              m = it->pattern.match (text, index + length);
-              if (! m.isValid())
-                  break;
-
-              index = m.capturedStart();
-             }
-       }
-
-  setCurrentBlockState (0);
-
-  int startIndex = 0;
-
-  if (! commentStartExpression.isValid() || ! commentEndExpression.isValid())
-     return;
-
-  QRegularExpressionMatch m_start = commentStartExpression.match (text);
-
-  if (previousBlockState() != 1)
-      startIndex = m_start.capturedStart();
-
-  while (startIndex >= 0)
-        {
-         QRegularExpressionMatch m_end = commentEndExpression.match (text, startIndex);
-
-         int endIndex = m_end.capturedStart();
-
-         int commentLength;
-
-         if (endIndex == -1)
-            {
-             setCurrentBlockState (1);
-             commentLength = text.length() - startIndex;
-            }
-         else
-             commentLength = endIndex - startIndex + m_end.capturedLength();
-
-         setFormat (startIndex, commentLength, multiLineCommentFormat);
-
-         m_start = commentStartExpression.match (text, startIndex + commentLength);
-         startIndex = m_start.capturedStart();
-        }
-}
-
-#endif
-
-
-#if QT_VERSION < 0x050000
-void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
-{
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
-  exts = "default";
-  langs = "default";
-  cs = Qt::CaseSensitive;
-
-  if (! file_exists (fname))
-     return;
-
-  QString temp = qstring_load (fname);
-  if (temp.isEmpty())
-     return;
-
-  QXmlStreamReader xml (temp);
-
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.name().toString().toLower();
-
-         if (xml.isStartElement())
-            {
-             if (tag_name == "document")
-                {
-                 exts = xml.attributes().value ("exts").toString();
-                 langs = xml.attributes().value ("langs").toString();
-                }
-
-             if (tag_name == "item")
-                {
-                 QString attr_type = xml.attributes().value ("type").toString();
-                 QString attr_name = xml.attributes().value ("name").toString();
-
-                 if (attr_name == "options")
-                    {
-                     QString s_casecare = xml.attributes().value ("casecare").toString();
-                     if (! s_casecare.isEmpty())
-                        if (s_casecare == "0" || s_casecare == "false")
-                           casecare = false;
-
-                     if (! casecare)
-                        cs = Qt::CaseInsensitive;
-                     }
-
-                 if (attr_type == "keywords")
-                    {
-                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
-                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                     if (xml_format == 0)
-                        {
-                         QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
-
-                         for (int i = 0; i < keywordPatterns.size(); i++)
-                             if (! keywordPatterns.at(i).isEmpty())
-                                {
-                                 QRegExp rg = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);
-                                 if (rg.isValid())
-                                    {
-                                     HighlightingRule rule;
-                                     rule.pattern = rg;
-                                     rule.format = fmt;
-                                     highlightingRules.push_back (rule);
-                                    }
-                                }
-                          }
-                     else
-                         if (xml_format == 1)
-                            {
-                             QRegExp rg = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
-
-                             if (! rg.isValid())
-                                qDebug() << "! valid " << rg.pattern();
-                             else
-                                 {
-                                  HighlightingRule rule;
-                                  rule.pattern = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
-                                  rule.format = fmt;
-                                  highlightingRules.push_back (rule);
-                                 }
-                            }
-
-                     } //keywords
-                 else
-                 if (attr_type == "item")
-                    {
-                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
-                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                     QRegExp rg = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
-                     if (rg.isValid())
-                        {
-                         HighlightingRule rule;
-                         rule.pattern = rg;
-                         rule.format = fmt;
-                         highlightingRules.push_back (rule);
-                        }
-                    }
-                 else
-                 if (attr_type == "mcomment-start")
-                    {
-                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
-                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
-
-                     multiLineCommentFormat = fmt;
-                     commentStartExpression = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
-                    }
-                 else
-                 if (attr_type == "mcomment-end")
-                    {
-                     commentEndExpression = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
-                    }
-                 else
-                 if (attr_type == "comment")
-                    {
-                     if (xml.attributes().value ("name").toString() == "cm_mult")
-                         cm_mult = xml.readElementText().trimmed();
-                     else
-                         if (xml.attributes().value ("name").toString() == "cm_single")
-                            cm_single = xml.readElementText().trimmed();
-                    }
-                }//item
-
-       }//is start
-
-  if (xml.hasError())
-     qDebug() << "xml parse error";
-
-  } //cycle
-}
-
-
-void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
-{
-  if (highlightingRules.size() == 0)
-     return;
-
-  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
-      {
-       int index = text.indexOf (it->pattern);
-
-       while (index >= 0)
-             {
-              int length = it->pattern.matchedLength();
-              setFormat (index, length, it->format);
-              index = text.indexOf (it->pattern, index + length);
-             }
-       }
-
-  setCurrentBlockState (0);
-
-  int startIndex = 0;
-
-  if (commentStartExpression.isEmpty() || commentEndExpression.isEmpty())
-     return;
-
-  if (previousBlockState() != 1)
-     startIndex = text.indexOf (commentStartExpression);
-
-  while (startIndex >= 0)
-        {
-         int endIndex = commentEndExpression.indexIn (text, startIndex);
-
-         int commentLength;
-
-         if (endIndex == -1)
-            {
-             setCurrentBlockState (1);
-             commentLength = text.length() - startIndex;
-            }
-         else
-             commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
-
-         setFormat (startIndex, commentLength, multiLineCommentFormat);
-         startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
-        }
-}
-#endif
 
 
 void CDox::save_to_session (const QString &fileName)
@@ -1716,7 +1293,7 @@ int CDocument::line_number_area_width()
 }
 
 
-void CDocument::updateLineNumberAreaWidth (int newBlockCount)
+void CDocument::updateLineNumberAreaWidth ()
 {
   setViewportMargins (line_number_area_width(), 0, 0, 0);
 }
@@ -1725,12 +1302,12 @@ void CDocument::updateLineNumberAreaWidth (int newBlockCount)
 void CDocument::updateLineNumberArea (const QRect &rect, int dy)
 {
   if (dy)
-     lineNumberArea->scroll (0, dy);
+     line_num_area->scroll (0, dy);
   else
-     lineNumberArea->update (0, rect.y(), lineNumberArea->width(), rect.height());
+     line_num_area->update (0, rect.y(), line_num_area->width(), rect.height());
 
   if (rect.contains (viewport()->rect()))
-     updateLineNumberAreaWidth (0);
+     updateLineNumberAreaWidth();
 }
 
 
@@ -1739,7 +1316,7 @@ void CDocument::lineNumberAreaPaintEvent (QPaintEvent *event)
   if (! draw_linenums)
      return;
 
-  QPainter painter (lineNumberArea);
+  QPainter painter (line_num_area);
   painter.fillRect (event->rect(), linenums_bg);
   painter.setPen (text_color);
 
@@ -1748,7 +1325,7 @@ void CDocument::lineNumberAreaPaintEvent (QPaintEvent *event)
   int top = (int) blockBoundingGeometry (block).translated (contentOffset()).top();
   int bottom = top + (int) blockBoundingRect (block).height();
 
-  int w = lineNumberArea->width();
+  int w = line_num_area->width();
   int h = fontMetrics().height();
 
   while (block.isValid() && top <= event->rect().bottom())
@@ -1771,7 +1348,7 @@ void CDocument::resizeEvent (QResizeEvent *e)
 {
   QPlainTextEdit::resizeEvent (e);
   QRect cr = contentsRect();
-  lineNumberArea->setGeometry (QRect (cr.left(), cr.top(), line_number_area_width(), cr.height()));
+  line_num_area->setGeometry (QRect (cr.left(), cr.top(), line_number_area_width(), cr.height()));
 }
 
 
@@ -1915,7 +1492,7 @@ bool CDocument::has_rect_selection() const
 }
 
 
-void CDocument::update_rect_sel()
+void CDocument::rect_sel_upd()
 {
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
      return;
@@ -2054,7 +1631,7 @@ QMimeData* CDocument::createMimeDataFromSelection() const
   if (has_rect_selection())
      {
       QMimeData *md = new QMimeData;
-      md->setText (get_rect_sel());
+      md->setText (rect_sel_get());
       return md;
      }
 
@@ -2157,7 +1734,7 @@ void CDocument::rect_sel_reset()
 }
 
 
-QString CDocument::get_rect_sel() const
+QString CDocument::rect_sel_get() const
 {
   QString result;
 
@@ -2243,7 +1820,7 @@ void CDocument::update_ext_selections()
 {
   extra_selections.clear();
   setExtraSelections (extra_selections);
-  update_rect_sel();
+  rect_sel_upd();
   brace_highlight();
 }
 
@@ -2366,4 +1943,430 @@ void CDocument::wheelEvent(QWheelEvent *e)
   QPlainTextEdit::wheelEvent(e);
 }
 
+
+
+CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent)
+{
+  document = doc;
+  xml_format = 0;
+  casecare = true;
+}
+
+
+#if QT_VERSION < 0x050000
+
+CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDocument *doc, const QString &fname):
+                                                      CSyntaxHighlighter (parent, doc, fname)
+{
+  document = doc;
+  load_from_xml (fname);
+}
+
+
+void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
+{
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  exts = "default";
+  langs = "default";
+  cs = Qt::CaseSensitive;
+
+  if (! file_exists (fname))
+     return;
+
+  QString temp = qstring_load (fname);
+  if (temp.isEmpty())
+     return;
+
+  QXmlStreamReader xml (temp);
+
+  while (! xml.atEnd())
+        {
+         xml.readNext();
+
+         QString tag_name = xml.name().toString().toLower();
+
+         if (xml.isStartElement())
+            {
+             if (tag_name == "document")
+                {
+                 exts = xml.attributes().value ("exts").toString();
+                 langs = xml.attributes().value ("langs").toString();
+                }
+
+             if (tag_name == "item")
+                {
+                 QString attr_type = xml.attributes().value ("type").toString();
+                 QString attr_name = xml.attributes().value ("name").toString();
+
+                 if (attr_name == "options")
+                    {
+                     QString s_casecare = xml.attributes().value ("casecare").toString();
+                     if (! s_casecare.isEmpty())
+                        if (s_casecare == "0" || s_casecare == "false")
+                           casecare = false;
+
+                     if (! casecare)
+                        cs = Qt::CaseInsensitive;
+                     }
+
+                 if (attr_type == "keywords")
+                    {
+                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
+                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
+
+                     if (xml_format == 0)
+                        {
+                         QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
+
+                         for (int i = 0; i < keywordPatterns.size(); i++)
+                             if (! keywordPatterns.at(i).isEmpty())
+                                {
+                                 QRegExp rg = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);
+                                 if (rg.isValid())
+                                    {
+                                     HighlightingRule rule;
+                                     rule.pattern = rg;
+                                     rule.format = fmt;
+                                     highlightingRules.push_back (rule);
+                                    }
+                                }
+                          }
+                     else
+                         if (xml_format == 1)
+                            {
+                             QRegExp rg = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
+
+                             if (! rg.isValid())
+                                qDebug() << "! valid " << rg.pattern();
+                             else
+                                 {
+                                  HighlightingRule rule;
+                                  rule.pattern = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
+                                  rule.format = fmt;
+                                  highlightingRules.push_back (rule);
+                                 }
+                            }
+
+                     } //keywords
+                 else
+                 if (attr_type == "item")
+                    {
+                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
+                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
+
+                     QRegExp rg = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
+                     if (rg.isValid())
+                        {
+                         HighlightingRule rule;
+                         rule.pattern = rg;
+                         rule.format = fmt;
+                         highlightingRules.push_back (rule);
+                        }
+                    }
+                 else
+                 if (attr_type == "mcomment-start")
+                    {
+                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
+                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
+
+                     multiLineCommentFormat = fmt;
+                     commentStartExpression = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
+                    }
+                 else
+                 if (attr_type == "mcomment-end")
+                    {
+                     commentEndExpression = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
+                    }
+                 else
+                 if (attr_type == "comment")
+                    {
+                     if (xml.attributes().value ("name").toString() == "cm_mult")
+                         cm_mult = xml.readElementText().trimmed();
+                     else
+                         if (xml.attributes().value ("name").toString() == "cm_single")
+                            cm_single = xml.readElementText().trimmed();
+                    }
+                }//item
+
+       }//is start
+
+  if (xml.hasError())
+     qDebug() << "xml parse error";
+
+  } //cycle
+}
+
+
+void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
+{
+  if (highlightingRules.size() == 0)
+     return;
+
+  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
+      {
+       int index = text.indexOf (it->pattern);
+
+       while (index >= 0)
+             {
+              int length = it->pattern.matchedLength();
+              setFormat (index, length, it->format);
+              index = text.indexOf (it->pattern, index + length);
+             }
+       }
+
+  setCurrentBlockState (0);
+
+  int startIndex = 0;
+
+  if (commentStartExpression.isEmpty() || commentEndExpression.isEmpty())
+     return;
+
+  if (previousBlockState() != 1)
+     startIndex = text.indexOf (commentStartExpression);
+
+  while (startIndex >= 0)
+        {
+         int endIndex = commentEndExpression.indexIn (text, startIndex);
+
+         int commentLength;
+
+         if (endIndex == -1)
+            {
+             setCurrentBlockState (1);
+             commentLength = text.length() - startIndex;
+            }
+         else
+             commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
+
+         setFormat (startIndex, commentLength, multiLineCommentFormat);
+         startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
+        }
+}
+#endif
+
+
+
+#if QT_VERSION >= 0x050000
+
+CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
+                                                                            CSyntaxHighlighter (parent, doc, fname)
+{
+  document = doc;
+  load_from_xml (fname);
+}
+
+
+void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
+{
+  casecare = true;
+  exts = "default";
+  langs = "default";
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  if (! file_exists (fname))
+     return;
+
+  QString temp = qstring_load (fname);
+  if (temp.isEmpty())
+     return;
+
+  QXmlStreamReader xml (temp);
+
+  while (! xml.atEnd())
+        {
+         xml.readNext();
+
+         QString tag_name = xml.name().toString().toLower();
+
+         if (xml.isStartElement())
+            {
+
+             if (tag_name == "document")
+                {
+                 exts = xml.attributes().value ("exts").toString();
+                 langs = xml.attributes().value ("langs").toString();
+                }
+
+
+             if (tag_name == "item")
+                {
+                 QString attr_type = xml.attributes().value ("type").toString();
+                 QString attr_name = xml.attributes().value ("name").toString();
+
+                 if (attr_name == "options")
+                    {
+                     QString s_xml_format = xml.attributes().value ("xml_format").toString();
+                     if (! s_xml_format.isEmpty())
+                        xml_format = s_xml_format.toInt();
+
+                     QString s_casecare = xml.attributes().value ("casecare").toString();
+                     if (! s_casecare.isEmpty())
+                        if (s_casecare == "0" || s_casecare == "false")
+                           casecare = false;
+
+                     if (! casecare)
+                        pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;
+                     }
+
+                 if (attr_type == "keywords")
+                    {
+                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
+
+                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
+
+                     if (xml_format == 0) //old and ugly format
+                        {
+                         QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
+
+                         for (int i = 0; i < keywordPatterns.size(); i++)
+                              if (! keywordPatterns.at(i).isEmpty())
+                                 {
+                                  QRegularExpression rg = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
+
+                                  if (! rg.isValid())
+                                     qDebug() << "! valid " << rg.pattern();
+                                  else
+                                      {
+                                       HighlightingRule rule;
+                                       rule.pattern = rg;
+                                       rule.format = fmt;
+                                       highlightingRules.push_back (rule);
+                                      }
+                                  }
+                         }
+                      else //current, good format
+                      if (xml_format == 1)
+                         {
+                          HighlightingRule rule;
+                          QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
+
+                          if (! rg.isValid())
+                             qDebug() << "! valid " << rg.pattern();
+                          else
+                              {
+                               HighlightingRule rule;
+                               rule.pattern = rg;
+                               rule.format = fmt;
+                               highlightingRules.push_back (rule);
+                              }
+                         }
+
+                     } //keywords
+                 else
+                    if (attr_type == "item")
+                       {
+                        QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
+                        QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
+
+                       // qDebug() << "attr_type == item, attr_name == " << attr_name;
+
+                        QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
+                        if (! rg.isValid())
+                           qDebug() << "! valid " << rg.pattern();
+                        else
+                            {
+                             HighlightingRule rule;
+                             rule.pattern = rg;
+                             rule.format = fmt;
+                             highlightingRules.push_back (rule);
+                            }
+                       }
+                    else
+                        if (attr_type == "mcomment-start")
+                           {
+                            QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
+                            QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
+
+                            multiLineCommentFormat = fmt;
+                            commentStartExpression = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
+                           }
+                    else
+                        if (attr_type == "mcomment-end")
+                           {
+                            commentEndExpression = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
+                           }
+                    else
+                        if (attr_type == "comment")
+                           {
+                            if (xml.attributes().value ("name").toString() == "cm_mult")
+                               cm_mult = xml.readElementText().trimmed();
+                            else
+                            if (xml.attributes().value ("name").toString() == "cm_single")
+                               cm_single = xml.readElementText().trimmed();
+                          }
+
+                     }//item
+
+       }//end of "is start"
+
+   if (xml.hasError())
+      qDebug() << "xml parse error";
+
+  } //cycle
+}
+
+
+void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
+{
+  if (highlightingRules.size() == 0)
+     return;
+
+  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
+      {
+       QRegularExpressionMatch m = it->pattern.match (text);
+       if (! m.isValid())
+           continue;
+
+       int index = m.capturedStart();
+
+       while (index >= 0)
+             {
+              int length = m.capturedLength();
+              setFormat (index, length, it->format);
+              m = it->pattern.match (text, index + length);
+              if (! m.isValid())
+                  break;
+
+              index = m.capturedStart();
+             }
+       }
+
+  setCurrentBlockState (0);
+
+  int startIndex = 0;
+
+  if (! commentStartExpression.isValid() || ! commentEndExpression.isValid())
+     return;
+
+  QRegularExpressionMatch m_start = commentStartExpression.match (text);
+
+  if (previousBlockState() != 1)
+      startIndex = m_start.capturedStart();
+
+  while (startIndex >= 0)
+        {
+         QRegularExpressionMatch m_end = commentEndExpression.match (text, startIndex);
+
+         int endIndex = m_end.capturedStart();
+
+         int commentLength;
+
+         if (endIndex == -1)
+            {
+             setCurrentBlockState (1);
+             commentLength = text.length() - startIndex;
+            }
+         else
+             commentLength = endIndex - startIndex + m_end.capturedLength();
+
+         setFormat (startIndex, commentLength, multiLineCommentFormat);
+
+         m_start = commentStartExpression.match (text, startIndex + commentLength);
+         startIndex = m_start.capturedStart();
+        }
+}
+
+#endif
 

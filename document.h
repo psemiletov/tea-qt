@@ -87,7 +87,7 @@ public:
 
 
 #if QT_VERSION < 0x050000
-class CSyntaxHighlighterQRegExp: public CSyntaxHighlighter
+class CSyntaxHighlighterQRegExp: public CSyntaxHightlighter
 {
   Q_OBJECT
 
@@ -154,9 +154,19 @@ class CDocument: public QPlainTextEdit
 
 private:
 
-  QWidget *lineNumberArea;
+  QWidget *line_num_area;
   QList <QTextEdit::ExtraSelection> extra_selections;
   QTextEdit::ExtraSelection brace_selection;
+
+protected:
+
+  QMimeData* createMimeDataFromSelection() const;
+  bool canInsertFromMimeData (const QMimeData *source) const;
+  void insertFromMimeData (const QMimeData *source);
+  void paintEvent(QPaintEvent *event);
+  void keyPressEvent (QKeyEvent *event);
+  void resizeEvent(QResizeEvent *event);
+  void wheelEvent(QWheelEvent *e);
 
 public:
 
@@ -208,30 +218,28 @@ public:
   Q_INVOKABLE QString get() const; //return selected text
   Q_INVOKABLE void put (const QString &value); //replace selection or insert text at cursor
 
+  Q_INVOKABLE bool file_open (const QString &fileName, const QString &codec);
+  Q_INVOKABLE bool file_save_with_name (const QString &fileName, const QString &codec);
+  Q_INVOKABLE bool file_save_with_name_plain (const QString &fileName);
 
-  Q_INVOKABLE bool open_file (const QString &fileName, const QString &codec);
-  Q_INVOKABLE bool save_with_name (const QString &fileName, const QString &codec);
-  Q_INVOKABLE bool save_with_name_plain (const QString &fileName);
+  Q_INVOKABLE int get_tab_idx();
+  Q_INVOKABLE QString get_triplex();
 
   Q_INVOKABLE QString get_filename_at_cursor();
-  Q_INVOKABLE QString get_triplex();
   Q_INVOKABLE QStringList get_words();
 
-  Q_INVOKABLE void set_tab_caption (const QString &fileName);
+  Q_INVOKABLE void goto_pos (int pos);
 
+  Q_INVOKABLE void set_tab_caption (const QString &fileName);
   Q_INVOKABLE void set_hl (bool mode_auto = true, const QString &theext = "txt");
-  Q_INVOKABLE void insert_image (const QString &full_path);
   Q_INVOKABLE void set_markup_mode();
+
+  Q_INVOKABLE void insert_image (const QString &full_path);
   Q_INVOKABLE void reload (const QString &enc);
-  Q_INVOKABLE int get_tab_idx();
 
   Q_INVOKABLE void update_status();
   Q_INVOKABLE void update_title (bool fullname = true);
   Q_INVOKABLE void update_labels();
-
-
-  Q_INVOKABLE void goto_pos (int pos);
-
 
   void set_show_linenums (bool enable);
   void set_show_margin (bool enable);
@@ -244,36 +252,25 @@ public:
 
   void indent();
   void un_indent();
-
   void calc_auto_indent();
+
   void setup_brace_width();
   void brace_highlight();
+
+  void update_ext_selections();
+  Q_INVOKABLE bool has_rect_selection() const;
+  void rect_sel_reset();
+  void rect_sel_replace (const QString &s, bool insert = false);
+  void rect_sel_upd();
+  QString rect_sel_get() const;
+  void rect_sel_cut (bool just_del = false);
 
   void lineNumberAreaPaintEvent (QPaintEvent *event);
   int line_number_area_width();
 
-  void rect_sel_reset();
-  void rect_sel_replace (const QString &s, bool insert = false);
-  void update_ext_selections();
-  void update_rect_sel();
-  QString get_rect_sel() const;
-  void rect_sel_cut (bool just_del = false);
-  Q_INVOKABLE bool has_rect_selection() const;
-
-
-protected:
-
-  QMimeData* createMimeDataFromSelection() const;
-  bool canInsertFromMimeData (const QMimeData *source) const;
-  void insertFromMimeData (const QMimeData *source);
-  void paintEvent(QPaintEvent *event);
-  void keyPressEvent (QKeyEvent *event);
-  void resizeEvent(QResizeEvent *event);
-  void wheelEvent(QWheelEvent *e);
-
 public slots:
 
-  void updateLineNumberAreaWidth (int newBlockCount);
+  void updateLineNumberAreaWidth();
   void cb_cursorPositionChanged();
   void updateLineNumberArea (const QRect &, int);
   void slot_selectionChanged();
@@ -382,7 +379,6 @@ protected:
        }
 
 };
-
 
 #endif
 

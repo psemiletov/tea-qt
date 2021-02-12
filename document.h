@@ -163,10 +163,10 @@ protected:
   QMimeData* createMimeDataFromSelection() const;
   bool canInsertFromMimeData (const QMimeData *source) const;
   void insertFromMimeData (const QMimeData *source);
-  void paintEvent(QPaintEvent *event);
+  void paintEvent (QPaintEvent *event);
   void keyPressEvent (QKeyEvent *event);
-  void resizeEvent(QResizeEvent *event);
-  void wheelEvent(QWheelEvent *e);
+  void resizeEvent (QResizeEvent *event);
+  void wheelEvent (QWheelEvent *e);
 
 public:
 
@@ -259,11 +259,11 @@ public:
 
   void update_ext_selections();
   Q_INVOKABLE bool has_rect_selection() const;
-  void rect_sel_reset();
-  void rect_sel_replace (const QString &s, bool insert = false);
-  void rect_sel_upd();
-  QString rect_sel_get() const;
-  void rect_sel_cut (bool just_del = false);
+  Q_INVOKABLE void rect_sel_reset();
+  Q_INVOKABLE void rect_sel_replace (const QString &s, bool insert = false);
+  Q_INVOKABLE void rect_sel_upd();
+  Q_INVOKABLE QString rect_sel_get() const;
+  Q_INVOKABLE void rect_sel_cut (bool just_del = false);
 
   void lineNumberAreaPaintEvent (QPaintEvent *event);
   int line_number_area_width();
@@ -283,10 +283,14 @@ class CDox: public QObject
 
 public:
 
+  QStringList recent_files;
+  QMultiHash <QString, QString> hls;
+  QHash <QString, QString> markup_modes;
+  QHash <QString, QString> hash_project;
+  std::vector <CDocument*> items;
+
   CTioHandler tio_handler;
   CTodo todo;
-
-  QStringList recent_files;
 
   QString fname_current_session;
   QString fname_current_project;
@@ -294,12 +298,6 @@ public:
   QString fname_crapbook;
   QString markup_mode;
   QString recent_list_fname;
-
-  QMultiHash <QString, QString> hls;
-  QHash <QString, QString> markup_modes;
-  QHash <QString, QString> hash_project;
-
-  std::vector <CDocument*> items;
 
   QLabel *l_status_bar;
   QLabel *l_charset;
@@ -311,15 +309,11 @@ public:
   QTimer *timer;
 
 #if defined(JOYSTICK_SUPPORTED)
-
   CJoystick *joystick;
-
-  bool event (QEvent *ev);
-  void handle_joystick_event (CJoystickAxisEvent *ev);
-
 #endif
 
-   CDox();
+
+  CDox();
   ~CDox();
 
   void update_project (const QString &fileName);
@@ -343,6 +337,14 @@ public:
   Q_INVOKABLE void apply_settings();
   Q_INVOKABLE void apply_settings_single (CDocument *d);
 
+#if defined(JOYSTICK_SUPPORTED)
+
+  bool event (QEvent *ev);
+  void handle_joystick_event (CJoystickAxisEvent *ev);
+
+#endif
+
+
 public slots:
 
   void open_recent();
@@ -355,8 +357,6 @@ public slots:
   void move_cursor_x (double v);
   void move_cursor_y (double v);
 };
-
-
 
 
 class CLineNumberArea: public QWidget
@@ -381,4 +381,5 @@ protected:
 };
 
 #endif
+
 

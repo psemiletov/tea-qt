@@ -949,7 +949,7 @@ void CTEA::createActions()
 
   saveAsAct = new QAction (get_theme_icon ("file-save-as.png"), tr ("Save As"), this);
   saveAsAct->setStatusTip (tr ("Save the document under a new name"));
-  connect (saveAsAct, SIGNAL(triggered()), this, SLOT(file_save()));
+  connect (saveAsAct, SIGNAL(triggered()), this, SLOT(file_save_as()));
 
   exitAct = new QAction (tr ("Exit"), this);
   exitAct->setShortcut (QKeySequence ("Ctrl+Q"));

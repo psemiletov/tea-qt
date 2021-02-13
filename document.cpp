@@ -1148,7 +1148,7 @@ void CDocument::set_markup_mode()
 
 void CDocument::insert_image (const QString &full_path)
 {
-  textCursor().insertText (get_insert_image (file_name, full_path, markup_mode));
+  put (get_insert_image (file_name, full_path, markup_mode));
 }
 
 
@@ -1161,11 +1161,10 @@ void CDocument::reload (const QString &enc)
 
 void CDocument::update_status()
 {
+  holder->l_charset->setText (charset);
+
   if (! cursor_xy_visible)
-     {
-      holder->l_charset->setText (charset);
       return;
-     }
 
   int x = textCursor().position() - textCursor().block().position() + 1;
   int y = textCursor().block().blockNumber() + 1;

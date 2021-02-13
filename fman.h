@@ -67,7 +67,7 @@ public slots:
   void tv_activated (const QModelIndex &index);
   void refresh();
   void dir_up();
-  void cb_fman_currentChanged (const QModelIndex &current, const QModelIndex &previous);
+  void fman_currentChanged (const QModelIndex &current, const QModelIndex &previous);
   void header_view_sortIndicatorChanged (int logicalIndex, Qt::SortOrder order);
   
 signals:

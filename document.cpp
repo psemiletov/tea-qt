@@ -42,7 +42,6 @@ code from qwriter:
 #include <algorithm>
 
 #include <QTextCodec>
-
 #include <QApplication>
 #include <QClipboard>
 #include <QSettings>
@@ -54,7 +53,6 @@ code from qwriter:
 #include <QXmlStreamReader>
 #include <QMimeData>
 #include <QTimer>
-
 
 #include "document.h"
 #include "utils.h"
@@ -77,7 +75,6 @@ QMenu *menu_current_files;
 int recent_list_max_items;
 bool b_recent_off;
 bool b_destroying_all;
-
 
 
 QStringList text_get_bookmarks (const QString &s, const QString &sstart, const QString &send)
@@ -131,22 +128,9 @@ QTextCharFormat tformat_from_style (const QString &fontstyle, const QString &col
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 CSyntaxHighlighter::CSyntaxHighlighter (QTextDocument *parent, CDocument *doc, const QString &fname): QSyntaxHighlighter (parent)
 {
   document = doc;
-  xml_format = 0;
   casecare = true;
 }
 
@@ -163,8 +147,6 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
   exts = "default";
   langs = "default";
   cs = Qt::CaseSensitive;
@@ -175,6 +157,8 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
   QString temp = qstring_load (fname);
   if (temp.isEmpty())
      return;
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
 
   QXmlStreamReader xml (temp);
 
@@ -213,26 +197,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                     if (xml_format == 0)
-                        {
-                         QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
-
-                         for (int i = 0; i < keywordPatterns.size(); i++)
-                             if (! keywordPatterns.at(i).isEmpty())
-                                {
-                                 QRegExp rg = QRegExp (keywordPatterns.at(i).trimmed(), cs, QRegExp::RegExp);
-                                 if (rg.isValid())
-                                    {
-                                     HighlightingRule rule;
-                                     rule.pattern = rg;
-                                     rule.format = fmt;
-                                     highlightingRules.push_back (rule);
-                                    }
-                                }
-                          }
-                     else
-                         if (xml_format == 1)
-                            {
                              QRegExp rg = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
 
                              if (! rg.isValid())
@@ -244,7 +208,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                                   rule.format = fmt;
                                   highlightingRules.push_back (rule);
                                  }
-                            }
 
                      } //keywords
                  else
@@ -344,7 +307,6 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 #endif
 
 
-
 #if QT_VERSION >= 0x050000
 
 CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
@@ -361,14 +323,14 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
   exts = "default";
   langs = "default";
 
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
   if (! file_exists (fname))
      return;
 
   QString temp = qstring_load (fname);
   if (temp.isEmpty())
      return;
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
 
   QXmlStreamReader xml (temp);
 
@@ -380,13 +342,11 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
          if (xml.isStartElement())
             {
-
              if (tag_name == "document")
                 {
                  exts = xml.attributes().value ("exts").toString();
                  langs = xml.attributes().value ("langs").toString();
                 }
-
 
              if (tag_name == "item")
                 {
@@ -395,9 +355,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
                  if (attr_name == "options")
                     {
-                     QString s_xml_format = xml.attributes().value ("xml_format").toString();
-                     if (! s_xml_format.isEmpty())
-                        xml_format = s_xml_format.toInt();
 
                      QString s_casecare = xml.attributes().value ("casecare").toString();
                      if (! s_casecare.isEmpty())
@@ -406,38 +363,13 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
                      if (! casecare)
                         pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;
-                     }
+                    }
 
                  if (attr_type == "keywords")
                     {
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
-
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                     if (xml_format == 0) //old and ugly format
-                        {
-                         QStringList keywordPatterns = xml.readElementText().trimmed().split(";");
-
-                         for (int i = 0; i < keywordPatterns.size(); i++)
-                              if (! keywordPatterns.at(i).isEmpty())
-                                 {
-                                  QRegularExpression rg = QRegularExpression (keywordPatterns.at(i).trimmed(), pattern_opts);
-
-                                  if (! rg.isValid())
-                                     qDebug() << "! valid " << rg.pattern();
-                                  else
-                                      {
-                                       HighlightingRule rule;
-                                       rule.pattern = rg;
-                                       rule.format = fmt;
-                                       highlightingRules.push_back (rule);
-                                      }
-                                  }
-                         }
-                      else //current, good format
-                      if (xml_format == 1)
-                         {
-                          HighlightingRule rule;
                           QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
 
                           if (! rg.isValid())
@@ -449,7 +381,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                                rule.format = fmt;
                                highlightingRules.push_back (rule);
                               }
-                         }
 
                      } //keywords
                  else
@@ -493,9 +424,9 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                             else
                             if (xml.attributes().value ("name").toString() == "cm_single")
                                cm_single = xml.readElementText().trimmed();
-                          }
+                           }
 
-                     }//item
+                   }//item
 
        }//end of "is start"
 
@@ -1933,7 +1864,7 @@ CDox::CDox()
   markup_modes.insert ("md", "Markdown");
   markup_modes.insert ("markdown", "Markdown");
 
-  recent_menu = 0;
+  menu_recent = 0;
   main_tab_widget = 0;
   tab_widget = 0;
   parent_wnd = 0;
@@ -2023,8 +1954,8 @@ void CDox::add_to_recent (CDocument *d)
 
 void CDox::update_recent_menu()
 {
-  recent_menu->clear();
-  create_menu_from_list (this, recent_menu, recent_files, SLOT(open_recent()));
+  menu_recent->clear();
+  create_menu_from_list (this, menu_recent, recent_files, SLOT(open_recent()));
 }
 
 

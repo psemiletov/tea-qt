@@ -72,7 +72,6 @@ public:
 
   CDocument *document;
   bool casecare;
-  int xml_format;
 
   QString exts;
   QString langs;
@@ -154,7 +153,7 @@ class CDocument: public QPlainTextEdit
 
 private:
 
-  QWidget *line_num_area;
+  CLineNumberArea *line_num_area;
   QList <QTextEdit::ExtraSelection> extra_selections;
   QTextEdit::ExtraSelection brace_selection;
 
@@ -305,7 +304,7 @@ public:
   QMainWindow *parent_wnd;
   QTabWidget *tab_widget;
   QTabWidget *main_tab_widget;
-  QMenu *recent_menu;
+  QMenu *menu_recent;
   QTimer *timer;
 
 #if defined(JOYSTICK_SUPPORTED)
@@ -368,15 +367,15 @@ public:
   CLineNumberArea (CDocument *editor = 0): QWidget (editor), code_editor (editor) {}
 
   QSize sizeHint() const {
-                          return QSize(code_editor->line_number_area_width(), 0);
+                          return QSize (code_editor->line_number_area_width(), 0);
                          }
 
 protected:
 
   void paintEvent (QPaintEvent *event)
-       {
-        code_editor->lineNumberAreaPaintEvent (event);
-       }
+      {
+       code_editor->lineNumberAreaPaintEvent (event);
+      }
 
 };
 

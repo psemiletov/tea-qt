@@ -756,7 +756,7 @@ CTEA::CTEA()
   documents->tab_widget = tab_editor;
   documents->main_tab_widget = main_tab_widget;
 
-  documents->recent_menu = menu_file_recent;
+  documents->menu_recent = menu_file_recent;
   documents->recent_list_fname = dir_config + "/tea_recent";
   documents->reload_recent_list();
   documents->update_recent_menu();

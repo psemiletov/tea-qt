@@ -90,7 +90,7 @@ void CFMan::nav (const QString &path)
   QFileInfoList lst = dir.entryInfoList (QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot|
                                          QDir::Files | QDir::Drives,
                                          sort_flags);
-/*
+
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
   if (path != "/")
      append_dot_entry ("..");
@@ -98,10 +98,6 @@ void CFMan::nav (const QString &path)
   if (path.size() != 2)
      append_dot_entry ("..");
 #endif
-*/
-
-  if (path != "/")
-     append_dot_entry ("..");
 
   for (int i = 0; i < lst.size(); i++)
        add_entry (lst.at(i));

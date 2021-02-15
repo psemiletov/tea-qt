@@ -1133,7 +1133,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 #endif
 }
 */
-
+/*
 void CDocument::set_hl (bool mode_auto, const QString &theext)
 {
   if (highlighter)
@@ -1186,6 +1186,69 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 #endif
 
 
+  if (fname.isEmpty() || ! file_exists (fname))
+     return;
+
+#if QT_VERSION >= 0x050000
+
+   highlighter = new CSyntaxHighlighterQRegularExpression (document(), this, fname);
+
+#else
+
+  highlighter = new CSyntaxHighlighterQRegExp (document(), this, fname);
+
+#endif
+}
+*/
+
+
+void CDocument::set_hl (bool mode_auto, const QString &theext)
+{
+  if (highlighter)
+     delete highlighter;
+
+  highlighter = 0;
+
+  if (! settings->value ("hl_enabled", 1).toBool())
+      return;
+
+  QString ext;
+
+  if (mode_auto)
+     ext = file_get_ext (file_name);
+  else
+      ext = theext;
+
+  if (ext.isEmpty())
+     return;
+
+   QString fname;
+
+#if QT_VERSION >= 0x050000
+
+   for (std::vector<std::pair<QRegularExpression, QString>>::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
+       {
+        if (p->first.isValid())
+           if (p->first.match(file_name).hasMatch())
+              {
+               fname = p->second;
+               break;
+              }
+      }
+
+#else
+   for (std::vector<std::pair<QRegExp, QString>>::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
+       {
+        if (p->first.isValid())
+           if (p->first.exactMatch(file_name))
+              {
+               fname = p->second;
+               break;
+              }
+      }
+
+
+#endif
 
 
   if (fname.isEmpty() || ! file_exists (fname))
@@ -1201,6 +1264,8 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #endif
 }
+
+
 
 void CDocument::set_markup_mode()
 {

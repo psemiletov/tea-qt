@@ -4894,9 +4894,13 @@ void CTEA::update_hls_noncached()
 
 #if QT_VERSION >= 0x050000
            documents->highlighters.insert (QRegularExpression (rgxp, QRegularExpression::CaseInsensitiveOption), fname);
+           documents->hl_files.push_back(std::make_pair(QRegularExpression (rgxp, QRegularExpression::CaseInsensitiveOption), fname));
 
 #else
 //           documents->highlighters.insert (QRegExp (rgxp, Qt::CaseInsensitive), fname);
+
+           documents->hl_files.push_back(std::make_pair(QRegExp (rgxp, Qt::CaseInsensitive), fname));
+
 #endif
 
           }

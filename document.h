@@ -37,6 +37,7 @@ code from qwriter:
 #define DOCUMENT_H
 
 #include <vector>
+#include <utility>
 
 #include <QPoint>
 #include <QStatusBar>
@@ -289,16 +290,19 @@ public:
 //regexp pattern and file name of syntax hl rules
 #if QT_VERSION >= 0x050000
   QHash <QRegularExpression, QString> highlighters;
+  std::vector<std::pair<QRegularExpression, QString>> hl_files;
+
 #else
   QHash <QRegExp, QString> highlighters;
+  std::vector<std::pair<QRegExp, QString>> hl_files;
+
 #endif
+
 
 
   QHash <QString, QString> markup_modes;
   QHash <QString, QString> hash_project;
   std::vector <CDocument*> items;
-
-
 
 
   CTioHandler tio_handler;

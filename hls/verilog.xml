@@ -1,4 +1,4 @@
-<document exts="v" lngs="verilog">
+<document exts="v" lngs="verilog" pattern="^.*\.(v)$">
 
 <item name="options" wrap="0" xml_format="1"></item>
 

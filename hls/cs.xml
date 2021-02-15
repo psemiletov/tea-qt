@@ -1,4 +1,4 @@
-<document exts="cs" langs="C#">
+<document exts="cs" langs="C#" pattern="^.*\.(cs)$">
 
 <item name="options" wrap="0" xml_format="1"></item>
 

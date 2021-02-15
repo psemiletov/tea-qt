@@ -1038,6 +1038,8 @@ Fn menu callbacks
   void fn_text_remove_formatting_at_each_line();
   void fn_text_remove_trailing_spaces();
   void fn_text_anagram();
+  void fn_text_regexp_match_check();
+
 
   void fn_quotes_to_angle();
   void fn_quotes_curly();
@@ -1192,16 +1194,8 @@ View menu callbacks
   void clipboard_dataChanged();
 
 
-
-
-
-
   void calendar_clicked (const QDate &date);
   void calendar_activated (const QDate &date);
-
-
-
-
 
 
 

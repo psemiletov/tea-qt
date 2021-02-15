@@ -1,4 +1,4 @@
-<document exts="htm;html;xml;xhtml;ts;osm;xsl" langs="HTML;XHTML;XML">
+<document exts="htm;html;xml;xhtml;ts;osm;xsl" langs="HTML;XHTML;XML" pattern="^.*\.(htm|html|xml|xhtml|ts|osm|xsl)$">
 
 <item name="options" wrap="1" xml_format="1"></item>
 

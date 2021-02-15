@@ -1,4 +1,4 @@
-<document exts="py" langs="Python">
+<document exts="py" langs="Python" pattern="^.*\.(py)$">
 
 <item name="options" wrap="0" xml_format="1"> 
 </item>

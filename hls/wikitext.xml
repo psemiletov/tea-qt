@@ -1,4 +1,4 @@
-<document exts="wiki" langs="Wikitext">
+<document exts="wiki" langs="Wikitext" pattern="^.*\.(wiki)$">
 
 <item name="options" wrap="1" xml_format="1"></item>
 

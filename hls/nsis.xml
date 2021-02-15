@@ -1,4 +1,4 @@
-<document exts="nsi" langs="NSIS">
+<document exts="nsi" langs="NSIS" pattern="^.*\.(nsi)$">
 
 <item name="options" casecare="0" wrap="0" xml_format="1"> 
 </item>

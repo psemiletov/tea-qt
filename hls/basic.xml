@@ -1,4 +1,4 @@
-<document exts="bas;bi;vbs;vbe" langs="BASIC">
+<document exts="bas;bi;vbs;vbe" langs="BASIC" pattern="^.*\.(bas|bi|vbs|vbe)$">
 
 <item name="options" casecare="0" wrap="0" xml_format="1"></item>
 

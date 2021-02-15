@@ -1,4 +1,4 @@
-<document exts="f;for;f90;f95" langs="Fortran">
+<document exts="f;for;f90;f95" langs="Fortran" pattern="^.*\.(f|for|f90|f95)$">
 
 <item name="options" casecare="0" xml_format="1"> 
 </item>

@@ -1,4 +1,4 @@
-<document exts="ly" langs="LilyPond">
+<document exts="ly" langs="LilyPond"  pattern="^.*\.(ly)$">
 
 <item name="options" wrap="0" xml_format="1"></item>
 

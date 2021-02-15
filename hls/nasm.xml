@@ -1,4 +1,4 @@
-<document exts="asm" langs="NASM" info="http://www.nasm.us/doc/">
+<document exts="asm" langs="NASM" info="http://www.nasm.us/doc/" pattern="^.*\.(asm)$">
 
 <item name="options" wrap="0" xml_format="1"> 
 </item>

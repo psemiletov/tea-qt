@@ -1,4 +1,4 @@
-<document exts="lout" langs="Lout">
+<document exts="lout" langs="Lout" pattern="^.*\.(lout)$">
 
 <item name="options" wrap="1" xml_format="1"></item>
 

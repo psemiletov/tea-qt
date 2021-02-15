@@ -1097,7 +1097,7 @@ void CDocument::set_tab_caption (const QString &fileName)
   holder->tab_widget->setTabText (get_tab_idx(), fileName);
 }
 
-
+/*
 void CDocument::set_hl (bool mode_auto, const QString &theext)
 {
   if (highlighter)
@@ -1132,7 +1132,75 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #endif
 }
+*/
 
+void CDocument::set_hl (bool mode_auto, const QString &theext)
+{
+  if (highlighter)
+     delete highlighter;
+
+  highlighter = 0;
+
+  if (! settings->value ("hl_enabled", 1).toBool())
+      return;
+
+  QString ext;
+
+  if (mode_auto)
+     ext = file_get_ext (file_name);
+  else
+      ext = theext;
+
+  if (ext.isEmpty())
+     return;
+
+   QString fname;
+
+#if QT_VERSION >= 0x050000
+
+  QHashIterator<QRegularExpression, QString> i(holder->highlighters);
+  while (i.hasNext())
+        {
+         i.next();
+
+         qDebug() << i.key() << ": " << i.value();
+         //if (i.key().isValid())
+           // qDebug() << "VALID";
+
+         if (i.key().isValid())
+         if (i.key().match(file_name).hasMatch())
+            {
+             fname = i.value();
+             qDebug() << "HL: " << fname;
+             break;
+            }
+          //cout << i.key() << ": " << i.value() << Qt::endl;
+  }
+
+  //QString fname = holder->hls.value (ext);
+
+//           documents->highlighters.insert (QRegularExpression (rgxp), fname);
+
+#else
+           documents->highlighters.insert (QRegExp (rgxp), fname);
+#endif
+
+
+
+
+  if (fname.isEmpty() || ! file_exists (fname))
+     return;
+
+#if QT_VERSION >= 0x050000
+
+   highlighter = new CSyntaxHighlighterQRegularExpression (document(), this, fname);
+
+#else
+
+  highlighter = new CSyntaxHighlighterQRegExp (document(), this, fname);
+
+#endif
+}
 
 void CDocument::set_markup_mode()
 {

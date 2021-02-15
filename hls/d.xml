@@ -1,4 +1,4 @@
-<document exts="d" langs="D">
+<document exts="d" langs="D" pattern="^.*\.(d)$">
 
 <item name="options" wrap="0" xml_format="1"></item>
 

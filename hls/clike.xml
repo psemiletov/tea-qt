@@ -1,4 +1,4 @@
-<document exts="cpp;c;h;hh;cxx;hpp;cc;m;mm" langs="c++;c;objective c">
+<document exts="cpp;c;h;hh;cxx;hpp;cc;m;mm" langs="c++;c;objective c" pattern="^.*\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$">
 
 <item name="options" xml_format="1"> 
 </item>

@@ -1,4 +1,4 @@
-<document exts="pp;pas;dpr" langs="Pascal">
+<document exts="pp;pas;dpr" langs="Pascal" pattern="^.*\.(pp|pas|dpr)$">
 
 <item name="options" casecare="0" xml_format="1"> 
 </item>

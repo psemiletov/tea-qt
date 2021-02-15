@@ -1337,6 +1337,7 @@ Fn menu
   add_to_menu (tm, tr ("Escape regexp"), SLOT(fn_text_escape()));
   add_to_menu (tm, tr ("Reverse"), SLOT(fn_text_reverse()));
   add_to_menu (tm, tr ("Compare two strings"), SLOT(fn_text_compare_two_strings()));
+  add_to_menu (tm, tr ("Check regexp match"), SLOT(fn_text_regexp_match_check()));
 
 
   tm = menu_functions->addMenu (tr ("Quotes"));
@@ -4886,6 +4887,19 @@ void CTEA::update_hls_noncached()
 
        QString buffer = qstring_load_first_line (fname);
        QString exts = string_between (buffer, "exts=\"", "\"");
+       QString rgxp = string_between (buffer, "pattern=\"", "\"");
+
+       if (! rgxp.isEmpty())
+          {
+
+#if QT_VERSION >= 0x050000
+           documents->highlighters.insert (QRegularExpression (rgxp, QRegularExpression::CaseInsensitiveOption), fname);
+
+#else
+           documents->highlighters.insert (QRegExp (rgxp, Qt::CaseInsensitive), fname);
+#endif
+
+          }
 
        if (! exts.isEmpty())
           {
@@ -9106,6 +9120,41 @@ void CTEA::fn_text_anagram()
   d = documents->create_new();
   if (d)
      d->put (txt);
+
+}
+
+
+void CTEA::fn_text_regexp_match_check()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QString t = d->get();
+  if (t.isEmpty())
+     return;
+
+  QString fiftxt = fif_get_text();
+
+#if QT_VERSION >= 0x050000
+ QRegularExpression r (fiftxt/*,  QRegularExpression::CaseInsensitiveOption*/);
+ QRegularExpressionMatch match = r.match(t);
+ if (match.hasMatch())
+    log->log (tr ("matched"));
+ else
+   log->log (tr ("does not"));
+
+#else
+  QRegExp r (fiftxt);
+  if (r.exactMatch)
+    log->log (tr ("matched"));
+  else
+   log->log (tr ("does not"));
+
+#endif
+
 
 }
 

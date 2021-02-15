@@ -1,4 +1,4 @@
-<document exts="po" langs="gettext">
+<document exts="po" langs="gettext" pattern="^.*\.(po)$">
 
 <item name="options" wrap="1" xml_format="1"> 
 </item>

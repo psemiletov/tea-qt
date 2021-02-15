@@ -1,6 +1,6 @@
-<document exts="awk" langs="awk">
+<document exts="awk" langs="awk" pattern="^.*\.(awk)$">
 
-<item name="options" wrap="0" xml_format="1"> 
+<item name="options" wrap="0" xml_format="1">
 </item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(BEGIN|END|if|for|function|in|else|while|do|break|continue|exit)\b</item>

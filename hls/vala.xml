@@ -1,4 +1,4 @@
-<document exts="vala" langs="Vala">
+<document exts="vala" langs="Vala" pattern="^.*\.(vala)$">
 
 <item name="options" wrap="0" xml_format="1"> 
 </item>

@@ -284,9 +284,22 @@ public:
 
   QStringList recent_files;
   QMultiHash <QString, QString> hls;
+
+
+//regexp pattern and file name of syntax hl rules
+#if QT_VERSION >= 0x050000
+  QHash <QRegularExpression, QString> highlighters;
+#else
+  QHash <QRegExp, QString> highlighters;
+#endif
+
+
   QHash <QString, QString> markup_modes;
   QHash <QString, QString> hash_project;
   std::vector <CDocument*> items;
+
+
+
 
   CTioHandler tio_handler;
   CTodo todo;

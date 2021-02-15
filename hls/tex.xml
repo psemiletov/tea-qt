@@ -1,4 +1,4 @@
-<document exts="tex;lyx" langs="TeX;LaTeX">
+<document exts="tex;lyx" langs="TeX;LaTeX" pattern="^.*\.(tex|lyx)$">
 
 <item name="options" wrap="1" xml_format="1"></item>
 

@@ -1,4 +1,4 @@
-<document exts="php" langs="PHP">
+<document exts="php" langs="PHP" pattern="^.*\.(php)$">
 
 <item name="options" wrap="0" xml_format="1"> 
 </item>

@@ -1,4 +1,4 @@
-<document exts="lua" langs="lua">
+<document exts="lua" langs="lua" pattern="^.*\.(lua)$">
 
 <item name="options" wrap="0" xml_format="1"> 
 </item>

@@ -1,4 +1,4 @@
-<document exts="sd7" langs="Seed7">
+<document exts="sd7" langs="Seed7" pattern="^.*\.(sd7)$">
 
 <item name="options" wrap="0" xml_format="1"> 
 </item>

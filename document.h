@@ -86,7 +86,7 @@ public:
 
 
 #if QT_VERSION < 0x050000
-class CSyntaxHighlighterQRegExp: public CSyntaxHightlighter
+class CSyntaxHighlighterQRegExp: public CSyntaxHighlighter
 {
   Q_OBJECT
 

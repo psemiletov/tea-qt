@@ -4896,7 +4896,7 @@ void CTEA::update_hls_noncached()
            documents->highlighters.insert (QRegularExpression (rgxp, QRegularExpression::CaseInsensitiveOption), fname);
 
 #else
-           documents->highlighters.insert (QRegExp (rgxp, Qt::CaseInsensitive), fname);
+//           documents->highlighters.insert (QRegExp (rgxp, Qt::CaseInsensitive), fname);
 #endif
 
           }
@@ -9148,7 +9148,7 @@ void CTEA::fn_text_regexp_match_check()
 
 #else
   QRegExp r (fiftxt);
-  if (r.exactMatch)
+  if (r.exactMatch(t))
     log->log (tr ("matched"));
   else
    log->log (tr ("does not"));

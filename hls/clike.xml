@@ -5,8 +5,7 @@
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(asm|asm|auto|break|case|catch|catch|class|const|const_cast|const_cast|continue|default|delete|do|dynamic_cast|dynamic_cast|else|enum|explicit|export|extern|false|for|foreach|friend|goto|if|inline|mutable|namespace|namespace|new|noexcept|operator|private|protected|public|register|reinterpret_cast|reinterpret_cast|return|signals|sizeof|slots|static|static_cast|static_cast|struct|switch|template|this|throw|throw|true|try|typedef|typeid|typename|union|using|virtual|volatile|while)\b</item>
 
-<item name="types" type="keywords" color="type">\b(bool|char|double|float|int|long|
-short|signed|size_t|unsigned|uint|void|wchar_t)\b</item>
+<item name="types" type="keywords" color="type">\b(bool|char|double|float|int|long|short|signed|size_t|unsigned|uint|void|wchar_t)\b</item>
 
 <item name="class" type="item" color="class">\bQ[A-Za-z0-9_]+\b</item>
 

@@ -453,7 +453,11 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                     QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed().remove('\n'), pattern_opts);
+                     QString element = xml.readElementText().trimmed().remove('\n');
+                     if (element.isEmpty())
+                        continue;
+
+                     QRegularExpression rg = QRegularExpression (element, pattern_opts);
 
                      if (! rg.isValid())
                         qDebug() << "! valid " << rg.pattern();
@@ -474,7 +478,11 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
                        // qDebug() << "attr_type == item, attr_name == " << attr_name;
 
-                     QRegularExpression rg = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
+                     QString element = xml.readElementText().trimmed().remove('\n');
+                     if (element.isEmpty())
+                        continue;
+
+                     QRegularExpression rg = QRegularExpression (element, pattern_opts);
                      if (! rg.isValid())
                         qDebug() << "! valid " << rg.pattern();
                      else
@@ -491,12 +499,31 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                       QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
                       QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
 
-                       multiLineCommentFormat = fmt;
-                       commentStartExpression = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
-                      }
+                      multiLineCommentFormat = fmt;
+
+                      QString element = xml.readElementText().trimmed().remove('\n');
+                      if (element.isEmpty())
+                         continue;
+
+                      QRegularExpression rg = QRegularExpression (element, pattern_opts);
+                      if (! rg.isValid())
+                         qDebug() << "! valid " << rg.pattern();
+                      else
+                          commentStartExpression = rg;
+                     }
                   else
                   if (attr_type == "mcomment-end")
-                          commentEndExpression = QRegularExpression (xml.readElementText().trimmed(), pattern_opts);
+                     {
+                      QString element = xml.readElementText().trimmed().remove('\n');
+                      if (element.isEmpty())
+                         continue;
+
+                      QRegularExpression rg = QRegularExpression (element, pattern_opts);
+                      if (! rg.isValid())
+                         qDebug() << "! valid " << rg.pattern();
+                      else
+                          commentEndExpression = rg;
+                     }
                   else
                   if (attr_type == "comment")
                      {
@@ -526,8 +553,8 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
       {
        QRegularExpressionMatch m = it->pattern.match (text);
-       if (! m.isValid())
-           continue;
+       //if (! m.isValid())
+          // continue;
 
        int index = m.capturedStart();
 
@@ -536,8 +563,8 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
               int length = m.capturedLength();
               setFormat (index, length, it->format);
               m = it->pattern.match (text, index + length);
-              if (! m.isValid())
-                  break;
+            // if (! m.isValid())
+              //    break;
 
               index = m.capturedStart();
              }
@@ -944,20 +971,14 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
   set_tab_caption (QFileInfo (file_name).fileName());
   set_hl();
 
-  qDebug() << "ZZZ1111";
-  
+
   set_markup_mode();
-  
-  qDebug() << "ZZZ2222";
-  
   
   document()->setModified (false);
 
   holder->log->log (tr ("%1 is open").arg (file_name));
 
-    qDebug() << "ZZZ333";
 
-  
   QMutableListIterator <QString> i (holder->recent_files);
 
   while (i.hasNext())
@@ -967,9 +988,6 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
              if (lt.at(0) == file_name)
                 i.remove();
         }
-
-          qDebug() << "ZZZ4444";
-
         
   return true;
 }
@@ -1449,7 +1467,6 @@ void CDocument::set_show_linenums (bool enable)
 {
   draw_linenums = enable;
   updateLineNumberAreaWidth();
-//  repaint();
   update();
 }
 
@@ -1457,7 +1474,6 @@ void CDocument::set_show_linenums (bool enable)
 void CDocument::set_show_margin (bool enable)
 {
   draw_margin = enable;
-//  repaint();
   update();
 }
 
@@ -1467,7 +1483,6 @@ void CDocument::set_margin_pos (int mp)
 {
   margin_pos = mp;
   margin_x = brace_width * margin_pos;
-  //repaint();
   update();
 }
 
@@ -1475,7 +1490,6 @@ void CDocument::set_margin_pos (int mp)
 void CDocument::set_hl_cur_line (bool enable)
 {
   highlight_current_line = enable;
-//  repaint();
   update();
 }
 
@@ -1484,7 +1498,6 @@ void CDocument::set_hl_cur_line (bool enable)
 void CDocument::set_hl_brackets (bool enable)
 {
   hl_brackets = enable;
-//  repaint();
   update();
 }
 
@@ -2263,9 +2276,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 
   CDocument *doc = create_new();
   doc->file_open (fileName, codec);
-  
-  qDebug() << "XXXXXXXXXXXXXX111111111111111";
-  
+    
   doc->update_status();
   doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
@@ -2273,9 +2284,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 
   update_current_files_menu();
 
-  qDebug() << "XXXXXXXXXXXXXX22222";
-  
-  
+
   return doc;
 }
 

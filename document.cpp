@@ -147,6 +147,8 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
+qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";  
+  
   exts = "default";
   langs = "default";
   cs = Qt::CaseSensitive;
@@ -197,14 +199,18 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
-                     QRegExp rg = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
+		     QString element = xml.readElementText().trimmed().remove('\n');
+		     if (element.isEmpty())
+		         continue;
+		     
+                     QRegExp rg (element, cs);
 
                      if (! rg.isValid())
                          qDebug() << "! valid " << rg.pattern();
                      else
                          {
                           HighlightingRule rule;
-                          rule.pattern = QRegExp (xml.readElementText().trimmed().remove('\n'), cs);
+                          rule.pattern = rg;
                           rule.format = fmt;
                           highlightingRules.push_back (rule);
                          }
@@ -215,8 +221,11 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                     {
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                     QRegExp rg = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
+                     QString element = xml.readElementText().trimmed().remove('\n');
+		     if (element.isEmpty())
+		         continue;
+		     
+		     QRegExp rg (element, cs);
                      if (rg.isValid())
                         {
                          HighlightingRule rule;
@@ -232,21 +241,29 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
 
                      multiLineCommentFormat = fmt;
-                     commentStartExpression = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
+                     QString element = xml.readElementText().trimmed().remove('\n');
+                     if (! element.isEmpty())        
+                        commentStartExpression = QRegExp (element, cs, QRegExp::RegExp);
                     }
                  else
                  if (attr_type == "mcomment-end")
                     {
-                     commentEndExpression = QRegExp (xml.readElementText().trimmed(), cs, QRegExp::RegExp);
+                     QString element = xml.readElementText().trimmed().remove('\n');
+                     if (! element.isEmpty())        
+                        commentEndExpression = QRegExp (element, cs, QRegExp::RegExp);
                     }
                  else
                  if (attr_type == "comment")
                     {
+                     QString element = xml.readElementText().trimmed().remove('\n');
+                     if (element.isEmpty())
+		        continue;
+		     
                      if (xml.attributes().value ("name").toString() == "cm_mult")
-                         cm_mult = xml.readElementText().trimmed();
+                         cm_mult = element;
                      else
                          if (xml.attributes().value ("name").toString() == "cm_single")
-                            cm_single = xml.readElementText().trimmed();
+                            cm_single = element;
                     }
                 }//item
 
@@ -256,11 +273,73 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
      qDebug() << "xml parse error";
 
   } //cycle
+  
+  
+qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 2";  
+  
 }
 
 
 void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 {
+  qDebug() << "highlightingRules.size() = " << highlightingRules.size();
+  
+  if (highlightingRules.size() == 0)
+     return;
+
+  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
+      {
+	qDebug() << it->pattern.pattern();
+              
+	
+       int index = text.indexOf (it->pattern);
+
+       
+       while (index >= 0)
+             {
+              int length = it->pattern.matchedLength();
+	      //qDebug() << it->pattern.pattern();
+              setFormat (index, length, it->format);
+              index = text.indexOf (it->pattern, index + length);
+             }
+       }
+
+       
+  setCurrentBlockState (0);
+
+  int startIndex = 0;
+
+  if (commentStartExpression.isEmpty() || commentEndExpression.isEmpty())
+     return;
+
+  if (previousBlockState() != 1)
+     startIndex = text.indexOf (commentStartExpression);
+
+  while (startIndex >= 0)
+        {
+         int endIndex = commentEndExpression.indexIn (text, startIndex);
+
+         int commentLength;
+
+         if (endIndex == -1)
+            {
+             setCurrentBlockState (1);
+             commentLength = text.length() - startIndex;
+            }
+         else
+             commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
+
+         setFormat (startIndex, commentLength, multiLineCommentFormat);
+         startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
+        }
+        
+}
+/*
+
+void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
+{
+qDebug() << "CSyntaxHighlighterQRegExp::highlightBlock - 1";
+  
   if (highlightingRules.size() == 0)
      return;
 
@@ -303,7 +382,12 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
          setFormat (startIndex, commentLength, multiLineCommentFormat);
          startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
         }
+        
+qDebug() << "CSyntaxHighlighterQRegExp::highlightBlock - 2";
+       
+        
 }
+*/
 #endif
 
 
@@ -860,11 +944,20 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
   set_tab_caption (QFileInfo (file_name).fileName());
   set_hl();
 
+  qDebug() << "ZZZ1111";
+  
   set_markup_mode();
+  
+  qDebug() << "ZZZ2222";
+  
+  
   document()->setModified (false);
 
   holder->log->log (tr ("%1 is open").arg (file_name));
 
+    qDebug() << "ZZZ333";
+
+  
   QMutableListIterator <QString> i (holder->recent_files);
 
   while (i.hasNext())
@@ -875,6 +968,9 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
                 i.remove();
         }
 
+          qDebug() << "ZZZ4444";
+
+        
   return true;
 }
 
@@ -1208,6 +1304,8 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 void CDocument::set_hl (bool mode_auto, const QString &theext)
 {
+  qDebug() << "1";
+  
   if (highlighter)
      delete highlighter;
 
@@ -1245,11 +1343,11 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
        {
 //       qDebug() << p->first.pattern();
         if (p->first.isValid())
-          // if (p->first.exactMatch(file_name))
-          if (p->first.indexIn(p->second) != -1 )
+           if (p->first.exactMatch(file_name))
+          //if (p->first.indexIn(p->second) != -1 )
               {
-              qDebug() << p->first.pattern() << " IS valid";
-               fname = p->second;
+              qDebug() << p->first.pattern() << " IS valid with " << p->second;
+              fname = p->second;
                break;
               }
       }
@@ -1257,6 +1355,8 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #endif
 
+qDebug() << "2";
+  
 
   if (fname.isEmpty() || ! file_exists (fname))
      return;
@@ -1270,6 +1370,10 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
   highlighter = new CSyntaxHighlighterQRegExp (document(), this, fname);
 
 #endif
+  
+  qDebug() << "3";
+  
+  
 }
 
 
@@ -2159,6 +2263,9 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 
   CDocument *doc = create_new();
   doc->file_open (fileName, codec);
+  
+  qDebug() << "XXXXXXXXXXXXXX111111111111111";
+  
   doc->update_status();
   doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
@@ -2166,6 +2273,9 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 
   update_current_files_menu();
 
+  qDebug() << "XXXXXXXXXXXXXX22222";
+  
+  
   return doc;
 }
 

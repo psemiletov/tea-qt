@@ -290,11 +290,11 @@ public:
 //regexp pattern and file name of syntax hl rules
 #if QT_VERSION >= 0x050000
   QHash <QRegularExpression, QString> highlighters;
-  std::vector<std::pair<QRegularExpression, QString>> hl_files;
+  std::vector<std::pair<QRegularExpression, QString> > hl_files;
 
 #else
   QHash <QRegExp, QString> highlighters;
-  std::vector<std::pair<QRegExp, QString>> hl_files;
+  std::vector<std::pair<QRegExp, QString> > hl_files;
 
 #endif
 

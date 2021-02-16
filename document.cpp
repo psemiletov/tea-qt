@@ -691,15 +691,19 @@ void CDocument::wheelEvent (QWheelEvent *e)
      {
 #if QT_VERSION < 0x050000
       const int delta = e->delta();
+
+     //no zoom at qt 4.x
+      
 #else
       const int delta = e->angleDelta().y();
-#endif
-
-      if (delta < 0)
+      
+    if (delta < 0)
          zoomOut();
       else
       if (delta > 0)
          zoomIn();
+     
+#endif
 
       return;
      }
@@ -1226,7 +1230,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #if QT_VERSION >= 0x050000
 
-   for (std::vector<std::pair<QRegularExpression, QString>>::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
+   for (std::vector<std::pair<QRegularExpression, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
        {
         if (p->first.isValid())
            if (p->first.match(file_name).hasMatch())
@@ -1237,11 +1241,14 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
       }
 
 #else
-   for (std::vector<std::pair<QRegExp, QString>>::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
+   for (std::vector<std::pair<QRegExp, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
        {
+//       qDebug() << p->first.pattern();
         if (p->first.isValid())
-           if (p->first.exactMatch(file_name))
+          // if (p->first.exactMatch(file_name))
+          if (p->first.indexIn(p->second) != -1 )
               {
+              qDebug() << p->first.pattern() << " IS valid";
                fname = p->second;
                break;
               }

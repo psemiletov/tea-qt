@@ -4899,7 +4899,7 @@ void CTEA::update_hls_noncached()
 #else
 //           documents->highlighters.insert (QRegExp (rgxp, Qt::CaseInsensitive), fname);
 
-           documents->hl_files.push_back(std::make_pair(QRegExp (rgxp, Qt::CaseInsensitive), fname));
+           documents->hl_files.push_back(std::make_pair(QRegExp (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2), fname));
 
 #endif
 

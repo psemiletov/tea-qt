@@ -284,16 +284,17 @@ class CDox: public QObject
 public:
 
   QStringList recent_files;
-  QMultiHash <QString, QString> hls;
+
+  //QMultiHash <QString, QString> hls;
 
 
 //regexp pattern and file name of syntax hl rules
 #if QT_VERSION >= 0x050000
-  QHash <QRegularExpression, QString> highlighters;
+  //QHash <QRegularExpression, QString> highlighters;
   std::vector<std::pair<QRegularExpression, QString> > hl_files;
 
 #else
-  QHash <QRegExp, QString> highlighters;
+  //QHash <QRegExp, QString> highlighters;
   std::vector<std::pair<QRegExp, QString> > hl_files;
 
 #endif

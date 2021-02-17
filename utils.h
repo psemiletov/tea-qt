@@ -12,9 +12,12 @@ Peter Semiletov
 #include <QStringList>
 
 
-#if QT_VERSION >= 0x050000
-#include <QMimeDatabase>
+#if QT_VERSION < 0x050000
+#include <QRegExp>
+#else
+#include <QRegularExpression>
 #endif
+
 
 
 class CFilesList: public QObject
@@ -39,7 +42,18 @@ public:
   QMimeDatabase db;
 #endif
 
-  CFTypeChecker (const QStringList &fnames, const QStringList &exts);
+
+
+#if QT_VERSION < 0x050000
+  std::vector <QRegExp> patterns;
+#else
+  std::vector <QRegularExpression> patterns;
+#endif
+
+
+//  CFTypeChecker (const QStringList &fnames, const QStringList &exts);
+  CFTypeChecker();
+
   bool check (const QString &fname) const; 
   QStringList get_supported_exts() const;
 };

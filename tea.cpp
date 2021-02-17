@@ -88,7 +88,6 @@ started at 08 November 2007
 #include "wavinfo.h"
 #include "exif_reader.h"
 
-
 #include "spellchecker.h"
 
 #ifdef USE_QML_STUFF
@@ -777,7 +776,7 @@ CTEA::CTEA()
   documents->todo.load_dayfile();
 
   update_hls_noncached();
-  update_view_hls();
+  //update_view_hls();
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   setup_spellcheckers();
@@ -3855,7 +3854,7 @@ void CTEA::update_dyn_menus()
   update_scripts();
   update_palettes();
   update_themes();
-  update_view_hls();
+  //update_view_hls();
   update_tables();
   update_profiles();
   update_labels_menu();
@@ -4871,7 +4870,7 @@ void CTEA::update_palettes()
 
 void CTEA::update_hls_noncached()
 {
-  documents->hls.clear();
+ // documents->hls.clear();
 
   QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
   l1 << read_dir_entries (dir_hls);  //read custom hls modules
@@ -4893,7 +4892,7 @@ void CTEA::update_hls_noncached()
           {
 
 #if QT_VERSION >= 0x050000
-           documents->highlighters.insert (QRegularExpression (rgxp, QRegularExpression::CaseInsensitiveOption), fname);
+           //documents->highlighters.insert (QRegularExpression (rgxp, QRegularExpression::CaseInsensitiveOption), fname);
            documents->hl_files.push_back(std::make_pair(QRegularExpression (rgxp, QRegularExpression::CaseInsensitiveOption), fname));
 
 #else
@@ -4904,7 +4903,7 @@ void CTEA::update_hls_noncached()
 #endif
 
           }
-
+/*
        if (! exts.isEmpty())
           {
            QStringList l = exts.split (";");
@@ -4914,6 +4913,7 @@ void CTEA::update_hls_noncached()
                 lsupported_exts.append (l[j]);
                }
            }
+        */
       }
 }
 
@@ -6120,7 +6120,7 @@ void CTEA::fman_fname_entry_confirm()
      cb_button_saves_as();
 }
 
-
+/*
 void CTEA::update_view_hls()
 {
   menu_view_hl->clear();
@@ -6133,8 +6133,8 @@ void CTEA::update_view_hls()
                          l,
                          SLOT (view_use_hl()));
 }
-
-
+*/
+/*
 void CTEA::view_use_hl()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -6144,7 +6144,7 @@ void CTEA::view_use_hl()
   if (d)
      d->set_hl (false, a->text());
 }
-
+*/
 
 
 void CTEA::fn_math_number_dec_to_bin()
@@ -6486,15 +6486,17 @@ void CTEA::search_in_files()
 
 //  CFTypeChecker fc (":/text-data/cm-tf-names", ":/text-data/cm-tf-exts");
 
-  CFTypeChecker fc (qstring_load (":/text-data/cm-tf-names").split ("\n"),
-                    documents->tio_handler.get_supported_exts());
 
-  fc.lexts += lsupported_exts;
+ // CFTypeChecker fc (qstring_load (":/text-data/cm-tf-names").split ("\n"),
+   //                 documents->tio_handler.get_supported_exts());
 
- // QStringList l = documents->hls.uniqueKeys();
-  QStringList l = documents->hls.keys();
+  CFTypeChecker fc;
 
-  fc.lexts.append (l);
+//  fc.lexts += lsupported_exts;
+
+  //QStringList l = documents->hls.keys();
+
+  //fc.lexts.append (l);
 
   log->log (tr ("Getting files list..."));
   qApp->processEvents();
@@ -6520,6 +6522,9 @@ void CTEA::search_in_files()
        QString fileName = lf.list[i];
        if (! fc.check (fileName))
           continue;
+
+   //    freeMegaString(mimetype);
+
 
        log->log (fileName);
 

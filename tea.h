@@ -677,7 +677,7 @@ public:
   void update_snippets();
   void update_sessions();
   void update_palettes();
-  void update_view_hls();
+ // void update_view_hls();
 
 #ifdef USE_QML_STUFF
   void update_plugins();
@@ -1162,7 +1162,7 @@ View menu callbacks
 
   void view_use_theme();
   void view_use_palette();
-  void view_use_hl();
+  //void view_use_hl();
   void view_use_profile();
   void view_profile_save_as();
 

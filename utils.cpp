@@ -402,7 +402,7 @@ CFTypeChecker::CFTypeChecker()
 
   //add rc
 
-  patterns.push_back (QRegularExpression ("^README|NEWS|ChangeLog|NEWS$", QRegularExpression::CaseInsensitiveOption));
+  patterns.push_back (QRegularExpression (".*(readme|news|changelog|todo)$", QRegularExpression::CaseInsensitiveOption));
 
   patterns.push_back (QRegularExpression ("^.*\\.(txt|cong|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", QRegularExpression::CaseInsensitiveOption));
@@ -483,7 +483,6 @@ bool CFTypeChecker::check (const QString &fname) const
 
   for(std::size_t i = 0; i < patterns.size(); ++i)
     {
-
       QRegularExpressionMatch match = patterns[i].match(fname);
       if (match.hasMatch())
          return true;
@@ -501,7 +500,7 @@ bool CFTypeChecker::check (const QString &fname) const
 
 }
 
-
+/*
 QStringList CFTypeChecker::get_supported_exts() const
 {
   QStringList l;
@@ -510,3 +509,4 @@ QStringList CFTypeChecker::get_supported_exts() const
   l.append ("txt");
   return l;
 }
+*/

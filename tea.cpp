@@ -6520,8 +6520,18 @@ void CTEA::search_in_files()
        pb_status->setValue (i);
 
        QString fileName = lf.list[i];
+
+      // qDebug() << "check is text: " <<  fileName;
+
        if (! fc.check (fileName))
+         {
+          qDebug() << "NOT TEXT: " <<  fileName;
+
           continue;
+         }
+
+       qDebug() << "OK: " <<  fileName;
+
 
    //    freeMegaString(mimetype);
 

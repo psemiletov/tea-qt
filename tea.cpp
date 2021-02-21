@@ -9892,7 +9892,6 @@ void CTEA::file_recent_off()
 }
 
 
-
 void CTEA::file_close()
 {
   last_action = sender();
@@ -9920,7 +9919,6 @@ void CTEA::ed_copy()
       if (main_tab_widget->currentIndex() == idx_tab_learn)
           man->copy();
 }
-
 
 
 void CTEA::ed_paste()
@@ -9951,13 +9949,7 @@ void CTEA::ed_block_start()
   if (! d)
      return;
 
-  int x = d->textCursor().position() - d->textCursor().block().position();
-  int y = d->textCursor().block().blockNumber();
-
-  d->rect_sel_start.setX (x);
-  d->rect_sel_start.setY (y);
-
-  d->update_ext_selections();
+  d->rect_block_start();
 }
 
 
@@ -9969,13 +9961,7 @@ void CTEA::ed_block_end()
   if (! d)
      return;
 
-  int x = d->textCursor().position() - d->textCursor().block().position();
-  int y = d->textCursor().block().blockNumber();
-
-  d->rect_sel_end.setX (x);
-  d->rect_sel_end.setY (y);
-
-  d->update_ext_selections();
+  d->rect_block_end();
 }
 
 

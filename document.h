@@ -258,6 +258,10 @@ public:
   void brace_highlight();
 
   void update_ext_selections();
+
+  void rect_block_start();
+  void rect_block_end();
+
   Q_INVOKABLE bool has_rect_selection() const;
   Q_INVOKABLE void rect_sel_reset();
   Q_INVOKABLE void rect_sel_replace (const QString &s, bool insert = false);
@@ -285,18 +289,11 @@ public:
 
   QStringList recent_files;
 
-  //QMultiHash <QString, QString> hls;
-
-
 //regexp pattern and file name of syntax hl rules
 #if QT_VERSION >= 0x050000
-  //QHash <QRegularExpression, QString> highlighters;
   std::vector<std::pair<QRegularExpression, QString> > hl_files;
-
 #else
-  //QHash <QRegExp, QString> highlighters;
   std::vector<std::pair<QRegExp, QString> > hl_files;
-
 #endif
 
 

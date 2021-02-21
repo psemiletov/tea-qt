@@ -1587,6 +1587,31 @@ void CDocument::update_ext_selections()
 }
 
 
+void CDocument::rect_block_start()
+{
+  int x = textCursor().position() - textCursor().block().position();
+  int y = textCursor().block().blockNumber();
+
+  rect_sel_start.setX (x);
+  rect_sel_start.setY (y);
+
+  update_ext_selections();
+}
+
+
+void CDocument::rect_block_end()
+{
+  int x = textCursor().position() - textCursor().block().position();
+  int y = textCursor().block().blockNumber();
+
+  rect_sel_end.setX (x);
+  rect_sel_end.setY (y);
+
+  update_ext_selections();
+}
+
+
+
 bool CDocument::has_rect_selection() const
 {
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
@@ -1594,8 +1619,6 @@ bool CDocument::has_rect_selection() const
 
   return true;
 }
-
-
 
 
 void CDocument::rect_sel_reset()

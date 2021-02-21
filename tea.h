@@ -383,7 +383,7 @@ Main menu items
   QMenu *menu_fn_snippets;
   QMenu *menu_fn_tables;
   QMenu *menu_view_palettes;
-  QMenu *menu_view_hl;
+//  QMenu *menu_view_hl;
   QMenu *menu_view_profiles;
 
   QMenu *menu_fn_sessions;

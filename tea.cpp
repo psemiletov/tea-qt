@@ -1524,8 +1524,8 @@ View menu
   menu_view_palettes = menu_view->addMenu (tr ("Palettes"));
   menu_view_palettes->setTearOffEnabled (true);
 
-  menu_view_hl = menu_view->addMenu (tr ("Highlighting mode"));
-  menu_view_hl->setTearOffEnabled (true);
+  //menu_view_hl = menu_view->addMenu (tr ("Highlighting mode"));
+  //menu_view_hl->setTearOffEnabled (true);
 
   menu_view_profiles = menu_view->addMenu (tr ("Profiles"));
   menu_view_profiles->setTearOffEnabled (true);
@@ -4866,14 +4866,14 @@ void CTEA::update_palettes()
                          SLOT (view_use_palette()));
 }
 
-
+/*
 void CTEA::update_hls_noncached()
 {
 
-/*
-HARDCODED PATTERNS are takes from resourse hl files, and escaped
-All regexps there are valid
-*/
+
+//HARDCODED PATTERNS are takes from resourse hl files, and escaped
+//All regexps there are valid
+
 
 #if QT_VERSION >= 0x050000
 
@@ -4939,10 +4939,10 @@ All regexps there are valid
 #endif
 
 
-/*
- USER DEFINED PATTERNS are takes from tea config dir, hl subdir files
- All regexps there must be validated valid
-*/
+
+// USER DEFINED PATTERNS are takes from tea config dir, hl subdir files
+ //All regexps there must be validated valid
+
 
 
  // QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
@@ -4975,7 +4975,123 @@ All regexps there are valid
           }
       }
 }
+*/
 
+void CTEA::update_hls_noncached()
+{
+
+
+//HARDCODED PATTERNS are takes from resourse hl files, and escaped
+//All regexps there are valid
+
+
+#if QT_VERSION >= 0x050000
+
+  QRegularExpression::PatternOptions opt = QRegularExpression::CaseInsensitiveOption;
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(awk)$", opt), ":/hls/awk.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(sh)$", opt), ":/hls/sh.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(bas|bi|vbs|vbe)$", opt), ":/hls/basic.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", opt), ":/hls/clike.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(cs)$", opt), ":/hls/cs.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(d)$", opt), ":/hls/d.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(f|for|f90|f95)$", opt), ":/hls/fortran.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(java|js)$", opt), ":/hls/java.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(ly)$", opt), ":/hls/lilypond.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(lout)$", opt), ":/hls/lout.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(lua)$", opt), ":/hls/lua.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(asm)$", opt), ":/hls/nasm.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(nsi)$", opt), ":/hls/nsis.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(pp|pas|dpr)$", opt), ":/hls/pascal.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(pl|pm)$", opt), ":/hls/perl.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(php)$", opt), ":/hls/php.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(po)$", opt), ":/hls/po.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(py)$", opt), ":/hls/python.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(r)$", opt), ":/hls/r.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(sd7)$", opt), ":/hls/seed7.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(tex|lyx)$", opt), ":/hls/tex.xml"));
+
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(vala)$", opt), ":/hls/vala.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(v)$", opt), ":/hls/verilog.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(wiki)$", opt), ":/hls/wikitext.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", opt), ":/hls/xml.xml"));
+
+#else
+
+
+  QRegExp::PatternQt::CaseInsensitive, QRegExp::RegExp2ions Qt::CaseInsensitive, QRegExp::RegExp2 = QRegExp::CaseInsensitiveQt::CaseInsensitive, QRegExp::RegExp2ion;
+
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(awk)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/awk.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(sh)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/sh.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(bas|bi|vbs|vbe)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/basic.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/clike.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(cs)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/cs.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(d)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/d.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(f|for|f90|f95)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/fortran.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(java|js)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/java.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(ly)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lilypond.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(lout)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lout.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(lua)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lua.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(asm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/nasm.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(nsi)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/nsis.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(pp|pas|dpr)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/pascal.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(pl|pm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/perl.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(php)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/php.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(po)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/po.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(py)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/python.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(r)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/r.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(sd7)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/seed7.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(tex|lyx)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/tex.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(vala)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/vala.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(v)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/verilog.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(wiki)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/wikitext.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/xml.xml"));
+
+#endif
+
+
+
+// USER DEFINED PATTERNS are takes from tea config dir, hl subdir files
+ //All regexps there must be validated valid
+
+
+
+ // QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
+
+  CFilesList lf;
+  lf.get (":/hls");
+
+  QStringList l (lf.list);
+
+  lf.get (dir_hls);
+  l << lf.list;
+
+
+  for (int i = 0; i < l.size(); i++)
+      {
+       QString fname = l[i];
+
+       QString buffer = qstring_load_first_line (fname);
+       QString rgxp = string_between (buffer, "pattern=\"", "\"");
+
+       if (! rgxp.isEmpty())
+          {
+
+#if QT_VERSION >= 0x050000
+
+          QRegularExpression re (rgxp, QRegularExpression::CaseInsensitiveOption);
+          if (re.isValid())
+             documents->hl_files.push_back (std::make_pair (re, fname));
+
+#else
+
+          QRegExp re (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2);
+          if (re.isValid())
+             documents->hl_files.push_back(std::make_pair (re, fname));
+
+#endif
+          }
+      }
+}
 
 void CTEA::fman_drives_changed (const QString & path)
 {
@@ -9946,10 +10062,8 @@ void CTEA::ed_block_start()
   last_action = sender();
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->rect_block_start();
+  if (d)
+     d->rect_block_start();
 }
 
 
@@ -9958,10 +10072,8 @@ void CTEA::ed_block_end()
   last_action = sender();
 
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->rect_block_end();
+  if (d)
+     d->rect_block_end();
 }
 
 
@@ -10225,70 +10337,69 @@ void CTEA::mrkup_header()
 
 void CTEA::mrkup_align_center()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("align_center");
 }
 
 
 void CTEA::mrkup_align_left()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("align_left");
 }
 
 
 void CTEA::mrkup_align_right()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("align_right");
 }
 
 
 void CTEA::mrkup_align_justify()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("align_justify");
 }
 
 
 void CTEA::mrkup_bold()
 {
-  last_action = qobject_cast<QAction *>(sender());
-
+  last_action = sender();
   markup_text ("bold");
 }
 
 
 void CTEA::mrkup_italic()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("italic");
 }
 
 
 void CTEA::mrkup_underline()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("underline");
 }
 
 void CTEA::mrkup_link()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("link");
 }
 
 
 void CTEA::mrkup_para()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("para");
 }
 
 
 void CTEA::mrkup_color()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -10313,15 +10424,14 @@ void CTEA::mrkup_color()
 
 void CTEA::mrkup_br()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   markup_text ("newline");
 }
 
 
 void CTEA::mrkup_nbsp()
 {
-  last_action = qobject_cast<QAction *>(sender());
-
+  last_action = sender();
   CDocument *d = documents->get_current();
   if (d)
      d->put ("&nbsp;");
@@ -10330,7 +10440,7 @@ void CTEA::mrkup_nbsp()
 
 void CTEA::markup_ins_image()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -10345,7 +10455,7 @@ void CTEA::markup_ins_image()
 
 void CTEA::mrkup_text_to_html()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)

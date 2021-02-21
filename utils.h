@@ -35,14 +35,6 @@ class CFTypeChecker: public QObject
 {
 public:
 
- // QStringList lexts;
-//  QStringList lnames;
-/*
-#if QT_VERSION >= 0x050000
-  QMimeDatabase db;
-#endif
-*/
-
 
 #if QT_VERSION < 0x050000
   std::vector <QRegExp> patterns;
@@ -50,12 +42,9 @@ public:
   std::vector <QRegularExpression> patterns;
 #endif
 
-
-//  CFTypeChecker (const QStringList &fnames, const QStringList &exts);
   CFTypeChecker();
 
   bool check (const QString &fname) const; 
-//  QStringList get_supported_exts() const;
 };
 
 

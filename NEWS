@@ -1,5 +1,5 @@
 =====NEWS ABOUT TEA====
-TEA 50.1.0, october 2020
+TEA 60.0.0, march 2021
 ---------------------------------------
 
    For the centuries of the development, TEA gains a thousands of features. Some of them becomes rarely used, some needs more dependencies, so I've decide to make a some sort of clean-up without the actual removing of such functions. Now they are just disabled by default at the build level, when you compile TEA with cmake and meson. The qmake subsystem still loves all TEA non-mandatory deps. 

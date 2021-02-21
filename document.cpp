@@ -282,8 +282,6 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 2";
 
 void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 {
-  qDebug() << "highlightingRules.size() = " << highlightingRules.size();
-  
   if (highlightingRules.size() == 0)
      return;
 
@@ -334,60 +332,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
         }
         
 }
-/*
 
-void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
-{
-qDebug() << "CSyntaxHighlighterQRegExp::highlightBlock - 1";
-  
-  if (highlightingRules.size() == 0)
-     return;
-
-  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
-      {
-       int index = text.indexOf (it->pattern);
-
-       while (index >= 0)
-             {
-              int length = it->pattern.matchedLength();
-              setFormat (index, length, it->format);
-              index = text.indexOf (it->pattern, index + length);
-             }
-       }
-
-  setCurrentBlockState (0);
-
-  int startIndex = 0;
-
-  if (commentStartExpression.isEmpty() || commentEndExpression.isEmpty())
-     return;
-
-  if (previousBlockState() != 1)
-     startIndex = text.indexOf (commentStartExpression);
-
-  while (startIndex >= 0)
-        {
-         int endIndex = commentEndExpression.indexIn (text, startIndex);
-
-         int commentLength;
-
-         if (endIndex == -1)
-            {
-             setCurrentBlockState (1);
-             commentLength = text.length() - startIndex;
-            }
-         else
-             commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
-
-         setFormat (startIndex, commentLength, multiLineCommentFormat);
-         startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
-        }
-        
-qDebug() << "CSyntaxHighlighterQRegExp::highlightBlock - 2";
-       
-        
-}
-*/
 #endif
 
 
@@ -553,8 +498,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
       {
        QRegularExpressionMatch m = it->pattern.match (text);
-       //if (! m.isValid())
-          // continue;
 
        int index = m.capturedStart();
 
@@ -563,9 +506,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
               int length = m.capturedLength();
               setFormat (index, length, it->format);
               m = it->pattern.match (text, index + length);
-            // if (! m.isValid())
-              //    break;
-
               index = m.capturedStart();
              }
        }
@@ -1215,115 +1155,9 @@ void CDocument::set_tab_caption (const QString &fileName)
   holder->tab_widget->setTabText (get_tab_idx(), fileName);
 }
 
-/*
-void CDocument::set_hl (bool mode_auto, const QString &theext)
-{
-  if (highlighter)
-     delete highlighter;
-
-  highlighter = 0;
-
-  if (! settings->value ("hl_enabled", 1).toBool())
-      return;
-
-  QString ext;
-
-  if (mode_auto)
-     ext = file_get_ext (file_name);
-  else
-      ext = theext;
-
-  if (ext.isEmpty())
-     return;
-
-  QString fname = holder->hls.value (ext);
-  if (fname.isEmpty() || ! file_exists (fname))
-     return;
-
-#if QT_VERSION >= 0x050000
-
-   highlighter = new CSyntaxHighlighterQRegularExpression (document(), this, fname);
-
-#else
-
-  highlighter = new CSyntaxHighlighterQRegExp (document(), this, fname);
-
-#endif
-}
-*/
-/*
-void CDocument::set_hl (bool mode_auto, const QString &theext)
-{
-  if (highlighter)
-     delete highlighter;
-
-  highlighter = 0;
-
-  if (! settings->value ("hl_enabled", 1).toBool())
-      return;
-
-  QString ext;
-
-  if (mode_auto)
-     ext = file_get_ext (file_name);
-  else
-      ext = theext;
-
-  if (ext.isEmpty())
-     return;
-
-   QString fname;
-
-#if QT_VERSION >= 0x050000
-
-  QHashIterator<QRegularExpression, QString> i(holder->highlighters);
-  while (i.hasNext())
-        {
-         i.next();
-
-         qDebug() << i.key() << ": " << i.value();
-         //if (i.key().isValid())
-           // qDebug() << "VALID";
-
-         if (i.key().isValid())
-         if (i.key().match(file_name).hasMatch())
-            {
-             fname = i.value();
-             qDebug() << "HL: " << fname;
-             break;
-            }
-          //cout << i.key() << ": " << i.value() << Qt::endl;
-  }
-
-  //QString fname = holder->hls.value (ext);
-
-//           documents->highlighters.insert (QRegularExpression (rgxp), fname);
-
-#else
-           documents->highlighters.insert (QRegExp (rgxp), fname);
-#endif
-
-
-  if (fname.isEmpty() || ! file_exists (fname))
-     return;
-
-#if QT_VERSION >= 0x050000
-
-   highlighter = new CSyntaxHighlighterQRegularExpression (document(), this, fname);
-
-#else
-
-  highlighter = new CSyntaxHighlighterQRegExp (document(), this, fname);
-
-#endif
-}
-*/
-
 
 void CDocument::set_hl (bool mode_auto, const QString &theext)
 {
-  qDebug() << "1";
-  
   if (highlighter)
      delete highlighter;
 
@@ -1354,17 +1188,15 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
                fname = p->second;
                break;
               }
-      }
+       }
 
 #else
    for (std::vector<std::pair<QRegExp, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
        {
-//       qDebug() << p->first.pattern();
         if (p->first.isValid())
            if (p->first.exactMatch(file_name))
-          //if (p->first.indexIn(p->second) != -1 )
               {
-              qDebug() << p->first.pattern() << " IS valid with " << p->second;
+//               qDebug() << p->first.pattern() << " IS valid with " << p->second;
               fname = p->second;
                break;
               }
@@ -1372,9 +1204,6 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 
 #endif
-
-qDebug() << "2";
-  
 
   if (fname.isEmpty() || ! file_exists (fname))
      return;
@@ -1388,13 +1217,7 @@ qDebug() << "2";
   highlighter = new CSyntaxHighlighterQRegExp (document(), this, fname);
 
 #endif
-  
-  qDebug() << "3";
-  
-  
 }
-
-
 
 void CDocument::set_markup_mode()
 {

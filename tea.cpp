@@ -1000,7 +1000,7 @@ void CTEA::createMenus()
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
 
-  //menu_file->addAction (act_test);
+  menu_file->addAction (act_test);
 
   menu_file->addAction (newAct);
   add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -4889,15 +4889,12 @@ All regexps there are valid
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(ly)$", opt), ":/hls/lilypond.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(lout)$", opt), ":/hls/lout.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(lua)$", opt), ":/hls/lua.xml"));
-
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(asm)$", opt), ":/hls/nasm.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(nsi)$", opt), ":/hls/nsis.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(pp|pas|dpr)$", opt), ":/hls/pascal.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(pl|pm)$", opt), ":/hls/perl.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(php)$", opt), ":/hls/php.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(po)$", opt), ":/hls/po.xml"));
-
-
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(py)$", opt), ":/hls/python.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(r)$", opt), ":/hls/r.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(sd7)$", opt), ":/hls/seed7.xml"));
@@ -4910,7 +4907,34 @@ All regexps there are valid
 
 #else
 
-  documents->hl_files.push_back(std::make_pair(QRegExp (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2), fname));
+
+  QRegExp::PatternQt::CaseInsensitive, QRegExp::RegExp2ions Qt::CaseInsensitive, QRegExp::RegExp2 = QRegExp::CaseInsensitiveQt::CaseInsensitive, QRegExp::RegExp2ion;
+
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(awk)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/awk.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(sh)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/sh.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(bas|bi|vbs|vbe)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/basic.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/clike.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(cs)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/cs.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(d)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/d.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(f|for|f90|f95)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/fortran.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(java|js)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/java.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(ly)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lilypond.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(lout)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lout.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(lua)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lua.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(asm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/nasm.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(nsi)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/nsis.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(pp|pas|dpr)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/pascal.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(pl|pm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/perl.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(php)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/php.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(po)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/po.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(py)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/python.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(r)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/r.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(sd7)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/seed7.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(tex|lyx)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/tex.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(vala)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/vala.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(v)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/verilog.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(wiki)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/wikitext.xml"));
+  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/xml.xml"));
 
 #endif
 
@@ -4927,14 +4951,7 @@ All regexps there are valid
 
   for (int i = 0; i < l1.size(); i++)
       {
-      // QString fname = ":/hls/" + l1[i];
-
-       //check is fname built-in or not
-
-       //if (! file_exists (fname))
-        //  fname = dir_hls + "/" + l1[i];
-      QString fname = dir_hls + "/" + l1[i];
-
+       QString fname = dir_hls + "/" + l1[i];
 
        QString buffer = qstring_load_first_line (fname);
        QString rgxp = string_between (buffer, "pattern=\"", "\"");
@@ -4943,88 +4960,21 @@ All regexps there are valid
           {
 
 #if QT_VERSION >= 0x050000
-           documents->hl_files.push_back(std::make_pair(QRegularExpression (rgxp, QRegularExpression::CaseInsensitiveOption), fname));
+
+          QRegularExpression re (rgxp, QRegularExpression::CaseInsensitiveOption);
+          if (re.isValid())
+             documents->hl_files.push_back (std::make_pair (re, fname));
 
 #else
-           documents->hl_files.push_back(std::make_pair(QRegExp (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2), fname));
+
+          QRegExp re (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2);
+          if (re.isValid())
+             documents->hl_files.push_back(std::make_pair (re, fname));
 
 #endif
-
           }
       }
 }
-
-
-//весь этот механизм отключен и требует изучения
-/*
-void CTEA::update_hls (bool force)
-{
-  QTime tm;
-  tm.start();
-
-  documents->hls.clear();
-
-  QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
-  l1 << read_dir_entries (dir_hls);  //read custom hls modules
-  QString newlist = l1.join("\n").trimmed();
-
-  QString fname_hls_flist = dir_config + "/fname_hls_flist";
-
-  if (force)
-     {
-      QFile::remove (fname_hls_flist);
-      qDebug() << "new version, hls cache must be updated";
-     }
-
-  if (! file_exists (fname_hls_flist))
-     {
-      qstring_save (fname_hls_flist, l1.join ("\n").trimmed());
-      QFile::remove (fname_hls_cache);
-     }
-  else
-      {
-       QString oldlist = qstring_load (fname_hls_flist);
-       if (newlist != oldlist)
-          {
-           qstring_save (fname_hls_flist, newlist);
-           QFile::remove (fname_hls_cache);
-          }
-      }
-
-
-  if (! file_exists (fname_hls_cache))
-     {
-      //make and save hls_cache
-
-      for (int i = 0; i < l1.size(); i++)
-          {
-           QString fname = ":/hls/" + l1[i];
-
-           //check is fname built-in or not
-
-           if (! file_exists (fname))
-              fname = dir_hls + "/" + l1[i];
-
-           QString buffer = qstring_load (fname);
-           QString exts = string_between (buffer, "exts=\"", "\"");
-
-           if (! exts.isEmpty())
-              {
-               QStringList l = exts.split (";");
-               for (int i = 0; i < l.size(); i++)
-                   documents->hls.insert (l[i], fname);
-              }
-          }
-
-      qstring_save (fname_hls_cache, hash_keyval_to_string (documents->hls));
-     }
-  else
-  documents->hls = hash_load_keyval (fname_hls_cache);
-
-  qDebug("Time elapsed: %d ms", tm.elapsed());
-}
-*/
-
 
 
 void CTEA::fman_drives_changed (const QString & path)
@@ -9315,7 +9265,7 @@ File menu callbacks
 
 void CTEA::test()
 {
-
+   pdf_conv_test ("/mnt/big8/books/cerk/povest_o_petre_i_fevronii.pdf");
 }
 
 

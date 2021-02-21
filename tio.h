@@ -205,5 +205,8 @@ public:
   QStringList get_supported_exts();
 };
 
+void pdf_conv_test (const QString &fname);
+
+
 #endif // TIO_H
 

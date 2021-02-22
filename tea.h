@@ -126,21 +126,6 @@ public:
 #endif
 
 
-class CFSizeFName: public QObject
-{
-Q_OBJECT
-
-public:
-
-  qint64 size;
-  QString fname;
-
-  CFSizeFName (qint64 sz, const QString &fn):
-               size (sz),
-               fname (fn) {}
-};
-
-
 class CMarkupPair: public QObject
 {
 Q_OBJECT

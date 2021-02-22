@@ -124,6 +124,9 @@ QVariantMap hs_path;
 QString current_version_number;
 std::vector <CTextListWnd*> text_window_list;
 
+
+QHash <QString, QHash<QString, QString> > hash_markup;
+
 enum {
       FM_ENTRY_MODE_NONE = 0,
       FM_ENTRY_MODE_OPEN,
@@ -1678,13 +1681,13 @@ void CTEA::markup_text (const QString &mode)
   if (! p)
      return;
 
-  QString t = p->pattern[d->markup_mode];
+  //QString t = p->pattern[d->markup_mode];
+
+  QString t = hash_markup[mode][d->markup_mode];
 
   if (! t.isEmpty())
       d->put (t.replace ("%s", d->get()));
 }
-
-
 
 
 QTextDocument::FindFlags CTEA::get_search_options()
@@ -5724,9 +5727,110 @@ CStrIntPair::CStrIntPair (const QString &s, int i): QObject()
   int_value = i;
 }
 
-
 void CTEA::create_markup_hash()
 {
+  QHash<QString, QString> h1;
+
+  h1["Docbook"] = "<emphasis role=\"bold\">%s</emphasis>";
+  h1["LaTeX"] = "\\textbf{%s}";
+  h1["HTML"] = "<b>%s</b>";
+  h1["XHTML"] = "<b>%s</b>";
+  h1["Lout"] = "@B{%s}";
+  h1["MediaWiki"] = "'''%s'''";
+  h1["DokuWiki"] = "**%s**";
+  h1["Markdown"] = "**%s**";
+
+  hash_markup.insert ("bold", h1);
+
+  QHash<QString, QString> h2;
+
+  h2["Docbook"] = "<emphasis role=\"italic\">%s</emphasis>";
+  h2["LaTeX"] = "\\textit{%s}";
+  h2["HTML"] = "<i>%s</i>";
+  h2["XHTML"] = "<i>%s</i>";
+  h2["Lout"] = "@I{%s}";
+  h2["MediaWiki"] = "''%s''";
+  h2["DokuWiki"] = "//%s//";
+  h2["Markdown"] = "*%s*";
+
+  hash_markup.insert ("italic", h2);
+
+  QHash<QString, QString> h3;
+
+  h3["HTML"] = "<p style=\"text-align:justify;\">%s</p>";
+  h3["XHTML"] = "<p style=\"text-align:justify;\">%s</p>";
+
+  hash_markup.insert ("align_justify", h3);
+
+
+  QHash<QString, QString> h4;
+
+  h4["LaTeX"] = "\\begin{center}%s\\end{center}";
+  h4["HTML"] = "<p style=\"text-align:center;\">%s</p>";
+  h4["XHTML"] = "<p style=\"text-align:center;\">%s</p>";
+
+  hash_markup.insert ("align_center", h4);
+
+
+  QHash<QString, QString> h5;
+
+  h5["LaTeX"] = "\\begin{flushleft}%s\\end{flushleft}";
+  h5["HTML"] = "<p style=\"text-align:left;\">%s</p>";
+  h5["XHTML"] = "<p style=\"text-align:left;\">%s</p>";
+
+  hash_markup.insert ("align_left", h5);
+
+  QHash<QString, QString> h6;
+
+  h6["LaTeX"] = "\\begin{flushright}%s\\end{flushright}";
+  h6["HTML"] = "<p style=\"text-align:right;\">%s</p>";
+  h6["XHTML"] = "<p style=\"text-align:right;\">%s</p>";
+
+  hash_markup.insert ("align_right", h6);
+
+  QHash<QString, QString> h7;
+
+  h7["Docbook"] = "<emphasis role=\"underline\">%s</emphasis>";
+  h7["LaTeX"] = "\\underline{%s}";
+  h7["HTML"] = "<u>%s</u>";
+  h7["XHTML"] = "<u>%s</u>";
+  h7["Lout"] = "@Underline{%s}";
+  h7["MediaWiki"] = "<u>%s</u>";
+  h7["DokuWiki"] = "__%s__";
+
+  hash_markup.insert ("underline", h7);
+
+  QHash<QString, QString> h8;
+
+  h8["Docbook"] = "<para>%s</para>";
+  h8["HTML"] = "<p>%s</p>";
+  h8["XHTML"] = "<p>%s</p>";
+  h8["Lout"] = "@PP%s";
+
+  hash_markup.insert ("para", h8);
+
+  QHash<QString, QString> h9;
+
+  h9["Docbook"] = "<ulink url=\"\">%s</ulink>";
+  h9["HTML"] = "<a href=\"\">%s</a>";
+  h9["XHTML"] = "<a href=\"\">%s</a>";
+  h9["LaTeX"] = "\\href{}{%s}";
+  h9["Markdown"] = "[](%s)";
+
+  hash_markup.insert ("link", h9);
+
+  QHash<QString, QString> h10;
+
+  h10["LaTeX"] = "\\newline";
+  h10["HTML"] = "<br>";
+  h10["XHTML"] = "<br />";
+  h10["Lout"] = "@LLP";
+  h10["MediaWiki"] = "<br />";
+  h10["DokuWiki"] = "\\\\ ";
+
+  hash_markup.insert ("newline", h9);
+
+
   CMarkupPair *p = new CMarkupPair;
 
   p->pattern["Docbook"] = "<emphasis role=\"bold\">%s</emphasis>";
@@ -7175,14 +7279,6 @@ void CTEA::fn_insert_c()
   if (d)
      d->put (qstring_load (":/text-data/tpl_c.c"));
 }
-
-
-inline bool CFSizeFNameLessThan (CFSizeFName *v1, CFSizeFName *v2)
-{
-  return v1->size > v2->size;
-}
-
-
 
 
 void CTEA::fman_zip_unpack()
@@ -10517,7 +10613,7 @@ void CTEA::mrkup_text_to_html()
 
 void CTEA::mrkup_tags_to_entities()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (d)
@@ -10525,9 +10621,10 @@ void CTEA::mrkup_tags_to_entities()
 }
 
 
+/*
 void CTEA::mrkup_document_weight()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -10576,10 +10673,82 @@ void CTEA::mrkup_document_weight()
 
   log->log (result);
 }
+*/
+
+
+
+void CTEA::mrkup_document_weight()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString result;
+  QStringList l = html_get_by_patt (d->toPlainText(), "src=\"");
+
+  QFileInfo f (d->file_name);
+  QUrl baseUrl (d->file_name);
+
+//  result += tr ("%1 %2 kbytes<br>").arg (d->file_name).arg (QString::number (f.size() / 1024));
+
+
+  std::vector<std::pair<QString, qint64> > files;
+  files.push_back(std::make_pair(d->file_name, f.size()));
+
+
+//  QList <CFSizeFName*> lst;
+//  lst.append (new CFSizeFName (f.size(), d->file_name));
+
+  int size_total = 0;
+  int files_total = 1;
+
+  for (int i = 0; i < l.size(); i++)
+      {
+       QUrl relativeUrl (l.at(i));
+       QString resolved = baseUrl.resolved (relativeUrl).toString();
+       QFileInfo info (resolved);
+
+       if (! info.exists())
+           //lst.append (new CFSizeFName (info.size(), tr ("%1 is not found<br>").arg (resolved)));
+         files.push_back(std::make_pair(tr ("%1 is not found<br>").arg (resolved), info.size()));
+
+       else
+           {
+            //lst.append (new CFSizeFName (info.size(), resolved));
+            files.push_back(std::make_pair(resolved, info.size()));
+            size_total += info.size();
+            ++files_total;
+           }
+       }
+
+  std::sort (files.begin(), files.end());
+
+  for (std::vector<std::pair<QString, qint64> >::iterator p = files.begin(); p != files.end(); p++)
+      {
+      result += tr ("%1 kbytes %2 <br>").arg (QString::number (p->second / 1024)).arg (p->first);
+
+      }
+
+/*
+  for (int i = 0; i < files.size(); i++)
+      {
+       result += tr ("%1 kbytes %2 <br>").arg (QString::number (lst[i]->size / 1024)).arg (lst[i]->fname);
+       delete lst[i];
+      }
+*/
+  result.prepend (tr ("Total size = %1 kbytes in %2 files<br>").arg (QString::number (size_total / 1024))
+                  .arg (QString::number (files_total)));
+
+  log->log (result);
+}
 
 
 void CTEA::mrkup_preview_color()
 {
+  last_action = sender();
+
   CDocument *d = documents->get_current();
   if (! d)
      return;

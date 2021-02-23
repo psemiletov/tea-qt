@@ -2637,14 +2637,6 @@ void CTEA::fn_text_apply_to_each_line()
 }
 
 
-void CTEA::fn_filter_with_regexp()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_WITH_REGEXP));
-}
 
 
 void CTEA::fn_text_reverse()
@@ -2942,30 +2934,6 @@ void CTEA::dropEvent (QDropEvent *event)
 }
 
 
-void CTEA::fn_math_evaluate()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString s = d->get();
-  std::string utf8_text = s.toUtf8().constData();
-  double f = calculate (utf8_text);
-  QString fs = s.setNum (f);
-
-  log->log (fs);
-}
-
-
-
-
-
-
-
-
-
 
 void CTEA::fn_analyze_text_stat()
 {
@@ -3108,28 +3076,7 @@ void CTEA::nav_goto_left_tab()
 }
 
 
-void CTEA::fn_filter_rm_less_than()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstringlist_process (d->get(),
-                                                                fif_get_text(),
-                                                                QSTRL_PROC_FLT_LESS));
-}
-
-
-void CTEA::fn_filter_rm_greater_than()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstringlist_process (d->get(),
-                                                                fif_get_text(),
-                                                                QSTRL_PROC_FLT_GREATER));
-}
 
 
 
@@ -3371,24 +3318,8 @@ int get_arab_num (std::string rom_str)
 }
 
 
-void CTEA::fn_math_number_arabic_to_roman()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (arabicToRoman (d->get().toUInt()));
-}
 
 
-void CTEA::fn_math_number_roman_to_arabic()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (QString::number(get_arab_num (d->get().toUpper().toStdString())));
-}
 
 
 void CTEA::help_show_gpl()
@@ -4026,48 +3957,6 @@ void CTEA::fn_quotes_tex_angle_02()
 }
 
 
-void CTEA::fn_math_enum()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QStringList source = d->get().split (QChar::ParagraphSeparator);
-
-  int pad = 0;
-  int end = source.size() - 1;
-  int step = 1;
-  QString result;
-  QString prefix;
-
-  QStringList params = fif_get_text().split ("~");
-
-  if (params.size() > 0)
-     step = params[0].toInt();
-
-  if (params.size() > 1)
-     pad = params[1].toInt();
-
-  if (params.size() > 2)
-     prefix = params[2];
-
-  if (step == 0)
-     step = 1;
-
-  for (int c = 0; c <= end; c++)
-      {
-       QString n;
-       n = n.setNum (((c + 1) * step));
-       if (pad != 0)
-          n = n.rightJustified (pad, '0');
-
-       result = result + n + prefix +  source.at(c) + '\n';
-      }
-
-  d->put (result);
-}
 
 
 void CTEA::view_stay_on_top()
@@ -5708,36 +5597,7 @@ void CTEA::view_use_hl()
 */
 
 
-void CTEA::fn_math_number_dec_to_bin()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (int_to_binary (d->get().toInt()));
-}
-
-
-void CTEA::fn_math_number_flip_bits()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (!d)
-     return;
-
-  QString s = d->get();
-  for (int i = 0; i < s.size(); i++)
-      {
-       if (s[i] == '1')
-          s[i] = '0';
-       else
-       if (s[i] == '0')
-          s[i] = '1';
-      }
-
-  d->put (s);
-}
 
 
 
@@ -5754,14 +5614,6 @@ void CTEA::update_tables()
 }
 
 
-void CTEA::fn_math_number_bin_to_dec()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (QString::number (bin_to_decimal (d->get())));
-}
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 void CTEA::cmb_spellchecker_currentIndexChanged (int)
@@ -5870,18 +5722,8 @@ void CTEA::fn_filter_delete_by_sep (bool mode)
 }
 
 
-void CTEA::fn_filter_delete_before_sep()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  fn_filter_delete_by_sep (true);
-}
 
 
-void CTEA::fn_filter_delete_after_sep()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  fn_filter_delete_by_sep (false);
-}
 
 
 void CTEA::fman_img_make_gallery()
@@ -7119,42 +6961,6 @@ void CTEA::keyPressEvent (QKeyEvent *event)
 
 
 
-void CTEA::fn_math_sum_by_last_col()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-      return;
-
-  QString t = d->get();
-  t = t.replace (",", ".");
-
-  if (t.isEmpty())
-      return;
-
-  double sum = 0.0f;
-
-  QStringList l = t.split (QChar::ParagraphSeparator);
-
-  for (int i = 0; i < l.size(); i++)
-      {
-       if (l[i].startsWith ("//") ||  l[i].startsWith ("#") || l[i].startsWith (";"))
-          continue;
-
-       QStringList lt = l[i].split (" ");
-       if (lt.size() > 0)
-          {
-           QString s = lt.at(lt.size() - 1);
-           std::string utf8_text = s.toUtf8().constData();
-           double f = calculate (utf8_text);
-           sum += f;
-          }
-      }
-
-  log->log (tr ("sum: %1").arg (sum));
-}
-
 
 
 
@@ -7948,59 +7754,6 @@ void CTEA::slot_font_interface_select()
   update_stylesheet (fname_stylesheet);
 }
 
-
-void CTEA::fn_filter_by_repetitions()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString result;
-
-  QString pattern = fif_get_text();
-
-  vector <int> positions;
-
-  for (int i = 0; i < pattern.size(); ++i)
-      {
-       if (pattern[i] == '1')
-          positions.push_back (i);
-      }
-
-
-
-  QStringList words = d->get().split (QChar::ParagraphSeparator);
-
-  for (int i = 0; i < words.size(); ++i)
-      {
-       QString wrd = words[i];
-
-       if (pattern.size() > wrd.size())
-          continue;
-
-       QChar ch = wrd [positions[0]];
-
-       size_t count = 0;
-
-       for (size_t j = 0; j < positions.size(); ++j)
-           {
-            if (wrd[positions[j]] == ch)
-                count++;
-           }
-
-
-       if (count == positions.size())
-           {
-            result += wrd;
-            result += "\n";
-           }
-      }
-
-      if (! result.isEmpty())
-         d->put (result);
-}
 
 
 
@@ -10710,4 +10463,261 @@ void CTEA::fn_filter_rm_empty()
   CDocument *d = documents->get_current();
   if (d)
       d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_REMOVE_EMPTY));
+}
+
+
+void CTEA::fn_filter_rm_less_than()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_LESS));
+}
+
+
+void CTEA::fn_filter_rm_greater_than()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_GREATER));
+}
+
+
+void CTEA::fn_filter_delete_before_sep()
+{
+  last_action = sender();
+  fn_filter_delete_by_sep (true);
+}
+
+
+void CTEA::fn_filter_delete_after_sep()
+{
+  last_action = sender();
+  fn_filter_delete_by_sep (false);
+}
+
+
+void CTEA::fn_filter_with_regexp()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_WITH_REGEXP));
+}
+
+
+void CTEA::fn_filter_by_repetitions()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString result;
+
+  QString pattern = fif_get_text();
+
+  vector <int> positions;
+
+  for (int i = 0; i < pattern.size(); ++i)
+      {
+       if (pattern[i] == '1')
+          positions.push_back (i);
+      }
+
+  QStringList words = d->get().split (QChar::ParagraphSeparator);
+
+  for (int i = 0; i < words.size(); ++i)
+      {
+       QString wrd = words[i];
+
+       if (pattern.size() > wrd.size())
+          continue;
+
+       QChar ch = wrd [positions[0]];
+
+       size_t count = 0;
+
+       for (size_t j = 0; j < positions.size(); ++j)
+           {
+            if (wrd[positions[j]] == ch)
+                count++;
+           }
+
+       if (count == positions.size())
+           {
+            result += wrd;
+            result += "\n";
+           }
+      }
+
+      if (! result.isEmpty())
+         d->put (result);
+}
+
+
+void CTEA::fn_math_evaluate()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString s = d->get();
+  std::string utf8_text = s.toUtf8().constData();
+  double f = calculate (utf8_text);
+  QString fs = s.setNum (f);
+
+  log->log (fs);
+}
+
+
+void CTEA::fn_math_number_arabic_to_roman()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (arabicToRoman (d->get().toUInt()));
+}
+
+
+void CTEA::fn_math_number_roman_to_arabic()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (QString::number(get_arab_num (d->get().toUpper().toStdString())));
+}
+
+
+void CTEA::fn_math_number_dec_to_bin()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (int_to_binary (d->get().toInt()));
+}
+
+
+void CTEA::fn_math_number_bin_to_dec()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (QString::number (bin_to_decimal (d->get())));
+}
+
+
+void CTEA::fn_math_number_flip_bits()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (!d)
+     return;
+
+  QString s = d->get();
+  for (int i = 0; i < s.size(); i++)
+      {
+       if (s[i] == '1')
+          s[i] = '0';
+       else
+       if (s[i] == '0')
+          s[i] = '1';
+      }
+
+  d->put (s);
+}
+
+
+
+void CTEA::fn_math_sum_by_last_col()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QString t = d->get();
+  t = t.replace (",", ".");
+
+  if (t.isEmpty())
+      return;
+
+  double sum = 0.0f;
+
+  QStringList l = t.split (QChar::ParagraphSeparator);
+
+  for (int i = 0; i < l.size(); i++)
+      {
+       if (l[i].startsWith ("//") ||  l[i].startsWith ("#") || l[i].startsWith (";"))
+          continue;
+
+       QStringList lt = l[i].split (" ");
+       if (lt.size() > 0)
+          {
+           QString s = lt.at(lt.size() - 1);
+           std::string utf8_text = s.toUtf8().constData();
+           double f = calculate (utf8_text);
+           sum += f;
+          }
+      }
+
+  log->log (tr ("sum: %1").arg (sum));
+}
+
+
+
+void CTEA::fn_math_enum()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QStringList source = d->get().split (QChar::ParagraphSeparator);
+
+  int pad = 0;
+  int end = source.size() - 1;
+  int step = 1;
+  QString result;
+  QString prefix;
+
+  QStringList params = fif_get_text().split ("~");
+
+  if (params.size() > 0)
+     step = params[0].toInt();
+
+  if (params.size() > 1)
+     pad = params[1].toInt();
+
+  if (params.size() > 2)
+     prefix = params[2];
+
+  if (step == 0)
+     step = 1;
+
+  for (int c = 0; c <= end; c++)
+      {
+       QString n;
+       n = n.setNum (((c + 1) * step));
+       if (pad != 0)
+          n = n.rightJustified (pad, '0');
+
+       result = result + n + prefix +  source.at(c) + '\n';
+      }
+
+  d->put (result);
 }

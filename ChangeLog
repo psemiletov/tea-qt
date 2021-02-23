@@ -1,5 +1,6 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ lua is added for script intepritators (Fn - Script)
 
 * old format for keywords (in syntax hl files) with ";" as the delimeter
 is dropped, use current one (regexp) instead if yoy write own hl files

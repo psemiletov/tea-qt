@@ -1646,24 +1646,7 @@ void CTEA::pageChanged (int index)
 
 
 
-void CTEA::fn_case_up()
-{
-  last_action = sender();
 
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (d->get().toUpper());
-}
-
-
-void CTEA::fn_case_down()
-{
-  last_action = sender();
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (d->get().toLower());
-}
 
 
 void CTEA::markup_text (const QString &mode)
@@ -2906,25 +2889,6 @@ void CTEA::fn_spell_suggest()
 #endif
 
 
-
-void CTEA::fn_use_snippet()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QAction *a = qobject_cast<QAction *>(sender());
-  QString s = qstring_load (a->data().toString());
-
-  if (s.contains ("%s"))
-     s = s.replace ("%s", d->get());
-
-  d->put (s);
-}
-
-
 void CTEA::update_templates()
 {
   menu_file_templates->clear();
@@ -2995,41 +2959,10 @@ void CTEA::fn_math_evaluate()
 }
 
 
-void CTEA::fn_sort_length()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (qstringlist_process (d->get(),
-                                                                 fif_get_text(),
-                                                                 QSTRL_PROC_FLT_WITH_SORTLEN));
-}
 
 
-void CTEA::fn_sort_casecare()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (qstringlist_process (d->get(),
-                                                                 fif_get_text(),
-                                                                 QSTRL_PROC_FLT_WITH_SORTCASECARE));
-}
 
 
-void CTEA::fn_sort_casecare_sep()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (qstringlist_process (
-                                                                 d->get(),
-                                                                 fif_get_text(),
-                                                                 QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP));
-}
 
 
 
@@ -3086,50 +3019,6 @@ void CTEA::fn_analyze_text_stat()
 
 
 
-void CTEA::search_replace_all_at_ofiles()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QStringList l = fif_get_text().split ("~");
-  if (l.size() < 2)
-     return;
-
-  int c = documents->items.size();
-  if (c == 0)
-     return;
-
-  Qt::CaseSensitivity cs = Qt::CaseInsensitive;
-  if (menu_find_case->isChecked())
-     cs = Qt::CaseSensitive;
-
-  for (vector <size_t>::size_type i = 0; i < documents->items.size(); i++)
-      {
-       CDocument *d = documents->items[i];
-       QString s;
-
-#if QT_VERSION < 0x050000
-
-       if (menu_find_regexp->isChecked())
-          s = d->toPlainText().replace (QRegExp (l[0]), l[1]);
-       else
-           s = d->toPlainText().replace (l[0], l[1], cs);
-
-#else
-
-       if (menu_find_regexp->isChecked())
-          s = d->toPlainText().replace (QRegularExpression (l[0]), l[1]);
-       else
-           s = d->toPlainText().replace (l[0], l[1], cs);
-
-
-#endif
-
-
-       d->selectAll();
-       d->put (s);
-      }
-}
-
 
 
 
@@ -3164,28 +3053,8 @@ void CTEA::add_to_last_used_charsets (const QString &s)
 }
 
 
-void CTEA::fn_flip_a_list()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (qstringlist_process (d->get(),
-                                                                 fif_get_text(),
-                                                                 QSTRL_PROC_LIST_FLIP));
-}
 
 
-void CTEA::fn_flip_a_list_sep()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstringlist_process (d->get(),
-                                                                fif_get_text(),
-                                                                QSTRL_PROC_LIST_FLIP_SEP));
-}
 
 
 QString str_to_entities (const QString &s)
@@ -3203,14 +3072,6 @@ QString str_to_entities (const QString &s)
 }
 
 
-void CTEA::fn_insert_loremipsum()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstring_load (":/text-data/lorem-ipsum"));
-}
 
 
 
@@ -3271,28 +3132,8 @@ void CTEA::fn_filter_rm_greater_than()
 }
 
 
-void CTEA::fn_filter_rm_duplicates()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstringlist_process (d->get(),
-                                                                fif_get_text(),
-                                                                QSTRL_PROC_FLT_REMOVE_DUPS));
-}
 
 
-void CTEA::fn_filter_rm_empty()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (qstringlist_process (d->get(),
-                                                                 fif_get_text(),
-                                                                 QSTRL_PROC_FLT_REMOVE_EMPTY));
-}
 
 
 void CTEA::fn_analyze_extract_words()
@@ -3471,24 +3312,8 @@ void CTEA::nav_focus_to_editor()
      d->setFocus (Qt::OtherFocusReason);
 }
 
-void CTEA::fn_insert_date()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (QDate::currentDate ().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
-}
 
 
-void CTEA::fn_insert_time()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (QTime::currentTime ().toString (settings->value("time_format", "hh:mm:ss").toString()));
-}
 
 
 void CTEA::fn_text_remove_formatting_at_each_line()
@@ -3689,34 +3514,9 @@ void CTEA::update_programs()
 }
 
 
-void CTEA::fn_insert_template_html()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstring_load (":/text-data/template-html"));
-}
 
 
-void CTEA::fn_insert_template_tea()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstring_load (":/text-data/template-teaproject"));
-}
-
-
-void CTEA::fn_insert_template_html5()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstring_load (":/text-data/template-html5"));
-}
 
 
 void CTEA::view_hide_error_marks()
@@ -3918,22 +3718,6 @@ CAboutWindow::CAboutWindow()
 }
 
 
-void CTEA::cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus)
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString s = qstring_load (fname_tempfile);
-  if (! s.isEmpty())
-     d->put(s);
-
-  QFile f (fname_tempfile);
-  f.remove();
-  f.setFileName (fname_tempparamfile);
-  f.remove();
-}
-
 
 void CTEA::update_scripts()
 {
@@ -3947,53 +3731,6 @@ void CTEA::update_scripts()
 }
 
 
-void CTEA::fn_run_script()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  QString fname = a->data().toString();
-  QString ext = file_get_ext (fname);
-
-  if (! d->textCursor().hasSelection())
-     return;
-
-  QString intrp;
-
-  if (ext == "rb")
-     intrp = "ruby";
-  else
-  if (ext == "py")
-     intrp = "python";
-  else
-  if (ext == "pl")
-     intrp = "perl";
-  else
-  if (ext == "sh")
-     intrp = "sh";
-
-  if (intrp.isEmpty())
-      return;
-
-  qstring_save (fname_tempfile, d->get());
-  qstring_save (fname_tempparamfile, fif_get_text());
-
-  QString command = QString ("%1 %2 %3 %4").arg (
-                             intrp).arg (
-                             fname).arg (
-                             fname_tempfile).arg (
-                             fname_tempparamfile);
-
-  QProcess *process = new QProcess (this);
-  connect(process, SIGNAL(finished ( int, QProcess::ExitStatus )), this, SLOT(cb_script_finished (int, QProcess::ExitStatus )));
-
-  process->start (command, QStringList());
-}
 
 
 void CTEA::cb_button_saves_as()
@@ -5933,17 +5670,6 @@ void CTEA::fman_preview_image()
 
 
 
-void CTEA::fn_sort_casecareless()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstringlist_process (
-                                                                d->get(),
-                                                                fif_get_text(),
-                                                                QSTRL_PROC_FLT_WITH_SORTNOCASECARE));
-}
 
 
 void CTEA::fman_fname_entry_confirm()
@@ -6014,48 +5740,6 @@ void CTEA::fn_math_number_flip_bits()
 }
 
 
-void CTEA::fn_use_table()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  if (main_tab_widget->currentIndex() == idx_tab_edit)
-     {
-      CDocument *d = documents->get_current();
-      if (! d)
-         return;
-
-      QString text;
-
-      if (d->textCursor().hasSelection())
-         text = d->get();
-      else
-          text = d->toPlainText();
-
-      if (d->textCursor().hasSelection())
-         d->put (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
-      else
-         d->setPlainText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
-      }
-  else
-      if (main_tab_widget->currentIndex() == idx_tab_fman)
-         {
-          QStringList sl = fman->get_sel_fnames();
-
-          if (sl.size() < 1)
-             return;
-
-          char *charset = cb_fman_codecs->currentText().toLatin1().data();
-
-          for (QList <QString>::const_iterator fname = sl.begin(); fname != sl.end(); ++fname)
-              {
-               QString f = qstring_load ((*fname), charset);
-               QString r = apply_table (f, a->data().toString(), menu_find_regexp->isChecked());
-               qstring_save ((*fname), r, charset);
-               log->log (tr ("%1 is processed and saved").arg ((*fname)));
-              }
-         }
-}
 
 
 void CTEA::update_tables()
@@ -6802,24 +6486,8 @@ void CTEA::select_label()
 }
 
 
-void CTEA::fn_insert_cpp()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstring_load (":/text-data/tpl_cpp.cpp"));
-}
 
 
-void CTEA::fn_insert_c()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (qstring_load (":/text-data/tpl_c.c"));
-}
 
 
 void CTEA::fman_zip_unpack()
@@ -7400,184 +7068,6 @@ void CTEA::update_themes()
 }
 
 
-#ifdef USE_QML_STUFF
-
-void CTEA::fn_use_plugin()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  if (! qml_engine)
-     {
-      qDebug() << "! qml_engine";
-      return;
-     }
-
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  QString qml_fname = a->data().toString() + "/" + "main.qml";
-
-  if (! file_exists (qml_fname))
-     {
-      log->log (tr ("There is no plugin file"));
-      return;
-     }
-
-  QQmlComponent *component = new QQmlComponent (qml_engine, QUrl::fromLocalFile (qml_fname));
-
-  if (! component->isReady() && component->isError())
-     {
-      log->log (tr ("<b>Error:</b> ") + component->errorString());
-      return;
-     }
-
-  CQQuickWindow *window = new CQQuickWindow;
-
-  QObject::connect((QObject*)qml_engine, SIGNAL(quit()), window, SLOT(close()));
-
-  QQuickItem *item = qobject_cast<QQuickItem*>(component->create());
-  item->setParentItem (window->contentItem());
-
-  window->id = qml_fname;
-
-  plugins_list.push_back (new CPluginListItem (qml_fname, window));
-
-  QVariant v = item->property ("close_on_complete");
-
-  if (v.isValid() && v.toBool())
-      window->close();
-  else
-      {
-       window->resize (item->width(), item->height());
-       window->show();
-      }
-
-  delete component;
-}
-
-
-bool CQQuickWindow::event (QEvent *event)
-{
-  if (event->type() == QEvent::Close)
-     {
-      if (plugins_list.size() > 0)
-      for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
-          {
-           if (plugins_list[i]->id == id)
-              {
-               delete plugins_list[i];
-               plugins_list.erase (plugins_list.begin() + i);
-               break;
-              }
-           }
-     }
-
-  return QQuickWindow::event (event);
-}
-
-
-bool has_qml_file (const QString &path)
-{
-  QDir d (path);
-  QStringList l = d.entryList();
-
-  for (int i = 0; i < l.size(); i++)
-     {
-      if (l[i].endsWith (".qml"))
-         return true;
-     }
-
-  return false;
-}
-
-
-//uses dir name as menuitem, no recursion
-void create_menu_from_plugins (QObject *handler,
-                               QMenu *menu,
-                               const QString &dir,
-                               const char *method
-                               )
-{
-  menu->setTearOffEnabled (true);
-  QDir d (dir);
-  QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
-                                          QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
-
-
-  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); ++fi)
-         {
-          if (fi->isDir())
-             {
-              if (has_qml_file (fi->absoluteFilePath()))
-                 {
-                  QAction *act = new QAction (fi->fileName(), menu->parentWidget());
-                  act->setData (fi->filePath());
-                  handler->connect (act, SIGNAL(triggered()), handler, method);
-                  menu->addAction (act);
-                 }
-             else
-                 {
-                  QMenu *mni_temp = menu->addMenu (fi->fileName());
-                  create_menu_from_plugins (handler, mni_temp,
-                                            fi->filePath(), method);
-                 }
-             }
-         }
-}
-
-
-void CTEA::update_plugins()
-{
-  menu_fn_plugins->clear();
-
-  create_menu_from_plugins (this,
-                            menu_fn_plugins,
-                            dir_plugins,
-                            SLOT (fn_use_plugin())
-                            );
-}
-
-
-void CTEA::plugins_init()
-{
-  qml_engine = new QQmlEngine;
-
-//    qmlRegisterInterface<CDocument>("CDocument");
-
-  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CDocument");
-  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CLogMemo");
-  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CTEAEdit");
-
-  qml_engine->rootContext()->setContextProperty ("docs", documents);
-  qml_engine->rootContext()->setContextProperty ("documents", documents);
-  qml_engine->rootContext()->setContextProperty ("log", log);
-  qml_engine->rootContext()->setContextProperty ("tea", this);
-  qml_engine->rootContext()->setContextProperty ("settings", settings);
-  qml_engine->rootContext()->setContextProperty ("hs_path", hs_path);
-}
-
-
-void CTEA::plugins_done()
-{
-// qDebug() << "CTEA::plugins_done()";
-//закрыть все плагины из списка (при созд. плагина добавляем указатель в список)
-//и потом
-
-  if (plugins_list.size() > 0)
-      for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
-          plugins_list[i]->window->close();
-
-  delete qml_engine;
-}
-
-
-CPluginListItem::CPluginListItem (const QString &plid, CQQuickWindow *wnd)
-{
-  id = plid;
-  window = wnd;
-}
-
-#endif
-
 
 void CTEA::receiveMessage (const QString &msg)
 {
@@ -7588,255 +7078,11 @@ void CTEA::receiveMessage (const QString &msg)
 }
 
 
-int latex_table_sort_col;
 
 
-bool latex_table_sort_fn (const QStringList &l1, const QStringList &l2)
-{
-  return l1.at(latex_table_sort_col) < l2.at(latex_table_sort_col);
-}
 
 
-void CTEA::fn_cells_latex_table_sort_by_col_abc()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString t = d->get();
-
-  if (t.isEmpty())
-     return;
-
-  QStringList fiftxt = fif_get_text().split("~");
-
-  if (fiftxt.size() < 2)
-     return;
-
-  QString sep = fiftxt[0];
-
-  latex_table_sort_col = fiftxt[1].toInt();
-
-  if (t.indexOf (sep) == -1)
-     return;
-
-  QStringList sl_temp = t.split (QChar::ParagraphSeparator);
-
-  QList <QStringList> output;
-
-  for (QList <QString>::iterator s = sl_temp.begin(); s != sl_temp.end(); ++s)
-      {
-       if (! s->isEmpty())
-          {
-           QStringList sl_parsed = s->split (sep);
-           if (latex_table_sort_col + 1 <= sl_parsed.size())
-            output.append (sl_parsed);
-          }
-      }
-
-  std::sort (output.begin(), output.end(), latex_table_sort_fn);
-
-  sl_temp.clear();
-
-  for (int i = 0; i < output.size(); i++)
-      {
-       sl_temp.append (output.at(i).join (sep));
-      }
-
-  t = sl_temp.join ("\n");
-
-  d->put (t);
-}
-
-
-void CTEA::fn_cells_swap_cells()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-      return;
-
-  QStringList fiftxt = fif_get_text().split("~");
-
-  if (fiftxt.size() < 3)
-     return;
-
-  int col1 = fiftxt[1].toInt();
-  int col2 = fiftxt[2].toInt();
-
-  QString sep = fiftxt[0];
-
-  QString t = d->get();
-
-  if (t.isEmpty())
-     return;
-
-  if (t.indexOf (sep) == -1)
-     return;
-
-  int imax = int (fmax (col1, col2));
-
-  QStringList sl_temp = t.split (QChar::ParagraphSeparator);
-
-  QList <QStringList> output;
-
-  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
-      {
-       if (! v->isEmpty())
-          {
-           QStringList sl_parsed = v->split (sep);
-           if (imax + 1 <= sl_parsed.size())
-              {
-
-//#if QT_VERSION >= 0x060000
-                  //sl_parsed.swapItemsAt (col1, col2);
-//#else
-//                  sl_parsed.swap (col1, col2);
-//#endif
-               strlist_swap (sl_parsed, col1, col2);
-               output.append (sl_parsed);
-              }
-          }
-      }
-
-  sl_temp.clear();
-
-  for (int i = 0; i < output.size(); i++)
-       sl_temp.append (output.at(i).join (sep));
-
-  t = sl_temp.join ("\n");
-
-  d->put (t);
-}
-
-
-void CTEA::fn_cells_delete_by_col()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-      return;
-
-  QStringList fiftxt = fif_get_text().split("~");
-
-  if (fiftxt.size() < 2)
-     return;
-
-  int col1 = fiftxt[1].toInt();
-
-  QString sep = fiftxt[0];
-
-  QString t = d->get();
-
-  if (t.isEmpty())
-      return;
-
-  if (t.indexOf (sep) == -1)
-     return;
-
-
-  QStringList sl_temp = t.split (QChar::ParagraphSeparator);
-
-  QList <QStringList> output;
-
-  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
-      {
-       if (! v->isEmpty())
-          {
-           QStringList sl_parsed = v->split (sep);
-           if (col1 + 1 <= sl_parsed.size())
-              {
-               sl_parsed.removeAt (col1);
-               output.append (sl_parsed);
-              }
-          }
-      }
-
-  sl_temp.clear();
-
-  for (int i = 0; i < output.size(); i++)
-       sl_temp.append (output.at(i).join (sep));
-
-  t = sl_temp.join ("\n");
-
-  d->put (t);
-}
-
-
-void CTEA::fn_cells_copy_by_col()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-      return;
-
-  QStringList fiftxt = fif_get_text().split("~");
-
-  if (fiftxt.size() < 2)
-      return;
-
-  QString sep = fiftxt[0];
-
-  int col1 = fiftxt[1].toInt();
-  int col2 = 0;
-
-  if (fiftxt.size() == 3)
-     col2 = fiftxt[2].toInt();
-
-
-  QString t = d->get();
-
-  if (t.isEmpty())
-      return;
-
-  if (t.indexOf (sep) == -1)
-      return;
-
-  QStringList sl_temp = t.split (QChar::ParagraphSeparator);
-
-  QList <QStringList> output;
-
-  if (col2 > 0)
-  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
-      {
-       if (! v->isEmpty())
-          {
-           QStringList sl_parsed = v->split (sep);
-           if (col2 + 1 <= sl_parsed.size())
-              {
-               QStringList tl = sl_parsed.mid (col1, col2 - col1 + 1);
-               output.append (tl);
-              }
-          }
-      }
-  else
-  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
-      {
-       if (! v->isEmpty())
-          {
-           QStringList sl_parsed = v->split (sep);
-           if (col1 + 1 <= sl_parsed.size())
-              {
-               QStringList tl = sl_parsed.mid (col1, 1);
-               output.append (tl);
-              }
-           }
-      }
-
-  sl_temp.clear();
-
-  for (int i = 0; i < output.size(); i++)
-       sl_temp.append (output.at(i).join (sep));
-
-  t = sl_temp.join ("\n");
-
-  QApplication::clipboard()->setText (t);
-}
 
 
 MyProxyStyle::MyProxyStyle (QStyle *style): QProxyStyle (style)
@@ -7913,112 +7159,7 @@ void CTEA::fn_math_sum_by_last_col()
 
 
 
-void CTEA::fn_scale_image()
-{
-  last_action = sender();
 
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString fname = d->get_filename_at_cursor();
-
-  if (! is_image (fname))
-     return;
-
-  QString t = fif_get_text();
-  if (t.indexOf ("~") == -1)
-     return;
-
-  QFileInfo fi (fname);
-
-  QStringList params = t.split ("~");
-
-  if (params.size() < 2)
-     {
-      log->log (tr("Incorrect parameters at FIF"));
-      return;
-     }
-
-  QString fnameout = params[0].replace ("%filename", fi.fileName());
-  fnameout = fnameout.replace ("%basename", fi.baseName());
-  fnameout = fnameout.replace ("%s", fname);
-
-  fnameout = fnameout.replace ("%ext", fi.suffix());
-  fnameout = fi.absolutePath() + "/" + fnameout;
-
-  bool scale_by_side = true;
-
-  if (params[1].indexOf("%") != -1)
-     scale_by_side = false;
-
-  int side = 800;
-  int percent = 100;
-
-  if (scale_by_side)
-     side = params[1].toInt();
-  else
-      {
-       params[1].chop (1);
-       percent = params[1].toInt();
-      }
-
-  Qt::TransformationMode transformMode = Qt::FastTransformation;
-  if (settings->value ("img_filter", 0).toBool())
-     transformMode = Qt::SmoothTransformation;
-
-  int quality = settings->value ("img_quality", "-1").toInt();
-
-  QImage source (fname);
-  if (source.isNull())
-     return;
-
-  if (settings->value ("cb_exif_rotate", 1).toBool())
-     {
-      int exif_orientation = get_exif_orientation (fname);
-
-      QTransform transform;
-      qreal angle = 0;
-
-      if (exif_orientation == 3)
-         angle = 180;
-      else
-      if (exif_orientation == 6)
-         angle = 90;
-      else
-      if (exif_orientation == 8)
-         angle = 270;
-
-      if (angle != 0)
-         {
-          transform.rotate (angle);
-          source = source.transformed (transform);
-         }
-     }
-
-  QImage dest;
-
-  if (scale_by_side)
-     dest = image_scale_by (source, true, side, transformMode);
-  else
-      dest = image_scale_by (source, false, percent, transformMode);
-
-  QString fmt (settings->value ("output_image_fmt", "jpg").toString());
-
-  fnameout = change_file_ext (fnameout, fmt);
-
-  if (! dest.save (fnameout, fmt.toLatin1().constData(), quality))
-     log->log (tr("Cannot save: %1").arg (fnameout));
-  else
-      log->log (tr("Saved: %1").arg (fnameout));
-}
-
-
-void CTEA::fn_repeat()
-{
-  if (last_action)
-     qobject_cast<QAction *>(last_action)->trigger();
-}
 
 
 void CTEA::fman_multi_rename_zeropad()
@@ -10635,7 +9776,6 @@ void CTEA::search_replace_all()
       else
           s = s.replace (l[0], l[1], cs);
 
-
 #endif
 
       d->put (s);
@@ -10669,11 +9809,905 @@ void CTEA::search_replace_all()
                else
                   r = f.replace (l[0], l[1], cs);
 
-
 #endif
 
                qstring_save ((*fname), r, charset);
                log->log (tr ("%1 is processed and saved").arg ((*fname)));
               }
         }
+}
+
+
+void CTEA::search_replace_all_at_ofiles()
+{
+  last_action = sender();
+
+  QStringList l = fif_get_text().split ("~");
+  if (l.size() < 2)
+     return;
+
+  int c = documents->items.size();
+  if (c == 0)
+     return;
+
+  Qt::CaseSensitivity cs = Qt::CaseInsensitive;
+  if (menu_find_case->isChecked())
+     cs = Qt::CaseSensitive;
+
+  for (vector <size_t>::size_type i = 0; i < documents->items.size(); i++)
+      {
+       CDocument *d = documents->items[i];
+       QString s;
+
+#if QT_VERSION < 0x050000
+
+       if (menu_find_regexp->isChecked())
+          s = d->toPlainText().replace (QRegExp (l[0]), l[1]);
+       else
+           s = d->toPlainText().replace (l[0], l[1], cs);
+
+#else
+
+       if (menu_find_regexp->isChecked())
+          s = d->toPlainText().replace (QRegularExpression (l[0]), l[1]);
+       else
+           s = d->toPlainText().replace (l[0], l[1], cs);
+
+#endif
+
+       d->selectAll();
+       d->put (s);
+      }
+}
+
+
+/*
+===================
+Fn menu callbacks
+===================
+*/
+
+
+#ifdef USE_QML_STUFF
+
+//ALL PLUGINS STUFF
+
+void CTEA::fn_use_plugin()
+{
+  last_action = sender();
+
+  if (! qml_engine)
+     {
+      qDebug() << "! qml_engine";
+      return;
+     }
+
+  QAction *a = qobject_cast<QAction *>(sender());
+
+  QString qml_fname = a->data().toString() + "/" + "main.qml";
+
+  if (! file_exists (qml_fname))
+     {
+      log->log (tr ("There is no plugin file"));
+      return;
+     }
+
+  QQmlComponent *component = new QQmlComponent (qml_engine, QUrl::fromLocalFile (qml_fname));
+
+  if (! component->isReady() && component->isError())
+     {
+      log->log (tr ("<b>Error:</b> ") + component->errorString());
+      return;
+     }
+
+  CQQuickWindow *window = new CQQuickWindow;
+
+  QObject::connect((QObject*)qml_engine, SIGNAL(quit()), window, SLOT(close()));
+
+  QQuickItem *item = qobject_cast<QQuickItem*>(component->create());
+  item->setParentItem (window->contentItem());
+
+  window->id = qml_fname;
+
+  plugins_list.push_back (new CPluginListItem (qml_fname, window));
+
+  QVariant v = item->property ("close_on_complete");
+
+  if (v.isValid() && v.toBool())
+      window->close();
+  else
+      {
+       window->resize (item->width(), item->height());
+       window->show();
+      }
+
+  delete component;
+}
+
+
+bool CQQuickWindow::event (QEvent *event)
+{
+  if (event->type() == QEvent::Close)
+     {
+      if (plugins_list.size() > 0)
+      for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
+          {
+           if (plugins_list[i]->id == id)
+              {
+               delete plugins_list[i];
+               plugins_list.erase (plugins_list.begin() + i);
+               break;
+              }
+           }
+     }
+
+  return QQuickWindow::event (event);
+}
+
+
+bool has_qml_file (const QString &path)
+{
+  QDir d (path);
+  QStringList l = d.entryList();
+
+  for (int i = 0; i < l.size(); i++)
+     {
+      if (l[i].endsWith (".qml"))
+         return true;
+     }
+
+  return false;
+}
+
+
+//uses dir name as menuitem, no recursion
+void create_menu_from_plugins (QObject *handler,
+                               QMenu *menu,
+                               const QString &dir,
+                               const char *method
+                               )
+{
+  menu->setTearOffEnabled (true);
+  QDir d (dir);
+  QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
+                                          QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
+
+
+  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); ++fi)
+         {
+          if (fi->isDir())
+             {
+              if (has_qml_file (fi->absoluteFilePath()))
+                 {
+                  QAction *act = new QAction (fi->fileName(), menu->parentWidget());
+                  act->setData (fi->filePath());
+                  handler->connect (act, SIGNAL(triggered()), handler, method);
+                  menu->addAction (act);
+                 }
+             else
+                 {
+                  QMenu *mni_temp = menu->addMenu (fi->fileName());
+                  create_menu_from_plugins (handler, mni_temp,
+                                            fi->filePath(), method);
+                 }
+             }
+         }
+}
+
+
+void CTEA::update_plugins()
+{
+  menu_fn_plugins->clear();
+
+  create_menu_from_plugins (this,
+                            menu_fn_plugins,
+                            dir_plugins,
+                            SLOT (fn_use_plugin())
+                            );
+}
+
+
+void CTEA::plugins_init()
+{
+  qml_engine = new QQmlEngine;
+
+//    qmlRegisterInterface<CDocument>("CDocument");
+
+  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CDocument");
+  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CLogMemo");
+  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CTEAEdit");
+
+  qml_engine->rootContext()->setContextProperty ("docs", documents);
+  qml_engine->rootContext()->setContextProperty ("documents", documents);
+  qml_engine->rootContext()->setContextProperty ("log", log);
+  qml_engine->rootContext()->setContextProperty ("tea", this);
+  qml_engine->rootContext()->setContextProperty ("settings", settings);
+  qml_engine->rootContext()->setContextProperty ("hs_path", hs_path);
+}
+
+
+void CTEA::plugins_done()
+{
+//закрыть все плагины из списка (при созд. плагина добавляем указатель в список)
+//и потом
+
+  if (plugins_list.size() > 0)
+      for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
+          plugins_list[i]->window->close();
+
+  delete qml_engine;
+}
+
+
+CPluginListItem::CPluginListItem (const QString &plid, CQQuickWindow *wnd)
+{
+  id = plid;
+  window = wnd;
+}
+
+#endif
+
+
+
+
+void CTEA::fn_repeat()
+{
+  if (last_action)
+     qobject_cast<QAction *>(last_action)->trigger();
+}
+
+
+void CTEA::fn_scale_image()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString fname = d->get_filename_at_cursor();
+
+  if (! is_image (fname))
+     return;
+
+  QString t = fif_get_text();
+  if (t.indexOf ("~") == -1)
+     return;
+
+  QFileInfo fi (fname);
+
+  QStringList params = t.split ("~");
+
+  if (params.size() < 2)
+     {
+      log->log (tr("Incorrect parameters at FIF"));
+      return;
+     }
+
+  QString fnameout = params[0].replace ("%filename", fi.fileName());
+  fnameout = fnameout.replace ("%basename", fi.baseName());
+  fnameout = fnameout.replace ("%s", fname);
+
+  fnameout = fnameout.replace ("%ext", fi.suffix());
+  fnameout = fi.absolutePath() + "/" + fnameout;
+
+  bool scale_by_side = true;
+
+  if (params[1].indexOf("%") != -1)
+     scale_by_side = false;
+
+  int side = 800;
+  int percent = 100;
+
+  if (scale_by_side)
+     side = params[1].toInt();
+  else
+      {
+       params[1].chop (1);
+       percent = params[1].toInt();
+      }
+
+  Qt::TransformationMode transformMode = Qt::FastTransformation;
+  if (settings->value ("img_filter", 0).toBool())
+     transformMode = Qt::SmoothTransformation;
+
+  int quality = settings->value ("img_quality", "-1").toInt();
+
+  QImage source (fname);
+  if (source.isNull())
+     return;
+
+  if (settings->value ("cb_exif_rotate", 1).toBool())
+     {
+      int exif_orientation = get_exif_orientation (fname);
+
+      QTransform transform;
+      qreal angle = 0;
+
+      if (exif_orientation == 3)
+         angle = 180;
+      else
+      if (exif_orientation == 6)
+         angle = 90;
+      else
+      if (exif_orientation == 8)
+         angle = 270;
+
+      if (angle != 0)
+         {
+          transform.rotate (angle);
+          source = source.transformed (transform);
+         }
+     }
+
+  QImage dest;
+
+  if (scale_by_side)
+     dest = image_scale_by (source, true, side, transformMode);
+  else
+      dest = image_scale_by (source, false, percent, transformMode);
+
+  QString fmt (settings->value ("output_image_fmt", "jpg").toString());
+
+  fnameout = change_file_ext (fnameout, fmt);
+
+  if (! dest.save (fnameout, fmt.toLatin1().constData(), quality))
+     log->log (tr("Cannot save: %1").arg (fnameout));
+  else
+      log->log (tr("Saved: %1").arg (fnameout));
+}
+
+
+void CTEA::fn_use_snippet()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QAction *a = qobject_cast<QAction *>(sender());
+  QString s = qstring_load (a->data().toString());
+
+  if (s.contains ("%s"))
+     s = s.replace ("%s", d->get());
+
+  d->put (s);
+}
+
+
+void CTEA::fn_run_script()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QAction *a = qobject_cast<QAction *>(sender());
+
+  QString fname = a->data().toString();
+  QString ext = file_get_ext (fname);
+
+  if (! d->textCursor().hasSelection())
+     return;
+
+  QString intrp;
+
+  if (ext == "rb")
+     intrp = "ruby";
+  else
+  if (ext == "py")
+     intrp = "python";
+  else
+  if (ext == "pl")
+     intrp = "perl";
+  else
+  if (ext == "sh")
+     intrp = "sh";
+  else
+  if (ext == "lua")
+     intrp = "lua";
+
+  if (intrp.isEmpty())
+      return;
+
+  qstring_save (fname_tempfile, d->get());
+  qstring_save (fname_tempparamfile, fif_get_text());
+
+  QString command = QString ("%1 %2 %3 %4").arg (
+                             intrp).arg (
+                             fname).arg (
+                             fname_tempfile).arg (
+                             fname_tempparamfile);
+
+  QProcess *process = new QProcess (this);
+  connect(process, SIGNAL(finished ( int, QProcess::ExitStatus )), this, SLOT(cb_script_finished (int, QProcess::ExitStatus )));
+
+  process->start (command, QStringList());
+}
+
+
+void CTEA::cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus)
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString s = qstring_load (fname_tempfile);
+  if (! s.isEmpty())
+     d->put(s);
+
+  QFile f (fname_tempfile);
+  f.remove();
+  f.setFileName (fname_tempparamfile);
+  f.remove();
+}
+
+
+void CTEA::fn_use_table()
+{
+  last_action = sender();
+  QAction *a = qobject_cast<QAction *>(sender());
+
+  if (main_tab_widget->currentIndex() == idx_tab_edit)
+     {
+      CDocument *d = documents->get_current();
+      if (! d)
+         return;
+
+      QString text;
+
+      if (d->textCursor().hasSelection())
+         text = d->get();
+      else
+          text = d->toPlainText();
+
+      if (d->textCursor().hasSelection())
+         d->put (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
+      else
+         d->setPlainText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
+      }
+  else
+      if (main_tab_widget->currentIndex() == idx_tab_fman)
+         {
+          QStringList sl = fman->get_sel_fnames();
+
+          if (sl.size() < 1)
+             return;
+
+          char *charset = cb_fman_codecs->currentText().toLatin1().data();
+
+          for (QList <QString>::const_iterator fname = sl.begin(); fname != sl.end(); ++fname)
+              {
+               QString f = qstring_load ((*fname), charset);
+               QString r = apply_table (f, a->data().toString(), menu_find_regexp->isChecked());
+               qstring_save ((*fname), r, charset);
+               log->log (tr ("%1 is processed and saved").arg ((*fname)));
+              }
+         }
+}
+
+
+void CTEA::fn_insert_loremipsum()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstring_load (":/text-data/lorem-ipsum"));
+}
+
+
+void CTEA::fn_insert_template_tea()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstring_load (":/text-data/template-teaproject"));
+}
+
+
+void CTEA::fn_insert_template_html()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstring_load (":/text-data/template-html"));
+}
+
+
+void CTEA::fn_insert_template_html5()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstring_load (":/text-data/template-html5"));
+}
+
+
+void CTEA::fn_insert_cpp()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstring_load (":/text-data/tpl_cpp.cpp"));
+}
+
+
+void CTEA::fn_insert_c()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstring_load (":/text-data/tpl_c.c"));
+}
+
+
+void CTEA::fn_insert_date()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (QDate::currentDate ().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
+}
+
+
+void CTEA::fn_insert_time()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (QTime::currentTime ().toString (settings->value("time_format", "hh:mm:ss").toString()));
+}
+
+
+void CTEA::fn_case_up()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (d->get().toUpper());
+}
+
+
+void CTEA::fn_case_down()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (d->get().toLower());
+}
+
+
+void CTEA::fn_sort_casecare()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_WITH_SORTCASECARE));
+}
+
+
+void CTEA::fn_sort_casecareless()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_WITH_SORTNOCASECARE));
+}
+
+
+void CTEA::fn_sort_casecare_sep()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP));
+}
+
+
+void CTEA::fn_sort_length()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_WITH_SORTLEN));
+}
+
+
+void CTEA::fn_flip_a_list()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_LIST_FLIP));
+}
+
+
+void CTEA::fn_flip_a_list_sep()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_LIST_FLIP_SEP));
+}
+
+
+int latex_table_sort_col;
+
+bool latex_table_sort_fn (const QStringList &l1, const QStringList &l2)
+{
+  return l1.at(latex_table_sort_col) < l2.at(latex_table_sort_col);
+}
+
+
+void CTEA::fn_cells_latex_table_sort_by_col_abc()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString t = d->get();
+
+  if (t.isEmpty())
+     return;
+
+  QStringList fiftxt = fif_get_text().split("~");
+
+  if (fiftxt.size() < 2)
+     return;
+
+  QString sep = fiftxt[0];
+
+  latex_table_sort_col = fiftxt[1].toInt();
+
+  if (t.indexOf (sep) == -1)
+     return;
+
+  QStringList sl_temp = t.split (QChar::ParagraphSeparator);
+
+  QList <QStringList> output;
+
+  for (QList <QString>::iterator s = sl_temp.begin(); s != sl_temp.end(); ++s)
+      {
+       if (! s->isEmpty())
+          {
+           QStringList sl_parsed = s->split (sep);
+           if (latex_table_sort_col + 1 <= sl_parsed.size())
+            output.append (sl_parsed);
+          }
+      }
+
+  std::sort (output.begin(), output.end(), latex_table_sort_fn);
+
+  sl_temp.clear();
+
+  for (int i = 0; i < output.size(); i++)
+      {
+       sl_temp.append (output.at(i).join (sep));
+      }
+
+  t = sl_temp.join ("\n");
+
+  d->put (t);
+}
+
+
+void CTEA::fn_cells_swap_cells()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QStringList fiftxt = fif_get_text().split("~");
+
+  if (fiftxt.size() < 3)
+     return;
+
+  int col1 = fiftxt[1].toInt();
+  int col2 = fiftxt[2].toInt();
+
+  QString sep = fiftxt[0];
+
+  QString t = d->get();
+
+  if (t.isEmpty())
+     return;
+
+  if (t.indexOf (sep) == -1)
+     return;
+
+  int imax = int (fmax (col1, col2));
+
+  QStringList sl_temp = t.split (QChar::ParagraphSeparator);
+
+  QList <QStringList> output;
+
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
+      {
+       if (! v->isEmpty())
+          {
+           QStringList sl_parsed = v->split (sep);
+           if (imax + 1 <= sl_parsed.size())
+              {
+               strlist_swap (sl_parsed, col1, col2);
+               output.append (sl_parsed);
+              }
+          }
+      }
+
+  sl_temp.clear();
+
+  for (int i = 0; i < output.size(); i++)
+       sl_temp.append (output.at(i).join (sep));
+
+  t = sl_temp.join ("\n");
+
+  d->put (t);
+}
+
+
+void CTEA::fn_cells_delete_by_col()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QStringList fiftxt = fif_get_text().split("~");
+
+  if (fiftxt.size() < 2)
+     return;
+
+  int col1 = fiftxt[1].toInt();
+
+  QString sep = fiftxt[0];
+
+  QString t = d->get();
+
+  if (t.isEmpty())
+      return;
+
+  if (t.indexOf (sep) == -1)
+     return;
+
+
+  QStringList sl_temp = t.split (QChar::ParagraphSeparator);
+
+  QList <QStringList> output;
+
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
+      {
+       if (! v->isEmpty())
+          {
+           QStringList sl_parsed = v->split (sep);
+           if (col1 + 1 <= sl_parsed.size())
+              {
+               sl_parsed.removeAt (col1);
+               output.append (sl_parsed);
+              }
+          }
+      }
+
+  sl_temp.clear();
+
+  for (int i = 0; i < output.size(); i++)
+       sl_temp.append (output.at(i).join (sep));
+
+  t = sl_temp.join ("\n");
+
+  d->put (t);
+}
+
+
+void CTEA::fn_cells_copy_by_col()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QStringList fiftxt = fif_get_text().split("~");
+
+  if (fiftxt.size() < 2)
+      return;
+
+  QString sep = fiftxt[0];
+
+  int col1 = fiftxt[1].toInt();
+  int col2 = 0;
+
+  if (fiftxt.size() == 3)
+     col2 = fiftxt[2].toInt();
+
+
+  QString t = d->get();
+
+  if (t.isEmpty())
+      return;
+
+  if (t.indexOf (sep) == -1)
+      return;
+
+  QStringList sl_temp = t.split (QChar::ParagraphSeparator);
+
+  QList <QStringList> output;
+
+  if (col2 > 0)
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
+      {
+       if (! v->isEmpty())
+          {
+           QStringList sl_parsed = v->split (sep);
+           if (col2 + 1 <= sl_parsed.size())
+              {
+               QStringList tl = sl_parsed.mid (col1, col2 - col1 + 1);
+               output.append (tl);
+              }
+          }
+      }
+  else
+  for (QList <QString>::iterator v = sl_temp.begin(); v != sl_temp.end(); ++v)
+      {
+       if (! v->isEmpty())
+          {
+           QStringList sl_parsed = v->split (sep);
+           if (col1 + 1 <= sl_parsed.size())
+              {
+               QStringList tl = sl_parsed.mid (col1, 1);
+               output.append (tl);
+              }
+           }
+      }
+
+  sl_temp.clear();
+
+  for (int i = 0; i < output.size(); i++)
+       sl_temp.append (output.at(i).join (sep));
+
+  t = sl_temp.join ("\n");
+
+  QApplication::clipboard()->setText (t);
+}
+
+
+void CTEA::fn_filter_rm_duplicates()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_REMOVE_DUPS));
+}
+
+
+void CTEA::fn_filter_rm_empty()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (qstringlist_process (d->get(), fif_get_text(), QSTRL_PROC_FLT_REMOVE_EMPTY));
 }

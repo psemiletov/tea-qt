@@ -913,7 +913,6 @@ Search menu callbacks
   void search_find();
   void search_find_next();
   void search_find_prev();
-
   void search_mark_all();
   void search_unmark();
 
@@ -927,8 +926,6 @@ Search menu callbacks
   void search_replace_with();
   void search_replace_all();
   void search_replace_all_at_ofiles();
-
-
 
 /*
 ===================

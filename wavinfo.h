@@ -28,7 +28,7 @@ public:
 
   t_wav_chunk_fmt wav_chunk_fmt;
   double rms;
-  bool get_info (const QString fname);
+  bool get_info (const QString &fname);
 };
 
 

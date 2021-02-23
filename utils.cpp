@@ -166,6 +166,16 @@ QByteArray file_load (const QString &fileName)
 /* string/stringlist utils */
 
 
+bool str_check (char *s1, char *s2, int size)
+{
+  for (int i = 0; i < size; i++)
+       if (s1[i] != s2[i])
+          return false;
+
+  return true;
+}
+
+
 void strlist_swap (QStringList &l, int a, int b)
 {
   QString t = l[a];
@@ -496,8 +506,6 @@ bool CFTypeChecker::check (const QString &fname) const
 #endif
 
   return false;
-
-
 }
 
 /*

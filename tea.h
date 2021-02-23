@@ -65,7 +65,7 @@ public:
  static int cursor_blink_time;
 
 
-  int styleHint (StyleHint hint, const QStyleOption *option = 0,
+ int styleHint (StyleHint hint, const QStyleOption *option = 0,
                  const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const
                 {
                  if (hint == QStyle::SH_ItemView_ActivateItemOnSingleClick)
@@ -77,7 +77,7 @@ public:
                  return QProxyStyle::styleHint (hint, option, widget, returnData);
                 }
 
-   MyProxyStyle (QStyle *style = 0);
+  MyProxyStyle (QStyle *style = 0);
 };
 
 
@@ -125,7 +125,7 @@ public:
 };
 #endif
 
-
+/*
 class CMarkupPair: public QObject
 {
 Q_OBJECT
@@ -134,7 +134,7 @@ public:
 
   QHash <QString, QString> pattern;
 };
-
+*/
 
 class CStrIntPair: public QObject
 {
@@ -278,7 +278,7 @@ Variables
   QString man_search_value;
   QString markup_mode;
 
-  QHash <QString, CMarkupPair*> hs_markup;
+  //QHash <QString, CMarkupPair*> hs_markup;
   QHash <QString, QString> programs;
   QHash <QString, QString> places_bookmarks;
   QHash <int, QString> moon_phase_algos;
@@ -349,8 +349,6 @@ Main menu items
   QMenu *menu_file_templates;
   QMenu *menu_file_sessions;
   QMenu *menu_file_configs;
-//  QAction *menu_recent_off;
-
 
   QMenu *menu_edit;
 
@@ -368,7 +366,6 @@ Main menu items
   QMenu *menu_fn_snippets;
   QMenu *menu_fn_tables;
   QMenu *menu_view_palettes;
-//  QMenu *menu_view_hl;
   QMenu *menu_view_profiles;
 
   QMenu *menu_fn_sessions;
@@ -662,7 +659,6 @@ public:
   void update_snippets();
   void update_sessions();
   void update_palettes();
- // void update_view_hls();
 
 #ifdef USE_QML_STUFF
   void update_plugins();
@@ -784,8 +780,6 @@ File manager slots
   void cb_button_saves_as();
 
 
-
-
 /*
 ===================
 Main menu callbacks
@@ -901,7 +895,6 @@ Markup menu callbacks
   void mrkup_br();
   void mrkup_nbsp();
   void markup_ins_image();
-
 
   void mrkup_text_to_html();
   void mrkup_tags_to_entities();

@@ -889,10 +889,6 @@ void CTEA::closeEvent (QCloseEvent *event)
 
   delete shortcuts;
 
-  QList<CMarkupPair *> l = hs_markup.values();
-
-  for (QList <CMarkupPair *>::iterator i = l.begin(); i != l.end(); ++i)
-      delete (*i);
 
   if (text_window_list.size() > 0)
       for (vector <size_t>::size_type i = 0; i < text_window_list.size(); i++)
@@ -1676,13 +1672,6 @@ void CTEA::markup_text (const QString &mode)
   if (! d)
      return;
 
-  CMarkupPair *p = hs_markup[mode];
-
-  if (! p)
-     return;
-
-  //QString t = p->pattern[d->markup_mode];
-
   QString t = hash_markup[mode][d->markup_mode];
 
   if (! t.isEmpty())
@@ -1690,82 +1679,6 @@ void CTEA::markup_text (const QString &mode)
 }
 
 
-QTextDocument::FindFlags CTEA::get_search_options()
-{
-  QTextDocument::FindFlags flags; //= 0;
-
-  if (menu_find_whole_words->isChecked())
-     flags = flags | QTextDocument::FindWholeWords;
-
-  if (menu_find_case->isChecked())
-     flags = flags | QTextDocument::FindCaseSensitively;
-
-  return flags;
-}
-
-
-void CTEA::search_find()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  if (main_tab_widget->currentIndex() == idx_tab_edit)
-     {
-      CDocument *d = documents->get_current();
-      if (! d)
-        return;
-
-      QTextCursor cr;
-
-      int from = 0;
-
-      if (settings->value ("find_from_cursor", "1").toBool())
-          from = d->textCursor().position();
-
-      d->text_to_search = fif_get_text();
-
-      if (menu_find_regexp->isChecked())
-
-#if QT_VERSION < 0x050000
-         cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
-#else
-         cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
-#endif
-
-      else
-          if (menu_find_fuzzy->isChecked())
-             {
-              int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
-              if (pos != -1)
-                 {
-                  from = pos + d->text_to_search.length() - 1;
-                  //set selection:
-                  cr = d->textCursor();
-                  cr.setPosition (/*pos*/from, QTextCursor::MoveAnchor);
-                  cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
-
-                  if (! cr.isNull())
-                      d->setTextCursor (cr);
-                 }
-              return;
-             }
-      else //normal search
-          cr = d->document()->find (d->text_to_search, from, get_search_options());
-
-      if (! cr.isNull())
-          d->setTextCursor (cr);
-      else
-           log->log(tr ("not found!"));
-     }
-  else
-  if (main_tab_widget->currentIndex() == idx_tab_learn)
-      man_find_find();
-  else
-  if (main_tab_widget->currentIndex() == idx_tab_tune)
-     opt_shortcuts_find();
-  else
-  if (main_tab_widget->currentIndex() == idx_tab_fman)
-     fman_find();
-}
 
 
 void CTEA::fman_find()
@@ -1816,95 +1729,8 @@ void CTEA::fman_find_prev()
 }
 
 
-void CTEA::search_find_next()
-{
-//  last_action = qobject_cast<QAction *>(sender());
-
-  if (main_tab_widget->currentIndex() == idx_tab_edit)
-     {
-      CDocument *d = documents->get_current();
-      if (! d)
-         return;
-
-      QTextCursor cr;
-      if (menu_find_regexp->isChecked())
-#if QT_VERSION < 0x050000
-         cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(),
-#else
-         cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(),
-#endif
-
-      get_search_options());
-      if (menu_find_fuzzy->isChecked())
-         {
-          int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, d->textCursor().position(), settings->value ("fuzzy_q", "60").toInt());
-          if (pos != -1)
-             {
-              cr = d->textCursor();
-              cr.setPosition (pos, QTextCursor::MoveAnchor);
-              cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
-
-              if (! cr.isNull())
-                  d->setTextCursor (cr);
-             }
-          return;
-         }
-      else
-          cr = d->document()->find (d->text_to_search, d->textCursor().position(), get_search_options());
-
-      if (! cr.isNull())
-          d->setTextCursor (cr);
-     }
-   else
-   if (main_tab_widget->currentIndex() == idx_tab_learn)
-      man_find_next();
-   else
-   if (main_tab_widget->currentIndex() == idx_tab_tune)
-      opt_shortcuts_find_next();
-   else
-   if (main_tab_widget->currentIndex() == idx_tab_fman)
-      fman_find_next();
-}
 
 
-void CTEA::search_find_prev()
-{
-  if (main_tab_widget->currentIndex() == idx_tab_edit)
-     {
-      CDocument *d = documents->get_current();
-      if (! d)
-         return;
-
-      QTextCursor cr;
-
-      if (menu_find_regexp->isChecked())
-#if QT_VERSION < 0x050000
-         cr = d->document()->find (QRegExp (d->text_to_search),
-                                             d->textCursor(),
-#else
-         cr = d->document()->find (QRegularExpression (d->text_to_search),
-                                             d->textCursor(),
-#endif
-
-                                             get_search_options() | QTextDocument::FindBackward);
-      else
-          cr = d->document()->find (d->text_to_search,
-                                              d->textCursor(),
-                                              get_search_options() | QTextDocument::FindBackward);
-
-      if (! cr.isNull())
-          d->setTextCursor (cr);
-     }
-  else
-  if (main_tab_widget->currentIndex() == idx_tab_learn)
-      man_find_prev();
-  else
-  if (main_tab_widget->currentIndex() == idx_tab_tune)
-      opt_shortcuts_find_prev();
-  else
-  if (main_tab_widget->currentIndex() == idx_tab_fman)
-      fman_find_prev();
-}
 
 
 void CTEA::opt_shortcuts_find()
@@ -3257,32 +3083,7 @@ void CTEA::fn_analyze_text_stat()
 }
 
 
-void CTEA::mrkup_antispam_email()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString s = d->get();
-  QString result;
-
-  for (int i = 0; i < s.size(); i++)
-      result = "&#" + QString::number (s.at (i).unicode()) + ";";
-
-  d->put (result);
-}
-
-
-void CTEA::search_replace_with()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (fif_get_text());
-}
 
 
 void CTEA::search_replace_all_at_ofiles()
@@ -3330,80 +3131,6 @@ void CTEA::search_replace_all_at_ofiles()
 }
 
 
-void CTEA::search_replace_all()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  Qt::CaseSensitivity cs = Qt::CaseInsensitive;
-  if (menu_find_case->isChecked())
-     cs = Qt::CaseSensitive;
-
-  QStringList l = fif_get_text().split ("~");
-  if (l.size() < 2)
-     return;
-
-  if (main_tab_widget->currentIndex() == idx_tab_edit)
-     {
-      CDocument *d = documents->get_current();
-      if (! d)
-         return;
-
-      QString s = d->get();
-
-#if (QT_VERSION_MAJOR < 5)
-      if (menu_find_regexp->isChecked())
-         s = s.replace (QRegExp (l[0]), l[1]);
-      else
-          s = s.replace (l[0], l[1], cs);
-#else
-
-      if (menu_find_regexp->isChecked())
-         s = s.replace (QRegularExpression (l[0]), l[1]);
-      else
-          s = s.replace (l[0], l[1], cs);
-
-
-#endif
-
-      d->put (s);
-     }
-  else
-      if (main_tab_widget->currentIndex() == idx_tab_fman)
-         {
-          QStringList sl = fman->get_sel_fnames();
-
-          if (sl.size() < 1)
-             return;
-
-          char *charset = cb_fman_codecs->currentText().toLatin1().data();
-
-          for (QList <QString>::iterator fname = sl.begin(); fname != sl.end(); ++fname)
-              {
-               QString f = qstring_load ((*fname), charset);
-               QString r;
-
-#if (QT_VERSION_MAJOR < 5)
-
-               if (menu_find_regexp->isChecked())
-                  r = f.replace (QRegExp (l[0]), l[1]);
-               else
-                  r = f.replace (l[0], l[1], cs);
-
-#else
-
-               if (menu_find_regexp->isChecked())
-                  r = f.replace (QRegularExpression (l[0]), l[1]);
-               else
-                  r = f.replace (l[0], l[1], cs);
-
-
-#endif
-
-               qstring_save ((*fname), r, charset);
-               log->log (tr ("%1 is processed and saved").arg ((*fname)));
-              }
-        }
-}
 
 
 void CTEA::update_charsets()
@@ -5830,105 +5557,6 @@ void CTEA::create_markup_hash()
 
   hash_markup.insert ("newline", h9);
 
-
-  CMarkupPair *p = new CMarkupPair;
-
-  p->pattern["Docbook"] = "<emphasis role=\"bold\">%s</emphasis>";
-  p->pattern["LaTeX"] = "\\textbf{%s}";
-  p->pattern["HTML"] = "<b>%s</b>";
-  p->pattern["XHTML"] = "<b>%s</b>";
-  p->pattern["Lout"] = "@B{%s}";
-  p->pattern["MediaWiki"] = "'''%s'''";
-  p->pattern["DokuWiki"] = "**%s**";
-  p->pattern["Markdown"] = "**%s**";
-
-  hs_markup.insert ("bold", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["HTML"] = "<p style=\"text-align:justify;\">%s</p>";
-  p->pattern["XHTML"] = "<p style=\"text-align:justify;\">%s</p>";
-
-  hs_markup.insert ("align_justify", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["LaTeX"] = "\\begin{flushleft}%s\\end{flushleft}";
-  p->pattern["HTML"] = "<p style=\"text-align:left;\">%s</p>";
-  p->pattern["XHTML"] = "<p style=\"text-align:left;\">%s</p>";
-
-  hs_markup.insert ("align_left", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["LaTeX"] = "\\begin{center}%s\\end{center}";
-  p->pattern["HTML"] = "<p style=\"text-align:center;\">%s</p>";
-  p->pattern["XHTML"] = "<p style=\"text-align:center;\">%s</p>";
-
-  hs_markup.insert ("align_center", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["LaTeX"] = "\\begin{flushright}%s\\end{flushright}";
-  p->pattern["HTML"] = "<p style=\"text-align:right;\">%s</p>";
-  p->pattern["XHTML"] = "<p style=\"text-align:right;\">%s</p>";
-
-  hs_markup.insert ("align_right", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["Docbook"] = "<emphasis role=\"italic\">%s</emphasis>";
-  p->pattern["LaTeX"] = "\\textit{%s}";
-  p->pattern["HTML"] = "<i>%s</i>";
-  p->pattern["XHTML"] = "<i>%s</i>";
-  p->pattern["Lout"] = "@I{%s}";
-  p->pattern["MediaWiki"] = "''%s''";
-  p->pattern["DokuWiki"] = "//%s//";
-  p->pattern["Markdown"] = "*%s*";
-
-  hs_markup.insert ("italic", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["Docbook"] = "<emphasis role=\"underline\">%s</emphasis>";
-  p->pattern["LaTeX"] = "\\underline{%s}";
-  p->pattern["HTML"] = "<u>%s</u>";
-  p->pattern["XHTML"] = "<u>%s</u>";
-  p->pattern["Lout"] = "@Underline{%s}";
-  p->pattern["MediaWiki"] = "<u>%s</u>";
-  p->pattern["DokuWiki"] = "__%s__";
-
-  hs_markup.insert ("underline", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["Docbook"] = "<para>%s</para>";
-  p->pattern["HTML"] = "<p>%s</p>";
-  p->pattern["XHTML"] = "<p>%s</p>";
-  p->pattern["Lout"] = "@PP%s";
-
-  hs_markup.insert ("para", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["Docbook"] = "<ulink url=\"\">%s</ulink>";
-  p->pattern["HTML"] = "<a href=\"\">%s</a>";
-  p->pattern["XHTML"] = "<a href=\"\">%s</a>";
-  p->pattern["LaTeX"] = "\\href{}{%s}";
-  p->pattern["Markdown"] = "[](%s)";
-
-  hs_markup.insert ("link", p);
-
-  p = new CMarkupPair;
-
-  p->pattern["LaTeX"] = "\\newline";
-  p->pattern["HTML"] = "<br>";
-  p->pattern["XHTML"] = "<br />";
-  p->pattern["Lout"] = "@LLP";
-  p->pattern["MediaWiki"] = "<br />";
-  p->pattern["DokuWiki"] = "\\\\ ";
-
-  hs_markup.insert ("newline", p);
 }
 
 
@@ -6675,95 +6303,8 @@ void CTEA::fman_img_make_gallery()
 }
 
 
-void CTEA::search_in_files_results_dclicked (QListWidgetItem *item)
-{
-  documents->open_file_triplex (item->text());
-  main_tab_widget->setCurrentIndex (idx_tab_edit);
-}
 
 
-void CTEA::search_in_files()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QStringList lresult;
-  QString charset = cb_fman_codecs->currentText();
-  QString path = fman->dir.path();
-  QString text_to_search = fif_get_text();
-
-//  CFTypeChecker fc (":/text-data/cm-tf-names", ":/text-data/cm-tf-exts");
-
-
- // CFTypeChecker fc (qstring_load (":/text-data/cm-tf-names").split ("\n"),
-   //                 documents->tio_handler.get_supported_exts());
-
-  CFTypeChecker fc;
-
-//  fc.lexts += lsupported_exts;
-
-  //QStringList l = documents->hls.keys();
-
-  //fc.lexts.append (l);
-
-  log->log (tr ("Getting files list..."));
-  qApp->processEvents();
-
-  CFilesList lf;
-  lf.get (path);
-
-  log->log (tr ("Searching..."));
-  qApp->processEvents();
-
-  pb_status->show();
-  pb_status->setRange (0, lf.list.size());
-  pb_status->setFormat (tr ("%p% completed"));
-  pb_status->setTextVisible (true);
-
-  for (int i = 0; i < lf.list.size(); i++)
-      {
-       if (i % 100 == 0)
-           qApp->processEvents();
-
-       pb_status->setValue (i);
-
-       QString fileName = lf.list[i];
-
-       if (! fc.check (fileName))
-          continue;
-
-       log->log (fileName);
-
-       CTio *tio = documents->tio_handler.get_for_fname (fileName);
-       tio->charset = charset;
-
-       if (! tio->load (fileName))
-           log->log (tr ("cannot open %1 because of: %2")
-                         .arg (fileName)
-                         .arg (tio->error_string));
-
-       Qt::CaseSensitivity cs = Qt::CaseInsensitive;
-       if (menu_find_case->isChecked())
-          cs = Qt::CaseSensitive;
-
-       int index = tio->data.indexOf (text_to_search, 0, cs);
-       if (index != -1)
-          lresult.append (fileName + "," + charset + "," + QString::number (index));
-      }
-
-
-  pb_status->hide();
-
-  CTextListWnd *w = new CTextListWnd (tr ("Search results"), tr ("Files"));
-  w->move (this->x(), this->y());
-
-  w->list->addItems (lresult);
-
-  connect (w->list, SIGNAL(itemDoubleClicked ( QListWidgetItem *)),
-           this, SLOT(search_in_files_results_dclicked ( QListWidgetItem *)));
-
-  w->resize (width() - 10, (int) height() / 2);
-  w->show();
-}
 
 
 void CTEA::view_use_profile()
@@ -7569,31 +7110,6 @@ QAction* CTEA::add_to_menu (QMenu *menu,
 }
 
 
-void CTEA::search_fuzzy_mode()
-{
-  menu_find_whole_words->setChecked (false);
-  menu_find_regexp->setChecked (false);;
-}
-
-
-void CTEA::search_regexp_mode()
-{
-  menu_find_fuzzy->setChecked (false);
-}
-
-
-void CTEA::search_whole_words_mode()
-{
-  menu_find_fuzzy->setChecked (false);
-}
-
-
-void CTEA::search_from_cursor_mode()
-{
-  settings->setValue ("find_from_cursor", menu_find_from_cursor->isChecked());
-}
-
-
 void CDarkerWindow::closeEvent (QCloseEvent *event)
 {
   event->accept();
@@ -8394,125 +7910,7 @@ void CTEA::fn_math_sum_by_last_col()
 }
 
 
-void CTEA::search_unmark()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
-  QString text_color = hash_get_val (global_palette, "text", "black");
-  QString back_color = hash_get_val (global_palette, "background", "white");
-
-  QString t_text_color = QColor (text_color).darker(darker_val).name();
-  QString t_back_color = QColor (back_color).darker(darker_val).name();
-
-  d->selectAll();
-
-  QTextCharFormat f =  d->currentCharFormat();
-  f.setBackground (QColor (t_back_color));
-  f.setForeground (QColor (t_text_color));
-  d->mergeCurrentCharFormat (f);
-  d->textCursor().clearSelection();
-}
-
-
-void CTEA::search_mark_all()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
-  QString text_color = hash_get_val (global_palette, "text", "black");
-  QString back_color = hash_get_val (global_palette, "background", "white");
-  QString t_text_color = QColor (text_color).darker(darker_val).name();
-  QString t_back_color = QColor (back_color).darker(darker_val).name();
-
-  bool cont_search = true;
-
-  QTextCursor cr;
-
-  int pos_save = d->textCursor().position();
-
-  d->selectAll();
-
-  QTextCharFormat f = d->currentCharFormat();
-  f.setBackground (QColor (t_back_color));
-  f.setForeground (QColor (t_text_color));
-  d->mergeCurrentCharFormat (f);
-
-  d->textCursor().clearSelection();
-
-  int from;
-
-  if (settings->value ("find_from_cursor", "1").toBool())
-      from = d->textCursor().position();
-  else
-      from = 0;
-
-  d->text_to_search = fif_get_text();
-
-  while (cont_search)
-        {
-
-#if (QT_VERSION_MAJOR < 5)
-
-         if (menu_find_regexp->isChecked())
-            cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
-#else
-
-         if (menu_find_regexp->isChecked())
-            cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
-
-
-#endif
-         else
-             if (menu_find_fuzzy->isChecked()) //fuzzy search
-                {
-                 int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
-                 if (pos != -1)
-                    {
-                     //set selection:
-                     cr = d->textCursor();
-                     cr.setPosition (pos, QTextCursor::MoveAnchor);
-                     cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
-
-                     if (! cr.isNull())
-                         d->setTextCursor (cr);
-                    }
-                 else
-                     cont_search = false;
-                }
-            else //normal search
-                 cr = d->document()->find (d->text_to_search, from, get_search_options());
-
-
-         if (! cr.isNull())
-            {
-             d->setTextCursor (cr);
-             QTextCharFormat fm = cr.blockCharFormat();
-             fm.setBackground (QColor (hash_get_val (global_palette, "backgroundmark", "red")));
-             fm.setForeground (QColor (hash_get_val (global_palette, "foregroundmark", "blue")));
-
-             cr.mergeCharFormat (fm);
-             d->setTextCursor (cr);
-            }
-         else
-             cont_search = false;
-
-         from = d->textCursor().position();
-        }
-
-  d->document()->setModified (false);
-  d->goto_pos (pos_save);
-}
 
 
 void CTEA::fn_scale_image()
@@ -9477,14 +8875,11 @@ File menu callbacks
 
 void CTEA::test()
 {
-   pdf_conv_test ("/mnt/big8/books/cerk/povest_o_petre_i_fevronii.pdf");
 }
-
 
 
 void CTEA::file_new()
 {
-//  last_action = qobject_cast<QAction *>(sender());
   last_action = sender();
   documents->create_new();
   main_tab_widget->setCurrentIndex (idx_tab_edit);
@@ -9605,7 +9000,6 @@ void CTEA::file_open()
   settings->setValue ("dialog_size", dialog.size());
   update_dyn_menus();
 }
-
 
 
 void CTEA::file_open_at_cursor()
@@ -10621,60 +10015,22 @@ void CTEA::mrkup_tags_to_entities()
 }
 
 
-/*
-void CTEA::mrkup_document_weight()
+void CTEA::mrkup_antispam_email()
 {
-  last_action = sender();
+  last_action = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
   if (! d)
      return;
 
+  QString s = d->get();
   QString result;
-  QStringList l = html_get_by_patt (d->toPlainText(), "src=\"");
 
-  QFileInfo f (d->file_name);
-  QUrl baseUrl (d->file_name);
+  for (int i = 0; i < s.size(); i++)
+      result = "&#" + QString::number (s.at (i).unicode()) + ";";
 
-//  result += tr ("%1 %2 kbytes<br>").arg (d->file_name).arg (QString::number (f.size() / 1024));
-
-  QList <CFSizeFName*> lst;
-  lst.append (new CFSizeFName (f.size(), d->file_name));
-
-  int size_total = 0;
-  int files_total = 1;
-
-  for (int i = 0; i < l.size(); i++)
-      {
-       QUrl relativeUrl (l.at(i));
-       QString resolved = baseUrl.resolved (relativeUrl).toString();
-       QFileInfo info (resolved);
-
-       if (! info.exists())
-           lst.append (new CFSizeFName (info.size(), tr ("%1 is not found<br>").arg (resolved)));
-       else
-           {
-            lst.append (new CFSizeFName (info.size(), resolved));
-            size_total += info.size();
-            ++files_total;
-           }
-       }
-
-  std::sort (lst.begin(), lst.end(), CFSizeFNameLessThan);
-
-  for (int i = 0; i < lst.size(); i++)
-      {
-       result += tr ("%1 kbytes %2 <br>").arg (QString::number (lst[i]->size / 1024)).arg (lst[i]->fname);
-       delete lst[i];
-      }
-
-  result.prepend (tr ("Total size = %1 kbytes in %2 files<br>").arg (QString::number (size_total / 1024))
-                  .arg (QString::number (files_total)));
-
-  log->log (result);
+  d->put (result);
 }
-*/
-
 
 
 void CTEA::mrkup_document_weight()
@@ -10690,17 +10046,10 @@ void CTEA::mrkup_document_weight()
 
   QFileInfo f (d->file_name);
   QUrl baseUrl (d->file_name);
-
-//  result += tr ("%1 %2 kbytes<br>").arg (d->file_name).arg (QString::number (f.size() / 1024));
-
 
   std::vector<std::pair<QString, qint64> > files;
   files.push_back(std::make_pair(d->file_name, f.size()));
 
-
-//  QList <CFSizeFName*> lst;
-//  lst.append (new CFSizeFName (f.size(), d->file_name));
-
   int size_total = 0;
   int files_total = 1;
 
@@ -10711,12 +10060,9 @@ void CTEA::mrkup_document_weight()
        QFileInfo info (resolved);
 
        if (! info.exists())
-           //lst.append (new CFSizeFName (info.size(), tr ("%1 is not found<br>").arg (resolved)));
          files.push_back(std::make_pair(tr ("%1 is not found<br>").arg (resolved), info.size()));
-
        else
            {
-            //lst.append (new CFSizeFName (info.size(), resolved));
             files.push_back(std::make_pair(resolved, info.size()));
             size_total += info.size();
             ++files_total;
@@ -10731,13 +10077,6 @@ void CTEA::mrkup_document_weight()
 
       }
 
-/*
-  for (int i = 0; i < files.size(); i++)
-      {
-       result += tr ("%1 kbytes %2 <br>").arg (QString::number (lst[i]->size / 1024)).arg (lst[i]->fname);
-       delete lst[i];
-      }
-*/
   result.prepend (tr ("Total size = %1 kbytes in %2 files<br>").arg (QString::number (size_total / 1024))
                   .arg (QString::number (files_total)));
 
@@ -10777,7 +10116,7 @@ void CTEA::mrkup_preview_color()
 
 void CTEA::mrkup_strip_html_tags()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -10796,8 +10135,11 @@ void CTEA::mrkup_strip_html_tags()
       d->setPlainText (strip_html (text));
 }
 
+
 void CTEA::mrkup_rename_selected()
 {
+  last_action = sender();
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -10840,4 +10182,498 @@ void CTEA::mrkup_rename_selected()
 
   if (d->textCursor().hasSelection())
      d->put (new_name.trimmed());
+}
+
+
+
+/*
+===================
+Search menu callbacks
+===================
+*/
+
+
+QTextDocument::FindFlags CTEA::get_search_options()
+{
+  QTextDocument::FindFlags flags; //= 0;
+
+  if (menu_find_whole_words->isChecked())
+     flags = flags | QTextDocument::FindWholeWords;
+
+  if (menu_find_case->isChecked())
+     flags = flags | QTextDocument::FindCaseSensitively;
+
+  return flags;
+}
+
+
+void CTEA::search_find()
+{
+  last_action = sender();
+
+  if (main_tab_widget->currentIndex() == idx_tab_edit)
+     {
+      CDocument *d = documents->get_current();
+      if (! d)
+        return;
+
+      QTextCursor cr;
+
+      int from = 0;
+
+      if (settings->value ("find_from_cursor", "1").toBool())
+          from = d->textCursor().position();
+
+      d->text_to_search = fif_get_text();
+
+      if (menu_find_regexp->isChecked())
+
+#if QT_VERSION < 0x050000
+         cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+#else
+         cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
+#endif
+
+      else
+          if (menu_find_fuzzy->isChecked())
+             {
+              int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
+              if (pos != -1)
+                 {
+                  from = pos + d->text_to_search.length() - 1;
+                  //set selection:
+                  cr = d->textCursor();
+                  cr.setPosition (from, QTextCursor::MoveAnchor);
+                  cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
+
+                  if (! cr.isNull())
+                      d->setTextCursor (cr);
+                 }
+              return;
+             }
+      else //normal search
+          cr = d->document()->find (d->text_to_search, from, get_search_options());
+
+      if (! cr.isNull())
+          d->setTextCursor (cr);
+      else
+          log->log(tr ("not found!"));
+     }
+  else
+  if (main_tab_widget->currentIndex() == idx_tab_learn)
+      man_find_find();
+  else
+  if (main_tab_widget->currentIndex() == idx_tab_tune)
+     opt_shortcuts_find();
+  else
+  if (main_tab_widget->currentIndex() == idx_tab_fman)
+     fman_find();
+}
+
+
+void CTEA::search_find_next()
+{
+  last_action = sender();
+
+  if (main_tab_widget->currentIndex() == idx_tab_edit)
+     {
+      CDocument *d = documents->get_current();
+      if (! d)
+         return;
+
+      QTextCursor cr;
+      if (menu_find_regexp->isChecked())
+#if QT_VERSION < 0x050000
+         cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options());
+
+#else
+         cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options());
+
+#endif
+
+      if (menu_find_fuzzy->isChecked())
+         {
+          int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, d->textCursor().position(), settings->value ("fuzzy_q", "60").toInt());
+          if (pos != -1)
+             {
+              cr = d->textCursor();
+              cr.setPosition (pos, QTextCursor::MoveAnchor);
+              cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
+
+              if (! cr.isNull())
+                  d->setTextCursor (cr);
+             }
+          return;
+         }
+      else
+          cr = d->document()->find (d->text_to_search, d->textCursor().position(), get_search_options());
+
+      if (! cr.isNull())
+          d->setTextCursor (cr);
+     }
+   else
+   if (main_tab_widget->currentIndex() == idx_tab_learn)
+      man_find_next();
+   else
+   if (main_tab_widget->currentIndex() == idx_tab_tune)
+      opt_shortcuts_find_next();
+   else
+   if (main_tab_widget->currentIndex() == idx_tab_fman)
+      fman_find_next();
+}
+
+
+void CTEA::search_find_prev()
+{
+  last_action = sender();
+
+  if (main_tab_widget->currentIndex() == idx_tab_edit)
+     {
+      CDocument *d = documents->get_current();
+      if (! d)
+         return;
+
+      QTextCursor cr;
+
+      if (menu_find_regexp->isChecked())
+#if QT_VERSION < 0x050000
+         cr = d->document()->find (QRegExp (d->text_to_search),
+                                            d->textCursor(),
+                                            get_search_options() | QTextDocument::FindBackward);
+
+#else
+         cr = d->document()->find (QRegularExpression (d->text_to_search),
+                                                       d->textCursor(),
+                                                       get_search_options() | QTextDocument::FindBackward);
+
+#endif
+
+      else
+          cr = d->document()->find (d->text_to_search,
+                                    d->textCursor(),
+                                    get_search_options() | QTextDocument::FindBackward);
+
+      if (! cr.isNull())
+          d->setTextCursor (cr);
+     }
+  else
+  if (main_tab_widget->currentIndex() == idx_tab_learn)
+      man_find_prev();
+  else
+  if (main_tab_widget->currentIndex() == idx_tab_tune)
+      opt_shortcuts_find_prev();
+  else
+  if (main_tab_widget->currentIndex() == idx_tab_fman)
+      fman_find_prev();
+}
+
+
+void CTEA::search_mark_all()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  QString text_color = hash_get_val (global_palette, "text", "black");
+  QString back_color = hash_get_val (global_palette, "background", "white");
+  QString t_text_color = QColor (text_color).darker(darker_val).name();
+  QString t_back_color = QColor (back_color).darker(darker_val).name();
+
+  bool cont_search = true;
+
+  QTextCursor cr;
+
+  int pos_save = d->textCursor().position();
+
+  d->selectAll();
+
+  QTextCharFormat f = d->currentCharFormat();
+  f.setBackground (QColor (t_back_color));
+  f.setForeground (QColor (t_text_color));
+  d->mergeCurrentCharFormat (f);
+
+  d->textCursor().clearSelection();
+
+  int from;
+
+  if (settings->value ("find_from_cursor", "1").toBool())
+      from = d->textCursor().position();
+  else
+      from = 0;
+
+  d->text_to_search = fif_get_text();
+
+  while (cont_search)
+        {
+
+#if (QT_VERSION_MAJOR < 5)
+
+         if (menu_find_regexp->isChecked())
+            cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+#else
+
+         if (menu_find_regexp->isChecked())
+            cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
+
+
+#endif
+         else
+             if (menu_find_fuzzy->isChecked()) //fuzzy search
+                {
+                 int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
+                 if (pos != -1)
+                    {
+                     //set selection:
+                     cr = d->textCursor();
+                     cr.setPosition (pos, QTextCursor::MoveAnchor);
+                     cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
+
+                     if (! cr.isNull())
+                         d->setTextCursor (cr);
+                    }
+                 else
+                     cont_search = false;
+                }
+            else //normal search
+                 cr = d->document()->find (d->text_to_search, from, get_search_options());
+
+
+         if (! cr.isNull())
+            {
+             d->setTextCursor (cr);
+             QTextCharFormat fm = cr.blockCharFormat();
+             fm.setBackground (QColor (hash_get_val (global_palette, "backgroundmark", "red")));
+             fm.setForeground (QColor (hash_get_val (global_palette, "foregroundmark", "blue")));
+
+             cr.mergeCharFormat (fm);
+             d->setTextCursor (cr);
+            }
+         else
+             cont_search = false;
+
+         from = d->textCursor().position();
+        }
+
+  d->document()->setModified (false);
+  d->goto_pos (pos_save);
+}
+
+
+void CTEA::search_unmark()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  QString text_color = hash_get_val (global_palette, "text", "black");
+  QString back_color = hash_get_val (global_palette, "background", "white");
+
+  QString t_text_color = QColor (text_color).darker(darker_val).name();
+  QString t_back_color = QColor (back_color).darker(darker_val).name();
+
+  d->selectAll();
+
+  QTextCharFormat f =  d->currentCharFormat();
+  f.setBackground (QColor (t_back_color));
+  f.setForeground (QColor (t_text_color));
+  d->mergeCurrentCharFormat (f);
+  d->textCursor().clearSelection();
+}
+
+
+void CTEA::search_in_files_results_dclicked (QListWidgetItem *item)
+{
+  documents->open_file_triplex (item->text());
+  main_tab_widget->setCurrentIndex (idx_tab_edit);
+}
+
+
+void CTEA::search_in_files()
+{
+  last_action = sender();
+
+  QStringList lresult;
+  QString charset = cb_fman_codecs->currentText();
+  QString path = fman->dir.path();
+  QString text_to_search = fif_get_text();
+
+  CFTypeChecker fc;
+
+  log->log (tr ("Getting files list..."));
+  qApp->processEvents();
+
+  CFilesList lf;
+  lf.get (path);
+
+  log->log (tr ("Searching..."));
+  qApp->processEvents();
+
+  pb_status->show();
+  pb_status->setRange (0, lf.list.size());
+  pb_status->setFormat (tr ("%p% completed"));
+  pb_status->setTextVisible (true);
+
+  for (int i = 0; i < lf.list.size(); i++)
+      {
+       if (i % 100 == 0)
+           qApp->processEvents();
+
+       pb_status->setValue (i);
+
+       QString fname = lf.list[i];
+
+       if (! fc.check (fname))
+          continue;
+
+       log->log (fname);
+
+       CTio *tio = documents->tio_handler.get_for_fname (fname);
+       tio->charset = charset;
+
+       if (! tio->load (fname))
+           log->log (tr ("cannot open %1 because of: %2")
+                         .arg (fname)
+                         .arg (tio->error_string));
+
+       Qt::CaseSensitivity cs = Qt::CaseInsensitive;
+       if (menu_find_case->isChecked())
+          cs = Qt::CaseSensitive;
+
+       int index = tio->data.indexOf (text_to_search, 0, cs);
+       if (index != -1)
+          lresult.append (fname + "," + charset + "," + QString::number (index));
+      }
+
+
+  pb_status->hide();
+
+  CTextListWnd *w = new CTextListWnd (tr ("Search results"), tr ("Files"));
+  w->move (this->x(), this->y());
+
+  w->list->addItems (lresult);
+
+  connect (w->list, SIGNAL(itemDoubleClicked ( QListWidgetItem *)),
+           this, SLOT(search_in_files_results_dclicked ( QListWidgetItem *)));
+
+  w->resize (width() - 10, (int) height() / 2);
+  w->show();
+}
+
+
+void CTEA::search_whole_words_mode()
+{
+  menu_find_fuzzy->setChecked (false);
+}
+
+
+void CTEA::search_from_cursor_mode()
+{
+  settings->setValue ("find_from_cursor", menu_find_from_cursor->isChecked());
+}
+
+
+void CTEA::search_regexp_mode()
+{
+  menu_find_fuzzy->setChecked (false);
+}
+
+
+void CTEA::search_fuzzy_mode()
+{
+  menu_find_whole_words->setChecked (false);
+  menu_find_regexp->setChecked (false);;
+}
+
+
+void CTEA::search_replace_with()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (fif_get_text());
+}
+
+
+void CTEA::search_replace_all()
+{
+  last_action = sender();
+
+  Qt::CaseSensitivity cs = Qt::CaseInsensitive;
+  if (menu_find_case->isChecked())
+     cs = Qt::CaseSensitive;
+
+  QStringList l = fif_get_text().split ("~");
+  if (l.size() < 2)
+     return;
+
+  if (main_tab_widget->currentIndex() == idx_tab_edit)
+     {
+      CDocument *d = documents->get_current();
+      if (! d)
+         return;
+
+      QString s = d->get();
+
+#if (QT_VERSION_MAJOR < 5)
+      if (menu_find_regexp->isChecked())
+         s = s.replace (QRegExp (l[0]), l[1]);
+      else
+          s = s.replace (l[0], l[1], cs);
+#else
+
+      if (menu_find_regexp->isChecked())
+         s = s.replace (QRegularExpression (l[0]), l[1]);
+      else
+          s = s.replace (l[0], l[1], cs);
+
+
+#endif
+
+      d->put (s);
+     }
+  else
+      if (main_tab_widget->currentIndex() == idx_tab_fman)
+         {
+          QStringList sl = fman->get_sel_fnames();
+
+          if (sl.size() < 1)
+             return;
+
+          char *charset = cb_fman_codecs->currentText().toLatin1().data();
+
+          for (QList <QString>::iterator fname = sl.begin(); fname != sl.end(); ++fname)
+              {
+               QString f = qstring_load ((*fname), charset);
+               QString r;
+
+#if (QT_VERSION_MAJOR < 5)
+
+               if (menu_find_regexp->isChecked())
+                  r = f.replace (QRegExp (l[0]), l[1]);
+               else
+                  r = f.replace (l[0], l[1], cs);
+
+#else
+
+               if (menu_find_regexp->isChecked())
+                  r = f.replace (QRegularExpression (l[0]), l[1]);
+               else
+                  r = f.replace (l[0], l[1], cs);
+
+
+#endif
+
+               qstring_save ((*fname), r, charset);
+               log->log (tr ("%1 is processed and saved").arg ((*fname)));
+              }
+        }
 }

@@ -1,22 +1,14 @@
-#include "wavinfo.h"
-
 #include <QFile>
 #include <QDataStream>
 
 #include <math.h>
 
-
-bool str_check (char *s1, char *s2, int size)
-{
-  for (int i = 0; i < size; i++)
-       if (s1[i] != s2[i])
-          return false;
-
-  return true;
-}
+#include "wavinfo.h"
+#include "utils.h"
 
 
-bool CWavReader::get_info (const QString fname)
+
+bool CWavReader::get_info (const QString &fname)
 {
   QFile fl (fname);
 

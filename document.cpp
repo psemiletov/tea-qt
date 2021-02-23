@@ -1196,12 +1196,10 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
         if (p->first.isValid())
            if (p->first.exactMatch(file_name))
               {
-//               qDebug() << p->first.pattern() << " IS valid with " << p->second;
-              fname = p->second;
+               fname = p->second;
                break;
               }
       }
-
 
 #endif
 
@@ -1210,7 +1208,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #if QT_VERSION >= 0x050000
 
-   highlighter = new CSyntaxHighlighterQRegularExpression (document(), this, fname);
+  highlighter = new CSyntaxHighlighterQRegularExpression (document(), this, fname);
 
 #else
 
@@ -1218,6 +1216,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #endif
 }
+
 
 void CDocument::set_markup_mode()
 {

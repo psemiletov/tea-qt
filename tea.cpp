@@ -3223,14 +3223,6 @@ void CTEA::fn_morse_to_en()
 }
 
 
-void CTEA::fn_morse_from_ru()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (morse_from_lang (d->get().toUpper(), "ru"));
-}
 
 
 void CTEA::fn_morse_to_ru()
@@ -7118,183 +7110,6 @@ void CTEA::fman_multi_rename_apply_template()
 }
 
 
-//UTF-16BE, UTF-32BE
-//′
-//#define UQS 8242
-//″
-//#define UQD 8243
-//°
-//#define UQDG 176
-
-//degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
-//to
-//decimal degrees: 40.446° N 79.982° W
-void CTEA::fn_math_number_dms2dc()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-      return;
-
-  QString t = d->get();
-  t = t.remove (" ");
-
-  t = t.replace ('\'', QChar (UQS));
-  t = t.replace ('"', QChar (UQD));
-
-  QChar north_or_south = ('N');
-  if (t.contains ('S'))
-     north_or_south = 'S';
-
-  QChar east_or_west = ('E');
-  if (t.contains ('W'))
-     east_or_west = 'W';
-
-  QStringList l = t.split (north_or_south);
-
-  QString latitude = l[0];
-  QString longtitude = l[1];
-
-//  qDebug() << "latitude " << latitude;
-
-//  qDebug() << "longtitude " << longtitude;
-
-  int iqdg = latitude.indexOf(QChar (UQDG));
-  int iqs = latitude.indexOf(QChar (UQS));
-  int iqd = latitude.indexOf(QChar (UQD));
-
-/*  qDebug() << "iqdg : " << iqdg;
-  qDebug() << "iqs : " << iqs;
-  qDebug() << "iqd : " << iqd;
-  */
-  QString degrees1 = latitude.left (iqdg);
-  QString minutes1 = latitude.mid (iqdg + 1, iqs - iqdg - 1);
-  QString seconds1 = latitude.mid (iqs + 1, iqd - iqs - 1);
-
-/*
-  qDebug() << "degrees1 : " << degrees1;
-  qDebug() << "minutes1 : " << minutes1;
-  qDebug() << "seconds1 : " << seconds1;
-*/
-  double lat_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
-  QString lat_decimal_degrees_N = QString::number (lat_decimal_degrees, 'f', 3) + QChar (UQDG) + north_or_south;
-
-  iqdg = longtitude.indexOf (QChar (UQDG));
-  iqs = longtitude.indexOf (QChar (UQS));
-  iqd = longtitude.indexOf (QChar (UQD));
-
-//   qDebug() << "iqdg : " << iqdg;
-//  qDebug() << "iqs : " << iqs;
-//  qDebug() << "iqd : " << iqd;
-
-  degrees1 = longtitude.left (iqdg);
-  minutes1 = longtitude.mid (iqdg + 1, iqs - iqdg - 1);
-  seconds1 = longtitude.mid (iqs + 1, iqd - iqs - 1);
-
-  double longt_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
-
-  QString longt_decimal_degrees_N = QString::number (longt_decimal_degrees, 'f', 3) + QChar (UQDG) + east_or_west;
-
-  log->log (lat_decimal_degrees_N + " " + longt_decimal_degrees_N);
-//  qDebug() << "decimal_degrees " << decimal_degrees;
-//  qDebug() << "decimal_degrees_N " << decimal_degrees_N;
-}
-
-
-
-/*
-
-degrees = floor (decimal_degrees)
-minutes = floor (60 * (decimal_degrees - degrees))
-seconds = 3600 * (decimal_degrees - degrees) - 60 * minites
-
-*/
-
-//decimal degrees: 40.446° N 79.982° W
-//to
-//degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
-
-void CTEA::fn_math_number_dd2dms()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-      return;
-
-  QString t = d->get();
-  t = t.remove (" ");
-  t = t.remove (QChar (UQDG));
-
-  QChar north_or_south = ('N');
-  if (t.contains ('S'))
-     north_or_south = 'S';
-
-  QChar east_or_west = ('E');
-  if (t.contains ('W'))
-     east_or_west = 'W';
-
-  QStringList l = t.split (north_or_south);
-
-  QString latitude = l[0];
-
-#if QT_VERSION < 0x050000
-  QString longtitude = l[1].remove (QRegExp("[a-zA-Z\\s]"));
-#else
-  QString longtitude = l[1].remove (QRegularExpression("[a-zA-Z\\s]"));
-#endif
-
-
-  double degrees = floor (latitude.toDouble());
-  double minutes = floor (60 * (latitude.toDouble() - degrees));
-  double seconds = round (3600 * (latitude.toDouble() - degrees) - 60 * minutes);
-
-
-  double degrees2 = floor (longtitude.toDouble());
-  double minutes2 = floor (60 * (longtitude.toDouble() - degrees2));
-  double seconds2 = round (3600 * (longtitude.toDouble() - degrees2) - 60 * minutes2);
-
-
-  QString result = QString::number (degrees) + QChar (UQDG) + QString::number (minutes) + QChar (UQS) +
-                   QString::number (seconds) + QChar (UQD) +
-                   north_or_south + " " +
-                   QString::number (degrees2) + QChar (UQDG) + QString::number (minutes2)
-                    + QChar (UQS) + QString::number (seconds2) + QChar (UQD) +
-                   east_or_west;
-
-  log->log (result);
-
-
-/*
-  double lat_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
-  QString lat_decimal_degrees_N = QString::number (lat_decimal_degrees, 'f', 3) + QChar (UQDG) + north_or_south;
-
-  iqdg = longtitude.indexOf (QChar (UQDG));
-  iqs = longtitude.indexOf (QChar (UQS));
-  iqd = longtitude.indexOf (QChar (UQD));
-
-   qDebug() << "iqdg : " << iqdg;
-  qDebug() << "iqs : " << iqs;
-  qDebug() << "iqd : " << iqd;
-
-
-  degrees1 = longtitude.left (iqdg);
-  minutes1 = longtitude.mid (iqdg + 1, iqs - iqdg - 1);
-  seconds1 = longtitude.mid (iqs + 1, iqd - iqs - 1);
-
-  double longt_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
-
-  QString longt_decimal_degrees_N = QString::number (longt_decimal_degrees, 'f', 3) + QChar (UQDG) + east_or_west;
-
-
-  log->log (lat_decimal_degrees_N + " " + longt_decimal_degrees_N);
-//  qDebug() << "decimal_degrees " << decimal_degrees;
-//  qDebug() << "decimal_degrees_N " << decimal_degrees_N;
-*/
-//     d->put (int_to_binary (d->get().toInt()));
-}
-
 
 void CTEA::receiveMessageShared (const QStringList &msg)
 {
@@ -9961,6 +9776,13 @@ void CTEA::fn_run_script()
   else
   if (ext == "lua")
      intrp = "lua";
+  else
+  if (ext == "bat" || ext == "btm")
+     intrp = "cmd.exe";
+  else
+  if (ext == "cmd") //REXX
+     intrp = "cmd.exe";
+
 
   if (intrp.isEmpty())
       return;
@@ -10720,4 +10542,149 @@ void CTEA::fn_math_enum()
       }
 
   d->put (result);
+}
+
+
+//UTF-16BE, UTF-32BE
+//′
+//#define UQS 8242
+//″
+//#define UQD 8243
+//°
+//#define UQDG 176
+
+//degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
+//to
+//decimal degrees: 40.446° N 79.982° W
+void CTEA::fn_math_number_dms2dc()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QString t = d->get();
+  t = t.remove (" ");
+
+  t = t.replace ('\'', QChar (UQS));
+  t = t.replace ('"', QChar (UQD));
+
+  QChar north_or_south = ('N');
+  if (t.contains ('S'))
+     north_or_south = 'S';
+
+  QChar east_or_west = ('E');
+  if (t.contains ('W'))
+     east_or_west = 'W';
+
+  QStringList l = t.split (north_or_south);
+
+  QString latitude = l[0];
+  QString longtitude = l[1];
+
+//  qDebug() << "latitude " << latitude;
+//  qDebug() << "longtitude " << longtitude;
+
+  int iqdg = latitude.indexOf (QChar (UQDG));
+  int iqs = latitude.indexOf (QChar (UQS));
+  int iqd = latitude.indexOf (QChar (UQD));
+
+  QString degrees1 = latitude.left (iqdg);
+  QString minutes1 = latitude.mid (iqdg + 1, iqs - iqdg - 1);
+  QString seconds1 = latitude.mid (iqs + 1, iqd - iqs - 1);
+
+  double lat_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
+  QString lat_decimal_degrees_N = QString::number (lat_decimal_degrees, 'f', 3) + QChar (UQDG) + north_or_south;
+
+  iqdg = longtitude.indexOf (QChar (UQDG));
+  iqs = longtitude.indexOf (QChar (UQS));
+  iqd = longtitude.indexOf (QChar (UQD));
+
+
+  degrees1 = longtitude.left (iqdg);
+  minutes1 = longtitude.mid (iqdg + 1, iqs - iqdg - 1);
+  seconds1 = longtitude.mid (iqs + 1, iqd - iqs - 1);
+
+  double longt_decimal_degrees = degrees1.toDouble() + (double) (minutes1.toDouble() / 60) + (double) (seconds1.toDouble() / 3600);
+
+  QString longt_decimal_degrees_N = QString::number (longt_decimal_degrees, 'f', 3) + QChar (UQDG) + east_or_west;
+
+  log->log (lat_decimal_degrees_N + " " + longt_decimal_degrees_N);
+//  qDebug() << "decimal_degrees " << decimal_degrees;
+//  qDebug() << "decimal_degrees_N " << decimal_degrees_N;
+}
+
+
+
+
+/*
+
+degrees = floor (decimal_degrees)
+minutes = floor (60 * (decimal_degrees - degrees))
+seconds = 3600 * (decimal_degrees - degrees) - 60 * minites
+
+*/
+
+//decimal degrees: 40.446° N 79.982° W
+//to
+//degrees minutes seconds: 40° 26′ 46″ N 79° 58′ 56″ W
+
+void CTEA::fn_math_number_dd2dms()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QString t = d->get();
+  t = t.remove (" ");
+  t = t.remove (QChar (UQDG));
+
+  QChar north_or_south = ('N');
+  if (t.contains ('S'))
+     north_or_south = 'S';
+
+  QChar east_or_west = ('E');
+  if (t.contains ('W'))
+     east_or_west = 'W';
+
+  QStringList l = t.split (north_or_south);
+
+  QString latitude = l[0];
+
+#if QT_VERSION < 0x050000
+  QString longtitude = l[1].remove (QRegExp("[a-zA-Z\\s]"));
+#else
+  QString longtitude = l[1].remove (QRegularExpression("[a-zA-Z\\s]"));
+#endif
+
+  double degrees = floor (latitude.toDouble());
+  double minutes = floor (60 * (latitude.toDouble() - degrees));
+  double seconds = round (3600 * (latitude.toDouble() - degrees) - 60 * minutes);
+
+  double degrees2 = floor (longtitude.toDouble());
+  double minutes2 = floor (60 * (longtitude.toDouble() - degrees2));
+  double seconds2 = round (3600 * (longtitude.toDouble() - degrees2) - 60 * minutes2);
+
+
+  QString result = QString::number (degrees) + QChar (UQDG) + QString::number (minutes) + QChar (UQS) +
+                   QString::number (seconds) + QChar (UQD) +
+                   north_or_south + " " +
+                   QString::number (degrees2) + QChar (UQDG) + QString::number (minutes2)
+                    + QChar (UQS) + QString::number (seconds2) + QChar (UQD) +
+                   east_or_west;
+
+  log->log (result);
+}
+
+
+void CTEA::fn_morse_from_ru()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (morse_from_lang (d->get().toUpper(), "ru"));
 }

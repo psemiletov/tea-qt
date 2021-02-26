@@ -282,10 +282,7 @@ Variables
   QString dir_sessions;
   QString dir_hls;
   QString dir_themes;
-
   QString dir_plugins;
-
-
   QString dir_snippets;
   QString dir_scripts;
   QString dir_palettes;
@@ -293,8 +290,6 @@ Variables
   QString dir_days;
 
   QString fname_def_palette;
-
-
   QString fname_fif;
 
   QString fname_bookmarks;
@@ -305,7 +300,6 @@ Variables
   QString fname_crapbook;
   QString fname_tempfile;
   QString fname_tempparamfile;
-
 
 
 
@@ -1110,7 +1104,6 @@ View menu callbacks
 
   void view_use_theme();
   void view_use_palette();
-  //void view_use_hl();
   void view_use_profile();
   void view_profile_save_as();
 

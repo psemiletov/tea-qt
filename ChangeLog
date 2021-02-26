@@ -1,5 +1,7 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+* Spellscheker module rewrite
+
 + lua is added for script intepritators (Fn - Script)
 + Fn::Script: bat, btm scripts support (Win)
 + Fn::Script: cmd //REXX  

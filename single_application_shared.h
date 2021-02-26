@@ -26,7 +26,7 @@ private:
 
 public:
 
-  CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey);
+  CSingleApplicationShared (int &argc, char *argv[], const QString &uniqueKey);
   ~CSingleApplicationShared() {/*qDebug() << "~CSingleApplicationShared";*/};  
 
   static int cursorFlashTime() 
@@ -53,7 +53,7 @@ public slots:
 
 signals:
 
-  void messageAvailable(const QStringList& messages);
+  void messageAvailable(const QStringList &messages);
   void signal_commit_data();
  
 };

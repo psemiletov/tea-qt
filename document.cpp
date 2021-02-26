@@ -801,7 +801,7 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 
   connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
-  connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
+  connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
 
   updateLineNumberAreaWidth();
 

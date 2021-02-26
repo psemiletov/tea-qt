@@ -103,7 +103,7 @@ void CFMan::nav (const QString &path)
        add_entry (lst.at(i));
 
   setModel (mymodel);
-  connect (selectionModel(), SIGNAL(currentChanged (const QModelIndex &, const QModelIndex &)), this, SLOT(fman_currentChanged (const QModelIndex &, const QModelIndex &)));
+  connect (selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)), this, SLOT(fman_currentChanged (QModelIndex,QModelIndex)));
   emit dir_changed (p);
 }
 
@@ -253,7 +253,7 @@ CFMan::CFMan (QWidget *parent): QTreeView (parent)
   setSelectionMode (QAbstractItemView::ExtendedSelection);
   setSelectionBehavior (QAbstractItemView::SelectRows);
 
-  connect (this, SIGNAL(activated(const QModelIndex &)), this, SLOT(tv_activated(const QModelIndex &)));
+  connect (this, SIGNAL(activated(QModelIndex)), this, SLOT(tv_activated(QModelIndex)));
 }
 
 

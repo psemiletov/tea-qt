@@ -107,10 +107,7 @@ const int UQDG = 176;
 bool MyProxyStyle::b_altmenu = false;
 int MyProxyStyle::cursor_blink_time = 1;
 
-
 extern QSettings *settings;
-
-
 extern QMenu *menu_current_files;
 extern QHash <QString, QString> global_palette;
 extern bool b_recent_off;
@@ -383,8 +380,8 @@ void CTEA::create_main_widget_splitter()
 
   log = new CLogMemo;
 
-  connect (log, SIGNAL(double_click (const QString &)),
-           this, SLOT(logmemo_double_click (const QString &)));
+  connect (log, SIGNAL(double_click (QString)),
+           this, SLOT(logmemo_double_click (QString)));
 
 
   mainSplitter = new QSplitter (Qt::Vertical);
@@ -497,8 +494,8 @@ void CTEA::create_main_widget_docked()
 
   log = new CLogMemo (dock_logmemo);
 
-  connect (log, SIGNAL(double_click (const QString &)),
-           this, SLOT(logmemo_double_click (const QString &)));
+  connect (log, SIGNAL(double_click (QString)),
+           this, SLOT(logmemo_double_click (QString)));
 
 
   dock_logmemo->setWidget (log);
@@ -1646,9 +1643,6 @@ void CTEA::pageChanged (int index)
 
 
 
-
-
-
 void CTEA::markup_text (const QString &mode)
 {
   CDocument *d = documents->get_current();
@@ -1660,8 +1654,6 @@ void CTEA::markup_text (const QString &mode)
   if (! t.isEmpty())
       d->put (t.replace ("%s", d->get()));
 }
-
-
 
 
 void CTEA::fman_find()
@@ -1710,9 +1702,6 @@ void CTEA::fman_find_prev()
 
   fman->setCurrentIndex (fman->mymodel->indexFromItem (l_fman_find[fman_find_idx]));
 }
-
-
-
 
 
 
@@ -1971,9 +1960,6 @@ void CTEA::createOptions()
                                 tr ("Icons size"),
                                 sl_icon_sizes,
                                 settings->value ("icon_size", "32").toString());
-
-//  connect (cmb_icon_size, SIGNAL(currentIndexChanged (const QString &)),
-  //         this, SLOT(cmb_icon_sizes_currentIndexChanged (const QString &)));
 
   connect (cmb_icon_size, SIGNAL(currentIndexChanged (int)),
            this, SLOT(cmb_icon_sizes_currentIndexChanged (int)));
@@ -2485,34 +2471,7 @@ void CTEA::view_toggle_wrap()
 
 
 
-void CTEA::nav_goto_pos()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QTextCursor cr = d->textCursor();
-  cr.setPosition (d->position);
-  d->setTextCursor (cr);
-}
-
-void CTEA::nav_goto_line()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QTextCursor cr = d->textCursor();
-  cr.movePosition (QTextCursor::Start);
-  cr.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, fif_get_text().toInt() - 1);
-
-  d->setTextCursor (cr);
-  d->setFocus();
-}
 
 
 void CTEA::updateFonts()
@@ -2524,12 +2483,7 @@ void CTEA::updateFonts()
 void CTEA::man_find_find()
 {
   QString fiftxt = fif_get_text();
-
- // if (man_search_value == fiftxt)
-      man->find (fiftxt, get_search_options());
-//  else
-  //    man->find (fiftxt, 0);
-
+  man->find (fiftxt, get_search_options());
   man_search_value = fiftxt;
 }
 
@@ -2588,12 +2542,6 @@ void CTEA::createManual()
 }
 
 
-
-
-
-
-
-
 void CTEA::update_templates()
 {
   menu_file_templates->clear();
@@ -2647,15 +2595,6 @@ void CTEA::dropEvent (QDropEvent *event)
 }
 
 
-
-
-
-
-
-
-
-
-
 void CTEA::update_charsets()
 {
   QString fname  = dir_config + "/last_used_charsets";
@@ -2687,10 +2626,6 @@ void CTEA::add_to_last_used_charsets (const QString &s)
 }
 
 
-
-
-
-
 QString str_to_entities (const QString &s)
 {
   QString t = s;
@@ -2704,47 +2639,6 @@ QString str_to_entities (const QString &s)
 
   return t;
 }
-
-
-
-
-
-
-void CTEA::nav_goto_right_tab()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  int i = 0;
-
-  if (tab_editor->currentIndex() == (tab_editor->count() - 1))
-     i = 0;
-  else
-      i = tab_editor->currentIndex() + 1;
-
-  if (tab_editor->count() > 0)
-     tab_editor->setCurrentIndex (i);
-}
-
-
-void CTEA::nav_goto_left_tab()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  int i = 0;
-
-  if (tab_editor->currentIndex() == 0)
-     i = tab_editor->count() - 1;
-  else
-      i = tab_editor->currentIndex() - 1;
-
-  if (tab_editor->count() > 0)
-      tab_editor->setCurrentIndex (i);
-}
-
-
-
-
-
 
 
 
@@ -2843,22 +2737,6 @@ QString morse_to_lang (const QString &s, const QString &lang)
 }
 
 
-
-void CTEA::nav_focus_to_fif()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  fif->setFocus (Qt::OtherFocusReason);
-}
-
-
-void CTEA::nav_focus_to_editor()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->setFocus (Qt::OtherFocusReason);
-}
 
 
 
@@ -3270,20 +3148,6 @@ void CTEA::cb_button_saves_as()
 }
 
 
-void CTEA::fman_home()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-  fman->nav ("c:\\");
-
-#else
-
-  fman->nav (QDir::homePath());
-
-#endif
-}
 
 
 void CTEA::fman_add_bmk()
@@ -3436,21 +3300,6 @@ void CTEA::fman_open()
 }
 
 
-void CTEA::fman_fileop_create_dir()
-{
-  bool ok;
-  QString newdir = QInputDialog::getText (this, tr ("Enter the name"),
-                                                tr ("Name:"), QLineEdit::Normal,
-                                                tr ("new_directory"), &ok);
-  if (! ok || newdir.isEmpty())
-     return;
-
-  QString dname = fman->dir.path() + "/" + newdir;
-
-  QDir d;
-  if (d.mkpath (dname))
-     fman->nav (dname);
-}
 
 
 
@@ -4081,16 +3930,16 @@ void CTEA::createFman()
 
   fman = new CFMan;
 
-  connect (fman, SIGNAL(file_activated (const QString &)), this, SLOT(fman_file_activated (const QString &)));
-  connect (fman, SIGNAL(dir_changed  (const QString &)), this, SLOT(fman_dir_changed  (const QString &)));
-  connect (fman, SIGNAL(current_file_changed  (const QString &, const QString &)), this, SLOT(fman_current_file_changed  (const QString &, const QString &)));
+  connect (fman, SIGNAL(file_activated (QString)), this, SLOT(fman_file_activated (QString)));
+  connect (fman, SIGNAL(dir_changed  (QString)), this, SLOT(fman_dir_changed  (QString)));
+  connect (fman, SIGNAL(current_file_changed  (QString, QString)), this, SLOT(fman_current_file_changed  (QString, QString)));
 
   connect (act_fman_refresh, SIGNAL(triggered()), fman, SLOT(refresh()));
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
-  connect (cb_fman_drives, SIGNAL(currentIndexChanged ( const QString & )),
-          this, SLOT(fman_drives_changed(const QString & )));
+  connect (cb_fman_drives, SIGNAL(currentIndexChanged (QString)),
+          this, SLOT(fman_drives_changed(QString)));
 
 #endif
 
@@ -4267,133 +4116,11 @@ void CTEA::fman_current_file_changed (const QString &full_path, const QString &j
 }
 
 
-void CTEA::fman_fileop_rename()
-{
-  QString fname = fman->get_sel_fname();
-  if (fname.isEmpty())
-     return;
-
-  QFileInfo fi (fname);
-  if (! fi.exists() && ! fi.isWritable())
-     return;
-
-  bool ok;
-  QString newname = QInputDialog::getText (this, tr ("Enter the name"),
-                                                 tr ("Name:"), QLineEdit::Normal,
-                                                 tr ("new"), &ok);
-  if (! ok || newname.isEmpty())
-     return;
-
-  QString newfpath = fi.path() + "/" + newname;
-  QFile::rename (fname, newfpath);
-  update_dyn_menus();
-  fman->refresh();
-
-  QModelIndex index = fman->index_from_name (newname);
-  fman->selectionModel()->setCurrentIndex (index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-  fman->scrollTo (index, QAbstractItemView::PositionAtCenter);
-}
 
 
-void CTEA::fman_fileop_delete()
-{
-  QString fname = fman->get_sel_fname();
-  if (fname.isEmpty())
-     return;
-
-  int i = fman->get_sel_index(); //save the index
-
-  QFileInfo fi (fname);
-  if (! fi.exists() && ! fi.isWritable())
-     return;
-
-  if (QMessageBox::warning (this, "TEA",
-                            tr ("Are you sure to delete\n"
-                            "%1?").arg (fname),
-                            QMessageBox::Yes | QMessageBox::Default,
-                            QMessageBox::No | QMessageBox::Escape) == QMessageBox::No)
-      return;
-
-  QFile::remove (fname);
-  update_dyn_menus();
-  fman->refresh();
-
-  QModelIndex index = fman->index_from_idx (i);
-  if (! index.isValid())
-     index = fman->index_from_idx (0);
-
-  fman->selectionModel()->setCurrentIndex (index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-  fman->scrollTo (index, QAbstractItemView::PositionAtCenter);
-}
 
 
-void CTEA::fman_refresh()
-{
-  fman->refresh();
-}
 
-
-void CTEA::fm_fileinfo_info()
-{
-  QString fname;
-
-  if (main_tab_widget->currentIndex() == idx_tab_fman)
-     fname = fman->get_sel_fname();
-  else
-      {
-       CDocument *d = documents->get_current();
-       if (d)
-          fname = d->file_name;
-      }
-
-  QFileInfo fi (fname);
-  if (! fi.exists())
-     return;
-
-  QStringList l;
-
-//detect EOL
-
-  QFile f (fname);
-
-  if (f.open (QIODevice::ReadOnly))
-     {
-      QString n (tr("End of line: "));
-      QByteArray barr = f.readAll();
-
-      int nl = barr.count ('\n');
-      int cr = barr.count ('\r');
-
-      if (nl > 0 && cr == 0)
-         n += "UNIX";
-
-      if (nl > 0 && cr > 0)
-         n += "Windows";
-
-      if (nl == 0 && cr > 0)
-         n += "Mac";
-
-      l.append (n);
-     }
-
-
-  l.append (tr ("file name: %1").arg (fi.absoluteFilePath()));
-  l.append (tr ("size: %1 kbytes").arg (QString::number (fi.size() / 1024)));
-  l.append (tr ("last modified: %1").arg (fi.lastModified().toString ("yyyy-MM-dd@hh:mm:ss")));
-
-  if (file_get_ext (fname) == "wav")
-     {
-      CWavReader wr;
-      wr.get_info (fname);
-      l.append (tr ("bits per sample: %1").arg (wr.wav_chunk_fmt.bits_per_sample));
-      l.append (tr ("number of channels: %1").arg (wr.wav_chunk_fmt.num_channels));
-      l.append (tr ("sample rate: %1").arg (wr.wav_chunk_fmt.sample_rate));
-      if (wr.wav_chunk_fmt.bits_per_sample == 16)
-         l.append (tr ("RMS for all channels: %1 dB").arg (wr.rms));
-     }
-
-  log->log (l.join ("<br>"));
-}
 
 
 void CTextListWnd::closeEvent (QCloseEvent *event)
@@ -4788,109 +4515,6 @@ void CTEA::fman_convert_images (bool by_side, int value)
 }
 
 
-void CTEA::fman_img_conv_by_side()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  int side = fif_get_text().toInt();
-  if (side != 0)
-     fman_convert_images (true, side);
-}
-
-
-void CTEA::fman_img_conv_by_percent()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  int percent = fif_get_text().toInt();
-  if (percent != 0)
-     fman_convert_images (false, percent);
-}
-
-
-
-
-void CTEA::fman_zip_add()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QString f = ed_fman_fname->text().trimmed();
-  QStringList li = fman->get_sel_fnames();
-
-  if (! f.isEmpty())
-  if (f[0] == '/')
-     {
-      fman->zipper.files_list.append (f);
-      return;
-     }
-
-  if (li.size() == 0)
-     {
-      QString fname = fman->dir.path() + "/" + f;
-      fman->zipper.files_list.append (fname);
-      return;
-     }
-
-  for (int i = 0; i < li.size(); i++)
-      fman->zipper.files_list.append (li.at(i));
-}
-
-
-void CTEA::fman_zip_create()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  bool ok;
-
-  QString name = QInputDialog::getText (this, tr ("Enter the archive name"),
-                                              tr ("Name:"), QLineEdit::Normal,
-                                              tr ("new_archive"), &ok);
-
-  if (! ok)
-     return;
-
-  fman->zipper.files_list.clear();
-  fman->zipper.archive_name = name;
-
-  if (! name.endsWith (".zip"))
-     name.append (".zip");
-
-  fman->zipper.archive_fullpath = fman->dir.path() + "/" + name;
-}
-
-
-void CTEA::fman_zip_save()
-{
-  fman->zipper.pack_prepared();
-  fman->refresh();
-}
-
-
-void CTEA::fman_preview_image()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QString fname = fman->get_sel_fname();
-  if (fname.isEmpty())
-     return;
-
-  if (is_image (fname))
-     {
-      if (file_get_ext (fname) == "gif")
-         {
-          CGIFWindow *w = new CGIFWindow;
-          w->load_image (fname);
-          return;
-         }
-
-      img_viewer->window_full.show();
-      img_viewer->set_image_full (fname);
-     }
-}
-
-
-
-
 
 void CTEA::fman_fname_entry_confirm()
 {
@@ -4900,36 +4524,6 @@ void CTEA::fman_fname_entry_confirm()
   if (fm_entry_mode == FM_ENTRY_MODE_SAVE)
      cb_button_saves_as();
 }
-
-/*
-void CTEA::update_view_hls()
-{
-  menu_view_hl->clear();
-
-  QStringList l = documents->hls.keys();
-
-  l.sort();
-
-  create_menu_from_list (this, menu_view_hl,
-                         l,
-                         SLOT (view_use_hl()));
-}
-*/
-/*
-void CTEA::view_use_hl()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->set_hl (false, a->text());
-}
-*/
-
-
-
-
 
 
 
@@ -4961,7 +4555,6 @@ void CTEA::cmb_spellchecker_currentIndexChanged (int)
   if (! spellcheckers.contains (cur_spellchecker) && spellcheckers.size() > 0)
      cur_spellchecker = spellcheckers[0];
 
-
 #ifdef ASPELL_ENABLE
   if (cur_spellchecker == "Aspell")
      spellchecker = new CAspellchecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString());
@@ -4972,6 +4565,8 @@ void CTEA::cmb_spellchecker_currentIndexChanged (int)
    if (cur_spellchecker == "Hunspell")
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), hunspell_default_dict_path());
 #endif
+
+  settings->setValue ("spell_lang", "");
 
   create_spellcheck_menu();
 }
@@ -5000,7 +4595,6 @@ void CTEA::pb_choose_hunspell_path_clicked()
 
 
 #ifdef ASPELL_ENABLE
-//#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
 void CTEA::pb_choose_aspell_path_clicked()
 {
@@ -5019,7 +4613,6 @@ void CTEA::pb_choose_aspell_path_clicked()
   setup_spellcheckers();
   create_spellcheck_menu();
 }
-//#endif
 #endif
 
 
@@ -5051,117 +4644,6 @@ void CTEA::fn_filter_delete_by_sep (bool mode)
 
   d->put (x);
 }
-
-
-
-
-
-
-void CTEA::fman_img_make_gallery()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (! file_exists (d->file_name))
-     return;
-
-  int side = settings->value ("ed_side_size", 110).toInt();
-  int thumbs_per_row = settings->value ("ed_thumbs_per_row", 4).toInt();
-
-  QString link_options = settings->value ("ed_link_options", "target=\"_blank\"").toString();
-  if (! link_options.startsWith (" "))
-     link_options.prepend (" ");
-
-  QString dir_out (fman->dir.absolutePath());
-
-  QString table ("<table>\n\n");
-
-  Qt::TransformationMode transformMode = Qt::FastTransformation;
-
-  pb_status->show();
-  pb_status->setFormat (tr ("%p% completed"));
-  pb_status->setTextVisible (true);
-
-  QStringList li = fman->get_sel_fnames();
-  int quality = settings->value ("img_quality", "-1").toInt();
-
-  pb_status->setRange (0, li.size() - 1 );
-
-  int x = 0;
-  int col = 0;
-
-  for (int i = 0; i < li.size(); i++)
-      {
-       QString fname = li[i];
-       if (is_image (fname))
-          {
-           QFileInfo fi (fname);
-
-           if (fi.baseName().startsWith ("tmb_"))
-              continue;
-
-           QImage source (fname);
-           if (! source.isNull())
-              {
-               qApp->processEvents();
-
-               QImage dest = image_scale_by (source, true, side, transformMode);
-
-               QString dest_fname (dir_out);
-               dest_fname.append ("/");
-               dest_fname.append ("tmb_");
-               dest_fname.append (fi.fileName());
-               dest_fname = change_file_ext (dest_fname, "jpg");
-
-               dest.save (dest_fname, 0, quality);
-
-               QFileInfo inf (d->file_name);
-               QDir dir (inf.absolutePath());
-
-               QString tmb = get_insert_image (d->file_name, dest_fname, d->markup_mode);
-               QString cell = "<a href=\"%source\"" + link_options +">%thumb</a>";
-               cell.replace ("%source", dir.relativeFilePath (fname));
-               cell.replace ("%thumb", tmb);
-
-               if (col == 0)
-                  table += "<tr>\n\n";
-
-               table += "<td>\n";
-
-               table += cell;
-
-               table += "</td>\n";
-
-               col++;
-               if (col == thumbs_per_row)
-                  {
-                   table += "</tr>\n\n";
-                   col = 0;
-                  }
-
-               pb_status->setValue (x++);
-              }
-           }
-          }
-
-  pb_status->hide();
-  fman->refresh();
-
-  if (! table.endsWith ("</tr>\n\n"))
-     table += "</tr>\n\n";
-
-  table += "</table>\n";
-
-  if (d)
-     d->put (table);
-}
-
-
-
-
 
 
 void CTEA::view_use_profile()
@@ -5287,43 +4769,7 @@ void CTEA::fman_items_select_by_regexp (bool mode)
 }
 
 
-void CTEA::fman_select_by_regexp()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  fman_items_select_by_regexp (true);
-}
 
-
-void CTEA::fman_deselect_by_regexp()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  fman_items_select_by_regexp (false);
-}
-
-
-void CTEA::fman_fileinfo_count_lines_in_selected_files()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QString ft = fif_get_text();
-  if (ft.isEmpty())
-      return;
-
-  QStringList sl = fman->get_sel_fnames();
-
-  if (sl.size() < 1)
-     return;
-
-  long int sum = 0;
-
-  for (int i = 0; i < sl.size(); i++)
-      {
-       QByteArray f = file_load (sl.at(i));
-       sum += f.count ('\n');
-      }
-
-  log->log (tr ("There are %1 lines at %2 files").arg (sum).arg (sl.size()));
-}
 
 
 void CTEA::guess_enc()
@@ -5414,8 +4860,8 @@ void CTEA::createCalendar()
   else
       calendar->setFirstDayOfWeek (Qt::Monday);
 
-  connect (calendar, SIGNAL(clicked (const QDate &)), this, SLOT(calendar_clicked (const QDate &)));
-  connect (calendar, SIGNAL(activated (const QDate &)), this, SLOT(calendar_activated (const QDate &)));
+  connect (calendar, SIGNAL(clicked (QDate)), this, SLOT(calendar_clicked (QDate)));
+  connect (calendar, SIGNAL(activated (QDate)), this, SLOT(calendar_activated (QDate)));
   connect (calendar, SIGNAL(currentPageChanged (int, int)), this, SLOT(calendar_currentPageChanged (int, int)));
 
   idx_tab_calendar = main_tab_widget->addTab (calendar, tr ("dates"));
@@ -5560,34 +5006,6 @@ void CTEA::idx_tab_learn_activate()
 }
 
 
-
-
-
-
-
-
-
-void CTEA::update_labels_menu()
-{
-  menu_labels->clear();
-
-  CDocument *d = documents->get_current();
-  if (d)
-     create_menu_from_list (this, menu_labels, d->labels, SLOT(select_label()));
-}
-
-
-void CTEA::nav_labels_update_list()
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  d->update_labels();
-  update_labels_menu();
-}
-
-
 void CTEA::select_label()
 {
   last_action = qobject_cast<QAction *>(sender());
@@ -5614,55 +5032,7 @@ void CTEA::select_label()
 
 
 
-void CTEA::fman_zip_unpack()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CZipper z;
-
-  QString f = ed_fman_fname->text().trimmed();
-  QStringList li = fman->get_sel_fnames();
-
-  if (! f.isEmpty())
-  if (f[0] == '/')
-     {
-      z.unzip (f, fman->dir.path());
-      return;
-     }
-
-  if (li.size() == 0)
-     {
-      QString fname (fman->dir.path());
-      fname.append ("/").append (f);
-      z.unzip (fname, fman->dir.path());
-      return;
-     }
-
-  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); ++fname)
-      {
-       z.unzip ((*fname), fman->dir.path());
-       log->log ((*fname) + tr (" is unpacked"));
-      }
-}
-
-
-void CTEA::fman_zip_info()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QString fn = fman->get_sel_fname();
-  if (fn.isEmpty())
-     return;
-
-  CZipper z;
-
-  QStringList sl = z.unzip_list (fman->get_sel_fname());
-
-  for (int i = 0; i < sl.size(); i++)
-       sl[i] = sl[i].append ("<br>");
-
-  log->log (sl.join("\n"));
-}
 
 
 void CTEA::cmb_tea_icons_currentIndexChanged (int)
@@ -5676,19 +5046,6 @@ void CTEA::cmb_tea_icons_currentIndexChanged (int)
 
   qApp->setWindowIcon (QIcon (icon_fname));
 }
-
-/*
-void CTEA::cmb_icon_sizes_currentIndexChanged (const QString &text)
-{
-  settings->setValue ("icon_size", text);
-
-  icon_size = settings->value ("icon_size", "32").toInt();
-
-  setIconSize (QSize (text.toInt(), text.toInt()));
-  tb_fman_dir->setIconSize (QSize (text.toInt(), text.toInt()));
-  filesToolBar->setIconSize (QSize (text.toInt(), text.toInt()));
-}
-*/
 
 
 
@@ -6131,13 +5488,6 @@ MyProxyStyle::MyProxyStyle (QStyle *style): QProxyStyle (style)
 }
 
 
-/*
-MyProxyStyle::MyProxyStyle (const QString & key)
-{
-  QProxyStyle::QProxyStyle (key);
-
-}
-*/
 
 
 
@@ -6159,164 +5509,6 @@ void CTEA::keyPressEvent (QKeyEvent *event)
 
 
 
-
-
-
-
-
-
-
-void CTEA::fman_multi_rename_zeropad()
-{
-  QString fiftxt = fif_get_text();
-  int finalsize = fiftxt.toInt();
-  if (finalsize < 1)
-     finalsize = 10;
-
-  QStringList sl = fman->get_sel_fnames();
-
-  if (sl.size() < 1)
-     return;
-
-  for (int i = 0; i < sl.size(); i++)
-      {
-       QString fname = sl[i];
-       QFileInfo fi (fname);
-
-       if (fi.exists() && fi.isWritable())
-          {
-           int zeroes_to_add = finalsize - fi.baseName().length();
-
-           QString newname = fi.baseName();
-           QString ext = file_get_ext (fname);
-
-#if (QT_VERSION_MAJOR < 5)
-
-           newname.remove(QRegExp("[a-zA-Z\\s]"));
-
-#else
-
-           newname.remove(QRegularExpression("[a-zA-Z\\s]"));
-
-#endif
-
-           if (newname.isEmpty())
-              continue;
-
-           QString pad = "0";
-           pad = pad.repeated (zeroes_to_add);
-           newname = pad + newname;
-
-           QString newfpath (fi.path());
-           newfpath.append ("/").append (newname);
-           newfpath.append (".");
-           newfpath.append (ext);
-
-           QFile::rename (fname, newfpath);
-          }
-       }
-
-  update_dyn_menus();
-  fman->refresh();
-}
-
-
-void CTEA::fman_multi_rename_del_n_first_chars()
-{
-  QString fiftxt = fif_get_text();
-  int todel = fiftxt.toInt();
-  if (todel < 1)
-     todel = 1;
-
-  QStringList sl = fman->get_sel_fnames();
-
-  if (sl.size() < 1)
-     return;
-
-  for (int i = 0; i < sl.size(); i++)
-      {
-       QFileInfo fi (sl.at(i));
-
-       if (fi.exists() && fi.isWritable())
-          {
-           QString newname = fi.fileName();
-           newname = newname.mid (todel);
-
-           QString newfpath (fi.path());
-           newfpath.append ("/").append (newname);
-           QFile::rename (sl.at(i), newfpath);
-          }
-       }
-
-  update_dyn_menus();
-  fman->refresh();
-}
-
-
-void CTEA::fman_multi_rename_replace()
-{
-  QStringList l = fif_get_text().split ("~");
-  if (l.size() < 2)
-     return;
-
-  QStringList sl = fman->get_sel_fnames();
-
-  if (sl.size() < 1)
-     return;
-
-  for (int i = 0; i < sl.size(); i++)
-      {
-       QFileInfo fi (sl.at(i));
-
-       if (fi.exists() && fi.isWritable())
-          {
-           QString newname = fi.fileName();
-           newname = newname.replace (l[0], l[1]);
-
-           QString newfpath (fi.path());
-           newfpath.append ("/").append (newname);
-           QFile::rename (sl.at(i), newfpath);
-          }
-      }
-
-  update_dyn_menus();
-  fman->refresh();
-}
-
-
-void CTEA::fman_multi_rename_apply_template()
-{
-  QString fiftxt = fif_get_text();
-
-  QStringList sl = fman->get_sel_fnames();
-
-  if (sl.size() < 1)
-     return;
-
-  for (int i = 0; i < sl.size(); i++)
-      {
-       QFileInfo fi (sl.at(i));
-
-       if (fi.exists() && fi.isWritable())
-          {
-           QString ext = file_get_ext (sl.at(i));
-           QString newname = fiftxt;
-           newname = newname.replace ("%filename", fi.fileName());
-           newname = newname.replace ("%ext", ext);
-           newname = newname.replace ("%basename", fi.baseName());
-
-           QString newfpath (fi.path());
-           newfpath.append ("/").append (newname);
-           QFile::rename (sl.at(i), newfpath);
-           }
-      }
-
-  update_dyn_menus();
-  fman->refresh();
-}
-
-
-
 void CTEA::receiveMessageShared (const QStringList &msg)
 {
   for (int i = 0; i < msg.size(); i++)
@@ -6326,10 +5518,6 @@ void CTEA::receiveMessageShared (const QStringList &msg)
   activateWindow();
   raise();
 }
-
-
-
-
 
 
 
@@ -10746,3 +9934,747 @@ void CTEA::nav_save_pos()
 }
 
 
+void CTEA::nav_goto_pos()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QTextCursor cr = d->textCursor();
+  cr.setPosition (d->position);
+  d->setTextCursor (cr);
+}
+
+
+void CTEA::nav_goto_line()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QTextCursor cr = d->textCursor();
+  cr.movePosition (QTextCursor::Start);
+  cr.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, fif_get_text().toInt() - 1);
+
+  d->setTextCursor (cr);
+  d->setFocus();
+}
+
+
+void CTEA::nav_goto_right_tab()
+{
+  last_action = sender();
+
+  int i = 0;
+
+  if (tab_editor->currentIndex() == (tab_editor->count() - 1))
+     i = 0;
+  else
+      i = tab_editor->currentIndex() + 1;
+
+  if (tab_editor->count() > 0)
+     tab_editor->setCurrentIndex (i);
+}
+
+
+void CTEA::nav_goto_left_tab()
+{
+  last_action = sender();
+
+  int i = 0;
+
+  if (tab_editor->currentIndex() == 0)
+     i = tab_editor->count() - 1;
+  else
+      i = tab_editor->currentIndex() - 1;
+
+  if (tab_editor->count() > 0)
+      tab_editor->setCurrentIndex (i);
+}
+
+
+void CTEA::nav_focus_to_fif()
+{
+  last_action = sender();
+  fif->setFocus (Qt::OtherFocusReason);
+}
+
+
+void CTEA::nav_focus_to_editor()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->setFocus (Qt::OtherFocusReason);
+}
+
+
+void CTEA::update_labels_menu()
+{
+  menu_labels->clear();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     create_menu_from_list (this, menu_labels, d->labels, SLOT(select_label()));
+}
+
+
+void CTEA::nav_labels_update_list()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  d->update_labels();
+  update_labels_menu();
+}
+
+
+
+/*
+===================
+Fm menu callbacks
+===================
+*/
+
+
+void CTEA::fman_multi_rename_zeropad()
+{
+  last_action = sender();
+
+  QString fiftxt = fif_get_text();
+  int finalsize = fiftxt.toInt();
+  if (finalsize < 1)
+     finalsize = 10;
+
+  QStringList sl = fman->get_sel_fnames();
+
+  if (sl.size() < 1)
+     return;
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QString fname = sl[i];
+       QFileInfo fi (fname);
+
+       if (fi.exists() && fi.isWritable())
+          {
+           int zeroes_to_add = finalsize - fi.baseName().length();
+
+           QString newname = fi.baseName();
+           QString ext = file_get_ext (fname);
+
+#if (QT_VERSION_MAJOR < 5)
+
+           newname.remove(QRegExp("[a-zA-Z\\s]"));
+
+#else
+
+           newname.remove(QRegularExpression("[a-zA-Z\\s]"));
+
+#endif
+
+           if (newname.isEmpty())
+              continue;
+
+           QString pad = "0";
+           pad = pad.repeated (zeroes_to_add);
+           newname = pad + newname;
+
+           QString newfpath (fi.path());
+           newfpath.append ("/").append (newname);
+           newfpath.append (".");
+           newfpath.append (ext);
+
+           QFile::rename (fname, newfpath);
+          }
+       }
+
+  update_dyn_menus();
+  fman->refresh();
+}
+
+
+void CTEA::fman_multi_rename_del_n_first_chars()
+{
+  last_action = sender();
+
+  QString fiftxt = fif_get_text();
+  int todel = fiftxt.toInt();
+  if (todel < 1)
+     todel = 1;
+
+  QStringList sl = fman->get_sel_fnames();
+
+  if (sl.size() < 1)
+     return;
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QFileInfo fi (sl.at(i));
+
+       if (fi.exists() && fi.isWritable())
+          {
+           QString newname = fi.fileName();
+           newname = newname.mid (todel);
+
+           QString newfpath (fi.path());
+           newfpath.append ("/").append (newname);
+           QFile::rename (sl.at(i), newfpath);
+          }
+       }
+
+  update_dyn_menus();
+  fman->refresh();
+}
+
+
+void CTEA::fman_multi_rename_replace()
+{
+  last_action = sender();
+
+  QStringList l = fif_get_text().split ("~");
+  if (l.size() < 2)
+     return;
+
+  QStringList sl = fman->get_sel_fnames();
+
+  if (sl.size() < 1)
+     return;
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QFileInfo fi (sl.at(i));
+
+       if (fi.exists() && fi.isWritable())
+          {
+           QString newname = fi.fileName();
+           newname = newname.replace (l[0], l[1]);
+
+           QString newfpath (fi.path());
+           newfpath.append ("/").append (newname);
+           QFile::rename (sl.at(i), newfpath);
+          }
+      }
+
+  update_dyn_menus();
+  fman->refresh();
+}
+
+
+
+void CTEA::fman_multi_rename_apply_template()
+{
+  last_action = sender();
+
+  QString fiftxt = fif_get_text();
+
+  QStringList sl = fman->get_sel_fnames();
+
+  if (sl.size() < 1)
+     return;
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QFileInfo fi (sl.at(i));
+
+       if (fi.exists() && fi.isWritable())
+          {
+           QString ext = file_get_ext (sl.at(i));
+           QString newname = fiftxt;
+           newname = newname.replace ("%filename", fi.fileName());
+           newname = newname.replace ("%ext", ext);
+           newname = newname.replace ("%basename", fi.baseName());
+
+           QString newfpath (fi.path());
+           newfpath.append ("/").append (newname);
+           QFile::rename (sl.at(i), newfpath);
+           }
+      }
+
+  update_dyn_menus();
+  fman->refresh();
+}
+
+
+void CTEA::fman_fileop_create_dir()
+{
+  last_action = sender();
+
+  bool ok;
+  QString newdir = QInputDialog::getText (this, tr ("Enter the name"),
+                                                tr ("Name:"), QLineEdit::Normal,
+                                                tr ("new_directory"), &ok);
+  if (! ok || newdir.isEmpty())
+     return;
+
+  QString dname = fman->dir.path() + "/" + newdir;
+
+  QDir d;
+  if (d.mkpath (dname))
+     fman->nav (dname);
+}
+
+
+void CTEA::fman_fileop_rename()
+{
+  last_action = sender();
+
+  QString fname = fman->get_sel_fname();
+  if (fname.isEmpty())
+     return;
+
+  QFileInfo fi (fname);
+  if (! fi.exists() && ! fi.isWritable())
+     return;
+
+  bool ok;
+  QString newname = QInputDialog::getText (this, tr ("Enter the name"),
+                                                 tr ("Name:"), QLineEdit::Normal,
+                                                 tr ("new"), &ok);
+  if (! ok || newname.isEmpty())
+     return;
+
+  QString newfpath = fi.path() + "/" + newname;
+  QFile::rename (fname, newfpath);
+  update_dyn_menus();
+  fman->refresh();
+
+  QModelIndex index = fman->index_from_name (newname);
+  fman->selectionModel()->setCurrentIndex (index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+  fman->scrollTo (index, QAbstractItemView::PositionAtCenter);
+}
+
+
+void CTEA::fman_fileop_delete()
+{
+  last_action = sender();
+
+  QString fname = fman->get_sel_fname();
+  if (fname.isEmpty())
+     return;
+
+  int i = fman->get_sel_index(); //save the index
+
+  QFileInfo fi (fname);
+  if (! fi.exists() && ! fi.isWritable())
+     return;
+
+  if (QMessageBox::warning (this, "TEA",
+                            tr ("Are you sure to delete\n"
+                            "%1?").arg (fname),
+                            QMessageBox::Yes | QMessageBox::Default,
+                            QMessageBox::No | QMessageBox::Escape) == QMessageBox::No)
+      return;
+
+  QFile::remove (fname);
+  update_dyn_menus();
+  fman->refresh();
+
+  QModelIndex index = fman->index_from_idx (i);
+  if (! index.isValid())
+     index = fman->index_from_idx (0);
+
+  fman->selectionModel()->setCurrentIndex (index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+  fman->scrollTo (index, QAbstractItemView::PositionAtCenter);
+}
+
+
+void CTEA::fm_fileinfo_info()
+{
+  last_action = sender();
+
+  QString fname;
+
+  if (main_tab_widget->currentIndex() == idx_tab_fman)
+     fname = fman->get_sel_fname();
+  else
+      {
+       CDocument *d = documents->get_current();
+       if (d)
+          fname = d->file_name;
+      }
+
+  QFileInfo fi (fname);
+  if (! fi.exists())
+     return;
+
+  QStringList l;
+
+//detect EOL
+
+  QFile f (fname);
+
+  if (f.open (QIODevice::ReadOnly))
+     {
+      QString n (tr("End of line: "));
+      QByteArray barr = f.readAll();
+
+      int nl = barr.count ('\n');
+      int cr = barr.count ('\r');
+
+      if (nl > 0 && cr == 0)
+         n += "UNIX";
+
+      if (nl > 0 && cr > 0)
+         n += "Windows";
+
+      if (nl == 0 && cr > 0)
+         n += "Mac";
+
+      l.append (n);
+     }
+
+
+  l.append (tr ("file name: %1").arg (fi.absoluteFilePath()));
+  l.append (tr ("size: %1 kbytes").arg (QString::number (fi.size() / 1024)));
+  l.append (tr ("last modified: %1").arg (fi.lastModified().toString ("yyyy-MM-dd@hh:mm:ss")));
+
+  if (file_get_ext (fname) == "wav")
+     {
+      CWavReader wr;
+      wr.get_info (fname);
+      l.append (tr ("bits per sample: %1").arg (wr.wav_chunk_fmt.bits_per_sample));
+      l.append (tr ("number of channels: %1").arg (wr.wav_chunk_fmt.num_channels));
+      l.append (tr ("sample rate: %1").arg (wr.wav_chunk_fmt.sample_rate));
+      if (wr.wav_chunk_fmt.bits_per_sample == 16)
+         l.append (tr ("RMS for all channels: %1 dB").arg (wr.rms));
+     }
+
+  log->log (l.join ("<br>"));
+}
+
+
+void CTEA::fman_fileinfo_count_lines_in_selected_files()
+{
+  last_action = sender();
+
+  QString ft = fif_get_text();
+  if (ft.isEmpty())
+      return;
+
+  QStringList sl = fman->get_sel_fnames();
+
+  if (sl.size() < 1)
+     return;
+
+  long int sum = 0;
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QByteArray f = file_load (sl.at(i));
+       sum += f.count ('\n');
+      }
+
+  log->log (tr ("There are %1 lines at %2 files").arg (sum).arg (sl.size()));
+}
+
+
+void CTEA::fman_zip_create()
+{
+  last_action = sender();
+
+  bool ok;
+
+  QString name = QInputDialog::getText (this, tr ("Enter the archive name"),
+                                              tr ("Name:"), QLineEdit::Normal,
+                                              tr ("new_archive"), &ok);
+
+  if (! ok)
+     return;
+
+  fman->zipper.files_list.clear();
+  fman->zipper.archive_name = name;
+
+  if (! name.endsWith (".zip"))
+     name.append (".zip");
+
+  fman->zipper.archive_fullpath = fman->dir.path() + "/" + name;
+}
+
+
+void CTEA::fman_zip_add()
+{
+  last_action = sender();
+
+  QString f = ed_fman_fname->text().trimmed();
+  QStringList li = fman->get_sel_fnames();
+
+  if (! f.isEmpty())
+  if (f[0] == '/')
+     {
+      fman->zipper.files_list.append (f);
+      return;
+     }
+
+  if (li.size() == 0)
+     {
+      QString fname = fman->dir.path() + "/" + f;
+      fman->zipper.files_list.append (fname);
+      return;
+     }
+
+  for (int i = 0; i < li.size(); i++)
+      fman->zipper.files_list.append (li.at(i));
+}
+
+
+
+void CTEA::fman_zip_save()
+{
+  last_action = sender();
+
+  fman->zipper.pack_prepared();
+  fman->refresh();
+}
+
+
+void CTEA::fman_zip_info()
+{
+  last_action = sender();
+
+  QString fn = fman->get_sel_fname();
+  if (fn.isEmpty())
+     return;
+
+  CZipper z;
+
+  QStringList sl = z.unzip_list (fman->get_sel_fname());
+
+  for (int i = 0; i < sl.size(); i++)
+       sl[i] = sl[i].append ("<br>");
+
+  log->log (sl.join("\n"));
+}
+
+
+void CTEA::fman_zip_unpack()
+{
+  last_action = sender();
+
+  CZipper z;
+
+  QString f = ed_fman_fname->text().trimmed();
+  QStringList li = fman->get_sel_fnames();
+
+  if (! f.isEmpty())
+  if (f[0] == '/')
+     {
+      z.unzip (f, fman->dir.path());
+      return;
+     }
+
+  if (li.size() == 0)
+     {
+      QString fname (fman->dir.path());
+      fname.append ("/").append (f);
+      z.unzip (fname, fman->dir.path());
+      return;
+     }
+
+  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); ++fname)
+      {
+       z.unzip ((*fname), fman->dir.path());
+       log->log ((*fname) + tr (" is unpacked"));
+      }
+}
+
+
+
+void CTEA::fman_img_conv_by_side()
+{
+  last_action = sender();
+
+  int side = fif_get_text().toInt();
+  if (side != 0)
+     fman_convert_images (true, side);
+}
+
+
+void CTEA::fman_img_conv_by_percent()
+{
+  last_action = sender();
+
+  int percent = fif_get_text().toInt();
+  if (percent != 0)
+     fman_convert_images (false, percent);
+}
+
+
+void CTEA::fman_img_make_gallery()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! file_exists (d->file_name))
+     return;
+
+  int side = settings->value ("ed_side_size", 110).toInt();
+  int thumbs_per_row = settings->value ("ed_thumbs_per_row", 4).toInt();
+
+  QString link_options = settings->value ("ed_link_options", "target=\"_blank\"").toString();
+  if (! link_options.startsWith (" "))
+     link_options.prepend (" ");
+
+  QString dir_out (fman->dir.absolutePath());
+
+  QString table ("<table>\n\n");
+
+  Qt::TransformationMode transformMode = Qt::FastTransformation;
+
+  pb_status->show();
+  pb_status->setFormat (tr ("%p% completed"));
+  pb_status->setTextVisible (true);
+
+  QStringList li = fman->get_sel_fnames();
+  int quality = settings->value ("img_quality", "-1").toInt();
+
+  pb_status->setRange (0, li.size() - 1 );
+
+  int x = 0;
+  int col = 0;
+
+  for (int i = 0; i < li.size(); i++)
+      {
+       QString fname = li[i];
+       if (is_image (fname))
+          {
+           QFileInfo fi (fname);
+
+           if (fi.baseName().startsWith ("tmb_"))
+              continue;
+
+           QImage source (fname);
+           if (! source.isNull())
+              {
+               qApp->processEvents();
+
+               QImage dest = image_scale_by (source, true, side, transformMode);
+
+               QString dest_fname (dir_out);
+               dest_fname.append ("/");
+               dest_fname.append ("tmb_");
+               dest_fname.append (fi.fileName());
+               dest_fname = change_file_ext (dest_fname, "jpg");
+
+               dest.save (dest_fname, 0, quality);
+
+               QFileInfo inf (d->file_name);
+               QDir dir (inf.absolutePath());
+
+               QString tmb = get_insert_image (d->file_name, dest_fname, d->markup_mode);
+               QString cell = "<a href=\"%source\"" + link_options +">%thumb</a>";
+               cell.replace ("%source", dir.relativeFilePath (fname));
+               cell.replace ("%thumb", tmb);
+
+               if (col == 0)
+                  table += "<tr>\n\n";
+
+               table += "<td>\n";
+
+               table += cell;
+
+               table += "</td>\n";
+
+               col++;
+               if (col == thumbs_per_row)
+                  {
+                   table += "</tr>\n\n";
+                   col = 0;
+                  }
+
+               pb_status->setValue (x++);
+              }
+           }
+          }
+
+  pb_status->hide();
+  fman->refresh();
+
+  if (! table.endsWith ("</tr>\n\n"))
+     table += "</tr>\n\n";
+
+  table += "</table>\n";
+
+  if (d)
+     d->put (table);
+}
+
+
+
+void CTEA::fman_home()
+{
+  last_action = sender();
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+
+  fman->nav ("c:\\");
+
+#else
+
+  fman->nav (QDir::homePath());
+
+#endif
+}
+
+
+void CTEA::fman_refresh()
+{
+  last_action = sender();
+
+  fman->refresh();
+}
+
+
+void CTEA::fman_preview_image()
+{
+  last_action = sender();
+
+  QString fname = fman->get_sel_fname();
+  if (fname.isEmpty())
+     return;
+
+  if (is_image (fname))
+     {
+      if (file_get_ext (fname) == "gif")
+         {
+          CGIFWindow *w = new CGIFWindow;
+          w->load_image (fname);
+          return;
+         }
+
+      img_viewer->window_full.show();
+      img_viewer->set_image_full (fname);
+     }
+}
+
+
+void CTEA::fman_select_by_regexp()
+{
+  last_action = sender();
+  fman_items_select_by_regexp (true);
+}
+
+
+void CTEA::fman_deselect_by_regexp()
+{
+  last_action = sender();
+  fman_items_select_by_regexp (false);
+}
+
+
+/*
+===================
+View menu callbacks
+===================
+*/

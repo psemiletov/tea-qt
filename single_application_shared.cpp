@@ -15,7 +15,7 @@
  
 #include "single_application_shared.h"
  
-CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], const QString uniqueKey): QApplication (argc, argv)
+CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], const QString &uniqueKey): QApplication (argc, argv)
 {
 //  qDebug() << "CSingleApplicationShared::CSingleApplicationShared";
 

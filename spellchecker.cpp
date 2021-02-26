@@ -38,6 +38,7 @@
 
 #ifdef ASPELL_ENABLE
 
+
 QString aspell_default_dict_path()
 {
   QString r;
@@ -58,22 +59,21 @@ QString aspell_default_dict_path()
   return r;
 }
 
-CAspellchecker::CAspellchecker (const QString &lang, const QString &path,
-                                const QString &user_path):
-                                CSpellchecker (lang, path, user_path)
+
+void CAspellchecker::load_dict()
 {
-  qDebug() << "CAspellchecker::CAspellchecker - start";
-  ret = 0;
-  speller = 0;
-  spell_config = 0;
+  loaded = false;
 
-  initialized = false;
-
-  spell_config = new_aspell_config();
   if (! spell_config)
      return;
 
-  aspell_config_replace (spell_config, "lang", lang.toUtf8().data());
+  if (speller)
+     {
+      delete_aspell_speller (speller);
+      speller = 0;
+     }
+
+  aspell_config_replace (spell_config, "lang", language.toUtf8().data());
   aspell_config_replace (spell_config, "encoding", "UTF-8");
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
@@ -101,7 +101,22 @@ CAspellchecker::CAspellchecker (const QString &lang, const QString &path,
      }
 
   speller = to_aspell_speller (ret);
-  initialized = true;
+
+  loaded = true;
+}
+
+
+CAspellchecker::CAspellchecker (const QString &lang, const QString &path,
+                                const QString &user_path):
+                                CSpellchecker (lang, path, user_path)
+{
+  ret = 0;
+  speller = 0;
+  spell_config = 0;
+
+  spell_config = new_aspell_config();
+  if (! spell_config)
+     return;
 }
 
 
@@ -117,7 +132,7 @@ CAspellchecker::~CAspellchecker()
 
 void CAspellchecker::add_to_user_dict (const QString &word)
 {
-  if (! initialized || ! speller)
+  if (! loaded || ! speller)
      return;
 
   if (word.isEmpty())
@@ -138,29 +153,11 @@ void CAspellchecker::remove_from_user_dict (const QString &word)
 
 void CAspellchecker::change_lang (const QString &lang)
 {
-  if (! spell_config)
+  if (lang.isEmpty() || language == lang)
      return;
 
-  if (lang.isEmpty())
-     return;
-
-  aspell_config_replace (spell_config, "lang", lang.toUtf8().data());
-  aspell_config_replace (spell_config, "encoding", "UTF-8");
-
-  if (speller)
-     delete_aspell_speller (speller);
-
-  ret = new_aspell_speller (spell_config);
-
-  if (aspell_error (ret) != 0)
-     {
-      //g_print ("Error: %s\n", aspell_error_message (ret));
-      delete_aspell_can_have_error (ret);
-      return;
-     }
-
-  speller = to_aspell_speller (ret);
-  initialized = true;
+  language = lang;
+//  load_dict();
 }
 
 
@@ -193,13 +190,16 @@ QStringList CAspellchecker::get_speller_modules_list()
 
 bool CAspellchecker::check (const QString &word)
 {
-  if (! initialized || ! speller)
-      return false;
-
   if (word.isEmpty())
      return false;
 
-   return aspell_speller_check (speller, word.toUtf8().data(), -1);
+  if (! loaded)
+     load_dict();
+
+  if (speller)
+     return aspell_speller_check (speller, word.toUtf8().data(), -1);
+  else
+      return false;
 }
 
 
@@ -207,7 +207,7 @@ QStringList CAspellchecker::get_suggestions_list (const QString &word)
 {
   QStringList l;
 
-  if (! initialized || word.isEmpty() || !speller)
+  if (! loaded || word.isEmpty() || !speller)
      return l;
 
   const AspellWordList *suggestions = aspell_speller_suggest (speller, word.toUtf8().data(), -1);
@@ -231,21 +231,53 @@ QStringList CAspellchecker::get_suggestions_list (const QString &word)
 
 #ifdef HUNSPELL_ENABLE
 
-CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, const QString &user_path): CSpellchecker (lang, path, user_path)
+
+void CHunspellChecker::save_user_dict() //uses current language
 {
-//  qDebug() << "CHunspellChecker::CHunspellChecker - start";
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
-  initialized = false;
+   QString filename = user_dir + QDir::separator() + lng + ".dic";
+   filename = filename.replace ("/", "\\");
 
-  dict_dir = path;
-  user_dir = user_path;
-  lng = lang;
+#else
+
+   QString filename = dir_user_dicts + QDir::separator() + language + ".dic";
+
+#endif
+
+  if (user_words.size() > 0)
+     {
+      user_words.prepend (QString::number (user_words.size()));
+#if ! defined (H_DEPRECATED)
+      qstring_save (filename, user_words.join ("\n"), encoding);
+#else
+      qstring_save (filename, user_words.join ("\n"), str_encoding.data());
+#endif
+     }
+}
+
+
+void CHunspellChecker::load_dict()
+{
+  loaded = false;
+
+  if (! dir_exists (dir_dicts))
+     return;
+
+  if (language.isEmpty())
+     return;
+
+  if (speller)
+     delete speller;
+
+
+  qDebug() << "CHunspellChecker::load_dict()";
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
-  QString fname_aff = path + QDir::separator() + lng + ".aff";
-  QString fname_dict = path + QDir::separator() + lng + ".dic";
-  QString fname_userdict = user_path + QDir::separator() + lng + ".dic";
+  QString fname_aff = dir_dicts + QDir::separator() + language + ".aff";
+  QString fname_dict = dir_dicts + QDir::separator() + language + ".dic";
+  QString fname_userdict = dir_user_dicts + QDir::separator() + language + ".dic";
   QString fname_userdict_pure;
 
   fname_aff = fname_aff.replace ("/", "\\");
@@ -255,9 +287,9 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 
 #else
 
-  QString fname_aff = path + QDir::separator() + lng + ".aff";
-  QString fname_dict = path + QDir::separator() + lng + ".dic";
-  QString fname_userdict = user_path + QDir::separator() + lng + ".dic";
+  QString fname_aff = dir_dicts + QDir::separator() + language + ".aff";
+  QString fname_dict = dir_dicts + QDir::separator() + language + ".dic";
+  QString fname_userdict = dir_user_dicts + QDir::separator() + language + ".dic";
 
 #endif
 
@@ -270,13 +302,6 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 
 #endif
 
-//qDebug() << fname_aff;
-//qDebug() << fname_dict;
-//qDebug() << fname_userdict;
-
-  if (dir_exists (dict_dir))
-     initialized = true;
-
   speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
 
 #if !defined (H_DEPRECATED)
@@ -288,7 +313,6 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 
 #if defined(Q_OS_UNIX)
 
-  if (initialized)
   if (file_exists (fname_userdict))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
@@ -303,7 +327,6 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
      }
 #else  //! UNIX
 
-  if (initialized)
   if (file_exists (fname_userdict_pure))
      {
       speller->add_dic (fname_userdict.toUtf8().data());
@@ -318,109 +341,38 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &path, co
 
 #endif
 
+  loaded = true;
+
+}
+
+CHunspellChecker::CHunspellChecker (const QString &lang, const QString &dir_path, const QString &dir_user): CSpellchecker (lang, dir_path, dir_user)
+{
   //qDebug() << "CHunspellChecker::CHunspellChecker - end";
+  speller = 0;
 }
 
 
 CHunspellChecker::~CHunspellChecker()
 {
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-  QString filename = user_dir + QDir::separator() + lng + ".dic";
-  filename = filename.replace ("/", "\\");
-
-#else
-
-  QString filename = user_dir + QDir::separator() + lng + ".dic";
-
-#endif
-
-  if (user_words.size() > 0)
-     {
-      user_words.prepend (QString::number (user_words.size()));
-#if ! defined (H_DEPRECATED)
-      qstring_save (filename, user_words.join ("\n"), encoding);
-#else
-      qstring_save (filename, user_words.join ("\n"), str_encoding.data());
-#endif
-     }
-
   delete speller;
 }
 
 
 void CHunspellChecker::change_lang (const QString &lang)
 {
-  delete speller;
+  if (language == lang)
+      return;
 
-  initialized = false;
-  lng = lang;
+  language = lang;
+  save_user_dict();
   user_words.clear();
-
-  if (dir_exists (dict_dir))
-     initialized = true;
-
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-  QString fname_aff = dict_dir + QDir::separator() + lng + ".aff";
-  QString fname_dict = dict_dir + QDir::separator() + lng + ".dic";
-  QString fname_userdict = user_dir + QDir::separator() + lng + ".dic";
-  QString fname_userdict_pure;
-
-  fname_aff = fname_aff.replace ("/", "\\");
-  fname_dict = fname_dict.replace ("/", "\\");
-  fname_userdict = fname_userdict.replace ("/", "\\");
-  fname_userdict_pure = fname_userdict;
-
-#else
-
-  QString fname_aff = dict_dir + QDir::separator() + lng + ".aff";
-  QString fname_dict = dict_dir + QDir::separator() + lng + ".dic";
-  QString fname_userdict = user_dir + QDir::separator() + lng + ".dic";
-
-#endif
-
-  speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
-
-#if ! defined (H_DEPRECATED)
-  encoding = speller->get_dic_encoding();
-#else
-  str_encoding = speller->get_dict_encoding();
-#endif
-
-#if defined(Q_OS_UNIX)
-
-  if (initialized && file_exists (fname_userdict))
-     {
-      speller->add_dic (fname_userdict.toUtf8().data());
-
-#if ! defined (H_DEPRECATED)
-      user_words = qstring_load (fname_userdict, encoding).split ("\n");
-#else
-      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");
-
-#endif
-      user_words.removeFirst(); //зачем я это закомментировал раньше?
-     }
-#else //! UNIX
-  if (initialized && file_exists (fname_userdict_pure))
-     {
-      speller->add_dic (fname_userdict.toUtf8().data());
-#if ! defined (H_DEPRECATED)
-      user_words = qstring_load (fname_userdict, encoding).split ("\n");
-#else
-      user_words = qstring_load (fname_userdict, str_encoding.data()).split ("\n");
-#endif
-      user_words.removeFirst(); //зачем я это закомментировал раньше?
-     }
-
-#endif
+//  load_dict();
 }
 
 
 void CHunspellChecker::add_to_user_dict (const QString &word)
 {
-  if (! initialized || word.isEmpty())
+  if (! loaded || word.isEmpty())
      return;
 
 #if !defined (H_DEPRECATED)
@@ -432,13 +384,15 @@ void CHunspellChecker::add_to_user_dict (const QString &word)
   QByteArray es = codec->fromUnicode (word);
   speller->add (es.data());
   user_words.append (word);
+  save_user_dict();
 }
 
 
 bool CHunspellChecker::check (const QString &word)
 {
-  if (! initialized)
-      return false;
+  if (! loaded)
+      //return false;
+     load_dict();
 
 #if ! defined (H_DEPRECATED)
  QTextCodec *codec = QTextCodec::codecForName (encoding);
@@ -460,7 +414,7 @@ bool CHunspellChecker::check (const QString &word)
 
 void CHunspellChecker::remove_from_user_dict (const QString &word)
 {
-  if (! initialized || word.isEmpty())
+  if (! loaded || word.isEmpty())
       return;
 
 #ifndef H_DEPRECATED
@@ -474,6 +428,8 @@ void CHunspellChecker::remove_from_user_dict (const QString &word)
   int i = user_words.indexOf (word);
   if (i != -1)
      user_words.removeAt (i);
+
+  save_user_dict();
 }
 
 
@@ -481,7 +437,7 @@ QStringList CHunspellChecker::get_speller_modules_list()
 {
   QStringList sl;
 
-  QDir dir (dict_dir);
+  QDir dir (dir_dicts);
   if (! dir.exists())
      return sl;
 
@@ -505,7 +461,7 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 {
   QStringList sl;
 
-  if (! initialized || word.isEmpty())
+  if (! loaded || word.isEmpty())
      return sl;
 
 #if !defined (H_DEPRECATED)

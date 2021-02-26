@@ -205,9 +205,6 @@ public:
   QStringList get_supported_exts();
 };
 
-void pdf_conv_test (const QString &fname);
-bool djvu_test_reader ();
-
 
 #endif // TIO_H
 

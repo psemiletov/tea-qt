@@ -2483,14 +2483,6 @@ void CTEA::view_toggle_wrap()
 }
 
 
-void CTEA::nav_save_pos()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->position = d->textCursor().position();
-}
 
 
 void CTEA::nav_goto_pos()
@@ -2596,289 +2588,10 @@ void CTEA::createManual()
 }
 
 
-void CTEA::fn_text_apply_to_each_line()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
 
-  QStringList sl = d->get().split (QChar::ParagraphSeparator);
-  QString t = fif_get_text();
 
-  if (t.isEmpty())
-     return;
 
-  if (t.startsWith ("@@"))
-     {
-      QString fname = dir_snippets + QDir::separator() + t;
-
-      if (! file_exists (fname))
-         {
-          log->log (tr ("snippet %1 is not exists").arg (fname));
-          return;
-         }
-
-      t = t.remove (0, 2);
-      t = qstring_load (fname);
-     }
-
-
-  for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
-      {
-       QString ts (t);
-       (*i) = ts.replace ("%s", (*i));
-      }
-
-  QString x = sl.join ("\n");
-
-  d->put (x);
-}
-
-
-
-
-void CTEA::fn_text_reverse()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString s = d->get();
-
-  if (! s.isEmpty())
-      d->put (string_reverse (s));
-}
-
-
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-void CTEA::fn_change_spell_lang()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QAction *Act = qobject_cast<QAction *>(sender());
-  settings->setValue ("spell_lang", Act->text());
-  spellchecker->change_lang (Act->text());
-  fn_spell_check();
-}
-
-
-void CTEA::create_spellcheck_menu()
-{
-  menu_spell_langs->clear();
-  create_menu_from_list (this, menu_spell_langs, spellchecker->get_speller_modules_list(), SLOT(fn_change_spell_lang()));
-}
-
-
-bool ends_with_badchar (const QString &s)
-{
-  if (s.endsWith ("\""))
-     return true;
-
-  if (s.endsWith ("»"))
-     return true;
-
-  if (s.endsWith ("\\"))
-     return true;
-
-  return false;
-}
-
-
-void CTEA::fn_spell_check()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QColor color_error = QColor (hash_get_val (global_palette, "error", "red"));
-
-  QElapsedTimer time_start;
-  time_start.start();
-
-  pb_status->show();
-  pb_status->setRange (0, d->toPlainText().size() - 1);
-  pb_status->setFormat (tr ("%p% completed"));
-  pb_status->setTextVisible (true);
-
-  int i = 0;
-
-  QTextCursor cr = d->textCursor();
-
-  int pos = cr.position();
-  int savepos = pos;
-
-  QString text = d->toPlainText();
-  int text_size = text.size();
-
-//delete all underlines
-  cr.setPosition (0);
-  cr.movePosition (QTextCursor::End, QTextCursor::KeepAnchor);
-  QTextCharFormat f = cr.blockCharFormat();
-  f.setFontUnderline (false);
-  cr.mergeCharFormat (f);
-
-  cr.setPosition (0);
-  cr.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
-
-  do
-    {
-//     if (i % 100 == 0)
-  //      qApp->processEvents();
-
-     pos = cr.position();
-     if (pos >= text_size)
-        break;
-
-     QChar c = text.at (pos);
-
-     if (char_is_bad (c))
-     while (char_is_bad (c))
-           {
-            cr.movePosition (QTextCursor::NextCharacter);
-
-            pos = cr.position();
-
-            if (pos < text_size)
-               c = text.at (pos);
-            else
-                break;
-           }
-
-     cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-
-     QString stext = cr.selectedText();
-     if (! stext.isEmpty() && ends_with_badchar (stext))
-        {
-         cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-         stext = cr.selectedText();
-        }
-
-     if (! stext.isEmpty())
-     if (! spellchecker->check (cr.selectedText()))
-        {
-         f = cr.blockCharFormat();
-
-//#if QT_VERSION >= 0x050000
-
-//         f.setUnderlineStyle (QTextCharFormat::UnderlineStyle(QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)));
-  //       f.setUnderlineColor (color_error);
-
-//#else
-
-         f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
-         f.setUnderlineColor (color_error);
-
-//#endif
-
-         cr.mergeCharFormat (f);
-        }
-
-
-     i++;
-
-     if (i % 512 == 0)
-        pb_status->setValue (i);
-    }
-   while (cr.movePosition (QTextCursor::NextWord));
-
-
-  cr.setPosition (savepos);
-  d->document()->setModified (false);
-
-  pb_status->hide();
-
-  log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
-}
-
-
-void CTEA::fn_spell_add_to_dict()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QTextCursor cr = d->textCursor();
-  cr.select (QTextCursor::WordUnderCursor); //плохо работает
-  QString s = cr.selectedText();
-
-  if (! s.isEmpty())
-     spellchecker->add_to_user_dict (s);
-}
-
-
-void CTEA::fn_spell_remove_from_dict()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QTextCursor cr = d->textCursor();
-  cr.select (QTextCursor::WordUnderCursor);
-  QString s = cr.selectedText();
-
-  if (! s.isEmpty())
-     spellchecker->remove_from_user_dict (s);
-}
-
-
-void CTEA::fn_spell_suggest_callback()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QAction *act = qobject_cast<QAction *>(sender());
-  QString new_text = act->text();
-
-  QTextCursor cr = d->textCursor();
-
-  cr.select (QTextCursor::WordUnderCursor);
-  QString s = cr.selectedText();
-  if (s.isEmpty())
-     return;
-
-  if (s[0].isUpper())
-     new_text[0] = new_text[0].toUpper();
-
-  cr.insertText (new_text);
-  d->setTextCursor (cr);
-}
-
-
-void CTEA::fn_spell_suggest()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QTextCursor cr = d->textCursor();
-  cr.select (QTextCursor::WordUnderCursor);
-  QString s = cr.selectedText();
-  if (s.isEmpty())
-     return;
-
-  QStringList l = spellchecker->get_suggestions_list (s);
-
-  QMenu *m = new QMenu (this);
-  create_menu_from_list (this, m, l, SLOT (fn_spell_suggest_callback()));
-  m->popup (mapToGlobal (d->cursorRect().topLeft()));
-}
-
-#endif
 
 
 void CTEA::update_templates()
@@ -2935,53 +2648,6 @@ void CTEA::dropEvent (QDropEvent *event)
 
 
 
-void CTEA::fn_analyze_text_stat()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  bool b_sel = d->textCursor().hasSelection();
-
-  QString s;
-
-  if (b_sel)
-     s = d->get();
-  else
-      s = d->toPlainText();
-
-  int c = s.length();
-  int purechars = 0;
-  int lines = 1;
-
-  for (int i = 0; i < c; ++ i)
-      {
-       QChar ch = s.at (i);
-
-       if (ch.isLetterOrNumber() || ch.isPunct())
-          purechars++;
-
-       if (! b_sel)
-          {
-           if (ch == '\n')
-              lines++;
-          }
-       else
-           if (ch == QChar::ParagraphSeparator)
-              lines++;
-      }
-
-
-  QString result = tr ("chars: %1<br>chars without spaces: %2<br>lines: %3<br>author's sheets: %4")
-                       .arg (QString::number (c))
-                       .arg (QString::number (purechars))
-                       .arg (QString::number (lines))
-                       .arg (QString::number (c / 40000));
-
-  documents->log->log (result);
-}
 
 
 
@@ -3083,20 +2749,6 @@ void CTEA::nav_goto_left_tab()
 
 
 
-void CTEA::fn_analyze_extract_words()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QStringList w = d->get_words();
-
-  CDocument *nd = documents->create_new();
-  if (nd)
-     nd->put (w.join("\n"));
-}
 
 
 QString toggle_fname_header_source (const QString &fileName)
@@ -3152,18 +2804,6 @@ QString toggle_fname_header_source (const QString &fileName)
 }
 
 
-void CTEA::ide_toggle_hs()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  if (file_exists (d->file_name))
-      documents->open_file (toggle_fname_header_source (d->file_name), d->charset);
-}
-
 
 QString morse_from_lang (const QString &s, const QString &lang)
 {
@@ -3203,37 +2843,6 @@ QString morse_to_lang (const QString &s, const QString &lang)
 }
 
 
-void CTEA::fn_morse_from_en()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (morse_from_lang (d->get().toUpper(), "en"));
-}
-
-
-void CTEA::fn_morse_to_en()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (morse_to_lang (d->get(), "en"));
-}
-
-
-
-
-void CTEA::fn_morse_to_ru()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (morse_to_lang (d->get(), "ru"));
-}
-
 
 void CTEA::nav_focus_to_fif()
 {
@@ -3255,16 +2864,6 @@ void CTEA::nav_focus_to_editor()
 
 
 
-void CTEA::fn_text_remove_formatting_at_each_line()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-      d->put (qstringlist_process (d->get(),
-                                                                 "",
-                                                                 QSTRL_PROC_REMOVE_FORMATTING));
-}
 
 
 //from http://www.cyberforum.ru/cpp-beginners/thread125615.html
@@ -3462,32 +3061,7 @@ void CTEA::view_hide_error_marks()
 }
 
 
-void CTEA::fn_text_remove_formatting()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (d)
-     d->put (d->get().simplified());
-}
-
-
-void CTEA::fn_text_compress()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString s = d->get();
-
-  s = s.remove ('\n');
-  s = s.remove ('\t');
-  s = s.remove (' ');
-  s = s.remove (QChar::ParagraphSeparator);
-  d->put (s);
-}
 
 
 void CTEA::view_toggle_fs()
@@ -3879,74 +3453,10 @@ void CTEA::fman_fileop_create_dir()
 }
 
 
-void CTEA::fn_quotes_to_angle()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString source = d->get();
-  if (! source.isEmpty())
-     d->put (conv_quotes (source, "\u00AB", "\u00BB"));
-}
 
 
-void CTEA::fn_quotes_curly()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString source = d->get();
-  if (! source.isEmpty())
-      d->put (conv_quotes (source, "\u201C", "\u201D"));
-}
 
 
-void CTEA::fn_quotes_tex_curly()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString source = d->get();
-  if (! source.isEmpty())
-     d->put (conv_quotes (source, "``", "\'\'"));
-}
-
-
-void CTEA::fn_quotes_tex_angle_01()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString source = d->get();
-  if (! source.isEmpty())
-     d->put (conv_quotes (source, "<<", ">>"));
-}
-
-
-void CTEA::fn_quotes_tex_angle_02()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString source = d->get();
-  if (! source.isEmpty())
-     d->put (conv_quotes (source, "\\glqq", "\\grqq"));
-}
 
 
 
@@ -4957,120 +4467,6 @@ void CTEA::handle_args()
 }
 
 
-bool CStrIntPair_bigger_than (CStrIntPair *o1, CStrIntPair *o2)
-{
-  return o1->int_value > o2->int_value;
-}
-
-
-bool CStrIntPair_bigger_than_str (CStrIntPair *o1, CStrIntPair *o2)
-{
-  return o1->string_value < o2->string_value;
-}
-
-bool CStrIntPair_bigger_than_str_len (CStrIntPair *o1, CStrIntPair *o2)
-{
-  return o1->string_value.size() < o2->string_value.size();
-}
-
-
-
-void CTEA::run_unitaz (int mode)
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  pb_status->show();
-  pb_status->setFormat (tr ("%p% completed"));
-  pb_status->setTextVisible (true);
-
-  int c = 0;
-
-  QStringList total = d->get_words();
-  QHash <QString, int> h;
-
-  pb_status->setRange (0, total.size() - 1);
-
-  for (int j = 0; j < total.size(); j++)
-      {
-       if (c % 100 == 0)
-          qApp->processEvents();
-
-       QHash<QString, int>::iterator i = h.find (total.at(j).toLower());
-       if (i != h.end())
-           i.value() += 1;
-       else
-           h.insert(total.at(j).toLower(), 1);
-
-       pb_status->setValue (c++);
-      }
-
-  QList <CStrIntPair*> uwords;
-  QList <QString> keys = h.keys();
-
-  for (int i = 0; i < keys.size(); i++)
-      uwords.append (new CStrIntPair (keys.at(i), h.value (keys.at(i))));
-
-  if (mode == 0)
-    std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than);
-  if (mode == 1)
-     std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than_str);
-  if (mode == 2)
-     std::sort (uwords.begin(), uwords.end(), CStrIntPair_bigger_than_str_len);
-
-
-  QStringList outp;
-
-  for (int i = 0; i < uwords.size(); i++)
-      outp.append (uwords.at(i)->string_value + " = " + QString::number (uwords.at(i)->int_value));
-
-  double diff = static_cast <double> (total.size()) / static_cast <double> (uwords.size());
-  double diff_per_cent = get_percent (static_cast <double> (total.size()), static_cast <double> (uwords.size()));
-
-  outp.prepend (tr ("total to unique per cent diff: %1").arg (diff_per_cent, 0, 'f', 6));
-  outp.prepend (tr ("total / unique: %1").arg (diff, 0, 'f', 6));
-  outp.prepend (tr ("words unique: %1").arg (uwords.size()));
-  outp.prepend (tr ("words total: %1").arg (total.size()));
-  outp.prepend (tr ("text analysis of: %1").arg (d->file_name));
-  outp.prepend (tr ("UNITAZ: UNIverlsal Text AnalyZer"));
-
-  CDocument *nd = documents->create_new();
-  nd->put (outp.join ("\n"));
-
-  while (! uwords.isEmpty())
-        delete uwords.takeFirst();
-
-  pb_status->hide();
-}
-
-
-void CTEA::fn_analyze_get_words_count()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  run_unitaz (0);
-}
-
-
-void CTEA::fn_analyze_unitaz_abc()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  run_unitaz (1);
-}
-
-
-void CTEA::fn_analyze_unitaz_len()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  run_unitaz (2);
-}
-
-
-CStrIntPair::CStrIntPair (const QString &s, int i): QObject()
-{
-  string_value = s;
-  int_value = i;
-}
 
 void CTEA::create_markup_hash()
 {
@@ -5220,18 +4616,8 @@ void CTEA::count_substring (bool use_regexp)
 }
 
 
-void CTEA::fn_analyze_count()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  count_substring (false);
-}
 
 
-void CTEA::fn_analyze_count_rx()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  count_substring (true);
-}
 
 
 void CTEA::read_search_options()
@@ -5310,35 +4696,6 @@ QString CTEA::fif_get_text()
 }
 
 
-void CTEA::fn_text_remove_trailing_spaces()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QStringList sl = d->get().split (QChar::ParagraphSeparator);
-
-  for (QList <QString>::iterator s = sl.begin(); s != sl.end(); ++s)
-      {
-       if (s->isEmpty())
-          continue;
-
-      if (s->at (s->size() - 1).isSpace())
-         {
-          int index = s->size() - 1;
-          while (s->at (--index).isSpace())
-                ;
-
-          s->truncate (index + 1);
-         }
-     }
-
-  QString x = sl.join ("\n");
-
-  d->put (x);
-}
 
 
 void CTEA::fman_convert_images (bool by_side, int value)
@@ -5451,24 +4808,6 @@ void CTEA::fman_img_conv_by_percent()
 }
 
 
-void CTEA::fn_text_escape()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-
-#if (QT_VERSION_MAJOR < 5)
-  if (d)
-     d->put (QRegExp::escape (d->get()));
-
-#else
-
-  if (d)
-     d->put (QRegularExpression::escape (d->get()));
-
-#endif
-
-}
 
 
 void CTEA::fman_zip_add()
@@ -6221,58 +5560,9 @@ void CTEA::idx_tab_learn_activate()
 }
 
 
-void CTEA::cal_add_days()
-{
-  QDate selected = calendar->selectedDate();
-  selected = selected.addDays (fif_get_text().toInt());
-  calendar->setSelectedDate (selected);
-}
 
 
-void CTEA::cal_add_months()
-{
-  QDate selected = calendar->selectedDate();
-  selected = selected.addMonths (fif_get_text().toInt());
-  calendar->setSelectedDate (selected);
-}
 
-
-void CTEA::cal_add_years()
-{
-  QDate selected = calendar->selectedDate();
-  selected = selected.addYears (fif_get_text().toInt());
-  calendar->setSelectedDate (selected);
-}
-
-
-void CTEA::cal_set_date_a()
-{
-  date1 = calendar->selectedDate();
-}
-
-
-void CTEA::cal_set_date_b()
-{
-  date2 = calendar->selectedDate();
-}
-
-
-void CTEA::cal_diff_days()
-{
-  int days = date2.daysTo (date1);
-  if (days < 0)
-      days = ~ days;
-
-  log->log (QString::number (days));
-}
-
-
-void CTEA::cal_remove()
-{
-  QString fname = dir_days + "/" + calendar->selectedDate().toString ("yyyy-MM-dd");
-  QFile::remove (fname);
-  calendar_update();
-}
 
 
 
@@ -6434,11 +5724,6 @@ void CTEA::cmb_docs_tabs_currentIndexChanged (int i)
 }
 
 
-void CTEA::cal_set_to_current()
-{
-  calendar->showToday();
-  calendar->setSelectedDate (QDate::currentDate());
-}
 
 
 void CTEA::clipboard_dataChanged()
@@ -6467,49 +5752,7 @@ void CTEA::clipboard_dataChanged()
 }
 
 
-void CTEA::cal_moon_mode()
-{
-  calendar->moon_mode = ! calendar->moon_mode;
-  calendar->do_update();
 
-  settings->setValue ("moon_mode", calendar->moon_mode);
-}
-
-
-void CTEA::create_moon_phase_algos()
-{
-  moon_phase_algos.insert (MOON_PHASE_TRIG2, tr ("Trigonometric 2"));
-  moon_phase_algos.insert (MOON_PHASE_TRIG1, tr ("Trigonometric 1"));
-  moon_phase_algos.insert (MOON_PHASE_CONWAY, tr ("Conway"));
-//  moon_phase_algos.insert (MOON_PHASE_SIMPLE, tr ("Simple1"));
-  moon_phase_algos.insert (MOON_PHASE_LEUESHKANOV, tr ("Leueshkanov"));
-}
-
-
-void CTEA::cal_gen_mooncal()
-{
-  int jdate1 = date1.toJulianDay();
-  int jdate2 = date2.toJulianDay();
-
-  QString s;
-
-  QString date_format = settings->value("date_format", "dd/MM/yyyy").toString();
-
-  for (int d = jdate1; d <= jdate2; d++)
-     {
-      QDate date = QDate::fromJulianDay (d);
-      int moon_day = moon_phase_trig2 (date.year(), date.month(), date.day());
-
-      s += date.toString (date_format);
-      s += " = ";
-      s += QString::number (moon_day);
-      s += "\n";
-     }
-
-  CDocument *nd = documents->create_new();
-  nd->put (s);
-  main_tab_widget->setCurrentIndex (idx_tab_edit);
-}
 
 
 void CTEA::leaving_tune()
@@ -6660,43 +5903,6 @@ void CTEA::view_darker()
 }
 
 
-void CTEA::fn_analyze_stat_words_lengths()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  unsigned long lengths[33] = { };
-
-  QStringList w = d->get_words();
-
-  for (int i =0; i < w.size(); i++)
-      {
-       int len = w.at(i).length();
-       if (len <= 32)
-          lengths[len]++;
-      }
-
-  QStringList l;
-
-  QString col1 = tr ("Word length: ");
-  QString col2 = tr ("Number:");
-
-  l.append (col1 + col2);
-
-  for (int i = 1; i <= 32; i++)
-      {
-       QString s = QString::number (i) + col1.fill ('_', col1.length()) + QString::number (lengths[i]);
-       l.append (s);
-      }
-
-
-  CDocument *nd = documents->create_new();
-  if (nd)
-     nd->put (l.join("\n"));
-}
 
 
 void CTEA::update_stylesheet (const QString &f)
@@ -7122,121 +6328,10 @@ void CTEA::receiveMessageShared (const QStringList &msg)
 }
 
 
-void CTEA::fn_text_compare_two_strings()
-{
-  last_action = qobject_cast <QAction *>(sender());
-
-  QStringList l = fif_get_text().split ("~");
-  if (l.size() < 2)
-     return;
-
-  if (l[0].size() < l[1].size())
-     return;
-
-  QString s;
-
-  for (int i = 0; i < l[0].size(); i++)
-      {
-       if (l[0][i] == l[1][i])
-          s = QString::number (i + 1) + ": " + l[0][i] + " == " + l[1][i];
-       else
-           s = QString::number (i + 1) + ": " + l[0][i] + " != " + l[1][i];
-
-       log->log (s);
-      }
-}
-
-
-void CTEA::ide_run()
-{
-  if (documents->hash_project.isEmpty())
-     return;
-
-  if (documents->fname_current_project.isEmpty())
-     return;
-
-
-  QFileInfo source_dir (documents->fname_current_project);
-
-  QString dir_build = hash_get_val (documents->hash_project,
-                                    "dir_build", source_dir.absolutePath());
-
-  if (dir_build[0] != '/') //dir is not absolute path
-      dir_build = source_dir.absolutePath() + "/" + dir_build;
-
-  QString command_run = hash_get_val (documents->hash_project,
-                                      "command_run", "");
-
-
-  QProcess *process  = new QProcess (this);
-  process->setWorkingDirectory (dir_build);
-
-  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
-  process->setProcessChannelMode (QProcess::MergedChannels) ;
-
-  process->start (command_run, QStringList());
-}
-
-
-void CTEA::ide_build()
-{
-  if (documents->hash_project.isEmpty())
-     return;
-
-  if (documents->fname_current_project.isEmpty())
-     return;
-
-  QFileInfo source_dir (documents->fname_current_project);
-
-  QString dir_build = hash_get_val (documents->hash_project,
-                                    "dir_build", source_dir.absolutePath());
-
-  if (dir_build[0] != '/') //dir is not absolute path
-      dir_build = source_dir.absolutePath() + "/" + dir_build;
-
-  QString command_build = hash_get_val (documents->hash_project,
-                                       "command_build", "make");
-
-  QProcess *process  = new QProcess (this);
-  process->setWorkingDirectory (dir_build);
-
-  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
-
-  process->setProcessChannelMode (QProcess::MergedChannels) ;
-  process->start (command_build, QStringList());
-}
-
-
-void CTEA::ide_clean()
-{
-    if (documents->hash_project.isEmpty())
-       return;
-
-    if (documents->fname_current_project.isEmpty())
-       return;
-
-
-    QFileInfo source_dir (documents->fname_current_project);
-
-    QString dir_build = hash_get_val (documents->hash_project,
-                                      "dir_build", source_dir.absolutePath());
 
 
 
-    if (dir_build[0] != '/') //dir is not absolute path
-        dir_build = source_dir.absolutePath() + "/" + dir_build;
 
-    QString command_clean = hash_get_val (documents->hash_project,
-                                          "command_clean", "make");
-
-    QProcess *process  = new QProcess (this);
-    process->setWorkingDirectory (dir_build);
-
-    connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
-
-    process->setProcessChannelMode (QProcess::MergedChannels) ;
-    process->start (command_clean, QStringList());
-}
 
 
 /*
@@ -7469,60 +6564,7 @@ CTEA::~CTEA()
 }
 
 
-void CTEA::fn_text_anagram()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CDocument *d = documents->get_current();
-  if (! d)
-      return;
-
-  QString t = d->get();
-  if (t.isEmpty())
-     return;
-
-  QString txt = anagram (t).join("\n");
-
-  d = documents->create_new();
-  if (d)
-     d->put (txt);
-
-}
-
-
-void CTEA::fn_text_regexp_match_check()
-{
-  last_action = sender();
-
-  CDocument *d = documents->get_current();
-  if (! d)
-      return;
-
-  QString t = d->get();
-  if (t.isEmpty())
-     return;
-
-  QString fiftxt = fif_get_text();
-
-#if QT_VERSION >= 0x050000
- QRegularExpression r (fiftxt/*,  QRegularExpression::CaseInsensitiveOption*/);
- QRegularExpressionMatch match = r.match(t);
- if (match.hasMatch())
-    log->log (tr ("matched"));
- else
-   log->log (tr ("does not"));
-
-#else
-  QRegExp r (fiftxt);
-  if (r.exactMatch(t))
-    log->log (tr ("matched"));
-  else
-   log->log (tr ("does not"));
-
-#endif
-
-
-}
 
 
 void CTEA::slot_font_logmemo_select()
@@ -10217,7 +9259,6 @@ void CTEA::fn_cells_copy_by_col()
   if (fiftxt.size() == 3)
      col2 = fiftxt[2].toInt();
 
-
   QString t = d->get();
 
   if (t.isEmpty())
@@ -10688,3 +9729,1020 @@ void CTEA::fn_morse_from_ru()
   if (d)
      d->put (morse_from_lang (d->get().toUpper(), "ru"));
 }
+
+
+void CTEA::fn_morse_to_ru()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (morse_to_lang (d->get(), "ru"));
+}
+
+
+void CTEA::fn_morse_from_en()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (morse_from_lang (d->get().toUpper(), "en"));
+}
+
+
+void CTEA::fn_morse_to_en()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (morse_to_lang (d->get(), "en"));
+}
+
+
+void CTEA::fn_analyze_text_stat()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  bool b_sel = d->textCursor().hasSelection();
+
+  QString s;
+
+  if (b_sel)
+     s = d->get();
+  else
+      s = d->toPlainText();
+
+  int c = s.length();
+  int purechars = 0;
+  int lines = 1;
+
+  for (int i = 0; i < c; ++ i)
+      {
+       QChar ch = s.at (i);
+
+       if (ch.isLetterOrNumber() || ch.isPunct())
+          purechars++;
+
+       if (! b_sel)
+          {
+           if (ch == '\n')
+              lines++;
+          }
+       else
+           if (ch == QChar::ParagraphSeparator)
+              lines++;
+      }
+
+
+  QString result = tr ("chars: %1<br>chars without spaces: %2<br>lines: %3<br>author's sheets: %4")
+                       .arg (QString::number (c))
+                       .arg (QString::number (purechars))
+                       .arg (QString::number (lines))
+                       .arg (QString::number (c / 40000));
+
+  log->log (result);
+}
+
+
+void CTEA::fn_analyze_extract_words()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QStringList w = d->get_words();
+
+  CDocument *nd = documents->create_new();
+  if (nd)
+     nd->put (w.join("\n"));
+}
+
+
+void CTEA::fn_analyze_stat_words_lengths()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  unsigned long lengths[33] = { };
+
+  QStringList w = d->get_words();
+
+  for (int i =0; i < w.size(); i++)
+      {
+       int len = w.at(i).length();
+       if (len <= 32)
+          lengths[len]++;
+      }
+
+  QStringList l;
+
+  QString col1 = tr ("Word length: ");
+  QString col2 = tr ("Number:");
+
+  l.append (col1 + col2);
+
+  for (int i = 1; i <= 32; i++)
+      {
+       QString s = QString::number (i) + col1.fill ('_', col1.length()) + QString::number (lengths[i]);
+       l.append (s);
+      }
+
+
+  CDocument *nd = documents->create_new();
+  if (nd)
+     nd->put (l.join("\n"));
+}
+
+
+void CTEA::fn_analyze_count()
+{
+  last_action = sender();
+  count_substring (false);
+}
+
+
+void CTEA::fn_analyze_count_rx()
+{
+  last_action = sender();
+  count_substring (true);
+}
+
+
+bool pr_bigger_than(const pair<const QString &,int> &a,
+                    const pair<const QString &,int> &b)
+{
+    return (a.second > b.second);
+}
+
+
+bool pr_bigger_than_str (const pair<const QString &,int> &a,
+                         const pair<const QString &,int> &b)
+{
+    return (a.first < b.first);
+}
+
+
+bool pr_bigger_than_str_len (const pair<const QString &,int> &a,
+                         const pair<const QString &,int> &b)
+{
+    return (a.first.size() < b.first.size());
+}
+
+
+
+void CTEA::run_unitaz (int mode)
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  pb_status->show();
+  pb_status->setFormat (tr ("%p% completed"));
+  pb_status->setTextVisible (true);
+
+  QElapsedTimer time_start;
+  time_start.start();
+
+  int c = 0;
+
+  QStringList total = d->get_words();
+  QHash <QString, int> h;
+
+  pb_status->setRange (0, total.size() - 1);
+
+  for (int j = 0; j < total.size(); j++)
+      {
+       if (c % 100 == 0)
+          qApp->processEvents();
+
+       QHash<QString, int>::iterator i = h.find (total.at(j).toLower());
+       if (i != h.end())
+           i.value() += 1;
+       else
+           h.insert(total.at(j).toLower(), 1);
+
+       pb_status->setValue (c++);
+      }
+
+
+  vector< pair <QString, int> > uwords;
+
+  QList <QString> keys = h.keys();
+
+  for (int i = 0; i < keys.size(); i++)
+      uwords.push_back (make_pair(keys.at(i),h.value (keys.at(i))));
+
+
+  if (mode == 0)
+    std::sort (uwords.begin(), uwords.end(), pr_bigger_than);
+  if (mode == 1)
+     std::sort (uwords.begin(), uwords.end(), pr_bigger_than_str);
+  if (mode == 2)
+     std::sort (uwords.begin(), uwords.end(), pr_bigger_than_str_len);
+
+  QStringList outp;
+
+  for (size_t i = 0; i < uwords.size(); i++)
+      outp.append (uwords.at(i).first + " = " + QString::number (uwords.at(i).second));
+
+  double diff = static_cast <double> (total.size()) / static_cast <double> (uwords.size());
+  double diff_per_cent = get_percent (static_cast <double> (total.size()), static_cast <double> (uwords.size()));
+
+  outp.prepend (tr ("total to unique per cent diff: %1").arg (diff_per_cent, 0, 'f', 6));
+  outp.prepend (tr ("total / unique: %1").arg (diff, 0, 'f', 6));
+  outp.prepend (tr ("words unique: %1").arg (uwords.size()));
+  outp.prepend (tr ("words total: %1").arg (total.size()));
+  outp.prepend (tr ("text analysis of: %1").arg (d->file_name));
+  outp.prepend (tr ("UNITAZ: UNIverlsal Text AnalyZer"));
+
+  log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
+
+
+  CDocument *nd = documents->create_new();
+  nd->put (outp.join ("\n"));
+
+   pb_status->hide();
+}
+
+
+
+void CTEA::fn_analyze_get_words_count()
+{
+  last_action = sender();
+  run_unitaz (0);
+}
+
+
+void CTEA::fn_analyze_unitaz_abc()
+{
+  last_action = sender();
+  run_unitaz (1);
+}
+
+
+void CTEA::fn_analyze_unitaz_len()
+{
+  last_action = sender();
+  run_unitaz (2);
+}
+
+
+void CTEA::fn_text_apply_to_each_line()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QStringList sl = d->get().split (QChar::ParagraphSeparator);
+  QString t = fif_get_text();
+
+  if (t.isEmpty())
+     return;
+
+  if (t.startsWith ("@@"))
+     {
+      QString fname = dir_snippets + QDir::separator() + t;
+
+      if (! file_exists (fname))
+         {
+          log->log (tr ("snippet %1 is not exists").arg (fname));
+          return;
+         }
+
+      t = t.remove (0, 2);
+      t = qstring_load (fname);
+     }
+
+
+  for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
+      {
+       QString ts (t);
+       (*i) = ts.replace ("%s", (*i));
+      }
+
+  QString x = sl.join ("\n");
+
+  d->put (x);
+}
+
+
+void CTEA::fn_text_reverse()
+{
+  last_action = sender();
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString s = d->get();
+
+  if (! s.isEmpty())
+      d->put (string_reverse (s));
+}
+
+
+void CTEA::fn_text_escape()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+
+#if (QT_VERSION_MAJOR < 5)
+  if (d)
+     d->put (QRegExp::escape (d->get()));
+#else
+  if (d)
+     d->put (QRegularExpression::escape (d->get()));
+#endif
+}
+
+void CTEA::fn_text_remove_formatting()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->put (d->get().simplified());
+}
+
+
+void CTEA::fn_text_compress()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString s = d->get();
+
+  s = s.remove ('\n');
+  s = s.remove ('\t');
+  s = s.remove (' ');
+  s = s.remove (QChar::ParagraphSeparator);
+  d->put (s);
+}
+
+
+void CTEA::fn_text_compare_two_strings()
+{
+  last_action = sender();
+
+  QStringList l = fif_get_text().split ("~");
+  if (l.size() < 2)
+     return;
+
+  if (l[0].size() < l[1].size())
+     return;
+
+  QString s;
+
+  for (int i = 0; i < l[0].size(); i++)
+      {
+       if (l[0][i] == l[1][i])
+          s = QString::number (i + 1) + ": " + l[0][i] + " == " + l[1][i];
+       else
+           s = QString::number (i + 1) + ": " + l[0][i] + " != " + l[1][i];
+
+       log->log (s);
+      }
+}
+
+
+void CTEA::fn_text_remove_formatting_at_each_line()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->put (qstringlist_process (d->get(), "", QSTRL_PROC_REMOVE_FORMATTING));
+}
+
+
+void CTEA::fn_text_remove_trailing_spaces()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QStringList sl = d->get().split (QChar::ParagraphSeparator);
+
+  for (QList <QString>::iterator s = sl.begin(); s != sl.end(); ++s)
+      {
+       if (s->isEmpty())
+          continue;
+
+       if (s->at (s->size() - 1).isSpace())
+          {
+           int index = s->size() - 1;
+           while (s->at (--index).isSpace())
+                 ;
+
+           s->truncate (index + 1);
+          }
+      }
+
+  QString x = sl.join ("\n");
+
+  d->put (x);
+}
+
+
+void CTEA::fn_text_anagram()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QString t = d->get();
+  if (t.isEmpty())
+     return;
+
+  QString txt = anagram (t).join("\n");
+
+  d = documents->create_new();
+  if (d)
+     d->put (txt);
+}
+
+
+void CTEA::fn_text_regexp_match_check()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  QString t = d->get();
+  if (t.isEmpty())
+     return;
+
+  QString fiftxt = fif_get_text();
+
+#if QT_VERSION >= 0x050000
+ QRegularExpression r (fiftxt/*,  QRegularExpression::CaseInsensitiveOption*/);
+ QRegularExpressionMatch match = r.match(t);
+ if (match.hasMatch())
+    log->log (tr ("matched"));
+ else
+     log->log (tr ("does not"));
+
+#else
+  QRegExp r (fiftxt);
+  if (r.exactMatch(t))
+     log->log (tr ("matched"));
+  else
+      log->log (tr ("does not"));
+
+#endif
+}
+
+
+void CTEA::fn_quotes_to_angle()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString source = d->get();
+  if (! source.isEmpty())
+     d->put (conv_quotes (source, "\u00AB", "\u00BB"));
+}
+
+
+void CTEA::fn_quotes_curly()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString source = d->get();
+  if (! source.isEmpty())
+      d->put (conv_quotes (source, "\u201C", "\u201D"));
+}
+
+
+void CTEA::fn_quotes_tex_curly()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString source = d->get();
+  if (! source.isEmpty())
+     d->put (conv_quotes (source, "``", "\'\'"));
+}
+
+
+void CTEA::fn_quotes_tex_angle_01()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString source = d->get();
+  if (! source.isEmpty())
+     d->put (conv_quotes (source, "<<", ">>"));
+}
+
+
+void CTEA::fn_quotes_tex_angle_02()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString source = d->get();
+  if (! source.isEmpty())
+     d->put (conv_quotes (source, "\\glqq", "\\grqq"));
+}
+
+
+
+
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+
+void CTEA::create_spellcheck_menu()
+{
+  menu_spell_langs->clear();
+  create_menu_from_list (this, menu_spell_langs, spellchecker->get_speller_modules_list(), SLOT(fn_change_spell_lang()));
+}
+
+
+void CTEA::fn_change_spell_lang()
+{
+  last_action = sender();
+
+  QAction *Act = qobject_cast<QAction *>(sender());
+  settings->setValue ("spell_lang", Act->text());
+  spellchecker->change_lang (Act->text());
+  fn_spell_check();
+}
+
+
+bool ends_with_badchar (const QString &s)
+{
+  if (s.endsWith ("\""))
+     return true;
+
+  if (s.endsWith ("»"))
+     return true;
+
+  if (s.endsWith ("\\"))
+     return true;
+
+  return false;
+}
+
+
+void CTEA::fn_spell_check()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QColor color_error = QColor (hash_get_val (global_palette, "error", "red"));
+
+  QElapsedTimer time_start;
+  time_start.start();
+
+  pb_status->show();
+  pb_status->setRange (0, d->toPlainText().size() - 1);
+  pb_status->setFormat (tr ("%p% completed"));
+  pb_status->setTextVisible (true);
+
+  int i = 0;
+
+  QTextCursor cr = d->textCursor();
+
+  int pos = cr.position();
+  int savepos = pos;
+
+  QString text = d->toPlainText();
+  int text_size = text.size();
+
+//delete all underlines
+  cr.setPosition (0);
+  cr.movePosition (QTextCursor::End, QTextCursor::KeepAnchor);
+  QTextCharFormat f = cr.blockCharFormat();
+  f.setFontUnderline (false);
+  cr.mergeCharFormat (f);
+
+  cr.setPosition (0);
+  cr.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
+
+  do
+    {
+     pos = cr.position();
+     if (pos >= text_size)
+        break;
+
+     QChar c = text.at (pos);
+
+     if (char_is_bad (c))
+     while (char_is_bad (c))
+           {
+            cr.movePosition (QTextCursor::NextCharacter);
+
+            pos = cr.position();
+
+            if (pos < text_size)
+               c = text.at (pos);
+            else
+                break;
+           }
+
+     cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+
+     QString stext = cr.selectedText();
+     if (! stext.isEmpty() && ends_with_badchar (stext))
+        {
+         cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+         stext = cr.selectedText();
+        }
+
+     if (! stext.isEmpty())
+     if (! spellchecker->check (cr.selectedText()))
+        {
+         f = cr.blockCharFormat();
+         f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
+         f.setUnderlineColor (color_error);
+         cr.mergeCharFormat (f);
+        }
+
+     i++;
+
+     if (i % 512 == 0)
+        pb_status->setValue (i);
+    }
+   while (cr.movePosition (QTextCursor::NextWord));
+
+
+  cr.setPosition (savepos);
+  d->document()->setModified (false);
+
+  pb_status->hide();
+
+  log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
+}
+
+
+void CTEA::fn_spell_add_to_dict()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QTextCursor cr = d->textCursor();
+  cr.select (QTextCursor::WordUnderCursor); //плохо работает
+  QString s = cr.selectedText();
+
+  if (! s.isEmpty())
+     spellchecker->add_to_user_dict (s);
+}
+
+
+void CTEA::fn_spell_remove_from_dict()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QTextCursor cr = d->textCursor();
+  cr.select (QTextCursor::WordUnderCursor);
+  QString s = cr.selectedText();
+
+  if (! s.isEmpty())
+     spellchecker->remove_from_user_dict (s);
+}
+
+
+void CTEA::fn_spell_suggest_callback()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QAction *act = qobject_cast<QAction *>(sender());
+  QString new_text = act->text();
+
+  QTextCursor cr = d->textCursor();
+
+  cr.select (QTextCursor::WordUnderCursor);
+  QString s = cr.selectedText();
+  if (s.isEmpty())
+     return;
+
+  if (s[0].isUpper())
+     new_text[0] = new_text[0].toUpper();
+
+  cr.insertText (new_text);
+  d->setTextCursor (cr);
+}
+
+
+void CTEA::fn_spell_suggest()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QTextCursor cr = d->textCursor();
+  cr.select (QTextCursor::WordUnderCursor);
+  QString s = cr.selectedText();
+  if (s.isEmpty())
+     return;
+
+  QStringList l = spellchecker->get_suggestions_list (s);
+
+  QMenu *m = new QMenu (this);
+  create_menu_from_list (this, m, l, SLOT (fn_spell_suggest_callback()));
+  m->popup (mapToGlobal (d->cursorRect().topLeft()));
+}
+
+#endif
+
+
+/*
+====================
+Cal menu
+===================
+*/
+
+
+void CTEA::create_moon_phase_algos()
+{
+  moon_phase_algos.insert (MOON_PHASE_TRIG2, tr ("Trigonometric 2"));
+  moon_phase_algos.insert (MOON_PHASE_TRIG1, tr ("Trigonometric 1"));
+  moon_phase_algos.insert (MOON_PHASE_CONWAY, tr ("Conway"));
+  moon_phase_algos.insert (MOON_PHASE_LEUESHKANOV, tr ("Leueshkanov"));
+}
+
+
+void CTEA::cal_moon_mode()
+{
+  calendar->moon_mode = ! calendar->moon_mode;
+  calendar->do_update();
+  settings->setValue ("moon_mode", calendar->moon_mode);
+}
+
+
+void CTEA::cal_set_date_a()
+{
+  date1 = calendar->selectedDate();
+}
+
+
+void CTEA::cal_set_date_b()
+{
+  date2 = calendar->selectedDate();
+}
+
+
+void CTEA::cal_add_days()
+{
+  QDate selected = calendar->selectedDate();
+  selected = selected.addDays (fif_get_text().toInt());
+  calendar->setSelectedDate (selected);
+}
+
+
+void CTEA::cal_add_months()
+{
+  QDate selected = calendar->selectedDate();
+  selected = selected.addMonths (fif_get_text().toInt());
+  calendar->setSelectedDate (selected);
+}
+
+
+void CTEA::cal_add_years()
+{
+  QDate selected = calendar->selectedDate();
+  selected = selected.addYears (fif_get_text().toInt());
+  calendar->setSelectedDate (selected);
+}
+
+
+void CTEA::cal_set_to_current()
+{
+  calendar->showToday();
+  calendar->setSelectedDate (QDate::currentDate());
+}
+
+
+void CTEA::cal_gen_mooncal()
+{
+  int jdate1 = date1.toJulianDay();
+  int jdate2 = date2.toJulianDay();
+
+  QString s;
+
+  QString date_format = settings->value("date_format", "dd/MM/yyyy").toString();
+
+  for (int d = jdate1; d <= jdate2; d++)
+     {
+      QDate date = QDate::fromJulianDay (d);
+      int moon_day = moon_phase_trig2 (date.year(), date.month(), date.day());
+
+      s += date.toString (date_format);
+      s += " = ";
+      s += QString::number (moon_day);
+      s += "\n";
+     }
+
+  CDocument *nd = documents->create_new();
+  nd->put (s);
+  main_tab_widget->setCurrentIndex (idx_tab_edit);
+}
+
+
+void CTEA::cal_diff_days()
+{
+  int days = date2.daysTo (date1);
+  if (days < 0)
+      days = ~ days;
+
+  log->log (QString::number (days));
+}
+
+
+void CTEA::cal_remove()
+{
+  QString fname = dir_days + "/" + calendar->selectedDate().toString ("yyyy-MM-dd");
+  QFile::remove (fname);
+  calendar_update();
+}
+
+
+/*
+===================
+IDE menu callbacks
+===================
+*/
+
+
+void CTEA::ide_run()
+{
+  last_action = sender();
+
+  if (documents->hash_project.isEmpty())
+     return;
+
+  if (documents->fname_current_project.isEmpty())
+     return;
+
+
+  QFileInfo source_dir (documents->fname_current_project);
+
+  QString dir_build = hash_get_val (documents->hash_project,
+                                    "dir_build", source_dir.absolutePath());
+
+  if (dir_build[0] != '/') //dir is not absolute path
+      dir_build = source_dir.absolutePath() + "/" + dir_build;
+
+  QString command_run = hash_get_val (documents->hash_project,
+                                      "command_run", "");
+
+
+  QProcess *process  = new QProcess (this);
+  process->setWorkingDirectory (dir_build);
+
+  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
+
+  process->start (command_run, QStringList());
+}
+
+
+void CTEA::ide_build()
+{
+  last_action = sender();
+
+  if (documents->hash_project.isEmpty())
+     return;
+
+  if (documents->fname_current_project.isEmpty())
+     return;
+
+  QFileInfo source_dir (documents->fname_current_project);
+
+  QString dir_build = hash_get_val (documents->hash_project,
+                                    "dir_build", source_dir.absolutePath());
+
+  if (dir_build[0] != '/') //dir is not absolute path
+      dir_build = source_dir.absolutePath() + "/" + dir_build;
+
+  QString command_build = hash_get_val (documents->hash_project,
+                                       "command_build", "make");
+
+  QProcess *process  = new QProcess (this);
+  process->setWorkingDirectory (dir_build);
+
+  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
+  process->start (command_build, QStringList());
+}
+
+
+void CTEA::ide_clean()
+{
+  last_action = sender();
+
+  if (documents->hash_project.isEmpty())
+      return;
+
+  if (documents->fname_current_project.isEmpty())
+      return;
+
+
+  QFileInfo source_dir (documents->fname_current_project);
+
+  QString dir_build = hash_get_val (documents->hash_project,
+                                    "dir_build", source_dir.absolutePath());
+
+
+
+  if (dir_build[0] != '/') //dir is not absolute path
+      dir_build = source_dir.absolutePath() + "/" + dir_build;
+
+    QString command_clean = hash_get_val (documents->hash_project,
+                                          "command_clean", "make");
+
+    QProcess *process  = new QProcess (this);
+    process->setWorkingDirectory (dir_build);
+
+    connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+
+    process->setProcessChannelMode (QProcess::MergedChannels) ;
+    process->start (command_clean, QStringList());
+}
+
+
+void CTEA::ide_toggle_hs()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (file_exists (d->file_name))
+      documents->open_file (toggle_fname_header_source (d->file_name), d->charset);
+}
+
+
+/*
+===================
+Nav menu callbacks
+===================
+*/
+
+
+void CTEA::nav_save_pos()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->position = d->textCursor().position();
+}
+
+

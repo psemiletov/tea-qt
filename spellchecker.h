@@ -41,13 +41,23 @@ class CSpellchecker
 
 public:
 
-  bool initialized;
+  QString language;
+  QString dir_dicts;
+  QString dir_user_dicts;
+
+  bool loaded;
+
 
   CSpellchecker (const QString &lang,
-                 const QString &path,
-                 const QString &user): initialized (false) {};
+                 const QString &dir_path,
+                 const QString &dir_user): language (lang),
+                 dir_dicts (dir_path), dir_user_dicts (dir_user), loaded(false)
+                 {};
 
   virtual ~CSpellchecker() {};
+
+  virtual void load_dict() = 0; //uses current language
+  virtual void save_user_dict() = 0; //uses current language
 
   virtual void change_lang (const QString &lang) = 0;
   virtual void add_to_user_dict (const QString &word) = 0;
@@ -57,6 +67,8 @@ public:
 
   virtual QStringList get_speller_modules_list() = 0;
   virtual QStringList get_suggestions_list (const QString &word) = 0;
+
+//  bool dir_dicts_empty();
 };
 
 
@@ -71,8 +83,11 @@ public:
   AspellCanHaveError *ret;
   AspellSpeller *speller;
 
-  CAspellchecker (const QString &lang, const QString &path = "", const QString &user_path = "");
+  CAspellchecker (const QString &lang, const QString &dir_path = "", const QString &dir_user = "");
   ~CAspellchecker();
+
+  void save_user_dict() {}; //uses current language
+  void load_dict();
 
   void change_lang (const QString &lang);
   void add_to_user_dict (const QString &word);
@@ -100,17 +115,15 @@ public:
   Hunspell *speller;
 
   QStringList user_words;
-  QString user_dir;
-  QString lng;
 
   const char *encoding;
   std::string str_encoding;
 
-  QString dict_dir;
-
-  CHunspellChecker (const QString &lang, const QString &path = "", const QString &user_path = "");
+  CHunspellChecker (const QString &lang, const QString &dir_path = "", const QString &dir_user = "");
   ~CHunspellChecker();
 
+  void save_user_dict(); //uses current language
+  void load_dict();
   void change_lang (const QString &lang);
   void add_to_user_dict (const QString &word);
   void remove_from_user_dict (const QString &word);

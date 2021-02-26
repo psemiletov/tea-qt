@@ -41,7 +41,7 @@ add_definitions(-DNOCRYPT=1)
 add_definitions(-DNOUNCRYPT=1)
 add_definitions(-DQUAZIP_STATIC=1)
 
-option(USE_ASPELL "Use Aspell" OFF)
+option(USE_ASPELL "Use Aspell" ON)
 option(USE_PRINTER "Use printer support" OFF)
 option(USE_PDF "Use libpoppler" OFF)
 option(USE_DJVU "Use djvu support" OFF)
@@ -161,6 +161,7 @@ endif()
 
 
 if(USE_ASPELL)
+ message("SEARCH ASPELL")
 find_path(ASPELL_INCLUDES aspell.h
          "/usr/include/"
          "/usr/local/"
@@ -168,7 +169,6 @@ find_path(ASPELL_INCLUDES aspell.h
 
 
 if(ASPELL_INCLUDES)
-
   message("+ aspell support")
   add_definitions(-DASPELL_ENABLE)
 

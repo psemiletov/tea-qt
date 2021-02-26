@@ -125,29 +125,6 @@ public:
 };
 #endif
 
-/*
-class CMarkupPair: public QObject
-{
-Q_OBJECT
-
-public:
-
-  QHash <QString, QString> pattern;
-};
-*/
-
-class CStrIntPair: public QObject
-{
-Q_OBJECT
-
-public:
-
-  QString string_value;
-  int int_value;
-
-  CStrIntPair (const QString &s, int i);
-};
-
 
 class CDarkerWindow: public QWidget
 {
@@ -1015,7 +992,6 @@ Fn menu callbacks
   void fn_text_anagram();
   void fn_text_regexp_match_check();
 
-
   void fn_quotes_to_angle();
   void fn_quotes_curly();
   void fn_quotes_tex_curly();
@@ -1030,8 +1006,6 @@ Fn menu callbacks
   void fn_spell_add_to_dict();
   void fn_spell_remove_from_dict();
   void fn_spell_suggest();
-
-//  void cmb_spellchecker_currentIndexChanged (int);
 
 #endif // SPELLCHECKERS ENABLED
 
@@ -1090,7 +1064,6 @@ Nav menu callbacks
   void nav_focus_to_fif();
   void nav_focus_to_editor();
   void nav_labels_update_list();
-
 
 
 /*

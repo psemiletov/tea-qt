@@ -6,6 +6,8 @@ Peter Semiletov
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <vector>
+
 #include <QObject>
 #include <QHash>
 #include <QFileInfo>

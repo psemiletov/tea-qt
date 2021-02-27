@@ -158,20 +158,6 @@ QTabWidget::TabPosition int_to_tabpos (int i)
 
 
 
-void CTEA::update_bookmarks()
-{
-  if (! file_exists (fname_bookmarks))
-     return;
-
-  bookmarks = qstring_load (fname_bookmarks);
-  if (bookmarks.isEmpty())
-     return;
-
-  menu_file_bookmarks->clear();
-  create_menu_from_list (this, menu_file_bookmarks,
-                         bookmarks.split ("\n"),
-                         SLOT (file_open_bookmark()));
-}
 
 
 void CTEA::readSettings()
@@ -495,73 +481,6 @@ void CTEA::closeEvent (QCloseEvent *event)
 
 
 
-void CTEA::createToolBars()
-{
-  openAct->setMenu (menu_file_recent);
-  filesAct->setMenu (menu_current_files);
-  act_labels->setMenu (menu_labels);
-
-  fileToolBar = addToolBar (tr ("File"));
-  fileToolBar->setObjectName ("fileToolBar");
-  fileToolBar->addAction (newAct);
-  fileToolBar->addAction (openAct);
-  fileToolBar->addAction (saveAct);
-
-  editToolBar = addToolBar (tr ("Edit"));
-  editToolBar->setObjectName ("editToolBar");
-  editToolBar->addAction (cutAct);
-  editToolBar->addAction (copyAct);
-  editToolBar->addAction (pasteAct);
-
-  if (! settings->value ("fif_at_toolbar", 0).toBool())
-     {
-      editToolBar->addSeparator();
-      editToolBar->addAction (act_labels);
-     }
-
-  filesToolBar = addToolBar (tr ("Files"));
-  filesToolBar->setObjectName ("filesToolBar");
-
-  filesToolBar->setIconSize (QSize (icon_size, icon_size));
-
-
-  QToolButton *tb_current_list = new QToolButton();
-  tb_current_list->setIcon (get_theme_icon ("current-list.png"));
-
-  tb_current_list->setMenu (menu_current_files);
-  tb_current_list->setPopupMode(QToolButton::InstantPopup);
-  filesToolBar->addWidget (tb_current_list);
-
-  if (settings->value ("fif_at_toolbar", 0).toBool())
-     {
-      fifToolBar = addToolBar (tr ("FIF"));
-      fifToolBar->setObjectName ("fifToolBar");
-
-      cmb_fif = new QComboBox;
-      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
-      cmb_fif->setObjectName ("FIF");
-
-      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-      cmb_fif->setEditable (true);
-      fif = cmb_fif->lineEdit();
-      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
-
-      fifToolBar->addWidget (cmb_fif);
-
-      QAction *act_fif_find = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
-      act_fif_find->setToolTip (tr ("Find"));
-      connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
-
-      QAction *act_fif_find_next = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
-      act_fif_find_next->setToolTip (tr ("Find next"));
-      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
-
-      QAction *act_fif_find_prev = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
-      act_fif_find_prev->setToolTip (tr ("Find previous"));
-      connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
-     }
-}
 
 
 void CTEA::pageChanged (int index)
@@ -822,17 +741,6 @@ void CTEA::slot_style_currentIndexChanged (int)
 
 
 
-
-
-
-
-
-void CTEA::update_fonts()
-{
-  documents->apply_settings();
-}
-
-
 void CTEA::man_find_find()
 {
   QString fiftxt = fif_get_text();
@@ -853,69 +761,10 @@ void CTEA::man_find_prev()
 }
 
 
-void CTEA::createManual()
-{
-  QWidget *wd_man = new QWidget (this);
-
-  QVBoxLayout *lv_t = new QVBoxLayout;
-
-  QString loc = QLocale::system().name().left (2).toLower();
-
-  QString ts = settings->value ("lng", loc).toString();
-
-  QString filename (":/manuals/");
-  filename = filename + ts + ".html";
-
-  if (! file_exists (filename))
-      filename = ":/manuals/en.html";
-
-  man_search_value = "";
-
-  QHBoxLayout *lh_controls = new QHBoxLayout();
-
-  QPushButton *bt_back = new QPushButton ("<");
-  QPushButton *bt_forw = new QPushButton (">");
-
-  lh_controls->addWidget (bt_back);
-  lh_controls->addWidget (bt_forw);
-
-  man = new QTextBrowser;
-  man->setOpenExternalLinks (true);
-  man->setSource (QUrl ("qrc" + filename));
-
-  connect (bt_back, SIGNAL(clicked()), man, SLOT(backward()));
-  connect (bt_forw, SIGNAL(clicked()), man, SLOT(forward()));
-
-  lv_t->addLayout (lh_controls);
-  lv_t->addWidget (man);
-
-  wd_man->setLayout (lv_t);
-
-  idx_tab_learn = main_tab_widget->addTab (wd_man, tr ("manual"));
-}
 
 
-void CTEA::update_templates()
-{
-  menu_file_templates->clear();
-
-  create_menu_from_dir (this,
-                        menu_file_templates,
-                        dir_templates,
-                        SLOT (file_use_template())
-                       );
-}
 
 
-void CTEA::update_snippets()
-{
-   menu_fn_snippets->clear();
-   create_menu_from_dir (this,
-                         menu_fn_snippets,
-                         dir_snippets,
-                         SLOT (fn_use_snippet())
-                        );
-}
 
 
 void CTEA::dragEnterEvent (QDragEnterEvent *event)
@@ -1145,18 +994,6 @@ int get_arab_num (std::string rom_str)
 
 
 
-void CTEA::update_dyn_menus()
-{
-  update_templates();
-  update_snippets();
-  update_scripts();
-  update_palettes();
-  update_themes();
-  //update_view_hls();
-  update_tables();
-  update_profiles();
-  update_labels_menu();
-}
 
 
 void CTEA::file_open_programs_file()
@@ -1593,15 +1430,6 @@ void CTEA::fman_open()
 
 
 
-void CTEA::update_sessions()
-{
-  menu_file_sessions->clear();
-  create_menu_from_dir (this,
-                        menu_file_sessions,
-                        dir_sessions,
-                        SLOT (file_open_session())
-                       );
-}
 
 
 void CTEA::file_session_save_as()
@@ -1815,18 +1643,6 @@ void CTEA::update_logmemo_palette()
 }
 
 
-void CTEA::update_palettes()
-{
-  menu_view_palettes->clear();
-
-  QStringList l1 = read_dir_entries (dir_palettes);
-  QStringList l2 = read_dir_entries (":/palettes");
-  l1 += l2;
-
-  create_menu_from_list (this, menu_view_palettes,
-                         l1,
-                         SLOT (view_use_palette()));
-}
 
 /*
 void CTEA::update_hls_noncached()
@@ -1942,13 +1758,10 @@ void CTEA::update_hls_noncached()
 void CTEA::update_hls_noncached()
 {
 
-
 //HARDCODED PATTERNS are takes from resourse hl files, and escaped
 //All regexps there are valid
-
-
+/*
 #if QT_VERSION >= 0x050000
-
   QRegularExpression::PatternOptions opt = QRegularExpression::CaseInsensitiveOption;
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(awk)$", opt), ":/hls/awk.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(sh)$", opt), ":/hls/sh.xml"));
@@ -1976,10 +1789,7 @@ void CTEA::update_hls_noncached()
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(v)$", opt), ":/hls/verilog.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(wiki)$", opt), ":/hls/wikitext.xml"));
   documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", opt), ":/hls/xml.xml"));
-
 #else
-
-
   QRegExp::PatternQt::CaseInsensitive, QRegExp::RegExp2ions Qt::CaseInsensitive, QRegExp::RegExp2 = QRegExp::CaseInsensitiveQt::CaseInsensitive, QRegExp::RegExp2ion;
 
   documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(awk)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/awk.xml"));
@@ -2007,12 +1817,11 @@ void CTEA::update_hls_noncached()
   documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(v)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/verilog.xml"));
   documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(wiki)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/wikitext.xml"));
   documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/xml.xml"));
-
 #endif
 
+*/
 
-
-// USER DEFINED PATTERNS are takes from tea config dir, hl subdir files
+// PATTERNS are takes from tea config dir, hl subdir files
  //All regexps there must be validated valid
 
 
@@ -2026,7 +1835,6 @@ void CTEA::update_hls_noncached()
 
   lf.get (dir_hls);
   l << lf.list;
-
 
   for (int i = 0; i < l.size(); i++)
       {
@@ -2062,201 +1870,6 @@ void CTEA::fman_drives_changed (const QString & path)
 }
 
 
-void CTEA::createFman()
-{
-  QWidget *wd_fman = new QWidget (this);
-
-  QVBoxLayout *lav_main = new QVBoxLayout;
-  QVBoxLayout *lah_controls = new QVBoxLayout;
-  QHBoxLayout *lah_topbar = new QHBoxLayout;
-
-  QLabel *l_t = new QLabel (tr ("Name"));
-  ed_fman_fname = new QLineEdit;
-  connect (ed_fman_fname, SIGNAL(returnPressed()), this, SLOT(fman_fname_entry_confirm()));
-
-  ed_fman_path = new QLineEdit;
-  connect (ed_fman_path, SIGNAL(returnPressed()), this, SLOT(fman_naventry_confirm()));
-
-  tb_fman_dir = new QToolBar;
-  tb_fman_dir->setObjectName ("tb_fman_dir");
-/*
-  QAction *act_fman_go = new QAction (get_theme_icon("go.png"), tr ("Go"), this);
-  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
-
-  QAction *act_fman_home = new QAction (get_theme_icon ("home.png"), tr ("Home"), this);
-  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
-
-  QAction *act_fman_refresh = new QAction (get_theme_icon ("refresh.png"), tr ("Refresh"), this);
-  QAction *act_fman_ops = new QAction (get_theme_icon ("create-dir.png"), tr ("Operations"), this);
-  act_fman_ops->setMenu (menu_fm_file_ops);
-*/
-
-
-  QAction *act_fman_go = new QAction (style()->standardIcon(QStyle::SP_ArrowForward), tr ("Go"), this);
-  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
-
-  QAction *act_fman_home = new QAction (style()->standardIcon(QStyle::SP_DirHomeIcon), tr ("Home"), this);
-  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
-
-  QAction *act_fman_refresh = new QAction (style()->standardIcon(QStyle::SP_BrowserReload), tr ("Refresh"), this);
-  QAction *act_fman_ops = new QAction (style()->standardIcon(QStyle::SP_DriveHDIcon), tr ("Actions"), this);
-  act_fman_ops->setMenu (menu_fm_file_ops);
-
-
-
-/*
-  QAction *act_fman_go = new QAction (tr ("[>]"), this);
-  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
-
-  QAction *act_fman_home = new QAction (tr ("[=]"), this);
-  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
-
-  QAction *act_fman_refresh = new QAction (tr ("[*]"), this);
-  QAction *act_fman_ops = new QAction (tr ("[^]"), this);
-  act_fman_ops->setMenu (menu_fm_file_ops);
-*/
-  tb_fman_dir->addAction (act_fman_go);
-  tb_fman_dir->addAction (act_fman_home);
-  tb_fman_dir->addAction (act_fman_refresh);
-  tb_fman_dir->addAction (act_fman_ops);
-
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-  cb_fman_drives = new QComboBox;
-  lah_topbar->addWidget (cb_fman_drives);
-
-  QFileInfoList l_drives = QDir::drives();
-  for (QList <QFileInfo>::iterator fi = l_drives.begin(); fi != l_drives.end(); ++fi)
-       cb_fman_drives->addItem (fi->path());
-
-#endif
-
-  lah_topbar->addWidget (ed_fman_path);
-  lah_topbar->addWidget (tb_fman_dir);
-
-  lah_controls->addWidget (l_t);
-  lah_controls->addWidget (ed_fman_fname);
-
-  l_t = new QLabel (tr ("Charset"));
-
-  QPushButton *bt_magicenc = new QPushButton ("?", this);
-  bt_magicenc->setToolTip (tr ("Guess encoding!"));
-  connect (bt_magicenc, SIGNAL(clicked()), this, SLOT(guess_enc()));
-
-  /*
-#if QT_VERSION >= 0x051100
-  bt_magicenc->setMaximumWidth (QApplication::fontMetrics().horizontalAdvance("???"));
-#else
-  bt_magicenc->setMaximumWidth (QApplication::fontMetrics().width ("???"));
-#endif
-*/
-
-  cb_fman_codecs = new QComboBox;
-
-  if (sl_last_used_charsets.size () > 0)
-     cb_fman_codecs->addItems (sl_last_used_charsets + sl_charsets);
-  else
-     {
-      cb_fman_codecs->addItems (sl_charsets);
-      cb_fman_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
-     }
-
-  QPushButton *bt_fman_open = new QPushButton (tr ("Open"), this);
-  connect (bt_fman_open, SIGNAL(clicked()), this, SLOT(fman_open()));
-  bt_fman_open->setToolTip (tr ("Open a file from the file name provided above"));
-
-
-  QPushButton *bt_fman_save_as = new QPushButton (tr ("Save as"), this);
-  connect (bt_fman_save_as, SIGNAL(clicked()), this, SLOT(cb_button_saves_as()));
-  bt_fman_save_as->setToolTip (tr ("Save the current opened file with the name provided above"));
-
-  lah_controls->addWidget (l_t);
-
-
-  QHBoxLayout *lt_hb = new QHBoxLayout;
-
-  lt_hb->addWidget (cb_fman_codecs);
-  lt_hb->addWidget (bt_magicenc);
-
-  lah_controls->addLayout (lt_hb);
-
-  lah_controls->addWidget (bt_fman_open);
-  lah_controls->addWidget (bt_fman_save_as);
-
-  fman = new CFMan;
-
-  connect (fman, SIGNAL(file_activated (QString)), this, SLOT(fman_file_activated (QString)));
-  connect (fman, SIGNAL(dir_changed  (QString)), this, SLOT(fman_dir_changed  (QString)));
-  connect (fman, SIGNAL(current_file_changed  (QString, QString)), this, SLOT(fman_current_file_changed  (QString, QString)));
-
-  connect (act_fman_refresh, SIGNAL(triggered()), fman, SLOT(refresh()));
-
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-  connect (cb_fman_drives, SIGNAL(currentIndexChanged (QString)),
-          this, SLOT(fman_drives_changed(QString)));
-
-#endif
-
-  w_right = new QWidget (this);
-
-  w_right->setMinimumWidth (10);
-
-
-  QVBoxLayout *lw_right = new QVBoxLayout;
-  w_right->setLayout (lw_right);
-
-  lw_right->addLayout (lah_controls);
-
-  QFrame *vline = new QFrame;
-  vline->setFrameStyle (QFrame::HLine);
-  lw_right->addWidget (vline);
-
-  QLabel *l_bookmarks = new QLabel (tr ("<b>Bookmarks</b>"));
-  lw_right->addWidget (l_bookmarks);
-
-
-  QHBoxLayout *lah_places_bar = new QHBoxLayout;
-  QPushButton *bt_add_bmk = new QPushButton ("+");
-  QPushButton *bt_del_bmk = new QPushButton ("-");
-  lah_places_bar->addWidget (bt_add_bmk);
-  lah_places_bar->addWidget (bt_del_bmk);
-
-  connect (bt_add_bmk, SIGNAL(clicked()), this, SLOT(fman_add_bmk()));
-  connect (bt_del_bmk, SIGNAL(clicked()), this, SLOT(fman_del_bmk()));
-
-  lv_places = new QListWidget;
-  //lv_places->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOn);
-
-  update_places_bookmarks();
-  connect (lv_places, SIGNAL(itemActivated (QListWidgetItem *)), this, SLOT(fman_places_itemActivated (QListWidgetItem *)));
-
-  QVBoxLayout *vbox = new QVBoxLayout;
-  vbox->addLayout (lah_places_bar);
-  vbox->addWidget (lv_places);
-
-  lw_right->addLayout (vbox);
-
-//commented out with Qt6
- // fman->setSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-
-  spl_fman = new QSplitter (this);
-  spl_fman->setChildrenCollapsible (true);
-
-  spl_fman->addWidget (fman);
-  spl_fman->addWidget (w_right);
-
-  spl_fman->restoreState (settings->value ("spl_fman").toByteArray());
-
-  lav_main->addLayout (lah_topbar);
-  lav_main->addWidget (spl_fman);
-
-  wd_fman->setLayout (lav_main);
-
-  fman_home();
-
-  idx_tab_fman = main_tab_widget->addTab (wd_fman, tr ("files"));
-}
 
 
 void CTEA::fman_file_activated (const QString &full_path)
@@ -2416,110 +2029,6 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
 
 
 
-void CTEA::create_markup_hash()
-{
-  QHash<QString, QString> h1;
-
-  h1["Docbook"] = "<emphasis role=\"bold\">%s</emphasis>";
-  h1["LaTeX"] = "\\textbf{%s}";
-  h1["HTML"] = "<b>%s</b>";
-  h1["XHTML"] = "<b>%s</b>";
-  h1["Lout"] = "@B{%s}";
-  h1["MediaWiki"] = "'''%s'''";
-  h1["DokuWiki"] = "**%s**";
-  h1["Markdown"] = "**%s**";
-
-  hash_markup.insert ("bold", h1);
-
-  QHash<QString, QString> h2;
-
-  h2["Docbook"] = "<emphasis role=\"italic\">%s</emphasis>";
-  h2["LaTeX"] = "\\textit{%s}";
-  h2["HTML"] = "<i>%s</i>";
-  h2["XHTML"] = "<i>%s</i>";
-  h2["Lout"] = "@I{%s}";
-  h2["MediaWiki"] = "''%s''";
-  h2["DokuWiki"] = "//%s//";
-  h2["Markdown"] = "*%s*";
-
-  hash_markup.insert ("italic", h2);
-
-  QHash<QString, QString> h3;
-
-  h3["HTML"] = "<p style=\"text-align:justify;\">%s</p>";
-  h3["XHTML"] = "<p style=\"text-align:justify;\">%s</p>";
-
-  hash_markup.insert ("align_justify", h3);
-
-
-  QHash<QString, QString> h4;
-
-  h4["LaTeX"] = "\\begin{center}%s\\end{center}";
-  h4["HTML"] = "<p style=\"text-align:center;\">%s</p>";
-  h4["XHTML"] = "<p style=\"text-align:center;\">%s</p>";
-
-  hash_markup.insert ("align_center", h4);
-
-
-  QHash<QString, QString> h5;
-
-  h5["LaTeX"] = "\\begin{flushleft}%s\\end{flushleft}";
-  h5["HTML"] = "<p style=\"text-align:left;\">%s</p>";
-  h5["XHTML"] = "<p style=\"text-align:left;\">%s</p>";
-
-  hash_markup.insert ("align_left", h5);
-
-  QHash<QString, QString> h6;
-
-  h6["LaTeX"] = "\\begin{flushright}%s\\end{flushright}";
-  h6["HTML"] = "<p style=\"text-align:right;\">%s</p>";
-  h6["XHTML"] = "<p style=\"text-align:right;\">%s</p>";
-
-  hash_markup.insert ("align_right", h6);
-
-  QHash<QString, QString> h7;
-
-  h7["Docbook"] = "<emphasis role=\"underline\">%s</emphasis>";
-  h7["LaTeX"] = "\\underline{%s}";
-  h7["HTML"] = "<u>%s</u>";
-  h7["XHTML"] = "<u>%s</u>";
-  h7["Lout"] = "@Underline{%s}";
-  h7["MediaWiki"] = "<u>%s</u>";
-  h7["DokuWiki"] = "__%s__";
-
-  hash_markup.insert ("underline", h7);
-
-  QHash<QString, QString> h8;
-
-  h8["Docbook"] = "<para>%s</para>";
-  h8["HTML"] = "<p>%s</p>";
-  h8["XHTML"] = "<p>%s</p>";
-  h8["Lout"] = "@PP%s";
-
-  hash_markup.insert ("para", h8);
-
-  QHash<QString, QString> h9;
-
-  h9["Docbook"] = "<ulink url=\"\">%s</ulink>";
-  h9["HTML"] = "<a href=\"\">%s</a>";
-  h9["XHTML"] = "<a href=\"\">%s</a>";
-  h9["LaTeX"] = "\\href{}{%s}";
-  h9["Markdown"] = "[](%s)";
-
-  hash_markup.insert ("link", h9);
-
-  QHash<QString, QString> h10;
-
-  h10["LaTeX"] = "\\newline";
-  h10["HTML"] = "<br>";
-  h10["XHTML"] = "<br />";
-  h10["Lout"] = "@LLP";
-  h10["MediaWiki"] = "<br />";
-  h10["DokuWiki"] = "\\\\ ";
-
-  hash_markup.insert ("newline", h9);
-
-}
 
 
 void CTEA::count_substring (bool use_regexp)
@@ -2979,31 +2488,6 @@ void CTEA::calendar_activated (const QDate &date)
 }
 
 
-void CTEA::createCalendar()
-{
-  calendar = new CCalendarWidget (this, dir_days);
-
-  calendar->moon_mode = settings->value ("moon_mode", "0").toBool();
-
-  qDebug() << "calendar->moon_mode: " << calendar->moon_mode;
-
-  calendar->northern_hemisphere = settings->value ("northern_hemisphere", "1").toBool();
-  calendar->moon_phase_algo = settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt();
-
-  calendar->setGridVisible (true);
-  calendar->setVerticalHeaderFormat (QCalendarWidget::NoVerticalHeader);
-
-  if (settings->value ("start_on_sunday", "0").toBool())
-     calendar->setFirstDayOfWeek (Qt::Sunday);
-  else
-      calendar->setFirstDayOfWeek (Qt::Monday);
-
-  connect (calendar, SIGNAL(clicked (QDate)), this, SLOT(calendar_clicked (QDate)));
-  connect (calendar, SIGNAL(activated (QDate)), this, SLOT(calendar_activated (QDate)));
-  connect (calendar, SIGNAL(currentPageChanged (int, int)), this, SLOT(calendar_currentPageChanged (int, int)));
-
-  idx_tab_calendar = main_tab_widget->addTab (calendar, tr ("dates"));
-}
 
 
 void CTEA::calendar_currentPageChanged (int year, int month)
@@ -3393,101 +2877,6 @@ void CDarkerWindow::slot_valueChanged (int value)
 
 
 
-void CTEA::update_stylesheet (const QString &f)
-{
-//Update paletted
-
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
-  QFontInfo fi = QFontInfo (qApp->font());
-
-  QString fontsize = "font-size:" + settings->value ("app_font_size", fi.pointSize()).toString() + "pt;";
-  QString fontfamily = "font-family:" + settings->value ("app_font_name", qApp->font().family()).toString() + ";";
-
-  QString edfontsize = "font-size:" + settings->value ("editor_font_size", "16").toString() + "pt;";
-  QString edfontfamily = "font-family:" + settings->value ("editor_font_name", "Serif").toString() + ";";
-
-  QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_font_size", "12").toString() + "pt;";
-  QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + ";";
-
-
-  QString stylesheet;
-
-  stylesheet = "QWidget, QWidget * {" + fontfamily + fontsize + "}\n";
-
-  stylesheet += "QPlainTextEdit, QPlainTextEdit * {" + edfontfamily + edfontsize + "}\n";
-
-  stylesheet += "QTextEdit {" + edfontfamily + edfontsize + "}\n";
-
-  stylesheet += "CLogMemo {" + logmemo_font + logmemo_fontsize + "}\n";
-
-  stylesheet += "CLineNumberArea {" + edfontfamily + edfontsize + "}\n";
-
-
-  QString text_color = hash_get_val (global_palette, "text", "black");
-  QString t_text_color = QColor (text_color).darker(darker_val).name();
-
-  QString back_color = hash_get_val (global_palette, "background", "white");
-  QString t_back_color = QColor (back_color).darker(darker_val).name();
-
-  QString sel_back_color = hash_get_val (global_palette, "sel-background", "black");
-  QString sel_text_color = hash_get_val (global_palette, "sel-text", "white");
-
-  QString t_sel_text_color = QColor (sel_text_color).darker(darker_val).name();
-  QString t_sel_back_color = QColor (sel_back_color).darker(darker_val).name();
-
-  QString css_plain_text_edit = QString ("QPlainTextEdit {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
-                                         t_text_color).arg (
-                                         t_back_color).arg (
-                                         t_sel_text_color).arg (
-                                         t_sel_back_color);
-
-  stylesheet += css_plain_text_edit;
-
-  QString css_tea_edit = QString ("CTEAEdit {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
-                                  t_text_color).arg (
-                                  t_back_color).arg (
-                                  t_sel_text_color).arg (
-                                  t_sel_back_color);
-
-
-  stylesheet += css_tea_edit;
-
-  QString css_tea_man = QString ("QTextBrowser {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
-                                  t_text_color).arg (
-                                  t_back_color).arg (
-                                  t_sel_text_color).arg (
-                                  t_sel_back_color);
-
-
-  stylesheet += css_tea_man;
-
-
-  QString css_fif = QString ("QComboBox#FIF { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
-                             t_text_color).arg (
-                             t_back_color).arg (
-                             t_sel_text_color).arg (
-                             t_sel_back_color);
-
-
-  stylesheet += css_fif;
-
- // qDebug() << "stylesheet: " << stylesheet;
-
-
-//Update themed
-
-  QString cssfile = qstring_load (f);
-
-  QString css_path = get_file_path (f) + "/";
-
-  cssfile = cssfile.replace ("./", css_path);
-  cssfile += stylesheet;
-
-  qApp->setStyleSheet ("");
-  qApp->setStyleSheet (cssfile);
-}
-
 
 QIcon CTEA::get_theme_icon (const QString &name)
 {
@@ -3561,22 +2950,6 @@ void create_menu_from_themes (QObject *handler,
 }
 
 
-void CTEA::update_themes()
-{
-  menu_view_themes->clear();
-
-  create_menu_from_themes (this,
-                           menu_view_themes,
-                           ":/themes",
-                           SLOT (view_use_theme())
-                          );
-
-  create_menu_from_themes (this,
-                           menu_view_themes,
-                           dir_themes,
-                           SLOT (view_use_theme())
-                           );
-}
 
 
 
@@ -8120,14 +7493,6 @@ void CTEA::nav_focus_to_editor()
 }
 
 
-void CTEA::update_labels_menu()
-{
-  menu_labels->clear();
-
-  CDocument *d = documents->get_current();
-  if (d)
-     create_menu_from_list (this, menu_labels, d->labels, SLOT(select_label()));
-}
 
 
 void CTEA::nav_labels_update_list()
@@ -9184,29 +8549,6 @@ void CTEA::create_paths()
 
 
 
-void CTEA::update_styles()
-{
-#if QT_VERSION >= 0x050000
-  QString default_style = qApp->style()->objectName();
-
-  if (default_style == "GTK+") //can be buggy
-     default_style = "Fusion";
-
-#else
-
-  QString default_style = qApp->style()->objectName();
-
-  if (default_style == "GTK+") //can be buggy
-     default_style = "Cleanlooks";
-
-#endif
-
-  fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
-
-  MyProxyStyle *ps = new MyProxyStyle (QStyleFactory::create (settings->value ("ui_style", default_style).toString()));
-
-  QApplication::setStyle (ps);
-}
 
 
 
@@ -10675,3 +10017,659 @@ OPTIONS::KEYBOARD
 }
 
 
+void CTEA::createCalendar()
+{
+  calendar = new CCalendarWidget (this, dir_days);
+
+  calendar->moon_mode = settings->value ("moon_mode", "0").toBool();
+
+  calendar->northern_hemisphere = settings->value ("northern_hemisphere", "1").toBool();
+  calendar->moon_phase_algo = settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt();
+
+  calendar->setGridVisible (true);
+  calendar->setVerticalHeaderFormat (QCalendarWidget::NoVerticalHeader);
+
+  if (settings->value ("start_on_sunday", "0").toBool())
+     calendar->setFirstDayOfWeek (Qt::Sunday);
+  else
+      calendar->setFirstDayOfWeek (Qt::Monday);
+
+  connect (calendar, SIGNAL(clicked (QDate)), this, SLOT(calendar_clicked (QDate)));
+  connect (calendar, SIGNAL(activated (QDate)), this, SLOT(calendar_activated (QDate)));
+  connect (calendar, SIGNAL(currentPageChanged (int, int)), this, SLOT(calendar_currentPageChanged (int, int)));
+
+  idx_tab_calendar = main_tab_widget->addTab (calendar, tr ("dates"));
+}
+
+
+void CTEA::createToolBars()
+{
+  openAct->setMenu (menu_file_recent);
+  filesAct->setMenu (menu_current_files);
+  act_labels->setMenu (menu_labels);
+
+  fileToolBar = addToolBar (tr ("File"));
+  fileToolBar->setObjectName ("fileToolBar");
+  fileToolBar->addAction (newAct);
+  fileToolBar->addAction (openAct);
+  fileToolBar->addAction (saveAct);
+
+  editToolBar = addToolBar (tr ("Edit"));
+  editToolBar->setObjectName ("editToolBar");
+  editToolBar->addAction (cutAct);
+  editToolBar->addAction (copyAct);
+  editToolBar->addAction (pasteAct);
+
+  if (! settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      editToolBar->addSeparator();
+      editToolBar->addAction (act_labels);
+     }
+
+  filesToolBar = addToolBar (tr ("Files"));
+  filesToolBar->setObjectName ("filesToolBar");
+
+  filesToolBar->setIconSize (QSize (icon_size, icon_size));
+
+  QToolButton *tb_current_list = new QToolButton();
+  tb_current_list->setIcon (get_theme_icon ("current-list.png"));
+
+  tb_current_list->setMenu (menu_current_files);
+  tb_current_list->setPopupMode(QToolButton::InstantPopup);
+  filesToolBar->addWidget (tb_current_list);
+
+  if (settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      fifToolBar = addToolBar (tr ("FIF"));
+      fifToolBar->setObjectName ("fifToolBar");
+
+      cmb_fif = new QComboBox;
+      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
+      cmb_fif->setObjectName ("FIF");
+
+      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+      cmb_fif->setEditable (true);
+      fif = cmb_fif->lineEdit();
+      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
+
+      fifToolBar->addWidget (cmb_fif);
+
+      QAction *act_fif_find = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
+      act_fif_find->setToolTip (tr ("Find"));
+      connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
+
+      QAction *act_fif_find_next = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
+      act_fif_find_next->setToolTip (tr ("Find next"));
+      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
+
+      QAction *act_fif_find_prev = fifToolBar->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
+      act_fif_find_prev->setToolTip (tr ("Find previous"));
+      connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
+     }
+}
+
+
+void CTEA::createManual()
+{
+  QWidget *wd_man = new QWidget (this);
+
+  QVBoxLayout *lv_t = new QVBoxLayout;
+
+  QString loc = QLocale::system().name().left (2).toLower();
+
+  QString ts = settings->value ("lng", loc).toString();
+
+  QString filename (":/manuals/");
+  filename = filename + ts + ".html";
+
+  if (! file_exists (filename))
+      filename = ":/manuals/en.html";
+
+  man_search_value = "";
+
+  QHBoxLayout *lh_controls = new QHBoxLayout();
+
+  QPushButton *bt_back = new QPushButton ("<");
+  QPushButton *bt_forw = new QPushButton (">");
+
+  lh_controls->addWidget (bt_back);
+  lh_controls->addWidget (bt_forw);
+
+  man = new QTextBrowser;
+  man->setOpenExternalLinks (true);
+  man->setSource (QUrl ("qrc" + filename));
+
+  connect (bt_back, SIGNAL(clicked()), man, SLOT(backward()));
+  connect (bt_forw, SIGNAL(clicked()), man, SLOT(forward()));
+
+  lv_t->addLayout (lh_controls);
+  lv_t->addWidget (man);
+
+  wd_man->setLayout (lv_t);
+
+  idx_tab_learn = main_tab_widget->addTab (wd_man, tr ("manual"));
+}
+
+
+void CTEA::createFman()
+{
+  QWidget *wd_fman = new QWidget (this);
+
+  QVBoxLayout *lav_main = new QVBoxLayout;
+  QVBoxLayout *lah_controls = new QVBoxLayout;
+  QHBoxLayout *lah_topbar = new QHBoxLayout;
+
+  QLabel *l_t = new QLabel (tr ("Name"));
+  ed_fman_fname = new QLineEdit;
+  connect (ed_fman_fname, SIGNAL(returnPressed()), this, SLOT(fman_fname_entry_confirm()));
+
+  ed_fman_path = new QLineEdit;
+  connect (ed_fman_path, SIGNAL(returnPressed()), this, SLOT(fman_naventry_confirm()));
+
+  tb_fman_dir = new QToolBar;
+  tb_fman_dir->setObjectName ("tb_fman_dir");
+/*
+  QAction *act_fman_go = new QAction (get_theme_icon("go.png"), tr ("Go"), this);
+  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
+
+  QAction *act_fman_home = new QAction (get_theme_icon ("home.png"), tr ("Home"), this);
+  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
+
+  QAction *act_fman_refresh = new QAction (get_theme_icon ("refresh.png"), tr ("Refresh"), this);
+  QAction *act_fman_ops = new QAction (get_theme_icon ("create-dir.png"), tr ("Operations"), this);
+  act_fman_ops->setMenu (menu_fm_file_ops);
+*/
+
+
+  QAction *act_fman_go = new QAction (style()->standardIcon(QStyle::SP_ArrowForward), tr ("Go"), this);
+  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
+
+  QAction *act_fman_home = new QAction (style()->standardIcon(QStyle::SP_DirHomeIcon), tr ("Home"), this);
+  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
+
+  QAction *act_fman_refresh = new QAction (style()->standardIcon(QStyle::SP_BrowserReload), tr ("Refresh"), this);
+  QAction *act_fman_ops = new QAction (style()->standardIcon(QStyle::SP_DriveHDIcon), tr ("Actions"), this);
+  act_fman_ops->setMenu (menu_fm_file_ops);
+
+
+/*
+  QAction *act_fman_go = new QAction (tr ("[>]"), this);
+  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
+
+  QAction *act_fman_home = new QAction (tr ("[=]"), this);
+  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
+
+  QAction *act_fman_refresh = new QAction (tr ("[*]"), this);
+  QAction *act_fman_ops = new QAction (tr ("[^]"), this);
+  act_fman_ops->setMenu (menu_fm_file_ops);
+*/
+  tb_fman_dir->addAction (act_fman_go);
+  tb_fman_dir->addAction (act_fman_home);
+  tb_fman_dir->addAction (act_fman_refresh);
+  tb_fman_dir->addAction (act_fman_ops);
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+
+  cb_fman_drives = new QComboBox;
+  lah_topbar->addWidget (cb_fman_drives);
+
+  QFileInfoList l_drives = QDir::drives();
+  for (QList <QFileInfo>::iterator fi = l_drives.begin(); fi != l_drives.end(); ++fi)
+       cb_fman_drives->addItem (fi->path());
+
+#endif
+
+  lah_topbar->addWidget (ed_fman_path);
+  lah_topbar->addWidget (tb_fman_dir);
+
+  lah_controls->addWidget (l_t);
+  lah_controls->addWidget (ed_fman_fname);
+
+  l_t = new QLabel (tr ("Charset"));
+
+  QPushButton *bt_magicenc = new QPushButton ("?", this);
+  bt_magicenc->setToolTip (tr ("Guess encoding!"));
+  connect (bt_magicenc, SIGNAL(clicked()), this, SLOT(guess_enc()));
+
+  /*
+#if QT_VERSION >= 0x051100
+  bt_magicenc->setMaximumWidth (QApplication::fontMetrics().horizontalAdvance("???"));
+#else
+  bt_magicenc->setMaximumWidth (QApplication::fontMetrics().width ("???"));
+#endif
+*/
+
+  cb_fman_codecs = new QComboBox;
+
+  if (sl_last_used_charsets.size () > 0)
+     cb_fman_codecs->addItems (sl_last_used_charsets + sl_charsets);
+  else
+     {
+      cb_fman_codecs->addItems (sl_charsets);
+      cb_fman_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
+     }
+
+  QPushButton *bt_fman_open = new QPushButton (tr ("Open"), this);
+  connect (bt_fman_open, SIGNAL(clicked()), this, SLOT(fman_open()));
+  bt_fman_open->setToolTip (tr ("Open a file from the file name provided above"));
+
+
+  QPushButton *bt_fman_save_as = new QPushButton (tr ("Save as"), this);
+  connect (bt_fman_save_as, SIGNAL(clicked()), this, SLOT(cb_button_saves_as()));
+  bt_fman_save_as->setToolTip (tr ("Save the current opened file with the name provided above"));
+
+  lah_controls->addWidget (l_t);
+
+
+  QHBoxLayout *lt_hb = new QHBoxLayout;
+
+  lt_hb->addWidget (cb_fman_codecs);
+  lt_hb->addWidget (bt_magicenc);
+
+  lah_controls->addLayout (lt_hb);
+
+  lah_controls->addWidget (bt_fman_open);
+  lah_controls->addWidget (bt_fman_save_as);
+
+  fman = new CFMan;
+
+  connect (fman, SIGNAL(file_activated (QString)), this, SLOT(fman_file_activated (QString)));
+  connect (fman, SIGNAL(dir_changed  (QString)), this, SLOT(fman_dir_changed  (QString)));
+  connect (fman, SIGNAL(current_file_changed  (QString, QString)), this, SLOT(fman_current_file_changed  (QString, QString)));
+
+  connect (act_fman_refresh, SIGNAL(triggered()), fman, SLOT(refresh()));
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+
+  connect (cb_fman_drives, SIGNAL(currentIndexChanged (QString)),
+          this, SLOT(fman_drives_changed(QString)));
+
+#endif
+
+  w_right = new QWidget (this);
+
+  w_right->setMinimumWidth (10);
+
+
+  QVBoxLayout *lw_right = new QVBoxLayout;
+  w_right->setLayout (lw_right);
+
+  lw_right->addLayout (lah_controls);
+
+  QFrame *vline = new QFrame;
+  vline->setFrameStyle (QFrame::HLine);
+  lw_right->addWidget (vline);
+
+  QLabel *l_bookmarks = new QLabel (tr ("<b>Bookmarks</b>"));
+  lw_right->addWidget (l_bookmarks);
+
+
+  QHBoxLayout *lah_places_bar = new QHBoxLayout;
+  QPushButton *bt_add_bmk = new QPushButton ("+");
+  QPushButton *bt_del_bmk = new QPushButton ("-");
+  lah_places_bar->addWidget (bt_add_bmk);
+  lah_places_bar->addWidget (bt_del_bmk);
+
+  connect (bt_add_bmk, SIGNAL(clicked()), this, SLOT(fman_add_bmk()));
+  connect (bt_del_bmk, SIGNAL(clicked()), this, SLOT(fman_del_bmk()));
+
+  lv_places = new QListWidget;
+  //lv_places->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOn);
+
+  update_places_bookmarks();
+  connect (lv_places, SIGNAL(itemActivated (QListWidgetItem *)), this, SLOT(fman_places_itemActivated (QListWidgetItem *)));
+
+  QVBoxLayout *vbox = new QVBoxLayout;
+  vbox->addLayout (lah_places_bar);
+  vbox->addWidget (lv_places);
+
+  lw_right->addLayout (vbox);
+
+//commented out with Qt6
+ // fman->setSizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+
+  spl_fman = new QSplitter (this);
+  spl_fman->setChildrenCollapsible (true);
+
+  spl_fman->addWidget (fman);
+  spl_fman->addWidget (w_right);
+
+  spl_fman->restoreState (settings->value ("spl_fman").toByteArray());
+
+  lav_main->addLayout (lah_topbar);
+  lav_main->addWidget (spl_fman);
+
+  wd_fman->setLayout (lav_main);
+
+  fman_home();
+
+  idx_tab_fman = main_tab_widget->addTab (wd_fman, tr ("files"));
+}
+
+
+void CTEA::create_markup_hash()
+{
+  QHash<QString, QString> h1;
+
+  h1["Docbook"] = "<emphasis role=\"bold\">%s</emphasis>";
+  h1["LaTeX"] = "\\textbf{%s}";
+  h1["HTML"] = "<b>%s</b>";
+  h1["XHTML"] = "<b>%s</b>";
+  h1["Lout"] = "@B{%s}";
+  h1["MediaWiki"] = "'''%s'''";
+  h1["DokuWiki"] = "**%s**";
+  h1["Markdown"] = "**%s**";
+
+  hash_markup.insert ("bold", h1);
+
+  QHash<QString, QString> h2;
+
+  h2["Docbook"] = "<emphasis role=\"italic\">%s</emphasis>";
+  h2["LaTeX"] = "\\textit{%s}";
+  h2["HTML"] = "<i>%s</i>";
+  h2["XHTML"] = "<i>%s</i>";
+  h2["Lout"] = "@I{%s}";
+  h2["MediaWiki"] = "''%s''";
+  h2["DokuWiki"] = "//%s//";
+  h2["Markdown"] = "*%s*";
+
+  hash_markup.insert ("italic", h2);
+
+  QHash<QString, QString> h3;
+
+  h3["HTML"] = "<p style=\"text-align:justify;\">%s</p>";
+  h3["XHTML"] = "<p style=\"text-align:justify;\">%s</p>";
+
+  hash_markup.insert ("align_justify", h3);
+
+  QHash<QString, QString> h4;
+
+  h4["LaTeX"] = "\\begin{center}%s\\end{center}";
+  h4["HTML"] = "<p style=\"text-align:center;\">%s</p>";
+  h4["XHTML"] = "<p style=\"text-align:center;\">%s</p>";
+
+  hash_markup.insert ("align_center", h4);
+
+  QHash<QString, QString> h5;
+
+  h5["LaTeX"] = "\\begin{flushleft}%s\\end{flushleft}";
+  h5["HTML"] = "<p style=\"text-align:left;\">%s</p>";
+  h5["XHTML"] = "<p style=\"text-align:left;\">%s</p>";
+
+  hash_markup.insert ("align_left", h5);
+
+  QHash<QString, QString> h6;
+
+  h6["LaTeX"] = "\\begin{flushright}%s\\end{flushright}";
+  h6["HTML"] = "<p style=\"text-align:right;\">%s</p>";
+  h6["XHTML"] = "<p style=\"text-align:right;\">%s</p>";
+
+  hash_markup.insert ("align_right", h6);
+
+  QHash<QString, QString> h7;
+
+  h7["Docbook"] = "<emphasis role=\"underline\">%s</emphasis>";
+  h7["LaTeX"] = "\\underline{%s}";
+  h7["HTML"] = "<u>%s</u>";
+  h7["XHTML"] = "<u>%s</u>";
+  h7["Lout"] = "@Underline{%s}";
+  h7["MediaWiki"] = "<u>%s</u>";
+  h7["DokuWiki"] = "__%s__";
+
+  hash_markup.insert ("underline", h7);
+
+  QHash<QString, QString> h8;
+
+  h8["Docbook"] = "<para>%s</para>";
+  h8["HTML"] = "<p>%s</p>";
+  h8["XHTML"] = "<p>%s</p>";
+  h8["Lout"] = "@PP%s";
+
+  hash_markup.insert ("para", h8);
+
+  QHash<QString, QString> h9;
+
+  h9["Docbook"] = "<ulink url=\"\">%s</ulink>";
+  h9["HTML"] = "<a href=\"\">%s</a>";
+  h9["XHTML"] = "<a href=\"\">%s</a>";
+  h9["LaTeX"] = "\\href{}{%s}";
+  h9["Markdown"] = "[](%s)";
+
+  hash_markup.insert ("link", h9);
+
+  QHash<QString, QString> h10;
+
+  h10["LaTeX"] = "\\newline";
+  h10["HTML"] = "<br>";
+  h10["XHTML"] = "<br />";
+  h10["Lout"] = "@LLP";
+  h10["MediaWiki"] = "<br />";
+  h10["DokuWiki"] = "\\\\ ";
+
+  hash_markup.insert ("newline", h10);
+}
+
+
+void CTEA::update_stylesheet (const QString &f)
+{
+//Update paletted
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  QFontInfo fi = QFontInfo (qApp->font());
+
+  QString fontsize = "font-size:" + settings->value ("app_font_size", fi.pointSize()).toString() + "pt;";
+  QString fontfamily = "font-family:" + settings->value ("app_font_name", qApp->font().family()).toString() + ";";
+
+  QString edfontsize = "font-size:" + settings->value ("editor_font_size", "16").toString() + "pt;";
+  QString edfontfamily = "font-family:" + settings->value ("editor_font_name", "Serif").toString() + ";";
+
+  QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_font_size", "12").toString() + "pt;";
+  QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + ";";
+
+
+  QString stylesheet;
+
+  stylesheet = "QWidget, QWidget * {" + fontfamily + fontsize + "}\n";
+  stylesheet += "QPlainTextEdit, QPlainTextEdit * {" + edfontfamily + edfontsize + "}\n";
+  stylesheet += "QTextEdit {" + edfontfamily + edfontsize + "}\n";
+  stylesheet += "CLogMemo {" + logmemo_font + logmemo_fontsize + "}\n";
+  stylesheet += "CLineNumberArea {" + edfontfamily + edfontsize + "}\n";
+
+
+  QString text_color = hash_get_val (global_palette, "text", "black");
+  QString t_text_color = QColor (text_color).darker(darker_val).name();
+
+  QString back_color = hash_get_val (global_palette, "background", "white");
+  QString t_back_color = QColor (back_color).darker(darker_val).name();
+
+  QString sel_back_color = hash_get_val (global_palette, "sel-background", "black");
+  QString sel_text_color = hash_get_val (global_palette, "sel-text", "white");
+
+  QString t_sel_text_color = QColor (sel_text_color).darker(darker_val).name();
+  QString t_sel_back_color = QColor (sel_back_color).darker(darker_val).name();
+
+  QString css_plain_text_edit = QString ("QPlainTextEdit {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
+                                         t_text_color).arg (
+                                         t_back_color).arg (
+                                         t_sel_text_color).arg (
+                                         t_sel_back_color);
+
+  stylesheet += css_plain_text_edit;
+
+  QString css_tea_edit = QString ("CTEAEdit {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
+                                  t_text_color).arg (
+                                  t_back_color).arg (
+                                  t_sel_text_color).arg (
+                                  t_sel_back_color);
+
+
+  stylesheet += css_tea_edit;
+
+  QString css_tea_man = QString ("QTextBrowser {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
+                                  t_text_color).arg (
+                                  t_back_color).arg (
+                                  t_sel_text_color).arg (
+                                  t_sel_back_color);
+
+
+  stylesheet += css_tea_man;
+
+  QString css_fif = QString ("QComboBox#FIF { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
+                             t_text_color).arg (
+                             t_back_color).arg (
+                             t_sel_text_color).arg (
+                             t_sel_back_color);
+
+  stylesheet += css_fif;
+
+
+//Update themed
+
+  QString cssfile = qstring_load (f);
+
+  QString css_path = get_file_path (f) + "/";
+
+  cssfile = cssfile.replace ("./", css_path);
+  cssfile += stylesheet;
+
+  qApp->setStyleSheet ("");
+  qApp->setStyleSheet (cssfile);
+}
+
+
+void CTEA::update_styles()
+{
+#if QT_VERSION >= 0x050000
+  QString default_style = qApp->style()->objectName();
+
+  if (default_style == "GTK+") //can be buggy
+     default_style = "Fusion";
+
+#else
+
+  QString default_style = qApp->style()->objectName();
+
+  if (default_style == "GTK+") //can be buggy
+     default_style = "Cleanlooks";
+
+#endif
+
+  fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
+
+  MyProxyStyle *ps = new MyProxyStyle (QStyleFactory::create (settings->value ("ui_style", default_style).toString()));
+
+  QApplication::setStyle (ps);
+}
+
+
+void CTEA::update_dyn_menus()
+{
+  update_templates();
+  update_snippets();
+  update_scripts();
+  update_palettes();
+  update_themes();
+  update_tables();
+  update_profiles();
+  update_labels_menu();
+}
+
+
+void CTEA::update_fonts()
+{
+  documents->apply_settings();
+}
+
+
+void CTEA::update_bookmarks()
+{
+  if (! file_exists (fname_bookmarks))
+     return;
+
+  bookmarks = qstring_load (fname_bookmarks);
+  if (bookmarks.isEmpty())
+     return;
+
+  menu_file_bookmarks->clear();
+  create_menu_from_list (this, menu_file_bookmarks,
+                         bookmarks.split ("\n"),
+                         SLOT (file_open_bookmark()));
+}
+
+
+void CTEA::update_templates()
+{
+  menu_file_templates->clear();
+
+  create_menu_from_dir (this,
+                        menu_file_templates,
+                        dir_templates,
+                        SLOT (file_use_template())
+                       );
+}
+
+
+void CTEA::update_snippets()
+{
+   menu_fn_snippets->clear();
+   create_menu_from_dir (this,
+                         menu_fn_snippets,
+                         dir_snippets,
+                         SLOT (fn_use_snippet())
+                        );
+}
+
+
+void CTEA::update_sessions()
+{
+  menu_file_sessions->clear();
+  create_menu_from_dir (this,
+                        menu_file_sessions,
+                        dir_sessions,
+                        SLOT (file_open_session())
+                       );
+}
+
+
+void CTEA::update_palettes()
+{
+  menu_view_palettes->clear();
+
+  QStringList l1 = read_dir_entries (dir_palettes);
+  QStringList l2 = read_dir_entries (":/palettes");
+  l1 += l2;
+
+  create_menu_from_list (this, menu_view_palettes,
+                         l1,
+                         SLOT (view_use_palette()));
+}
+
+
+void CTEA::update_labels_menu()
+{
+  menu_labels->clear();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     create_menu_from_list (this, menu_labels, d->labels, SLOT(select_label()));
+}
+
+
+void CTEA::update_themes()
+{
+  menu_view_themes->clear();
+
+  create_menu_from_themes (this,
+                           menu_view_themes,
+                           ":/themes",
+                           SLOT (view_use_theme())
+                          );
+
+  create_menu_from_themes (this,
+                           menu_view_themes,
+                           dir_themes,
+                           SLOT (view_use_theme())
+                           );
+}

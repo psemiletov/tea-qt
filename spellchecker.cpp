@@ -29,7 +29,9 @@
 
 #include <QTextCodec>
 #include <QDir>
-#include <QRegExp>
+#include <QMessageBox>
+#include <QObject>
+
 
 #include "spellchecker.h"
 #include "utils.h"
@@ -157,39 +159,41 @@ void CAspellchecker::change_lang (const QString &lang)
      return;
 
   language = lang;
-//  load_dict();
 }
 
 
-QStringList CAspellchecker::get_speller_modules_list()
+void CAspellchecker::get_speller_modules_list()
 {
-  QStringList l;
+   modules_list.clear();
 
-  if (! spell_config)
-    return l;
+   if (! spell_config)
+      return;
 
   AspellDictInfoList *dlist;
   AspellDictInfoEnumeration *dels;
   const AspellDictInfo *entry;
 
   dlist = get_aspell_dict_info_list (spell_config);
-
   dels = aspell_dict_info_list_elements (dlist);
 
   while ((entry = aspell_dict_info_enumeration_next (dels)) != 0)
         {
          if (entry)
-            l.prepend (entry->name);
+            modules_list.prepend (entry->name);
         }
 
   delete_aspell_dict_info_enumeration (dels);
-
-  return l;
 }
 
 
 bool CAspellchecker::check (const QString &word)
 {
+  if (modules_list.size() == 0)
+     {
+      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Tune - Functions page"));
+      return false;
+     }
+
   if (word.isEmpty())
      return false;
 
@@ -269,9 +273,6 @@ void CHunspellChecker::load_dict()
 
   if (speller)
      delete speller;
-
-
-  qDebug() << "CHunspellChecker::load_dict()";
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
@@ -366,7 +367,6 @@ void CHunspellChecker::change_lang (const QString &lang)
   language = lang;
   save_user_dict();
   user_words.clear();
-//  load_dict();
 }
 
 
@@ -390,8 +390,13 @@ void CHunspellChecker::add_to_user_dict (const QString &word)
 
 bool CHunspellChecker::check (const QString &word)
 {
+  if (modules_list.size() == 0)
+     {
+      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Tune - Functions page"));
+      return false;
+     }
+
   if (! loaded)
-      //return false;
      load_dict();
 
 #if ! defined (H_DEPRECATED)
@@ -433,13 +438,13 @@ void CHunspellChecker::remove_from_user_dict (const QString &word)
 }
 
 
-QStringList CHunspellChecker::get_speller_modules_list()
+void CHunspellChecker::get_speller_modules_list()
 {
-  QStringList sl;
+  modules_list.clear();
 
   QDir dir (dir_dicts);
   if (! dir.exists())
-     return sl;
+     return;
 
   QStringList filters;
 
@@ -450,10 +455,8 @@ QStringList CHunspellChecker::get_speller_modules_list()
 
   for (int i = 0; i < fil.size(); i++)
       {
-       sl.append (fil[i].baseName());
+       modules_list.append (fil[i].baseName());
       }
-
-  return sl;
 }
 
 

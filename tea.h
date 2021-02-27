@@ -545,9 +545,6 @@ Preferences tab :: Functions page UI elements
   QSpinBox *spb_fuzzy_q;
 
 
-
-
-
 /*
 =============================================
 Preferences tab :: Images page UI elements
@@ -587,11 +584,8 @@ Application stuff inits and updates
 
 public:
 
-  void init_styles();
-  void update_dyn_menus();
+  void handle_args();
   void create_paths();
-  void calendar_update();
-
 
 #ifdef USE_QML_STUFF
   void plugins_init();
@@ -604,16 +598,6 @@ public:
   void create_spellcheck_menu();
 #endif
 
-  void handle_args();
-  void create_moon_phase_algos();
-
-
-  void update_labels_menu();
-
-  void opt_update_keyb();
-
-  void createFman();
-  void create_markup_hash();
 
   void create_main_widget_splitter();
   void create_main_widget_docked();
@@ -622,40 +606,47 @@ public:
   void createMenus();
   void createOptions();
   void createCalendar();
-
+  void createToolBars();
   void createManual();
-  void updateFonts();
+  void createFman();
+
+  void create_markup_hash();
+
+  void update_stylesheet (const QString &f);
+  void update_styles();
+  void update_dyn_menus();
+  void update_fonts();
   void update_bookmarks();
   void update_templates();
   void update_snippets();
   void update_sessions();
   void update_palettes();
+  void update_labels_menu();
 
 #ifdef USE_QML_STUFF
   void update_plugins();
 #endif
 
   void update_themes();
-
-
   void update_hls_noncached();
-
   void update_tables();
   void update_scripts();
   void update_places_bookmarks();
   void update_programs();
   void update_logmemo_palette();
-
   void update_charsets();
   void update_profiles();
 
+  void opt_update_keyb();
 
-  void createToolBars();
   void readSettings();
   void writeSettings();
 
   void read_search_options();
   void write_search_options();
+
+  void calendar_update();
+  void create_moon_phase_algos();
 
 
 /*
@@ -679,7 +670,6 @@ Application misc. methods
                         );
 
 
-  void update_stylesheet (const QString &f);
 
   QIcon get_theme_icon (const QString &name);
   QString get_theme_icon_fname (const QString &name);
@@ -712,8 +702,6 @@ protected:
   bool fman_tv_eventFilter (QObject *obj, QEvent *event);
   void dragEnterEvent (QDragEnterEvent *event);
   void dropEvent (QDropEvent *event);
-
-
 
 
 public slots:
@@ -1106,7 +1094,6 @@ View menu callbacks
   void view_use_palette();
   void view_use_profile();
   void view_profile_save_as();
-
   void view_toggle_wrap();
   void view_hide_error_marks();
   void view_toggle_fs();
@@ -1151,11 +1138,7 @@ View menu callbacks
 
   void process_readyReadStandardOutput();
 
-
-
-
   void guess_enc();
-
 
   void run_program();
 

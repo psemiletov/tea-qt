@@ -156,130 +156,6 @@ QTabWidget::TabPosition int_to_tabpos (int i)
 }
 
 
-void CTEA::create_paths()
-{
-  portable_mode = false;
-
-  QStringList l = qApp->arguments();
-  if (l.contains ("--p"))
-     portable_mode = true;
-
-  QDir dr;
-  if (! portable_mode)
-     dir_config = dr.homePath();
-  else
-      dir_config = QCoreApplication::applicationDirPath();
-
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-  dir_config.append ("/tea");
-
-#else
-
-  dir_config.append ("/.config/tea");
-
-#endif
-
-  hs_path["dir_config"] = dir_config;
-
-  dr.setPath (dir_config);
-  if (! dr.exists())
-     dr.mkpath (dir_config);
-
-
-  fname_crapbook = dir_config + "/crapbook.txt";
-  hs_path["fname_crapbook"] = fname_crapbook;
-
-  fname_fif = dir_config + "/fif";
-  hs_path["fname_fif"] = fname_fif;
-
-  fname_bookmarks = dir_config + "/tea_bmx";
-  hs_path["fname_bookmarks"] = fname_bookmarks;
-
-  fname_programs = dir_config + "/programs";
-  hs_path["fname_programs"] = fname_programs;
-
-  fname_places_bookmarks = dir_config + "/places_bookmarks";
-  hs_path["fname_places_bookmarks"] = fname_places_bookmarks;
-
-  fname_tempfile = QDir::tempPath() + "/tea.tmp";
-  hs_path["fname_tempfile"] = fname_tempfile;
-
-  fname_tempparamfile = QDir::tempPath() + "/teaparam.tmp";
-  hs_path["fname_tempparamfile"] = fname_tempparamfile;
-
-  dir_tables = dir_config + "/tables";
-
-  dr.setPath (dir_tables);
-  if (! dr.exists())
-     dr.mkpath (dir_tables);
-
-  dir_user_dict = dir_config + "/dictionaries";
-
-  dr.setPath (dir_user_dict);
-  if (! dr.exists())
-     dr.mkpath (dir_user_dict);
-
-  dir_plugins = dir_config + "/plugins";
-
-  dr.setPath (dir_plugins);
-  if (! dr.exists())
-     dr.mkpath (dir_plugins);
-
-  dir_profiles = dir_config + "/profiles";
-
-  dr.setPath (dir_profiles);
-  if (! dr.exists())
-     dr.mkpath (dir_profiles);
-
-  dir_templates = dir_config + "/templates";
-
-  dr.setPath (dir_templates);
-  if (! dr.exists())
-     dr.mkpath (dir_templates);
-
-  dir_snippets = dir_config + "/snippets";
-
-  dr.setPath (dir_snippets);
-  if (! dr.exists())
-     dr.mkpath (dir_snippets);
-
-  dir_scripts = dir_config + "/scripts";
-
-  dr.setPath (dir_scripts);
-  if (! dr.exists())
-     dr.mkpath (dir_scripts);
-
-  dir_days = dir_config + "/days";
-
-  dr.setPath (dir_days);
-  if (! dr.exists())
-     dr.mkpath (dir_days);
-
-  dir_sessions = dir_config + "/sessions";
-
-  dr.setPath (dir_sessions);
-  if (! dr.exists())
-     dr.mkpath (dir_sessions);
-
-  dir_themes = dir_config + "/themes";
-
-  dr.setPath (dir_themes);
-  if (! dr.exists())
-     dr.mkpath (dir_themes);
-
-  dir_hls = dir_config + "/hls";
-
-  dr.setPath (dir_hls);
-  if (! dr.exists())
-     dr.mkpath (dir_hls);
-
-  dir_palettes = dir_config + "/palettes";
-
-  dr.setPath (dir_palettes);
-  if (! dr.exists())
-     dr.mkpath (dir_palettes);
-}
 
 
 void CTEA::update_bookmarks()
@@ -351,292 +227,10 @@ void CTEA::writeSettings()
 }
 
 
-void CTEA::create_main_widget_splitter()
-{
-  QWidget *main_widget = new QWidget;
-  QVBoxLayout *v_box = new QVBoxLayout;
-  main_widget->setLayout (v_box);
 
-  main_tab_widget = new QTabWidget;
-  main_tab_widget->setObjectName ("main_tab_widget");
 
-  main_tab_widget->setTabShape (QTabWidget::Triangular);
 
 
-  tab_editor = new QTabWidget;
-  tab_editor->setUsesScrollButtons (true);
-
-//#if QT_VERSION >= 0x040500
-#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
-  tab_editor->setMovable (true);
-#endif
-
-  tab_editor->setObjectName ("tab_editor");
-
-  QPushButton *bt_close = new QPushButton ("X", this);
-  connect (bt_close, SIGNAL(clicked()), this, SLOT(file_close()));
-  tab_editor->setCornerWidget (bt_close);
-
-
-  log = new CLogMemo;
-
-  connect (log, SIGNAL(double_click (QString)),
-           this, SLOT(logmemo_double_click (QString)));
-
-
-  mainSplitter = new QSplitter (Qt::Vertical);
-  v_box->addWidget (mainSplitter);
-
-  main_tab_widget->setMinimumHeight (10);
-  log->setMinimumHeight (10);
-
-
-  mainSplitter->addWidget (main_tab_widget);
-  mainSplitter->addWidget (log);
-
-// FIF creation code
-
-  if (! settings->value ("fif_at_toolbar", 0).toBool())
-     {
-      cmb_fif = new QComboBox;
-      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
-      cmb_fif->setObjectName ("FIF");
-
-      cmb_fif->setEditable (true);
-      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-      fif = cmb_fif->lineEdit();
-      fif->setStatusTip (tr ("The famous input field. Use for search/replace, function parameters"));
-
-      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
-
-      QHBoxLayout *lt_fte = new QHBoxLayout;
-
-      v_box->addLayout (lt_fte, 0);
-
-      int tleft = 1;
-      int tright = 1;
-      int ttop = 1;
-      int tbottom = 1;
-
-      v_box->getContentsMargins(&tleft, &ttop, &tright, &tbottom);
-
-      v_box->setContentsMargins(tleft, 1, tright, 1);
-
-      QToolBar *tb_fif = new QToolBar;
-
-      QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
-      act_fif_find->setToolTip (tr ("Find"));
-      connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
-
-      QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
-      act_fif_find_next->setToolTip (tr ("Find next"));
-      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
-
-      QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
-      act_fif_find_prev->setToolTip (tr ("Find previous"));
-      connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
-
-      QLabel *l_fif = new QLabel (tr ("FIF"));
-
-      lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
-      lt_fte->addWidget (cmb_fif, 0);
-
-      lt_fte->addWidget (tb_fif, 0);
-     }
-
-  mainSplitter->setStretchFactor (1, 1);
-
-
-  idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
-  setCentralWidget (main_widget);
-
-  connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
-}
-
-
-void CTEA::create_main_widget_docked()
-{
-  setDockOptions (QMainWindow::AnimatedDocks | QMainWindow::AllowNestedDocks);
-
-  QWidget *main_widget = new QWidget;
-  QVBoxLayout *v_box = new QVBoxLayout;
-  main_widget->setLayout (v_box);
-  setCentralWidget (main_widget);
-
-
-  main_tab_widget = new QTabWidget;
-  main_tab_widget->setObjectName ("main_tab_widget");
-  v_box->addWidget (main_tab_widget);
-
-
-  main_tab_widget->setTabShape (QTabWidget::Triangular);
-
-
-  tab_editor = new QTabWidget;
-  tab_editor->setUsesScrollButtons (true);
-
-//#if QT_VERSION >= 0x040500
-#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
-  tab_editor->setMovable (true);
-#endif
-
-  tab_editor->setObjectName ("tab_editor");
-
-  QPushButton *bt_close = new QPushButton ("X", this);
-  connect (bt_close, SIGNAL(clicked()), this, SLOT(file_close()));
-  tab_editor->setCornerWidget (bt_close);
-
-
-  QDockWidget *dock_logmemo = new QDockWidget (tr ("logmemo"), this);
-  dock_logmemo->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-  dock_logmemo->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
-
-  log = new CLogMemo (dock_logmemo);
-
-  connect (log, SIGNAL(double_click (QString)),
-           this, SLOT(logmemo_double_click (QString)));
-
-
-  dock_logmemo->setWidget (log);
-  dock_logmemo->setObjectName ("dock_log");
-  addDockWidget (Qt::BottomDockWidgetArea, dock_logmemo);
-
-
-// FIF creation code
-
-  if (! settings->value ("fif_at_toolbar", 0).toBool())
-     {
-      QDockWidget *dock_fif = new QDockWidget (tr ("famous input field"), this);
-      dock_fif->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
-      dock_fif->setObjectName ("dock_fif");
-      dock_fif->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-
-      QWidget *w_fif = new QWidget (dock_fif);
-      w_fif->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
-
-      cmb_fif = new QComboBox;
-      cmb_fif->setObjectName ("FIF");
-      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-
-      cmb_fif->setEditable (true);
-      fif = cmb_fif->lineEdit();
-      fif->setStatusTip (tr ("The famous input field. Use for search/replace, function parameters"));
-
-      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
-
-      QHBoxLayout *lt_fte = new QHBoxLayout;
-      w_fif->setLayout (lt_fte);
-
-
-      QToolBar *tb_fif = new QToolBar;
-
-        QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
-        act_fif_find->setToolTip (tr ("Find"));
-        connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
-
-        QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
-        act_fif_find_next->setToolTip (tr ("Find next"));
-        connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
-
-        QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
-        act_fif_find_prev->setToolTip (tr ("Find previous"));
-        connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
-
-        QLabel *l_fif = new QLabel (tr ("FIF"));
-
-        lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
-        lt_fte->addWidget (cmb_fif, 0);
-        lt_fte->addWidget (tb_fif, 0);
-
-      dock_fif->setWidget (w_fif);
-      addDockWidget (Qt::BottomDockWidgetArea, dock_fif);
-     }
-
-
-  idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
-
-  connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
-}
-
-
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-
-void CTEA::setup_spellcheckers()
-{
-#ifdef ASPELL_ENABLE
-  spellcheckers.append ("Aspell");
-#endif
-
-#ifdef HUNSPELL_ENABLE
-  spellcheckers.append ("Hunspell");
-#endif
-
-  cur_spellchecker = settings->value ("cur_spellchecker", "Hunspell").toString();
-
-  if (spellcheckers.size() > 0)
-     if (! spellcheckers.contains (cur_spellchecker))
-         cur_spellchecker = spellcheckers[0];
-
-#ifdef ASPELL_ENABLE
-  if (cur_spellchecker == "Aspell")
-     {
-      QString lang = settings->value ("spell_lang", QLocale::system().name().left(2)).toString();
-
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-      QString win32_aspell_path = settings->value ("win32_aspell_path", aspell_default_dict_path()).toString();
-      spellchecker = new CAspellchecker (lang, win32_aspell_path);
-
-#else
-
-      spellchecker = new CAspellchecker (lang);
-
-#endif
-     }
-
-#endif
-
-
-#ifdef HUNSPELL_ENABLE
-   if (cur_spellchecker == "Hunspell")
-      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
-
-#endif
-
- create_spellcheck_menu();
-}
-
-#endif
-
-
-void CTEA::init_styles()
-{
-#if QT_VERSION >= 0x050000
-  QString default_style = qApp->style()->objectName();
-
-  if (default_style == "GTK+") //can be buggy
-     default_style = "Fusion";
-
-#else
-
-  QString default_style = qApp->style()->objectName();
-
-  if (default_style == "GTK+") //can be buggy
-     default_style = "Cleanlooks";
-
-#endif
-
-  fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
-
-  MyProxyStyle *ps = new MyProxyStyle (QStyleFactory::create (settings->value ("ui_style", default_style).toString()));
-
-  QApplication::setStyle (ps);
-
-//вызывается позже
-//  update_stylesheet (fname_stylesheet);
-}
 
 
 CTEA::CTEA()
@@ -715,7 +309,7 @@ CTEA::CTEA()
   createMenus();
   createToolBars();
 
-  init_styles();
+  update_styles();
 
   update_bookmarks();
   update_templates();
@@ -794,7 +388,7 @@ CTEA::CTEA()
   createCalendar();
   createManual();
 
-  updateFonts();
+  update_fonts();
 
   dir_last = settings->value ("dir_last", QDir::homePath()).toString();
   b_preview = settings->value ("b_preview", false).toBool();
@@ -896,660 +490,9 @@ void CTEA::closeEvent (QCloseEvent *event)
 }
 
 
-void CTEA::help_show_about()
-{
-  last_action = qobject_cast<QAction *>(sender());
 
-  CAboutWindow *a = new CAboutWindow();
-  a->move (x() + 20, y() + 20);
-  a->show();
-}
 
 
-void CTEA::createActions()
-{
-  icon_size = settings->value ("icon_size", "32").toInt();
-
-  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
-
-  filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
-
-
-  act_labels = new QAction (get_theme_icon ("labels.png"), tr ("Labels"), this);
-  connect (act_labels, SIGNAL(triggered()), this, SLOT(nav_labels_update_list()));
-
-  newAct = new QAction (get_theme_icon ("file-new.png"), tr ("New"), this);
-
-  newAct->setShortcut (QKeySequence ("Ctrl+N"));
-  newAct->setStatusTip (tr ("Create a new file"));
-  connect (newAct, SIGNAL(triggered()), this, SLOT(file_new()));
-
-  QIcon ic_file_open = get_theme_icon ("file-open.png");
-  ic_file_open.addFile (get_theme_icon_fname ("file-open-active.png"), QSize(), QIcon::Active);
-
-  openAct = new QAction (ic_file_open, tr ("Open file"), this);
-
-  openAct->setStatusTip (tr ("Open an existing file"));
-  connect (openAct, SIGNAL(triggered()), this, SLOT(file_open()));
-
-  QIcon ic_file_save = get_theme_icon ("file-save.png");
-  ic_file_save.addFile (get_theme_icon_fname ("file-save-active.png"), QSize(), QIcon::Active);
-
-  saveAct = new QAction (ic_file_save, tr ("Save"), this);
-  saveAct->setShortcut (QKeySequence ("Ctrl+S"));
-  saveAct->setStatusTip (tr ("Save the document to disk"));
-  connect (saveAct, SIGNAL(triggered()), this, SLOT(file_save()));
-
-  saveAsAct = new QAction (get_theme_icon ("file-save-as.png"), tr ("Save As"), this);
-  saveAsAct->setStatusTip (tr ("Save the document under a new name"));
-  connect (saveAsAct, SIGNAL(triggered()), this, SLOT(file_save_as()));
-
-  exitAct = new QAction (tr ("Exit"), this);
-  exitAct->setShortcut (QKeySequence ("Ctrl+Q"));
-  exitAct->setStatusTip (tr ("Exit the application"));
-  connect (exitAct, SIGNAL(triggered()), this, SLOT(close()));
-
-  QIcon ic_edit_cut = get_theme_icon ("edit-cut.png");
-  ic_edit_cut.addFile (get_theme_icon_fname ("edit-cut-active.png"), QSize(), QIcon::Active);
-
-  cutAct = new QAction (ic_edit_cut, tr ("Cut"), this);
-  cutAct->setShortcut (QKeySequence ("Ctrl+X"));
-  cutAct->setStatusTip (tr ("Cut the current selection's contents to the clipboard"));
-  connect (cutAct, SIGNAL(triggered()), this, SLOT(ed_cut()));
-
-  QIcon ic_edit_copy = get_theme_icon ("edit-copy.png");
-  ic_edit_copy.addFile (get_theme_icon_fname ("edit-copy-active.png"), QSize(), QIcon::Active);
-
-
-  copyAct = new QAction (ic_edit_copy, tr("Copy"), this);
-  copyAct->setShortcut (QKeySequence ("Ctrl+C"));
-  copyAct->setStatusTip (tr ("Copy the current selection's contents to the clipboard"));
-  connect (copyAct, SIGNAL(triggered()), this, SLOT(ed_copy()));
-
-  QIcon ic_edit_paste = get_theme_icon ("edit-paste.png");
-  ic_edit_paste.addFile (get_theme_icon_fname ("edit-paste-active.png"), QSize(), QIcon::Active);
-
-
-  pasteAct = new QAction (ic_edit_paste, tr("Paste"), this);
-  pasteAct->setShortcut (QKeySequence ("Ctrl+V"));
-  pasteAct->setStatusTip (tr ("Paste the clipboard's contents into the current selection"));
-  connect (pasteAct, SIGNAL(triggered()), this, SLOT(ed_paste()));
-
-  undoAct = new QAction (tr ("Undo"), this);
-  undoAct->setShortcut (QKeySequence ("Ctrl+Z"));
-  connect (undoAct, SIGNAL(triggered()), this, SLOT(ed_undo()));
-
-  redoAct = new QAction (tr ("Redo"), this);
-  connect (redoAct, SIGNAL(triggered()), this, SLOT(ed_redo()));
-
-  aboutAct = new QAction (tr ("About"), this);
-  connect (aboutAct, SIGNAL(triggered()), this, SLOT(help_show_about()));
-
-  aboutQtAct = new QAction (tr ("About Qt"), this);
-  connect (aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-}
-
-
-void CTEA::createMenus()
-{
-  menu_file = menuBar()->addMenu (tr ("File"));
-  menu_file->setTearOffEnabled (true);
-
-  menu_file->addAction (act_test);
-
-  menu_file->addAction (newAct);
-  add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
-  add_to_menu (menu_file, tr ("Last closed file"), SLOT(file_last_opened()));
-  add_to_menu (menu_file, tr ("Open at cursor"), SLOT(file_open_at_cursor()), "F2");
-  add_to_menu (menu_file, tr ("Crapbook"), SLOT(file_crapbook()));
-  add_to_menu (menu_file, tr ("Notes"), SLOT(file_notes()));
-
-  menu_file->addSeparator();
-
-  menu_file->addAction (saveAct);
-  menu_file->addAction (saveAsAct);
-
-  QMenu *tm = menu_file->addMenu (tr ("Save as different"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Save .bak"), SLOT(file_save_bak()), "Ctrl+B");
-  add_to_menu (tm, tr ("Save timestamped version"), SLOT(file_save_version()));
-  add_to_menu (tm, tr ("Save session"), SLOT(file_session_save_as()));
-
-  menu_file->addSeparator();
-
-  menu_file_actions = menu_file->addMenu (tr ("File actions"));
-  add_to_menu (menu_file_actions, tr ("Reload"), SLOT(file_reload()));
-  add_to_menu (menu_file_actions, tr ("Reload with encoding"), SLOT(file_reload_enc()));
-  menu_file_actions->addSeparator();
-  add_to_menu (menu_file_actions, tr ("Set UNIX end of line"), SLOT(file_set_eol_unix()));
-  add_to_menu (menu_file_actions, tr ("Set Windows end of line"), SLOT(file_set_eol_win()));
-  add_to_menu (menu_file_actions, tr ("Set old Mac end of line (CR)"), SLOT(file_set_eol_mac()));
-
-
-  menu_file_recent = menu_file->addMenu (tr ("Recent files"));
-
-  menu_file_bookmarks = menu_file->addMenu (tr ("Bookmarks"));
-
-  menu_file_edit_bookmarks = menu_file->addMenu (tr ("Edit bookmarks"));
-  add_to_menu (menu_file_edit_bookmarks, tr ("Add to bookmarks"), SLOT(file_add_to_bookmarks()));
-  add_to_menu (menu_file_edit_bookmarks, tr ("Find obsolete paths"), SLOT(file_find_obsolete_paths()));
-
-  menu_file_templates = menu_file->addMenu (tr ("Templates"));
-  menu_file_sessions = menu_file->addMenu (tr ("Sessions"));
-
-  menu_file_configs = menu_file->addMenu (tr ("Configs"));
-  add_to_menu (menu_file_configs, tr ("Bookmarks list"), SLOT(file_open_bookmarks_file()));
-  add_to_menu (menu_file_configs, tr ("Programs list"), SLOT(file_open_programs_file()));
-
-  menu_file->addSeparator();
-
-  add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(file_recent_off()))->setCheckable (true);
-
-#ifdef PRINTER_ENABLE
-  add_to_menu (menu_file, tr ("Print"), SLOT(file_print()));
-#endif
-
-  add_to_menu (menu_file, tr ("Close current"), SLOT(file_close()), "Ctrl+W");
-
-  menu_file->addAction (exitAct);
-
-
-  menu_edit = menuBar()->addMenu (tr ("Edit"));
-  menu_edit->setTearOffEnabled (true);
-
-  menu_edit->addAction (cutAct);
-  menu_edit->addAction (copyAct);
-  menu_edit->addAction (pasteAct);
-
-  menu_edit->addSeparator();
-
-  add_to_menu (menu_edit, tr ("Block start"), SLOT(ed_block_start()));
-  add_to_menu (menu_edit, tr ("Block end"), SLOT(ed_block_end()));
-  add_to_menu (menu_edit, tr ("Copy block"), SLOT(ed_block_copy()));
-  add_to_menu (menu_edit, tr ("Paste block"), SLOT(ed_block_paste()));
-  add_to_menu (menu_edit, tr ("Cut block"), SLOT(ed_block_cut()));
-
-  menu_edit->addSeparator();
-
-  add_to_menu (menu_edit, tr ("Copy current file name"), SLOT(ed_copy_current_fname()));
-
-  menu_edit->addSeparator();
-
-  menu_edit->addAction (undoAct);
-  menu_edit->addAction (redoAct);
-
-  menu_edit->addSeparator();
-
-  add_to_menu (menu_edit, tr ("Indent (tab)"), SLOT(ed_indent()));
-  add_to_menu (menu_edit, tr ("Un-indent (shift+tab)"), SLOT(ed_unindent()));
-  add_to_menu (menu_edit, tr ("Indent by first line"), SLOT(ed_indent_by_first_line()));
-
-  menu_edit->addSeparator();
-
-  add_to_menu (menu_edit, tr ("Comment selection"), SLOT(ed_comment()));
-
-  menu_edit->addSeparator();
-
-  add_to_menu (menu_edit, tr ("Set as storage file"), SLOT(ed_set_as_storage_file()));
-  add_to_menu (menu_edit, tr ("Copy to storage file"), SLOT(ed_copy_to_storage_file()));
-  add_to_menu (menu_edit, tr ("Start/stop capture clipboard to storage file"), SLOT(ed_capture_clipboard_to_storage_file()))->setCheckable (true);
-
-
-/*
-===================
-Markup menu callbacks
-===================
-*/
-
-
-  menu_markup = menuBar()->addMenu (tr ("Markup"));
-  menu_markup->setTearOffEnabled (true);
-
-  tm = menu_markup->addMenu (tr ("Mode"));
-  tm->setTearOffEnabled (true);
-
-  create_menu_from_list (this, tm,
-                         QString ("HTML XHTML Docbook LaTeX Markdown Lout DokuWiki MediaWiki").split (" "),
-                         SLOT (mrkup_mode_choosed()));
-
-  tm = menu_markup->addMenu (tr ("Header"));
-  tm->setTearOffEnabled (true);
-
-  create_menu_from_list (this, tm,
-                         QString ("H1 H2 H3 H4 H5 H6").split (" "),
-                         SLOT (mrkup_header()));
-
-  tm = menu_markup->addMenu (tr ("Align"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Center"), SLOT(mrkup_align_center()));
-  add_to_menu (tm, tr ("Left"), SLOT(mrkup_align_left()));
-  add_to_menu (tm, tr ("Right"), SLOT(mrkup_align_right()));
-  add_to_menu (tm, tr ("Justify"), SLOT(mrkup_align_justify()));
-
-  add_to_menu (menu_markup, tr ("Bold"), SLOT(mrkup_bold()), "Alt+B");
-  add_to_menu (menu_markup, tr ("Italic"), SLOT(mrkup_italic()), "Alt+I");
-  add_to_menu (menu_markup, tr ("Underline"), SLOT(mrkup_underline()));
-
-  add_to_menu (menu_markup, tr ("Link"), SLOT(mrkup_link()), "Alt+L");
-  add_to_menu (menu_markup, tr ("Paragraph"), SLOT(mrkup_para()), "Alt+P");
-  add_to_menu (menu_markup, tr ("Color"), SLOT(mrkup_color()));
-
-  add_to_menu (menu_markup, tr ("Break line"), SLOT(mrkup_br()), "Ctrl+Return");
-  add_to_menu (menu_markup, tr ("Non-breaking space"), SLOT(mrkup_nbsp()), "Ctrl+Space");
-  add_to_menu (menu_markup, tr ("Insert image"), SLOT(markup_ins_image()));
-
-  tm = menu_markup->addMenu (tr ("[X]HTML tools"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Text to [X]HTML"), SLOT(mrkup_text_to_html()));
-  add_to_menu (tm, tr ("Convert tags to entities"), SLOT(mrkup_tags_to_entities()));
-  add_to_menu (tm, tr ("Antispam e-mail"), SLOT(mrkup_antispam_email()));
-  add_to_menu (tm, tr ("Document weight"), SLOT(mrkup_document_weight()));
-  add_to_menu (tm, tr ("Preview selected color"), SLOT(mrkup_preview_color()));
-  add_to_menu (tm, tr ("Strip HTML tags"), SLOT(mrkup_strip_html_tags()));
-  add_to_menu (tm, tr ("Rename selected file"), SLOT(mrkup_rename_selected()));
-
-/*
-===================
-Search menu
-===================
-*/
-
-  menu_search = menuBar()->addMenu (tr ("Search"));
-  menu_search->setTearOffEnabled (true);
-
-  add_to_menu (menu_search, tr ("Find"), SLOT(search_find()), "Ctrl+F");
-  add_to_menu (menu_search, tr ("Find next"), SLOT(search_find_next()), "F3");
-  add_to_menu (menu_search, tr ("Find previous"), SLOT(search_find_prev()),"Ctrl+F3");
-
-  menu_search->addSeparator();
-
-  add_to_menu (menu_search, tr ("Find in files"), SLOT(search_in_files()));
-
-  menu_search->addSeparator();
-
-  add_to_menu (menu_search, tr ("Replace with"), SLOT(search_replace_with()));
-  add_to_menu (menu_search, tr ("Replace all"), SLOT(search_replace_all()));
-  add_to_menu (menu_search, tr ("Replace all in opened files"), SLOT(search_replace_all_at_ofiles()));
-
-  menu_search->addSeparator();
-
-  add_to_menu (menu_search, tr ("Mark all found"), SLOT(search_mark_all()));
-  add_to_menu (menu_search, tr ("Unmark"), SLOT(search_unmark()));
-
-  menu_search->addSeparator();
-
-  menu_find_case = menu_search->addAction (tr ("Case sensitive"));
-  menu_find_case->setCheckable (true);
-
-  menu_find_whole_words = menu_search->addAction (tr ("Whole words"));
-  menu_find_whole_words->setCheckable (true);
-  connect (menu_find_whole_words, SIGNAL(triggered()), this, SLOT(search_whole_words_mode()));
-
-  menu_find_from_cursor = menu_search->addAction (tr ("From cursor"));
-  menu_find_from_cursor->setCheckable (true);
-  connect (menu_find_from_cursor, SIGNAL(triggered()), this, SLOT(search_from_cursor_mode()));
-
-  menu_find_regexp = menu_search->addAction (tr ("Regexp mode"));
-  menu_find_regexp->setCheckable (true);
-  connect (menu_find_regexp, SIGNAL(triggered()), this, SLOT(search_regexp_mode()));
-
-  menu_find_fuzzy = menu_search->addAction (tr ("Fuzzy mode"));
-  menu_find_fuzzy->setCheckable (true);
-  connect (menu_find_fuzzy, SIGNAL(triggered()), this, SLOT(search_fuzzy_mode()));
-
-
-/*
-===================
-Fn menu
-===================
-*/
-
-
-  menu_functions = menuBar()->addMenu (tr ("Functions"));
-  menu_functions->setTearOffEnabled (true);
-
-  add_to_menu (menu_functions, tr ("Repeat last"), SLOT(fn_repeat()));
-
-  menu_instr = menu_functions->addMenu (tr ("Tools"));
-  menu_instr->setTearOffEnabled (true);
-  add_to_menu (menu_instr, tr ("Scale image"), SLOT(fn_scale_image()));
-
-
-#ifdef USE_QML_STUFF
-  menu_fn_plugins = menu_functions->addMenu (tr ("Plugins"));
-#endif
-
-  menu_fn_snippets = menu_functions->addMenu (tr ("Snippets"));
-  menu_fn_scripts = menu_functions->addMenu (tr ("Scripts"));
-  menu_fn_tables = menu_functions->addMenu (tr ("Tables"));
-
-  tm = menu_functions->addMenu (tr ("Place"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, "Lorem ipsum", SLOT(fn_insert_loremipsum()));
-  add_to_menu (tm, tr ("TEA project template"), SLOT(fn_insert_template_tea()));
-  add_to_menu (tm, tr ("HTML template"), SLOT(fn_insert_template_html()));
-  add_to_menu (tm, tr ("HTML5 template"), SLOT(fn_insert_template_html5()));
-  add_to_menu (tm, tr ("C++ template"), SLOT(fn_insert_cpp()));
-  add_to_menu (tm, tr ("C template"), SLOT(fn_insert_c()));
-  add_to_menu (tm, tr ("Date"), SLOT(fn_insert_date()));
-  add_to_menu (tm, tr ("Time"), SLOT(fn_insert_time()));
-
-
-  tm = menu_functions->addMenu (tr ("Case"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("UPCASE"), SLOT(fn_case_up()),"Ctrl+Up");
-  add_to_menu (tm, tr ("lower case"), SLOT(fn_case_down()),"Ctrl+Down");
-
-
-  tm = menu_functions->addMenu (tr ("Sort"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Sort case sensitively"), SLOT(fn_sort_casecare()));
-  add_to_menu (tm, tr ("Sort case insensitively"), SLOT(fn_sort_casecareless()));
-  add_to_menu (tm, tr ("Sort case sensitively, with separator"), SLOT(fn_sort_casecare_sep()));
-  add_to_menu (tm, tr ("Sort by length"), SLOT(fn_sort_length()));
-
-  add_to_menu (tm, tr ("Flip a list"), SLOT(fn_flip_a_list()));
-  add_to_menu (tm, tr ("Flip a list with separator"), SLOT(fn_flip_a_list_sep()));
-
-
-  tm = menu_functions->addMenu (tr ("Cells"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Sort table by column ABC"), SLOT(fn_cells_latex_table_sort_by_col_abc()));
-  add_to_menu (tm, tr ("Swap cells"), SLOT(fn_cells_swap_cells()));
-  add_to_menu (tm, tr ("Delete by column"), SLOT(fn_cells_delete_by_col()));
-  add_to_menu (tm, tr ("Copy by column[s]"), SLOT(fn_cells_copy_by_col()));
-
-
-  tm = menu_functions->addMenu (tr ("Filter"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Remove duplicates"), SLOT(fn_filter_rm_duplicates()));
-  add_to_menu (tm, tr ("Remove empty lines"), SLOT(fn_filter_rm_empty()));
-  add_to_menu (tm, tr ("Remove lines < N size"), SLOT(fn_filter_rm_less_than()));
-  add_to_menu (tm, tr ("Remove lines > N size"), SLOT(fn_filter_rm_greater_than()));
-  add_to_menu (tm, tr ("Remove before delimiter at each line"), SLOT(fn_filter_delete_before_sep()));
-  add_to_menu (tm, tr ("Remove after delimiter at each line"), SLOT(fn_filter_delete_after_sep()));
-  add_to_menu (tm, tr ("Filter with regexp"), SLOT(fn_filter_with_regexp()));
-  add_to_menu (tm, tr ("Filter by repetitions"), SLOT(fn_filter_by_repetitions()));
-
-
-
-  tm = menu_functions->addMenu (tr ("Math"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Evaluate"), SLOT(fn_math_evaluate()), "F4");
-  add_to_menu (tm, tr ("Arabic to Roman"), SLOT(fn_math_number_arabic_to_roman()));
-  add_to_menu (tm, tr ("Roman to Arabic"), SLOT(fn_math_number_roman_to_arabic()));
-  add_to_menu (tm, tr ("Decimal to binary"), SLOT(fn_math_number_dec_to_bin()));
-  add_to_menu (tm, tr ("Binary to decimal"), SLOT(fn_math_number_bin_to_dec()));
-  add_to_menu (tm, tr ("Flip bits (bitwise complement)"), SLOT(fn_math_number_flip_bits()));
-  add_to_menu (tm, tr ("Enumerate"), SLOT(fn_math_enum()));
-  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_math_sum_by_last_col()));
-  add_to_menu (tm, tr ("deg min sec > dec degrees"), SLOT(fn_math_number_dms2dc()));
-  add_to_menu (tm, tr ("dec degrees > deg min sec"), SLOT(fn_math_number_dd2dms()));
-
-
-  tm = menu_functions->addMenu (tr ("Morse code"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("From Russian to Morse"), SLOT(fn_morse_from_ru()));
-  add_to_menu (tm, tr ("From Morse To Russian"), SLOT(fn_morse_to_ru()));
-  add_to_menu (tm, tr ("From English to Morse"), SLOT(fn_morse_from_en()));
-  add_to_menu (tm, tr ("From Morse To English"), SLOT(fn_morse_to_en()));
-
-
-  tm = menu_functions->addMenu (tr ("Analyze"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Text statistics"), SLOT(fn_analyze_text_stat()));
-  add_to_menu (tm, tr ("Extract words"), SLOT(fn_analyze_extract_words()));
-  add_to_menu (tm, tr ("Words lengths"), SLOT(fn_analyze_stat_words_lengths()));
-  add_to_menu (tm, tr ("Count the substring"), SLOT(fn_analyze_count()));
-  add_to_menu (tm, tr ("Count the substring (regexp)"), SLOT(fn_analyze_count_rx()));
-  add_to_menu (tm, tr ("UNITAZ quantity sorting"), SLOT(fn_analyze_get_words_count()));
-  add_to_menu (tm, tr ("UNITAZ sorting by alphabet"), SLOT(fn_analyze_unitaz_abc()));
-  add_to_menu (tm, tr ("UNITAZ sorting by length"), SLOT(fn_analyze_unitaz_len()));
-
-
-  tm = menu_functions->addMenu (tr ("Text"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Apply to each line"), SLOT(fn_text_apply_to_each_line()),"Alt+E");
-  add_to_menu (tm, tr ("Remove formatting"), SLOT(fn_text_remove_formatting()));
-  add_to_menu (tm, tr ("Remove formatting at each line"), SLOT(fn_text_remove_formatting_at_each_line()));
-  add_to_menu (tm, tr ("Remove trailing spaces"), SLOT(fn_text_remove_trailing_spaces()));
-  add_to_menu (tm, tr ("Compress"), SLOT(fn_text_compress()));
-  add_to_menu (tm, tr ("Anagram"), SLOT(fn_text_anagram()));
-  add_to_menu (tm, tr ("Escape regexp"), SLOT(fn_text_escape()));
-  add_to_menu (tm, tr ("Reverse"), SLOT(fn_text_reverse()));
-  add_to_menu (tm, tr ("Compare two strings"), SLOT(fn_text_compare_two_strings()));
-  add_to_menu (tm, tr ("Check regexp match"), SLOT(fn_text_regexp_match_check()));
-
-
-  tm = menu_functions->addMenu (tr ("Quotes"));
-  tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Straight to double angle quotes"), SLOT(fn_quotes_to_angle()));
-  add_to_menu (tm, tr ("Straight to curly double quotes"), SLOT(fn_quotes_curly()));
-  add_to_menu (tm, tr ("LaTeX: Straight to curly double quotes"), SLOT(fn_quotes_tex_curly()));
-  add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes"), SLOT(fn_quotes_tex_angle_01()));
-  add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes v2"), SLOT(fn_quotes_tex_angle_02()));
-
-
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-  menu_functions->addSeparator();
-
-  menu_spell_langs = menu_functions->addMenu (tr ("Spell-checker languages"));
-  menu_spell_langs->setTearOffEnabled (true);
-
-  add_to_menu (menu_functions, tr ("Spell check"), SLOT(fn_spell_check()), "", get_theme_icon_fname ("fn-spell-check.png"));
-  add_to_menu (menu_functions, tr ("Suggest"), SLOT(fn_spell_suggest()));
-  add_to_menu (menu_functions, tr ("Add to dictionary"), SLOT(fn_spell_add_to_dict()));
-  add_to_menu (menu_functions, tr ("Remove from dictionary"), SLOT(fn_spell_remove_from_dict()));
-
-  menu_functions->addSeparator();
-
-#endif
-
-
-
-/*
-====================
-Cal menu
-===================
-*/
-
-
-  menu_cal = menuBar()->addMenu (tr ("Calendar"));
-  menu_cal->setTearOffEnabled (true);
-
-  add_to_menu (menu_cal, tr ("Moon mode on/off"), SLOT(cal_moon_mode()));
-  add_to_menu (menu_cal, tr ("Mark first date"), SLOT(cal_set_date_a()));
-  add_to_menu (menu_cal, tr ("Mark last date"), SLOT(cal_set_date_b()));
-
-  menu_cal_add = menu_cal->addMenu (tr ("Add or subtract"));
-  menu_cal_add->setTearOffEnabled (true);
-
-  add_to_menu (menu_cal_add, tr ("Days"), SLOT(cal_add_days()));
-  add_to_menu (menu_cal_add, tr ("Months"), SLOT(cal_add_months()));
-  add_to_menu (menu_cal_add, tr ("Years"), SLOT(cal_add_years()));
-
-  menu_cal->addSeparator();
-
-  add_to_menu (menu_cal, tr ("Go to current date"), SLOT(cal_set_to_current()));
-  add_to_menu (menu_cal, tr ("Calculate moon days between dates"), SLOT(cal_gen_mooncal()));
-  add_to_menu (menu_cal, tr ("Number of days between two dates"), SLOT(cal_diff_days()));
-  add_to_menu (menu_cal, tr ("Remove day record"), SLOT(cal_remove()));
-
-/*
-====================
-Run menu
-===================
-*/
-
-
-  menu_programs = menuBar()->addMenu (tr ("Run"));
-
-
-/*
-====================
-IDE menu
-===================
-*/
-
-
-  menu_ide = menuBar()->addMenu (tr ("IDE"));;
-  menu_ide->setTearOffEnabled (true);
-
-  add_to_menu (menu_ide, tr ("Run program"), SLOT(ide_run()));
-  add_to_menu (menu_ide, tr ("Build program"), SLOT(ide_build()));
-  add_to_menu (menu_ide, tr ("Clean program"), SLOT(ide_clean()));
-
-  menu_ide->addSeparator();
-
-  add_to_menu (menu_ide, tr ("Toggle header/source"), SLOT(ide_toggle_hs()));
-
-/*
-===================
-Nav menu
-===================
-*/
-
-
-  menu_nav = menuBar()->addMenu (tr ("Nav"));
-  menu_nav->setTearOffEnabled (true);
-
-  add_to_menu (menu_nav, tr ("Save position"), SLOT(nav_save_pos()));
-  add_to_menu (menu_nav, tr ("Go to saved position"), SLOT(nav_goto_pos()));
-  add_to_menu (menu_nav, tr ("Go to line"), SLOT(nav_goto_line()),"Alt+G");
-  add_to_menu (menu_nav, tr ("Next tab"), SLOT(nav_goto_right_tab()));
-  add_to_menu (menu_nav, tr ("Prev tab"), SLOT(nav_goto_left_tab()));
-  add_to_menu (menu_nav, tr ("Focus the Famous input field"), SLOT(nav_focus_to_fif()), "Ctrl+F");
-  add_to_menu (menu_nav, tr ("Focus the editor"), SLOT(nav_focus_to_editor()));
-
-  menu_labels = menu_nav->addMenu (tr ("Labels"));
-  add_to_menu (menu_nav, tr ("Refresh labels"), SLOT(nav_labels_update_list()));
-
-  menu_current_files = menu_nav->addMenu (tr ("Current files"));
-
-
-/*
-===================
-Fm menu callbacks
-===================
-*/
-
-
-  menu_fm = menuBar()->addMenu (tr ("Fm"));
-  menu_fm->setTearOffEnabled (true);
-
-  menu_fm_multi_rename = menu_fm->addMenu (tr ("Multi-rename"));
-  menu_fm_multi_rename->setTearOffEnabled (true);
-
-  add_to_menu (menu_fm_multi_rename, tr ("Zero pad file names"), SLOT(fman_multi_rename_zeropad()));
-  add_to_menu (menu_fm_multi_rename, tr ("Delete N first chars at file names"), SLOT(fman_multi_rename_del_n_first_chars()));
-  add_to_menu (menu_fm_multi_rename, tr ("Replace in file names"), SLOT(fman_multi_rename_replace()));
-  add_to_menu (menu_fm_multi_rename, tr ("Apply template"), SLOT(fman_multi_rename_apply_template()));
-
-  menu_fm_file_ops = menu_fm->addMenu (tr ("File operations"));
-  menu_fm_file_ops->setTearOffEnabled (true);
-
-  add_to_menu (menu_fm_file_ops, tr ("Create new directory"), SLOT(fman_fileop_create_dir()));
-  add_to_menu (menu_fm_file_ops, tr ("Rename"), SLOT(fman_fileop_rename()));
-  add_to_menu (menu_fm_file_ops, tr ("Delete file"), SLOT(fman_fileop_delete()));
-
-
-  menu_fm_file_infos = menu_fm->addMenu (tr ("File information"));
-  menu_fm_file_infos->setTearOffEnabled (true);
-
-
-  add_to_menu (menu_fm_file_infos, tr ("Count lines in selected files"), SLOT(fman_fileinfo_count_lines_in_selected_files()));
-  add_to_menu (menu_fm_file_infos, tr ("Full info"), SLOT(fm_fileinfo_info()));
-
-
-  menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
-  menu_fm_zip->setTearOffEnabled (true);
-
-  menu_fm_zip->addSeparator();
-
-  add_to_menu (menu_fm_zip, tr ("Create new ZIP"), SLOT(fman_zip_create()));
-  add_to_menu (menu_fm_zip, tr ("Add to ZIP"), SLOT(fman_zip_add()));
-  add_to_menu (menu_fm_zip, tr ("Save ZIP"), SLOT(fman_zip_save()));
-
-  menu_fm_zip->addSeparator();
-
-  add_to_menu (menu_fm_zip, tr ("List ZIP content"), SLOT(fman_zip_info()));
-  add_to_menu (menu_fm_zip, tr ("Unpack ZIP to current directory"), SLOT(fman_zip_unpack()));
-
-
-  menu_fm_img_conv = menu_fm->addMenu (tr ("Images"));
-  menu_fm_img_conv->setTearOffEnabled (true);
-
-  add_to_menu (menu_fm_img_conv, tr ("Scale by side"), SLOT(fman_img_conv_by_side()));
-  add_to_menu (menu_fm_img_conv, tr ("Scale by percentages"), SLOT(fman_img_conv_by_percent()));
-  add_to_menu (menu_fm_img_conv, tr ("Create web gallery"), SLOT(fman_img_make_gallery()));
-
-  add_to_menu (menu_fm, tr ("Go to home dir"), SLOT(fman_home()));
-  add_to_menu (menu_fm, tr ("Refresh current dir"), SLOT(fman_refresh()));
-  add_to_menu (menu_fm, tr ("Preview image"), SLOT(fman_preview_image()));
-  add_to_menu (menu_fm, tr ("Select by regexp"), SLOT(fman_select_by_regexp()));
-  add_to_menu (menu_fm, tr ("Deselect by regexp"), SLOT(fman_deselect_by_regexp()));
-
-
-/*
-===================
-View menu
-===================
-*/
-
-
-  menu_view = menuBar()->addMenu (tr ("View"));
-  menu_view->setTearOffEnabled (true);
-
-  menu_view_themes = menu_view->addMenu (tr ("Themes"));
-  menu_view_themes->setTearOffEnabled (true);
-
-  menu_view_palettes = menu_view->addMenu (tr ("Palettes"));
-  menu_view_palettes->setTearOffEnabled (true);
-
-  //menu_view_hl = menu_view->addMenu (tr ("Highlighting mode"));
-  //menu_view_hl->setTearOffEnabled (true);
-
-  menu_view_profiles = menu_view->addMenu (tr ("Profiles"));
-  menu_view_profiles->setTearOffEnabled (true);
-
-  add_to_menu (menu_view, tr ("Save profile"), SLOT(view_profile_save_as()));
-  add_to_menu (menu_view, tr ("Toggle word wrap"), SLOT(view_toggle_wrap()));
-  add_to_menu (menu_view, tr ("Hide error marks"), SLOT(view_hide_error_marks()));
-  add_to_menu (menu_view, tr ("Toggle fullscreen"), SLOT(view_toggle_fs()));
-  add_to_menu (menu_view, tr ("Stay on top"), SLOT(view_stay_on_top()));
-  add_to_menu (menu_view, tr ("Darker"), SLOT(view_darker()));
-
-/*
-===================
-? menu
-===================
-*/
-
-
-  helpMenu = menuBar()->addMenu ("?");
-  helpMenu->setTearOffEnabled (true);
-
-  helpMenu->addAction (aboutAct);
-  helpMenu->addAction (aboutQtAct);
-  add_to_menu (helpMenu, tr ("NEWS"), SLOT(help_show_news()));
-  add_to_menu (helpMenu, "TODO", SLOT(help_show_todo()));
-  add_to_menu (helpMenu, "ChangeLog", SLOT(help_show_changelog()));
-  add_to_menu (helpMenu, tr ("License"), SLOT(help_show_gpl()));
-}
 
 
 void CTEA::createToolBars()
@@ -1845,588 +788,6 @@ void CTEA::cb_use_joystick_stateChanged (int state)
 #endif
 
 
-void CTEA::createOptions()
-{
-  tab_options = new QTabWidget;
-
-  idx_tab_tune = main_tab_widget->addTab (tab_options, tr ("options"));
-
-  QWidget *page_interface = new QWidget (tab_options);
-  page_interface->setObjectName ("page_interface");
-
-  QVBoxLayout *page_interface_layout = new QVBoxLayout;
-  page_interface_layout->setAlignment (Qt::AlignTop);
-
-  QStringList sl_ui_modes;
-  sl_ui_modes << tr ("Classic") << tr ("Docked");
-
-  cmb_ui_mode = new_combobox (page_interface_layout,
-                              tr ("UI mode (TEA restart needed)"),
-                              sl_ui_modes,
-                              settings->value ("ui_mode", 0).toInt());
-
-
-  QStringList sl_lngs = read_dir_entries (":/translations");
-
-  for (QList <QString>::iterator i = sl_lngs.begin(); i != sl_lngs.end(); ++i)
-      {
-       (*i) = i->left(2);
-      }
-
-  sl_lngs.append ("en");
-
-  QString lng = settings->value ("lng", QLocale::system().name()).toString().left(2).toLower();
-
-
-  if (! file_exists (":/translations/" + lng + ".qm"))
-     lng = "en";
-
-  cmb_lng = new_combobox (page_interface_layout,
-                          tr ("UI language (TEA restart needed)"),
-                          sl_lngs,
-                          settings->value ("lng", lng).toString());
-
-
-  QString default_style = qApp->style()->objectName();
-  if (default_style == "GTK+") //can be buggy
-     default_style = "Cleanlooks";
-
-
-  cmb_styles = new_combobox (page_interface_layout,
-                             tr ("UI style (TEA restart needed)"),
-                             QStyleFactory::keys(),
-                             settings->value ("ui_style", default_style).toString());
-
-
-//  connect (cmb_styles, SIGNAL(currentIndexChanged (const QString &)),
-  //         this, SLOT(slot_style_currentIndexChanged (const QString &)));
-
-  connect (cmb_styles, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(slot_style_currentIndexChanged (int)));
-
-
-  QPushButton *bt_font_interface = new QPushButton (tr ("Interface font"), this);
-  connect (bt_font_interface, SIGNAL(clicked()), this, SLOT(slot_font_interface_select()));
-
-  QPushButton *bt_font_editor = new QPushButton (tr ("Editor font"), this);
-  connect (bt_font_editor, SIGNAL(clicked()), this, SLOT(slot_font_editor_select()));
-
-  QPushButton *bt_font_logmemo = new QPushButton (tr ("Logmemo font"), this);
-  connect (bt_font_logmemo, SIGNAL(clicked()), this, SLOT(slot_font_logmemo_select()));
-
-
-  page_interface_layout->addWidget (bt_font_interface);
-  page_interface_layout->addWidget (bt_font_editor);
-  page_interface_layout->addWidget (bt_font_logmemo);
-
-
-  QStringList sl_tabs_align;
-
-  sl_tabs_align.append (tr ("Up"));
-  sl_tabs_align.append (tr ("Bottom"));
-  sl_tabs_align.append (tr ("Left"));
-  sl_tabs_align.append (tr ("Right"));
-
-  int ui_tab_align = settings->value ("ui_tabs_align", "3").toInt();
-  main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align ));
-
-
-  QComboBox *cmb_ui_tabs_align = new_combobox (page_interface_layout,
-                             tr ("GUI tabs align"),
-                             sl_tabs_align,
-                             ui_tab_align);
-
-  connect (cmb_ui_tabs_align, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_ui_tabs_currentIndexChanged (int)));
-
-
-  int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
-  tab_editor->setTabPosition (int_to_tabpos (docs_tab_align));
-
-
-  QComboBox *cmb_docs_tabs_align = new_combobox (page_interface_layout,
-                             tr ("Documents tabs align"),
-                             sl_tabs_align,
-                             docs_tab_align);
-
-  connect (cmb_docs_tabs_align, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_docs_tabs_currentIndexChanged (int)));
-
-
-  QStringList sl_icon_sizes;
-  sl_icon_sizes << "16" << "24" << "32" << "48" << "64";
-
-  cmb_icon_size = new_combobox (page_interface_layout,
-                                tr ("Icons size"),
-                                sl_icon_sizes,
-                                settings->value ("icon_size", "32").toString());
-
-  connect (cmb_icon_size, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_icon_sizes_currentIndexChanged (int)));
-
-
-  QStringList sl_tea_icons;
-  sl_tea_icons.append ("1");
-  sl_tea_icons.append ("2");
-  sl_tea_icons.append ("3");
-
-  cmb_tea_icons = new_combobox (page_interface_layout,
-                                tr ("TEA program icon"),
-                                sl_tea_icons,
-                                settings->value ("icon_fname", "1").toString());
-
-
-  connect (cmb_tea_icons, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_tea_icons_currentIndexChanged (int)));
-
-
-  cb_fif_at_toolbar = new QCheckBox (tr ("FIF at the top (restart needed)"), tab_options);
-  cb_fif_at_toolbar->setChecked (settings->value ("fif_at_toolbar", "0").toBool());
-  page_interface_layout->addWidget (cb_fif_at_toolbar);
-
-
-  cb_show_linenums = new QCheckBox (tr ("Show line numbers"), tab_options);
-  cb_show_linenums->setChecked (settings->value ("show_linenums", "0").toBool());
-  page_interface_layout->addWidget (cb_show_linenums);
-
-
-  cb_wordwrap = new QCheckBox (tr ("Word wrap"), tab_options);
-  cb_wordwrap->setChecked (settings->value ("word_wrap", "1").toBool());
-  page_interface_layout->addWidget (cb_wordwrap);
-
-  cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
-  cb_hl_enabled->setChecked (settings->value ("hl_enabled", "1").toBool());
-  page_interface_layout->addWidget (cb_hl_enabled);
-
-
-  cb_hl_current_line = new QCheckBox (tr ("Highlight current line"), tab_options);
-  cb_hl_current_line->setChecked (settings->value ("additional_hl", "0").toBool());
-  page_interface_layout->addWidget (cb_hl_current_line);
-
-
-  cb_hl_brackets = new QCheckBox (tr ("Highlight paired brackets"), tab_options);
-  cb_hl_brackets->setChecked (settings->value ("hl_brackets", "0").toBool());
-  page_interface_layout->addWidget (cb_hl_brackets);
-
-
-  cb_auto_indent = new QCheckBox (tr ("Automatic indent"), tab_options);
-  cb_auto_indent->setChecked (settings->value ("auto_indent", "0").toBool());
-  page_interface_layout->addWidget (cb_auto_indent);
-
-
-  cb_spaces_instead_of_tabs = new QCheckBox (tr ("Use spaces instead of tabs"), tab_options);
-  cb_spaces_instead_of_tabs->setChecked (settings->value ("spaces_instead_of_tabs", "1").toBool());
-  page_interface_layout->addWidget (cb_spaces_instead_of_tabs);
-
-  spb_tab_sp_width = new_spin_box (page_interface_layout,
-                                   tr ("Tab width in spaces"), 1, 64,
-                                   settings->value ("tab_sp_width", 8).toInt());
-
-
-  cb_cursor_xy_visible = new QCheckBox (tr ("Show cursor position"), tab_options);
-  cb_cursor_xy_visible->setChecked (settings->value ("cursor_xy_visible", "1").toBool());
-  page_interface_layout->addWidget (cb_cursor_xy_visible);
-
-
-  cb_center_on_cursor = new QCheckBox (tr ("Cursor center on scroll"), tab_options);
-  cb_center_on_cursor->setChecked (settings->value ("center_on_scroll", "1").toBool());
-  page_interface_layout->addWidget (cb_center_on_cursor);
-
-
-  spb_cursor_blink_time = new_spin_box (page_interface_layout,
-                                   tr ("Cursor blink time (msecs, zero is OFF)"), 0, 10000,
-                                   settings->value ("cursor_blink_time", 0).toInt());
-
-
-  spb_cursor_width = new_spin_box (page_interface_layout,
-                                   tr ("Cursor width"), 1, 5,
-                                   settings->value ("cursor_width", 2).toInt());
-
-
-
-  cb_show_margin = new QCheckBox (tr ("Show margin at"), tab_options);
-  cb_show_margin->setChecked (settings->value ("show_margin", "0").toBool());
-
-  spb_margin_pos = new QSpinBox;
-  spb_margin_pos->setValue (settings->value ("margin_pos", 72).toInt());
-
-  QHBoxLayout *lt_margin = new QHBoxLayout;
-
-  lt_margin->insertWidget (-1, cb_show_margin, 0, Qt::AlignLeft);
-  lt_margin->insertWidget (-1, spb_margin_pos, 1, Qt::AlignLeft);
-
-  page_interface_layout->addLayout (lt_margin);
-
-  cb_full_path_at_window_title = new QCheckBox (tr ("Show full path at window title"), tab_options);
-  cb_full_path_at_window_title->setChecked (settings->value ("full_path_at_window_title", "1").toBool());
-  page_interface_layout->addWidget (cb_full_path_at_window_title);
-
-  page_interface->setLayout (page_interface_layout);
-  page_interface->show();
-
-
-  QScrollArea *scra_interface = new QScrollArea;
-  scra_interface->setWidgetResizable (true);
-  scra_interface->setWidget (page_interface);
-
-  tab_options->addTab (scra_interface, tr ("Interface"));
-
-
-  QWidget *page_common = new QWidget (tab_options);
-  QVBoxLayout *page_common_layout = new QVBoxLayout;
-  page_common_layout->setAlignment (Qt::AlignTop);
-
-  cb_altmenu = new QCheckBox (tr ("Use Alt key to access main menu"), tab_options);
-  cb_altmenu->setChecked (MyProxyStyle::b_altmenu);
-
-  connect (cb_altmenu, SIGNAL(stateChanged (int)),
-           this, SLOT(cb_altmenu_stateChanged (int)));
-
-  cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
-  cb_wasd->setChecked (settings->value ("wasd", "0").toBool());
-
-
-#if defined(JOYSTICK_SUPPORTED)
-
-  cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
-  cb_use_joystick->setChecked (settings->value ("use_joystick", "0").toBool());
-  connect (cb_use_joystick, SIGNAL(stateChanged (int)),
-           this, SLOT(cb_use_joystick_stateChanged (int)));
-#endif
-
-
-
-  cb_auto_img_preview = new QCheckBox (tr ("Automatic preview images at file manager"), tab_options);
-  cb_auto_img_preview->setChecked (settings->value ("b_preview", "0").toBool());
-
-  cb_session_restore = new QCheckBox (tr ("Restore the last session on start-up"), tab_options);
-  cb_session_restore->setChecked (settings->value ("session_restore", "0").toBool());
-
-
-
-  cb_use_enca_for_charset_detection = new QCheckBox (tr ("Use Enca for charset detection"), tab_options);
-  cb_use_enca_for_charset_detection->setChecked (settings->value ("use_enca_for_charset_detection", 0).toBool());
-
-  cb_override_img_viewer = new QCheckBox (tr ("Use external image viewer for F2"), tab_options);
-  cb_override_img_viewer->setChecked (settings->value ("override_img_viewer", 0).toBool());
-
-  ed_img_viewer_override = new QLineEdit (this);
-  ed_img_viewer_override->setText (settings->value ("img_viewer_override_command", "display %s").toString());
-
-  QHBoxLayout *hb_imgvovr = new QHBoxLayout;
-
-  hb_imgvovr->addWidget (cb_override_img_viewer);
-  hb_imgvovr->addWidget (ed_img_viewer_override);
-
-  hb_imgvovr->insertWidget (-1, cb_override_img_viewer, 0, Qt::AlignLeft);
-  hb_imgvovr->insertWidget (-1, ed_img_viewer_override, 1, Qt::AlignLeft);
-
-
-  cb_use_trad_dialogs = new QCheckBox (tr ("Use traditional File Save/Open dialogs"), tab_options);
-  cb_use_trad_dialogs->setChecked (settings->value ("use_trad_dialogs", "0").toBool());
-
-  cb_start_on_sunday = new QCheckBox (tr ("Start week on Sunday"), tab_options);
-  cb_start_on_sunday->setChecked (settings->value ("start_week_on_sunday", "0").toBool());
-
-  cb_northern_hemisphere = new QCheckBox (tr ("Northern hemisphere"), this);
-  cb_northern_hemisphere->setChecked (settings->value ("northern_hemisphere", "1").toBool());
-
-
-  page_common_layout->addWidget (cb_start_on_sunday);
-  page_common_layout->addWidget (cb_northern_hemisphere);
-
-
-  cmb_moon_phase_algos = new_combobox (page_common_layout,
-                             tr ("Moon phase algorithm"),
-                             moon_phase_algos.values(),
-                             settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
-
-
-  cmb_cmdline_default_charset = new_combobox (page_common_layout,
-                             tr ("Charset for file open from command line"),
-                             sl_charsets,
-                             sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
-
-
-  cmb_zip_charset_in = new_combobox (page_common_layout,
-                             tr ("ZIP unpacking: file names charset"),
-                             sl_charsets,
-                             sl_charsets.indexOf (settings->value ("zip_charset_in", "UTF-8").toString()));
-
-
-  cmb_zip_charset_out = new_combobox (page_common_layout,
-                             tr ("ZIP packing: file names charset"),
-                             sl_charsets,
-                             sl_charsets.indexOf (settings->value ("zip_charset_out", "UTF-8").toString()));
-
-
-
-  page_common_layout->addWidget (cb_altmenu);
-  page_common_layout->addWidget (cb_wasd);
-
-#if defined(JOYSTICK_SUPPORTED)
-  page_common_layout->addWidget (cb_use_joystick);
-#endif
-
-  page_common_layout->addWidget (cb_auto_img_preview);
-  page_common_layout->addWidget (cb_session_restore);
-  page_common_layout->addWidget (cb_use_trad_dialogs);
-  page_common_layout->addWidget (cb_use_enca_for_charset_detection);
-
-  page_common_layout->addLayout (hb_imgvovr);
-
-
-  page_common->setLayout (page_common_layout);
-  page_common->show();
-
-  QScrollArea *scra_common = new QScrollArea;
-  scra_common->setWidgetResizable (true);
-  scra_common->setWidget (page_common);
-
-  tab_options->addTab (scra_common, tr ("Common"));
-
-
-  QWidget *page_functions = new QWidget (tab_options);
-  QVBoxLayout *page_functions_layout = new QVBoxLayout;
-  page_functions_layout->setAlignment (Qt::AlignTop);
-
-  QGroupBox *gb_labels = new QGroupBox (tr ("Labels"));
-  QVBoxLayout *vb_labels = new QVBoxLayout;
-  gb_labels->setLayout (vb_labels);
-
-  ed_label_start = new_line_edit (vb_labels, tr ("Label starts with: "), settings->value ("label_start", "[?").toString());
-  ed_label_end = new_line_edit (vb_labels, tr ("Label ends with: "), settings->value ("label_end", "?]").toString());
-
-
-  page_functions_layout->addWidget (gb_labels);
-
-
-  QGroupBox *gb_datetime = new QGroupBox (tr ("Date and time"));
-  QVBoxLayout *vb_datetime = new QVBoxLayout;
-  gb_datetime->setLayout (vb_datetime);
-
-  ed_date_format  = new_line_edit (vb_datetime, tr ("Date format"), settings->value ("date_format", "dd/MM/yyyy").toString());
-  ed_time_format  = new_line_edit (vb_datetime, tr ("Time format"), settings->value ("time_format", "hh:mm:ss").toString());
-
-
-  page_functions_layout->addWidget (gb_datetime);
-
-  QLabel *l_t = 0;
-
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-
-  QGroupBox *gb_spell = new QGroupBox (tr ("Spell checking"));
-  QVBoxLayout *vb_spell = new QVBoxLayout;
-  gb_spell->setLayout(vb_spell);
-
-  QHBoxLayout *hb_spellcheck_engine = new QHBoxLayout;
-
-  cmb_spellcheckers = new_combobox (hb_spellcheck_engine,
-                                    tr ("Spell checker engine"),
-                                    spellcheckers,
-                                    cur_spellchecker);
-
-  vb_spell->addLayout (hb_spellcheck_engine);
-
-#ifdef HUNSPELL_ENABLE
-
-  QHBoxLayout *hb_spellcheck_path = new QHBoxLayout;
-  l_t = new QLabel (tr ("Hunspell dictionaries directory"));
-
-  ed_spellcheck_path = new QLineEdit (this);
-
-  ed_spellcheck_path->setText (settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString());/*QDir::homePath ()).toString()*/
-  ed_spellcheck_path->setReadOnly (true);
-
-  QPushButton *pb_choose_path = new QPushButton (tr ("Select"), this);
-
-  connect (pb_choose_path, SIGNAL(clicked()), this, SLOT(pb_choose_hunspell_path_clicked()));
-
-  hb_spellcheck_path->addWidget (l_t);
-  hb_spellcheck_path->addWidget (ed_spellcheck_path);
-  hb_spellcheck_path->addWidget (pb_choose_path);
-
-  vb_spell->addLayout (hb_spellcheck_path);
-
-#endif
-
-
-#ifdef ASPELL_ENABLE
-
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-  QHBoxLayout *hb_aspellcheck_path = new QHBoxLayout;
-  l_t = new QLabel (tr ("Aspell directory"));
-
-  ed_aspellcheck_path = new QLineEdit (this);
-  ed_aspellcheck_path->setText (settings->value ("win32_aspell_path", aspell_default_dict_path()).toString());
-  ed_aspellcheck_path->setReadOnly (true);
-
-  QPushButton *pb_choose_path2 = new QPushButton (tr ("Select"), this);
-
-  connect (pb_choose_path2, SIGNAL(clicked()), this, SLOT(pb_choose_aspell_path_clicked()));
-
-  hb_aspellcheck_path->addWidget (l_t);
-  hb_aspellcheck_path->addWidget (ed_aspellcheck_path);
-  hb_aspellcheck_path->addWidget (pb_choose_path2);
-
-  vb_spell->addLayout (hb_aspellcheck_path);
-
-#endif
-
-#endif
-
-  connect (cmb_spellcheckers, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_spellchecker_currentIndexChanged (int)));
-
-  page_functions_layout->addWidget (gb_spell);
-
-#endif
-
-
-  QGroupBox *gb_func_misc = new QGroupBox (tr ("Miscellaneous"));
-  QVBoxLayout *vb_func_misc = new QVBoxLayout;
-  vb_func_misc->setAlignment (Qt::AlignTop);
-
-  gb_func_misc->setLayout (vb_func_misc);
-
-
-  spb_fuzzy_q = new_spin_box (vb_func_misc, tr ("Fuzzy search factor"), 10, 100, settings->value ("fuzzy_q", "60").toInt());
-
-  page_functions_layout->addWidget (gb_func_misc);
-
-
-  page_functions->setLayout (page_functions_layout);
-  page_functions->show();
-
-  QScrollArea *scra_functions = new QScrollArea;
-  scra_functions->setWidgetResizable (true);
-  scra_functions->setWidget (page_functions);
-
-  tab_options->addTab (scra_functions, tr ("Functions"));
-
-
-/////////////
-
-
-  QWidget *page_images = new QWidget (tab_options);
-  QVBoxLayout *page_images_layout = new QVBoxLayout;
-  page_images_layout->setAlignment (Qt::AlignTop);
-
-  QGroupBox *gb_images = new QGroupBox (tr("Miscellaneous"));
-  QVBoxLayout *vb_images = new QVBoxLayout;
-  vb_images->setAlignment (Qt::AlignTop);
-
-  gb_images->setLayout (vb_images);
-
-
-  cmb_output_image_fmt = new_combobox (vb_images,
-                                       tr ("Image conversion output format"),
-                                       bytearray_to_stringlist (QImageWriter::supportedImageFormats()),
-                                       settings->value ("output_image_fmt", "jpg").toString());
-
-  cb_output_image_flt = new QCheckBox (tr ("Scale images with bilinear filtering"), this);
-  cb_output_image_flt->setChecked (settings->value ("img_filter", 0).toBool());
-
-  vb_images->addWidget (cb_output_image_flt);
-
-  spb_img_quality = new_spin_box (vb_images, tr ("Output images quality"), -1, 100, settings->value ("img_quality", "-1").toInt());
-
-
-  cb_exif_rotate = new QCheckBox (tr ("Apply hard rotation by EXIF data"), this);
-  cb_exif_rotate->setChecked (settings->value ("cb_exif_rotate", 1).toBool());
-
-
-
-  cb_output_image_flt = new QCheckBox (tr ("Scale images with bilinear filtering"), this);
-  cb_output_image_flt->setChecked (settings->value ("img_filter", 0).toBool());
-
-  vb_images->addWidget (cb_output_image_flt);
-
-  cb_zip_after_scale = new QCheckBox (tr ("Zip directory with processed images"), this);
-  cb_zip_after_scale->setChecked (settings->value ("img_post_proc", 0).toBool());
-
-  vb_images->addWidget (cb_zip_after_scale);
-
-
-  vb_images->addWidget (cb_exif_rotate);
-
-  page_images_layout->addWidget (gb_images);
-
-
-  QGroupBox *gb_webgallery = new QGroupBox (tr ("Web gallery options"));
-  QVBoxLayout *vb_webgal = new QVBoxLayout;
-  vb_webgal->setAlignment (Qt::AlignTop);
-
-  ed_side_size = new_line_edit (vb_webgal, tr ("Size of the side"), settings->value ("ed_side_size", "110").toString());
-  ed_link_options = new_line_edit (vb_webgal, tr ("Link options"), settings->value ("ed_link_options", "target=\"_blank\"").toString());
-  ed_cols_per_row = new_line_edit (vb_webgal, tr ("Columns per row"), settings->value ("ed_cols_per_row", "4").toString());
-
-  gb_webgallery->setLayout(vb_webgal);
-  page_images_layout->addWidget (gb_webgallery);
-
-
-  QGroupBox *gb_exif = new QGroupBox (tr ("EXIF"));
-  QVBoxLayout *vb_exif = new QVBoxLayout;
-  gb_exif->setLayout(vb_exif);
-  page_images_layout->addWidget (gb_exif);
-
-  cb_zor_use_exif= new QCheckBox (tr ("Use EXIF orientation at image viewer"), this);
-  cb_zor_use_exif->setChecked (settings->value ("zor_use_exif_orientation", 0).toBool());
-  vb_exif->addWidget (cb_zor_use_exif);
-
-
-  page_images->setLayout (page_images_layout);
-
-  QScrollArea *scra_images = new QScrollArea;
-  scra_images->setWidgetResizable (true);
-  scra_images->setWidget (page_images);
-
-  tab_options->addTab (scra_images, tr ("Images"));
-
-
-////////////////////////////
-
-  QWidget *page_keyboard = new QWidget (tab_options);
-
-  QHBoxLayout *lt_h = new QHBoxLayout;
-
-  QHBoxLayout *lt_shortcut = new QHBoxLayout;
-  QVBoxLayout *lt_vkeys = new QVBoxLayout;
-  QVBoxLayout *lt_vbuttons = new QVBoxLayout;
-
-  lv_menuitems = new QListWidget;
-
-  lt_vkeys->addWidget (lv_menuitems);
-
-  connect (lv_menuitems, SIGNAL(currentItemChanged (QListWidgetItem *, QListWidgetItem *)),
-           this, SLOT(slot_lv_menuitems_currentItemChanged (QListWidgetItem *, QListWidgetItem *)));
-
-  ent_shtcut = new CShortcutEntry;
-  QLabel *l_shortcut = new QLabel (tr ("Shortcut"));
-
-  lt_shortcut->addWidget (l_shortcut);
-  lt_shortcut->addWidget (ent_shtcut);
-
-  lt_vbuttons->addLayout (lt_shortcut);
-
-  QPushButton *pb_assign_hotkey = new QPushButton (tr ("Assign"), this);
-  QPushButton *pb_remove_hotkey = new QPushButton (tr ("Remove"), this);
-
-  connect (pb_assign_hotkey, SIGNAL(clicked()), this, SLOT(pb_assign_hotkey_clicked()));
-  connect (pb_remove_hotkey, SIGNAL(clicked()), this, SLOT(pb_remove_hotkey_clicked()));
-
-  lt_vbuttons->addWidget (pb_assign_hotkey);
-  lt_vbuttons->addWidget (pb_remove_hotkey, 0, Qt::AlignTop);
-
-  lt_h->addLayout (lt_vkeys);
-  lt_h->addLayout (lt_vbuttons);
-
-  page_keyboard->setLayout (lt_h);
-  page_keyboard->show();
-
-  idx_tab_keyboard = tab_options->addTab (page_keyboard, tr ("Keyboard"));
-}
 
 
 void CTEA::opt_update_keyb()
@@ -2459,14 +820,6 @@ void CTEA::slot_style_currentIndexChanged (int)
 
 
 
-void CTEA::view_toggle_wrap()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (d)
-     d->set_word_wrap (! d->get_word_wrap());
-}
 
 
 
@@ -2474,7 +827,7 @@ void CTEA::view_toggle_wrap()
 
 
 
-void CTEA::updateFonts()
+void CTEA::update_fonts()
 {
   documents->apply_settings();
 }
@@ -2791,15 +1144,6 @@ int get_arab_num (std::string rom_str)
 
 
 
-void CTEA::help_show_gpl()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->open_file (":/COPYING", "UTF-8");
-  if (d)
-     d->setReadOnly (true);
-}
-
 
 void CTEA::update_dyn_menus()
 {
@@ -2919,69 +1263,6 @@ void CTEA::update_programs()
 
 
 
-void CTEA::view_hide_error_marks()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QTextCursor cr = d->textCursor();
-
-//delete all underlines
-  cr.setPosition (0);
-  cr.movePosition (QTextCursor::End, QTextCursor::KeepAnchor);
-  QTextCharFormat f = cr.blockCharFormat();
-  f.setFontUnderline (false);
-  cr.mergeCharFormat (f);
-  d->document()->setModified (false);
-}
-
-
-
-
-
-void CTEA::view_toggle_fs()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  setWindowState(windowState() ^ Qt::WindowFullScreen);
-}
-
-
-void CTEA::help_show_news()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QString fname = ":/NEWS";
-  if (QLocale::system().name().left(2) == "ru")
-     fname = ":/NEWS-RU";
-
-  CDocument *d = documents->open_file (fname, "UTF-8");
-  if (d)
-     d->setReadOnly (true);
-}
-
-
-void CTEA::help_show_changelog()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->open_file (":/ChangeLog", "UTF-8");
-  if (d)
-     d->setReadOnly (true);
-}
-
-
-void CTEA::help_show_todo()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->open_file (":/TODO", "UTF-8");
-  if (d)
-     d->setReadOnly (true);
-}
 
 
 void CAboutWindow::closeEvent (QCloseEvent *event)
@@ -3310,16 +1591,6 @@ void CTEA::fman_open()
 
 
 
-void CTEA::view_stay_on_top()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  Qt::WindowFlags flags = windowFlags();
-  flags ^= Qt::WindowStaysOnTopHint;
-  setWindowFlags (flags );
-  show();
-  activateWindow();
-}
 
 
 void CTEA::update_sessions()
@@ -3510,22 +1781,6 @@ void CTEA::load_palette (const QString &fileName)
 }
 
 
-void CTEA::view_use_palette()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  QAction *a = qobject_cast<QAction *>(sender());
-  QString fname = dir_palettes + "/" + a->text();
-
-  if (! file_exists (fname))
-     fname = ":/palettes/" + a->text();
-
-  fname_def_palette = fname;
-  load_palette (fname);
-
-  update_stylesheet (fname_stylesheet);
-  documents->apply_settings();
-}
 
 
 void CTEA::update_logmemo_palette()
@@ -4159,40 +2414,6 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
 
 
 
-void CTEA::handle_args()
-{
-  QStringList l = qApp->arguments();
-  int size = l.size();
-  if (size < 2)
-     return;
-
-  QString charset = settings->value ("cmdline_default_charset", "UTF-8").toString();//"UTF-8";
-
-  for (int i = 1; i < size; i++)
-      {
-       QString t = l.at(i);
-       if (t.startsWith("--charset"))
-          {
-           QStringList pair = t.split ("=");
-           if (pair.size() > 1)
-              charset = pair[1];
-          }
-       else
-           {
-            QFileInfo f (l.at(i));
-
-            if (! f.isAbsolute())
-               {
-                QString fullname (QDir::currentPath());
-                fullname.append ("/").append (l.at(i));
-                documents->open_file (fullname, charset);
-               }
-            else
-                documents->open_file (l.at(i), charset);
-          }
-      }
-}
-
 
 
 void CTEA::create_markup_hash()
@@ -4646,91 +2867,8 @@ void CTEA::fn_filter_delete_by_sep (bool mode)
 }
 
 
-void CTEA::view_use_profile()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  QSettings s (a->data().toString(), QSettings::IniFormat);
-
-  QPoint pos = s.value ("pos", QPoint (1, 200)).toPoint();
-  QSize size = s.value ("size", QSize (600, 420)).toSize();
-
-  if (mainSplitter/* && ! settings->value ("ui_mode", 0).toBool()*/)
-     mainSplitter->restoreState (s.value ("splitterSizes").toByteArray());
-
-  resize (size);
-  move (pos);
-
-  fname_def_palette = s.value ("fname_def_palette", ":/palettes/TEA").toString();
-  load_palette (fname_def_palette);
-
-  settings->setValue ("fname_def_palette", fname_def_palette);
-  settings->setValue ("word_wrap", s.value ("word_wrap", "1").toBool());
-  settings->setValue ("show_linenums", s.value ("show_linenums", "0").toBool());
-  settings->setValue ("additional_hl", s.value ("additional_hl", "0").toBool());
-  settings->setValue ("show_margin", s.value ("show_margin", "0").toBool());
-
-  settings->setValue ("editor_font_name", s.value ("editor_font_name", "Serif").toString());
-  settings->setValue ("editor_font_size", s.value ("editor_font_size", "14").toInt());
-  settings->setValue ("logmemo_font", s.value ("logmemo_font", "Monospace").toString());
-  settings->setValue ("logmemo_font_size", s.value ("logmemo_font_size", "14").toInt());
-  settings->setValue ("app_font_name", s.value ("app_font_name", "Sans").toString());
-  settings->setValue ("app_font_size", s.value ("app_font_size", "12").toInt());
-
-  cb_wordwrap->setChecked (s.value ("word_wrap", "1").toBool());
-
-  cb_show_linenums->setChecked (s.value ("show_linenums", "0").toBool());
-  cb_hl_current_line->setChecked (s.value ("additional_hl", "0").toBool());
-  cb_show_margin->setChecked (s.value ("show_margin", "0").toBool());
-
-  update_stylesheet (fname_stylesheet);
-  documents->apply_settings();
-}
 
 
-void CTEA::view_profile_save_as()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  bool ok;
-  QString name = QInputDialog::getText (this, tr ("Enter the name"),
-                                              tr ("Name:"), QLineEdit::Normal,
-                                              tr ("new_profile"), &ok);
-  if (! ok || name.isEmpty())
-     return;
-
-  QString fname (dir_profiles);
-  fname.append ("/").append (name);
-
-  QSettings s (fname, QSettings::IniFormat);
-
-  s.setValue ("fname_def_palette", fname_def_palette);
-
-  s.setValue ("word_wrap", settings->value ("word_wrap", "1").toBool());
-  s.setValue ("show_linenums", settings->value ("show_linenums", "0").toBool());
-  s.setValue ("additional_hl", settings->value ("additional_hl", "0").toBool());
-
-  s.setValue ("pos", pos());
-  s.setValue ("size", size());
-
-  if (mainSplitter /*&& ! settings->value ("ui_mode", 0).toBool()*/)
-     s.setValue ("splitterSizes", mainSplitter->saveState());
-
-  s.setValue ("editor_font_name", settings->value ("editor_font_name", "Monospace").toString());
-  s.setValue ("editor_font_size", settings->value ("editor_font_size", "16").toInt());
-
-  s.setValue ("logmemo_font", settings->value ("logmemo_font", "Monospace").toString());
-  s.setValue ("logmemo_font_size", settings->value ("logmemo_font_size", "12").toInt());
-
-  s.setValue ("app_font_name", settings->value ("app_font_name", "Sans").toString());
-  s.setValue ("app_font_size", settings->value ("app_font_size", "12").toInt());
-
-  s.sync();
-
-  update_profiles();
-  shortcuts->load_from_file (shortcuts->fname);
-}
 
 
 void CTEA::update_profiles()
@@ -5251,13 +3389,6 @@ void CDarkerWindow::slot_valueChanged (int value)
 }
 
 
-void CTEA::view_darker()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDarkerWindow *wd = new CDarkerWindow;
-  wd->show();
-}
 
 
 
@@ -5380,23 +3511,6 @@ QString CTEA::get_theme_icon_fname (const QString &name)
 }
 
 
-void CTEA::view_use_theme()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  QString css_fname = a->data().toString() + "/" + "stylesheet.css";
-
-  if (! file_exists (css_fname))
-     {
-      log->log (tr ("There is no stylesheet file"));
-      return;
-    }
-
-  update_stylesheet (css_fname);
-  fname_stylesheet = css_fname;
-  settings->setValue ("fname_stylesheet", fname_stylesheet);
-}
 
 
 bool has_css_file (const QString &path)
@@ -9474,15 +7588,7 @@ void CTEA::fn_quotes_tex_angle_02()
 
 
 
-
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-
-void CTEA::create_spellcheck_menu()
-{
-  menu_spell_langs->clear();
-  create_menu_from_list (this, menu_spell_langs, spellchecker->get_speller_modules_list(), SLOT(fn_change_spell_lang()));
-}
-
 
 void CTEA::fn_change_spell_lang()
 {
@@ -10678,3 +8784,1894 @@ void CTEA::fman_deselect_by_regexp()
 View menu callbacks
 ===================
 */
+
+
+void CTEA::view_use_theme()
+{
+  last_action = sender();
+  QAction *a = qobject_cast<QAction *>(sender());
+
+  QString css_fname = a->data().toString() + "/" + "stylesheet.css";
+
+  if (! file_exists (css_fname))
+     {
+      log->log (tr ("There is no stylesheet file"));
+      return;
+    }
+
+  update_stylesheet (css_fname);
+  fname_stylesheet = css_fname;
+  settings->setValue ("fname_stylesheet", fname_stylesheet);
+}
+
+
+void CTEA::view_use_palette()
+{
+  last_action = sender();
+
+  QAction *a = qobject_cast<QAction *>(sender());
+  QString fname = dir_palettes + "/" + a->text();
+
+  if (! file_exists (fname))
+     fname = ":/palettes/" + a->text();
+
+  fname_def_palette = fname;
+  load_palette (fname);
+
+  update_stylesheet (fname_stylesheet);
+  documents->apply_settings();
+}
+
+
+void CTEA::view_use_profile()
+{
+  last_action = sender();
+  QAction *a = qobject_cast<QAction *>(sender());
+
+  QSettings s (a->data().toString(), QSettings::IniFormat);
+
+  QPoint pos = s.value ("pos", QPoint (1, 200)).toPoint();
+  QSize size = s.value ("size", QSize (600, 420)).toSize();
+
+  if (mainSplitter/* && ! settings->value ("ui_mode", 0).toBool()*/)
+     mainSplitter->restoreState (s.value ("splitterSizes").toByteArray());
+
+  resize (size);
+  move (pos);
+
+  fname_def_palette = s.value ("fname_def_palette", ":/palettes/TEA").toString();
+  load_palette (fname_def_palette);
+
+  settings->setValue ("fname_def_palette", fname_def_palette);
+  settings->setValue ("word_wrap", s.value ("word_wrap", "1").toBool());
+  settings->setValue ("show_linenums", s.value ("show_linenums", "0").toBool());
+  settings->setValue ("additional_hl", s.value ("additional_hl", "0").toBool());
+  settings->setValue ("show_margin", s.value ("show_margin", "0").toBool());
+
+  settings->setValue ("editor_font_name", s.value ("editor_font_name", "Serif").toString());
+  settings->setValue ("editor_font_size", s.value ("editor_font_size", "14").toInt());
+  settings->setValue ("logmemo_font", s.value ("logmemo_font", "Monospace").toString());
+  settings->setValue ("logmemo_font_size", s.value ("logmemo_font_size", "14").toInt());
+  settings->setValue ("app_font_name", s.value ("app_font_name", "Sans").toString());
+  settings->setValue ("app_font_size", s.value ("app_font_size", "12").toInt());
+
+  cb_wordwrap->setChecked (s.value ("word_wrap", "1").toBool());
+
+  cb_show_linenums->setChecked (s.value ("show_linenums", "0").toBool());
+  cb_hl_current_line->setChecked (s.value ("additional_hl", "0").toBool());
+  cb_show_margin->setChecked (s.value ("show_margin", "0").toBool());
+
+  update_stylesheet (fname_stylesheet);
+  documents->apply_settings();
+}
+
+
+void CTEA::view_profile_save_as()
+{
+  last_action = sender();
+
+  bool ok;
+  QString name = QInputDialog::getText (this, tr ("Enter the name"),
+                                              tr ("Name:"), QLineEdit::Normal,
+                                              tr ("new_profile"), &ok);
+  if (! ok || name.isEmpty())
+     return;
+
+  QString fname (dir_profiles);
+  fname.append ("/").append (name);
+
+  QSettings s (fname, QSettings::IniFormat);
+
+  s.setValue ("fname_def_palette", fname_def_palette);
+
+  s.setValue ("word_wrap", settings->value ("word_wrap", "1").toBool());
+  s.setValue ("show_linenums", settings->value ("show_linenums", "0").toBool());
+  s.setValue ("additional_hl", settings->value ("additional_hl", "0").toBool());
+
+  s.setValue ("pos", pos());
+  s.setValue ("size", size());
+
+  if (mainSplitter /*&& ! settings->value ("ui_mode", 0).toBool()*/)
+     s.setValue ("splitterSizes", mainSplitter->saveState());
+
+  s.setValue ("editor_font_name", settings->value ("editor_font_name", "Monospace").toString());
+  s.setValue ("editor_font_size", settings->value ("editor_font_size", "16").toInt());
+
+  s.setValue ("logmemo_font", settings->value ("logmemo_font", "Monospace").toString());
+  s.setValue ("logmemo_font_size", settings->value ("logmemo_font_size", "12").toInt());
+
+  s.setValue ("app_font_name", settings->value ("app_font_name", "Sans").toString());
+  s.setValue ("app_font_size", settings->value ("app_font_size", "12").toInt());
+
+  s.sync();
+
+  update_profiles();
+  shortcuts->load_from_file (shortcuts->fname);
+}
+
+
+void CTEA::view_toggle_wrap()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+     d->set_word_wrap (! d->get_word_wrap());
+}
+
+
+void CTEA::view_hide_error_marks()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QTextCursor cr = d->textCursor();
+
+//delete all underlines
+  cr.setPosition (0);
+  cr.movePosition (QTextCursor::End, QTextCursor::KeepAnchor);
+  QTextCharFormat f = cr.blockCharFormat();
+  f.setFontUnderline (false);
+  cr.mergeCharFormat (f);
+  d->document()->setModified (false);
+}
+
+
+void CTEA::view_toggle_fs()
+{
+  last_action = sender();
+  setWindowState(windowState() ^ Qt::WindowFullScreen);
+}
+
+
+void CTEA::view_stay_on_top()
+{
+  last_action = sender();
+
+  Qt::WindowFlags flags = windowFlags();
+  flags ^= Qt::WindowStaysOnTopHint;
+  setWindowFlags (flags );
+  show();
+  activateWindow();
+}
+
+
+void CTEA::view_darker()
+{
+  last_action = sender();
+  CDarkerWindow *wd = new CDarkerWindow;
+  wd->show();
+}
+
+
+/*
+===================
+? menu callbacks
+===================
+*/
+
+
+void CTEA::help_show_about()
+{
+  CAboutWindow *a = new CAboutWindow();
+  a->move (x() + 20, y() + 20);
+  a->show();
+}
+
+
+void CTEA::help_show_news()
+{
+  QString fname = ":/NEWS";
+  if (QLocale::system().name().left(2) == "ru")
+     fname = ":/NEWS-RU";
+
+  CDocument *d = documents->open_file (fname, "UTF-8");
+  if (d)
+     d->setReadOnly (true);
+}
+
+
+void CTEA::help_show_todo()
+{
+  CDocument *d = documents->open_file (":/TODO", "UTF-8");
+  if (d)
+     d->setReadOnly (true);
+}
+
+
+void CTEA::help_show_changelog()
+{
+  CDocument *d = documents->open_file (":/ChangeLog", "UTF-8");
+  if (d)
+     d->setReadOnly (true);
+}
+
+
+void CTEA::help_show_gpl()
+{
+  CDocument *d = documents->open_file (":/COPYING", "UTF-8");
+  if (d)
+     d->setReadOnly (true);
+}
+
+
+
+/*
+====================================
+Application stuff inits and updates
+====================================
+*/
+
+
+void CTEA::handle_args()
+{
+  QStringList l = qApp->arguments();
+  int size = l.size();
+  if (size < 2)
+     return;
+
+  QString charset = settings->value ("cmdline_default_charset", "UTF-8").toString();//"UTF-8";
+
+  for (int i = 1; i < size; i++)
+      {
+       QString t = l.at(i);
+       if (t.startsWith("--charset"))
+          {
+           QStringList pair = t.split ("=");
+           if (pair.size() > 1)
+              charset = pair[1];
+          }
+       else
+           {
+            QFileInfo f (l.at(i));
+
+            if (! f.isAbsolute())
+               {
+                QString fullname (QDir::currentPath());
+                fullname.append ("/").append (l.at(i));
+                documents->open_file (fullname, charset);
+               }
+            else
+                documents->open_file (l.at(i), charset);
+          }
+      }
+}
+
+
+void CTEA::create_paths()
+{
+  portable_mode = false;
+
+  QStringList l = qApp->arguments();
+  if (l.contains ("--p"))
+     portable_mode = true;
+
+  QDir dr;
+  if (! portable_mode)
+     dir_config = dr.homePath();
+  else
+      dir_config = QCoreApplication::applicationDirPath();
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+  dir_config.append ("/tea");
+#else
+  dir_config.append ("/.config/tea");
+#endif
+
+  hs_path["dir_config"] = dir_config;
+
+  dr.setPath (dir_config);
+  if (! dr.exists())
+     dr.mkpath (dir_config);
+
+
+  fname_crapbook = dir_config + "/crapbook.txt";
+  hs_path["fname_crapbook"] = fname_crapbook;
+
+  fname_fif = dir_config + "/fif";
+  hs_path["fname_fif"] = fname_fif;
+
+  fname_bookmarks = dir_config + "/tea_bmx";
+  hs_path["fname_bookmarks"] = fname_bookmarks;
+
+  fname_programs = dir_config + "/programs";
+  hs_path["fname_programs"] = fname_programs;
+
+  fname_places_bookmarks = dir_config + "/places_bookmarks";
+  hs_path["fname_places_bookmarks"] = fname_places_bookmarks;
+
+  fname_tempfile = QDir::tempPath() + "/tea.tmp";
+  hs_path["fname_tempfile"] = fname_tempfile;
+
+  fname_tempparamfile = QDir::tempPath() + "/teaparam.tmp";
+  hs_path["fname_tempparamfile"] = fname_tempparamfile;
+
+  dir_tables = dir_config + "/tables";
+
+  dr.setPath (dir_tables);
+  if (! dr.exists())
+     dr.mkpath (dir_tables);
+
+  dir_user_dict = dir_config + "/dictionaries";
+
+  dr.setPath (dir_user_dict);
+  if (! dr.exists())
+     dr.mkpath (dir_user_dict);
+
+  dir_plugins = dir_config + "/plugins";
+
+  dr.setPath (dir_plugins);
+  if (! dr.exists())
+     dr.mkpath (dir_plugins);
+
+  dir_profiles = dir_config + "/profiles";
+
+  dr.setPath (dir_profiles);
+  if (! dr.exists())
+     dr.mkpath (dir_profiles);
+
+  dir_templates = dir_config + "/templates";
+
+  dr.setPath (dir_templates);
+  if (! dr.exists())
+     dr.mkpath (dir_templates);
+
+  dir_snippets = dir_config + "/snippets";
+
+  dr.setPath (dir_snippets);
+  if (! dr.exists())
+     dr.mkpath (dir_snippets);
+
+  dir_scripts = dir_config + "/scripts";
+
+  dr.setPath (dir_scripts);
+  if (! dr.exists())
+     dr.mkpath (dir_scripts);
+
+  dir_days = dir_config + "/days";
+
+  dr.setPath (dir_days);
+  if (! dr.exists())
+     dr.mkpath (dir_days);
+
+  dir_sessions = dir_config + "/sessions";
+
+  dr.setPath (dir_sessions);
+  if (! dr.exists())
+     dr.mkpath (dir_sessions);
+
+  dir_themes = dir_config + "/themes";
+
+  dr.setPath (dir_themes);
+  if (! dr.exists())
+     dr.mkpath (dir_themes);
+
+  dir_hls = dir_config + "/hls";
+
+  dr.setPath (dir_hls);
+  if (! dr.exists())
+     dr.mkpath (dir_hls);
+
+  dir_palettes = dir_config + "/palettes";
+
+  dr.setPath (dir_palettes);
+  if (! dr.exists())
+     dr.mkpath (dir_palettes);
+}
+
+
+
+void CTEA::update_styles()
+{
+#if QT_VERSION >= 0x050000
+  QString default_style = qApp->style()->objectName();
+
+  if (default_style == "GTK+") //can be buggy
+     default_style = "Fusion";
+
+#else
+
+  QString default_style = qApp->style()->objectName();
+
+  if (default_style == "GTK+") //can be buggy
+     default_style = "Cleanlooks";
+
+#endif
+
+  fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
+
+  MyProxyStyle *ps = new MyProxyStyle (QStyleFactory::create (settings->value ("ui_style", default_style).toString()));
+
+  QApplication::setStyle (ps);
+}
+
+
+
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+
+void CTEA::setup_spellcheckers()
+{
+
+#ifdef HUNSPELL_ENABLE
+  spellcheckers.append ("Hunspell");
+#endif
+
+#ifdef ASPELL_ENABLE
+  spellcheckers.append ("Aspell");
+#endif
+
+  cur_spellchecker = settings->value ("cur_spellchecker", "Hunspell").toString();
+
+  if (spellcheckers.size() > 0)
+     if (! spellcheckers.contains (cur_spellchecker))
+         cur_spellchecker = spellcheckers[0];
+
+#ifdef ASPELL_ENABLE
+  if (cur_spellchecker == "Aspell")
+     {
+      QString lang = settings->value ("spell_lang", QLocale::system().name().left(2)).toString();
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+      QString win32_aspell_path = settings->value ("win32_aspell_path", aspell_default_dict_path()).toString();
+      spellchecker = new CAspellchecker (lang, win32_aspell_path);
+#else
+      spellchecker = new CAspellchecker (lang);
+#endif
+     }
+
+
+#endif
+
+
+#ifdef HUNSPELL_ENABLE
+   if (cur_spellchecker == "Hunspell")
+      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
+
+#endif
+
+ create_spellcheck_menu();
+}
+
+
+void CTEA::create_spellcheck_menu()
+{
+  menu_spell_langs->clear();
+  spellchecker->get_speller_modules_list();
+  if (spellchecker->modules_list.size() > 0)
+     create_menu_from_list (this, menu_spell_langs, spellchecker->modules_list, SLOT(fn_change_spell_lang()));
+}
+
+#endif
+
+
+void CTEA::create_main_widget_splitter()
+{
+  QWidget *main_widget = new QWidget;
+  QVBoxLayout *v_box = new QVBoxLayout;
+  main_widget->setLayout (v_box);
+
+  main_tab_widget = new QTabWidget;
+  main_tab_widget->setObjectName ("main_tab_widget");
+  main_tab_widget->setTabShape (QTabWidget::Triangular);
+
+  tab_editor = new QTabWidget;
+  tab_editor->setUsesScrollButtons (true);
+
+//#if QT_VERSION >= 0x040500
+#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
+  tab_editor->setMovable (true);
+#endif
+
+  tab_editor->setObjectName ("tab_editor");
+
+  QPushButton *bt_close = new QPushButton ("X", this);
+  connect (bt_close, SIGNAL(clicked()), this, SLOT(file_close()));
+  tab_editor->setCornerWidget (bt_close);
+
+
+  log = new CLogMemo;
+
+  connect (log, SIGNAL(double_click (QString)),
+           this, SLOT(logmemo_double_click (QString)));
+
+
+  mainSplitter = new QSplitter (Qt::Vertical);
+  v_box->addWidget (mainSplitter);
+
+  main_tab_widget->setMinimumHeight (10);
+  log->setMinimumHeight (10);
+
+
+  mainSplitter->addWidget (main_tab_widget);
+  mainSplitter->addWidget (log);
+
+// FIF creation code
+
+  if (! settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      cmb_fif = new QComboBox;
+      cmb_fif->setInsertPolicy (QComboBox::InsertAtTop);
+      cmb_fif->setObjectName ("FIF");
+
+      cmb_fif->setEditable (true);
+      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+      fif = cmb_fif->lineEdit();
+      fif->setStatusTip (tr ("The famous input field. Use for search/replace, function parameters"));
+
+      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
+
+      QHBoxLayout *lt_fte = new QHBoxLayout;
+
+      v_box->addLayout (lt_fte, 0);
+
+      int tleft = 1;
+      int tright = 1;
+      int ttop = 1;
+      int tbottom = 1;
+
+      v_box->getContentsMargins(&tleft, &ttop, &tright, &tbottom);
+      v_box->setContentsMargins(tleft, 1, tright, 1);
+
+      QToolBar *tb_fif = new QToolBar;
+
+      QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
+      act_fif_find->setToolTip (tr ("Find"));
+      connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
+
+      QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
+      act_fif_find_next->setToolTip (tr ("Find next"));
+      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
+
+      QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
+      act_fif_find_prev->setToolTip (tr ("Find previous"));
+      connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
+
+      QLabel *l_fif = new QLabel (tr ("FIF"));
+
+      lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
+      lt_fte->addWidget (cmb_fif, 0);
+
+      lt_fte->addWidget (tb_fif, 0);
+     }
+
+  mainSplitter->setStretchFactor (1, 1);
+
+  idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
+  setCentralWidget (main_widget);
+
+  connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
+}
+
+
+void CTEA::create_main_widget_docked()
+{
+  setDockOptions (QMainWindow::AnimatedDocks | QMainWindow::AllowNestedDocks);
+
+  QWidget *main_widget = new QWidget;
+  QVBoxLayout *v_box = new QVBoxLayout;
+  main_widget->setLayout (v_box);
+  setCentralWidget (main_widget);
+
+  main_tab_widget = new QTabWidget;
+  main_tab_widget->setObjectName ("main_tab_widget");
+  v_box->addWidget (main_tab_widget);
+
+  main_tab_widget->setTabShape (QTabWidget::Triangular);
+
+  tab_editor = new QTabWidget;
+  tab_editor->setUsesScrollButtons (true);
+
+//#if QT_VERSION >= 0x040500
+#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
+  tab_editor->setMovable (true);
+#endif
+
+  tab_editor->setObjectName ("tab_editor");
+
+  QPushButton *bt_close = new QPushButton ("X", this);
+  connect (bt_close, SIGNAL(clicked()), this, SLOT(file_close()));
+  tab_editor->setCornerWidget (bt_close);
+
+  QDockWidget *dock_logmemo = new QDockWidget (tr ("logmemo"), this);
+  dock_logmemo->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+  dock_logmemo->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+
+  log = new CLogMemo (dock_logmemo);
+
+  connect (log, SIGNAL(double_click (QString)),
+           this, SLOT(logmemo_double_click (QString)));
+
+  dock_logmemo->setWidget (log);
+  dock_logmemo->setObjectName ("dock_log");
+  addDockWidget (Qt::BottomDockWidgetArea, dock_logmemo);
+
+
+// FIF creation code
+
+  if (! settings->value ("fif_at_toolbar", 0).toBool())
+     {
+      QDockWidget *dock_fif = new QDockWidget (tr ("famous input field"), this);
+      dock_fif->setAllowedAreas (Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+      dock_fif->setObjectName ("dock_fif");
+      dock_fif->setFeatures (QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+
+      QWidget *w_fif = new QWidget (dock_fif);
+      w_fif->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Maximum);
+
+      cmb_fif = new QComboBox;
+      cmb_fif->setObjectName ("FIF");
+      cmb_fif->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+      cmb_fif->setEditable (true);
+      fif = cmb_fif->lineEdit();
+      fif->setStatusTip (tr ("The famous input field. Use for search/replace, function parameters"));
+
+      connect (fif, SIGNAL(returnPressed()), this, SLOT(search_find()));
+
+      QHBoxLayout *lt_fte = new QHBoxLayout;
+      w_fif->setLayout (lt_fte);
+
+      QToolBar *tb_fif = new QToolBar;
+
+      QAction *act_fif_find = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowForward), "");
+      act_fif_find->setToolTip (tr ("Find"));
+      connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
+
+      QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
+      act_fif_find_next->setToolTip (tr ("Find next"));
+      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
+
+      QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
+      act_fif_find_prev->setToolTip (tr ("Find previous"));
+      connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
+
+      QLabel *l_fif = new QLabel (tr ("FIF"));
+
+      lt_fte->addWidget (l_fif, 0, Qt::AlignRight);
+      lt_fte->addWidget (cmb_fif, 0);
+      lt_fte->addWidget (tb_fif, 0);
+
+      dock_fif->setWidget (w_fif);
+      addDockWidget (Qt::BottomDockWidgetArea, dock_fif);
+     }
+
+
+  idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
+
+  connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
+}
+
+
+void CTEA::createActions()
+{
+  icon_size = settings->value ("icon_size", "32").toInt();
+
+  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+
+  filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
+
+  act_labels = new QAction (get_theme_icon ("labels.png"), tr ("Labels"), this);
+  connect (act_labels, SIGNAL(triggered()), this, SLOT(nav_labels_update_list()));
+
+  newAct = new QAction (get_theme_icon ("file-new.png"), tr ("New"), this);
+
+  newAct->setShortcut (QKeySequence ("Ctrl+N"));
+  newAct->setStatusTip (tr ("Create a new file"));
+  connect (newAct, SIGNAL(triggered()), this, SLOT(file_new()));
+
+  QIcon ic_file_open = get_theme_icon ("file-open.png");
+  ic_file_open.addFile (get_theme_icon_fname ("file-open-active.png"), QSize(), QIcon::Active);
+
+  openAct = new QAction (ic_file_open, tr ("Open file"), this);
+
+  openAct->setStatusTip (tr ("Open an existing file"));
+  connect (openAct, SIGNAL(triggered()), this, SLOT(file_open()));
+
+  QIcon ic_file_save = get_theme_icon ("file-save.png");
+  ic_file_save.addFile (get_theme_icon_fname ("file-save-active.png"), QSize(), QIcon::Active);
+
+  saveAct = new QAction (ic_file_save, tr ("Save"), this);
+  saveAct->setShortcut (QKeySequence ("Ctrl+S"));
+  saveAct->setStatusTip (tr ("Save the document to disk"));
+  connect (saveAct, SIGNAL(triggered()), this, SLOT(file_save()));
+
+  saveAsAct = new QAction (get_theme_icon ("file-save-as.png"), tr ("Save As"), this);
+  saveAsAct->setStatusTip (tr ("Save the document under a new name"));
+  connect (saveAsAct, SIGNAL(triggered()), this, SLOT(file_save_as()));
+
+  exitAct = new QAction (tr ("Exit"), this);
+  exitAct->setShortcut (QKeySequence ("Ctrl+Q"));
+  exitAct->setStatusTip (tr ("Exit the application"));
+  connect (exitAct, SIGNAL(triggered()), this, SLOT(close()));
+
+  QIcon ic_edit_cut = get_theme_icon ("edit-cut.png");
+  ic_edit_cut.addFile (get_theme_icon_fname ("edit-cut-active.png"), QSize(), QIcon::Active);
+
+  cutAct = new QAction (ic_edit_cut, tr ("Cut"), this);
+  cutAct->setShortcut (QKeySequence ("Ctrl+X"));
+  cutAct->setStatusTip (tr ("Cut the current selection's contents to the clipboard"));
+  connect (cutAct, SIGNAL(triggered()), this, SLOT(ed_cut()));
+
+  QIcon ic_edit_copy = get_theme_icon ("edit-copy.png");
+  ic_edit_copy.addFile (get_theme_icon_fname ("edit-copy-active.png"), QSize(), QIcon::Active);
+
+
+  copyAct = new QAction (ic_edit_copy, tr("Copy"), this);
+  copyAct->setShortcut (QKeySequence ("Ctrl+C"));
+  copyAct->setStatusTip (tr ("Copy the current selection's contents to the clipboard"));
+  connect (copyAct, SIGNAL(triggered()), this, SLOT(ed_copy()));
+
+  QIcon ic_edit_paste = get_theme_icon ("edit-paste.png");
+  ic_edit_paste.addFile (get_theme_icon_fname ("edit-paste-active.png"), QSize(), QIcon::Active);
+
+
+  pasteAct = new QAction (ic_edit_paste, tr("Paste"), this);
+  pasteAct->setShortcut (QKeySequence ("Ctrl+V"));
+  pasteAct->setStatusTip (tr ("Paste the clipboard's contents into the current selection"));
+  connect (pasteAct, SIGNAL(triggered()), this, SLOT(ed_paste()));
+
+  undoAct = new QAction (tr ("Undo"), this);
+  undoAct->setShortcut (QKeySequence ("Ctrl+Z"));
+  connect (undoAct, SIGNAL(triggered()), this, SLOT(ed_undo()));
+
+  redoAct = new QAction (tr ("Redo"), this);
+  connect (redoAct, SIGNAL(triggered()), this, SLOT(ed_redo()));
+
+  aboutAct = new QAction (tr ("About"), this);
+  connect (aboutAct, SIGNAL(triggered()), this, SLOT(help_show_about()));
+
+  aboutQtAct = new QAction (tr ("About Qt"), this);
+  connect (aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+}
+
+
+void CTEA::createMenus()
+{
+  menu_file = menuBar()->addMenu (tr ("File"));
+  menu_file->setTearOffEnabled (true);
+
+ // menu_file->addAction (act_test);
+
+  menu_file->addAction (newAct);
+  add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
+  add_to_menu (menu_file, tr ("Last closed file"), SLOT(file_last_opened()));
+  add_to_menu (menu_file, tr ("Open at cursor"), SLOT(file_open_at_cursor()), "F2");
+  add_to_menu (menu_file, tr ("Crapbook"), SLOT(file_crapbook()));
+  add_to_menu (menu_file, tr ("Notes"), SLOT(file_notes()));
+
+  menu_file->addSeparator();
+
+  menu_file->addAction (saveAct);
+  menu_file->addAction (saveAsAct);
+
+  QMenu *tm = menu_file->addMenu (tr ("Save as different"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Save .bak"), SLOT(file_save_bak()), "Ctrl+B");
+  add_to_menu (tm, tr ("Save timestamped version"), SLOT(file_save_version()));
+  add_to_menu (tm, tr ("Save session"), SLOT(file_session_save_as()));
+
+  menu_file->addSeparator();
+
+  menu_file_actions = menu_file->addMenu (tr ("File actions"));
+  add_to_menu (menu_file_actions, tr ("Reload"), SLOT(file_reload()));
+  add_to_menu (menu_file_actions, tr ("Reload with encoding"), SLOT(file_reload_enc()));
+  menu_file_actions->addSeparator();
+  add_to_menu (menu_file_actions, tr ("Set UNIX end of line"), SLOT(file_set_eol_unix()));
+  add_to_menu (menu_file_actions, tr ("Set Windows end of line"), SLOT(file_set_eol_win()));
+  add_to_menu (menu_file_actions, tr ("Set old Mac end of line (CR)"), SLOT(file_set_eol_mac()));
+
+
+  menu_file_recent = menu_file->addMenu (tr ("Recent files"));
+
+  menu_file_bookmarks = menu_file->addMenu (tr ("Bookmarks"));
+
+  menu_file_edit_bookmarks = menu_file->addMenu (tr ("Edit bookmarks"));
+  add_to_menu (menu_file_edit_bookmarks, tr ("Add to bookmarks"), SLOT(file_add_to_bookmarks()));
+  add_to_menu (menu_file_edit_bookmarks, tr ("Find obsolete paths"), SLOT(file_find_obsolete_paths()));
+
+  menu_file_templates = menu_file->addMenu (tr ("Templates"));
+  menu_file_sessions = menu_file->addMenu (tr ("Sessions"));
+
+  menu_file_configs = menu_file->addMenu (tr ("Configs"));
+  add_to_menu (menu_file_configs, tr ("Bookmarks list"), SLOT(file_open_bookmarks_file()));
+  add_to_menu (menu_file_configs, tr ("Programs list"), SLOT(file_open_programs_file()));
+
+  menu_file->addSeparator();
+
+  add_to_menu (menu_file, tr ("Do not add to recent"), SLOT(file_recent_off()))->setCheckable (true);
+
+#ifdef PRINTER_ENABLE
+  add_to_menu (menu_file, tr ("Print"), SLOT(file_print()));
+#endif
+
+  add_to_menu (menu_file, tr ("Close current"), SLOT(file_close()), "Ctrl+W");
+
+  menu_file->addAction (exitAct);
+
+
+  menu_edit = menuBar()->addMenu (tr ("Edit"));
+  menu_edit->setTearOffEnabled (true);
+
+  menu_edit->addAction (cutAct);
+  menu_edit->addAction (copyAct);
+  menu_edit->addAction (pasteAct);
+
+  menu_edit->addSeparator();
+
+  add_to_menu (menu_edit, tr ("Block start"), SLOT(ed_block_start()));
+  add_to_menu (menu_edit, tr ("Block end"), SLOT(ed_block_end()));
+  add_to_menu (menu_edit, tr ("Copy block"), SLOT(ed_block_copy()));
+  add_to_menu (menu_edit, tr ("Paste block"), SLOT(ed_block_paste()));
+  add_to_menu (menu_edit, tr ("Cut block"), SLOT(ed_block_cut()));
+
+  menu_edit->addSeparator();
+
+  add_to_menu (menu_edit, tr ("Copy current file name"), SLOT(ed_copy_current_fname()));
+
+  menu_edit->addSeparator();
+
+  menu_edit->addAction (undoAct);
+  menu_edit->addAction (redoAct);
+
+  menu_edit->addSeparator();
+
+  add_to_menu (menu_edit, tr ("Indent (tab)"), SLOT(ed_indent()));
+  add_to_menu (menu_edit, tr ("Un-indent (shift+tab)"), SLOT(ed_unindent()));
+  add_to_menu (menu_edit, tr ("Indent by first line"), SLOT(ed_indent_by_first_line()));
+
+  menu_edit->addSeparator();
+
+  add_to_menu (menu_edit, tr ("Comment selection"), SLOT(ed_comment()));
+
+  menu_edit->addSeparator();
+
+  add_to_menu (menu_edit, tr ("Set as storage file"), SLOT(ed_set_as_storage_file()));
+  add_to_menu (menu_edit, tr ("Copy to storage file"), SLOT(ed_copy_to_storage_file()));
+  add_to_menu (menu_edit, tr ("Start/stop capture clipboard to storage file"), SLOT(ed_capture_clipboard_to_storage_file()))->setCheckable (true);
+
+
+/*
+===================
+Markup menu callbacks
+===================
+*/
+
+
+  menu_markup = menuBar()->addMenu (tr ("Markup"));
+  menu_markup->setTearOffEnabled (true);
+
+  tm = menu_markup->addMenu (tr ("Mode"));
+  tm->setTearOffEnabled (true);
+
+  create_menu_from_list (this, tm,
+                         QString ("HTML XHTML Docbook LaTeX Markdown Lout DokuWiki MediaWiki").split (" "),
+                         SLOT (mrkup_mode_choosed()));
+
+  tm = menu_markup->addMenu (tr ("Header"));
+  tm->setTearOffEnabled (true);
+
+  create_menu_from_list (this, tm,
+                         QString ("H1 H2 H3 H4 H5 H6").split (" "),
+                         SLOT (mrkup_header()));
+
+  tm = menu_markup->addMenu (tr ("Align"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Center"), SLOT(mrkup_align_center()));
+  add_to_menu (tm, tr ("Left"), SLOT(mrkup_align_left()));
+  add_to_menu (tm, tr ("Right"), SLOT(mrkup_align_right()));
+  add_to_menu (tm, tr ("Justify"), SLOT(mrkup_align_justify()));
+
+  add_to_menu (menu_markup, tr ("Bold"), SLOT(mrkup_bold()), "Alt+B");
+  add_to_menu (menu_markup, tr ("Italic"), SLOT(mrkup_italic()), "Alt+I");
+  add_to_menu (menu_markup, tr ("Underline"), SLOT(mrkup_underline()));
+
+  add_to_menu (menu_markup, tr ("Link"), SLOT(mrkup_link()), "Alt+L");
+  add_to_menu (menu_markup, tr ("Paragraph"), SLOT(mrkup_para()), "Alt+P");
+  add_to_menu (menu_markup, tr ("Color"), SLOT(mrkup_color()));
+
+  add_to_menu (menu_markup, tr ("Break line"), SLOT(mrkup_br()), "Ctrl+Return");
+  add_to_menu (menu_markup, tr ("Non-breaking space"), SLOT(mrkup_nbsp()), "Ctrl+Space");
+  add_to_menu (menu_markup, tr ("Insert image"), SLOT(markup_ins_image()));
+
+  tm = menu_markup->addMenu (tr ("[X]HTML tools"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Text to [X]HTML"), SLOT(mrkup_text_to_html()));
+  add_to_menu (tm, tr ("Convert tags to entities"), SLOT(mrkup_tags_to_entities()));
+  add_to_menu (tm, tr ("Antispam e-mail"), SLOT(mrkup_antispam_email()));
+  add_to_menu (tm, tr ("Document weight"), SLOT(mrkup_document_weight()));
+  add_to_menu (tm, tr ("Preview selected color"), SLOT(mrkup_preview_color()));
+  add_to_menu (tm, tr ("Strip HTML tags"), SLOT(mrkup_strip_html_tags()));
+  add_to_menu (tm, tr ("Rename selected file"), SLOT(mrkup_rename_selected()));
+
+/*
+===================
+Search menu
+===================
+*/
+
+  menu_search = menuBar()->addMenu (tr ("Search"));
+  menu_search->setTearOffEnabled (true);
+
+  add_to_menu (menu_search, tr ("Find"), SLOT(search_find()), "Ctrl+F");
+  add_to_menu (menu_search, tr ("Find next"), SLOT(search_find_next()), "F3");
+  add_to_menu (menu_search, tr ("Find previous"), SLOT(search_find_prev()),"Ctrl+F3");
+
+  menu_search->addSeparator();
+
+  add_to_menu (menu_search, tr ("Find in files"), SLOT(search_in_files()));
+
+  menu_search->addSeparator();
+
+  add_to_menu (menu_search, tr ("Replace with"), SLOT(search_replace_with()));
+  add_to_menu (menu_search, tr ("Replace all"), SLOT(search_replace_all()));
+  add_to_menu (menu_search, tr ("Replace all in opened files"), SLOT(search_replace_all_at_ofiles()));
+
+  menu_search->addSeparator();
+
+  add_to_menu (menu_search, tr ("Mark all found"), SLOT(search_mark_all()));
+  add_to_menu (menu_search, tr ("Unmark"), SLOT(search_unmark()));
+
+  menu_search->addSeparator();
+
+  menu_find_case = menu_search->addAction (tr ("Case sensitive"));
+  menu_find_case->setCheckable (true);
+
+  menu_find_whole_words = menu_search->addAction (tr ("Whole words"));
+  menu_find_whole_words->setCheckable (true);
+  connect (menu_find_whole_words, SIGNAL(triggered()), this, SLOT(search_whole_words_mode()));
+
+  menu_find_from_cursor = menu_search->addAction (tr ("From cursor"));
+  menu_find_from_cursor->setCheckable (true);
+  connect (menu_find_from_cursor, SIGNAL(triggered()), this, SLOT(search_from_cursor_mode()));
+
+  menu_find_regexp = menu_search->addAction (tr ("Regexp mode"));
+  menu_find_regexp->setCheckable (true);
+  connect (menu_find_regexp, SIGNAL(triggered()), this, SLOT(search_regexp_mode()));
+
+  menu_find_fuzzy = menu_search->addAction (tr ("Fuzzy mode"));
+  menu_find_fuzzy->setCheckable (true);
+  connect (menu_find_fuzzy, SIGNAL(triggered()), this, SLOT(search_fuzzy_mode()));
+
+
+/*
+===================
+Fn menu
+===================
+*/
+
+
+  menu_functions = menuBar()->addMenu (tr ("Functions"));
+  menu_functions->setTearOffEnabled (true);
+
+  add_to_menu (menu_functions, tr ("Repeat last"), SLOT(fn_repeat()));
+
+  menu_instr = menu_functions->addMenu (tr ("Tools"));
+  menu_instr->setTearOffEnabled (true);
+  add_to_menu (menu_instr, tr ("Scale image"), SLOT(fn_scale_image()));
+
+
+#ifdef USE_QML_STUFF
+  menu_fn_plugins = menu_functions->addMenu (tr ("Plugins"));
+#endif
+
+  menu_fn_snippets = menu_functions->addMenu (tr ("Snippets"));
+  menu_fn_scripts = menu_functions->addMenu (tr ("Scripts"));
+  menu_fn_tables = menu_functions->addMenu (tr ("Tables"));
+
+  tm = menu_functions->addMenu (tr ("Place"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, "Lorem ipsum", SLOT(fn_insert_loremipsum()));
+  add_to_menu (tm, tr ("TEA project template"), SLOT(fn_insert_template_tea()));
+  add_to_menu (tm, tr ("HTML template"), SLOT(fn_insert_template_html()));
+  add_to_menu (tm, tr ("HTML5 template"), SLOT(fn_insert_template_html5()));
+  add_to_menu (tm, tr ("C++ template"), SLOT(fn_insert_cpp()));
+  add_to_menu (tm, tr ("C template"), SLOT(fn_insert_c()));
+  add_to_menu (tm, tr ("Date"), SLOT(fn_insert_date()));
+  add_to_menu (tm, tr ("Time"), SLOT(fn_insert_time()));
+
+
+  tm = menu_functions->addMenu (tr ("Case"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("UPCASE"), SLOT(fn_case_up()),"Ctrl+Up");
+  add_to_menu (tm, tr ("lower case"), SLOT(fn_case_down()),"Ctrl+Down");
+
+
+  tm = menu_functions->addMenu (tr ("Sort"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Sort case sensitively"), SLOT(fn_sort_casecare()));
+  add_to_menu (tm, tr ("Sort case insensitively"), SLOT(fn_sort_casecareless()));
+  add_to_menu (tm, tr ("Sort case sensitively, with separator"), SLOT(fn_sort_casecare_sep()));
+  add_to_menu (tm, tr ("Sort by length"), SLOT(fn_sort_length()));
+
+  add_to_menu (tm, tr ("Flip a list"), SLOT(fn_flip_a_list()));
+  add_to_menu (tm, tr ("Flip a list with separator"), SLOT(fn_flip_a_list_sep()));
+
+
+  tm = menu_functions->addMenu (tr ("Cells"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Sort table by column ABC"), SLOT(fn_cells_latex_table_sort_by_col_abc()));
+  add_to_menu (tm, tr ("Swap cells"), SLOT(fn_cells_swap_cells()));
+  add_to_menu (tm, tr ("Delete by column"), SLOT(fn_cells_delete_by_col()));
+  add_to_menu (tm, tr ("Copy by column[s]"), SLOT(fn_cells_copy_by_col()));
+
+
+  tm = menu_functions->addMenu (tr ("Filter"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Remove duplicates"), SLOT(fn_filter_rm_duplicates()));
+  add_to_menu (tm, tr ("Remove empty lines"), SLOT(fn_filter_rm_empty()));
+  add_to_menu (tm, tr ("Remove lines < N size"), SLOT(fn_filter_rm_less_than()));
+  add_to_menu (tm, tr ("Remove lines > N size"), SLOT(fn_filter_rm_greater_than()));
+  add_to_menu (tm, tr ("Remove before delimiter at each line"), SLOT(fn_filter_delete_before_sep()));
+  add_to_menu (tm, tr ("Remove after delimiter at each line"), SLOT(fn_filter_delete_after_sep()));
+  add_to_menu (tm, tr ("Filter with regexp"), SLOT(fn_filter_with_regexp()));
+  add_to_menu (tm, tr ("Filter by repetitions"), SLOT(fn_filter_by_repetitions()));
+
+
+
+  tm = menu_functions->addMenu (tr ("Math"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Evaluate"), SLOT(fn_math_evaluate()), "F4");
+  add_to_menu (tm, tr ("Arabic to Roman"), SLOT(fn_math_number_arabic_to_roman()));
+  add_to_menu (tm, tr ("Roman to Arabic"), SLOT(fn_math_number_roman_to_arabic()));
+  add_to_menu (tm, tr ("Decimal to binary"), SLOT(fn_math_number_dec_to_bin()));
+  add_to_menu (tm, tr ("Binary to decimal"), SLOT(fn_math_number_bin_to_dec()));
+  add_to_menu (tm, tr ("Flip bits (bitwise complement)"), SLOT(fn_math_number_flip_bits()));
+  add_to_menu (tm, tr ("Enumerate"), SLOT(fn_math_enum()));
+  add_to_menu (tm, tr ("Sum by last column"), SLOT(fn_math_sum_by_last_col()));
+  add_to_menu (tm, tr ("deg min sec > dec degrees"), SLOT(fn_math_number_dms2dc()));
+  add_to_menu (tm, tr ("dec degrees > deg min sec"), SLOT(fn_math_number_dd2dms()));
+
+
+  tm = menu_functions->addMenu (tr ("Morse code"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("From Russian to Morse"), SLOT(fn_morse_from_ru()));
+  add_to_menu (tm, tr ("From Morse To Russian"), SLOT(fn_morse_to_ru()));
+  add_to_menu (tm, tr ("From English to Morse"), SLOT(fn_morse_from_en()));
+  add_to_menu (tm, tr ("From Morse To English"), SLOT(fn_morse_to_en()));
+
+
+  tm = menu_functions->addMenu (tr ("Analyze"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Text statistics"), SLOT(fn_analyze_text_stat()));
+  add_to_menu (tm, tr ("Extract words"), SLOT(fn_analyze_extract_words()));
+  add_to_menu (tm, tr ("Words lengths"), SLOT(fn_analyze_stat_words_lengths()));
+  add_to_menu (tm, tr ("Count the substring"), SLOT(fn_analyze_count()));
+  add_to_menu (tm, tr ("Count the substring (regexp)"), SLOT(fn_analyze_count_rx()));
+  add_to_menu (tm, tr ("UNITAZ quantity sorting"), SLOT(fn_analyze_get_words_count()));
+  add_to_menu (tm, tr ("UNITAZ sorting by alphabet"), SLOT(fn_analyze_unitaz_abc()));
+  add_to_menu (tm, tr ("UNITAZ sorting by length"), SLOT(fn_analyze_unitaz_len()));
+
+
+  tm = menu_functions->addMenu (tr ("Text"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Apply to each line"), SLOT(fn_text_apply_to_each_line()),"Alt+E");
+  add_to_menu (tm, tr ("Remove formatting"), SLOT(fn_text_remove_formatting()));
+  add_to_menu (tm, tr ("Remove formatting at each line"), SLOT(fn_text_remove_formatting_at_each_line()));
+  add_to_menu (tm, tr ("Remove trailing spaces"), SLOT(fn_text_remove_trailing_spaces()));
+  add_to_menu (tm, tr ("Compress"), SLOT(fn_text_compress()));
+  add_to_menu (tm, tr ("Anagram"), SLOT(fn_text_anagram()));
+  add_to_menu (tm, tr ("Escape regexp"), SLOT(fn_text_escape()));
+  add_to_menu (tm, tr ("Reverse"), SLOT(fn_text_reverse()));
+  add_to_menu (tm, tr ("Compare two strings"), SLOT(fn_text_compare_two_strings()));
+  add_to_menu (tm, tr ("Check regexp match"), SLOT(fn_text_regexp_match_check()));
+
+
+  tm = menu_functions->addMenu (tr ("Quotes"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Straight to double angle quotes"), SLOT(fn_quotes_to_angle()));
+  add_to_menu (tm, tr ("Straight to curly double quotes"), SLOT(fn_quotes_curly()));
+  add_to_menu (tm, tr ("LaTeX: Straight to curly double quotes"), SLOT(fn_quotes_tex_curly()));
+  add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes"), SLOT(fn_quotes_tex_angle_01()));
+  add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes v2"), SLOT(fn_quotes_tex_angle_02()));
+
+
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+  menu_functions->addSeparator();
+
+  menu_spell_langs = menu_functions->addMenu (tr ("Spell-checker languages"));
+  menu_spell_langs->setTearOffEnabled (true);
+
+  add_to_menu (menu_functions, tr ("Spell check"), SLOT(fn_spell_check()), "", get_theme_icon_fname ("fn-spell-check.png"));
+  add_to_menu (menu_functions, tr ("Suggest"), SLOT(fn_spell_suggest()));
+  add_to_menu (menu_functions, tr ("Add to dictionary"), SLOT(fn_spell_add_to_dict()));
+  add_to_menu (menu_functions, tr ("Remove from dictionary"), SLOT(fn_spell_remove_from_dict()));
+
+  menu_functions->addSeparator();
+
+#endif
+
+
+/*
+====================
+Cal menu
+===================
+*/
+
+  menu_cal = menuBar()->addMenu (tr ("Calendar"));
+  menu_cal->setTearOffEnabled (true);
+
+  add_to_menu (menu_cal, tr ("Moon mode on/off"), SLOT(cal_moon_mode()));
+  add_to_menu (menu_cal, tr ("Mark first date"), SLOT(cal_set_date_a()));
+  add_to_menu (menu_cal, tr ("Mark last date"), SLOT(cal_set_date_b()));
+
+  menu_cal_add = menu_cal->addMenu (tr ("Add or subtract"));
+  menu_cal_add->setTearOffEnabled (true);
+
+  add_to_menu (menu_cal_add, tr ("Days"), SLOT(cal_add_days()));
+  add_to_menu (menu_cal_add, tr ("Months"), SLOT(cal_add_months()));
+  add_to_menu (menu_cal_add, tr ("Years"), SLOT(cal_add_years()));
+
+  menu_cal->addSeparator();
+
+  add_to_menu (menu_cal, tr ("Go to current date"), SLOT(cal_set_to_current()));
+  add_to_menu (menu_cal, tr ("Calculate moon days between dates"), SLOT(cal_gen_mooncal()));
+  add_to_menu (menu_cal, tr ("Number of days between two dates"), SLOT(cal_diff_days()));
+  add_to_menu (menu_cal, tr ("Remove day record"), SLOT(cal_remove()));
+
+/*
+====================
+Run menu
+===================
+*/
+
+  menu_programs = menuBar()->addMenu (tr ("Run"));
+
+/*
+====================
+IDE menu
+===================
+*/
+
+
+  menu_ide = menuBar()->addMenu (tr ("IDE"));;
+  menu_ide->setTearOffEnabled (true);
+
+  add_to_menu (menu_ide, tr ("Run program"), SLOT(ide_run()));
+  add_to_menu (menu_ide, tr ("Build program"), SLOT(ide_build()));
+  add_to_menu (menu_ide, tr ("Clean program"), SLOT(ide_clean()));
+
+  menu_ide->addSeparator();
+
+  add_to_menu (menu_ide, tr ("Toggle header/source"), SLOT(ide_toggle_hs()));
+
+/*
+===================
+Nav menu
+===================
+*/
+
+
+  menu_nav = menuBar()->addMenu (tr ("Nav"));
+  menu_nav->setTearOffEnabled (true);
+
+  add_to_menu (menu_nav, tr ("Save position"), SLOT(nav_save_pos()));
+  add_to_menu (menu_nav, tr ("Go to saved position"), SLOT(nav_goto_pos()));
+  add_to_menu (menu_nav, tr ("Go to line"), SLOT(nav_goto_line()),"Alt+G");
+  add_to_menu (menu_nav, tr ("Next tab"), SLOT(nav_goto_right_tab()));
+  add_to_menu (menu_nav, tr ("Prev tab"), SLOT(nav_goto_left_tab()));
+  add_to_menu (menu_nav, tr ("Focus the Famous input field"), SLOT(nav_focus_to_fif()), "Ctrl+F");
+  add_to_menu (menu_nav, tr ("Focus the editor"), SLOT(nav_focus_to_editor()));
+
+  menu_labels = menu_nav->addMenu (tr ("Labels"));
+  add_to_menu (menu_nav, tr ("Refresh labels"), SLOT(nav_labels_update_list()));
+
+  menu_current_files = menu_nav->addMenu (tr ("Current files"));
+
+/*
+===================
+Fm menu callbacks
+===================
+*/
+
+  menu_fm = menuBar()->addMenu (tr ("Fm"));
+  menu_fm->setTearOffEnabled (true);
+
+  menu_fm_multi_rename = menu_fm->addMenu (tr ("Multi-rename"));
+  menu_fm_multi_rename->setTearOffEnabled (true);
+
+  add_to_menu (menu_fm_multi_rename, tr ("Zero pad file names"), SLOT(fman_multi_rename_zeropad()));
+  add_to_menu (menu_fm_multi_rename, tr ("Delete N first chars at file names"), SLOT(fman_multi_rename_del_n_first_chars()));
+  add_to_menu (menu_fm_multi_rename, tr ("Replace in file names"), SLOT(fman_multi_rename_replace()));
+  add_to_menu (menu_fm_multi_rename, tr ("Apply template"), SLOT(fman_multi_rename_apply_template()));
+
+  menu_fm_file_ops = menu_fm->addMenu (tr ("File operations"));
+  menu_fm_file_ops->setTearOffEnabled (true);
+
+  add_to_menu (menu_fm_file_ops, tr ("Create new directory"), SLOT(fman_fileop_create_dir()));
+  add_to_menu (menu_fm_file_ops, tr ("Rename"), SLOT(fman_fileop_rename()));
+  add_to_menu (menu_fm_file_ops, tr ("Delete file"), SLOT(fman_fileop_delete()));
+
+
+  menu_fm_file_infos = menu_fm->addMenu (tr ("File information"));
+  menu_fm_file_infos->setTearOffEnabled (true);
+
+
+  add_to_menu (menu_fm_file_infos, tr ("Count lines in selected files"), SLOT(fman_fileinfo_count_lines_in_selected_files()));
+  add_to_menu (menu_fm_file_infos, tr ("Full info"), SLOT(fm_fileinfo_info()));
+
+
+  menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
+  menu_fm_zip->setTearOffEnabled (true);
+
+  menu_fm_zip->addSeparator();
+
+  add_to_menu (menu_fm_zip, tr ("Create new ZIP"), SLOT(fman_zip_create()));
+  add_to_menu (menu_fm_zip, tr ("Add to ZIP"), SLOT(fman_zip_add()));
+  add_to_menu (menu_fm_zip, tr ("Save ZIP"), SLOT(fman_zip_save()));
+
+  menu_fm_zip->addSeparator();
+
+  add_to_menu (menu_fm_zip, tr ("List ZIP content"), SLOT(fman_zip_info()));
+  add_to_menu (menu_fm_zip, tr ("Unpack ZIP to current directory"), SLOT(fman_zip_unpack()));
+
+
+  menu_fm_img_conv = menu_fm->addMenu (tr ("Images"));
+  menu_fm_img_conv->setTearOffEnabled (true);
+
+  add_to_menu (menu_fm_img_conv, tr ("Scale by side"), SLOT(fman_img_conv_by_side()));
+  add_to_menu (menu_fm_img_conv, tr ("Scale by percentages"), SLOT(fman_img_conv_by_percent()));
+  add_to_menu (menu_fm_img_conv, tr ("Create web gallery"), SLOT(fman_img_make_gallery()));
+
+  add_to_menu (menu_fm, tr ("Go to home dir"), SLOT(fman_home()));
+  add_to_menu (menu_fm, tr ("Refresh current dir"), SLOT(fman_refresh()));
+  add_to_menu (menu_fm, tr ("Preview image"), SLOT(fman_preview_image()));
+  add_to_menu (menu_fm, tr ("Select by regexp"), SLOT(fman_select_by_regexp()));
+  add_to_menu (menu_fm, tr ("Deselect by regexp"), SLOT(fman_deselect_by_regexp()));
+
+/*
+===================
+View menu
+===================
+*/
+
+  menu_view = menuBar()->addMenu (tr ("View"));
+  menu_view->setTearOffEnabled (true);
+
+  menu_view_themes = menu_view->addMenu (tr ("Themes"));
+  menu_view_themes->setTearOffEnabled (true);
+
+  menu_view_palettes = menu_view->addMenu (tr ("Palettes"));
+  menu_view_palettes->setTearOffEnabled (true);
+
+  //menu_view_hl = menu_view->addMenu (tr ("Highlighting mode"));
+  //menu_view_hl->setTearOffEnabled (true);
+
+  menu_view_profiles = menu_view->addMenu (tr ("Profiles"));
+  menu_view_profiles->setTearOffEnabled (true);
+
+  add_to_menu (menu_view, tr ("Save profile"), SLOT(view_profile_save_as()));
+  add_to_menu (menu_view, tr ("Toggle word wrap"), SLOT(view_toggle_wrap()));
+  add_to_menu (menu_view, tr ("Hide error marks"), SLOT(view_hide_error_marks()));
+  add_to_menu (menu_view, tr ("Toggle fullscreen"), SLOT(view_toggle_fs()));
+  add_to_menu (menu_view, tr ("Stay on top"), SLOT(view_stay_on_top()));
+  add_to_menu (menu_view, tr ("Darker"), SLOT(view_darker()));
+
+/*
+===================
+? menu
+===================
+*/
+
+  helpMenu = menuBar()->addMenu ("?");
+  helpMenu->setTearOffEnabled (true);
+
+  helpMenu->addAction (aboutAct);
+  helpMenu->addAction (aboutQtAct);
+  add_to_menu (helpMenu, tr ("NEWS"), SLOT(help_show_news()));
+  add_to_menu (helpMenu, "TODO", SLOT(help_show_tdo()));
+  add_to_menu (helpMenu, "ChangeLog", SLOT(help_show_changelog()));
+  add_to_menu (helpMenu, tr ("License"), SLOT(help_show_gpl()));
+}
+
+
+/*************************
+----------------------
+OPTIONS PAGE UI
+----------------------
+*************************/
+
+void CTEA::createOptions()
+{
+  tab_options = new QTabWidget;
+
+  idx_tab_tune = main_tab_widget->addTab (tab_options, tr ("options"));
+
+/*
+----------------------
+OPTIONS::INTERFACE
+----------------------
+*/
+
+  QWidget *page_interface = new QWidget (tab_options);
+  page_interface->setObjectName ("page_interface");
+
+  QVBoxLayout *page_interface_layout = new QVBoxLayout;
+  page_interface_layout->setAlignment (Qt::AlignTop);
+
+  QStringList sl_ui_modes;
+  sl_ui_modes << tr ("Classic") << tr ("Docked");
+
+  cmb_ui_mode = new_combobox (page_interface_layout,
+                              tr ("UI mode (TEA restart needed)"),
+                              sl_ui_modes,
+                              settings->value ("ui_mode", 0).toInt());
+
+
+  QStringList sl_lngs = read_dir_entries (":/translations");
+
+  for (QList <QString>::iterator i = sl_lngs.begin(); i != sl_lngs.end(); ++i)
+      {
+       (*i) = i->left(2);
+      }
+
+  sl_lngs.append ("en");
+
+  QString lng = settings->value ("lng", QLocale::system().name()).toString().left(2).toLower();
+
+  if (! file_exists (":/translations/" + lng + ".qm"))
+     lng = "en";
+
+  cmb_lng = new_combobox (page_interface_layout,
+                          tr ("UI language (TEA restart needed)"),
+                          sl_lngs,
+                          settings->value ("lng", lng).toString());
+
+
+  QString default_style = qApp->style()->objectName();
+  if (default_style == "GTK+") //can be buggy, so disable it
+     default_style = "Cleanlooks";
+
+
+  cmb_styles = new_combobox (page_interface_layout,
+                             tr ("UI style (TEA restart needed)"),
+                             QStyleFactory::keys(),
+                             settings->value ("ui_style", default_style).toString());
+
+
+  connect (cmb_styles, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(slot_style_currentIndexChanged (int)));
+
+
+  QPushButton *bt_font_interface = new QPushButton (tr ("Interface font"), this);
+  connect (bt_font_interface, SIGNAL(clicked()), this, SLOT(slot_font_interface_select()));
+
+  QPushButton *bt_font_editor = new QPushButton (tr ("Editor font"), this);
+  connect (bt_font_editor, SIGNAL(clicked()), this, SLOT(slot_font_editor_select()));
+
+  QPushButton *bt_font_logmemo = new QPushButton (tr ("Logmemo font"), this);
+  connect (bt_font_logmemo, SIGNAL(clicked()), this, SLOT(slot_font_logmemo_select()));
+
+  page_interface_layout->addWidget (bt_font_interface);
+  page_interface_layout->addWidget (bt_font_editor);
+  page_interface_layout->addWidget (bt_font_logmemo);
+
+  QStringList sl_tabs_align;
+
+  sl_tabs_align.append (tr ("Up"));
+  sl_tabs_align.append (tr ("Bottom"));
+  sl_tabs_align.append (tr ("Left"));
+  sl_tabs_align.append (tr ("Right"));
+
+  int ui_tab_align = settings->value ("ui_tabs_align", "3").toInt();
+  main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align ));
+
+  QComboBox *cmb_ui_tabs_align = new_combobox (page_interface_layout,
+                             tr ("GUI tabs align"),
+                             sl_tabs_align,
+                             ui_tab_align);
+
+  connect (cmb_ui_tabs_align, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_ui_tabs_currentIndexChanged (int)));
+
+  int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
+  tab_editor->setTabPosition (int_to_tabpos (docs_tab_align));
+
+
+  QComboBox *cmb_docs_tabs_align = new_combobox (page_interface_layout,
+                             tr ("Documents tabs align"),
+                             sl_tabs_align,
+                             docs_tab_align);
+
+  connect (cmb_docs_tabs_align, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_docs_tabs_currentIndexChanged (int)));
+
+
+  QStringList sl_icon_sizes;
+  sl_icon_sizes << "16" << "24" << "32" << "48" << "64";
+
+  cmb_icon_size = new_combobox (page_interface_layout,
+                                tr ("Icons size"),
+                                sl_icon_sizes,
+                                settings->value ("icon_size", "32").toString());
+
+  connect (cmb_icon_size, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_icon_sizes_currentIndexChanged (int)));
+
+  QStringList sl_tea_icons;
+  sl_tea_icons.append ("1");
+  sl_tea_icons.append ("2");
+  sl_tea_icons.append ("3");
+
+  cmb_tea_icons = new_combobox (page_interface_layout,
+                                tr ("TEA program icon"),
+                                sl_tea_icons,
+                                settings->value ("icon_fname", "1").toString());
+
+  connect (cmb_tea_icons, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_tea_icons_currentIndexChanged (int)));
+
+  cb_fif_at_toolbar = new QCheckBox (tr ("FIF at the top (restart needed)"), tab_options);
+  cb_fif_at_toolbar->setChecked (settings->value ("fif_at_toolbar", "0").toBool());
+  page_interface_layout->addWidget (cb_fif_at_toolbar);
+
+  cb_show_linenums = new QCheckBox (tr ("Show line numbers"), tab_options);
+  cb_show_linenums->setChecked (settings->value ("show_linenums", "0").toBool());
+  page_interface_layout->addWidget (cb_show_linenums);
+
+  cb_wordwrap = new QCheckBox (tr ("Word wrap"), tab_options);
+  cb_wordwrap->setChecked (settings->value ("word_wrap", "1").toBool());
+  page_interface_layout->addWidget (cb_wordwrap);
+
+  cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
+  cb_hl_enabled->setChecked (settings->value ("hl_enabled", "1").toBool());
+  page_interface_layout->addWidget (cb_hl_enabled);
+
+  cb_hl_current_line = new QCheckBox (tr ("Highlight current line"), tab_options);
+  cb_hl_current_line->setChecked (settings->value ("additional_hl", "0").toBool());
+  page_interface_layout->addWidget (cb_hl_current_line);
+
+  cb_hl_brackets = new QCheckBox (tr ("Highlight paired brackets"), tab_options);
+  cb_hl_brackets->setChecked (settings->value ("hl_brackets", "0").toBool());
+  page_interface_layout->addWidget (cb_hl_brackets);
+
+  cb_auto_indent = new QCheckBox (tr ("Automatic indent"), tab_options);
+  cb_auto_indent->setChecked (settings->value ("auto_indent", "0").toBool());
+  page_interface_layout->addWidget (cb_auto_indent);
+
+  cb_spaces_instead_of_tabs = new QCheckBox (tr ("Use spaces instead of tabs"), tab_options);
+  cb_spaces_instead_of_tabs->setChecked (settings->value ("spaces_instead_of_tabs", "1").toBool());
+  page_interface_layout->addWidget (cb_spaces_instead_of_tabs);
+
+  spb_tab_sp_width = new_spin_box (page_interface_layout,
+                                   tr ("Tab width in spaces"), 1, 64,
+                                   settings->value ("tab_sp_width", 8).toInt());
+
+  cb_cursor_xy_visible = new QCheckBox (tr ("Show cursor position"), tab_options);
+  cb_cursor_xy_visible->setChecked (settings->value ("cursor_xy_visible", "1").toBool());
+  page_interface_layout->addWidget (cb_cursor_xy_visible);
+
+  cb_center_on_cursor = new QCheckBox (tr ("Cursor center on scroll"), tab_options);
+  cb_center_on_cursor->setChecked (settings->value ("center_on_scroll", "1").toBool());
+  page_interface_layout->addWidget (cb_center_on_cursor);
+
+  spb_cursor_blink_time = new_spin_box (page_interface_layout,
+                                   tr ("Cursor blink time (msecs, zero is OFF)"), 0, 10000,
+                                   settings->value ("cursor_blink_time", 0).toInt());
+
+
+  spb_cursor_width = new_spin_box (page_interface_layout,
+                                   tr ("Cursor width"), 1, 5,
+                                   settings->value ("cursor_width", 2).toInt());
+
+
+
+  cb_show_margin = new QCheckBox (tr ("Show margin at"), tab_options);
+  cb_show_margin->setChecked (settings->value ("show_margin", "0").toBool());
+
+  spb_margin_pos = new QSpinBox;
+  spb_margin_pos->setValue (settings->value ("margin_pos", 72).toInt());
+
+  QHBoxLayout *lt_margin = new QHBoxLayout;
+
+  lt_margin->insertWidget (-1, cb_show_margin, 0, Qt::AlignLeft);
+  lt_margin->insertWidget (-1, spb_margin_pos, 1, Qt::AlignLeft);
+
+  page_interface_layout->addLayout (lt_margin);
+
+  cb_full_path_at_window_title = new QCheckBox (tr ("Show full path at window title"), tab_options);
+  cb_full_path_at_window_title->setChecked (settings->value ("full_path_at_window_title", "1").toBool());
+  page_interface_layout->addWidget (cb_full_path_at_window_title);
+
+  page_interface->setLayout (page_interface_layout);
+  page_interface->show();
+
+
+  QScrollArea *scra_interface = new QScrollArea;
+  scra_interface->setWidgetResizable (true);
+  scra_interface->setWidget (page_interface);
+
+  tab_options->addTab (scra_interface, tr ("Interface"));
+
+/*
+----------------------
+OPTIONS::COMMON
+----------------------
+*/
+
+
+  QWidget *page_common = new QWidget (tab_options);
+  QVBoxLayout *page_common_layout = new QVBoxLayout;
+  page_common_layout->setAlignment (Qt::AlignTop);
+
+  cb_altmenu = new QCheckBox (tr ("Use Alt key to access main menu"), tab_options);
+  cb_altmenu->setChecked (MyProxyStyle::b_altmenu);
+
+  connect (cb_altmenu, SIGNAL(stateChanged (int)),
+           this, SLOT(cb_altmenu_stateChanged (int)));
+
+  cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
+  cb_wasd->setChecked (settings->value ("wasd", "0").toBool());
+
+
+#if defined(JOYSTICK_SUPPORTED)
+
+  cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
+  cb_use_joystick->setChecked (settings->value ("use_joystick", "0").toBool());
+  connect (cb_use_joystick, SIGNAL(stateChanged (int)),
+           this, SLOT(cb_use_joystick_stateChanged (int)));
+#endif
+
+  cb_auto_img_preview = new QCheckBox (tr ("Automatic preview images at file manager"), tab_options);
+  cb_auto_img_preview->setChecked (settings->value ("b_preview", "0").toBool());
+
+  cb_session_restore = new QCheckBox (tr ("Restore the last session on start-up"), tab_options);
+  cb_session_restore->setChecked (settings->value ("session_restore", "0").toBool());
+
+  cb_use_enca_for_charset_detection = new QCheckBox (tr ("Use Enca for charset detection"), tab_options);
+  cb_use_enca_for_charset_detection->setChecked (settings->value ("use_enca_for_charset_detection", 0).toBool());
+
+  cb_override_img_viewer = new QCheckBox (tr ("Use external image viewer for F2"), tab_options);
+  cb_override_img_viewer->setChecked (settings->value ("override_img_viewer", 0).toBool());
+
+  ed_img_viewer_override = new QLineEdit (this);
+  ed_img_viewer_override->setText (settings->value ("img_viewer_override_command", "display %s").toString());
+
+  QHBoxLayout *hb_imgvovr = new QHBoxLayout;
+
+  hb_imgvovr->addWidget (cb_override_img_viewer);
+  hb_imgvovr->addWidget (ed_img_viewer_override);
+
+  hb_imgvovr->insertWidget (-1, cb_override_img_viewer, 0, Qt::AlignLeft);
+  hb_imgvovr->insertWidget (-1, ed_img_viewer_override, 1, Qt::AlignLeft);
+
+  cb_use_trad_dialogs = new QCheckBox (tr ("Use traditional File Save/Open dialogs"), tab_options);
+  cb_use_trad_dialogs->setChecked (settings->value ("use_trad_dialogs", "0").toBool());
+
+  cb_start_on_sunday = new QCheckBox (tr ("Start week on Sunday"), tab_options);
+  cb_start_on_sunday->setChecked (settings->value ("start_week_on_sunday", "0").toBool());
+
+  cb_northern_hemisphere = new QCheckBox (tr ("Northern hemisphere"), this);
+  cb_northern_hemisphere->setChecked (settings->value ("northern_hemisphere", "1").toBool());
+
+  page_common_layout->addWidget (cb_start_on_sunday);
+  page_common_layout->addWidget (cb_northern_hemisphere);
+
+
+  cmb_moon_phase_algos = new_combobox (page_common_layout,
+                             tr ("Moon phase algorithm"),
+                             moon_phase_algos.values(),
+                             settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
+
+  cmb_cmdline_default_charset = new_combobox (page_common_layout,
+                             tr ("Charset for file open from command line"),
+                             sl_charsets,
+                             sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
+
+  cmb_zip_charset_in = new_combobox (page_common_layout,
+                             tr ("ZIP unpacking: file names charset"),
+                             sl_charsets,
+                             sl_charsets.indexOf (settings->value ("zip_charset_in", "UTF-8").toString()));
+
+
+  cmb_zip_charset_out = new_combobox (page_common_layout,
+                             tr ("ZIP packing: file names charset"),
+                             sl_charsets,
+                             sl_charsets.indexOf (settings->value ("zip_charset_out", "UTF-8").toString()));
+
+
+  page_common_layout->addWidget (cb_altmenu);
+  page_common_layout->addWidget (cb_wasd);
+
+#if defined(JOYSTICK_SUPPORTED)
+  page_common_layout->addWidget (cb_use_joystick);
+#endif
+
+  page_common_layout->addWidget (cb_auto_img_preview);
+  page_common_layout->addWidget (cb_session_restore);
+  page_common_layout->addWidget (cb_use_trad_dialogs);
+  page_common_layout->addWidget (cb_use_enca_for_charset_detection);
+
+  page_common_layout->addLayout (hb_imgvovr);
+  page_common->setLayout (page_common_layout);
+  page_common->show();
+
+  QScrollArea *scra_common = new QScrollArea;
+  scra_common->setWidgetResizable (true);
+  scra_common->setWidget (page_common);
+
+  tab_options->addTab (scra_common, tr ("Common"));
+
+
+/*
+ ----------------------
+OPTIONS::FUNCTIONS
+----------------------
+*/
+
+  QWidget *page_functions = new QWidget (tab_options);
+  QVBoxLayout *page_functions_layout = new QVBoxLayout;
+  page_functions_layout->setAlignment (Qt::AlignTop);
+
+  QGroupBox *gb_labels = new QGroupBox (tr ("Labels"));
+  QVBoxLayout *vb_labels = new QVBoxLayout;
+  gb_labels->setLayout (vb_labels);
+
+  ed_label_start = new_line_edit (vb_labels, tr ("Label starts with: "), settings->value ("label_start", "[?").toString());
+  ed_label_end = new_line_edit (vb_labels, tr ("Label ends with: "), settings->value ("label_end", "?]").toString());
+
+  page_functions_layout->addWidget (gb_labels);
+
+  QGroupBox *gb_datetime = new QGroupBox (tr ("Date and time"));
+  QVBoxLayout *vb_datetime = new QVBoxLayout;
+  gb_datetime->setLayout (vb_datetime);
+
+  ed_date_format  = new_line_edit (vb_datetime, tr ("Date format"), settings->value ("date_format", "dd/MM/yyyy").toString());
+  ed_time_format  = new_line_edit (vb_datetime, tr ("Time format"), settings->value ("time_format", "hh:mm:ss").toString());
+
+  page_functions_layout->addWidget (gb_datetime);
+
+  QLabel *l_t = 0;
+
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+
+  QGroupBox *gb_spell = new QGroupBox (tr ("Spell checking"));
+  QVBoxLayout *vb_spell = new QVBoxLayout;
+  gb_spell->setLayout(vb_spell);
+
+  QHBoxLayout *hb_spellcheck_engine = new QHBoxLayout;
+
+  cmb_spellcheckers = new_combobox (hb_spellcheck_engine,
+                                    tr ("Spell checker engine"),
+                                    spellcheckers,
+                                    cur_spellchecker);
+
+  vb_spell->addLayout (hb_spellcheck_engine);
+
+#ifdef HUNSPELL_ENABLE
+
+  QHBoxLayout *hb_spellcheck_path = new QHBoxLayout;
+  l_t = new QLabel (tr ("Hunspell dictionaries directory"));
+
+  ed_spellcheck_path = new QLineEdit (this);
+
+  ed_spellcheck_path->setText (settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString());/*QDir::homePath ()).toString()*/
+  ed_spellcheck_path->setReadOnly (true);
+
+  QPushButton *pb_choose_path = new QPushButton (tr ("Select"), this);
+
+  connect (pb_choose_path, SIGNAL(clicked()), this, SLOT(pb_choose_hunspell_path_clicked()));
+
+  hb_spellcheck_path->addWidget (l_t);
+  hb_spellcheck_path->addWidget (ed_spellcheck_path);
+  hb_spellcheck_path->addWidget (pb_choose_path);
+
+  vb_spell->addLayout (hb_spellcheck_path);
+
+#endif
+
+
+#ifdef ASPELL_ENABLE
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+
+  QHBoxLayout *hb_aspellcheck_path = new QHBoxLayout;
+  l_t = new QLabel (tr ("Aspell directory"));
+
+  ed_aspellcheck_path = new QLineEdit (this);
+  ed_aspellcheck_path->setText (settings->value ("win32_aspell_path", aspell_default_dict_path()).toString());
+  ed_aspellcheck_path->setReadOnly (true);
+
+  QPushButton *pb_choose_path2 = new QPushButton (tr ("Select"), this);
+
+  connect (pb_choose_path2, SIGNAL(clicked()), this, SLOT(pb_choose_aspell_path_clicked()));
+
+  hb_aspellcheck_path->addWidget (l_t);
+  hb_aspellcheck_path->addWidget (ed_aspellcheck_path);
+  hb_aspellcheck_path->addWidget (pb_choose_path2);
+
+  vb_spell->addLayout (hb_aspellcheck_path);
+
+#endif
+
+#endif
+
+  connect (cmb_spellcheckers, SIGNAL(currentIndexChanged (int)),
+           this, SLOT(cmb_spellchecker_currentIndexChanged (int)));
+
+  page_functions_layout->addWidget (gb_spell);
+
+#endif
+
+
+  QGroupBox *gb_func_misc = new QGroupBox (tr ("Miscellaneous"));
+  QVBoxLayout *vb_func_misc = new QVBoxLayout;
+  vb_func_misc->setAlignment (Qt::AlignTop);
+  gb_func_misc->setLayout (vb_func_misc);
+
+  spb_fuzzy_q = new_spin_box (vb_func_misc, tr ("Fuzzy search factor"), 10, 100, settings->value ("fuzzy_q", "60").toInt());
+
+  page_functions_layout->addWidget (gb_func_misc);
+
+  page_functions->setLayout (page_functions_layout);
+  page_functions->show();
+
+  QScrollArea *scra_functions = new QScrollArea;
+  scra_functions->setWidgetResizable (true);
+  scra_functions->setWidget (page_functions);
+
+  tab_options->addTab (scra_functions, tr ("Functions"));
+
+
+/////////////
+
+/*
+----------------------
+OPTIONS::IMAGES
+----------------------
+*/
+
+
+  QWidget *page_images = new QWidget (tab_options);
+  QVBoxLayout *page_images_layout = new QVBoxLayout;
+  page_images_layout->setAlignment (Qt::AlignTop);
+
+  QGroupBox *gb_images = new QGroupBox (tr ("Miscellaneous"));
+  QVBoxLayout *vb_images = new QVBoxLayout;
+  vb_images->setAlignment (Qt::AlignTop);
+
+  gb_images->setLayout (vb_images);
+
+
+  cmb_output_image_fmt = new_combobox (vb_images,
+                                       tr ("Image conversion output format"),
+                                       bytearray_to_stringlist (QImageWriter::supportedImageFormats()),
+                                       settings->value ("output_image_fmt", "jpg").toString());
+
+  cb_output_image_flt = new QCheckBox (tr ("Scale images with bilinear filtering"), this);
+  cb_output_image_flt->setChecked (settings->value ("img_filter", 0).toBool());
+
+  vb_images->addWidget (cb_output_image_flt);
+
+  spb_img_quality = new_spin_box (vb_images, tr ("Output images quality"), -1, 100, settings->value ("img_quality", "-1").toInt());
+
+  cb_exif_rotate = new QCheckBox (tr ("Apply hard rotation by EXIF data"), this);
+  cb_exif_rotate->setChecked (settings->value ("cb_exif_rotate", 1).toBool());
+
+  cb_output_image_flt = new QCheckBox (tr ("Scale images with bilinear filtering"), this);
+  cb_output_image_flt->setChecked (settings->value ("img_filter", 0).toBool());
+
+  vb_images->addWidget (cb_output_image_flt);
+
+  cb_zip_after_scale = new QCheckBox (tr ("Zip directory with processed images"), this);
+  cb_zip_after_scale->setChecked (settings->value ("img_post_proc", 0).toBool());
+
+  vb_images->addWidget (cb_zip_after_scale);
+  vb_images->addWidget (cb_exif_rotate);
+  page_images_layout->addWidget (gb_images);
+
+  QGroupBox *gb_webgallery = new QGroupBox (tr ("Web gallery options"));
+  QVBoxLayout *vb_webgal = new QVBoxLayout;
+  vb_webgal->setAlignment (Qt::AlignTop);
+
+  ed_side_size = new_line_edit (vb_webgal, tr ("Size of the side"), settings->value ("ed_side_size", "110").toString());
+  ed_link_options = new_line_edit (vb_webgal, tr ("Link options"), settings->value ("ed_link_options", "target=\"_blank\"").toString());
+  ed_cols_per_row = new_line_edit (vb_webgal, tr ("Columns per row"), settings->value ("ed_cols_per_row", "4").toString());
+
+  gb_webgallery->setLayout(vb_webgal);
+  page_images_layout->addWidget (gb_webgallery);
+
+  QGroupBox *gb_exif = new QGroupBox (tr ("EXIF"));
+  QVBoxLayout *vb_exif = new QVBoxLayout;
+  gb_exif->setLayout(vb_exif);
+  page_images_layout->addWidget (gb_exif);
+
+  cb_zor_use_exif= new QCheckBox (tr ("Use EXIF orientation at image viewer"), this);
+  cb_zor_use_exif->setChecked (settings->value ("zor_use_exif_orientation", 0).toBool());
+  vb_exif->addWidget (cb_zor_use_exif);
+
+
+  page_images->setLayout (page_images_layout);
+
+  QScrollArea *scra_images = new QScrollArea;
+  scra_images->setWidgetResizable (true);
+  scra_images->setWidget (page_images);
+
+  tab_options->addTab (scra_images, tr ("Images"));
+
+
+/*
+----------------------
+OPTIONS::KEYBOARD
+----------------------
+*/
+
+
+  QWidget *page_keyboard = new QWidget (tab_options);
+
+  QHBoxLayout *lt_h = new QHBoxLayout;
+
+  QHBoxLayout *lt_shortcut = new QHBoxLayout;
+  QVBoxLayout *lt_vkeys = new QVBoxLayout;
+  QVBoxLayout *lt_vbuttons = new QVBoxLayout;
+
+  lv_menuitems = new QListWidget;
+
+  lt_vkeys->addWidget (lv_menuitems);
+
+  connect (lv_menuitems, SIGNAL(currentItemChanged (QListWidgetItem *, QListWidgetItem *)),
+           this, SLOT(slot_lv_menuitems_currentItemChanged (QListWidgetItem *, QListWidgetItem *)));
+
+  ent_shtcut = new CShortcutEntry;
+  QLabel *l_shortcut = new QLabel (tr ("Shortcut"));
+
+  lt_shortcut->addWidget (l_shortcut);
+  lt_shortcut->addWidget (ent_shtcut);
+
+  lt_vbuttons->addLayout (lt_shortcut);
+
+  QPushButton *pb_assign_hotkey = new QPushButton (tr ("Assign"), this);
+  QPushButton *pb_remove_hotkey = new QPushButton (tr ("Remove"), this);
+
+  connect (pb_assign_hotkey, SIGNAL(clicked()), this, SLOT(pb_assign_hotkey_clicked()));
+  connect (pb_remove_hotkey, SIGNAL(clicked()), this, SLOT(pb_remove_hotkey_clicked()));
+
+  lt_vbuttons->addWidget (pb_assign_hotkey);
+  lt_vbuttons->addWidget (pb_remove_hotkey, 0, Qt::AlignTop);
+
+  lt_h->addLayout (lt_vkeys);
+  lt_h->addLayout (lt_vbuttons);
+
+  page_keyboard->setLayout (lt_h);
+  page_keyboard->show();
+
+  idx_tab_keyboard = tab_options->addTab (page_keyboard, tr ("Keyboard"));
+}
+
+

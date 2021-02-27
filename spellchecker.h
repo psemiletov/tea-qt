@@ -44,6 +44,7 @@ public:
   QString language;
   QString dir_dicts;
   QString dir_user_dicts;
+  QStringList modules_list;
 
   bool loaded;
 
@@ -65,10 +66,8 @@ public:
 
   virtual bool check (const QString &word) = 0;
 
-  virtual QStringList get_speller_modules_list() = 0;
+  virtual void get_speller_modules_list() = 0;
   virtual QStringList get_suggestions_list (const QString &word) = 0;
-
-//  bool dir_dicts_empty();
 };
 
 
@@ -95,7 +94,7 @@ public:
 
   bool check (const QString &word);
 
-  QStringList get_speller_modules_list();
+  void get_speller_modules_list();
   QStringList get_suggestions_list (const QString &word);
 };
 
@@ -130,7 +129,7 @@ public:
 
   bool check (const QString &word);
 
-  QStringList get_speller_modules_list();
+  void get_speller_modules_list();
   QStringList get_suggestions_list (const QString &word);
 };
 

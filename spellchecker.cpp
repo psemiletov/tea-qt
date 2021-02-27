@@ -52,7 +52,7 @@ QString aspell_default_dict_path()
 
 #endif
 
-#if defined(Q_OS_WIN) 
+#if defined(Q_OS_WIN)
 
   r = "C:\\Program Files\\Aspell";
 
@@ -178,7 +178,7 @@ void CAspellchecker::get_speller_modules_list()
 
   while ((entry = aspell_dict_info_enumeration_next (dels)) != 0)
         {
-         if (entry)
+//         if (entry)
             modules_list.prepend (entry->name);
         }
 
@@ -350,6 +350,7 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &dir_path
 {
   //qDebug() << "CHunspellChecker::CHunspellChecker - end";
   speller = 0;
+  encoding = 0;
 }
 
 
@@ -499,7 +500,7 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 }
 
 
-QString hunspell_default_dict_path() 
+QString hunspell_default_dict_path()
 {
   QString r;
   r = "/usr/share/hunspell";
@@ -510,7 +511,7 @@ QString hunspell_default_dict_path()
 
 #endif
 
-#if defined(Q_OS_WIN) 
+#if defined(Q_OS_WIN)
 #endif
 
   return r;

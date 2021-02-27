@@ -4497,10 +4497,9 @@ void CTEA::mrkup_document_weight()
 
   std::sort (files.begin(), files.end());
 
-  for (std::vector<std::pair<QString, qint64> >::iterator p = files.begin(); p != files.end(); p++)
+  for (std::vector<std::pair<QString, qint64> >::iterator p = files.begin(); p != files.end(); ++p)
       {
-      result += tr ("%1 kbytes %2 <br>").arg (QString::number (p->second / 1024)).arg (p->first);
-
+       result += tr ("%1 kbytes %2 <br>").arg (QString::number (p->second / 1024)).arg (p->first);
       }
 
   result.prepend (tr ("Total size = %1 kbytes in %2 files<br>").arg (QString::number (size_total / 1024))

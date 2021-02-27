@@ -147,8 +147,8 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
-qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";  
-  
+qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
+
   exts = "default";
   langs = "default";
   cs = Qt::CaseSensitive;
@@ -202,7 +202,7 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
 		     QString element = xml.readElementText().trimmed().remove('\n');
 		     if (element.isEmpty())
 		         continue;
-		     
+
                      QRegExp rg (element, cs);
 
                      if (! rg.isValid())
@@ -224,7 +224,7 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
                      QString element = xml.readElementText().trimmed().remove('\n');
 		     if (element.isEmpty())
 		         continue;
-		     
+
 		     QRegExp rg (element, cs);
                      if (rg.isValid())
                         {
@@ -242,14 +242,14 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
 
                      multiLineCommentFormat = fmt;
                      QString element = xml.readElementText().trimmed().remove('\n');
-                     if (! element.isEmpty())        
+                     if (! element.isEmpty())
                         commentStartExpression = QRegExp (element, cs, QRegExp::RegExp);
                     }
                  else
                  if (attr_type == "mcomment-end")
                     {
                      QString element = xml.readElementText().trimmed().remove('\n');
-                     if (! element.isEmpty())        
+                     if (! element.isEmpty())
                         commentEndExpression = QRegExp (element, cs, QRegExp::RegExp);
                     }
                  else
@@ -258,7 +258,7 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
                      QString element = xml.readElementText().trimmed().remove('\n');
                      if (element.isEmpty())
 		        continue;
-		     
+
                      if (xml.attributes().value ("name").toString() == "cm_mult")
                          cm_mult = element;
                      else
@@ -273,10 +273,10 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
      qDebug() << "xml parse error";
 
   } //cycle
-  
-  
-qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 2";  
-  
+
+
+qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 2";
+
 }
 
 
@@ -288,11 +288,11 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
       {
 	qDebug() << it->pattern.pattern();
-              
-	
+
+
        int index = text.indexOf (it->pattern);
 
-       
+
        while (index >= 0)
              {
               int length = it->pattern.matchedLength();
@@ -302,7 +302,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
              }
        }
 
-       
+
   setCurrentBlockState (0);
 
   int startIndex = 0;
@@ -330,7 +330,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
          setFormat (startIndex, commentLength, multiLineCommentFormat);
          startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
         }
-        
+
 }
 
 #endif
@@ -744,16 +744,16 @@ void CDocument::wheelEvent (QWheelEvent *e)
       const int delta = e->delta();
 
      //no zoom at qt 4.x
-      
+
 #else
       const int delta = e->angleDelta().y();
-      
+
     if (delta < 0)
          zoomOut();
       else
       if (delta > 0)
          zoomIn();
-     
+
 #endif
 
       return;
@@ -913,7 +913,7 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
 
 
   set_markup_mode();
-  
+
   document()->setModified (false);
 
   holder->log->log (tr ("%1 is open").arg (file_name));
@@ -928,7 +928,7 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
              if (lt.at(0) == file_name)
                 i.remove();
         }
-        
+
   return true;
 }
 
@@ -1180,7 +1180,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #if QT_VERSION >= 0x050000
 
-   for (std::vector<std::pair<QRegularExpression, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
+   for (std::vector<std::pair<QRegularExpression, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
        {
         if (p->first.isValid())
            if (p->first.match(file_name).hasMatch())
@@ -1191,7 +1191,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
        }
 
 #else
-   for (std::vector<std::pair<QRegExp, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); p++)
+   for (std::vector<std::pair<QRegExp, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
        {
         if (p->first.isValid())
            if (p->first.exactMatch(file_name))
@@ -2121,7 +2121,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 
   CDocument *doc = create_new();
   doc->file_open (fileName, codec);
-    
+
   doc->update_status();
   doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 

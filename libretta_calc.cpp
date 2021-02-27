@@ -56,7 +56,7 @@ double calculate (string expression)
 
 //open braces
 
-  size_t end_pos = expression.find (")"); 
+  size_t end_pos = expression.find (')');
   
 //  cout << " end pos = " << end_pos << endl;    
     

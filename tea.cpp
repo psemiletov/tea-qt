@@ -6613,8 +6613,11 @@ void CTEA::run_unitaz (int mode)
   vector< pair <QString, int> > uwords;
 
   QList <QString> keys = h.keys();
+  int sz = keys.size();
 
-  for (int i = 0; i < keys.size(); i++)
+  uwords.reserve (sz);
+
+  for (int i = 0; i < sz; i++)
       uwords.push_back (make_pair(keys.at(i),h.value (keys.at(i))));
 
 

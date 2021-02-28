@@ -96,19 +96,21 @@ protected:
   void highlightBlock (const QString &text);
 
 public:
-
+/*
   struct HighlightingRule
          {
           QRegExp pattern;
           QTextCharFormat format;
          };
+*/
+  std::vector<std::pair<QRegExp, QTextCharFormat> > hl_rules;
 
   QRegExp commentStartExpression;
   QRegExp commentEndExpression;
 
   Qt::CaseSensitivity cs;
 
-  std::vector <HighlightingRule> highlightingRules;
+ // std::vector <HighlightingRule> highlightingRules;
 
   CSyntaxHighlighterQRegExp (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);
@@ -126,12 +128,14 @@ protected:
   void highlightBlock (const QString &text);
 
 public:
-
+/*
   struct HighlightingRule
         {
          QRegularExpression pattern;
          QTextCharFormat format;
         };
+*/
+  std::vector<std::pair<QRegularExpression, QTextCharFormat> > hl_rules;
 
   QRegularExpression commentStartExpression;
   QRegularExpression commentEndExpression;
@@ -140,7 +144,7 @@ public:
   QTextCharFormat singleLineCommentFormat;
   QTextCharFormat multiLineCommentFormat;
 
-  std::vector <HighlightingRule> highlightingRules;
+ // std::vector <HighlightingRule> highlightingRules;
 
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);

@@ -147,8 +147,6 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
-qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
-
   exts = "default";
   langs = "default";
   cs = Qt::CaseSensitive;
@@ -209,10 +207,12 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
                          qDebug() << "! valid " << rg.pattern();
                      else
                          {
-                          HighlightingRule rule;
-                          rule.pattern = rg;
-                          rule.format = fmt;
-                          highlightingRules.push_back (rule);
+                          //HighlightingRule rule;
+                          //rule.pattern = rg;
+                          //rule.format = fmt;
+                          //highlightingRules.push_back (rule);
+                         hl_rules.push_back (make_pair (rg, fmt));
+
                          }
 
                      } //keywords
@@ -228,10 +228,11 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
 		     QRegExp rg (element, cs);
                      if (rg.isValid())
                         {
-                         HighlightingRule rule;
-                         rule.pattern = rg;
-                         rule.format = fmt;
-                         highlightingRules.push_back (rule);
+                     //    HighlightingRule rule;
+                      //   rule.pattern = rg;
+                       //  rule.format = fmt;
+                       //  highlightingRules.push_back (rule);
+                         hl_rules.push_back (make_pair (rg, fmt));
                         }
                     }
                  else
@@ -273,25 +274,17 @@ qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 1";
      qDebug() << "xml parse error";
 
   } //cycle
-
-
-qDebug() << "CSyntaxHighlighterQRegExp::load_from_xml - 2";
-
 }
 
 
 void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 {
-  if (highlightingRules.size() == 0)
+ /* if (highlightingRules.size() == 0)
      return;
 
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
       {
-	qDebug() << it->pattern.pattern();
-
-
        int index = text.indexOf (it->pattern);
-
 
        while (index >= 0)
              {
@@ -300,6 +293,27 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
               setFormat (index, length, it->format);
               index = text.indexOf (it->pattern, index + length);
              }
+       }
+*/
+  if (hl_rules.size() == 0)
+      return;
+
+  for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
+      {
+       QRegularExpressionMatch m = p->first.match (text);
+
+       int index = m.capturedStart();
+
+       while (index >= 0)
+             {
+              int length = m.capturedLength();
+             if (length == 0)
+               continue;
+
+             setFormat (index, length, p->second);
+             m = p->first.match (text, index + length);
+             index = m.capturedStart();
+            }
        }
 
 
@@ -330,7 +344,6 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
          setFormat (startIndex, commentLength, multiLineCommentFormat);
          startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
         }
-
 }
 
 #endif
@@ -408,10 +421,11 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                         qDebug() << "! valid " << rg.pattern();
                      else
                          {
-                          HighlightingRule rule;
-                          rule.pattern = rg;
-                          rule.format = fmt;
-                          highlightingRules.push_back (rule);
+//                          HighlightingRule rule;
+            //              rule.pattern = rg;
+              //            rule.format = fmt;
+  //                        highlightingRules.push_back (rule);
+                          hl_rules.push_back (make_pair (rg, fmt));
                          }
 
                      } //keywords
@@ -432,10 +446,11 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                         qDebug() << "! valid " << rg.pattern();
                      else
                          {
-                          HighlightingRule rule;
-                          rule.pattern = rg;
-                          rule.format = fmt;
-                          highlightingRules.push_back (rule);
+    //                      HighlightingRule rule;
+        //                  rule.pattern = rg;
+          //                rule.format = fmt;
+      //                    highlightingRules.push_back (rule);
+                          hl_rules.push_back (make_pair (rg, fmt));
                          }
                     }
                   else
@@ -492,7 +507,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
 void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 {
-  if (highlightingRules.size() == 0)
+/*  if (highlightingRules.size() == 0)
      return;
 
   for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
@@ -504,11 +519,37 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
        while (index >= 0)
              {
               int length = m.capturedLength();
+              if (length == 0)
+                continue;
+
               setFormat (index, length, it->format);
               m = it->pattern.match (text, index + length);
               index = m.capturedStart();
              }
        }
+*/
+
+  if (hl_rules.size() == 0)
+      return;
+
+  for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
+      {
+       QRegularExpressionMatch m = p->first.match (text);
+
+       int index = m.capturedStart();
+
+       while (index >= 0)
+             {
+              int length = m.capturedLength();
+             if (length == 0)
+               continue;
+
+             setFormat (index, length, p->second);
+             m = p->first.match (text, index + length);
+             index = m.capturedStart();
+            }
+       }
+
 
   setCurrentBlockState (0);
 

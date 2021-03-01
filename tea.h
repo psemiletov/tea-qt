@@ -571,10 +571,6 @@ Preferences tab :: Keyboard page UI elements
   QListWidget *lv_menuitems;
 
 
-
-
-
-
 /*
 ====================================
 Application stuff inits and updates
@@ -674,7 +670,7 @@ Application misc. methods
   QIcon get_theme_icon (const QString &name);
   QString get_theme_icon_fname (const QString &name);
 
-  void leaving_tune();
+  void leaving_options();
   void add_to_last_used_charsets (const QString &s);
   void count_substring (bool use_regexp);
   void run_unitaz (int mode);
@@ -695,6 +691,11 @@ Application misc. methods
   void idx_tab_tune_activate();
   void idx_tab_fman_activate();
   void idx_tab_learn_activate();
+
+  void man_find_find();
+  void man_find_next();
+  void man_find_prev();
+
 
 protected:
 
@@ -737,7 +738,6 @@ File manager slots
   void fman_open();
   void fman_places_itemActivated (QListWidgetItem *item);
   void cb_button_saves_as();
-
 
 /*
 ===================
@@ -1115,32 +1115,25 @@ View menu callbacks
   void help_show_gpl();
 
 
-/*-----------------------------*/
-
+/*
+=====================
+Misc callbacks
+=====================
+*/
 
   void select_label();
-  void clipboard_dataChanged();
+  void run_program();
+  void guess_enc();
 
+  void clipboard_dataChanged();
+  void main_tab_page_changed (int index);
 
   void calendar_clicked (const QDate &date);
   void calendar_activated (const QDate &date);
 
-
-
-  void main_tab_page_changed (int index);
   void calendar_currentPageChanged (int year, int month);
-
-  void man_find_find();
-  void man_find_next();
-  void man_find_prev();
-
-
-
   void process_readyReadStandardOutput();
 
-  void guess_enc();
-
-  void run_program();
 
 
 /*
@@ -1167,11 +1160,9 @@ Tune page callbacks
 
   void slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QListWidgetItem *previous);
 
-
   void slot_font_logmemo_select();
   void slot_font_interface_select();
   void slot_font_editor_select();
-
 
   void slot_style_currentIndexChanged (int);
 
@@ -1189,7 +1180,6 @@ Tune page callbacks
 #ifdef ASPELL_ENABLE
   void pb_choose_aspell_path_clicked();
 #endif
-
 
 };
 

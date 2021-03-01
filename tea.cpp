@@ -156,69 +156,6 @@ QTabWidget::TabPosition int_to_tabpos (int i)
 }
 
 
-
-
-
-
-void CTEA::readSettings()
-{
-  MyProxyStyle::cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
-
-  qApp->setCursorFlashTime (MyProxyStyle::cursor_blink_time);
-
-  recent_list_max_items = settings->value ("recent_list.max_items", 21).toInt();
-
-  MyProxyStyle::b_altmenu = settings->value ("b_altmenu", "0").toBool();
-
-  int ui_tab_align = settings->value ("ui_tabs_align", "0").toInt();
-  main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align));
-
-  int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
-  tab_editor->setTabPosition (int_to_tabpos (docs_tab_align));
-
-  markup_mode = settings->value ("markup_mode", "HTML").toString();
-  charset = settings->value ("charset", "UTF-8").toString();
-  fname_def_palette = settings->value ("fname_def_palette", ":/palettes/TEA").toString();
-  QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
-  QSize size = settings->value ("size", QSize (600, 420)).toSize();
-
-  if (mainSplitter)
-      mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
-
-  resize (size);
-  move (pos);
-}
-
-
-void CTEA::writeSettings()
-{
-  settings->setValue ("pos", pos());
-  settings->setValue ("size", size());
-  settings->setValue ("charset", charset);
-
-  if (mainSplitter)
-     settings->setValue ("splitterSizes", mainSplitter->saveState());
-
-  settings->setValue ("spl_fman", spl_fman->saveState());
-  settings->setValue ("dir_last", dir_last);
-  settings->setValue ("fname_def_palette", fname_def_palette);
-  settings->setValue ("markup_mode", markup_mode);
-  settings->setValue ("VER_NUMBER", QString (current_version_number));
-  settings->setValue ("state", saveState());
-  settings->setValue ("word_wrap", cb_wordwrap->isChecked());
-  settings->setValue ("show_linenums", cb_show_linenums->isChecked());
-  settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->isChecked());
-
-  delete settings;
-}
-
-
-
-
-
-
-
-
 CTEA::CTEA()
 {
   mainSplitter = 0;
@@ -436,7 +373,7 @@ CTEA::CTEA()
 void CTEA::closeEvent (QCloseEvent *event)
 {
   if (main_tab_widget->currentIndex() == idx_tab_tune)
-     leaving_tune();
+     leaving_options();
 
   QString fname  = dir_config + "/last_used_charsets";
 
@@ -479,10 +416,6 @@ void CTEA::closeEvent (QCloseEvent *event)
 
 
 
-
-
-
-
 void CTEA::pageChanged (int index)
 {
   if (b_destroying_all)
@@ -501,142 +434,6 @@ void CTEA::pageChanged (int index)
   documents->update_project (d->file_name);
 
   update_labels_menu();
-}
-
-
-
-void CTEA::markup_text (const QString &mode)
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString t = hash_markup[mode][d->markup_mode];
-
-  if (! t.isEmpty())
-      d->put (t.replace ("%s", d->get()));
-}
-
-
-void CTEA::fman_find()
-{
-  QString ft = fif_get_text();
-  if (ft.isEmpty())
-      return;
-
-  l_fman_find = fman->mymodel->findItems (ft, Qt::MatchStartsWith);
-
-  if (l_fman_find.size() < 1)
-     return;
-
-  fman_find_idx = 0;
-  fman->setCurrentIndex (fman->mymodel->indexFromItem (l_fman_find[fman_find_idx]));
-}
-
-
-void CTEA::fman_find_next()
-{
-  QString ft = fif_get_text();
-  if (ft.isEmpty())
-      return;
-
-  if (l_fman_find.size() < 1)
-     return;
-
-  if (fman_find_idx < (l_fman_find.size() - 1))
-     fman_find_idx++;
-
-  fman->setCurrentIndex (fman->mymodel->indexFromItem (l_fman_find[fman_find_idx]));
-}
-
-
-void CTEA::fman_find_prev()
-{
-  QString ft = fif_get_text();
-  if (ft.isEmpty())
-      return;
-
-  if (l_fman_find.size() < 1)
-     return;
-
-  if (fman_find_idx != 0)
-     fman_find_idx--;
-
-  fman->setCurrentIndex (fman->mymodel->indexFromItem (l_fman_find[fman_find_idx]));
-}
-
-
-
-void CTEA::opt_shortcuts_find()
-{
-  int from = 0;
-
-  QString fiftxt = fif_get_text();
-
-  if (opt_shortcuts_string_to_find == fiftxt)
-      from = lv_menuitems->currentRow();
-
-  opt_shortcuts_string_to_find = fiftxt;
-
-  if (from == -1)
-      from = 0;
-
-#if QT_VERSION < 0x050000
-  int index = shortcuts->captions.indexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
-                                                    Qt::CaseInsensitive), from);
-#else
-  int index = shortcuts->captions.indexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
-                                           QRegularExpression::CaseInsensitiveOption), from);
-
-#endif
-
-  if (index != -1)
-     lv_menuitems->setCurrentRow (index);
-}
-
-
-void CTEA::opt_shortcuts_find_next()
-{
-  int from = lv_menuitems->currentRow();
-  if (from == -1)
-     from = 0;
-
-#if QT_VERSION < 0x050000
-  int index = shortcuts->captions.indexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
-                                                    Qt::CaseInsensitive), from + 1);
-#else
-  int index = shortcuts->captions.indexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
-                                                    QRegularExpression::CaseInsensitiveOption), from + 1);
-
-
-#endif
-
-  if (index != -1)
-    lv_menuitems->setCurrentRow (index);
-}
-
-
-void CTEA::opt_shortcuts_find_prev()
-{
-  int from = lv_menuitems->currentRow();
-  if (from == -1)
-     from = 0;
-
-#if QT_VERSION < 0x050000
-
-  int index = shortcuts->captions.lastIndexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
-                                                  Qt::CaseInsensitive), from - 1);
-
-#else
-
-  int index = shortcuts->captions.lastIndexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
-                                                 QRegularExpression::CaseInsensitiveOption), from - 1);
-
-
-#endif
-
-  if (index != -1)
-     lv_menuitems->setCurrentRow (index);
 }
 
 
@@ -707,6 +504,58 @@ void CTEA::cb_use_joystick_stateChanged (int state)
 #endif
 
 
+void CTEA::readSettings()
+{
+  MyProxyStyle::cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
+
+  qApp->setCursorFlashTime (MyProxyStyle::cursor_blink_time);
+
+  recent_list_max_items = settings->value ("recent_list.max_items", 21).toInt();
+
+  MyProxyStyle::b_altmenu = settings->value ("b_altmenu", "0").toBool();
+
+  int ui_tab_align = settings->value ("ui_tabs_align", "0").toInt();
+  main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align));
+
+  int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
+  tab_editor->setTabPosition (int_to_tabpos (docs_tab_align));
+
+  markup_mode = settings->value ("markup_mode", "HTML").toString();
+  charset = settings->value ("charset", "UTF-8").toString();
+  fname_def_palette = settings->value ("fname_def_palette", ":/palettes/TEA").toString();
+  QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
+  QSize size = settings->value ("size", QSize (600, 420)).toSize();
+
+  if (mainSplitter)
+      mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
+
+  resize (size);
+  move (pos);
+}
+
+
+void CTEA::writeSettings()
+{
+  settings->setValue ("pos", pos());
+  settings->setValue ("size", size());
+  settings->setValue ("charset", charset);
+
+  if (mainSplitter)
+     settings->setValue ("splitterSizes", mainSplitter->saveState());
+
+  settings->setValue ("spl_fman", spl_fman->saveState());
+  settings->setValue ("dir_last", dir_last);
+  settings->setValue ("fname_def_palette", fname_def_palette);
+  settings->setValue ("markup_mode", markup_mode);
+  settings->setValue ("VER_NUMBER", QString (current_version_number));
+  settings->setValue ("state", saveState());
+  settings->setValue ("word_wrap", cb_wordwrap->isChecked());
+  settings->setValue ("show_linenums", cb_show_linenums->isChecked());
+  settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->isChecked());
+
+  delete settings;
+}
+
 
 
 void CTEA::opt_update_keyb()
@@ -737,33 +586,80 @@ void CTEA::slot_style_currentIndexChanged (int)
 }
 
 
-
-
-
-
-void CTEA::man_find_find()
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+void CTEA::cmb_spellchecker_currentIndexChanged (int)
 {
-  QString fiftxt = fif_get_text();
-  man->find (fiftxt, get_search_options());
-  man_search_value = fiftxt;
+  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+  QString text = cmb->currentText();
+
+  cur_spellchecker = text;
+
+  settings->setValue ("cur_spellchecker", cur_spellchecker);
+
+  delete spellchecker;
+
+  if (! spellcheckers.contains (cur_spellchecker) && spellcheckers.size() > 0)
+     cur_spellchecker = spellcheckers[0];
+
+#ifdef ASPELL_ENABLE
+  if (cur_spellchecker == "Aspell")
+     spellchecker = new CAspellchecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString());
+#endif
+
+
+#ifdef HUNSPELL_ENABLE
+   if (cur_spellchecker == "Hunspell")
+      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), hunspell_default_dict_path());
+#endif
+
+  settings->setValue ("spell_lang", "");
+
+  create_spellcheck_menu();
 }
+#endif
 
 
-void CTEA::man_find_next()
+#ifdef HUNSPELL_ENABLE
+void CTEA::pb_choose_hunspell_path_clicked()
 {
-  man->find (man_search_value, get_search_options());
+  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), hunspell_default_dict_path(),
+                                                    QFileDialog::ShowDirsOnly |
+                                                    QFileDialog::DontResolveSymlinks);
+  if (path.isEmpty())
+      return;
+
+  settings->setValue ("hunspell_dic_path", path);
+  ed_spellcheck_path->setText (path);
+
+  if (spellchecker)
+      delete spellchecker;
+
+  setup_spellcheckers();
+  create_spellcheck_menu();
 }
+#endif
 
 
-void CTEA::man_find_prev()
+#ifdef ASPELL_ENABLE
+
+void CTEA::pb_choose_aspell_path_clicked()
 {
-  man->find (man_search_value, get_search_options() | QTextDocument::FindBackward);
+  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/",
+                                                    QFileDialog::ShowDirsOnly |
+                                                    QFileDialog::DontResolveSymlinks);
+  if (path.isEmpty())
+     return;
+
+  settings->setValue ("win32_aspell_path", path);
+  ed_aspellcheck_path->setText (path);
+
+  if (spellchecker)
+     delete spellchecker;
+
+  setup_spellcheckers();
+  create_spellcheck_menu();
 }
-
-
-
-
-
+#endif
 
 
 
@@ -815,18 +711,6 @@ void CTEA::update_charsets()
 }
 
 
-void CTEA::add_to_last_used_charsets (const QString &s)
-{
-  int i = sl_last_used_charsets.indexOf (s);
-  if (i == -1)
-     sl_last_used_charsets.prepend (s);
-  else
-      sl_last_used_charsets.move (i, 0);
-
-  if (sl_last_used_charsets.size() > 3)
-     sl_last_used_charsets.removeLast();
-}
-
 
 QString str_to_entities (const QString &s)
 {
@@ -841,8 +725,6 @@ QString str_to_entities (const QString &s)
 
   return t;
 }
-
-
 
 
 
@@ -991,117 +873,6 @@ int get_arab_num (std::string rom_str)
 
 
 
-
-
-
-
-
-void CTEA::file_open_programs_file()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
-  if (! file_exists (fname_programs))
-     qstring_save (fname_programs, tr ("#external programs list. example:\nopera=\"C:\\Program Files\\Opera\\opera.exe \" \"%s\""));
-
-#else
-
-  if (! file_exists (fname_programs))
-     qstring_save (fname_programs, tr ("#external programs list. example:\nff=firefox file:///%s"));
-
-#endif
-
-  documents->open_file (fname_programs, "UTF-8");
-}
-
-
-void CTEA::process_readyReadStandardOutput()
-{
-  QProcess *p = qobject_cast<QProcess *>(sender());
-  QByteArray a = p->readAllStandardOutput()/*.data()*/;
-  QTextCodec *c = QTextCodec::codecForLocale();
-  QString t = c->toUnicode (a);
-
-  log->terminal_output = true;
-  log->log (t);
-  log->terminal_output = false;
-}
-
-
-void CTEA::run_program()
-{
-  last_action = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QAction *a = qobject_cast<QAction *>(sender());
-  QString command = programs.value(a->text());
-  if (command.isEmpty())
-     return;
-
-  if (main_tab_widget->currentIndex() == idx_tab_edit)
-     {
-      if (! file_exists (d->file_name))
-         {
-          QMessageBox::critical (this, "!", tr ("Save the file first!"), QMessageBox::Ok, QMessageBox::Ok);
-          return;
-         }
-
-      QFileInfo fi (d->file_name);
-
-      command = command.replace ("%s", d->file_name);
-      command = command.replace ("%basename", fi.baseName());
-      command = command.replace ("%filename", fi.fileName());
-      command = command.replace ("%ext", fi.suffix());
-      command = command.replace ("%dir", fi.canonicalPath());
-
-      QString fname = d->get_filename_at_cursor();
-      if (! fname.isEmpty())
-          command = command.replace ("%i", fname);
-     }
-  else
-  if (main_tab_widget->currentIndex() == idx_tab_fman)
-     command = command.replace ("%s", fman->get_sel_fname());
-
-  QProcess *process  = new QProcess (this);
-
-  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
-  process->setProcessChannelMode (QProcess::MergedChannels) ;
-
-  process->start (command, QStringList());
-}
-
-
-void CTEA::update_programs()
-{
-  if (! file_exists (fname_programs))
-     return;
-
-  programs = hash_load_keyval (fname_programs);
-  if (programs.count() < 0)
-     return;
-
-  menu_programs->clear();
-
-  QStringList sl = programs.keys();
-  sl.sort();
-
-  create_menu_from_list (this, menu_programs,
-                         sl,
-                         SLOT (run_program()));
-}
-
-
-
-
-
-
-
-
-
 void CAboutWindow::closeEvent (QCloseEvent *event)
 {
   event->accept();
@@ -1212,18 +983,6 @@ CAboutWindow::CAboutWindow()
 
 
 
-void CTEA::update_scripts()
-{
-  menu_fn_scripts->clear();
-
-  create_menu_from_dir (this,
-                        menu_fn_scripts,
-                        dir_scripts,
-                        SLOT (fn_run_script())
-                        );
-}
-
-
 
 
 void CTEA::cb_button_saves_as()
@@ -1290,6 +1049,58 @@ void CTEA::fman_del_bmk()
   sl_places_bmx.removeAt (i);
   qstring_save (fname_places_bookmarks, sl_places_bmx.join ("\n"));
   update_places_bookmarks();
+}
+
+
+void CTEA::fman_open()
+{
+  QString f = ed_fman_fname->text().trimmed();
+  QStringList li = fman->get_sel_fnames();
+
+  if (! f.isEmpty())
+  if (f[0] == '/')
+     {
+      CDocument *d = documents->open_file (f, cb_fman_codecs->currentText());
+      if (d)
+         {
+          dir_last = get_file_path (d->file_name);
+          charset = d->charset;
+          add_to_last_used_charsets (cb_fman_codecs->currentText());
+         }
+
+      main_tab_widget->setCurrentIndex (idx_tab_edit);
+      return;
+     }
+
+  if (li.size() == 0)
+     {
+      QString fname (fman->dir.path());
+      fname.append ("/").append (f);
+      CDocument *d = documents->open_file (fname, cb_fman_codecs->currentText());
+      if (d)
+         {
+          dir_last = get_file_path (d->file_name);
+          charset = d->charset;
+          add_to_last_used_charsets (cb_fman_codecs->currentText());
+         }
+
+      main_tab_widget->setCurrentIndex (idx_tab_edit);
+      return;
+     }
+
+  for (int i = 0; i < li.size(); i++)
+      {
+       CDocument *d = 0;
+       d = documents->open_file (li.at(i), cb_fman_codecs->currentText());
+       if (d)
+          {
+           dir_last = get_file_path (d->file_name);
+           charset = d->charset;
+          }
+      }
+
+  add_to_last_used_charsets (cb_fman_codecs->currentText());
+  main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
 
@@ -1366,56 +1177,26 @@ void CTEA::update_places_bookmarks()
 }
 
 
-void CTEA::fman_open()
+void CTEA::update_programs()
 {
-  QString f = ed_fman_fname->text().trimmed();
-  QStringList li = fman->get_sel_fnames();
+  if (! file_exists (fname_programs))
+     return;
 
-  if (! f.isEmpty())
-  if (f[0] == '/')
-     {
-      CDocument *d = documents->open_file (f, cb_fman_codecs->currentText());
-      if (d)
-         {
-          dir_last = get_file_path (d->file_name);
-          charset = d->charset;
-          add_to_last_used_charsets (cb_fman_codecs->currentText());
-         }
+  programs = hash_load_keyval (fname_programs);
+  if (programs.count() < 0)
+     return;
 
-      main_tab_widget->setCurrentIndex (idx_tab_edit);
-      return;
-     }
+  menu_programs->clear();
 
-  if (li.size() == 0)
-     {
-      QString fname (fman->dir.path());
-      fname.append ("/").append (f);
-      CDocument *d = documents->open_file (fname, cb_fman_codecs->currentText());
-      if (d)
-         {
-          dir_last = get_file_path (d->file_name);
-          charset = d->charset;
-          add_to_last_used_charsets (cb_fman_codecs->currentText());
-         }
+  QStringList sl = programs.keys();
+  sl.sort();
 
-      main_tab_widget->setCurrentIndex (idx_tab_edit);
-      return;
-     }
-
-  for (int i = 0; i < li.size(); i++)
-      {
-       CDocument *d = 0;
-       d = documents->open_file (li.at(i), cb_fman_codecs->currentText());
-       if (d)
-          {
-           dir_last = get_file_path (d->file_name);
-           charset = d->charset;
-          }
-      }
-
-  add_to_last_used_charsets (cb_fman_codecs->currentText());
-  main_tab_widget->setCurrentIndex (idx_tab_edit);
+  create_menu_from_list (this, menu_programs,
+                         sl,
+                         SLOT (run_program()));
 }
+
+
 
 
 
@@ -1452,161 +1233,8 @@ void CTEA::file_session_save_as()
 }
 
 
-QHash <QString, QString> CTEA::load_eclipse_theme_xml (const QString &fname)
-{
-  QHash <QString, QString> result;
-
-  QString temp = qstring_load (fname);
-  QXmlStreamReader xml (temp);
-
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.name().toString();
-
-         if (xml.isStartElement())
-            {
-             if (tag_name == "colorTheme")
-                {
-                 log->log (xml.attributes().value ("id").toString());
-                 log->log (xml.attributes().value ("name").toString());
-                 log->log (xml.attributes().value ("modified").toString());
-                 log->log (xml.attributes().value ("author").toString());
-                 log->log (xml.attributes().value ("website").toString());
-                }
-
-            if (tag_name == "singleLineComment")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                   result.insert ("single comment", t);
-               }
-
-            if (tag_name == "class")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                   {
-                    result.insert ("class", t);
-                    result.insert ("type", t);
-                   }
-               }
-
-            if (tag_name == "operator")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                   result.insert ("operator", t);
-               }
 
 
-            if (tag_name == "string")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                   result.insert ("quotes", t);
-               }
-
-
-            if (tag_name == "multiLineComment")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                   result.insert ("mcomment-start", t);
-               }
-
-            if (tag_name == "foreground")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                   {
-                    result.insert ("text", t);
-                    result.insert ("functions", t);
-                    result.insert ("modifiers", t);
-                    result.insert ("margin_color", t);
-                    result.insert ("digits", t);
-                    result.insert ("digits-float", t);
-                    result.insert ("label", t);
-                    result.insert ("include", t);
-                    result.insert ("preproc", t);
-                   }
-               }
-
-            if (tag_name == "background")
-               {
-                QString t = xml.attributes().value ("color").toString();
-                if (! t.isEmpty())
-                   {
-                    result.insert ("background", t);
-                    result.insert ("linenums_bg", t);
-                   }
-               }
-
-           if (tag_name == "selectionForeground")
-              {
-               QString t = xml.attributes().value ("color").toString();
-               if (! t.isEmpty())
-                  result.insert ("sel-text", t);
-              }
-
-           if (tag_name == "selectionBackground")
-              {
-               QString t = xml.attributes().value ("color").toString();
-               if (! t.isEmpty())
-                 result.insert ("sel-background", t);
-              }
-
-           if (tag_name == "keyword")
-              {
-               QString t = xml.attributes().value ("color").toString();
-               if (! t.isEmpty())
-                  {
-                   result.insert ("keywords", t);
-                   result.insert ("tags", t);
-                  }
-              }
-
-          if (tag_name == "currentLine")
-             {
-              QString t = xml.attributes().value ("color").toString();
-              if (! t.isEmpty())
-                 result.insert ("cur_line_color", t);
-             }
-
-          if (tag_name == "bracket")
-            {
-             QString t = xml.attributes().value ("color").toString();
-             if (! t.isEmpty())
-                 result.insert ("brackets", t);
-             }
-
-        }//is start
-
-   if (xml.hasError())
-     qDebug() << "xml parse error";
-
-  } //cycle
-
-
-  result.insert ("error", "red");
-
-  return result;
-}
-
-
-void CTEA::load_palette (const QString &fileName)
-{
-  if (! file_exists (fileName))
-      return;
-
-  global_palette.clear();
-
-  if (file_get_ext (fileName) == "xml")
-     global_palette = load_eclipse_theme_xml (fileName);
-  else
-      global_palette = hash_load_keyval (fileName);
-}
 
 
 
@@ -1644,189 +1272,8 @@ void CTEA::update_logmemo_palette()
 
 
 
-/*
 void CTEA::update_hls_noncached()
 {
-
-
-//HARDCODED PATTERNS are takes from resourse hl files, and escaped
-//All regexps there are valid
-
-
-#if QT_VERSION >= 0x050000
-
-  QRegularExpression::PatternOptions opt = QRegularExpression::CaseInsensitiveOption;
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(awk)$", opt), ":/hls/awk.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(sh)$", opt), ":/hls/sh.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(bas|bi|vbs|vbe)$", opt), ":/hls/basic.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", opt), ":/hls/clike.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(cs)$", opt), ":/hls/cs.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(d)$", opt), ":/hls/d.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(f|for|f90|f95)$", opt), ":/hls/fortran.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(java|js)$", opt), ":/hls/java.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(ly)$", opt), ":/hls/lilypond.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(lout)$", opt), ":/hls/lout.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(lua)$", opt), ":/hls/lua.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(asm)$", opt), ":/hls/nasm.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(nsi)$", opt), ":/hls/nsis.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(pp|pas|dpr)$", opt), ":/hls/pascal.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(pl|pm)$", opt), ":/hls/perl.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(php)$", opt), ":/hls/php.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(po)$", opt), ":/hls/po.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(py)$", opt), ":/hls/python.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(r)$", opt), ":/hls/r.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(sd7)$", opt), ":/hls/seed7.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(tex|lyx)$", opt), ":/hls/tex.xml"));
-
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(vala)$", opt), ":/hls/vala.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(v)$", opt), ":/hls/verilog.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(wiki)$", opt), ":/hls/wikitext.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", opt), ":/hls/xml.xml"));
-
-#else
-
-
-  QRegExp::PatternQt::CaseInsensitive, QRegExp::RegExp2ions Qt::CaseInsensitive, QRegExp::RegExp2 = QRegExp::CaseInsensitiveQt::CaseInsensitive, QRegExp::RegExp2ion;
-
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(awk)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/awk.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(sh)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/sh.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(bas|bi|vbs|vbe)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/basic.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/clike.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(cs)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/cs.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(d)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/d.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(f|for|f90|f95)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/fortran.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(java|js)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/java.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(ly)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lilypond.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(lout)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lout.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(lua)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lua.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(asm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/nasm.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(nsi)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/nsis.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(pp|pas|dpr)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/pascal.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(pl|pm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/perl.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(php)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/php.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(po)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/po.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(py)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/python.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(r)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/r.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(sd7)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/seed7.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(tex|lyx)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/tex.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(vala)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/vala.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(v)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/verilog.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(wiki)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/wikitext.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/xml.xml"));
-
-#endif
-
-
-
-// USER DEFINED PATTERNS are takes from tea config dir, hl subdir files
- //All regexps there must be validated valid
-
-
-
- // QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
-   QStringList l1;
-   l1 << read_dir_entries (dir_hls);  //read custom hls modules
-
-  for (int i = 0; i < l1.size(); i++)
-      {
-       QString fname = dir_hls + "/" + l1[i];
-
-       QString buffer = qstring_load_first_line (fname);
-       QString rgxp = string_between (buffer, "pattern=\"", "\"");
-
-       if (! rgxp.isEmpty())
-          {
-
-#if QT_VERSION >= 0x050000
-
-          QRegularExpression re (rgxp, QRegularExpression::CaseInsensitiveOption);
-          if (re.isValid())
-             documents->hl_files.push_back (std::make_pair (re, fname));
-
-#else
-
-          QRegExp re (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2);
-          if (re.isValid())
-             documents->hl_files.push_back(std::make_pair (re, fname));
-
-#endif
-          }
-      }
-}
-*/
-
-void CTEA::update_hls_noncached()
-{
-
-//HARDCODED PATTERNS are takes from resourse hl files, and escaped
-//All regexps there are valid
-/*
-#if QT_VERSION >= 0x050000
-  QRegularExpression::PatternOptions opt = QRegularExpression::CaseInsensitiveOption;
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(awk)$", opt), ":/hls/awk.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(sh)$", opt), ":/hls/sh.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(bas|bi|vbs|vbe)$", opt), ":/hls/basic.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", opt), ":/hls/clike.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(cs)$", opt), ":/hls/cs.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(d)$", opt), ":/hls/d.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(f|for|f90|f95)$", opt), ":/hls/fortran.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(java|js)$", opt), ":/hls/java.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(ly)$", opt), ":/hls/lilypond.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(lout)$", opt), ":/hls/lout.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(lua)$", opt), ":/hls/lua.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(asm)$", opt), ":/hls/nasm.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(nsi)$", opt), ":/hls/nsis.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(pp|pas|dpr)$", opt), ":/hls/pascal.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(pl|pm)$", opt), ":/hls/perl.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(php)$", opt), ":/hls/php.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(po)$", opt), ":/hls/po.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(py)$", opt), ":/hls/python.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(r)$", opt), ":/hls/r.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(sd7)$", opt), ":/hls/seed7.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(tex|lyx)$", opt), ":/hls/tex.xml"));
-
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(vala)$", opt), ":/hls/vala.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(v)$", opt), ":/hls/verilog.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(wiki)$", opt), ":/hls/wikitext.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegularExpression ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", opt), ":/hls/xml.xml"));
-#else
-  QRegExp::PatternQt::CaseInsensitive, QRegExp::RegExp2ions Qt::CaseInsensitive, QRegExp::RegExp2 = QRegExp::CaseInsensitiveQt::CaseInsensitive, QRegExp::RegExp2ion;
-
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(awk)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/awk.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(sh)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/sh.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(bas|bi|vbs|vbe)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/basic.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/clike.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(cs)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/cs.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(d)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/d.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(f|for|f90|f95)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/fortran.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(java|js)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/java.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(ly)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lilypond.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(lout)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lout.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(lua)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/lua.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(asm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/nasm.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(nsi)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/nsis.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(pp|pas|dpr)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/pascal.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(pl|pm)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/perl.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(php)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/php.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(po)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/po.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(py)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/python.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(r)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/r.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(sd7)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/seed7.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(tex|lyx)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/tex.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(vala)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/vala.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(v)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/verilog.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(wiki)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/wikitext.xml"));
-  documents->hl_files.push_back(std::make_pair(QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive, QRegExp::RegExp2), ":/hls/xml.xml"));
-#endif
-
-*/
-
-// PATTERNS are takes from tea config dir, hl subdir files
- //All regexps there must be validated valid
-
-
-
- // QStringList l1 = read_dir_entries (":/hls"); //read built-in hls modiles
 
   CFilesList lf;
   lf.get (":/hls");
@@ -1868,8 +1315,6 @@ void CTEA::fman_drives_changed (const QString & path)
   if (! ui_update)
      fman->nav (path);
 }
-
-
 
 
 void CTEA::fman_file_activated (const QString &full_path)
@@ -2031,52 +1476,6 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
 
 
 
-void CTEA::count_substring (bool use_regexp)
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString text;
-
-  if (d->textCursor().hasSelection())
-     text = d->get();
-  else
-      text = d->toPlainText();
-
-  int count = 0;
-  Qt::CaseSensitivity cs = Qt::CaseInsensitive;
-
-  if (menu_find_case->isChecked())
-     cs = Qt::CaseSensitive;
-
-#if (QT_VERSION_MAJOR < 5)
-
-  if (use_regexp)
-     count = text.count (QRegExp (fif_get_text()));
-  else
-      count = text.count (fif_get_text(), cs);
-
-
-#else
-
-  if (use_regexp)
-     count = text.count (QRegularExpression (fif_get_text()));
-  else
-      count = text.count (fif_get_text(), cs);
-
-
-#endif
-
-
-  log->log (tr ("%1 number of occurrences of %2 is found").arg (count).arg (fif->text()));
-}
-
-
-
-
-
-
 void CTEA::read_search_options()
 {
   menu_find_whole_words->setChecked (settings->value ("find_whole_words", "0").toBool());
@@ -2097,152 +1496,12 @@ void CTEA::write_search_options()
 }
 
 
-void CTEA::main_tab_page_changed (int index)
-{
-  if (idx_prev == idx_tab_fman)
-     if (img_viewer && img_viewer->window_mini.isVisible())
-         img_viewer->window_mini.close();
-
-  if (idx_prev == idx_tab_tune)
-      leaving_tune();
-
-  idx_prev = index;
-
-  if (index == idx_tab_fman)
-     {
-      fman->setFocus();
-      fm_entry_mode = FM_ENTRY_MODE_NONE;
-      idx_tab_fman_activate();
-     }
-  else
-  if (index == idx_tab_calendar)
-     {
-      calendar_update();
-      idx_tab_calendar_activate();
-     }
-  else
-  if (index == idx_tab_edit)
-     idx_tab_edit_activate();
-  else
-  if (index == idx_tab_tune)
-     idx_tab_tune_activate();
-  else
-  if (index == idx_tab_learn)
-     idx_tab_learn_activate();
-}
-
-
-QString CTEA::fif_get_text()
-{
-  QString t = fif->text();
-
-  int i = sl_fif_history.indexOf (t);
-
-  if (i != -1)
-     {
-      sl_fif_history.removeAt (i);
-      sl_fif_history.prepend (t);
-     }
-  else
-      sl_fif_history.prepend (t);
-
-  if (sl_fif_history.count() > 77)
-     sl_fif_history.removeLast();
-
-  return t;
-}
 
 
 
 
-void CTEA::fman_convert_images (bool by_side, int value)
-{
-  srand (QTime::currentTime().msec());
-
-  QString dir_out ("images-out-");
-
-  dir_out.append (QString::number (rand() % 777));
-  dir_out.prepend ("/");
-  dir_out.prepend (fman->dir.absolutePath());
-
-  if (! fman->dir.mkpath (dir_out))
-     return;
-
-  Qt::TransformationMode transformMode = Qt::FastTransformation;
-  if (settings->value ("img_filter", 0).toBool())
-     transformMode = Qt::SmoothTransformation;
-
-  pb_status->show();
-  pb_status->setFormat (tr ("%p% completed"));
-  pb_status->setTextVisible (true);
-
-  QStringList li = fman->get_sel_fnames();
-
-  int quality = settings->value ("img_quality", "-1").toInt();
-
-  pb_status->setRange (0, li.size() - 1 );
-  int i = 0;
-
-  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); ++fname)
-      {
-       if (! is_image ((*fname)))
-           continue;
-
-       QImage source ((*fname));
-
-       if (source.isNull())
-          continue;
-
-       qApp->processEvents();
-
-       if (settings->value ("cb_exif_rotate", 1).toBool())
-          {
-           int exif_orientation = get_exif_orientation ((*fname));
-
-           QTransform transform;
-           qreal angle = 0;
-
-           if (exif_orientation == 3)
-              angle = 180;
-           else
-           if (exif_orientation == 6)
-              angle = 90;
-           else
-           if (exif_orientation == 8)
-              angle = 270;
-           if (angle != 0)
-              {
-               transform.rotate (angle);
-               source = source.transformed (transform);
-              }
-          }
 
 
-          QImage dest = image_scale_by (source, by_side, value, transformMode);
-          QString fmt (settings->value ("output_image_fmt", "jpg").toString());
-          QFileInfo fi ((*fname));
-
-          QString dest_fname (dir_out);
-          dest_fname.append ("/");
-          dest_fname.append (fi.fileName());
-          dest_fname = change_file_ext (dest_fname, fmt);
-
-          if (! dest.save (dest_fname, fmt.toLatin1().constData(), quality))
-             qDebug() << "Cannot save " << dest_fname;
-
-          pb_status->setValue (i++);
-         }
-
-  pb_status->hide();
-
-  if (settings->value ("img_post_proc", 0).toBool())
-     {
-      CZipper zipper;
-      zipper.zip_directory (fman->dir.absolutePath(), dir_out);
-     }
-
-  fman->refresh();
-}
 
 
 
@@ -2269,110 +1528,15 @@ void CTEA::update_tables()
 }
 
 
-
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-void CTEA::cmb_spellchecker_currentIndexChanged (int)
+void CTEA::update_scripts()
 {
-  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
-  QString text = cmb->currentText();
+  menu_fn_scripts->clear();
 
-  cur_spellchecker = text;
-
-  settings->setValue ("cur_spellchecker", cur_spellchecker);
-
-  delete spellchecker;
-
-  if (! spellcheckers.contains (cur_spellchecker) && spellcheckers.size() > 0)
-     cur_spellchecker = spellcheckers[0];
-
-#ifdef ASPELL_ENABLE
-  if (cur_spellchecker == "Aspell")
-     spellchecker = new CAspellchecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString());
-#endif
-
-
-#ifdef HUNSPELL_ENABLE
-   if (cur_spellchecker == "Hunspell")
-      spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), hunspell_default_dict_path());
-#endif
-
-  settings->setValue ("spell_lang", "");
-
-  create_spellcheck_menu();
-}
-#endif
-
-
-#ifdef HUNSPELL_ENABLE
-void CTEA::pb_choose_hunspell_path_clicked()
-{
-  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), hunspell_default_dict_path(),
-                                                    QFileDialog::ShowDirsOnly |
-                                                    QFileDialog::DontResolveSymlinks);
-  if (path.isEmpty())
-      return;
-
-  settings->setValue ("hunspell_dic_path", path);
-  ed_spellcheck_path->setText (path);
-
-  if (spellchecker)
-      delete spellchecker;
-
-  setup_spellcheckers();
-  create_spellcheck_menu();
-}
-#endif
-
-
-#ifdef ASPELL_ENABLE
-
-void CTEA::pb_choose_aspell_path_clicked()
-{
-  QString path = QFileDialog::getExistingDirectory (this, tr ("Open Directory"), "/",
-                                                    QFileDialog::ShowDirsOnly |
-                                                    QFileDialog::DontResolveSymlinks);
-  if (path.isEmpty())
-     return;
-
-  settings->setValue ("win32_aspell_path", path);
-  ed_aspellcheck_path->setText (path);
-
-  if (spellchecker)
-     delete spellchecker;
-
-  setup_spellcheckers();
-  create_spellcheck_menu();
-}
-#endif
-
-
-void CTEA::fn_filter_delete_by_sep (bool mode)
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QStringList sl = d->get().split (QChar::ParagraphSeparator);
-
-  QString t = fif_get_text();
-
-  for (int i = 0; i < sl.size(); i++)
-      {
-       int n = sl[i].indexOf (t);
-       if (n != -1)
-          {
-           QString s = sl[i];
-           if (mode)
-               s = s.right (s.size() - n);
-           else
-               s = s.left (n);
-           sl[i] = s;
-          }
-      }
-
-  QString x = sl.join ("\n");
-
-  d->put (x);
+  create_menu_from_dir (this,
+                        menu_fn_scripts,
+                        dir_scripts,
+                        SLOT (fn_run_script())
+                        );
 }
 
 
@@ -2391,263 +1555,15 @@ void CTEA::update_profiles()
 }
 
 
-void CTEA::fman_items_select_by_regexp (bool mode)
-{
-  QString ft = fif_get_text();
-  if (ft.isEmpty())
-      return;
-
-#if QT_VERSION >= 0x050000
-  l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegularExpression);
-#else
-  l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegExp);
-#endif
-
-
-  if (l_fman_find.size() < 1)
-     return;
-
-  QItemSelectionModel *m = fman->selectionModel();
-  for (int i = 0; i < l_fman_find.size(); i++)
-      if (mode)
-         m->select (fman->mymodel->indexFromItem (l_fman_find[i]), QItemSelectionModel::Select | QItemSelectionModel::Rows);
-      else
-          m->select (fman->mymodel->indexFromItem (l_fman_find[i]), QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
-}
 
 
 
 
 
-void CTEA::guess_enc()
-{
-  QString enc;
-  QString fn = fman->get_sel_fname();
-
-  if (settings->value ("use_enca_for_charset_detection", 0).toBool())
-      {
-       enc = guess_enc_for_file (fn);
-       if (enc == "err")
-          {
-           log->log (tr ("Enca is not installed, falling back to the built-in detection"));
-           CCharsetMagic cm;
-           enc = cm.guess_for_file (fn);
-          }
-      }
-  else
-      {
-       CCharsetMagic cm;
-       enc = cm.guess_for_file (fn);
-      }
-
-  cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
-}
-
-
-void CTEA::calendar_clicked (const QDate &date)
-{
-  QString fname = dir_days + "/" + date.toString ("yyyy-MM-dd");
-
-  if (file_exists (fname))
-     {
-      QString s = qstring_load (fname);
-      log->log (s);
-     }
-}
-
-
-void CTEA::calendar_activated (const QDate &date)
-{
-  QString fname = dir_days + "/" + date.toString ("yyyy-MM-dd");
-
-  bool fresh = false;
-
-  if (settings->value ("cal_run_1st", true).toBool())
-     {
-      if (! file_exists (fname))
-         qstring_save (fname, tr ("Enter your daily notes here.\nTo use time-based reminders, specify the time signature in 24-hour format [hh:mm], i.e.:\n[06:00]good morning!\n[20:10]go to theatre"));
-
-      settings->setValue ("cal_run_1st", false);
-      fresh = true;
-     }
-  else
-  if (! file_exists (fname))
-     {
-      qstring_save (fname, tr ("Enter your daily notes here."));
-      fresh = true;
-     }
-
-  CDocument *d = documents->open_file (fname, "UTF-8");
-  if (! d)
-     return;
-
-  if (fresh)
-     d->selectAll();
-
-  main_tab_widget->setCurrentIndex (idx_tab_edit);
-}
 
 
 
 
-void CTEA::calendar_currentPageChanged (int year, int month)
-{
-  calendar_update();
-}
-
-
-void CTEA::calendar_update()
-{
-  if (settings->value ("start_week_on_sunday", "0").toBool())
-     calendar->setFirstDayOfWeek (Qt::Sunday);
-  else
-      calendar->setFirstDayOfWeek (Qt::Monday);
-
-  int year = calendar->yearShown();
-  int month = calendar->monthShown();
-
-  QDate dbase (year, month, 1);
-
-  QTextCharFormat format_past;
-  QTextCharFormat format_future;
-  QTextCharFormat format_normal;
-
-  format_past.setFontStrikeOut (true);
-  format_future.setFontUnderline (true);
-
-  int days_count = dbase.daysInMonth();
-
-  for (int day = 1; day <= days_count; day++)
-      {
-       QDate date (year, month, day);
-       QString sdate;
-
-//       sdate = sdate.sprintf ("%02d-%02d-%02d", year, month, day);
-
-      sdate += QString("%1").arg (year, 2, 10, QChar('0'));
-      sdate += "-";
-      sdate += QString("%1").arg (month, 2, 10, QChar('0'));
-      sdate += "-";
-      sdate += QString("%1").arg (day, 2, 10, QChar('0'));
-
-       QString fname  = dir_days + "/" + sdate;
-
-       if (file_exists (fname))
-          {
-           if (date < QDate::currentDate())
-              calendar->setDateTextFormat (date, format_past);
-           else
-           if (date >= QDate::currentDate())
-              calendar->setDateTextFormat (date, format_future);
-          }
-        else
-            calendar->setDateTextFormat (date, format_normal);
-      }
-}
-
-
-void CTEA::idx_tab_edit_activate()
-{
-  menu_file->menuAction()->setVisible (true);
-  menu_edit->menuAction()->setVisible (true);
-  menu_programs->menuAction()->setVisible (true);
-  menu_cal->menuAction()->setVisible (false);
-  menu_markup->menuAction()->setVisible (true);
-  menu_functions->menuAction()->setVisible (true);
-  menu_search->menuAction()->setVisible (true);
-  menu_nav->menuAction()->setVisible (true);
-  menu_fm->menuAction()->setVisible (false);
-  menu_view->menuAction()->setVisible (true);
-  helpMenu->menuAction()->setVisible (true);
-}
-
-
-void CTEA::idx_tab_calendar_activate()
-{
-  menu_file->menuAction()->setVisible (true);
-  menu_edit->menuAction()->setVisible (false);
-  menu_cal->menuAction()->setVisible (true);
-  menu_programs->menuAction()->setVisible (true);
-  menu_markup->menuAction()->setVisible (false);
-  menu_functions->menuAction()->setVisible (false);
-  menu_search->menuAction()->setVisible (false);
-  menu_nav->menuAction()->setVisible (false);
-  menu_fm->menuAction()->setVisible (false);
-  menu_view->menuAction()->setVisible (true);
-  helpMenu->menuAction()->setVisible (true);
-}
-
-
-void CTEA::idx_tab_tune_activate()
-{
-  opt_update_keyb();
-
-  menu_file->menuAction()->setVisible (true);
-  menu_edit->menuAction()->setVisible (false);
-  menu_programs->menuAction()->setVisible (true);
-  menu_markup->menuAction()->setVisible (false);
-  menu_functions->menuAction()->setVisible (true);
-  menu_search->menuAction()->setVisible (false);
-  menu_nav->menuAction()->setVisible (false);
-  menu_fm->menuAction()->setVisible (false);
-  menu_view->menuAction()->setVisible (true);
-  helpMenu->menuAction()->setVisible (true);
-  menu_cal->menuAction()->setVisible (false);
-}
-
-
-void CTEA::idx_tab_fman_activate()
-{
-  menu_file->menuAction()->setVisible (true);
-  menu_edit->menuAction()->setVisible (false);
-  menu_programs->menuAction()->setVisible (true);
-  menu_markup->menuAction()->setVisible (false);
-  menu_functions->menuAction()->setVisible (true);
-  menu_search->menuAction()->setVisible (true);
-  menu_nav->menuAction()->setVisible (false);
-  menu_fm->menuAction()->setVisible (true);
-  menu_view->menuAction()->setVisible (true);
-  helpMenu->menuAction()->setVisible (true);
-  menu_cal->menuAction()->setVisible (false);
-}
-
-
-void CTEA::idx_tab_learn_activate()
-{
-  menu_file->menuAction()->setVisible (true);
-  menu_edit->menuAction()->setVisible (false);
-  menu_programs->menuAction()->setVisible (true);
-  menu_markup->menuAction()->setVisible (false);
-  menu_functions->menuAction()->setVisible (false);
-  menu_search->menuAction()->setVisible (true);
-  menu_nav->menuAction()->setVisible (false);
-  menu_fm->menuAction()->setVisible (false);
-  menu_view->menuAction()->setVisible (true);
-  helpMenu->menuAction()->setVisible (true);
-  menu_cal->menuAction()->setVisible (false);
-}
-
-
-void CTEA::select_label()
-{
-  last_action = qobject_cast<QAction *>(sender());
-  QAction *Act = qobject_cast<QAction *>(sender());
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QTextCursor cr;
-
-  QString text_to_find = settings->value ("label_start", "[?").toString()
-                         + Act->text()
-                         + settings->value ("label_end", "?]").toString();
-
-  cr = d->document()->find (text_to_find);
-
-  if (! cr.isNull())
-     d->setTextCursor (cr);
-}
 
 
 
@@ -2705,133 +1621,11 @@ void CTEA::cmb_docs_tabs_currentIndexChanged (int i)
 
 
 
-void CTEA::clipboard_dataChanged()
-{
-  if (! capture_to_storage_file)
-     return;
-
-  CDocument *ddest = documents->get_document_by_fname (fname_storage_file);
-  if (ddest)
-     {
-      QString t = QApplication::clipboard()->text();
-
-      QString tpl = "%s\n";
-
-      QString ftemplate = dir_config + "/cliptpl.txt";
-      if (file_exists (ftemplate))
-         tpl = qstring_load (ftemplate);
-
-      tpl = tpl.replace ("%time", QTime::currentTime().toString (settings->value("time_format", "hh:mm:ss").toString()));
-      tpl = tpl.replace ("%date", QDate::currentDate().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
-
-      QString text_to_insert = tpl.replace ("%s", t);
-
-      ddest->put (text_to_insert);
-     }
-}
 
 
 
 
 
-void CTEA::leaving_tune()
-{
-  settings->setValue ("date_format", ed_date_format->text());
-  settings->setValue ("time_format", ed_time_format->text());
-  settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
-  settings->setValue ("wasd", cb_wasd->isChecked());
-
-  settings->setValue ("ui_mode", cmb_ui_mode->currentIndex());
-
-
-
-#if defined(JOYSTICK_SUPPORTED)
-  settings->setValue ("use_joystick", cb_use_joystick->isChecked());
-#endif
-
-  settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->isChecked());
-  settings->setValue ("word_wrap", cb_wordwrap->isChecked());
-
-#if QT_VERSION >= 0x050000
-//  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->isChecked());
-#endif
-
-  settings->setValue ("additional_hl", cb_hl_current_line->isChecked());
-  settings->setValue ("session_restore", cb_session_restore->isChecked());
-  settings->setValue ("show_linenums", cb_show_linenums->isChecked());
-  settings->setValue ("hl_enabled", cb_hl_enabled->isChecked());
-  settings->setValue ("hl_brackets", cb_hl_brackets->isChecked());
-  settings->setValue ("auto_indent", cb_auto_indent->isChecked());
-  settings->setValue ("spaces_instead_of_tabs", cb_spaces_instead_of_tabs->isChecked());
-  settings->setValue ("cursor_xy_visible", cb_cursor_xy_visible->isChecked());
-  settings->setValue ("tab_sp_width", spb_tab_sp_width->value());
-  settings->setValue ("center_on_scroll", cb_center_on_cursor->isChecked());
-  settings->setValue ("show_margin", cb_show_margin->isChecked());
-  settings->setValue ("margin_pos", spb_margin_pos->value());
-  settings->setValue ("b_preview", cb_auto_img_preview->isChecked());
-  settings->setValue ("cursor_blink_time", spb_cursor_blink_time->value());
-
-  MyProxyStyle::cursor_blink_time = spb_cursor_blink_time->value();
-
-  qApp->setCursorFlashTime (spb_cursor_blink_time->value());
-
-  settings->setValue ("cursor_width", spb_cursor_width->value());
-  settings->setValue ("override_img_viewer", cb_override_img_viewer->isChecked());
-  settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->isChecked());
-  settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->isChecked());
-  settings->setValue ("start_week_on_sunday", cb_start_on_sunday->isChecked());
-  settings->setValue ("northern_hemisphere", cb_northern_hemisphere->isChecked());
-
-  calendar->northern_hemisphere = bool (cb_northern_hemisphere->isChecked());
-
-  int i = moon_phase_algos.key (cmb_moon_phase_algos->currentText());
-  settings->setValue ("moon_phase_algo", i);
-  calendar->moon_phase_algo = i;
-
-  settings->setValue ("lng", cmb_lng->currentText());
-
-  settings->setValue ("zip_charset_in", cmb_zip_charset_in->currentText());
-  settings->setValue ("zip_charset_out", cmb_zip_charset_out->currentText());
-  settings->setValue ("cmdline_default_charset", cmb_cmdline_default_charset->currentText());
-  settings->setValue ("label_end", ed_label_end->text());
-  settings->setValue ("label_start", ed_label_start->text());
-  settings->setValue ("output_image_fmt", cmb_output_image_fmt->currentText());
-  settings->setValue ("img_filter", cb_output_image_flt->isChecked());
-  settings->setValue("fuzzy_q", spb_fuzzy_q->value());
-  settings->setValue("img_quality", spb_img_quality->value());
-  settings->setValue ("img_post_proc", cb_zip_after_scale->isChecked());
-  settings->setValue ("cb_exif_rotate", cb_exif_rotate->isChecked());
-  settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->isChecked());
-  settings->setValue ("ed_side_size", ed_side_size->text());
-  settings->setValue ("ed_link_options", ed_link_options->text());
-  settings->setValue ("ed_cols_per_row", ed_cols_per_row->text());
-
-  b_preview = settings->value ("b_preview", false).toBool();
-
-  calendar->do_update();
-  documents->apply_settings();
-}
-
-
-QAction* CTEA::add_to_menu (QMenu *menu,
-                            const QString &caption,
-                            const char *method,
-                            const QString &shortkt,
-                            const QString &iconpath
-                           )
-{
-  QAction *act = new QAction (caption, this);
-
-  if (! shortkt.isEmpty())
-     act->setShortcut (shortkt);
-
-  if (! iconpath.isEmpty())
-     act->setIcon (QIcon (iconpath));
-
-  connect (act, SIGNAL(triggered()), this, method);
-  menu->addAction (act);
-  return act;
-}
 
 
 void CDarkerWindow::closeEvent (QCloseEvent *event)
@@ -2877,27 +1671,6 @@ void CDarkerWindow::slot_valueChanged (int value)
 
 
 
-
-QIcon CTEA::get_theme_icon (const QString &name)
-{
-  QString fname = theme_dir + "icons/" + name;
-
-  if (file_exists (fname))
-     return QIcon (fname);
-  else
-      return QIcon (":/icons/" + name);
-}
-
-
-QString CTEA::get_theme_icon_fname (const QString &name)
-{
-  QString fname = theme_dir + "icons/" + name;
-
-  if (file_exists (fname))
-     return fname;
-  else
-      return ":/icons/" + name;
-}
 
 
 
@@ -3887,6 +2660,26 @@ void CTEA::file_open_bookmarks_file()
 }
 
 
+void CTEA::file_open_programs_file()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+
+  if (! file_exists (fname_programs))
+     qstring_save (fname_programs, tr ("#external programs list. example:\nopera=\"C:\\Program Files\\Opera\\opera.exe \" \"%s\""));
+
+#else
+
+  if (! file_exists (fname_programs))
+     qstring_save (fname_programs, tr ("#external programs list. example:\nff=firefox file:///%s"));
+
+#endif
+
+  documents->open_file (fname_programs, "UTF-8");
+}
+
+
 void CTEA::file_open_bookmark()
 {
   last_action = sender();
@@ -4618,18 +3411,6 @@ Search menu callbacks
 */
 
 
-QTextDocument::FindFlags CTEA::get_search_options()
-{
-  QTextDocument::FindFlags flags; //= 0;
-
-  if (menu_find_whole_words->isChecked())
-     flags = flags | QTextDocument::FindWholeWords;
-
-  if (menu_find_case->isChecked())
-     flags = flags | QTextDocument::FindCaseSensitively;
-
-  return flags;
-}
 
 
 void CTEA::search_find()
@@ -6575,82 +5356,6 @@ bool pr_bigger_than_str_len (const pair<const QString &,int> &a,
 
 
 
-void CTEA::run_unitaz (int mode)
-{
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  pb_status->show();
-  pb_status->setFormat (tr ("%p% completed"));
-  pb_status->setTextVisible (true);
-
-  QElapsedTimer time_start;
-  time_start.start();
-
-  int c = 0;
-
-  QStringList total = d->get_words();
-  QHash <QString, int> h;
-
-  pb_status->setRange (0, total.size() - 1);
-
-  for (int j = 0; j < total.size(); j++)
-      {
-       if (c % 100 == 0)
-          qApp->processEvents();
-
-       QHash<QString, int>::iterator i = h.find (total.at(j).toLower());
-       if (i != h.end())
-           i.value() += 1;
-       else
-           h.insert(total.at(j).toLower(), 1);
-
-       pb_status->setValue (c++);
-      }
-
-
-  vector< pair <QString, int> > uwords;
-
-  QList <QString> keys = h.keys();
-  int sz = keys.size();
-
-  uwords.reserve (sz);
-
-  for (int i = 0; i < sz; i++)
-      uwords.push_back (make_pair(keys.at(i),h.value (keys.at(i))));
-
-
-  if (mode == 0)
-    std::sort (uwords.begin(), uwords.end(), pr_bigger_than);
-  if (mode == 1)
-     std::sort (uwords.begin(), uwords.end(), pr_bigger_than_str);
-  if (mode == 2)
-     std::sort (uwords.begin(), uwords.end(), pr_bigger_than_str_len);
-
-  QStringList outp;
-
-  for (size_t i = 0; i < uwords.size(); i++)
-      outp.append (uwords.at(i).first + " = " + QString::number (uwords.at(i).second));
-
-  double diff = static_cast <double> (total.size()) / static_cast <double> (uwords.size());
-  double diff_per_cent = get_percent (static_cast <double> (total.size()), static_cast <double> (uwords.size()));
-
-  outp.prepend (tr ("total to unique per cent diff: %1").arg (diff_per_cent, 0, 'f', 6));
-  outp.prepend (tr ("total / unique: %1").arg (diff, 0, 'f', 6));
-  outp.prepend (tr ("words unique: %1").arg (uwords.size()));
-  outp.prepend (tr ("words total: %1").arg (total.size()));
-  outp.prepend (tr ("text analysis of: %1").arg (d->file_name));
-  outp.prepend (tr ("UNITAZ: UNIverlsal Text AnalyZer"));
-
-  log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
-
-
-  CDocument *nd = documents->create_new();
-  nd->put (outp.join ("\n"));
-
-   pb_status->hide();
-}
 
 
 
@@ -7174,6 +5879,57 @@ void CTEA::fn_spell_suggest()
 Cal menu
 ===================
 */
+
+
+void CTEA::calendar_update()
+{
+  if (settings->value ("start_week_on_sunday", "0").toBool())
+     calendar->setFirstDayOfWeek (Qt::Sunday);
+  else
+      calendar->setFirstDayOfWeek (Qt::Monday);
+
+  int year = calendar->yearShown();
+  int month = calendar->monthShown();
+
+  QDate dbase (year, month, 1);
+
+  QTextCharFormat format_past;
+  QTextCharFormat format_future;
+  QTextCharFormat format_normal;
+
+  format_past.setFontStrikeOut (true);
+  format_future.setFontUnderline (true);
+
+  int days_count = dbase.daysInMonth();
+
+  for (int day = 1; day <= days_count; day++)
+      {
+       QDate date (year, month, day);
+       QString sdate;
+
+//       sdate = sdate.sprintf ("%02d-%02d-%02d", year, month, day);
+
+      sdate += QString("%1").arg (year, 2, 10, QChar('0'));
+      sdate += "-";
+      sdate += QString("%1").arg (month, 2, 10, QChar('0'));
+      sdate += "-";
+      sdate += QString("%1").arg (day, 2, 10, QChar('0'));
+
+       QString fname  = dir_days + "/" + sdate;
+
+       if (file_exists (fname))
+          {
+           if (date < QDate::currentDate())
+              calendar->setDateTextFormat (date, format_past);
+           else
+           if (date >= QDate::currentDate())
+              calendar->setDateTextFormat (date, format_future);
+          }
+        else
+            calendar->setDateTextFormat (date, format_normal);
+      }
+}
+
 
 
 void CTEA::create_moon_phase_algos()
@@ -10675,3 +9431,1068 @@ void CTEA::update_themes()
                            SLOT (view_use_theme())
                            );
 }
+
+
+/*
+=====================
+Misc callbacks
+=====================
+*/
+
+
+void CTEA::select_label()
+{
+  last_action = qobject_cast<QAction *>(sender());
+  QAction *Act = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QTextCursor cr;
+
+  QString text_to_find = settings->value ("label_start", "[?").toString()
+                         + Act->text()
+                         + settings->value ("label_end", "?]").toString();
+
+  cr = d->document()->find (text_to_find);
+
+  if (! cr.isNull())
+     d->setTextCursor (cr);
+}
+
+
+void CTEA::run_program()
+{
+  last_action = qobject_cast<QAction *>(sender());
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QAction *a = qobject_cast<QAction *>(sender());
+  QString command = programs.value(a->text());
+  if (command.isEmpty())
+     return;
+
+  if (main_tab_widget->currentIndex() == idx_tab_edit)
+     {
+      if (! file_exists (d->file_name))
+         {
+          QMessageBox::critical (this, "!", tr ("Save the file first!"), QMessageBox::Ok, QMessageBox::Ok);
+          return;
+         }
+
+      QFileInfo fi (d->file_name);
+
+      command = command.replace ("%s", d->file_name);
+      command = command.replace ("%basename", fi.baseName());
+      command = command.replace ("%filename", fi.fileName());
+      command = command.replace ("%ext", fi.suffix());
+      command = command.replace ("%dir", fi.canonicalPath());
+
+      QString fname = d->get_filename_at_cursor();
+      if (! fname.isEmpty())
+          command = command.replace ("%i", fname);
+     }
+  else
+  if (main_tab_widget->currentIndex() == idx_tab_fman)
+     command = command.replace ("%s", fman->get_sel_fname());
+
+  QProcess *process  = new QProcess (this);
+
+  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
+
+  process->start (command, QStringList());
+}
+
+
+void CTEA::guess_enc()
+{
+  QString enc;
+  QString fn = fman->get_sel_fname();
+
+  if (settings->value ("use_enca_for_charset_detection", 0).toBool())
+      {
+       enc = guess_enc_for_file (fn);
+       if (enc == "err")
+          {
+           log->log (tr ("Enca is not installed, falling back to the built-in detection"));
+           CCharsetMagic cm;
+           enc = cm.guess_for_file (fn);
+          }
+      }
+  else
+      {
+       CCharsetMagic cm;
+       enc = cm.guess_for_file (fn);
+      }
+
+  cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
+}
+
+
+void CTEA::clipboard_dataChanged()
+{
+  if (! capture_to_storage_file)
+     return;
+
+  CDocument *ddest = documents->get_document_by_fname (fname_storage_file);
+  if (ddest)
+     {
+      QString t = QApplication::clipboard()->text();
+
+      QString tpl = "%s\n";
+
+      QString ftemplate = dir_config + "/cliptpl.txt";
+      if (file_exists (ftemplate))
+         tpl = qstring_load (ftemplate);
+
+      tpl = tpl.replace ("%time", QTime::currentTime().toString (settings->value("time_format", "hh:mm:ss").toString()));
+      tpl = tpl.replace ("%date", QDate::currentDate().toString (settings->value("date_format", "dd/MM/yyyy").toString()));
+
+      QString text_to_insert = tpl.replace ("%s", t);
+
+      ddest->put (text_to_insert);
+     }
+}
+
+
+
+void CTEA::main_tab_page_changed (int index)
+{
+  if (idx_prev == idx_tab_fman)
+     if (img_viewer && img_viewer->window_mini.isVisible())
+         img_viewer->window_mini.close();
+
+  if (idx_prev == idx_tab_tune)
+      leaving_options();
+
+  idx_prev = index;
+
+  if (index == idx_tab_fman)
+     {
+      fman->setFocus();
+      fm_entry_mode = FM_ENTRY_MODE_NONE;
+      idx_tab_fman_activate();
+     }
+  else
+  if (index == idx_tab_calendar)
+     {
+      calendar_update();
+      idx_tab_calendar_activate();
+     }
+  else
+  if (index == idx_tab_edit)
+     idx_tab_edit_activate();
+  else
+  if (index == idx_tab_tune)
+     idx_tab_tune_activate();
+  else
+  if (index == idx_tab_learn)
+     idx_tab_learn_activate();
+}
+
+
+void CTEA::calendar_clicked (const QDate &date)
+{
+  QString fname = dir_days + "/" + date.toString ("yyyy-MM-dd");
+
+  if (file_exists (fname))
+     {
+      QString s = qstring_load (fname);
+      log->log (s);
+     }
+}
+
+
+void CTEA::calendar_activated (const QDate &date)
+{
+  QString fname = dir_days + "/" + date.toString ("yyyy-MM-dd");
+
+  bool fresh = false;
+
+  if (settings->value ("cal_run_1st", true).toBool())
+     {
+      if (! file_exists (fname))
+         qstring_save (fname, tr ("Enter your daily notes here.\nTo use time-based reminders, specify the time signature in 24-hour format [hh:mm], i.e.:\n[06:00]good morning!\n[20:10]go to theatre"));
+
+      settings->setValue ("cal_run_1st", false);
+      fresh = true;
+     }
+  else
+  if (! file_exists (fname))
+     {
+      qstring_save (fname, tr ("Enter your daily notes here."));
+      fresh = true;
+     }
+
+  CDocument *d = documents->open_file (fname, "UTF-8");
+  if (! d)
+     return;
+
+  if (fresh)
+     d->selectAll();
+
+  main_tab_widget->setCurrentIndex (idx_tab_edit);
+}
+
+
+void CTEA::calendar_currentPageChanged (int year, int month)
+{
+  calendar_update();
+}
+
+
+
+void CTEA::process_readyReadStandardOutput()
+{
+  QProcess *p = qobject_cast<QProcess *>(sender());
+  QByteArray a = p->readAllStandardOutput()/*.data()*/;
+  QTextCodec *c = QTextCodec::codecForLocale();
+  QString t = c->toUnicode (a);
+
+  log->terminal_output = true;
+  log->log (t);
+  log->terminal_output = false;
+}
+
+
+/*
+===========================
+Application misc. methods
+===========================
+*/
+
+
+QHash <QString, QString> CTEA::load_eclipse_theme_xml (const QString &fname)
+{
+  QHash <QString, QString> result;
+
+  QString temp = qstring_load (fname);
+  QXmlStreamReader xml (temp);
+
+  while (! xml.atEnd())
+        {
+         xml.readNext();
+
+         QString tag_name = xml.name().toString();
+
+         if (xml.isStartElement())
+            {
+             if (tag_name == "colorTheme")
+                {
+                 log->log (xml.attributes().value ("id").toString());
+                 log->log (xml.attributes().value ("name").toString());
+                 log->log (xml.attributes().value ("modified").toString());
+                 log->log (xml.attributes().value ("author").toString());
+                 log->log (xml.attributes().value ("website").toString());
+                }
+
+            if (tag_name == "singleLineComment")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   result.insert ("single comment", t);
+               }
+
+            if (tag_name == "class")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   {
+                    result.insert ("class", t);
+                    result.insert ("type", t);
+                   }
+               }
+
+            if (tag_name == "operator")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   result.insert ("operator", t);
+               }
+
+
+            if (tag_name == "string")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   result.insert ("quotes", t);
+               }
+
+
+            if (tag_name == "multiLineComment")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   result.insert ("mcomment-start", t);
+               }
+
+            if (tag_name == "foreground")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   {
+                    result.insert ("text", t);
+                    result.insert ("functions", t);
+                    result.insert ("modifiers", t);
+                    result.insert ("margin_color", t);
+                    result.insert ("digits", t);
+                    result.insert ("digits-float", t);
+                    result.insert ("label", t);
+                    result.insert ("include", t);
+                    result.insert ("preproc", t);
+                   }
+               }
+
+            if (tag_name == "background")
+               {
+                QString t = xml.attributes().value ("color").toString();
+                if (! t.isEmpty())
+                   {
+                    result.insert ("background", t);
+                    result.insert ("linenums_bg", t);
+                   }
+               }
+
+           if (tag_name == "selectionForeground")
+              {
+               QString t = xml.attributes().value ("color").toString();
+               if (! t.isEmpty())
+                  result.insert ("sel-text", t);
+              }
+
+           if (tag_name == "selectionBackground")
+              {
+               QString t = xml.attributes().value ("color").toString();
+               if (! t.isEmpty())
+                 result.insert ("sel-background", t);
+              }
+
+           if (tag_name == "keyword")
+              {
+               QString t = xml.attributes().value ("color").toString();
+               if (! t.isEmpty())
+                  {
+                   result.insert ("keywords", t);
+                   result.insert ("tags", t);
+                  }
+              }
+
+          if (tag_name == "currentLine")
+             {
+              QString t = xml.attributes().value ("color").toString();
+              if (! t.isEmpty())
+                 result.insert ("cur_line_color", t);
+             }
+
+          if (tag_name == "bracket")
+            {
+             QString t = xml.attributes().value ("color").toString();
+             if (! t.isEmpty())
+                 result.insert ("brackets", t);
+             }
+
+        }//is start
+
+   if (xml.hasError())
+     qDebug() << "xml parse error";
+
+  } //cycle
+
+
+  result.insert ("error", "red");
+
+  return result;
+}
+
+
+void CTEA::load_palette (const QString &fileName)
+{
+  if (! file_exists (fileName))
+      return;
+
+  global_palette.clear();
+
+  if (file_get_ext (fileName) == "xml")
+     global_palette = load_eclipse_theme_xml (fileName);
+  else
+      global_palette = hash_load_keyval (fileName);
+}
+
+
+void CTEA::fman_convert_images (bool by_side, int value)
+{
+  srand (QTime::currentTime().msec());
+
+  QString dir_out ("images-out-");
+
+  dir_out.append (QString::number (rand() % 777));
+  dir_out.prepend ("/");
+  dir_out.prepend (fman->dir.absolutePath());
+
+  if (! fman->dir.mkpath (dir_out))
+     return;
+
+  Qt::TransformationMode transformMode = Qt::FastTransformation;
+  if (settings->value ("img_filter", 0).toBool())
+     transformMode = Qt::SmoothTransformation;
+
+  pb_status->show();
+  pb_status->setFormat (tr ("%p% completed"));
+  pb_status->setTextVisible (true);
+
+  QStringList li = fman->get_sel_fnames();
+
+  int quality = settings->value ("img_quality", "-1").toInt();
+
+  pb_status->setRange (0, li.size() - 1 );
+  int i = 0;
+
+  for (QList <QString>::iterator fname = li.begin(); fname != li.end(); ++fname)
+      {
+       if (! is_image ((*fname)))
+           continue;
+
+       QImage source ((*fname));
+
+       if (source.isNull())
+          continue;
+
+       qApp->processEvents();
+
+       if (settings->value ("cb_exif_rotate", 1).toBool())
+          {
+           int exif_orientation = get_exif_orientation ((*fname));
+
+           QTransform transform;
+           qreal angle = 0;
+
+           if (exif_orientation == 3)
+              angle = 180;
+           else
+           if (exif_orientation == 6)
+              angle = 90;
+           else
+           if (exif_orientation == 8)
+              angle = 270;
+           if (angle != 0)
+              {
+               transform.rotate (angle);
+               source = source.transformed (transform);
+              }
+          }
+
+
+          QImage dest = image_scale_by (source, by_side, value, transformMode);
+          QString fmt (settings->value ("output_image_fmt", "jpg").toString());
+          QFileInfo fi ((*fname));
+
+          QString dest_fname (dir_out);
+          dest_fname.append ("/");
+          dest_fname.append (fi.fileName());
+          dest_fname = change_file_ext (dest_fname, fmt);
+
+          if (! dest.save (dest_fname, fmt.toLatin1().constData(), quality))
+             qDebug() << "Cannot save " << dest_fname;
+
+          pb_status->setValue (i++);
+         }
+
+  pb_status->hide();
+
+  if (settings->value ("img_post_proc", 0).toBool())
+     {
+      CZipper zipper;
+      zipper.zip_directory (fman->dir.absolutePath(), dir_out);
+     }
+
+  fman->refresh();
+}
+
+
+QTextDocument::FindFlags CTEA::get_search_options()
+{
+  QTextDocument::FindFlags flags; //= 0;
+
+  if (menu_find_whole_words->isChecked())
+     flags = flags | QTextDocument::FindWholeWords;
+
+  if (menu_find_case->isChecked())
+     flags = flags | QTextDocument::FindCaseSensitively;
+
+  return flags;
+}
+
+
+QString CTEA::fif_get_text()
+{
+  QString t = fif->text();
+
+  int i = sl_fif_history.indexOf (t);
+
+  if (i != -1)
+     {
+      sl_fif_history.removeAt (i);
+      sl_fif_history.prepend (t);
+     }
+  else
+      sl_fif_history.prepend (t);
+
+  if (sl_fif_history.count() > 77)
+     sl_fif_history.removeLast();
+
+  return t;
+}
+
+QAction* CTEA::add_to_menu (QMenu *menu,
+                            const QString &caption,
+                            const char *method,
+                            const QString &shortkt,
+                            const QString &iconpath
+                           )
+{
+  QAction *act = new QAction (caption, this);
+
+  if (! shortkt.isEmpty())
+     act->setShortcut (shortkt);
+
+  if (! iconpath.isEmpty())
+     act->setIcon (QIcon (iconpath));
+
+  connect (act, SIGNAL(triggered()), this, method);
+  menu->addAction (act);
+  return act;
+}
+
+
+QIcon CTEA::get_theme_icon (const QString &name)
+{
+  QString fname = theme_dir + "icons/" + name;
+
+  if (file_exists (fname))
+     return QIcon (fname);
+  else
+      return QIcon (":/icons/" + name);
+}
+
+
+QString CTEA::get_theme_icon_fname (const QString &name)
+{
+  QString fname = theme_dir + "icons/" + name;
+
+  if (file_exists (fname))
+     return fname;
+  else
+      return ":/icons/" + name;
+}
+
+
+void CTEA::leaving_options()
+{
+  settings->setValue ("date_format", ed_date_format->text());
+  settings->setValue ("time_format", ed_time_format->text());
+  settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
+  settings->setValue ("wasd", cb_wasd->isChecked());
+
+  settings->setValue ("ui_mode", cmb_ui_mode->currentIndex());
+
+
+
+#if defined(JOYSTICK_SUPPORTED)
+  settings->setValue ("use_joystick", cb_use_joystick->isChecked());
+#endif
+
+  settings->setValue ("full_path_at_window_title", cb_full_path_at_window_title->isChecked());
+  settings->setValue ("word_wrap", cb_wordwrap->isChecked());
+
+#if QT_VERSION >= 0x050000
+//  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->isChecked());
+#endif
+
+  settings->setValue ("additional_hl", cb_hl_current_line->isChecked());
+  settings->setValue ("session_restore", cb_session_restore->isChecked());
+  settings->setValue ("show_linenums", cb_show_linenums->isChecked());
+  settings->setValue ("hl_enabled", cb_hl_enabled->isChecked());
+  settings->setValue ("hl_brackets", cb_hl_brackets->isChecked());
+  settings->setValue ("auto_indent", cb_auto_indent->isChecked());
+  settings->setValue ("spaces_instead_of_tabs", cb_spaces_instead_of_tabs->isChecked());
+  settings->setValue ("cursor_xy_visible", cb_cursor_xy_visible->isChecked());
+  settings->setValue ("tab_sp_width", spb_tab_sp_width->value());
+  settings->setValue ("center_on_scroll", cb_center_on_cursor->isChecked());
+  settings->setValue ("show_margin", cb_show_margin->isChecked());
+  settings->setValue ("margin_pos", spb_margin_pos->value());
+  settings->setValue ("b_preview", cb_auto_img_preview->isChecked());
+  settings->setValue ("cursor_blink_time", spb_cursor_blink_time->value());
+
+  MyProxyStyle::cursor_blink_time = spb_cursor_blink_time->value();
+
+  qApp->setCursorFlashTime (spb_cursor_blink_time->value());
+
+  settings->setValue ("cursor_width", spb_cursor_width->value());
+  settings->setValue ("override_img_viewer", cb_override_img_viewer->isChecked());
+  settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->isChecked());
+  settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->isChecked());
+  settings->setValue ("start_week_on_sunday", cb_start_on_sunday->isChecked());
+  settings->setValue ("northern_hemisphere", cb_northern_hemisphere->isChecked());
+
+  calendar->northern_hemisphere = bool (cb_northern_hemisphere->isChecked());
+
+  int i = moon_phase_algos.key (cmb_moon_phase_algos->currentText());
+  settings->setValue ("moon_phase_algo", i);
+  calendar->moon_phase_algo = i;
+
+  settings->setValue ("lng", cmb_lng->currentText());
+
+  settings->setValue ("zip_charset_in", cmb_zip_charset_in->currentText());
+  settings->setValue ("zip_charset_out", cmb_zip_charset_out->currentText());
+  settings->setValue ("cmdline_default_charset", cmb_cmdline_default_charset->currentText());
+  settings->setValue ("label_end", ed_label_end->text());
+  settings->setValue ("label_start", ed_label_start->text());
+  settings->setValue ("output_image_fmt", cmb_output_image_fmt->currentText());
+  settings->setValue ("img_filter", cb_output_image_flt->isChecked());
+  settings->setValue("fuzzy_q", spb_fuzzy_q->value());
+  settings->setValue("img_quality", spb_img_quality->value());
+  settings->setValue ("img_post_proc", cb_zip_after_scale->isChecked());
+  settings->setValue ("cb_exif_rotate", cb_exif_rotate->isChecked());
+  settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->isChecked());
+  settings->setValue ("ed_side_size", ed_side_size->text());
+  settings->setValue ("ed_link_options", ed_link_options->text());
+  settings->setValue ("ed_cols_per_row", ed_cols_per_row->text());
+
+  b_preview = settings->value ("b_preview", false).toBool();
+
+  calendar->do_update();
+  documents->apply_settings();
+}
+
+
+void CTEA::add_to_last_used_charsets (const QString &s)
+{
+  int i = sl_last_used_charsets.indexOf (s);
+  if (i == -1)
+     sl_last_used_charsets.prepend (s);
+  else
+      sl_last_used_charsets.move (i, 0);
+
+  if (sl_last_used_charsets.size() > 3)
+     sl_last_used_charsets.removeLast();
+}
+
+
+void CTEA::count_substring (bool use_regexp)
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString text;
+
+  if (d->textCursor().hasSelection())
+     text = d->get();
+  else
+      text = d->toPlainText();
+
+  int count = 0;
+  Qt::CaseSensitivity cs = Qt::CaseInsensitive;
+
+  if (menu_find_case->isChecked())
+     cs = Qt::CaseSensitive;
+
+#if (QT_VERSION_MAJOR < 5)
+
+  if (use_regexp)
+     count = text.count (QRegExp (fif_get_text()));
+  else
+      count = text.count (fif_get_text(), cs);
+
+
+#else
+
+  if (use_regexp)
+     count = text.count (QRegularExpression (fif_get_text()));
+  else
+      count = text.count (fif_get_text(), cs);
+
+
+#endif
+
+
+  log->log (tr ("%1 number of occurrences of %2 is found").arg (count).arg (fif->text()));
+}
+
+
+void CTEA::run_unitaz (int mode)
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  pb_status->show();
+  pb_status->setFormat (tr ("%p% completed"));
+  pb_status->setTextVisible (true);
+
+  QElapsedTimer time_start;
+  time_start.start();
+
+  int c = 0;
+
+  QStringList total = d->get_words();
+  QHash <QString, int> h;
+
+  pb_status->setRange (0, total.size() - 1);
+
+  for (int j = 0; j < total.size(); j++)
+      {
+       if (c % 100 == 0)
+          qApp->processEvents();
+
+       QHash<QString, int>::iterator i = h.find (total.at(j).toLower());
+       if (i != h.end())
+           i.value() += 1;
+       else
+           h.insert(total.at(j).toLower(), 1);
+
+       pb_status->setValue (c++);
+      }
+
+
+  vector< pair <QString, int> > uwords;
+
+  QList <QString> keys = h.keys();
+  int sz = keys.size();
+
+  uwords.reserve (sz);
+
+  for (int i = 0; i < sz; i++)
+      uwords.push_back (make_pair(keys.at(i),h.value (keys.at(i))));
+
+
+  if (mode == 0)
+    std::sort (uwords.begin(), uwords.end(), pr_bigger_than);
+  if (mode == 1)
+     std::sort (uwords.begin(), uwords.end(), pr_bigger_than_str);
+  if (mode == 2)
+     std::sort (uwords.begin(), uwords.end(), pr_bigger_than_str_len);
+
+  QStringList outp;
+
+  for (size_t i = 0; i < uwords.size(); i++)
+      outp.append (uwords.at(i).first + " = " + QString::number (uwords.at(i).second));
+
+  double diff = static_cast <double> (total.size()) / static_cast <double> (uwords.size());
+  double diff_per_cent = get_percent (static_cast <double> (total.size()), static_cast <double> (uwords.size()));
+
+  outp.prepend (tr ("total to unique per cent diff: %1").arg (diff_per_cent, 0, 'f', 6));
+  outp.prepend (tr ("total / unique: %1").arg (diff, 0, 'f', 6));
+  outp.prepend (tr ("words unique: %1").arg (uwords.size()));
+  outp.prepend (tr ("words total: %1").arg (total.size()));
+  outp.prepend (tr ("text analysis of: %1").arg (d->file_name));
+  outp.prepend (tr ("UNITAZ: UNIverlsal Text AnalyZer"));
+
+  log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
+
+
+  CDocument *nd = documents->create_new();
+  nd->put (outp.join ("\n"));
+
+   pb_status->hide();
+}
+
+
+void CTEA::markup_text (const QString &mode)
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString t = hash_markup[mode][d->markup_mode];
+
+  if (! t.isEmpty())
+      d->put (t.replace ("%s", d->get()));
+}
+
+
+void CTEA::fman_items_select_by_regexp (bool mode)
+{
+  QString ft = fif_get_text();
+  if (ft.isEmpty())
+      return;
+
+#if QT_VERSION >= 0x050000
+  l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegularExpression);
+#else
+  l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegExp);
+#endif
+
+
+  if (l_fman_find.size() < 1)
+     return;
+
+  QItemSelectionModel *m = fman->selectionModel();
+  for (int i = 0; i < l_fman_find.size(); i++)
+      if (mode)
+         m->select (fman->mymodel->indexFromItem (l_fman_find[i]), QItemSelectionModel::Select | QItemSelectionModel::Rows);
+      else
+          m->select (fman->mymodel->indexFromItem (l_fman_find[i]), QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
+}
+
+
+void CTEA::fn_filter_delete_by_sep (bool mode)
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QStringList sl = d->get().split (QChar::ParagraphSeparator);
+
+  QString t = fif_get_text();
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       int n = sl[i].indexOf (t);
+       if (n != -1)
+          {
+           QString s = sl[i];
+           if (mode)
+               s = s.right (s.size() - n);
+           else
+               s = s.left (n);
+           sl[i] = s;
+          }
+      }
+
+  QString x = sl.join ("\n");
+
+  d->put (x);
+}
+
+
+void CTEA::fman_find()
+{
+  QString ft = fif_get_text();
+  if (ft.isEmpty())
+      return;
+
+  l_fman_find = fman->mymodel->findItems (ft, Qt::MatchStartsWith);
+
+  if (l_fman_find.size() < 1)
+     return;
+
+  fman_find_idx = 0;
+  fman->setCurrentIndex (fman->mymodel->indexFromItem (l_fman_find[fman_find_idx]));
+}
+
+
+void CTEA::fman_find_next()
+{
+  QString ft = fif_get_text();
+  if (ft.isEmpty())
+      return;
+
+  if (l_fman_find.size() < 1)
+     return;
+
+  if (fman_find_idx < (l_fman_find.size() - 1))
+     fman_find_idx++;
+
+  fman->setCurrentIndex (fman->mymodel->indexFromItem (l_fman_find[fman_find_idx]));
+}
+
+
+void CTEA::fman_find_prev()
+{
+  QString ft = fif_get_text();
+  if (ft.isEmpty())
+      return;
+
+  if (l_fman_find.size() < 1)
+     return;
+
+  if (fman_find_idx != 0)
+     fman_find_idx--;
+
+  fman->setCurrentIndex (fman->mymodel->indexFromItem (l_fman_find[fman_find_idx]));
+}
+
+
+void CTEA::opt_shortcuts_find()
+{
+  int from = 0;
+
+  QString fiftxt = fif_get_text();
+
+  if (opt_shortcuts_string_to_find == fiftxt)
+      from = lv_menuitems->currentRow();
+
+  opt_shortcuts_string_to_find = fiftxt;
+
+  if (from == -1)
+      from = 0;
+
+#if QT_VERSION < 0x050000
+  int index = shortcuts->captions.indexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
+                                                    Qt::CaseInsensitive), from);
+#else
+  int index = shortcuts->captions.indexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
+                                           QRegularExpression::CaseInsensitiveOption), from);
+
+#endif
+
+  if (index != -1)
+     lv_menuitems->setCurrentRow (index);
+}
+
+
+void CTEA::opt_shortcuts_find_next()
+{
+  int from = lv_menuitems->currentRow();
+  if (from == -1)
+     from = 0;
+
+#if QT_VERSION < 0x050000
+  int index = shortcuts->captions.indexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
+                                                    Qt::CaseInsensitive), from + 1);
+#else
+  int index = shortcuts->captions.indexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
+                                                    QRegularExpression::CaseInsensitiveOption), from + 1);
+
+
+#endif
+
+  if (index != -1)
+    lv_menuitems->setCurrentRow (index);
+}
+
+
+void CTEA::opt_shortcuts_find_prev()
+{
+  int from = lv_menuitems->currentRow();
+  if (from == -1)
+     from = 0;
+
+#if QT_VERSION < 0x050000
+
+  int index = shortcuts->captions.lastIndexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
+                                                  Qt::CaseInsensitive), from - 1);
+
+#else
+
+  int index = shortcuts->captions.lastIndexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
+                                                 QRegularExpression::CaseInsensitiveOption), from - 1);
+
+
+#endif
+
+  if (index != -1)
+     lv_menuitems->setCurrentRow (index);
+}
+
+
+void CTEA::idx_tab_edit_activate()
+{
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (true);
+  menu_programs->menuAction()->setVisible (true);
+  menu_cal->menuAction()->setVisible (false);
+  menu_markup->menuAction()->setVisible (true);
+  menu_functions->menuAction()->setVisible (true);
+  menu_search->menuAction()->setVisible (true);
+  menu_nav->menuAction()->setVisible (true);
+  menu_fm->menuAction()->setVisible (false);
+  menu_view->menuAction()->setVisible (true);
+  helpMenu->menuAction()->setVisible (true);
+}
+
+
+void CTEA::idx_tab_calendar_activate()
+{
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (false);
+  menu_cal->menuAction()->setVisible (true);
+  menu_programs->menuAction()->setVisible (true);
+  menu_markup->menuAction()->setVisible (false);
+  menu_functions->menuAction()->setVisible (false);
+  menu_search->menuAction()->setVisible (false);
+  menu_nav->menuAction()->setVisible (false);
+  menu_fm->menuAction()->setVisible (false);
+  menu_view->menuAction()->setVisible (true);
+  helpMenu->menuAction()->setVisible (true);
+}
+
+
+void CTEA::idx_tab_tune_activate()
+{
+  opt_update_keyb();
+
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (false);
+  menu_programs->menuAction()->setVisible (true);
+  menu_markup->menuAction()->setVisible (false);
+  menu_functions->menuAction()->setVisible (true);
+  menu_search->menuAction()->setVisible (false);
+  menu_nav->menuAction()->setVisible (false);
+  menu_fm->menuAction()->setVisible (false);
+  menu_view->menuAction()->setVisible (true);
+  helpMenu->menuAction()->setVisible (true);
+  menu_cal->menuAction()->setVisible (false);
+}
+
+
+void CTEA::idx_tab_fman_activate()
+{
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (false);
+  menu_programs->menuAction()->setVisible (true);
+  menu_markup->menuAction()->setVisible (false);
+  menu_functions->menuAction()->setVisible (true);
+  menu_search->menuAction()->setVisible (true);
+  menu_nav->menuAction()->setVisible (false);
+  menu_fm->menuAction()->setVisible (true);
+  menu_view->menuAction()->setVisible (true);
+  helpMenu->menuAction()->setVisible (true);
+  menu_cal->menuAction()->setVisible (false);
+}
+
+
+void CTEA::idx_tab_learn_activate()
+{
+  menu_file->menuAction()->setVisible (true);
+  menu_edit->menuAction()->setVisible (false);
+  menu_programs->menuAction()->setVisible (true);
+  menu_markup->menuAction()->setVisible (false);
+  menu_functions->menuAction()->setVisible (false);
+  menu_search->menuAction()->setVisible (true);
+  menu_nav->menuAction()->setVisible (false);
+  menu_fm->menuAction()->setVisible (false);
+  menu_view->menuAction()->setVisible (true);
+  helpMenu->menuAction()->setVisible (true);
+  menu_cal->menuAction()->setVisible (false);
+}
+
+
+void CTEA::man_find_find()
+{
+  QString fiftxt = fif_get_text();
+  man->find (fiftxt, get_search_options());
+  man_search_value = fiftxt;
+}
+
+
+void CTEA::man_find_next()
+{
+  man->find (man_search_value, get_search_options());
+}
+
+
+void CTEA::man_find_prev()
+{
+  man->find (man_search_value, get_search_options() | QTextDocument::FindBackward);
+}
+
+
+
+
+

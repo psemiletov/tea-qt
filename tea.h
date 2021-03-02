@@ -77,7 +77,7 @@ public:
                  return QProxyStyle::styleHint (hint, option, widget, returnData);
                 }
 
-  MyProxyStyle (QStyle *style = 0);
+  MyProxyStyle (QStyle *style = 0): QProxyStyle (style){};
 };
 
 
@@ -189,8 +189,6 @@ Q_OBJECT
 
 public:
 
-  CTEA();
-  ~CTEA();
 
 /*
 =========================
@@ -403,10 +401,6 @@ Main menu items
 
 
 
-
-
-
-
 /*
 =========================
 Main window widgets
@@ -580,6 +574,9 @@ Application stuff inits and updates
 
 public:
 
+  CTEA();
+  ~CTEA() {};
+
   void handle_args();
   void create_paths();
 
@@ -624,7 +621,7 @@ public:
 #endif
 
   void update_themes();
-  void update_hls_noncached();
+  void update_hls();
   void update_tables();
   void update_scripts();
   void update_places_bookmarks();
@@ -635,8 +632,8 @@ public:
 
   void opt_update_keyb();
 
-  void readSettings();
-  void writeSettings();
+  void read_settings();
+  void write_settings();
 
   void read_search_options();
   void write_search_options();
@@ -651,7 +648,6 @@ Application misc. methods
 ===========================
 */
 
-
   QHash <QString, QString> load_eclipse_theme_xml (const QString &fname);
   void load_palette (const QString &fileName);
   void fman_convert_images (bool by_side, int value);
@@ -664,8 +660,6 @@ Application misc. methods
                         const QString &shortkt = QString(),
                         const QString &iconpath = QString()
                         );
-
-
 
   QIcon get_theme_icon (const QString &name);
   QString get_theme_icon_fname (const QString &name);
@@ -700,10 +694,8 @@ Application misc. methods
 protected:
 
   void closeEvent (QCloseEvent *event);
-  bool fman_tv_eventFilter (QObject *obj, QEvent *event);
   void dragEnterEvent (QDragEnterEvent *event);
   void dropEvent (QDropEvent *event);
-
 
 public slots:
 
@@ -1146,14 +1138,12 @@ Tune page callbacks
   void cb_use_joystick_stateChanged (int state);
 #endif
 
-
   void cb_altmenu_stateChanged (int state);
 
   void cmb_ui_tabs_currentIndexChanged (int i);
   void cmb_docs_tabs_currentIndexChanged (int i);
   void cmb_icon_sizes_currentIndexChanged (int i);
   void cmb_tea_icons_currentIndexChanged  (int i);
-
 
   void pb_assign_hotkey_clicked();
   void pb_remove_hotkey_clicked();
@@ -1165,7 +1155,6 @@ Tune page callbacks
   void slot_font_editor_select();
 
   void slot_style_currentIndexChanged (int);
-
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 

@@ -67,7 +67,6 @@ code from qwriter:
 #define SK_C 54
 
 
-using namespace std;
 
 QHash <QString, QString> global_palette;
 QSettings *settings;
@@ -420,13 +419,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                      if (! rg.isValid())
                         qDebug() << "! valid " << rg.pattern();
                      else
-                         {
-//                          HighlightingRule rule;
-            //              rule.pattern = rg;
-              //            rule.format = fmt;
-  //                        highlightingRules.push_back (rule);
                           hl_rules.push_back (make_pair (rg, fmt));
-                         }
 
                      } //keywords
                  else
@@ -445,13 +438,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                      if (! rg.isValid())
                         qDebug() << "! valid " << rg.pattern();
                      else
-                         {
-    //                      HighlightingRule rule;
-        //                  rule.pattern = rg;
-          //                rule.format = fmt;
-      //                    highlightingRules.push_back (rule);
-                          hl_rules.push_back (make_pair (rg, fmt));
-                         }
+                         hl_rules.push_back (make_pair (rg, fmt));
                     }
                   else
                   if (attr_type == "mcomment-start")
@@ -507,28 +494,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
 void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 {
-/*  if (highlightingRules.size() == 0)
-     return;
-
-  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
-      {
-       QRegularExpressionMatch m = it->pattern.match (text);
-
-       int index = m.capturedStart();
-
-       while (index >= 0)
-             {
-              int length = m.capturedLength();
-              if (length == 0)
-                continue;
-
-              setFormat (index, length, it->format);
-              m = it->pattern.match (text, index + length);
-              index = m.capturedStart();
-             }
-       }
-*/
-
   if (hl_rules.size() == 0)
       return;
 
@@ -541,13 +506,13 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
        while (index >= 0)
              {
               int length = m.capturedLength();
-             if (length == 0)
-               continue;
+              if (length == 0)
+                 continue;
 
-             setFormat (index, length, p->second);
-             m = p->first.match (text, index + length);
-             index = m.capturedStart();
-            }
+              setFormat (index, length, p->second);
+              m = p->first.match (text, index + length);
+              index = m.capturedStart();
+             }
        }
 
 
@@ -685,7 +650,7 @@ void CDocument::keyPressEvent (QKeyEvent *event)
 
   if (settings->value ("wasd", "0").toBool())
      {
-      std::bitset<32> btst (event->nativeModifiers());
+      bitset<32> btst (event->nativeModifiers());
       QTextCursor cr = textCursor();
 
       QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
@@ -1221,7 +1186,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #if QT_VERSION >= 0x050000
 
-   for (std::vector<std::pair<QRegularExpression, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
+   for (vector<pair<QRegularExpression, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
        {
         if (p->first.isValid())
            if (p->first.match(file_name).hasMatch())
@@ -1232,7 +1197,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
        }
 
 #else
-   for (std::vector<std::pair<QRegExp, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
+   for (vector<pair<QRegExp, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
        {
         if (p->first.isValid())
            if (p->first.exactMatch(file_name))

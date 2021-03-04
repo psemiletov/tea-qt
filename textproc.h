@@ -31,6 +31,10 @@ int romanToDecimal (const char *roman);
 QString arabicToRoman (int i);
 QString int_to_binary (int n);
 unsigned int bin_to_decimal (const QString &s);
+QString str_to_entities (const QString &s);
+QString morse_from_lang (const QString &s, const QString &lang);
+QString morse_to_lang (const QString &s, const QString &lang);
+int get_arab_num (std::string rom_str);
 
 
 #endif // TEXTPROC_H

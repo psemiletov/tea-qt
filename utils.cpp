@@ -15,8 +15,26 @@ Peter Semiletov
 
 #include "utils.h"
 
+using namespace std;
+
 
 /* file utils */
+
+bool has_css_file (const QString &path)
+{
+  QDir d (path);
+  QStringList l = d.entryList();
+
+  for (int i = 0; i < l.size(); i++)
+      {
+       if (l.at(i).endsWith(".css"))
+           return true;
+      }
+
+  return false;
+}
+
+
 
 QString guess_enc_for_file (const QString &fname)
 {
@@ -357,55 +375,46 @@ void CFilesList::get (const QString &path)
 }
 
 
-/*
-CFTypeChecker::CFTypeChecker (const QStringList &fnames, const QStringList &exts)
-{
-  lexts = exts;
-  lnames = fnames;
-}
-*/
-
 
 CFTypeChecker::CFTypeChecker()
 {
 #if QT_VERSION < 0x050000
 
-  patterns.push_back (QRegExp ("^README$"));
-
-  patterns.push_back (QRegExp ("^.*\\.(txt|cong|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$"));
-  patterns.push_back (QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$"));
-  patterns.push_back (QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$"));
+  patterns.push_back (QRegExp (".*(readme|news|changelog|todo)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(txt|cong|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive));
 
 #if defined(POPPLER_ENABLE)
-  patterns.push_back (QRegExp ("^.*\\.(pdf)$"));
+  patterns.push_back (QRegExp ("^.*\\.(pdf)$", Qt::CaseInsensitive));
 #endif
 
 #if defined(DJVU_ENABLE)
-  patterns.push_back (QRegExp ("^.*\\.(djvu)$"));
+  patterns.push_back (QRegExp ("^.*\\.(djvu)$", Qt::CaseInsensitive));
 #endif
 
-  patterns.push_back (QRegExp ("^.*\\.(awk)$"));
-  patterns.push_back (QRegExp ("^.*\\.(sh)$"));
-  patterns.push_back (QRegExp ("^.*\\.(bas|bi|vbs|vbe)$"));
-  patterns.push_back (QRegExp ("^.*\\.(d)$"));
-  patterns.push_back (QRegExp ("^.*\\.(f|for|f90|f95)$"));
-  patterns.push_back (QRegExp ("^.*\\.(java|js)$"));
-  patterns.push_back (QRegExp ("^.*\\.(ly)$"));
-  patterns.push_back (QRegExp ("^.*\\.(lout)$"));
-  patterns.push_back (QRegExp ("^.*\\.(lua)$"));
-  patterns.push_back (QRegExp ("^.*\\.(asm)$"));
-  patterns.push_back (QRegExp ("^.*\\.(nsi)$"));
-  patterns.push_back (QRegExp ("^.*\\.(pp|pas|dpr)$"));
-  patterns.push_back (QRegExp ("^.*\\.(pl|pm)$"));
-  patterns.push_back (QRegExp ("^.*\\.(php)$"));
-  patterns.push_back (QRegExp ("^.*\\.(po)$"));
-  patterns.push_back (QRegExp ("^.*\\.(py)$"));
-  patterns.push_back (QRegExp ("^.*\\.(r)$"));
-  patterns.push_back (QRegExp ("^.*\\.(sd7)$"));
-  patterns.push_back (QRegExp ("^.*\\.(tex|lyx)$"));
-  patterns.push_back (QRegExp ("^.*\\.(vala)$"));
-  patterns.push_back (QRegExp ("^.*\\.(v)$"));
-  patterns.push_back (QRegExp ("^.*\\.(wiki)$"));
+  patterns.push_back (QRegExp ("^.*\\.(awk)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(sh)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(bas|bi|vbs|vbe)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(d)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(f|for|f90|f95)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(java|js)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(ly)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(lout)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(lua)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(asm)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(nsi)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(pp|pas|dpr)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(pl|pm)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(php)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(po)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(py)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(r)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(sd7)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(tex|lyx)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(vala)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(v)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(wiki)$", Qt::CaseInsensitive));
 
 
 #else
@@ -413,7 +422,6 @@ CFTypeChecker::CFTypeChecker()
   //add rc
 
   patterns.push_back (QRegularExpression (".*(readme|news|changelog|todo)$", QRegularExpression::CaseInsensitiveOption));
-
   patterns.push_back (QRegularExpression ("^.*\\.(txt|cong|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", QRegularExpression::CaseInsensitiveOption));
@@ -449,72 +457,38 @@ CFTypeChecker::CFTypeChecker()
   patterns.push_back (QRegularExpression ("^.*\\.(v)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(wiki)$", QRegularExpression::CaseInsensitiveOption));
 
-
 #endif
 
 }
 
 
-
 bool CFTypeChecker::check (const QString &fname) const
 {
-/*
-  bool result = false;
-
-#if QT_VERSION >= 0x050000
-  QMimeType mime = db.mimeTypeForFile(fname);
-  if (mime.inherits ("text/plain"))
-     result = true;
-#endif
-
-  if (! result)
-      result = lnames.contains (fname.toLower());
-
-  if (! result)
-     {
-      QString ext = file_get_ext (fname);
-      result = lexts.contains (ext.toLower());
-     }
-
-  return result;*/
-
-//  QString ext = file_get_ext (fname);
-
-  //if (exts.contains (ext))
-    //  return true;
-
-//  return false;
-
 
 #if QT_VERSION < 0x050000
-  //std::vector <QRegExp> patterns;
-  ;
+
+  for (size_t i = 0; i < patterns.size(); ++i)
+     {
+      if (patterns[i].exactMatch(fname))
+         return true;
+     }
+
 #else
 
-  for(std::size_t i = 0; i < patterns.size(); ++i)
-    {
+  for (size_t i = 0; i < patterns.size(); ++i)
+     {
       QRegularExpressionMatch match = patterns[i].match(fname);
       if (match.hasMatch())
          return true;
-     }
-  //for (std::vector <QRegularExpression>::iterator it = patterns.begin(); it != patterns.end(); ++it)
-    //  {
-	//qDebug() << it->pattern.pattern();
-
-     // }
+      }
 
 #endif
 
   return false;
 }
 
-/*
-QStringList CFTypeChecker::get_supported_exts() const
-{
-  QStringList l;
 
-  l += lexts;
-  l.append ("txt");
-  return l;
-}
+/*
+GUI functions
 */
+

@@ -15,6 +15,7 @@ this code is Public Domain
 #include "utils.h"
 
 
+
 void create_menu_from_list (QObject *handler,
                             QMenu *menu,
                             const QStringList &list,
@@ -27,12 +28,51 @@ void create_menu_from_list (QObject *handler,
       {
        if (! i->startsWith ("#"))
           {
-           QAction *act = new QAction (*i, menu->parentWidget());
+        /*   QAction *act = new QAction (*i, menu->parentWidget());
            handler->connect (act, SIGNAL(triggered()), handler, method);
-           menu->addAction (act);
+           menu->addAction (act);*/
+           QAction *act = menu->addAction (*i);
+           handler->connect (act, SIGNAL(triggered()), handler, method);
+//           menu->addAction (act);
+
           }
       }
 }
+
+
+//uses dir name as menuitem, no recursion
+void create_menu_from_themes (QObject *handler,
+                              QMenu *menu,
+                              const QString &dir,
+                              const char *method
+                              )
+{
+  menu->setTearOffEnabled (true);
+  QDir d (dir);
+  QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
+                                          QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
+
+  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); ++fi)
+      {
+       if (fi->isDir())
+          {
+           if (has_css_file (fi->absoluteFilePath()))
+              {
+               QAction *act = new QAction (fi->fileName(), menu->parentWidget());
+               act->setData (fi->filePath());
+               handler->connect (act, SIGNAL(triggered()), handler, method);
+               menu->addAction (act);
+              }
+           else
+               {
+                QMenu *mni_temp = menu->addMenu (fi->fileName());
+                create_menu_from_themes (handler, mni_temp,
+                                         fi->filePath(), method);
+               }
+           }
+       }
+}
+
 
 
 void create_menu_from_dir (QObject *handler,

@@ -56,6 +56,25 @@
 #include "spellchecker.h"
 
 
+class CDarkerWindow: public QWidget
+{
+Q_OBJECT
+
+  QSlider *slider;
+
+public:
+
+  CDarkerWindow();
+
+protected:
+
+  void closeEvent (QCloseEvent *event);
+
+public slots:
+
+ void slot_valueChanged (int value);
+};
+
 
 class MyProxyStyle: public QProxyStyle
 {
@@ -126,24 +145,6 @@ public:
 #endif
 
 
-class CDarkerWindow: public QWidget
-{
-Q_OBJECT
-
-  QSlider *slider;
-
-public:
-
-  CDarkerWindow();
-
-protected:
-
-  void closeEvent (QCloseEvent *event);
-
-public slots:
-
- void slot_valueChanged (int value);
-};
 
 
 class CAboutWindow: public QWidget
@@ -595,13 +596,13 @@ public:
   void create_main_widget_splitter();
   void create_main_widget_docked();
 
-  void createActions();
-  void createMenus();
-  void createOptions();
-  void createCalendar();
-  void createToolBars();
-  void createManual();
-  void createFman();
+  void create_actions();
+  void create_menus();
+  void create_options();
+  void create_calendar();
+  void create_toolbars();
+  void create_manual();
+  void create_fman();
 
   void create_markup_hash();
 

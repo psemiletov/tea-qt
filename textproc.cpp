@@ -672,3 +672,100 @@ QStringList anagram (const QString &s)
   return sl;
 }
 
+
+QString str_to_entities (const QString &s)
+{
+  QString t = s;
+  t = t.replace ("&", "&amp;");
+
+  t = t.replace ("\"", "&quot;");
+  t = t.replace ("'", "&apos;");
+
+  t = t.replace ("<", "&lt;");
+  t = t.replace (">", "&gt;");
+
+  return t;
+}
+
+
+QString morse_from_lang (const QString &s, const QString &lang)
+{
+  QHash<QString, QString> h = hash_load_keyval (":/text-data/morse-" + lang);
+
+  QString result;
+  QString x = s.toUpper();
+
+  int c = x.size();
+  for (int i = 0; i < c; i++)
+      {
+       QString t = h.value (QString (x[i]));
+       if (! t.isEmpty())
+          result.append (t).append (" ");
+      }
+
+  return result;
+}
+
+
+QString morse_to_lang (const QString &s, const QString &lang)
+{
+  QHash<QString, QString> h = hash_load_keyval (":/text-data/morse-" + lang);
+
+  QStringList sl = s.toUpper().split (" ");
+
+  QString result;
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       QString t = h.key (sl[i]);
+       if (! t.isEmpty())
+          result.append (t);
+      }
+
+  return result;
+}
+
+
+
+//from http://www.cyberforum.ru/cpp-beginners/thread125615.html
+int get_arab_num (std::string rom_str)
+{
+  int res = 0;
+
+  for (size_t i = 0; i < rom_str.length(); ++i)
+      {
+       switch (rom_str[i])
+              {
+               case 'M':
+                        res += 1000;
+                        break;
+               case 'D':
+                        res += 500;
+                        break;
+               case 'C':
+                        i + 1 < rom_str.length() && (rom_str[i + 1] == 'D'
+                        || rom_str[i + 1] == 'M') ? res -= 100 : res += 100;
+                        break;
+               case 'L':
+                        res += 50;
+                        break;
+               case 'X':
+                        i + 1 < rom_str.length()
+                        &&  (rom_str[i + 1] == 'L'
+                        || rom_str[i + 1] == 'C') ? res -= 10 : res += 10;
+                        break;
+               case 'V':
+                        res += 5;
+                        break;
+               case 'I':
+                        i + 1 < rom_str.length()
+                        &&  (rom_str[i + 1] == 'V'
+                        || rom_str[i + 1] == 'X') ? res -= 1 : res += 1;
+                        break;
+
+                }//switch
+       }//for
+
+  return res;
+}
+

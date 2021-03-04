@@ -331,10 +331,8 @@ QStringList CZipper::unzip_list (const QString &archpath)
   for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile())
       {
        if (! zip.getCurrentFileInfo (&info))
-          {
-           qDebug() << "getCurrentFileInfo()" << zip.getZipError();
            return QStringList();
-          }
+         //           qDebug() << "getCurrentFileInfo()" << zip.getZipError();
 
        result.prepend (info.name);
       }
@@ -342,4 +340,3 @@ QStringList CZipper::unzip_list (const QString &archpath)
   zip.close();
   return result;
 }
-

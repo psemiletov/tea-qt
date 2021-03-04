@@ -27,10 +27,10 @@ started at 08 November 2007
 #include <iostream>
 #include <stdlib.h>
 
-#if QT_VERSION < 0x050000
-#include <QRegExp>
-#else
+#if QT_VERSION >= 0x050000
 #include <QRegularExpression>
+#else
+#include <QRegExp>
 #endif
 
 #include <QElapsedTimer>
@@ -144,8 +144,7 @@ void CDarkerWindow::closeEvent (QCloseEvent *event)
 CDarkerWindow::CDarkerWindow()
 {
   setAttribute (Qt::WA_DeleteOnClose);
-
-  setWindowFlags (Qt::Tool/* | Qt::FramelessWindowHint*/);
+  setWindowFlags (Qt::Tool);
 
   setWindowTitle (tr ("Darker palette"));
 
@@ -190,7 +189,7 @@ void CTextListWnd::closeEvent (QCloseEvent *event)
 
 CTextListWnd::~CTextListWnd()
 {
-  std::vector<CTextListWnd*>::iterator it = std::find (text_window_list.begin(), text_window_list.end(), this);
+  vector<CTextListWnd*>::iterator it = std::find (text_window_list.begin(), text_window_list.end(), this);
   text_window_list.erase (it);
 }
 
@@ -220,7 +219,6 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
 About window
 ===========================
 */
-
 
 
 void CAboutWindow::closeEvent (QCloseEvent *event)
@@ -333,7 +331,6 @@ CAboutWindow::CAboutWindow()
 
 
 
-
 /*
 ===========================
 Local utility functions
@@ -341,7 +338,7 @@ Local utility functions
 */
 
 
-//for the further compat.
+//for the further compatibility
 QTabWidget::TabPosition int_to_tabpos (int i)
 {
   QTabWidget::TabPosition p = QTabWidget::North;
@@ -363,21 +360,6 @@ QTabWidget::TabPosition int_to_tabpos (int i)
          }
 
   return p;
-}
-
-
-QString str_to_entities (const QString &s)
-{
-  QString t = s;
-  t = t.replace ("&", "&amp;");
-
-  t = t.replace ("\"", "&quot;");
-  t = t.replace ("'", "&apos;");
-
-  t = t.replace ("<", "&lt;");
-  t = t.replace (">", "&gt;");
-
-  return t;
 }
 
 
@@ -434,134 +416,76 @@ QString toggle_fname_header_source (const QString &fileName)
 }
 
 
-QString morse_from_lang (const QString &s, const QString &lang)
+void CTEA::closeEvent (QCloseEvent *event)
 {
-  QHash<QString, QString> h = hash_load_keyval (":/text-data/morse-" + lang);
+  if (main_tab_widget->currentIndex() == idx_tab_tune)
+     leaving_options();
 
-  QString result;
-  QString x = s.toUpper();
+  QString fname = dir_config + "/last_used_charsets";
 
-  int c = x.size();
-  for (int i = 0; i < c; i++)
+  qstring_save (fname, sl_last_used_charsets.join ("\n").trimmed());
+
+  if (settings->value("session_restore", false).toBool())
+     {
+      QString fname_session = dir_sessions + "/def-session-777";
+      documents->save_to_session (fname_session);
+     }
+
+  write_search_options();
+  write_settings();
+
+  qstring_save (fname_fif, sl_fif_history.join ("\n"));
+
+  delete documents;
+  delete img_viewer;
+
+#ifdef USE_QML_STUFF
+  plugins_done();
+#endif
+
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+  delete spellchecker;
+#endif
+
+  delete shortcuts;
+
+  if (text_window_list.size() > 0)
+      for (vector <size_t>::size_type i = 0; i < text_window_list.size(); i++)
+          text_window_list[i]->close();
+
+  event->accept();
+  deleteLater();
+}
+
+
+void CTEA::dragEnterEvent (QDragEnterEvent *event)
+{
+  if (event->mimeData()->hasFormat ("text/uri-list"))
+     event->acceptProposedAction();
+}
+
+
+void CTEA::dropEvent (QDropEvent *event)
+{
+  if (! event->mimeData()->hasUrls())
+     return;
+
+  QString fName;
+  QFileInfo info;
+
+  QList<QUrl> l = event->mimeData()->urls();
+
+  for (QList <QUrl>::iterator u = l.begin(); u != l.end(); ++u)
       {
-       QString t = h.value (QString (x[i]));
-       if (! t.isEmpty())
-          result.append (t).append (" ");
+       fName = u->toLocalFile();
+
+       info.setFile (fName);
+       if (info.isFile())
+          documents->open_file (fName, cb_fman_codecs->currentText());
       }
 
-  return result;
+  event->accept();
 }
-
-
-QString morse_to_lang (const QString &s, const QString &lang)
-{
-  QHash<QString, QString> h = hash_load_keyval (":/text-data/morse-" + lang);
-
-  QStringList sl = s.toUpper().split (" ");
-
-  QString result;
-
-  for (int i = 0; i < sl.size(); i++)
-      {
-       QString t = h.key (sl[i]);
-       if (! t.isEmpty())
-          result.append (t);
-      }
-
-  return result;
-}
-
-
-//from http://www.cyberforum.ru/cpp-beginners/thread125615.html
-int get_arab_num (std::string rom_str)
-{
-  int res = 0;
-
-  for (size_t i = 0; i < rom_str.length(); ++i)
-      {
-       switch (rom_str[i])
-              {
-               case 'M':
-                        res += 1000;
-                        break;
-               case 'D':
-                        res += 500;
-                        break;
-               case 'C':
-                        i + 1 < rom_str.length() && (rom_str[i + 1] == 'D'
-                        || rom_str[i + 1] == 'M') ? res -= 100 : res += 100;
-                        break;
-               case 'L':
-                        res += 50;
-                        break;
-               case 'X':
-                        i + 1 < rom_str.length()
-                        &&  (rom_str[i + 1] == 'L'
-                        || rom_str[i + 1] == 'C') ? res -= 10 : res += 10;
-                        break;
-               case 'V':
-                        res += 5;
-                        break;
-               case 'I':
-                        i + 1 < rom_str.length()
-                        &&  (rom_str[i + 1] == 'V'
-                        || rom_str[i + 1] == 'X') ? res -= 1 : res += 1;
-                        break;
-
-                }//switch
-       }//for
-
-  return res;
-}
-
-
-bool has_css_file (const QString &path)
-{
-  QDir d (path);
-  QStringList l = d.entryList();
-
-  for (int i = 0; i < l.size(); i++)
-      {
-       if (l.at(i).endsWith(".css"))
-           return true;
-      }
-
-  return false;
-}
-
-//uses dir name as menuitem, no recursion
-void create_menu_from_themes (QObject *handler,
-                              QMenu *menu,
-                              const QString &dir,
-                              const char *method
-                              )
-{
-  menu->setTearOffEnabled (true);
-  QDir d (dir);
-  QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
-                                          QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
-
-  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); ++fi)
-      {
-       if (fi->isDir())
-          {
-           if (has_css_file (fi->absoluteFilePath()))
-              {
-               QAction *act = new QAction (fi->fileName(), menu->parentWidget());
-               act->setData (fi->filePath());
-               handler->connect (act, SIGNAL(triggered()), handler, method);
-               menu->addAction (act);
-              }
-           else
-               {
-                QMenu *mni_temp = menu->addMenu (fi->fileName());
-                create_menu_from_themes (handler, mni_temp,
-                                         fi->filePath(), method);
-               }
-           }
-       }
-}
-
 
 
 
@@ -573,10 +497,7 @@ Main window slots
 
 void CTEA::pageChanged (int index)
 {
-  if (b_destroying_all)
-      return;
-
-  if (index == -1)
+  if (b_destroying_all || index == -1)
       return;
 
   CDocument *d = documents->items[index];
@@ -594,21 +515,16 @@ void CTEA::pageChanged (int index)
 
 void CTEA::logmemo_double_click (const QString &txt)
 {
- // std::cout << "CTEA::logmemo_double_click txt:" << txt.toStdString() << std::endl;
-
-  if (documents->hash_project.isEmpty())
+  if (documents->hash_project.isEmpty() || documents->fname_current_project.isEmpty())
       return;
 
-  if (documents->fname_current_project.isEmpty())
+  QStringList parsed = txt.split (":");
+  if (parsed.size() == 0)
      return;
 
   QString source_fname;
   QString source_line;
   QString source_col;
-
-  QStringList parsed = txt.split (":");
-  if (parsed.size() == 0)
-     return;
 
   source_fname = parsed[0];
 
@@ -654,10 +570,8 @@ void CTEA::logmemo_double_click (const QString &txt)
 
 void CTEA::receiveMessage (const QString &msg)
 {
-  if (msg.isEmpty())
-     return;
-
-  documents->open_file (msg, "UTF-8");
+  if (! msg.isEmpty())
+     documents->open_file (msg, "UTF-8");
 }
 
 
@@ -672,16 +586,13 @@ void CTEA::receiveMessageShared (const QStringList &msg)
 }
 
 
-
 void CTEA::read_settings()
 {
   MyProxyStyle::cursor_blink_time = settings->value ("cursor_blink_time", 0).toInt();
-
   qApp->setCursorFlashTime (MyProxyStyle::cursor_blink_time);
+  MyProxyStyle::b_altmenu = settings->value ("b_altmenu", "0").toBool();
 
   recent_list_max_items = settings->value ("recent_list.max_items", 21).toInt();
-
-  MyProxyStyle::b_altmenu = settings->value ("b_altmenu", "0").toBool();
 
   int ui_tab_align = settings->value ("ui_tabs_align", "0").toInt();
   main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align));
@@ -692,8 +603,9 @@ void CTEA::read_settings()
   markup_mode = settings->value ("markup_mode", "HTML").toString();
   charset = settings->value ("charset", "UTF-8").toString();
   fname_def_palette = settings->value ("fname_def_palette", ":/palettes/TEA").toString();
+
   QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
-  QSize size = settings->value ("size", QSize (600, 420)).toSize();
+  QSize size = settings->value ("size", QSize (800, 512)).toSize();
 
   if (mainSplitter)
       mainSplitter->restoreState (settings->value ("splitterSizes").toByteArray());
@@ -746,127 +658,6 @@ void CTEA::write_search_options()
 }
 
 
-
-
-void CTEA::closeEvent (QCloseEvent *event)
-{
-  if (main_tab_widget->currentIndex() == idx_tab_tune)
-     leaving_options();
-
-  QString fname  = dir_config + "/last_used_charsets";
-
-  qstring_save (fname, sl_last_used_charsets.join ("\n").trimmed());
-
-  if (settings->value("session_restore", false).toBool())
-     {
-      QString fname_session = dir_sessions + "/def-session-777";
-      documents->save_to_session (fname_session);
-     }
-
-  write_search_options();
-  write_settings();
-
-  qstring_save (fname_fif, sl_fif_history.join ("\n"));
-
-  delete documents;
-  delete img_viewer;
-
-#ifdef USE_QML_STUFF
-  plugins_done();
-#endif
-
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-  delete spellchecker;
-#endif
-
-  delete shortcuts;
-
-
-  if (text_window_list.size() > 0)
-      for (vector <size_t>::size_type i = 0; i < text_window_list.size(); i++)
-          text_window_list[i]->close();
-
-  event->accept();
-  deleteLater();
-}
-
-
-void CTEA::dragEnterEvent (QDragEnterEvent *event)
-{
-  if (event->mimeData()->hasFormat ("text/uri-list"))
-     event->acceptProposedAction();
-}
-
-
-void CTEA::dropEvent (QDropEvent *event)
-{
-  if (! event->mimeData()->hasUrls())
-     return;
-
-  QString fName;
-  QFileInfo info;
-
-  QList<QUrl> l = event->mimeData()->urls();
-
-  for (QList <QUrl>::iterator u = l.begin(); u != l.end(); ++u)
-      {
-       fName = u->toLocalFile();
-
-       info.setFile (fName);
-       if (info.isFile())
-          documents->open_file (fName, cb_fman_codecs->currentText());
-      }
-
-  event->accept();
-}
-
-
-
-
-
-
-
-
-void CTEA::update_hls()
-{
-
-  CFilesList lf;
-  lf.get (":/hls");
-
-  QStringList l (lf.list);
-
-  lf.get (dir_hls);
-  l << lf.list;
-
-  for (int i = 0; i < l.size(); i++)
-      {
-       QString fname = l[i];
-
-       QString buffer = qstring_load_first_line (fname);
-       QString rgxp = string_between (buffer, "pattern=\"", "\"");
-
-       if (! rgxp.isEmpty())
-          {
-
-#if QT_VERSION >= 0x050000
-
-          QRegularExpression re (rgxp, QRegularExpression::CaseInsensitiveOption);
-          if (re.isValid())
-             documents->hl_files.push_back (std::make_pair (re, fname));
-
-#else
-
-          QRegExp re (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2);
-          if (re.isValid())
-             documents->hl_files.push_back(std::make_pair (re, fname));
-
-#endif
-          }
-      }
-}
-
-
-
 /*
 ===================
 File manager slots
@@ -909,7 +700,6 @@ void CTEA::fman_file_activated (const QString &full_path)
       //check if plugin:
 
       CZipper z;
-
       QStringList sl = z.unzip_list (full_path);
 
       bool is_plugin = false;
@@ -927,7 +717,7 @@ void CTEA::fman_file_activated (const QString &full_path)
          {
           int ret = QMessageBox::warning (this, "TEA",
                                           tr ("It seems that %1 contains TEA plugin.\n Do you want to install it?")
-                                           .arg (full_path),
+                                          .arg (full_path),
                                           QMessageBox::Ok | QMessageBox::Default,
                                           QMessageBox::Cancel | QMessageBox::Escape);
 
@@ -936,7 +726,6 @@ void CTEA::fman_file_activated (const QString &full_path)
 
           if (! z.unzip (full_path, dir_plugins))
               log->log (tr ("Cannot unzip and install plugin"));
-
 
 #ifdef USE_QML_STUFF
           update_plugins();
@@ -964,7 +753,6 @@ void CTEA::fman_file_activated (const QString &full_path)
       main_tab_widget->setCurrentIndex (idx_tab_edit);
       return;
      }
-
 
   CDocument *d = documents->open_file (full_path, cb_fman_codecs->currentText());
   if (d)
@@ -1039,7 +827,7 @@ void CTEA::fman_open()
   QStringList li = fman->get_sel_fnames();
 
   if (! f.isEmpty())
-  if (f[0] == '/')
+  if (f[0] == '/') //if file name entry is the full path
      {
       CDocument *d = documents->open_file (f, cb_fman_codecs->currentText());
       if (d)
@@ -1047,12 +835,13 @@ void CTEA::fman_open()
           dir_last = get_file_path (d->file_name);
           charset = d->charset;
           add_to_last_used_charsets (cb_fman_codecs->currentText());
+          main_tab_widget->setCurrentIndex (idx_tab_edit);
          }
 
-      main_tab_widget->setCurrentIndex (idx_tab_edit);
       return;
      }
 
+  //if file name entry == just filename
   if (li.size() == 0)
      {
       QString fname (fman->dir.path());
@@ -1063,12 +852,13 @@ void CTEA::fman_open()
           dir_last = get_file_path (d->file_name);
           charset = d->charset;
           add_to_last_used_charsets (cb_fman_codecs->currentText());
+          main_tab_widget->setCurrentIndex (idx_tab_edit);
          }
 
-      main_tab_widget->setCurrentIndex (idx_tab_edit);
       return;
      }
 
+  //if file[s] selected at files list
   for (int i = 0; i < li.size(); i++)
       {
        CDocument *d = 0;
@@ -1087,49 +877,29 @@ void CTEA::fman_open()
 
 void CTEA::fman_places_itemActivated (QListWidgetItem *item)
 {
-  int index = lv_places->currentRow();
+  int i = lv_places->currentRow();
+  QString s = item->text();
 
-  if (index == 0)
-     {
-      fman->nav (dir_templates);
-      return;
-     }
-  else
-  if (index == 1)
-     {
-      fman->nav (dir_snippets);
-      return;
-     }
-  else
-  if (index == 2)
-     {
-      fman->nav (dir_scripts);
-      return;
-     }
-  else
-  if (index == 3)
-     {
-      fman->nav (dir_tables);
-      return;
-     }
-  else
-  if (index == 4)
-     {
-      fman->nav (dir_config);
-      return;
-     }
+  vector <QString> v;
 
-  fman->nav (item->text());
+  v.push_back (dir_templates);
+  v.push_back (dir_snippets);
+  v.push_back (dir_scripts);
+  v.push_back (dir_tables);
+  v.push_back (dir_config);
+
+  if (i < 5)
+     s = v[i];
+
+  fman->nav (s);
 }
 
 
 void CTEA::cb_button_saves_as()
 {
   CDocument *d = documents->get_current();
-  if (! d)
-     return;
 
-  if (ed_fman_fname->text().isEmpty())
+  if (! d || ed_fman_fname->text().isEmpty())
      return;
 
   QString filename (fman->dir.path());
@@ -1162,150 +932,6 @@ void CTEA::cb_button_saves_as()
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
-
-void CTEA::update_tables()
-{
-  menu_fn_tables->clear();
-
-  create_menu_from_dir (this,
-                        menu_fn_tables,
-                        dir_tables,
-                        SLOT (fn_use_table())
-                        );
-}
-
-void CTEA::update_scripts()
-{
-  menu_fn_scripts->clear();
-
-  create_menu_from_dir (this,
-                        menu_fn_scripts,
-                        dir_scripts,
-                        SLOT (fn_run_script())
-                        );
-}
-
-
-
-void CTEA::update_places_bookmarks()
-{
-  lv_places->clear();
-
-  QStringList sl_items;
-  sl_items << tr ("templates");
-  sl_items << tr ("snippets");
-  sl_items << tr ("scripts");
-  sl_items << tr ("tables");
-  sl_items << tr ("configs");
-
-  lv_places->addItems (sl_items);
-
-  if (! file_exists (fname_places_bookmarks))
-     return;
-
-  sl_places_bmx = qstring_load (fname_places_bookmarks).split ("\n");
-  if (sl_places_bmx.size() != 0)
-     lv_places->addItems (sl_places_bmx);
-
-  QString fname_gtk_bookmarks = QDir::homePath() + "/" + ".gtk-bookmarks";
-
-  QStringList sl_gtk_bookmarks = qstring_load (fname_gtk_bookmarks).split ("\n");
-
-  if (sl_gtk_bookmarks.size() > 0)
-     lv_places->addItems (sl_gtk_bookmarks);
-}
-
-
-void CTEA::update_programs()
-{
-  if (! file_exists (fname_programs))
-     return;
-
-  programs = hash_load_keyval (fname_programs);
-  if (programs.count() < 0)
-     return;
-
-  menu_programs->clear();
-
-  QStringList sl = programs.keys();
-  sl.sort();
-
-  create_menu_from_list (this, menu_programs,
-                         sl,
-                         SLOT (run_program()));
-}
-
-
-void CTEA::update_logmemo_palette()
-{
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
-  QString text_color = hash_get_val (global_palette, "text", "black");
-  QString back_color = hash_get_val (global_palette, "background", "white");
-  QString sel_back_color = hash_get_val (global_palette, "sel-background", "black");
-  QString sel_text_color = hash_get_val (global_palette, "sel-text", "white");
-
-  QString t_text_color = QColor (text_color).darker(darker_val).name();
-  QString t_back_color = QColor (back_color).darker(darker_val).name();
-  QString t_sel_text_color = QColor (sel_text_color).darker(darker_val).name();
-  QString t_sel_back_color = QColor (sel_back_color).darker(darker_val).name();
-
-  QString sheet = QString ("QPlainTextEdit { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}").arg (
-                           t_text_color).arg (
-                           t_back_color).arg (
-                           t_sel_text_color).arg (
-                           t_sel_back_color);
-
-  log->setStyleSheet (sheet);
-
-  sheet = QString ("QLineEdit { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}").arg (
-                   t_text_color).arg (
-                   t_back_color).arg (
-                   t_sel_text_color).arg (
-                   t_sel_back_color);
-
-  fif->setStyleSheet (sheet);
-}
-
-
-void CTEA::update_charsets()
-{
-  QString fname  = dir_config + "/last_used_charsets";
-
-  if (! file_exists (fname))
-     qstring_save (fname, "UTF-8");
-
-  sl_last_used_charsets = qstring_load (fname).split ("\n");
-
-  QList<QByteArray> acodecs = QTextCodec::availableCodecs();
-
-  for (QList <QByteArray>::iterator codec = acodecs.begin(); codec != acodecs.end(); ++codec)
-      sl_charsets.prepend ((*codec));
-
-  sl_charsets.sort();
-}
-
-
-void CTEA::update_profiles()
-{
-  menu_view_profiles->clear();
-  create_menu_from_dir (this,
-                        menu_view_profiles,
-                        dir_profiles,
-                        SLOT (view_use_profile())
-                       );
-}
-
-
-void CTEA::opt_update_keyb()
-{
-  if (! lv_menuitems)
-     return;
-
-  lv_menuitems->clear();
-  shortcuts->captions_iterate();
-  lv_menuitems->addItems (shortcuts->captions);
-}
 
 
 
@@ -4778,10 +4404,6 @@ bool pr_bigger_than_str_len (const pair<const QString &,int> &a,
 }
 
 
-
-
-
-
 void CTEA::fn_analyze_get_words_count()
 {
   last_action = sender();
@@ -5002,12 +4624,12 @@ void CTEA::fn_text_regexp_match_check()
   QString fiftxt = fif_get_text();
 
 #if QT_VERSION >= 0x050000
- QRegularExpression r (fiftxt/*,  QRegularExpression::CaseInsensitiveOption*/);
- QRegularExpressionMatch match = r.match(t);
- if (match.hasMatch())
-    log->log (tr ("matched"));
- else
-     log->log (tr ("does not"));
+  QRegularExpression r (fiftxt);
+  QRegularExpressionMatch match = r.match(t);
+  if (match.hasMatch())
+      log->log (tr ("matched"));
+  else
+      log->log (tr ("does not"));
 
 #else
   QRegExp r (fiftxt);
@@ -6644,9 +6266,9 @@ CTEA::CTEA()
   pb_status->hide();
 
 
-  createActions();
-  createMenus();
-  createToolBars();
+  create_actions();
+  create_menus();
+  create_toolbars();
 
   update_styles();
 
@@ -6721,10 +6343,10 @@ CTEA::CTEA()
   cmb_fif->addItems (sl_fif_history);
   cmb_fif->clearEditText();
 
-  createFman();
-  createOptions();
-  createCalendar();
-  createManual();
+  create_fman();
+  create_options();
+  create_calendar();
+  create_manual();
 
   update_fonts();
 
@@ -6933,9 +6555,6 @@ void CTEA::create_paths()
   if (! dr.exists())
      dr.mkpath (dir_palettes);
 }
-
-
-
 
 
 
@@ -7194,7 +6813,7 @@ void CTEA::create_main_widget_docked()
 }
 
 
-void CTEA::createActions()
+void CTEA::create_actions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
 
@@ -7278,7 +6897,7 @@ void CTEA::createActions()
 }
 
 
-void CTEA::createMenus()
+void CTEA::create_menus()
 {
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
@@ -7836,7 +7455,7 @@ OPTIONS PAGE UI
 ----------------------
 *************************/
 
-void CTEA::createOptions()
+void CTEA::create_options()
 {
   tab_options = new QTabWidget;
 
@@ -8404,7 +8023,7 @@ OPTIONS::KEYBOARD
 }
 
 
-void CTEA::createCalendar()
+void CTEA::create_calendar()
 {
   calendar = new CCalendarWidget (this, dir_days);
 
@@ -8429,7 +8048,7 @@ void CTEA::createCalendar()
 }
 
 
-void CTEA::createToolBars()
+void CTEA::create_toolbars()
 {
   openAct->setMenu (menu_file_recent);
   filesAct->setMenu (menu_current_files);
@@ -8497,7 +8116,7 @@ void CTEA::createToolBars()
 }
 
 
-void CTEA::createManual()
+void CTEA::create_manual()
 {
   QWidget *wd_man = new QWidget (this);
 
@@ -8539,7 +8158,7 @@ void CTEA::createManual()
 }
 
 
-void CTEA::createFman()
+void CTEA::create_fman()
 {
   QWidget *wd_fman = new QWidget (this);
 
@@ -9059,6 +8678,189 @@ void CTEA::update_themes()
                            dir_themes,
                            SLOT (view_use_theme())
                            );
+}
+
+
+void CTEA::update_hls()
+{
+
+  CFilesList lf;
+  lf.get (":/hls");
+
+  QStringList l (lf.list);
+
+  lf.get (dir_hls);
+  l << lf.list;
+
+  for (int i = 0; i < l.size(); i++)
+      {
+       QString fname = l[i];
+
+       QString buffer = qstring_load_first_line (fname);
+       QString rgxp = string_between (buffer, "pattern=\"", "\"");
+
+       if (! rgxp.isEmpty())
+          {
+
+#if QT_VERSION >= 0x050000
+
+          QRegularExpression re (rgxp, QRegularExpression::CaseInsensitiveOption);
+          if (re.isValid())
+             documents->hl_files.push_back (std::make_pair (re, fname));
+
+#else
+
+          QRegExp re (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2);
+          if (re.isValid())
+             documents->hl_files.push_back(std::make_pair (re, fname));
+
+#endif
+          }
+      }
+}
+
+
+void CTEA::update_tables()
+{
+  menu_fn_tables->clear();
+
+  create_menu_from_dir (this,
+                        menu_fn_tables,
+                        dir_tables,
+                        SLOT (fn_use_table())
+                        );
+}
+
+void CTEA::update_scripts()
+{
+  menu_fn_scripts->clear();
+
+  create_menu_from_dir (this,
+                        menu_fn_scripts,
+                        dir_scripts,
+                        SLOT (fn_run_script())
+                        );
+}
+
+
+void CTEA::update_places_bookmarks()
+{
+  lv_places->clear();
+
+  QStringList sl_items;
+  sl_items << tr ("templates");
+  sl_items << tr ("snippets");
+  sl_items << tr ("scripts");
+  sl_items << tr ("tables");
+  sl_items << tr ("configs");
+
+  lv_places->addItems (sl_items);
+
+  if (! file_exists (fname_places_bookmarks))
+     return;
+
+  sl_places_bmx = qstring_load (fname_places_bookmarks).split ("\n");
+  if (sl_places_bmx.size() != 0)
+     lv_places->addItems (sl_places_bmx);
+
+  QString fname_gtk_bookmarks = QDir::homePath() + "/" + ".gtk-bookmarks";
+
+  QStringList sl_gtk_bookmarks = qstring_load (fname_gtk_bookmarks).split ("\n");
+
+  if (sl_gtk_bookmarks.size() > 0)
+     lv_places->addItems (sl_gtk_bookmarks);
+}
+
+
+void CTEA::update_programs()
+{
+  if (! file_exists (fname_programs))
+     return;
+
+  programs = hash_load_keyval (fname_programs);
+  if (programs.count() < 0)
+     return;
+
+  menu_programs->clear();
+
+  QStringList sl = programs.keys();
+  sl.sort();
+
+  create_menu_from_list (this, menu_programs,
+                         sl,
+                         SLOT (run_program()));
+}
+
+
+void CTEA::update_logmemo_palette()
+{
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  QString text_color = hash_get_val (global_palette, "text", "black");
+  QString back_color = hash_get_val (global_palette, "background", "white");
+  QString sel_back_color = hash_get_val (global_palette, "sel-background", "black");
+  QString sel_text_color = hash_get_val (global_palette, "sel-text", "white");
+
+  QString t_text_color = QColor (text_color).darker(darker_val).name();
+  QString t_back_color = QColor (back_color).darker(darker_val).name();
+  QString t_sel_text_color = QColor (sel_text_color).darker(darker_val).name();
+  QString t_sel_back_color = QColor (sel_back_color).darker(darker_val).name();
+
+  QString sheet = QString ("QPlainTextEdit { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}").arg (
+                           t_text_color).arg (
+                           t_back_color).arg (
+                           t_sel_text_color).arg (
+                           t_sel_back_color);
+
+  log->setStyleSheet (sheet);
+
+  sheet = QString ("QLineEdit { color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}").arg (
+                   t_text_color).arg (
+                   t_back_color).arg (
+                   t_sel_text_color).arg (
+                   t_sel_back_color);
+
+  fif->setStyleSheet (sheet);
+}
+
+
+void CTEA::update_charsets()
+{
+  QString fname  = dir_config + "/last_used_charsets";
+
+  if (! file_exists (fname))
+     qstring_save (fname, "UTF-8");
+
+  sl_last_used_charsets = qstring_load (fname).split ("\n");
+
+  QList<QByteArray> acodecs = QTextCodec::availableCodecs();
+
+  for (QList <QByteArray>::iterator codec = acodecs.begin(); codec != acodecs.end(); ++codec)
+      sl_charsets.prepend ((*codec));
+
+  sl_charsets.sort();
+}
+
+
+void CTEA::update_profiles()
+{
+  menu_view_profiles->clear();
+  create_menu_from_dir (this,
+                        menu_view_profiles,
+                        dir_profiles,
+                        SLOT (view_use_profile())
+                       );
+}
+
+
+void CTEA::opt_update_keyb()
+{
+  if (! lv_menuitems)
+     return;
+
+  lv_menuitems->clear();
+  shortcuts->captions_iterate();
+  lv_menuitems->addItems (shortcuts->captions);
 }
 
 

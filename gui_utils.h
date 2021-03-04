@@ -15,6 +15,13 @@ void create_menu_from_list (QObject *handler,
                             const char *method
                            );
 
+
+void create_menu_from_themes (QObject *handler,
+                              QMenu *menu,
+                              const QString &dir,
+                              const char *method
+                              );
+
 void create_menu_from_dir (QObject *handler,
                            QMenu *menu,
                            const QString &dir,

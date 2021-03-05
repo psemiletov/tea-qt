@@ -497,8 +497,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   if (hl_rules.size() == 0)
       return;
 
-//  for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
-/*
+/*  for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
   {
    QRegularExpressionMatch m = p->first.match (text);
 

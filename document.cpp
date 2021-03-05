@@ -297,6 +297,22 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
   if (hl_rules.size() == 0)
       return;
 
+  for (const auto& p: hl_rules)
+     {
+      int index  = text.indexOf (p.first);
+       
+       while (index >= 0)
+             {
+             int length = p.first.matchedLength();
+             if (length == 0)
+               continue;
+
+             setFormat (index, length, p.second);
+             index = text.indexOf (p.first, index + length);
+            }
+       }
+
+/*  
   for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
       {
        QRegularExpressionMatch m = p->first.match (text);
@@ -314,7 +330,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
              index = m.capturedStart();
             }
        }
-
+*/
 
   setCurrentBlockState (0);
 

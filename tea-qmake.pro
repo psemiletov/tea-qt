@@ -17,6 +17,9 @@ DEFINES += NOCRYPT \
            NOUNCRYPT \
            QUAZIP_STATIC
 
+QMAKE_CXXFLAGS += -std=c++11
+
+
 USE_ASPELL = true
 USE_HUNSPELL = true
 USE_PRINTER = true
@@ -95,7 +98,6 @@ noprinter{
 DEFINES -= PRINTER_ENABLE
 message ("Printer OFF")
 }
-
 
 useclang{
     message ("Clang enabled")
@@ -184,6 +186,7 @@ CONFIG += warn_on \
     qt \
     release \
     link_pkgconfig
+     
 
 QT += core
 QT += gui

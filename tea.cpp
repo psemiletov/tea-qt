@@ -934,9 +934,6 @@ void CTEA::cb_button_saves_as()
 
 
 
-
-
-
 /*
 void CTEA::ide_ctags()
 {
@@ -1043,7 +1040,6 @@ void CTEA::ide_global_definition()
 
   //if (s.indexOf ('\t') != -1)
     // qDebug() << "TAB!";
-
 
 
 
@@ -1174,7 +1170,6 @@ void CTEA::file_open()
 
   dialog.setFileMode (QFileDialog::ExistingFiles);
   dialog.setAcceptMode (QFileDialog::AcceptOpen);
-
 
   CDocument *d = documents->get_current();
   if (d)

@@ -35,10 +35,6 @@
 #include <QProcess>
 #include <QProxyStyle>
 
-#ifdef USE_QML_STUFF
-#include <QQmlEngine>
-#include <QQuickWindow>
-#endif
 
 
 #ifdef PRINTER_ENABLE
@@ -113,40 +109,6 @@ public:
 #endif
 
 
-#ifdef USE_QML_STUFF
-class CQQuickWindow: public QQuickWindow
-{
-Q_OBJECT
-
-public:
-
-  QString id;
-
-  CQQuickWindow (QWindow *parent = 0): QQuickWindow (parent) {}
-  ~CQQuickWindow() {}
-
-protected:
-
-  bool event (QEvent *event);
-};
-
-
-class CPluginListItem: public QObject
-{
-Q_OBJECT
-
-public:
-
-  QString id;
-  CQQuickWindow *window;
-
-  CPluginListItem (const QString &plid, CQQuickWindow *wnd);
-};
-#endif
-
-
-
-
 class CAboutWindow: public QWidget
 {
 Q_OBJECT
@@ -196,10 +158,6 @@ public:
 Variables
 =========================
 */
-
-#ifdef USE_QML_STUFF
-  QQmlEngine *qml_engine;
-#endif
 
   QString charset;
 
@@ -341,10 +299,6 @@ Main menu items
   QMenu *menu_fn_sessions;
   QMenu *menu_fn_scripts;
 
-
-#ifdef USE_QML_STUFF
-  QMenu *menu_fn_plugins;
-#endif
 
   QMenu *menu_view_themes;
 
@@ -581,11 +535,6 @@ public:
   void handle_args();
   void create_paths();
 
-#ifdef USE_QML_STUFF
-  void plugins_init();
-  void plugins_done();
-#endif
-
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   void setup_spellcheckers();
@@ -616,10 +565,6 @@ public:
   void update_sessions();
   void update_palettes();
   void update_labels_menu();
-
-#ifdef USE_QML_STUFF
-  void update_plugins();
-#endif
 
   void update_themes();
   void update_hls();
@@ -887,10 +832,6 @@ Fn menu callbacks
 
   void fn_repeat();
   void fn_scale_image();
-
-#ifdef USE_QML_STUFF
-  void fn_use_plugin();
-#endif
 
   void fn_use_snippet();
   void fn_run_script();

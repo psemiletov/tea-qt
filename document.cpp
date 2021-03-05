@@ -205,14 +205,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      if (! rg.isValid())
                          qDebug() << "! valid " << rg.pattern();
                      else
-                         {
-                          //HighlightingRule rule;
-                          //rule.pattern = rg;
-                          //rule.format = fmt;
-                          //highlightingRules.push_back (rule);
-                          hl_rules.push_back (make_pair (rg, fmt));
-
-                         }
+                         hl_rules.push_back (make_pair (rg, fmt));
 
                      } //keywords
                  else
@@ -282,6 +275,8 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
   if (hl_rules.size() == 0)
       return;
 
+  /*
+//виснет с const auto &p
   for (auto p: hl_rules)
      {
       int index  = text.indexOf (p.first);
@@ -296,8 +291,8 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
               index = text.indexOf (p.first, index + length);
              }
        }
+*/
 
- /* 
   for (vector<pair<QRegExp, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
       {
        int index  = text.indexOf (p->first);
@@ -312,7 +307,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
              index = text.indexOf (p->first, index + length);
             }
       }
-*/
+
 
   setCurrentBlockState (0);
 
@@ -495,7 +490,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   if (hl_rules.size() == 0)
       return;
 
-/*  for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
+  for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
   {
    QRegularExpressionMatch m = p->first.match (text);
 
@@ -512,7 +507,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
           index = m.capturedStart();
          }
    }
-  */
+  /*
   for (const auto& p: hl_rules)
       {
        QRegularExpressionMatch m = p.first.match (text);
@@ -530,7 +525,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
               index = m.capturedStart();
              }
        }
-
+*/
 
   setCurrentBlockState (0);
 

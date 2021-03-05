@@ -192,38 +192,18 @@ CONFIG += warn_on \
 QT += core
 QT += gui
 
-CONFIG-=qml_debug
-
 greaterThan(QT_MAJOR_VERSION, 4) {
        QT += widgets
        QT += printsupport
-       QT += qml
-       QT += quick
 
 noprinter{
        QT -= printsupport
 }
 
-#    DEFINES += USE_QML_STUFF
    } else {
 #QT += blah blah blah
    }
 
-
-
-noqml{
-       QT -= qml
-       QT -= quick
-       DEFINES -= USE_QML_STUFF
-       message ("QML stuff is off")
-}
-
-os2: {
-       QT -= qml
-       QT -= quick
-       DEFINES -= USE_QML_STUFF
-       message ("QML stuff is off")
-}
 
 
 nosingleapp{
@@ -261,11 +241,6 @@ DISTFILES += ChangeLog \
     translations/* \
     manuals/en.html \
     manuals/ru.html \
-    manuals/plugins/readme-en.txt \
-    manuals/plugins/examples/click-and-close/main.qml \
-    manuals/plugins/examples/run-and-close/main.qml \
-    manuals/plugins/examples/settings-via-qmap/main.qml \
-    manuals/plugins/examples/use-fif/main.qml \
     themes/Cotton/stylesheet.css \
     themes/Plum/stylesheet.css \
     themes/Smaragd/stylesheet.css \
@@ -296,10 +271,7 @@ icons/file-save-as.png \
 icons/file-save.png \ 
 icons/fn-spell-check.png \
 icons/go.png \
-icons/home.png \
 icons/labels.png \
-icons/refresh.png \
-icons/search_find.png \
 icons/tea_icon_v2.png \
 icons/tea-icon-v3-01.png \
 icons/tea-icon-v3-02.png \

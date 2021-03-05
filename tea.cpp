@@ -66,12 +66,6 @@ started at 08 November 2007
 #include <QLibraryInfo>
 #include <QFontDialog>
 
-#ifdef USE_QML_STUFF
-#include <QQmlComponent>
-#include <QQmlContext>
-#include <QQuickItem>
-#include <QQuickView>
-#endif
 
 
 #ifdef PRINTER_ENABLE
@@ -92,10 +86,6 @@ started at 08 November 2007
 #include "exif_reader.h"
 
 #include "spellchecker.h"
-
-#ifdef USE_QML_STUFF
-std::vector <CPluginListItem *> plugins_list;
-#endif
 
 
 //′
@@ -446,10 +436,6 @@ void CTEA::closeEvent (QCloseEvent *event)
   delete documents;
   delete img_viewer;
 
-#ifdef USE_QML_STUFF
-  plugins_done();
-#endif
-
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   delete spellchecker;
 #endif
@@ -709,42 +695,11 @@ void CTEA::fman_file_activated (const QString &full_path)
       CZipper z;
       QStringList sl = z.unzip_list (full_path);
 
-      bool is_plugin = false;
 
       for (int i = 0; i < sl.size(); i++)
-          {
-           if (sl.at(i).endsWith("main.qml"))
-              {
-               is_plugin = true;
-               break;
-              }
-          }
+           sl[i] = sl[i] + "<br>";
 
-      if (is_plugin)
-         {
-          int ret = QMessageBox::warning (this, "TEA",
-                                          tr ("It seems that %1 contains TEA plugin.\n Do you want to install it?")
-                                          .arg (full_path),
-                                          QMessageBox::Ok | QMessageBox::Default,
-                                          QMessageBox::Cancel | QMessageBox::Escape);
-
-          if (ret == QMessageBox::Cancel)
-             return;
-
-          if (! z.unzip (full_path, dir_plugins))
-              log->log (tr ("Cannot unzip and install plugin"));
-
-#ifdef USE_QML_STUFF
-          update_plugins();
-#endif
-         }
-      else
-          {
-           for (int i = 0; i < sl.size(); i++)
-               sl[i] = sl[i] + "<br>";
-
-           log->log (sl.join("\n"));
-          }
+      log->log (sl.join("\n"));
 
       return;
      }
@@ -2992,187 +2947,6 @@ void CTEA::search_replace_all_at_ofiles()
 Fn menu callbacks
 ===================
 */
-
-
-#ifdef USE_QML_STUFF
-
-//ALL PLUGINS STUFF
-
-void CTEA::fn_use_plugin()
-{
-  last_action = sender();
-
-  if (! qml_engine)
-     {
-      qDebug() << "! qml_engine";
-      return;
-     }
-
-  QAction *a = qobject_cast<QAction *>(sender());
-
-  QString qml_fname = a->data().toString() + "/" + "main.qml";
-
-  if (! file_exists (qml_fname))
-     {
-      log->log (tr ("There is no plugin file"));
-      return;
-     }
-
-  QQmlComponent *component = new QQmlComponent (qml_engine, QUrl::fromLocalFile (qml_fname));
-
-  if (! component->isReady() && component->isError())
-     {
-      log->log (tr ("<b>Error:</b> ") + component->errorString());
-      return;
-     }
-
-  CQQuickWindow *window = new CQQuickWindow;
-
-  QObject::connect((QObject*)qml_engine, SIGNAL(quit()), window, SLOT(close()));
-
-  QQuickItem *item = qobject_cast<QQuickItem*>(component->create());
-  item->setParentItem (window->contentItem());
-
-  window->id = qml_fname;
-
-  plugins_list.push_back (new CPluginListItem (qml_fname, window));
-
-  QVariant v = item->property ("close_on_complete");
-
-  if (v.isValid() && v.toBool())
-      window->close();
-  else
-      {
-       window->resize (item->width(), item->height());
-       window->show();
-      }
-
-  delete component;
-}
-
-
-bool CQQuickWindow::event (QEvent *event)
-{
-  if (event->type() == QEvent::Close)
-     {
-      if (plugins_list.size() > 0)
-      for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
-          {
-           if (plugins_list[i]->id == id)
-              {
-               delete plugins_list[i];
-               plugins_list.erase (plugins_list.begin() + i);
-               break;
-              }
-           }
-     }
-
-  return QQuickWindow::event (event);
-}
-
-
-bool has_qml_file (const QString &path)
-{
-  QDir d (path);
-  QStringList l = d.entryList();
-
-  for (int i = 0; i < l.size(); i++)
-     {
-      if (l[i].endsWith (".qml"))
-         return true;
-     }
-
-  return false;
-}
-
-
-//uses dir name as menuitem, no recursion
-void create_menu_from_plugins (QObject *handler,
-                               QMenu *menu,
-                               const QString &dir,
-                               const char *method
-                               )
-{
-  menu->setTearOffEnabled (true);
-  QDir d (dir);
-  QFileInfoList lst_fi = d.entryInfoList (QDir::NoDotAndDotDot | QDir::Dirs,
-                                          QDir::IgnoreCase | QDir::LocaleAware | QDir::Name);
-
-
-  for (QList <QFileInfo>::iterator fi = lst_fi.begin(); fi != lst_fi.end(); ++fi)
-         {
-          if (fi->isDir())
-             {
-              if (has_qml_file (fi->absoluteFilePath()))
-                 {
-                  QAction *act = new QAction (fi->fileName(), menu->parentWidget());
-                  act->setData (fi->filePath());
-                  handler->connect (act, SIGNAL(triggered()), handler, method);
-                  menu->addAction (act);
-                 }
-             else
-                 {
-                  QMenu *mni_temp = menu->addMenu (fi->fileName());
-                  create_menu_from_plugins (handler, mni_temp,
-                                            fi->filePath(), method);
-                 }
-             }
-         }
-}
-
-
-void CTEA::update_plugins()
-{
-  menu_fn_plugins->clear();
-
-  create_menu_from_plugins (this,
-                            menu_fn_plugins,
-                            dir_plugins,
-                            SLOT (fn_use_plugin())
-                            );
-}
-
-
-void CTEA::plugins_init()
-{
-  qml_engine = new QQmlEngine;
-
-//    qmlRegisterInterface<CDocument>("CDocument");
-
-  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CDocument");
-  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CLogMemo");
-  qmlRegisterType<CDocument>("semiletov.tea.qmlcomponents", 1, 0, "CTEAEdit");
-
-  qml_engine->rootContext()->setContextProperty ("docs", documents);
-  qml_engine->rootContext()->setContextProperty ("documents", documents);
-  qml_engine->rootContext()->setContextProperty ("log", log);
-  qml_engine->rootContext()->setContextProperty ("tea", this);
-  qml_engine->rootContext()->setContextProperty ("settings", settings);
-  qml_engine->rootContext()->setContextProperty ("hs_path", hs_path);
-}
-
-
-void CTEA::plugins_done()
-{
-//закрыть все плагины из списка (при созд. плагина добавляем указатель в список)
-//и потом
-
-  if (plugins_list.size() > 0)
-      for (vector <size_t>::size_type i = 0; i < plugins_list.size(); i++)
-          plugins_list[i]->window->close();
-
-  delete qml_engine;
-}
-
-
-CPluginListItem::CPluginListItem (const QString &plid, CQQuickWindow *wnd)
-{
-  id = plid;
-  window = wnd;
-}
-
-#endif
-
 
 
 
@@ -6291,9 +6065,6 @@ CTEA::CTEA()
   update_sessions();
   update_scripts();
 
-#ifdef USE_QML_STUFF
-  update_plugins();
-#endif
 
   update_programs();
   update_palettes();
@@ -6397,9 +6168,6 @@ CTEA::CTEA()
   QClipboard *clipboard = QApplication::clipboard();
   connect (clipboard , SIGNAL(dataChanged()), this, SLOT(clipboard_dataChanged()));
 
-#ifdef USE_QML_STUFF
-  plugins_init();
-#endif
 
   setAcceptDrops (true);
 
@@ -7137,9 +6905,6 @@ Fn menu
   add_to_menu (menu_instr, tr ("Scale image"), SLOT(fn_scale_image()));
 
 
-#ifdef USE_QML_STUFF
-  menu_fn_plugins = menu_functions->addMenu (tr ("Plugins"));
-#endif
 
   menu_fn_snippets = menu_functions->addMenu (tr ("Snippets"));
   menu_fn_scripts = menu_functions->addMenu (tr ("Scripts"));

@@ -9,10 +9,8 @@ add_global_arguments('-DNOUNCRYPT="1"', language : 'cpp')
 add_global_arguments('-DQUAZIP_STATIC="1"', language : 'cpp')
 
    
-#add_global_arguments('-DUSE_QML_STUFF=1', language : 'cpp')
 
 #harcoded for now
-#moc_params = ['-DQT_VERSION=0x050000', '-DUSE_QML_STUFF=1']
 moc_params = ['-DQT_VERSION=0x050000']
 
 
@@ -62,7 +60,7 @@ endif
 
 zlib_dep = dependency('zlib', required : true)
 
-#qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network', 'Qml', 'Quick']) 
+#qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network']) 
 qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets']) 
 
 qt5 = import('qt5') 

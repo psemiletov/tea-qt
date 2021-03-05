@@ -45,7 +45,6 @@ option(USE_ASPELL "Use Aspell" ON)
 option(USE_PRINTER "Use printer support" OFF)
 option(USE_PDF "Use libpoppler" OFF)
 option(USE_DJVU "Use djvu support" OFF)
-option(USE_QML "Use QML support" OFF)
 
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -66,13 +65,6 @@ endif()
 
 
 find_package(Qt${QT_VERSION_MAJOR} CONFIG REQUIRED Core Widgets)
-
-
-if(USE_QML)
-message("QML IS SUPPORTED")
-find_package(Qt${QT_VERSION_MAJOR} CONFIG OPTIONAL_COMPONENTS Qml Quick)
-add_definitions(-DUSE_QML_STUFF)
-endif()
 
 
 
@@ -237,10 +229,6 @@ if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt5")
 target_link_libraries(tea Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core)
 endif()
 
-
-if(USE_QML)
-target_link_libraries(tea Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick)
-endif()
 
 
 install (TARGETS tea DESTINATION bin)

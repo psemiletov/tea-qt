@@ -17,6 +17,7 @@ DEFINES += NOCRYPT \
            NOUNCRYPT \
            QUAZIP_STATIC
 
+
 QMAKE_CXXFLAGS += -std=c++11
 
 
@@ -203,7 +204,7 @@ noprinter{
        QT -= printsupport
 }
 
-    DEFINES += USE_QML_STUFF
+#    DEFINES += USE_QML_STUFF
    } else {
 #QT += blah blah blah
    }

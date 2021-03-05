@@ -33,6 +33,13 @@ started at 08 November 2007
 #include <QRegExp>
 #endif
 
+#if QT_VERSION < 0x050500
+#include <QRegExp>
+#endif
+
+
+
+
 #include <QElapsedTimer>
 #include <QDockWidget>
 #include <QFileSystemModel>
@@ -2476,15 +2483,20 @@ void CTEA::search_find()
 
       d->text_to_search = fif_get_text();
 
+#if QT_VERSION >= 0x050500
       if (menu_find_regexp->isChecked())
+         cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
+#else
+      cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+#endif
 
+/*
 #if QT_VERSION < 0x050000
          cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
 #else
          cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
 #endif
-
-      else
+*/
           if (menu_find_fuzzy->isChecked())
              {
               int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
@@ -2533,13 +2545,16 @@ void CTEA::search_find_next()
 
       QTextCursor cr;
       if (menu_find_regexp->isChecked())
-#if QT_VERSION < 0x050000
-         cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options());
 
-#else
+#if QT_VERSION >= 0x050500
+      if (menu_find_regexp->isChecked())
          cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options());
-
+#else
+#if QT_VERSION < 0x050500
+      cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options());
 #endif
+#endif
+
 
       if (menu_find_fuzzy->isChecked())
          {
@@ -2586,17 +2601,19 @@ void CTEA::search_find_prev()
       QTextCursor cr;
 
       if (menu_find_regexp->isChecked())
-#if QT_VERSION < 0x050000
-         cr = d->document()->find (QRegExp (d->text_to_search),
-                                            d->textCursor(),
-                                            get_search_options() | QTextDocument::FindBackward);
+
+#if QT_VERSION >= 0x050500
+      if (menu_find_regexp->isChecked())
+         cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options() | QTextDocument::FindBackward);
 
 #else
-         cr = d->document()->find (QRegularExpression (d->text_to_search),
-                                                       d->textCursor(),
-                                                       get_search_options() | QTextDocument::FindBackward);
+#if QT_VERSION < 0x050500
+      cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options() | QTextDocument::FindBackward);
 
 #endif
+#endif
+
+
 
       else
           cr = d->document()->find (d->text_to_search,
@@ -9647,7 +9664,7 @@ void CTEA::fman_items_select_by_regexp (bool mode)
   if (ft.isEmpty())
       return;
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= 0x050500
   l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegularExpression);
 #else
   l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegExp);

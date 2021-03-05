@@ -80,8 +80,8 @@ void CAspellchecker::load_dict()
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
-  QString data_path = path + "\\data";
-  QString dict_path = path + "\\dict";
+  QString data_path = dir_dicts + "\\data";
+  QString dict_path = dir_dicts + "\\dict";
 
   data_path = data_path.replace ("/", "\\");
   dict_path = dict_path.replace ("/", "\\");
@@ -240,7 +240,7 @@ void CHunspellChecker::save_user_dict() //uses current language
 {
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
-   QString filename = user_dir + QDir::separator() + lng + ".dic";
+   QString filename = dir_user_dicts + QDir::separator() + language + ".dic";
    filename = filename.replace ("/", "\\");
 
 #else

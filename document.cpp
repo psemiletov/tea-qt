@@ -210,7 +210,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                           //rule.pattern = rg;
                           //rule.format = fmt;
                           //highlightingRules.push_back (rule);
-                         hl_rules.push_back (make_pair (rg, fmt));
+                          hl_rules.push_back (make_pair (rg, fmt));
 
                          }
 
@@ -278,58 +278,40 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
 void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 {
- /* if (highlightingRules.size() == 0)
-     return;
-
-  for (std::vector <HighlightingRule>::iterator it = highlightingRules.begin(); it != highlightingRules.end(); ++it)
-      {
-       int index = text.indexOf (it->pattern);
-
-       while (index >= 0)
-             {
-              int length = it->pattern.matchedLength();
-	      //qDebug() << it->pattern.pattern();
-              setFormat (index, length, it->format);
-              index = text.indexOf (it->pattern, index + length);
-             }
-       }
-*/
+ /
   if (hl_rules.size() == 0)
       return;
 
-  for (const auto& p: hl_rules)
+  for (auto p: hl_rules)
      {
       int index  = text.indexOf (p.first);
        
-       while (index >= 0)
+      while (index >= 0)
              {
-             int length = p.first.matchedLength();
-             if (length == 0)
-               continue;
+              int length = p.first.matchedLength();
+              if (length == 0)
+                continue;
 
-             setFormat (index, length, p.second);
-             index = text.indexOf (p.first, index + length);
-            }
+              setFormat (index, length, p.second);
+              index = text.indexOf (p.first, index + length);
+             }
        }
 
-/*  
-  for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
+ /* 
+  for (vector<pair<QRegExp, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
       {
-       QRegularExpressionMatch m = p->first.match (text);
-
-       int index = m.capturedStart();
+       int index  = text.indexOf (p->first);
 
        while (index >= 0)
              {
-              int length = m.capturedLength();
+             int length = p->first.matchedLength();
              if (length == 0)
                continue;
 
              setFormat (index, length, p->second);
-             m = p->first.match (text, index + length);
-             index = m.capturedStart();
+             index = text.indexOf (p->first, index + length);
             }
-       }
+      }
 */
 
   setCurrentBlockState (0);

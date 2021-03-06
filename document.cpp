@@ -219,13 +219,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
 		     QRegExp rg (element, cs);
                      if (rg.isValid())
-                        {
-                     //    HighlightingRule rule;
-                      //   rule.pattern = rg;
-                       //  rule.format = fmt;
-                       //  highlightingRules.push_back (rule);
                          hl_rules.push_back (make_pair (rg, fmt));
-                        }
                     }
                  else
                  if (attr_type == "mcomment-start")
@@ -282,15 +276,15 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
       int index  = text.indexOf (p.first);
        
       while (index >= 0)
-             {
-              int length = p.first.matchedLength();
-              if (length == 0)
-                continue;
+            {
+             int length = p.first.matchedLength();
+             if (length == 0)
+               continue;
 
-              setFormat (index, length, p.second);
-              index = text.indexOf (p.first, index + length);
-             }
-       }
+             setFormat (index, length, p.second);
+             index = text.indexOf (p.first, index + length);
+            }
+      }
 */
 
   for (vector<pair<QRegExp, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)

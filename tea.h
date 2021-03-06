@@ -239,7 +239,6 @@ Variables
   QString dir_sessions;
   QString dir_hls;
   QString dir_themes;
-  QString dir_plugins;
   QString dir_snippets;
   QString dir_scripts;
   QString dir_palettes;
@@ -483,7 +482,6 @@ Preferences tab :: Functions page UI elements
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
   QComboBox *cmb_spellcheckers;
-//  void cmb_spellchecker_currentIndexChanged (int index);
 
 #endif // SPELLCHECKERS ENABLED
 

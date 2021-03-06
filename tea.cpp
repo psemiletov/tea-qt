@@ -37,9 +37,6 @@ started at 08 November 2007
 #include <QRegExp>
 #endif
 
-
-
-
 #include <QElapsedTimer>
 #include <QDockWidget>
 #include <QFileSystemModel>
@@ -67,13 +64,11 @@ started at 08 November 2007
 #include <QFontDialog>
 
 
-
 #ifdef PRINTER_ENABLE
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QAbstractPrintDialog>
 #endif
-
 
 #include "tea.h"
 #include "utils.h"

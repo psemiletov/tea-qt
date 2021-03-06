@@ -26,10 +26,9 @@ USE_HUNSPELL = true
 USE_PRINTER = true
 
 win32:{
-
-isEmpty(PREFIX) {
-PREFIX = /usr/local/bin
-}
+       isEmpty(PREFIX) {
+       PREFIX = /usr/local/bin
+       }
 
 TARGET = bin/tea
 target.path = $$PREFIX
@@ -47,51 +46,41 @@ target.path = $$PREFIX
 }
 
 
-unix:{
+unix: {
+       isEmpty(PREFIX) {
+                        PREFIX = /usr/local
+                       }
 
-isEmpty(PREFIX) {
-PREFIX = /usr/local
-}
+       PREFIX = $$replace(PREFIX, bin,)
+       TARGET = bin/tea
+       target.path = $$PREFIX/bin
+       desktop.path = $$PREFIX/share/applications
+       desktop.files = desktop/tea.desktop
 
-#old PREFIX compatibility hack
-#message($$replace(PREFIX, bin,))
-#message ($$PREFIX)
-PREFIX = $$replace(PREFIX, bin,)
-#message ($$PREFIX)
-#
+       icon128.path = $$PREFIX/share/icons/hicolor/128x128/apps/
+       icon128.files += icons/128/tea.png
 
+       icon64.path = $$PREFIX/share/icons/hicolor/64x64/apps/
+       icon64.files += icons/64/tea.png
 
-TARGET = bin/tea
-target.path = $$PREFIX/bin
+       icon48.path = $$PREFIX/share/icons/hicolor/48x48/apps/
+       icon48.files += icons/48/tea.png
 
-desktop.path = $$PREFIX/share/applications
-desktop.files = desktop/tea.desktop
+       icon32.path = $$PREFIX/share/icons/hicolor/32x32/apps/
+       icon32.files += icons/32/tea.png
 
-icon128.path = $$PREFIX/share/icons/hicolor/128x128/apps/
-icon128.files += icons/128/tea.png
-
-icon64.path = $$PREFIX/share/icons/hicolor/64x64/apps/
-icon64.files += icons/64/tea.png
-
-icon48.path = $$PREFIX/share/icons/hicolor/48x48/apps/
-icon48.files += icons/48/tea.png
-
-icon32.path = $$PREFIX/share/icons/hicolor/32x32/apps/
-icon32.files += icons/32/tea.png
-
-iconsvg.path = $$PREFIX/share/icons/hicolor/scalable/apps/
-iconsvg.files += icons/svg/tea.svg
-
-}
+       iconsvg.path = $$PREFIX/share/icons/hicolor/scalable/apps/
+       iconsvg.files += icons/svg/tea.svg
+      }
 
 
-nohunspell{
-USE_HUNSPELL = false
-}
+nohunspell {
+            USE_HUNSPELL = false
+           }
 
-noaspell{
-USE_ASPELL = false
-}
+noaspell {
+          USE_ASPELL = false
+         }
 
 DEFINES += PRINTER_ENABLE
 
@@ -187,7 +176,7 @@ CONFIG += warn_on \
     qt \
     release \
     link_pkgconfig
-     
+ 
 
 QT += core
 QT += gui
@@ -278,30 +267,27 @@ icons/tea-icon-v3-02.png \
 icons/tea-icon-v3-03.png
 
 
-unix:  {
-#        LIBS += -lz
+unix: {
+       system (pkg-config --exists zlib) {
+               message ("Zlib found")
+               PKGCONFIG += zlib
+               }
 
-    system(pkg-config --exists zlib) {
-    message ("Zlib found")
-        PKGCONFIG += zlib
-        }
-
-
-contains(USE_ASPELL,true){
-exists("/usr/include/aspell.h") {
-    message ("ASpell enabled")
-    LIBS += -laspell
-    DEFINES += ASPELL_ENABLE
-}
-}
-
-
-contains(USE_HUNSPELL,true){
-system(pkg-config --exists hunspell) {
-message ("hunspell enabled")
-        PKGCONFIG += hunspell
-            DEFINES += HUNSPELL_ENABLE
+       contains (USE_ASPELL,true) {
+                exists ("/usr/include/aspell.h") {
+                        message ("ASpell enabled")
+                        LIBS += -laspell
+                        DEFINES += ASPELL_ENABLE
+                       }
                 }
+
+
+       contains (USE_HUNSPELL,true) {
+                 system (pkg-config --exists hunspell) {
+                         message ("hunspell enabled")
+                         PKGCONFIG += hunspell
+                         DEFINES += HUNSPELL_ENABLE
+                         }
                 }
 
 
@@ -316,8 +302,8 @@ system(pkg-config --exists poppler-qt5) {
 
 usedjvu{
 system(pkg-config --exists ddjvuapi) {
-    message ("djvu enabled")
-        PKGCONFIG += ddjvuapi
+            message ("djvu enabled")
+            PKGCONFIG += ddjvuapi
             DEFINES += DJVU_ENABLE
         }
 }

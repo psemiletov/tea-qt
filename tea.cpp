@@ -7210,7 +7210,7 @@ View menu
   helpMenu->addAction (aboutAct);
   helpMenu->addAction (aboutQtAct);
   add_to_menu (helpMenu, tr ("NEWS"), SLOT(help_show_news()));
-  add_to_menu (helpMenu, "TODO", SLOT(help_show_tdo()));
+  add_to_menu (helpMenu, "TODO", SLOT(help_show_todo()));
   add_to_menu (helpMenu, "ChangeLog", SLOT(help_show_changelog()));
   add_to_menu (helpMenu, tr ("License"), SLOT(help_show_gpl()));
 }

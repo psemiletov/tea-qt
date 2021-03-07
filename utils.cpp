@@ -343,6 +343,9 @@ QString get_insert_image (const QString &file_name, const QString &full_path, co
   else
   if (markup_mode == "Lout")
       result = QString ("@IncludeGraphic {%1}").arg (dir.relativeFilePath (full_path));
+  else
+  if (markup_mode == "Markdown")
+      result = QString ("![alt_text]({%1})").arg (dir.relativeFilePath (full_path));
 
   return result;
 }
@@ -381,7 +384,7 @@ CFTypeChecker::CFTypeChecker()
 #if QT_VERSION < 0x050000
 
   patterns.push_back (QRegExp (".*(readme|news|changelog|todo)$", Qt::CaseInsensitive));
-  patterns.push_back (QRegExp ("^.*\\.(txt|cong|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(txt|conf|md|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive));
 
@@ -422,7 +425,7 @@ CFTypeChecker::CFTypeChecker()
   //add rc
 
   patterns.push_back (QRegularExpression (".*(readme|news|changelog|todo)$", QRegularExpression::CaseInsensitiveOption));
-  patterns.push_back (QRegularExpression ("^.*\\.(txt|cong|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", QRegularExpression::CaseInsensitiveOption));
+  patterns.push_back (QRegularExpression ("^.*\\.(txt|conf|md|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", QRegularExpression::CaseInsensitiveOption));
 

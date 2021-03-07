@@ -18,7 +18,7 @@ DEFINES += NOCRYPT \
            QUAZIP_STATIC
 
 
-QMAKE_CXXFLAGS += -std=c++11
+#QMAKE_CXXFLAGS += -std=c++11
 
 
 USE_ASPELL = true

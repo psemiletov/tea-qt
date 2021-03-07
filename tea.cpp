@@ -8219,6 +8219,7 @@ void CTEA::create_markup_hash()
   h10["Lout"] = "@LLP";
   h10["MediaWiki"] = "<br />";
   h10["DokuWiki"] = "\\\\ ";
+  h10["Markdown"] = " \n";
 
   hash_markup.insert ("newline", h10);
 }

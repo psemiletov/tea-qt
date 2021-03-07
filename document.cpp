@@ -265,13 +265,11 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
 void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 {
- /
+ 
   if (hl_rules.size() == 0)
       return;
 
-  /*
-//виснет с const auto &p
-  for (auto p: hl_rules)
+  for (auto &p: hl_rules)
      {
       int index  = text.indexOf (p.first);
        
@@ -285,8 +283,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
              index = text.indexOf (p.first, index + length);
             }
       }
-*/
-
+/*
   for (vector<pair<QRegExp, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
       {
        int index  = text.indexOf (p->first);
@@ -301,7 +298,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
              index = text.indexOf (p->first, index + length);
             }
       }
-
+*/
 
   setCurrentBlockState (0);
 

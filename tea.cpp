@@ -6270,11 +6270,6 @@ void CTEA::create_paths()
   if (! dr.exists())
      dr.mkpath (dir_user_dict);
 
-  dir_plugins = dir_config + "/plugins";
-
-  dr.setPath (dir_plugins);
-  if (! dr.exists())
-     dr.mkpath (dir_plugins);
 
   dir_profiles = dir_config + "/profiles";
 

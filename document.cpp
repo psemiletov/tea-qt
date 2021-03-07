@@ -750,8 +750,7 @@ void CDocument::wheelEvent (QWheelEvent *e)
      {
 #if QT_VERSION < 0x050000
       const int delta = e->delta();
-         
-            
+
       QFont f = font();
       int sz = f.pointSize();
       
@@ -764,7 +763,6 @@ void CDocument::wheelEvent (QWheelEvent *e)
       f.setPointSize(sz);
       setFont(f);
 
-     //no zoom at qt 4.x
 
 #else
     const int delta = e->angleDelta().y();

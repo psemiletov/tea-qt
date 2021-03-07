@@ -2550,25 +2550,21 @@ void CTEA::search_find_prev()
 
       QTextCursor cr;
 
-      if (menu_find_regexp->isChecked())
-
 #if QT_VERSION >= 0x050500
-      if (menu_find_regexp->isChecked())
-         cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options() | QTextDocument::FindBackward);
+        if (menu_find_regexp->isChecked())
+           cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options() | QTextDocument::FindBackward);
+        else
+#endif
 
-#else
 #if QT_VERSION < 0x050500
-      cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options() | QTextDocument::FindBackward);
-
+       if (menu_find_regexp->isChecked())
+          cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options() | QTextDocument::FindBackward);
+       else
 #endif
-#endif
 
-
-
-      else
-          cr = d->document()->find (d->text_to_search,
-                                    d->textCursor(),
-                                    get_search_options() | QTextDocument::FindBackward);
+      cr = d->document()->find (d->text_to_search,
+                                d->textCursor(),
+                                get_search_options() | QTextDocument::FindBackward);
 
       if (! cr.isNull())
           d->setTextCursor (cr);
@@ -3165,11 +3161,19 @@ void CTEA::fn_use_table()
       else
           text = d->toPlainText();
 
+      int y = d->textCursor().block().blockNumber();
+      qDebug() << y;
+
       if (d->textCursor().hasSelection())
          d->put (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
       else
          d->setPlainText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
-      }
+
+      QTextCursor cr = d->textCursor();
+      cr.movePosition (QTextCursor::Start);
+      cr.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y);
+      d->setTextCursor (cr);
+     }
   else
       if (main_tab_widget->currentIndex() == idx_tab_fman)
          {

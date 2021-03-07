@@ -518,26 +518,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
        }
 */
 
-  /*
-  for (auto &p: hl_rules)
-      {
-       QRegularExpressionMatch m = p.first.match (text);
-
-       int index = m.capturedStart();
-
-       while (index >= 0)
-             {
-              int length = m.capturedLength();
-              if (length == 0)
-                 continue;
-
-              setFormat (index, length, p.second);
-              m = p.first.match (text, index + length);
-              index = m.capturedStart();
-             }
-       }
-*/
-
 
   setCurrentBlockState (0);
 
@@ -719,7 +699,6 @@ void CDocument::keyPressEvent (QKeyEvent *event)
                             setTextCursor (cr);
                             return;
                 }
-
        }
     }
 
@@ -772,10 +751,30 @@ void CDocument::wheelEvent (QWheelEvent *e)
 #if QT_VERSION < 0x050000
       const int delta = e->delta();
 
+      float fdelta = (float) delta / 120.f;
+
+      if (fdelta == 0.f)
+         {
+          QPlainTextEdit::wheelEvent(e);
+          return;
+         }
+
+      QFont f = font();
+      const float sz = f.pointSizeF() + delta;
+      if (sz <= 0)
+         {
+          QPlainTextEdit::wheelEvent(e);
+          return;
+         }
+
+
+      f.setPointSizeF(newSize);
+      setFont(f);
+
      //no zoom at qt 4.x
 
 #else
-      const int delta = e->angleDelta().y();
+    const int delta = e->angleDelta().y();
 
     if (delta < 0)
          zoomOut();

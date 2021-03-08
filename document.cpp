@@ -750,25 +750,18 @@ void CDocument::wheelEvent (QWheelEvent *e)
      {
 #if QT_VERSION < 0x050000
       const int delta = e->delta();
-
-      float fdelta = (float) delta / 120.f;
-
-      if (fdelta == 0.f)
-         {
-          QPlainTextEdit::wheelEvent(e);
-          return;
-         }
-
+         
+            
       QFont f = font();
-      const float sz = f.pointSizeF() + delta;
-      if (sz <= 0)
-         {
-          QPlainTextEdit::wheelEvent(e);
-          return;
-         }
-
-
-      f.setPointSizeF(newSize);
+      int sz = f.pointSize();
+      
+      if (delta > 0)
+	  sz++;
+      
+      if (delta < 0)
+	  sz--;
+            
+      f.setPointSize(sz);
       setFont(f);
 
      //no zoom at qt 4.x

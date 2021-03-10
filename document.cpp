@@ -67,7 +67,6 @@ code from qwriter:
 #define SK_C 54
 
 
-
 QHash <QString, QString> global_palette;
 QSettings *settings;
 QMenu *menu_current_files;
@@ -146,12 +145,13 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
-  exts = "default";
-  langs = "default";
-  cs = Qt::CaseSensitive;
+  //exts = "default";
+  //langs = "default";
 
   if (! file_exists (fname))
      return;
+
+  cs = Qt::CaseSensitive;
 
   QString temp = qstring_load (fname);
   if (temp.isEmpty())
@@ -169,11 +169,11 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
          if (xml.isStartElement())
             {
-             if (tag_name == "document")
+             /*if (tag_name == "document")
                 {
                  exts = xml.attributes().value ("exts").toString();
                  langs = xml.attributes().value ("langs").toString();
-                }
+                }*/
 
              if (tag_name == "item")
                 {
@@ -247,10 +247,10 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 		        continue;
 
                      if (xml.attributes().value ("name").toString() == "cm_mult")
-                         cm_mult = element;
+                         comment_mult = element;
                      else
                          if (xml.attributes().value ("name").toString() == "cm_single")
-                            cm_single = element;
+                            comment_single = element;
                     }
                 }//item
 
@@ -344,12 +344,13 @@ CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTex
 
 void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
-  casecare = true;
-  exts = "default";
-  langs = "default";
+   //exts = "default";
+ //langs = "default";
 
   if (! file_exists (fname))
      return;
+
+  casecare = true;
 
   QString temp = qstring_load (fname);
   if (temp.isEmpty())
@@ -367,11 +368,11 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
          if (xml.isStartElement())
             {
-             if (tag_name == "document")
+             /*if (tag_name == "document")
                 {
                  exts = xml.attributes().value ("exts").toString();
                  langs = xml.attributes().value ("langs").toString();
-                }
+                }*/
 
              if (tag_name == "item")
                 {
@@ -430,7 +431,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                       QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
                       QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
 
-                      multiLineCommentFormat = fmt;
+                      fmt_multi_line_comment = fmt;
 
                       QString element = xml.readElementText().trimmed().remove('\n');
                       if (element.isEmpty())
@@ -459,10 +460,10 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                   if (attr_type == "comment")
                      {
                       if (xml.attributes().value ("name").toString() == "cm_mult")
-                          cm_mult = xml.readElementText().trimmed();
+                          comment_mult = xml.readElementText().trimmed();
                       else
                       if (xml.attributes().value ("name").toString() == "cm_single")
-                          cm_single = xml.readElementText().trimmed();
+                          comment_single = xml.readElementText().trimmed();
                      }
 
                  }//item
@@ -481,7 +482,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
   if (hl_rules.size() == 0)
       return;
 
-  for (vector<pair<QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
+  for (vector <pair <QRegularExpression, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
       {
        QRegularExpressionMatch m = p->first.match (text);
 
@@ -547,7 +548,7 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
          else
              commentLength = endIndex - startIndex + m_end.capturedLength();
 
-         setFormat (startIndex, commentLength, multiLineCommentFormat);
+         setFormat (startIndex, commentLength, fmt_multi_line_comment);
 
          m_start = commentStartExpression.match (text, startIndex + commentLength);
          startIndex = m_start.capturedStart();

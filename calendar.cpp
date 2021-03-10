@@ -179,7 +179,6 @@ int moon_phase_by_algo (int v, int year, int month, int day)
           case MOON_PHASE_SIMPLE:
                                  r = moon_phase_simple (year, month, day);
                                  break;
-
          };
 
   return r;
@@ -198,8 +197,8 @@ CCalendarWidget::CCalendarWidget (QWidget *parent, const QString &a_dir_days): Q
   //setHeaderTextFormat (const QTextCharFormat & format);
 
   QTextCharFormat tformat;
-  tformat.setForeground (QBrush (QColor ("white")));
-  tformat.setBackground (QBrush (QColor ("black")));
+  tformat.setForeground (QBrush (Qt::white));
+  tformat.setBackground (QBrush (Qt::black));
   tformat.setFontWeight (QFont::Bold);
 
   setWeekdayTextFormat (Qt::Monday, tformat);
@@ -219,7 +218,6 @@ void CCalendarWidget::paintCell (QPainter *painter, const QRect &rect, QDate dat
 #endif
 {
   QSize fsize = fontMetrics().size (Qt::TextSingleLine, "A");
-
 
   if (moon_mode)
      {
@@ -312,4 +310,3 @@ void CCalendarWidget::do_update()
 {
   updateCells();
 }
-

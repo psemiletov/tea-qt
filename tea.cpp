@@ -1923,7 +1923,7 @@ void CTEA::ed_comment()
   if (! d->highlighter)
      return;
 
-  if (d->highlighter->cm_mult.isEmpty() && d->highlighter->cm_single.isEmpty())
+  if (d->highlighter->comment_mult.isEmpty() && d->highlighter->comment_single.isEmpty())
      return;
 
   QString t = d->get();
@@ -1936,9 +1936,9 @@ void CTEA::ed_comment()
      is_multiline = false;
 
   if (is_multiline)
-      result = d->highlighter->cm_mult;
+      result = d->highlighter->comment_mult;
   else
-      result = d->highlighter->cm_single;
+      result = d->highlighter->comment_single;
 
 
   if (is_multiline && result.isEmpty())
@@ -1946,7 +1946,7 @@ void CTEA::ed_comment()
       QStringList sl = t.split (QChar::ParagraphSeparator);
       for (int i = 0; i < sl.size(); i++)
           {
-           QString x = d->highlighter->cm_single;
+           QString x = d->highlighter->comment_single;
            sl[i] = x.replace ("%s", sl[i]);
           }
 

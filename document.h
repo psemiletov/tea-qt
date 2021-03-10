@@ -77,13 +77,13 @@ public:
   CDocument *document;
   bool casecare;
 
-  QString exts;
-  QString langs;
-  QString cm_mult;
-  QString cm_single;
+ // QString exts;
+  //QString langs;
+  QString comment_mult;
+  QString comment_single;
 
-  QTextCharFormat singleLineCommentFormat;
-  QTextCharFormat multiLineCommentFormat;
+  //QTextCharFormat fmt_single_line_comment;
+  QTextCharFormat fmt_multi_line_comment;
 
   CSyntaxHighlighter (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
 };
@@ -100,7 +100,7 @@ protected:
 
 public:
 
-  vector<pair<QRegExp, QTextCharFormat> > hl_rules;
+  vector <pair <QRegExp, QTextCharFormat> > hl_rules;
 
   QRegExp commentStartExpression;
   QRegExp commentEndExpression;
@@ -124,15 +124,14 @@ protected:
 
 public:
 
-  vector<pair<QRegularExpression, QTextCharFormat> > hl_rules;
+  vector <pair <QRegularExpression, QTextCharFormat> > hl_rules;
 
   QRegularExpression commentStartExpression;
   QRegularExpression commentEndExpression;
   QRegularExpression::PatternOptions pattern_opts;
 
-  QTextCharFormat singleLineCommentFormat;
-  QTextCharFormat multiLineCommentFormat;
-
+  //QTextCharFormat singleLineCommentFormat;
+  //QTextCharFormat multiLineCommentFormat;
 
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);

@@ -77,12 +77,9 @@ public:
   CDocument *document;
   bool casecare;
 
- // QString exts;
-  //QString langs;
   QString comment_mult;
   QString comment_single;
 
-  //QTextCharFormat fmt_single_line_comment;
   QTextCharFormat fmt_multi_line_comment;
 
   CSyntaxHighlighter (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
@@ -130,9 +127,6 @@ public:
   QRegularExpression commentEndExpression;
   QRegularExpression::PatternOptions pattern_opts;
 
-  //QTextCharFormat singleLineCommentFormat;
-  //QTextCharFormat multiLineCommentFormat;
-
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);
 };
@@ -166,28 +160,13 @@ public:
 
   CSyntaxHighlighter *highlighter;
 
-  bool cursor_xy_visible;
-
-  QString eol;
   QStringList labels;
 
+  QString eol;
   QString markup_mode;
   QString file_name;
   QString text_to_search;
   QString charset;
-  int position;
-
-  bool highlight_current_line;
-  bool hl_brackets;
-  bool draw_margin;
-  bool draw_linenums;
-  bool auto_indent;
-  bool spaces_instead_of_tabs;
-  int tab_sp_width; //in spaces
-  int brace_width; //in pixels
-  int margin_pos; //in chars
-  int margin_x;  //in pixels
-
   QString indent_val;
 
   QPoint rect_sel_start; //rect selection
@@ -198,39 +177,50 @@ public:
   QColor margin_color;
   QColor linenums_bg;
   QColor text_color;
-
   QColor sel_text_color;
   QColor sel_back_color;
 
+  bool cursor_xy_visible;
+  bool highlight_current_line;
+  bool hl_brackets;
+  bool draw_margin;
+  bool draw_linenums;
+  bool auto_indent;
+  bool spaces_instead_of_tabs;
+
+  int position;
+  int tab_sp_width; //in spaces
+  int brace_width; //in pixels
+  int margin_pos; //in chars
+  int margin_x;  //in pixels
 
   CDocument (CDox *hldr, QWidget *parent = 0);
   ~CDocument();
 
-  Q_INVOKABLE QString get() const; //return selected text
-  Q_INVOKABLE void put (const QString &value); //replace selection or insert text at cursor
+  QString get() const; //return selected text
+  void put (const QString &value); //replace selection or insert text at cursor
 
-  Q_INVOKABLE bool file_open (const QString &fileName, const QString &codec);
-  Q_INVOKABLE bool file_save_with_name (const QString &fileName, const QString &codec);
-  Q_INVOKABLE bool file_save_with_name_plain (const QString &fileName);
+  bool file_open (const QString &fileName, const QString &codec);
+  bool file_save_with_name (const QString &fileName, const QString &codec);
+  bool file_save_with_name_plain (const QString &fileName);
 
-  Q_INVOKABLE int get_tab_idx();
-  Q_INVOKABLE QString get_triplex();
+  int get_tab_idx();
+  QString get_triplex();
+  QString get_filename_at_cursor();
+  QStringList get_words();
 
-  Q_INVOKABLE QString get_filename_at_cursor();
-  Q_INVOKABLE QStringList get_words();
+  void goto_pos (int pos);
 
-  Q_INVOKABLE void goto_pos (int pos);
+  void set_tab_caption (const QString &fileName);
+  void set_hl (bool mode_auto = true, const QString &theext = "txt");
+  void set_markup_mode();
 
-  Q_INVOKABLE void set_tab_caption (const QString &fileName);
-  Q_INVOKABLE void set_hl (bool mode_auto = true, const QString &theext = "txt");
-  Q_INVOKABLE void set_markup_mode();
+  void insert_image (const QString &full_path);
+  void reload (const QString &enc);
 
-  Q_INVOKABLE void insert_image (const QString &full_path);
-  Q_INVOKABLE void reload (const QString &enc);
-
-  Q_INVOKABLE void update_status();
-  Q_INVOKABLE void update_title (bool fullname = true);
-  Q_INVOKABLE void update_labels();
+  void update_status();
+  void update_title (bool fullname = true);
+  void update_labels();
 
   void set_show_linenums (bool enable);
   void set_show_margin (bool enable);
@@ -253,12 +243,12 @@ public:
   void rect_block_start();
   void rect_block_end();
 
-  Q_INVOKABLE bool has_rect_selection() const;
-  Q_INVOKABLE void rect_sel_reset();
-  Q_INVOKABLE void rect_sel_replace (const QString &s, bool insert = false);
-  Q_INVOKABLE void rect_sel_upd();
-  Q_INVOKABLE QString rect_sel_get() const;
-  Q_INVOKABLE void rect_sel_cut (bool just_del = false);
+  bool has_rect_selection() const;
+  void rect_sel_reset();
+  void rect_sel_replace (const QString &s, bool insert = false);
+  void rect_sel_upd();
+  QString rect_sel_get() const;
+  void rect_sel_cut (bool just_del = false);
 
   void lineNumberAreaPaintEvent (QPaintEvent *event);
   int line_number_area_width();
@@ -282,17 +272,15 @@ public:
 
 //regexp pattern and file name of syntax hl rules
 #if QT_VERSION >= 0x050000
-  std::vector<std::pair<QRegularExpression, QString> > hl_files;
+  std::vector<std::pair <QRegularExpression, QString> > hl_files;
 #else
-  std::vector<std::pair<QRegExp, QString> > hl_files;
+  std::vector<std::pair <QRegExp, QString> > hl_files;
 #endif
 
-
+  std::vector <CDocument*> items;
 
   QHash <QString, QString> markup_modes;
   QHash <QString, QString> hash_project;
-  std::vector <CDocument*> items;
-
 
   CTioHandler tio_handler;
   CTodo todo;
@@ -306,17 +294,16 @@ public:
 
   QLabel *l_status_bar;
   QLabel *l_charset;
-  CLogMemo *log;
-  QMainWindow *parent_wnd;
-  QTabWidget *tab_widget;
-  QTabWidget *main_tab_widget;
-  QMenu *menu_recent;
+  CLogMemo *log; //uplink
+  QMainWindow *parent_wnd; //uplink
+  QTabWidget *tab_widget; //uplink
+  QTabWidget *main_tab_widget; //uplink
+  QMenu *menu_recent; //uplink
   QTimer *timer;
 
 #if defined(JOYSTICK_SUPPORTED)
   CJoystick *joystick;
 #endif
-
 
   CDox();
   ~CDox();
@@ -329,24 +316,22 @@ public:
 
   void move_cursor (QTextCursor::MoveOperation mo);
 
-  Q_INVOKABLE CDocument* create_new();
-  Q_INVOKABLE CDocument* open_file (const QString &fileName, const QString &codec);
-  Q_INVOKABLE CDocument* open_file_triplex (const QString &triplex);
-  Q_INVOKABLE CDocument* get_document_by_fname (const QString &fileName);
-  Q_INVOKABLE CDocument* get_current();
+  CDocument* create_new();
+  CDocument* open_file (const QString &fileName, const QString &codec);
+  CDocument* open_file_triplex (const QString &triplex);
+  CDocument* get_document_by_fname (const QString &fileName);
+  CDocument* get_current();
 
-  Q_INVOKABLE void close_by_idx (int i);
-  Q_INVOKABLE void close_current();
-  Q_INVOKABLE void save_to_session (const QString &fileName);
-  Q_INVOKABLE void load_from_session (const QString &fileName);
-  Q_INVOKABLE void apply_settings();
-  Q_INVOKABLE void apply_settings_single (CDocument *d);
+  void close_by_idx (int i);
+  void close_current();
+  void save_to_session (const QString &fileName);
+  void load_from_session (const QString &fileName);
+  void apply_settings();
+  void apply_settings_single (CDocument *d);
 
 #if defined(JOYSTICK_SUPPORTED)
-
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
-
 #endif
 
 

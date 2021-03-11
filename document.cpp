@@ -284,7 +284,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
             }
       }*/
 
-  for (vector<pair<QRegExp, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
+  for (vector <pair <QRegExp, QTextCharFormat> >::iterator p = hl_rules.begin(); p != hl_rules.end(); ++p)
       {
        int index  = text.indexOf (p->first);
 
@@ -412,8 +412,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                     {
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                       // qDebug() << "attr_type == item, attr_name == " << attr_name;
 
                      QString element = xml.readElementText().trimmed().remove('\n');
                      if (element.isEmpty())
@@ -554,7 +552,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
          startIndex = m_start.capturedStart();
         }
 }
-
 #endif
 
 
@@ -582,7 +579,7 @@ bool CDocument::canInsertFromMimeData (const QMimeData *source) const
 
 void CDocument::insertFromMimeData (const QMimeData *source)
 {
-  QString fName;
+  QString fname;
   QFileInfo info;
 
   bool b_ins_plain_text = ! source->hasUrls();
@@ -599,10 +596,10 @@ void CDocument::insertFromMimeData (const QMimeData *source)
 
    for (QList <QUrl>::iterator u = l.begin(); u != l.end(); ++u)
        {
-        fName = u->toLocalFile();
-        info.setFile(fName);
+        fname = u->toLocalFile();
+        info.setFile(fname);
         if (info.isFile())
-           holder->open_file (fName, "UTF-8");
+           holder->open_file (fname, "UTF-8");
        }
 }
 
@@ -654,7 +651,7 @@ void CDocument::keyPressEvent (QKeyEvent *event)
 
   if (settings->value ("wasd", "0").toBool())
      {
-      bitset<32> btst (event->nativeModifiers());
+      bitset <32> btst (event->nativeModifiers());
       QTextCursor cr = textCursor();
 
       QTextCursor::MoveMode m = QTextCursor::MoveAnchor;
@@ -718,14 +715,14 @@ void CDocument::keyPressEvent (QKeyEvent *event)
       event->accept();
       return;
      }
-  else
+
   if (event->key() == Qt::Key_Backtab)
      {
       un_indent();
       event->accept();
       return;
      }
-  else
+
   if (event->key() == Qt::Key_Insert)
      {
       setOverwriteMode (! overwriteMode());
@@ -751,7 +748,9 @@ void CDocument::wheelEvent (QWheelEvent *e)
      {
 #if QT_VERSION < 0x050000
       const int delta = e->delta();
-
+#else
+      const int delta = e->angleDelta().y();
+#endif
       QFont f = font();
       int sz = f.pointSize();
       
@@ -763,18 +762,6 @@ void CDocument::wheelEvent (QWheelEvent *e)
             
       f.setPointSize(sz);
       setFont(f);
-
-
-#else
-    const int delta = e->angleDelta().y();
-
-    if (delta < 0)
-         zoomOut();
-      else
-      if (delta > 0)
-         zoomIn();
-
-#endif
 
       return;
      }
@@ -805,13 +792,9 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
   highlight_current_line = false;
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
   eol = "\r\n";
-
 #elif defined(Q_OS_UNIX)
-
   eol = "\n";
-
 #endif
 
   rect_sel_reset();
@@ -822,6 +805,7 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
   connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
   connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
   connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
+  connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
 
   updateLineNumberAreaWidth();
 
@@ -834,17 +818,11 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 
   sel_text_color = QColor (s_sel_text_color).darker(darker_val).name();
   sel_back_color = QColor (s_sel_back_color).darker(darker_val).name();
-
-  connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
-
-  current_line_color = QColor (hash_get_val (global_palette,
-                               "cur_line_color",
+  current_line_color = QColor (hash_get_val (global_palette, "cur_line_color",
                                "#EEF6FF")).darker (settings->value ("darker_val", 100).toInt()).name();
 
   holder->items.push_back (this);
-
   int tab_index = holder->tab_widget->addTab (this, file_name);
-
   tab_page = holder->tab_widget->widget (tab_index);
 
   setFocus (Qt::OtherFocusReason);
@@ -877,7 +855,6 @@ CDocument::~CDocument()
 
   if (file_name.startsWith (holder->todo.dir_days))
       holder->todo.load_dayfile();
-
 
   QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
   w->setWindowTitle ("");
@@ -930,14 +907,10 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
 
   set_tab_caption (QFileInfo (file_name).fileName());
   set_hl();
-
-
   set_markup_mode();
-
   document()->setModified (false);
 
   holder->log->log (tr ("%1 is open").arg (file_name));
-
 
   QMutableListIterator <QString> i (holder->recent_files);
 
@@ -948,6 +921,7 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
              if (lt.at(0) == file_name)
                 i.remove();
         }
+
 
   return true;
 }
@@ -1059,7 +1033,7 @@ QString CDocument::get_filename_at_cursor()
 
   QString s = textCursor().block().text();
   if (s.isEmpty())
-     return QString ("");
+     return QString();
 
   QString x;
 
@@ -1200,7 +1174,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
 
 #if QT_VERSION >= 0x050000
 
-   for (vector<pair<QRegularExpression, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
+   for (vector <pair <QRegularExpression, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
        {
         if (p->first.isValid())
            if (p->first.match(file_name).hasMatch())
@@ -1227,13 +1201,9 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
      return;
 
 #if QT_VERSION >= 0x050000
-
   highlighter = new CSyntaxHighlighterQRegularExpression (document(), this, fname);
-
 #else
-
   highlighter = new CSyntaxHighlighterQRegExp (document(), this, fname);
-
 #endif
 }
 
@@ -1336,7 +1306,6 @@ void CDocument::set_hl_cur_line (bool enable)
 }
 
 
-
 void CDocument::set_hl_brackets (bool enable)
 {
   hl_brackets = enable;
@@ -1375,6 +1344,8 @@ void CDocument::indent()
      }
 
   QStringList l = textCursor().selectedText().split (QChar::ParagraphSeparator);
+  if (l.size() == 0)
+     return;
 
   QString fl;
   fl = fl.fill (' ', tab_sp_width);
@@ -1383,8 +1354,8 @@ void CDocument::indent()
       {
        if (spaces_instead_of_tabs)
            i->prepend (fl);
-         else
-             i->prepend ("\t");
+       else
+           i->prepend ("\t");
       }
 
   textCursor().insertText (l.join ("\n"));
@@ -1400,12 +1371,14 @@ void CDocument::indent()
 void CDocument::un_indent()
 {
   QStringList l = textCursor().selectedText().split (QChar::ParagraphSeparator);
+  if (l.size() == 0)
+     return;
 
   for (QList <QString>::iterator t = l.begin(); t != l.end(); ++t)
       {
        if (! t->isEmpty())
           if (t->at(0) == '\t' || t->at(0) == ' ')
-            (*t) = t->mid (1);//eat first
+             (*t) = t->mid (1);//eat first
       }
 
   textCursor().insertText (l.join ("\n"));
@@ -1630,7 +1603,6 @@ void CDocument::rect_block_end()
 }
 
 
-
 bool CDocument::has_rect_selection() const
 {
   if (rect_sel_start.y() == -1 || rect_sel_end.y() == -1)
@@ -1663,7 +1635,6 @@ void CDocument::rect_sel_replace (const QString &s, bool insert)
   int y1 = std::min (rect_sel_start.y(), rect_sel_end.y());
   int y2 = std::max (rect_sel_start.y(), rect_sel_end.y());
   int ydiff = y2 - y1;
-
 
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
@@ -1717,9 +1688,6 @@ void CDocument::rect_sel_replace (const QString &s, bool insert)
 
   textCursor().insertText (new_text);
 }
-
-
-
 
 
 void CDocument::rect_sel_upd()
@@ -1777,7 +1745,6 @@ void CDocument::rect_sel_upd()
 }
 
 
-
 QString CDocument::rect_sel_get() const
 {
   QString result;
@@ -1788,7 +1755,6 @@ QString CDocument::rect_sel_get() const
   int x1 = std::min (rect_sel_start.x(), rect_sel_end.x());
   int x2 = std::max (rect_sel_start.x(), rect_sel_end.x());
   int xdiff = x2 - x1; //sel length
-
 
   for (int y = y1; y <= y2; y++)
       {
@@ -1907,18 +1873,14 @@ int CDocument::line_number_area_width()
          ++digits;
         }
 
-  int space = (brace_width * 2) + (brace_width * digits);
-
-  return space;
+  return (brace_width * 2) + (brace_width * digits);
 }
-
 
 
 void CDocument::updateLineNumberAreaWidth()
 {
   setViewportMargins (line_number_area_width(), 0, 0, 0);
 }
-
 
 
 void CDocument::cb_cursorPositionChanged()
@@ -2114,11 +2076,10 @@ CDocument* CDox::create_new()
 }
 
 
-
 CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 {
   if (! file_exists (fileName))
-     return NULL;
+     return 0;
 
   if (is_image (fileName))
      {
@@ -2139,18 +2100,18 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
       return d;
      }
 
-  CDocument *doc = create_new();
-  doc->file_open (fileName, codec);
+//else truly create the new doc
+  d = create_new();
+  d->file_open (fileName, codec);
 
-  doc->update_status();
-  doc->update_title (settings->value ("full_path_at_window_title", 1).toBool());
+  d->update_status();
+  d->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
   main_tab_widget->setCurrentIndex (0);
 
   update_current_files_menu();
 
-
-  return doc;
+  return d;
 }
 
 
@@ -2158,11 +2119,11 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
 {
   QStringList sl = triplex.split (",");
   if (sl.size() < 3)
-     return NULL;
+     return 0;
 
   CDocument *d = open_file (sl[0], sl[1]);
   if (! d)
-     return NULL;
+     return 0;
 
   d->goto_pos (sl[2].toInt());
 
@@ -2181,13 +2142,13 @@ CDocument* CDox::open_file_triplex (const QString &triplex)
 CDocument* CDox::get_document_by_fname (const QString &fileName)
 {
   if (fileName.isEmpty() || items.size() == 0)
-     return NULL;
+     return 0;
 
   for (vector <CDocument *>::iterator i = items.begin(); i != items.end(); ++i)
        if ((*i)->file_name == fileName)
           return *i;
 
-  return NULL;
+  return 0;
 }
 
 
@@ -2195,12 +2156,10 @@ CDocument* CDox::get_current()
 {
   int i = tab_widget->currentIndex();
   if (i < 0)
-     return NULL;
+     return 0;
 
   return items[i];
 }
-
-
 
 
 void CDox::close_by_idx (int i)
@@ -2255,7 +2214,6 @@ void CDox::load_from_session (const QString &fileName)
   for (int i = 0; i < l.size(); i++)
       open_file_triplex (l[i]);
 
-
   fname_current_session = fileName;
 }
 
@@ -2286,15 +2244,10 @@ void CDox::apply_settings_single (CDocument *d)
   d->tab_sp_width = settings->value ("tab_sp_width", 8).toInt();
   d->spaces_instead_of_tabs = settings->value ("spaces_instead_of_tabs", true).toBool();
 
-
 #if (QT_VERSION_MAJOR <= 5 && QT_VERSION_MINOR < 10)
-
   d->setTabStopWidth (d->tab_sp_width * d->brace_width);
-
 #else
-
   d->setTabStopDistance (d->tab_sp_width * d->brace_width);
-
 #endif
 
   d->setup_brace_width();
@@ -2337,7 +2290,6 @@ void CDox::open_recent()
 }
 
 
-
 void CDox::open_current()
 {
   QAction *act = qobject_cast<QAction *>(sender());
@@ -2346,7 +2298,6 @@ void CDox::open_current()
   if (d)
       tab_widget->setCurrentIndex (tab_widget->indexOf (d->tab_page));
 }
-
 
 
 void CDox::move_cursor_up()
@@ -2422,7 +2373,6 @@ void CDox::handle_joystick_event (CJoystickAxisEvent *event)
 
   if (event->axis == 0 && event->value > 0) //right
      mo = QTextCursor::Right;
-
 
   move_cursor (mo);
 }

@@ -37,19 +37,18 @@
 #define M_IPTC  0xED          // IPTC marker
 
 
-typedef unsigned char rint8u;
-typedef char rint8;
-typedef unsigned int rint32u;
-
-
 #include <QList>
 #include <QByteArray>
 #include <QFile>
 
 
+typedef unsigned char rint8u;
+typedef char rint8;
+typedef unsigned int rint32u;
+
+
 class Exif
 {
-
 public:
     
   int getExifOrientation (QFile &file);
@@ -62,5 +61,3 @@ public:
 int get_exif_orientation (const QString &fname);
 
 #endif // EXIF_READER_H
-
-

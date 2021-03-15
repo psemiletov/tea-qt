@@ -353,7 +353,7 @@ class CLineNumberArea: public QWidget
 {
 public:
 
-  CDocument *code_editor;
+  CDocument *code_editor; //uplink
 
   CLineNumberArea (CDocument *editor = 0): QWidget (editor), code_editor (editor) {}
 
@@ -371,5 +371,3 @@ protected:
 };
 
 #endif
-
-

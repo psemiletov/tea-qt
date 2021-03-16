@@ -36,7 +36,9 @@ extern QSettings *settings;
 
 void CFMan::dir_up()
 {
-  if (dir.path() == "/")
+  //if (dir.path() == "/")
+    // return;
+  if (dir.isRoot())
      return;
 
   QString oldcurdir = dir.dirName();

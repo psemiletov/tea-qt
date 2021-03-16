@@ -2553,18 +2553,18 @@ void CTEA::search_find_prev()
 #if QT_VERSION >= 0x050500
         if (menu_find_regexp->isChecked())
            cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options() | QTextDocument::FindBackward);
-        else
 #endif
 
 #if QT_VERSION < 0x050500
        if (menu_find_regexp->isChecked())
           cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options() | QTextDocument::FindBackward);
-       else
 #endif
 
-      cr = d->document()->find (d->text_to_search,
-                                d->textCursor(),
-                                get_search_options() | QTextDocument::FindBackward);
+     if (! menu_find_regexp->isChecked())
+         cr = d->document()->find (d->text_to_search,
+                                   d->textCursor(),
+                                   get_search_options() | QTextDocument::FindBackward);
+
 
       if (! cr.isNull())
           d->setTextCursor (cr);
@@ -6463,13 +6463,13 @@ void CTEA::create_main_widget_splitter()
       act_fif_find->setToolTip (tr ("Find"));
       connect (act_fif_find, SIGNAL(triggered()), this, SLOT(search_find()));
 
-      QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
-      act_fif_find_next->setToolTip (tr ("Find next"));
-      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
-
       QAction *act_fif_find_prev = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowUp), "");
       act_fif_find_prev->setToolTip (tr ("Find previous"));
       connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
+
+      QAction *act_fif_find_next = tb_fif->addAction (style()->standardIcon(QStyle::SP_ArrowDown), "");
+      act_fif_find_next->setToolTip (tr ("Find next"));
+      connect (act_fif_find_next, SIGNAL(triggered()), this, SLOT(search_find_next()));
 
       QLabel *l_fif = new QLabel (tr ("FIF"));
 

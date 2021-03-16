@@ -283,7 +283,7 @@ int Exif::processEXIFDir (const char *DirStart, const char *OffsetBase, rint32u 
                                                *Orientation = 0;
 
                                            *NumOrientations += 1;
-                                            break;
+                                           break;
 
                        case TAG_EXIF_OFFSET:
 
@@ -307,58 +307,58 @@ int Exif::processEXIF(QByteArray *data, int itemlen, int *Orientation)
 {
   int MotorolaOrder = 0;
 
-    // Check the EXIF header component
-   if(data->left(6) == "Exif\0\0")
-        qDebug() << data->left(4);
+   // Check the EXIF header component
+  if (data->left(6) == "Exif\0\0")
+      qDebug() << data->left(4);
 
 
-    if(data->mid(6,2) == "II") // Exif section in Intel order
-        //qDebug() << data->mid(6,2);
-        MotorolaOrder = 0;
-    else
-        {
-        if(data->mid(6,2) == "II") // Exif section in Motorola order
-            //qDebug() << data->mid(6,2);
-            MotorolaOrder = 1;
-        else
-            return -1; // Invalid Exif alignment marker.
-
-        }
+  if(data->mid(6,2) == "II") // Exif section in Intel order
+     //qDebug() << data->mid(6,2);
+     MotorolaOrder = 0;
+  else
+      {
+       if(data->mid(6,2) == "II") // Exif section in Motorola order
+         //qDebug() << data->mid(6,2);
+         MotorolaOrder = 1;
+       else
+           return -1; // Invalid Exif alignment marker.
+      }
 
     // get first offset
-    QByteArray ttt(data->mid(10,4));
-    const char *ttt2 = ttt.constData();
-    rint32u FirstOffset;
-    FirstOffset = Get32u(ttt2, MotorolaOrder);
+  QByteArray ttt (data->mid (10, 4));
+  const char *ttt2 = ttt.constData();
+  rint32u FirstOffset = Get32u (ttt2, MotorolaOrder);
     //qDebug() << "fist offset: " << FirstOffset;
-    if (FirstOffset < 8 || FirstOffset > 16)
-            if (FirstOffset < 16 || int(FirstOffset) > itemlen-16)
-              return -1;  // invalid offset for first Exif IFD value ;
+  if (FirstOffset < 8 || FirstOffset > 16)
+     if (FirstOffset < 16 || int (FirstOffset) > itemlen - 16)
+         return -1;  // invalid offset for first Exif IFD value ;
 
 
-    const char *dirStart = data->constData();
-    const char *offsetBase = data->constData();
+  const char *dirStart = data->constData();
+  const char *offsetBase = data->constData();
 
-    dirStart   += 6 + FirstOffset;
-    offsetBase += 6;
-    int numOrientations = 0;
+  dirStart   += 6 + FirstOffset;
+  offsetBase += 6;
+  int numOrientations = 0;
     // First directory starts 16 bytes in.  All offset are relative to 8 bytes in.
-    processEXIFDir(dirStart, offsetBase, itemlen-8, 0, MotorolaOrder, &numOrientations, Orientation);
+  processEXIFDir (dirStart, offsetBase, itemlen - 8, 0, MotorolaOrder, &numOrientations, Orientation);
     //qDebug() << "num orientations:" << numOrientations;
 
-    return 0;
-}
-
-int Exif::readJpegFile(QFile &file, int *Orientation)
-{
-  readJpegSections(file, Orientation);
   return 0;
 }
 
-int Exif::getExifOrientation(QFile &file)
+
+int Exif::readJpegFile (QFile &file, int *Orientation)
+{
+  readJpegSections (file, Orientation);
+  return 0;
+}
+
+
+int Exif::getExifOrientation (QFile &file)
 {
   int r = 0;
-  readJpegFile(file, &r);
+  readJpegFile (file, &r);
   return r;
 }
 
@@ -376,4 +376,3 @@ int get_exif_orientation (const QString &fname)
      
   return o;    
 }
-

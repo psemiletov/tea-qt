@@ -86,13 +86,13 @@ void CFMan::nav (const QString &path)
   sort_flags |= QDir::IgnoreCase;
   sort_flags |= QDir::LocaleAware;
 
-
   mymodel->removeRows (0, mymodel->rowCount());
 
   QFileInfoList lst = dir.entryInfoList (QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot|
                                          QDir::Files | QDir::Drives,
                                          sort_flags);
 
+  /*
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
   if (path != "/")
      append_dot_entry ("..");
@@ -100,6 +100,10 @@ void CFMan::nav (const QString &path)
   if (path.size() != 2)
      append_dot_entry ("..");
 #endif
+*/
+
+  if (! dir.isRoot())
+    append_dot_entry ("..");
 
   for (int i = 0; i < lst.size(); i++)
        add_entry (lst.at(i));
@@ -148,8 +152,7 @@ void CFMan::tv_activated (const QModelIndex &index)
      {
       nav (full_path);
       QModelIndex idx = mymodel->index (0, 0);
-      selectionModel()->setCurrentIndex (idx, QItemSelectionModel::Select |
-                                         QItemSelectionModel::Rows);
+      selectionModel()->setCurrentIndex (idx, QItemSelectionModel::Select | QItemSelectionModel::Rows);
      }
   else
       emit file_activated (full_path);
@@ -158,7 +161,7 @@ void CFMan::tv_activated (const QModelIndex &index)
 
 void CFMan::add_entry (const QFileInfo &fi)
 {
-  QList<QStandardItem *> items;
+  QList <QStandardItem*> items;
 
   QStandardItem *item = new QStandardItem (fi.fileName());
 
@@ -186,7 +189,7 @@ void CFMan::add_entry (const QFileInfo &fi)
 
 void CFMan::append_dot_entry (const QString &fname)
 {
-  QList<QStandardItem *> items;
+  QList <QStandardItem*> items;
 
   QStandardItem *item = new QStandardItem (fname);
   item->setFlags (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -295,8 +298,7 @@ QStringList CFMan::get_sel_fnames()
   QModelIndexList il = selectionModel()->QItemSelectionModel::selectedRows (0);
   QStringList li;
 
-  QList<QModelIndex>::iterator i;
-  for (i = il.begin(); i != il.end(); ++i)
+  for (QList <QModelIndex>::iterator i = il.begin(); i != il.end(); ++i)
       {
        QString item_string = i->data().toString();
        if (item_string != "..")

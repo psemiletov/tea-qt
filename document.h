@@ -285,6 +285,7 @@ public:
   CTioHandler tio_handler;
   CTodo todo;
 
+  QString dir_last;
   QString fname_current_session;
   QString fname_current_project;
   QString dir_config;

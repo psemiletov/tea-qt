@@ -28,13 +28,8 @@ void create_menu_from_list (QObject *handler,
       {
        if (! i->startsWith ("#"))
           {
-        /*   QAction *act = new QAction (*i, menu->parentWidget());
-           handler->connect (act, SIGNAL(triggered()), handler, method);
-           menu->addAction (act);*/
            QAction *act = menu->addAction (*i);
            handler->connect (act, SIGNAL(triggered()), handler, method);
-//           menu->addAction (act);
-
           }
       }
 }
@@ -58,10 +53,9 @@ void create_menu_from_themes (QObject *handler,
           {
            if (has_css_file (fi->absoluteFilePath()))
               {
-               QAction *act = new QAction (fi->fileName(), menu->parentWidget());
+               QAction *act = menu->addAction (fi->fileName());
                act->setData (fi->filePath());
                handler->connect (act, SIGNAL(triggered()), handler, method);
-               menu->addAction (act);
               }
            else
                {
@@ -72,7 +66,6 @@ void create_menu_from_themes (QObject *handler,
            }
        }
 }
-
 
 
 void create_menu_from_dir (QObject *handler,
@@ -101,10 +94,9 @@ void create_menu_from_dir (QObject *handler,
           }
        else
            {
-            QAction *act = new QAction (fi->fileName(), menu->parentWidget());
+            QAction *act = menu->addAction (fi->fileName());
             act->setData (fi->filePath());
             handler->connect (act, SIGNAL(triggered()), handler, method);
-            menu->addAction (act);
            }
       }
 }

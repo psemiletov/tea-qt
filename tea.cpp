@@ -495,6 +495,9 @@ void CTEA::pageChanged (int index)
   d->update_title (settings->value ("full_path_at_window_title", 1).toBool());
   d->update_status();
 
+  if (file_exists (d->file_name))
+      documents->dir_last = get_file_path (d->file_name);
+
   documents->update_project (d->file_name);
 
   update_labels_menu();
@@ -613,7 +616,7 @@ void CTEA::write_settings()
      settings->setValue ("splitterSizes", mainSplitter->saveState());
 
   settings->setValue ("spl_fman", spl_fman->saveState());
-  settings->setValue ("dir_last", dir_last);
+  settings->setValue ("dir_last", documents->dir_last);
   settings->setValue ("fname_def_palette", fname_def_palette);
   settings->setValue ("markup_mode", markup_mode);
   settings->setValue ("VER_NUMBER", QString (current_version_number));
@@ -685,8 +688,6 @@ void CTEA::fman_file_activated (const QString &full_path)
 {
   if (file_get_ext (full_path) == ("zip"))
      {
-      //check if plugin:
-
       CZipper z;
       QStringList sl = z.unzip_list (full_path);
 
@@ -713,10 +714,7 @@ void CTEA::fman_file_activated (const QString &full_path)
 
   CDocument *d = documents->open_file (full_path, cb_fman_codecs->currentText());
   if (d)
-     {
-      dir_last = get_file_path (d->file_name);
       charset = d->charset;
-     }
 
   add_to_last_used_charsets (cb_fman_codecs->currentText());
   main_tab_widget->setCurrentIndex (idx_tab_edit);
@@ -789,7 +787,6 @@ void CTEA::fman_open()
       CDocument *d = documents->open_file (f, cb_fman_codecs->currentText());
       if (d)
          {
-          dir_last = get_file_path (d->file_name);
           charset = d->charset;
           add_to_last_used_charsets (cb_fman_codecs->currentText());
           main_tab_widget->setCurrentIndex (idx_tab_edit);
@@ -806,7 +803,6 @@ void CTEA::fman_open()
       CDocument *d = documents->open_file (fname, cb_fman_codecs->currentText());
       if (d)
          {
-          dir_last = get_file_path (d->file_name);
           charset = d->charset;
           add_to_last_used_charsets (cb_fman_codecs->currentText());
           main_tab_widget->setCurrentIndex (idx_tab_edit);
@@ -821,10 +817,7 @@ void CTEA::fman_open()
        CDocument *d = 0;
        d = documents->open_file (li.at(i), cb_fman_codecs->currentText());
        if (d)
-          {
-           dir_last = get_file_path (d->file_name);
            charset = d->charset;
-          }
       }
 
   add_to_last_used_charsets (cb_fman_codecs->currentText());
@@ -880,7 +873,7 @@ void CTEA::cb_button_saves_as()
 
   d->set_hl();
   QFileInfo f (d->file_name);
-  dir_last = f.path();
+  documents->dir_last = f.path();
   update_dyn_menus();
 
   shortcuts->load_from_file (shortcuts->fname);
@@ -1081,7 +1074,7 @@ void CTEA::file_open()
              fman->nav (get_file_path (d->file_name));
          }
       else
-          fman->nav (dir_last);
+          fman->nav (documents->dir_last);
 
       main_tab_widget->setCurrentIndex (idx_tab_fman);
       fm_entry_mode = FM_ENTRY_MODE_OPEN;
@@ -1134,10 +1127,10 @@ void CTEA::file_open()
       if (file_exists (d->file_name))
           dialog.setDirectory (get_file_path (d->file_name));
       else
-          dialog.setDirectory (dir_last);
+          dialog.setDirectory (documents->dir_last);
      }
   else
-      dialog.setDirectory (dir_last);
+      dialog.setDirectory (documents->dir_last);
 
   dialog.setNameFilter (tr ("All (*);;Text files (*.txt);;Markup files (*.xml *.html *.htm *.);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)"));
 
@@ -1166,10 +1159,7 @@ void CTEA::file_open()
           {
            CDocument *dc = documents->open_file (fileNames.at(i), cb_codecs->currentText());
            if (dc)
-              {
-               dir_last = get_file_path (dc->file_name);
                charset = dc->charset;
-              }
 
            add_to_last_used_charsets (cb_codecs->currentText());
           }
@@ -1340,7 +1330,7 @@ bool CTEA::file_save_as()
       if (file_exists (d->file_name))
          fman->nav (get_file_path (d->file_name));
       else
-          fman->nav (dir_last);
+          fman->nav (documents->dir_last);
 
       ed_fman_fname->setFocus();
 
@@ -1387,7 +1377,7 @@ bool CTEA::file_save_as()
 
   dialog.setFileMode (QFileDialog::AnyFile);
   dialog.setAcceptMode (QFileDialog::AcceptSave);
-  dialog.setDirectory (dir_last);
+  dialog.setDirectory (documents->dir_last);
 
   QLabel *l = new QLabel (tr ("Charset"));
   QComboBox *cb_codecs = new QComboBox (&dialog);
@@ -1429,7 +1419,7 @@ bool CTEA::file_save_as()
       update_dyn_menus();
 
       QFileInfo f (d->file_name);
-      dir_last = f.path();
+      documents->dir_last = f.path();
      }
    else
        dialog.setSidebarUrls (sidebarUrls_old);
@@ -3162,7 +3152,6 @@ void CTEA::fn_use_table()
           text = d->toPlainText();
 
       int y = d->textCursor().block().blockNumber();
-      qDebug() << y;
 
       if (d->textCursor().hasSelection())
          d->put (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
@@ -6132,7 +6121,7 @@ CTEA::CTEA()
 
   update_fonts();
 
-  dir_last = settings->value ("dir_last", QDir::homePath()).toString();
+  documents->dir_last = settings->value ("dir_last", QDir::homePath()).toString();
   b_preview = settings->value ("b_preview", false).toBool();
 
 
@@ -8760,7 +8749,6 @@ void CTEA::clipboard_dataChanged()
       ddest->put (text_to_insert);
      }
 }
-
 
 
 void CTEA::main_tab_page_changed (int index)

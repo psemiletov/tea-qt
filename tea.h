@@ -233,7 +233,7 @@ Variables
 
   QString dir_user_dict;
   QString dir_profiles;
-  QString dir_last;
+ // QString dir_last;
   QString dir_config;
   QString dir_templates;
   QString dir_sessions;

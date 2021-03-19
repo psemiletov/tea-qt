@@ -1290,7 +1290,6 @@ void CDocument::set_show_margin (bool enable)
 }
 
 
-
 void CDocument::set_margin_pos (int mp)
 {
   margin_pos = mp;
@@ -2104,6 +2103,8 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
   d = create_new();
   d->file_open (fileName, codec);
 
+  dir_last = get_file_path (d->file_name);
+
   d->update_status();
   d->update_title (settings->value ("full_path_at_window_title", 1).toBool());
 
@@ -2285,7 +2286,10 @@ void CDox::open_recent()
   if (i == -1)
      return;
 
-  open_file_triplex (recent_files[i]);
+  CDocument *d = open_file_triplex (recent_files[i]);
+  dir_last = get_file_path (d->file_name);
+
+
   update_recent_menu();
 }
 

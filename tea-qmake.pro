@@ -141,7 +141,6 @@ HEADERS += tea.h \
 
 HEADERS += \
         ioapi.h \
-        quaadler32.h \
         quachecksum32.h \
         quacrc32.h \
         quagzipfile.h \
@@ -156,7 +155,6 @@ HEADERS += \
         zip.h
 
 SOURCES += qioapi.cpp \
-           quaadler32.cpp \
            quacrc32.cpp \
            quagzipfile.cpp \
            quaziodevice.cpp \

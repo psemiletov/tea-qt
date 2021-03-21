@@ -1071,7 +1071,7 @@ void CTEA::file_open()
       if (d)
          {
           if (file_exists (d->file_name))
-             fman->nav (get_file_path (d->file_name));
+              fman->nav (get_file_path (d->file_name));
          }
       else
           fman->nav (documents->dir_last);

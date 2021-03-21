@@ -50,19 +50,7 @@
 #define fopen64 fopen
 #define ftello64 ftell
 #define fseeko64 fseek
-#else
-#ifdef _MSC_VER
- #define fopen64 fopen
- #if (_MSC_VER >= 1400) && (!(defined(NO_MSCVER_FILE64_FUNC)))
-  #define ftello64 _ftelli64
-  #define fseeko64 _fseeki64
- #else // old MSC
-  #define ftello64 ftell
-  #define fseeko64 fseek
- #endif
 #endif
-#endif
-
 
 #ifdef HAVE_MINIZIP64_CONF_H
 #include "mz64conf.h"
@@ -76,8 +64,6 @@ typedef  64BIT_INT_CUSTOM_TYPE ZPOS64_T;
 #include "stdint.h"
 typedef uint64_t ZPOS64_T;
 #else
-
-
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 typedef unsigned __int64 ZPOS64_T;
 #else

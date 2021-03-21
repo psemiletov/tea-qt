@@ -2,19 +2,12 @@
 
 #include <QtGlobal>
 
-
 #if defined(JOYSTICK_SUPPORTED)
 
 #include <QDebug>
 #include <QApplication>
 
 #include "myjoystick.h"
-
-
-CJoystick::~CJoystick()
-{
-  close (fd);
-}
 
 
 CJoystick::CJoystick (uint idn, QObject *upper_link)
@@ -53,23 +46,9 @@ CJoystick::CJoystick (uint idn, QObject *upper_link)
 }
 
 
-void CJoystick::read_joystick()
+CJoystick::~CJoystick()
 {
-  if (! initialized)
-     return;
-
-  struct js_event e;
-
-  while (read (fd, &e, sizeof(e)) > 0)
-        {
-         process_event (e);
-        }
-
-  if (errno != EAGAIN)
-     {
-      qDebug() << "Joystick read error";
-      initialized = false;
-     }
+  close (fd);
 }
 
 
@@ -98,5 +77,24 @@ void CJoystick::process_event (js_event e)
     }
 }
 
-#endif
 
+void CJoystick::read_joystick()
+{
+  if (! initialized)
+     return;
+
+  struct js_event e;
+
+  while (read (fd, &e, sizeof(e)) > 0)
+        {
+         process_event (e);
+        }
+
+  if (errno != EAGAIN)
+     {
+      qDebug() << "Joystick read error";
+      initialized = false;
+     }
+}
+
+#endif

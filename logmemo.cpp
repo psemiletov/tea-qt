@@ -55,7 +55,6 @@ void CLogMemo::log_terminal (const QString &text)
   QString tb = txt;
 
   QRegularExpression re ("\\w+\\.\\w+:\\d+:\\d+:");
-
   QRegularExpressionMatch match = re.match (txt, 1);
 
   if (match.hasMatch())
@@ -118,7 +117,6 @@ void CLogMemo::log (const QString &text)
 void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 {
   QTextCursor cur = cursorForPosition (event->pos());
-
   QString txt = toPlainText();
   int pos = cur.position();
 
@@ -146,4 +144,3 @@ void CLogMemo::mouseDoubleClickEvent (QMouseEvent *event)
 
   event->accept();
 }
-

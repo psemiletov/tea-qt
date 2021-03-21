@@ -38,8 +38,6 @@ typedef uLongf z_crc_t;
 #endif
 #include "zip.h"
 
-#define NOCRYPT 1
-
 #ifdef STDC
 #  include <stddef.h>
 #  include <string.h>

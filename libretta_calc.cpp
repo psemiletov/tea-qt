@@ -134,7 +134,6 @@ double calculate (string expression)
      }
 
 
-
   list<CItem>::iterator p = items.begin();
 
 //степень и процент
@@ -246,4 +245,3 @@ double calculate (string expression)
 
   return item.val;
 }
-

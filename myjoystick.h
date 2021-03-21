@@ -1,12 +1,13 @@
 //this code by Peter Semiletov is the public domain
 
-#ifndef MYJOYSTICK_H
-#define MYJOYSTICK_H
-
 #include <QtGlobal>
 #include <QObject>
 
+#ifndef MYJOYSTICK_H
+#define MYJOYSTICK_H
+
 #if defined(JOYSTICK_SUPPORTED)
+
 
 #include <iostream>
 #include <unistd.h>
@@ -73,7 +74,6 @@ public slots:
   void read_joystick();
 
 };
-
 
 #endif
 #endif

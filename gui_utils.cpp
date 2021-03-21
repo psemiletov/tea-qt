@@ -2,7 +2,6 @@
 this code is Public Domain
 */
 
-#include <QDir>
 #include <QFileInfoList>
 #include <QFileInfo>
 #include <QLabel>
@@ -60,8 +59,7 @@ void create_menu_from_themes (QObject *handler,
            else
                {
                 QMenu *mni_temp = menu->addMenu (fi->fileName());
-                create_menu_from_themes (handler, mni_temp,
-                                         fi->filePath(), method);
+                create_menu_from_themes (handler, mni_temp, fi->filePath(), method);
                }
            }
        }
@@ -89,8 +87,7 @@ void create_menu_from_dir (QObject *handler,
        if (fi->isDir())
           {
            QMenu *mni_temp = menu->addMenu (fi->fileName());
-           create_menu_from_dir (handler, mni_temp,
-                                 fi->filePath(), method);
+           create_menu_from_dir (handler, mni_temp, fi->filePath(), method);
           }
        else
            {
@@ -209,4 +206,3 @@ QComboBox* new_combobox (QBoxLayout *layout,
 
   return r;
 }
-

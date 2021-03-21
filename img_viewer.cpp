@@ -97,7 +97,6 @@ QString CImgViewer::get_the_thumb_name (const QString &img_fname)
 }
 
 
-
 void CZORWindow::closeEvent (QCloseEvent *event)
 {
   event->accept();
@@ -128,7 +127,7 @@ void CZORWindow::load_image (const QString &fname)
      return;
  
   if (! source_image.load (fname))
-     qDebug() << "cannot load " << fname;
+     return;
 
   fname_image = fname;
   
@@ -157,7 +156,6 @@ void CZORWindow::load_image (const QString &fname)
       transformed_image = transformed_image.scaled (size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
       source_image = transformed_image;
      }
-     
   
   if (orientation_portrait)
      {
@@ -261,4 +259,3 @@ void CGIFWindow::closeEvent (QCloseEvent *event)
 {
   event->accept();
 }
-

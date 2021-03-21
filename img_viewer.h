@@ -23,7 +23,6 @@ public:
 
   void keyPressEvent ( QKeyEvent * event);
   void closeEvent (QCloseEvent *event);
-
 };
 
 
@@ -42,7 +41,7 @@ public:
   void load_image (const QString &fname);
 
   void paintEvent (QPaintEvent *event);
-  void keyPressEvent ( QKeyEvent * event);
+  void keyPressEvent (QKeyEvent *event);
   void closeEvent (QCloseEvent *event);
 };
 

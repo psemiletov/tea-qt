@@ -28,7 +28,7 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 
 QuaCrc32::QuaCrc32()
 {
-	reset();
+  checksum = crc32(0L, Z_NULL, 0);
 }
 
 quint32 QuaCrc32::calculate(const QByteArray &data)

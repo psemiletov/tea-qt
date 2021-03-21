@@ -12,6 +12,7 @@ Peter Semiletov
 #include <QHash>
 #include <QFileInfo>
 #include <QStringList>
+//#include <QDir>
 
 
 #if QT_VERSION < 0x050000
@@ -134,7 +135,7 @@ inline bool is_dir (const QString &path)
 
 inline QString get_file_path (const QString &fileName)
 {
-  return QFileInfo (fileName).absolutePath();
+  return QFileInfo (fileName).path();
 }
 
 

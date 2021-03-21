@@ -7,6 +7,7 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QBoxLayout>
+#include <QDir>
 
 
 void create_menu_from_list (QObject *handler,

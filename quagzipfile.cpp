@@ -28,7 +28,8 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 #include "quagzipfile.h"
 
 /// \cond internal
-class QuaGzipFilePrivate {
+class QuaGzipFilePrivate
+{
     friend class QuaGzipFile;
     QString fileName;
     gzFile gzd;

@@ -22,11 +22,12 @@ Original ZIP package is copyrighted by Gilles Vollant and contributors,
 see quazip/(un)zip.h files for details. Basically it's the zlib license.
 */
 
+#include <string.h>
+
 #include <QFileInfo>
 
 #include "quazipnewinfo.h"
 
-#include <string.h>
 
 static void QuaZipNewInfo_setPermissions(QuaZipNewInfo *info,
         QFile::Permissions perm, bool isDir, bool isSymLink = false)
@@ -143,7 +144,6 @@ void QuaZipNewInfo::setFileNTFSTimes(const QString &fileName)
   setFileNTFScTime(fi.created());
 
 #endif
-
 }
 
 static void setNTFSTime(QByteArray &extra, const QDateTime &time, int position,

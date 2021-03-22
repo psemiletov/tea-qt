@@ -2364,6 +2364,12 @@ void CTEA::mrkup_rename_selected()
   if (fname.isEmpty())
      return;
 
+  if (documents->get_document_by_fname (fname))
+     {
+      log->log (tr("You are trying to renamed opened file, please close it first!"));
+      return;
+     }
+
   QString newname = fif_get_text();
   if (newname.isEmpty())
      return;

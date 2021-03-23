@@ -147,7 +147,7 @@ QAction* CShortcuts::find_by_caption (const QString &text)
        if (a.at(i)->text() == text)
           return a.at(i);
 
-  return NULL;
+  return 0;
 }
 
 
@@ -159,7 +159,7 @@ QAction* CShortcuts::find_by_shortcut (const QString &shcut)
        if (a.at(i)->shortcut().toString() == shcut)
           return a.at(i);
 
-  return NULL;
+  return 0;
 }
 
 
@@ -214,20 +214,6 @@ void CShortcuts::load_from_file (const QString &file_name)
 
        if (hash.contains (at->text()))
            at->setShortcut (QKeySequence (hash.value (at->text())));
-//
-//          {
-        //   qDebug() << at->text() << " = " << at->shortcut().toString();
-
-      //     if (at->shortcut().isEmpty())
-        //      {
-  //         at->setShortcut (QKeySequence (hash.value (at->text())));
-//               qDebug() << "SET FOR" << at->text();
-          //    }
-         //  else
-           //    qDebug() << "NOT FOR" << at->text();
- //     if (hash.contains (a.at(i)->text()))
-   //       a[i]->setShortcut (QKeySequence (hash.value (a.at(i)->text())));
-    //     }
       }
 }
 

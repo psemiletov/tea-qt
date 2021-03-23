@@ -60,4 +60,3 @@ signals:
 
 
 #endif // SINGLE_APP_SHARED_H
-

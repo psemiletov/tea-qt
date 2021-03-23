@@ -35,20 +35,15 @@
 #include <QProcess>
 #include <QProxyStyle>
 
-
-
 #ifdef PRINTER_ENABLE
 #include <QPrinter>
 #endif
-
 
 #include "document.h"
 #include "fman.h"
 #include "calendar.h"
 #include "shortcuts.h"
 #include "img_viewer.h"
-
-
 #include "spellchecker.h"
 
 
@@ -78,7 +73,6 @@ public:
 
  static bool b_altmenu;
  static int cursor_blink_time;
-
 
  int styleHint (StyleHint hint, const QStyleOption *option = 0,
                  const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const
@@ -175,9 +169,7 @@ Variables
   bool portable_mode;
 
   CLogMemo *log;
-
   QObject *last_action;
-
 
   CShortcuts *shortcuts;
   CFMan *fman;
@@ -186,7 +178,6 @@ Variables
   CSpellchecker *spellchecker;
   QStringList spellcheckers;
   QString cur_spellchecker;
-
   QString theme_dir;
 
   int icon_size;
@@ -222,7 +213,6 @@ Variables
 
   QDir dir_lv;
 
-
 #ifdef PRINTER_ENABLE
   QPrinter printer;
 #endif
@@ -233,7 +223,6 @@ Variables
 
   QString dir_user_dict;
   QString dir_profiles;
- // QString dir_last;
   QString dir_config;
   QString dir_templates;
   QString dir_sessions;
@@ -247,7 +236,6 @@ Variables
 
   QString fname_def_palette;
   QString fname_fif;
-
   QString fname_bookmarks;
   QString fname_programs;
   QString fname_places_bookmarks;
@@ -266,62 +254,43 @@ Main menu items
 */
 
   QMenu *menu_file;
-
   QMenu *menu_file_actions;
   QMenu *menu_file_recent;
-
   QMenu *menu_file_bookmarks;
   QMenu *menu_file_edit_bookmarks;
-
   QMenu *menu_file_templates;
   QMenu *menu_file_sessions;
   QMenu *menu_file_configs;
-
   QMenu *menu_edit;
-
   QMenu *menu_ide;
-
-
   QMenu *menu_cal;
-
   QMenu *menu_cal_add;
   QMenu *menu_cal_sub;
   QMenu *menu_cal_diff;
-
-
   QMenu *menu_programs;
   QMenu *menu_fn_snippets;
   QMenu *menu_fn_tables;
   QMenu *menu_view_palettes;
   QMenu *menu_view_profiles;
-
   QMenu *menu_fn_sessions;
   QMenu *menu_fn_scripts;
-
-
   QMenu *menu_view_themes;
-
   QMenu *menu_markup;
   QMenu *menu_functions;
   QMenu *menu_functions_case;
-
   QMenu *menu_search;
   QMenu *menu_nav;
   QMenu *menu_instr;
-
   QMenu *menu_fm;
   QMenu *menu_fm_file_ops;
   QMenu *menu_fm_multi_rename;
-
   QMenu *menu_fm_file_infos;
   QMenu *menu_fm_img_conv;
   QMenu *menu_fm_zip;
   QMenu *menu_fm_checksums;
-
   QMenu *menu_view;
   QMenu *menu_spell_langs;
   QMenu *helpMenu;
-
   QMenu *menu_labels;
 
 
@@ -354,7 +323,6 @@ Main menu items
   QAction *menu_find_fuzzy;
 
 
-
 /*
 =========================
 Main window widgets
@@ -374,7 +342,6 @@ Main window widgets
   QComboBox *cb_fman_drives;
   CCalendarWidget *calendar;
 
-
 /*
 ==============================
 Main tab UI elements
@@ -391,15 +358,12 @@ FileManager tab UI elements
 ==============================
 */
 
-
   QLineEdit *ed_fman_path;
   QListWidget *lv_places;
   QSplitter *spl_fman;
-
   QToolBar *tb_fman_dir;
   QLabel *l_fman_preview;
   QLabel *l_charset;
-
 
 /*
 =============================================
@@ -407,15 +371,12 @@ Preferences tab :: Interface page UI elements
 =============================================
 */
 
-
   QComboBox *cmb_ui_mode;
   QComboBox *cmb_lng;
   QComboBox *cmb_styles;
-
   QCheckBox *cb_fif_at_toolbar;
   QComboBox *cmb_icon_size;
   QComboBox *cmb_tea_icons;
-
   QCheckBox *cb_show_linenums;
   QCheckBox *cb_wordwrap;
   QCheckBox *cb_hl_enabled;
@@ -440,15 +401,12 @@ Preferences tab :: Common page UI elements
 =============================================
 */
 
-
   QCheckBox *cb_start_on_sunday;
   QCheckBox *cb_northern_hemisphere;
   QComboBox *cmb_moon_phase_algos;
   QComboBox *cmb_cmdline_default_charset;
-
   QComboBox *cmb_zip_charset_in;
   QComboBox *cmb_zip_charset_out;
-
   QCheckBox *cb_altmenu;
   QCheckBox *cb_wasd;
 
@@ -463,8 +421,6 @@ Preferences tab :: Common page UI elements
   QCheckBox *cb_override_img_viewer;
   QLineEdit *ed_img_viewer_override;
 
-
-
 /*
 =============================================
 Preferences tab :: Functions page UI elements
@@ -473,24 +429,16 @@ Preferences tab :: Functions page UI elements
 
   QLineEdit *ed_label_end;
   QLineEdit *ed_label_start;
-
   QLineEdit *ed_date_format;
   QLineEdit *ed_time_format;
 
-
-
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-
   QComboBox *cmb_spellcheckers;
-
 #endif // SPELLCHECKERS ENABLED
-
 
   QLineEdit *ed_spellcheck_path;
   QLineEdit *ed_aspellcheck_path;
-
   QSpinBox *spb_fuzzy_q;
-
 
 /*
 =============================================
@@ -517,13 +465,11 @@ Preferences tab :: Keyboard page UI elements
   CShortcutEntry *ent_shtcut;
   QListWidget *lv_menuitems;
 
-
 /*
 ====================================
 Application stuff inits and updates
 ====================================
 */
-
 
 public:
 
@@ -533,16 +479,13 @@ public:
   void handle_args();
   void create_paths();
 
-
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   void setup_spellcheckers();
   void create_spellcheck_menu();
 #endif
 
-
   void create_main_widget_splitter();
   void create_main_widget_docked();
-
   void create_actions();
   void create_menus();
   void create_options();
@@ -550,7 +493,6 @@ public:
   void create_toolbars();
   void create_manual();
   void create_fman();
-
   void create_markup_hash();
 
   void update_stylesheet (const QString &f);
@@ -563,7 +505,6 @@ public:
   void update_sessions();
   void update_palettes();
   void update_labels_menu();
-
   void update_themes();
   void update_hls();
   void update_tables();
@@ -634,7 +575,6 @@ Application misc. methods
   void man_find_next();
   void man_find_prev();
 
-
 protected:
 
   void closeEvent (QCloseEvent *event);
@@ -643,19 +583,16 @@ protected:
 
 public slots:
 
-
 /*
 ===========================
 Main window slots
 ===========================
 */
 
-
   void pageChanged (int index);
   void logmemo_double_click (const QString &txt);
   void receiveMessage (const QString &msg);
   void receiveMessageShared (const QStringList& msg);
-
 
 /*
 ===================
@@ -694,44 +631,33 @@ File menu callbacks
   void file_open();
   void file_open_at_cursor();
   void file_last_opened();
-
   void file_crapbook();
   void file_notes();
-
   bool file_save();
   bool file_save_as();
-
   void file_save_bak();
   void file_save_version();
   void file_session_save_as();
-
   void file_reload();
   void file_reload_enc_itemDoubleClicked (QListWidgetItem *item);
   void file_reload_enc();
-
   void file_set_eol_unix();
   void file_set_eol_win();
   void file_set_eol_mac();
-
 
 #ifdef PRINTER_ENABLE
   void file_print();
 #endif
 
-
   void file_add_to_bookmarks();
   void file_find_obsolete_paths();
-
   void file_open_bookmarks_file();
   void file_open_programs_file();
   void file_open_bookmark();
-
   void file_use_template();
   void file_open_session();
-
   void file_recent_off();
   void file_close();
-
 
 /*
 ===================
@@ -742,28 +668,21 @@ Edit menu callbacks
   void ed_copy();
   void ed_paste();
   void ed_cut();
-
   void ed_block_start();
   void ed_block_end();
   void ed_block_copy();
   void ed_block_paste();
   void ed_block_cut();
-
   void ed_copy_current_fname();
-
   void ed_undo();
   void ed_redo();
-
   void ed_indent();
   void ed_unindent();
   void ed_indent_by_first_line();
-
   void ed_comment();
-
   void ed_set_as_storage_file();
   void ed_copy_to_storage_file();
   void ed_capture_clipboard_to_storage_file();
-
 
 /*
 ===================
@@ -773,24 +692,19 @@ Markup menu callbacks
 
   void mrkup_mode_choosed();
   void mrkup_header();
-
   void mrkup_align_center();
   void mrkup_align_left();
   void mrkup_align_right();
   void mrkup_align_justify();
-
   void mrkup_bold();
   void mrkup_italic();
   void mrkup_underline();
-
   void mrkup_link();
   void mrkup_para();
   void mrkup_color();
-
   void mrkup_br();
   void mrkup_nbsp();
   void markup_ins_image();
-
   void mrkup_text_to_html();
   void mrkup_tags_to_entities();
   void mrkup_antispam_email();
@@ -810,14 +724,12 @@ Search menu callbacks
   void search_find_prev();
   void search_mark_all();
   void search_unmark();
-
   void search_in_files_results_dclicked (QListWidgetItem *item);
   void search_in_files();
   void search_whole_words_mode();
   void search_from_cursor_mode();
   void search_regexp_mode();
   void search_fuzzy_mode();
-
   void search_replace_with();
   void search_replace_all();
   void search_replace_all_at_ofiles();
@@ -830,12 +742,10 @@ Fn menu callbacks
 
   void fn_repeat();
   void fn_scale_image();
-
   void fn_use_snippet();
   void fn_run_script();
   void cb_script_finished (int exitCode, QProcess::ExitStatus exitStatus);
   void fn_use_table();
-
   void fn_insert_loremipsum();
   void fn_insert_template_tea();
   void fn_insert_template_html();
@@ -844,23 +754,18 @@ Fn menu callbacks
   void fn_insert_c();
   void fn_insert_date();
   void fn_insert_time();
-
   void fn_case_up();
   void fn_case_down();
-
   void fn_sort_casecare();
   void fn_sort_casecareless();
   void fn_sort_casecare_sep();
   void fn_sort_length();
-
   void fn_flip_a_list();
   void fn_flip_a_list_sep();
-
   void fn_cells_latex_table_sort_by_col_abc();
   void fn_cells_swap_cells();
   void fn_cells_delete_by_col();
   void fn_cells_copy_by_col();
-
   void fn_filter_rm_duplicates();
   void fn_filter_rm_empty();
   void fn_filter_rm_less_than();
@@ -869,7 +774,6 @@ Fn menu callbacks
   void fn_filter_delete_after_sep();
   void fn_filter_with_regexp();
   void fn_filter_by_repetitions();
-
   void fn_math_evaluate();
   void fn_math_number_arabic_to_roman();
   void fn_math_number_roman_to_arabic();
@@ -880,12 +784,10 @@ Fn menu callbacks
   void fn_math_enum();
   void fn_math_number_dms2dc();
   void fn_math_number_dd2dms();
-
   void fn_morse_from_ru();
   void fn_morse_to_ru();
   void fn_morse_from_en();
   void fn_morse_to_en();
-
   void fn_analyze_text_stat();
   void fn_analyze_extract_words();
   void fn_analyze_stat_words_lengths();
@@ -894,7 +796,6 @@ Fn menu callbacks
   void fn_analyze_get_words_count();
   void fn_analyze_unitaz_abc();
   void fn_analyze_unitaz_len();
-
   void fn_text_apply_to_each_line();
   void fn_text_reverse();
   void fn_text_escape();
@@ -905,7 +806,6 @@ Fn menu callbacks
   void fn_text_remove_trailing_spaces();
   void fn_text_anagram();
   void fn_text_regexp_match_check();
-
   void fn_quotes_to_angle();
   void fn_quotes_curly();
   void fn_quotes_tex_curly();
@@ -923,8 +823,6 @@ Fn menu callbacks
 
 #endif // SPELLCHECKERS ENABLED
 
-
-
 /*
 ====================
 Cal menu
@@ -934,11 +832,9 @@ Cal menu
   void cal_moon_mode();
   void cal_set_date_a();
   void cal_set_date_b();
-
   void cal_add_days();
   void cal_add_months();
   void cal_add_years();
-
   void cal_set_to_current();
   void cal_gen_mooncal();
   void cal_diff_days();
@@ -963,7 +859,6 @@ IDE menu callbacks
   void ide_clean();
   void ide_toggle_hs();
 
-
 /*
 ===================
 Nav menu callbacks
@@ -979,7 +874,6 @@ Nav menu callbacks
   void nav_focus_to_editor();
   void nav_labels_update_list();
 
-
 /*
 ===================
 Fm menu callbacks
@@ -990,25 +884,19 @@ Fm menu callbacks
   void fman_multi_rename_del_n_first_chars();
   void fman_multi_rename_replace();
   void fman_multi_rename_apply_template();
-
   void fman_fileop_create_dir();
   void fman_fileop_rename();
   void fman_fileop_delete();
-
   void fm_fileinfo_info();
   void fman_fileinfo_count_lines_in_selected_files();
-
-
   void fman_zip_create();
   void fman_zip_add();
   void fman_zip_save();
   void fman_zip_info();
   void fman_zip_unpack();
-
   void fman_img_conv_by_side();
   void fman_img_conv_by_percent();
   void fman_img_make_gallery();
-
   void fman_home();
   void fman_refresh();
   void fman_preview_image();
@@ -1046,7 +934,6 @@ View menu callbacks
   void help_show_changelog();
   void help_show_gpl();
 
-
 /*
 =====================
 Misc callbacks
@@ -1056,17 +943,12 @@ Misc callbacks
   void select_label();
   void run_program();
   void guess_enc();
-
   void clipboard_dataChanged();
   void main_tab_page_changed (int index);
-
   void calendar_clicked (const QDate &date);
   void calendar_activated (const QDate &date);
-
   void calendar_currentPageChanged (int year, int month);
   void process_readyReadStandardOutput();
-
-
 
 /*
 ====================
@@ -1079,27 +961,20 @@ Tune page callbacks
 #endif
 
   void cb_altmenu_stateChanged (int state);
-
   void cmb_ui_tabs_currentIndexChanged (int i);
   void cmb_docs_tabs_currentIndexChanged (int i);
   void cmb_icon_sizes_currentIndexChanged (int i);
   void cmb_tea_icons_currentIndexChanged  (int i);
-
   void pb_assign_hotkey_clicked();
   void pb_remove_hotkey_clicked();
-
   void slot_lv_menuitems_currentItemChanged (QListWidgetItem *current, QListWidgetItem *previous);
-
   void slot_font_logmemo_select();
   void slot_font_interface_select();
   void slot_font_editor_select();
-
   void slot_style_currentIndexChanged (int);
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
-
   void cmb_spellchecker_currentIndexChanged (int);
-
 #endif
 
 #ifdef HUNSPELL_ENABLE
@@ -1111,6 +986,5 @@ Tune page callbacks
 #endif
 
 };
-
 
 #endif

@@ -145,9 +145,6 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
 
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
-  //exts = "default";
-  //langs = "default";
-
   if (! file_exists (fname))
      return;
 

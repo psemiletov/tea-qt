@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2019 by Peter Semiletov                                          *
+ *   2007-2021 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -51,21 +51,17 @@ public:
 
   CSpellchecker (const QString &lang,
                  const QString &dir_path,
-                 const QString &dir_user): language (lang),
-                 dir_dicts (dir_path), dir_user_dicts (dir_user), loaded(false)
+                 const QString &dir_user): language (lang), dir_dicts (dir_path), dir_user_dicts (dir_user), loaded(false)
                  {};
 
   virtual ~CSpellchecker() {};
 
   virtual void load_dict() = 0; //uses current language
   virtual void save_user_dict() = 0; //uses current language
-
-  virtual void change_lang (const QString &lang) = 0;
+  virtual void change_lang (const QString &lang) = 0; //set current language
   virtual void add_to_user_dict (const QString &word) = 0;
   virtual void remove_from_user_dict (const QString &word) = 0;
-
   virtual bool check (const QString &word) = 0;
-
   virtual void get_speller_modules_list() = 0;
   virtual QStringList get_suggestions_list (const QString &word) = 0;
 };
@@ -85,19 +81,15 @@ public:
   CAspellchecker (const QString &lang, const QString &dir_path = "", const QString &dir_user = "");
   ~CAspellchecker();
 
-  void save_user_dict() {}; //uses current language
+  void save_user_dict() {}; //not needed due to Aspell implementation
   void load_dict();
-
   void change_lang (const QString &lang);
   void add_to_user_dict (const QString &word);
   void remove_from_user_dict (const QString &word);
-
   bool check (const QString &word);
-
   void get_speller_modules_list();
   QStringList get_suggestions_list (const QString &word);
 };
-
 
 QString aspell_default_dict_path();
 
@@ -114,21 +106,18 @@ public:
   Hunspell *speller;
 
   QStringList user_words;
-
-  const char *encoding;
-  std::string str_encoding;
+  const char *encoding; //depercated (old Hunspell versions) but supported
+  std::string str_encoding; //new approach
 
   CHunspellChecker (const QString &lang, const QString &dir_path = "", const QString &dir_user = "");
   ~CHunspellChecker();
 
-  void save_user_dict(); //uses current language
+  void save_user_dict();
   void load_dict();
   void change_lang (const QString &lang);
   void add_to_user_dict (const QString &word);
   void remove_from_user_dict (const QString &word);
-
   bool check (const QString &word);
-
   void get_speller_modules_list();
   QStringList get_suggestions_list (const QString &word);
 };
@@ -137,7 +126,5 @@ QString hunspell_default_dict_path();
 
 
 #endif
-
-
 
 #endif

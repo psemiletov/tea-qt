@@ -1,12 +1,10 @@
 // "single_application.cpp"
 
 /*
- * taken from http://berenger.eu/blog/c-qt-singleapplication-single-app-instance/
- * code by Berenger Bramas
- * modified by Peter Semiletov
- 
- * 
- */
+ taken from http://berenger.eu/blog/c-qt-singleapplication-single-app-instance/
+ code by Berenger Bramas
+ modified by Peter Semiletov
+*/
 
 
 #include <QTimer>
@@ -17,9 +15,7 @@
  
 CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], const QString &uniqueKey): QApplication (argc, argv)
 {
-//  qDebug() << "CSingleApplicationShared::CSingleApplicationShared";
-
-  sharedMemory.setKey(uniqueKey);
+  sharedMemory.setKey (uniqueKey);
  
   // when can create it only if it doesn't exist
   if (sharedMemory.create (8192))
@@ -40,9 +36,6 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
   else 
       if (sharedMemory.attach())
          bAlreadyExists = true;
-     //else
-       //  ;// error
-  
 }
  
  
@@ -50,7 +43,6 @@ CSingleApplicationShared::CSingleApplicationShared (int &argc, char *argv[], con
  
 void CSingleApplicationShared::checkForMessage()
 {
-    
   QStringList arguments;
  
   sharedMemory.lock();
@@ -77,7 +69,6 @@ void CSingleApplicationShared::checkForMessage()
 
 bool CSingleApplicationShared::sendMessage (const QString &message)
 {
-
  //we cannot send message if we are master process!
   if (isMasterApp())
      return false;
@@ -104,4 +95,3 @@ bool CSingleApplicationShared::sendMessage (const QString &message)
 
  return true;
 }
-

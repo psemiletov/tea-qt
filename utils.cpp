@@ -68,6 +68,25 @@ bool file_is_readable (const QString &fname)
 }
 
 
+bool path_is_file (const QString &fname)
+{
+  QFileInfo fi (fname);
+  return fi.isFile();
+}
+
+
+bool path_is_abs (const QString &fname)
+{
+  if (fname.isEmpty())
+    return false;
+
+  if (fname[0] == '/' || fname.indexOf (':') == 1)
+    return true;
+  else
+    return false;
+}
+
+
 bool dir_exists (const QString &path)
 {
   QDir d (path);

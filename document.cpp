@@ -2074,7 +2074,7 @@ CDocument* CDox::create_new()
 
 CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 {
-  if (! file_exists (fileName))
+  if (! file_exists (fileName) || ! path_is_file (fileName))
      return 0;
 
   if (is_image (fileName))

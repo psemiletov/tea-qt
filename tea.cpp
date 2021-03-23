@@ -108,8 +108,6 @@ QVariantMap hs_path;
 
 QString current_version_number;
 std::vector <CTextListWnd*> text_window_list;
-
-
 QHash <QString, QHash<QString, QString> > hash_markup;
 
 enum {
@@ -117,7 +115,6 @@ enum {
       FM_ENTRY_MODE_OPEN,
       FM_ENTRY_MODE_SAVE
      };
-
 
 
 /*
@@ -137,7 +134,6 @@ CDarkerWindow::CDarkerWindow()
 {
   setAttribute (Qt::WA_DeleteOnClose);
   setWindowFlags (Qt::Tool);
-
   setWindowTitle (tr ("Darker palette"));
 
   slider = new QSlider (Qt::Horizontal);
@@ -146,7 +142,6 @@ CDarkerWindow::CDarkerWindow()
 
   QVBoxLayout *v_box = new QVBoxLayout;
   setLayout (v_box);
-
   v_box->addWidget (slider);
 
   slider->setValue (settings->value ("darker_val", "100").toInt() - 100);
@@ -157,13 +152,11 @@ CDarkerWindow::CDarkerWindow()
 
 void CDarkerWindow::slot_valueChanged (int value)
 {
-  int corrected_val = value + 100;
-  settings->setValue ("darker_val", corrected_val);
+  settings->setValue ("darker_val", value + 100);
 
   documents->apply_settings();
   main_window->update_stylesheet (main_window->fname_stylesheet);
 }
-
 
 
 /*
@@ -192,7 +185,6 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
   QVBoxLayout *lt = new QVBoxLayout;
 
   QLabel *l = new QLabel (label_text);
-
   list = new QListWidget (this);
 
   lt->addWidget (l);
@@ -203,7 +195,6 @@ CTextListWnd::CTextListWnd (const QString &title, const QString &label_text)
 
   text_window_list.push_back (this);
 }
-
 
 
 /*
@@ -222,10 +213,11 @@ void CAboutWindow::closeEvent (QCloseEvent *event)
 void CAboutWindow::update_image()
 {
   QImage img (400, 100, QImage::Format_ARGB32);
-
   QPainter painter (&img);
+
   QFont f;
   f.setPixelSize (25);
+
   painter.setPen (Qt::gray);
   painter.setFont (f);
 
@@ -322,7 +314,6 @@ CAboutWindow::CAboutWindow()
 }
 
 
-
 /*
 ===========================
 Local utility functions
@@ -413,9 +404,7 @@ void CTEA::closeEvent (QCloseEvent *event)
   if (main_tab_widget->currentIndex() == idx_tab_tune)
      leaving_options();
 
-  QString fname = dir_config + "/last_used_charsets";
-
-  qstring_save (fname, sl_last_used_charsets.join ("\n").trimmed());
+  qstring_save (dir_config + "/last_used_charsets", sl_last_used_charsets.join ("\n").trimmed());
 
   if (settings->value("session_restore", false).toBool())
      {
@@ -476,7 +465,6 @@ void CTEA::dropEvent (QDropEvent *event)
 }
 
 
-
 /*
 ===========================
 Main window slots
@@ -533,14 +521,8 @@ void CTEA::logmemo_double_click (const QString &txt)
 
   source_fname = source_dir + "/" + source_fname;
 
-//  std::cout << "source_fname:" << source_fname.toStdString() << std::endl;
-//  std::cout << "source_line:" << source_line.toStdString() << std::endl;
-//  std::cout << "source_col:" << source_col.toStdString() << std::endl;
-
   log->no_jump = true;
-
   CDocument *d = documents->open_file (source_fname, "UTF-8");
-
   log->no_jump = false;
 
   if (! d)
@@ -585,11 +567,8 @@ void CTEA::read_settings()
 
   recent_list_max_items = settings->value ("recent_list.max_items", 21).toInt();
 
-  int ui_tab_align = settings->value ("ui_tabs_align", "0").toInt();
-  main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align));
-
-  int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
-  tab_editor->setTabPosition (int_to_tabpos (docs_tab_align));
+  main_tab_widget->setTabPosition (int_to_tabpos (settings->value ("ui_tabs_align", "0").toInt()));
+  tab_editor->setTabPosition (int_to_tabpos (settings->value ("docs_tabs_align", "0").toInt()));
 
   markup_mode = settings->value ("markup_mode", "HTML").toString();
   charset = settings->value ("charset", "UTF-8").toString();
@@ -608,13 +587,12 @@ void CTEA::read_settings()
 
 void CTEA::write_settings()
 {
-  settings->setValue ("pos", pos());
-  settings->setValue ("size", size());
-  settings->setValue ("charset", charset);
-
   if (mainSplitter)
      settings->setValue ("splitterSizes", mainSplitter->saveState());
 
+  settings->setValue ("pos", pos());
+  settings->setValue ("size", size());
+  settings->setValue ("charset", charset);
   settings->setValue ("spl_fman", spl_fman->saveState());
   settings->setValue ("dir_last", documents->dir_last);
   settings->setValue ("fname_def_palette", fname_def_palette);
@@ -691,12 +669,10 @@ void CTEA::fman_file_activated (const QString &full_path)
       CZipper z;
       QStringList sl = z.unzip_list (full_path);
 
-
       for (int i = 0; i < sl.size(); i++)
            sl[i] = sl[i] + "<br>";
 
       log->log (sl.join("\n"));
-
       return;
      }
 
@@ -727,9 +703,7 @@ void CTEA::fman_dir_changed (const QString &full_path)
   ed_fman_path->setText (full_path);
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
   cb_fman_drives->setCurrentIndex (cb_fman_drives->findText (full_path.left(3).toUpper()));
-
 #endif
 
   ui_update = false;
@@ -744,6 +718,7 @@ void CTEA::fman_fname_entry_confirm()
   if (fm_entry_mode == FM_ENTRY_MODE_SAVE)
      cb_button_saves_as();
 }
+
 
 void CTEA::fman_naventry_confirm()
 {
@@ -762,15 +737,14 @@ void CTEA::fman_add_bmk()
 void CTEA::fman_del_bmk()
 {
   int i = lv_places->currentRow();
-  if (i < 5)
+  if (i < 5) //user-wide bookmark, don't remove
      return;
 
   QString s = lv_places->item(i)->text();
   if (s.isEmpty())
      return;
 
-  i = sl_places_bmx.indexOf (s);
-  sl_places_bmx.removeAt (i);
+  sl_places_bmx.removeAt (sl_places_bmx.indexOf (s));
   qstring_save (fname_places_bookmarks, sl_places_bmx.join ("\n"));
   update_places_bookmarks();
 }
@@ -781,8 +755,7 @@ void CTEA::fman_open()
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
 
-  if (! f.isEmpty())
-  if (f[0] == '/') //if file name entry is the full path
+  if (path_is_abs (f)) //if file name entry is the full path and not empty
      {
       CDocument *d = documents->open_file (f, cb_fman_codecs->currentText());
       if (d)
@@ -796,7 +769,7 @@ void CTEA::fman_open()
      }
 
   //if file name entry == just filename
-  if (li.size() == 0)
+  if (li.size() == 0 && ! f.isEmpty())
      {
       QString fname (fman->dir.path());
       fname.append ("/").append (f);
@@ -812,16 +785,24 @@ void CTEA::fman_open()
      }
 
   //if file[s] selected at files list
+
+  bool opened = false;
+
   for (int i = 0; i < li.size(); i++)
       {
        CDocument *d = 0;
        d = documents->open_file (li.at(i), cb_fman_codecs->currentText());
        if (d)
-           charset = d->charset;
+           {
+            charset = d->charset;
+            opened = true;
+           }
       }
 
   add_to_last_used_charsets (cb_fman_codecs->currentText());
-  main_tab_widget->setCurrentIndex (idx_tab_edit);
+
+  if (opened)
+     main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
 

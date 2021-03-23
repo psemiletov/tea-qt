@@ -58,6 +58,8 @@ QString guess_enc_for_file (const QString &fname);
 
 bool file_is_writable (const QString &fname);
 bool file_is_readable (const QString &fname);
+bool path_is_file (const QString &fname);
+bool path_is_abs (const QString &fname);
 
 bool dir_exists (const QString &path);
 bool file_exists (const QString &fileName);

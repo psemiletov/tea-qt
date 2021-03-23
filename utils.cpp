@@ -75,6 +75,13 @@ bool path_is_file (const QString &fname)
 }
 
 
+bool path_is_dir (const QString &fname)
+{
+  QFileInfo fi (fname);
+  return fi.isDir();
+}
+
+
 bool path_is_abs (const QString &fname)
 {
   if (fname.isEmpty())

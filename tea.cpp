@@ -833,9 +833,19 @@ void CTEA::cb_button_saves_as()
   if (! d || ed_fman_fname->text().isEmpty())
      return;
 
-  QString filename (fman->dir.path());
+  QString fn = ed_fman_fname->text();
+  QString filename;
 
-  filename.append ("/").append (ed_fman_fname->text());
+  if (path_is_abs (fn)) //if file name entry is the full path and not empty
+     filename = fn;
+  else
+      {
+       filename = fman->dir.path();
+       filename.append ("/").append (ed_fman_fname->text());
+      }
+
+  if (path_is_dir (filename))
+     return;
 
   if (file_exists (filename))
      if (QMessageBox::warning (this, "TEA",
@@ -853,6 +863,7 @@ void CTEA::cb_button_saves_as()
   add_to_last_used_charsets (cb_fman_codecs->currentText());
 
   d->set_hl();
+
   QFileInfo f (d->file_name);
   documents->dir_last = f.path();
   update_dyn_menus();
@@ -1008,9 +1019,6 @@ void CTEA::ide_global_definition()
 
 
 qDebug() << "3";
-
-
-
 }
 
 

@@ -1115,8 +1115,6 @@ void CTEA::file_open()
      {
       if (file_exists (d->file_name))
           dialog.setDirectory (get_file_path (d->file_name));
-      else
-          dialog.setDirectory (documents->dir_last);
      }
   else
       dialog.setDirectory (documents->dir_last);
@@ -1180,7 +1178,7 @@ void CTEA::file_open_at_cursor()
 
   if (is_image (fname))
      {
-      if (settings->value ("override_img_viewer", 0).toBool())
+      if (settings->value ("override_img_viewer", 0).toBool()) //external image viewer
          {
           QString command = settings->value ("img_viewer_override_command", "display %s").toString();
           command = command.replace ("%s", fname);
@@ -1195,7 +1193,7 @@ void CTEA::file_open_at_cursor()
                w->load_image (fname);
                return;
               }
-           else
+           else //not GIF
                {
                 if (! img_viewer->window_full.isVisible())
                    {
@@ -1210,7 +1208,7 @@ void CTEA::file_open_at_cursor()
       }
 
 
-  if (fname.startsWith ("#"))
+  if (fname.startsWith ("#"))  //HTML inner label
      {
       QString t = fname;
       t.remove (0, 1);
@@ -1473,7 +1471,7 @@ void CTEA::file_save_version()
 
 void CTEA::file_session_save_as()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   if (documents->items.size() == 0)
      return;
@@ -1520,7 +1518,7 @@ void CTEA::file_reload_enc()
   else
       w->list->addItems (sl_charsets);
 
-  connect (w->list, SIGNAL(itemDoubleClicked ( QListWidgetItem *)),
+  connect (w->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)),
            this, SLOT(file_reload_enc_itemDoubleClicked ( QListWidgetItem *)));
 
   w->show();
@@ -1555,7 +1553,6 @@ void CTEA::file_set_eol_mac()
   if (d)
      d->eol = "\r";
 }
-
 
 
 #ifdef PRINTER_ENABLE
@@ -1597,7 +1594,7 @@ void CTEA::file_add_to_bookmarks()
 
   for (int i = 0; i < l_bookmarks.size(); i++)
       {
-       if (l_bookmarks.at(i).contains (d->file_name))
+       if (l_bookmarks.at(i).contains (d->file_name)) //update the bookmark
           {
            l_bookmarks[i] = d->get_triplex();
            found = true;
@@ -1605,10 +1602,10 @@ void CTEA::file_add_to_bookmarks()
           }
       }
 
-  if (! found)
+  if (! found) //else just add new bookbmark
       l_bookmarks.prepend (d->get_triplex());
 
-  bookmarks = l_bookmarks.join ("\n").trimmed();
+  QString bookmarks = l_bookmarks.join ("\n").trimmed();
 
   qstring_save (fname_bookmarks, bookmarks);
   update_bookmarks();
@@ -1623,10 +1620,10 @@ void CTEA::file_find_obsolete_paths()
       {
        QStringList t = l_bookmarks[i].split (",");
        if (! file_exists (t[0]))
-          l_bookmarks[i] = "#" + l_bookmarks[i];
+          l_bookmarks[i] = "#" + l_bookmarks[i]; //comment out the bookmark line
       }
 
-  bookmarks = l_bookmarks.join ("\n").trimmed();
+  QString bookmarks = l_bookmarks.join ("\n").trimmed();
 
   qstring_save (fname_bookmarks, bookmarks);
   update_bookmarks();
@@ -1642,7 +1639,7 @@ void CTEA::file_open_bookmarks_file()
 
 void CTEA::file_open_programs_file()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
 
@@ -1919,7 +1916,6 @@ void CTEA::ed_comment()
   else
       result = d->highlighter->comment_single;
 
-
   if (is_multiline && result.isEmpty())
      {
       QStringList sl = t.split (QChar::ParagraphSeparator);
@@ -1951,7 +1947,7 @@ void CTEA::ed_set_as_storage_file()
 
 void CTEA::ed_copy_to_storage_file()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *dsource = documents->get_current();
   if (! dsource)
@@ -1964,6 +1960,8 @@ void CTEA::ed_copy_to_storage_file()
       ddest->put (t);
       ddest->put ("\n");
      }
+  else
+      log->log (tr ("The storage file is closed or not set."));
 }
 
 
@@ -2246,8 +2244,8 @@ void CTEA::mrkup_document_weight()
   QFileInfo f (d->file_name);
   QUrl baseUrl (d->file_name);
 
-  std::vector<std::pair<QString, qint64> > files;
-  files.push_back(std::make_pair(d->file_name, f.size()));
+  vector <pair <QString, qint64> > files;
+  files.push_back(make_pair(d->file_name, f.size()));
 
   int size_total = 0;
   int files_total = 1;
@@ -2270,7 +2268,7 @@ void CTEA::mrkup_document_weight()
 
   std::sort (files.begin(), files.end());
 
-  for (std::vector<std::pair<QString, qint64> >::iterator p = files.begin(); p != files.end(); ++p)
+  for (vector <pair <QString, qint64> >::iterator p = files.begin(); p != files.end(); ++p)
       {
        result += tr ("%1 kbytes %2 <br>").arg (QString::number (p->second / 1024)).arg (p->first);
       }
@@ -2355,7 +2353,7 @@ void CTEA::mrkup_rename_selected()
 
   if (documents->get_document_by_fname (fname))
      {
-      log->log (tr("You are trying to renamed opened file, please close it first!"));
+      log->log (tr("You are trying to rename the opened file, please close it first!"));
       return;
      }
 
@@ -2389,14 +2387,11 @@ void CTEA::mrkup_rename_selected()
 }
 
 
-
 /*
 ===================
 Search menu callbacks
 ===================
 */
-
-
 
 
 void CTEA::search_find()
@@ -2422,7 +2417,8 @@ void CTEA::search_find()
       if (menu_find_regexp->isChecked())
          cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
 #else
-      cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
+      if (menu_find_regexp->isChecked())
+         cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
 #endif
 
 /*
@@ -2432,22 +2428,22 @@ void CTEA::search_find()
          cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
 #endif
 */
-          if (menu_find_fuzzy->isChecked())
+      if (menu_find_fuzzy->isChecked())
+         {
+          int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
+          if (pos != -1)
              {
-              int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
-              if (pos != -1)
-                 {
-                  from = pos + d->text_to_search.length() - 1;
-                  //set selection:
-                  cr = d->textCursor();
-                  cr.setPosition (from, QTextCursor::MoveAnchor);
-                  cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
+              from = pos + d->text_to_search.length() - 1;
+              //set selection:
+              cr = d->textCursor();
+              cr.setPosition (from, QTextCursor::MoveAnchor);
+              cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
 
-                  if (! cr.isNull())
-                      d->setTextCursor (cr);
-                 }
-              return;
+              if (! cr.isNull())
+                  d->setTextCursor (cr);
              }
+          return;
+         }
       else //normal search
           cr = d->document()->find (d->text_to_search, from, get_search_options());
 
@@ -2486,7 +2482,8 @@ void CTEA::search_find_next()
          cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options());
 #else
 #if QT_VERSION < 0x050500
-      cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options());
+     if (menu_find_regexp->isChecked())
+        cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options());
 #endif
 #endif
 
@@ -8350,7 +8347,7 @@ void CTEA::update_bookmarks()
   if (! file_exists (fname_bookmarks))
      return;
 
-  bookmarks = qstring_load (fname_bookmarks);
+  QString bookmarks = qstring_load (fname_bookmarks);
   if (bookmarks.isEmpty())
      return;
 

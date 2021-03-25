@@ -240,7 +240,7 @@ Variables
   QString fname_programs;
   QString fname_places_bookmarks;
 
-  QString bookmarks;
+ // QString bookmarks;
   QString fname_crapbook;
   QString fname_tempfile;
   QString fname_tempparamfile;

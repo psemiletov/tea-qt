@@ -2482,11 +2482,10 @@ void CTEA::search_find_next()
          cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options());
 #else
 #if QT_VERSION < 0x050500
-     if (menu_find_regexp->isChecked())
-        cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options());
+      if (menu_find_regexp->isChecked())
+         cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options());
 #endif
 #endif
-
 
       if (menu_find_fuzzy->isChecked())
          {
@@ -2580,8 +2579,6 @@ void CTEA::search_mark_all()
 
   bool cont_search = true;
 
-  QTextCursor cr;
-
   int pos_save = d->textCursor().position();
 
   d->selectAll();
@@ -2601,41 +2598,37 @@ void CTEA::search_mark_all()
       from = 0;
 
   d->text_to_search = fif_get_text();
+  QTextCursor cr;
 
   while (cont_search)
         {
 
 #if (QT_VERSION_MAJOR < 5)
-
          if (menu_find_regexp->isChecked())
             cr = d->document()->find (QRegExp (d->text_to_search), from, get_search_options());
 #else
-
          if (menu_find_regexp->isChecked())
             cr = d->document()->find (QRegularExpression (d->text_to_search), from, get_search_options());
-
-
 #endif
          else
-             if (menu_find_fuzzy->isChecked()) //fuzzy search
+         if (menu_find_fuzzy->isChecked()) //fuzzy search
+            {
+             int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
+             if (pos != -1)
                 {
-                 int pos = str_fuzzy_search (d->toPlainText(), d->text_to_search, from, settings->value ("fuzzy_q", "60").toInt());
-                 if (pos != -1)
-                    {
-                     //set selection:
-                     cr = d->textCursor();
-                     cr.setPosition (pos, QTextCursor::MoveAnchor);
-                     cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
+                 //set selection:
+                 cr = d->textCursor();
+                 cr.setPosition (pos, QTextCursor::MoveAnchor);
+                 cr.movePosition (QTextCursor::Right, QTextCursor::KeepAnchor, d->text_to_search.length());
 
-                     if (! cr.isNull())
-                         d->setTextCursor (cr);
-                    }
-                 else
-                     cont_search = false;
+                 if (! cr.isNull())
+                     d->setTextCursor (cr);
                 }
-            else //normal search
-                 cr = d->document()->find (d->text_to_search, from, get_search_options());
-
+             else
+                 cont_search = false;
+            }
+         else //normal search
+             cr = d->document()->find (d->text_to_search, from, get_search_options());
 
          if (! cr.isNull())
             {
@@ -2746,7 +2739,6 @@ void CTEA::search_in_files()
        if (index != -1)
           lresult.append (fname + "," + charset + "," + QString::number (index));
       }
-
 
   pb_status->hide();
 
@@ -2922,7 +2914,6 @@ Fn menu callbacks
 */
 
 
-
 void CTEA::fn_repeat()
 {
   if (last_action)
@@ -2941,6 +2932,10 @@ void CTEA::fn_scale_image()
   QString fname = d->get_filename_at_cursor();
 
   if (! is_image (fname))
+     return;
+
+  QImage source (fname);
+  if (source.isNull())
      return;
 
   QString t = fif_get_text();
@@ -2986,10 +2981,6 @@ void CTEA::fn_scale_image()
 
   int quality = settings->value ("img_quality", "-1").toInt();
 
-  QImage source (fname);
-  if (source.isNull())
-     return;
-
   if (settings->value ("cb_exif_rotate", 1).toBool())
      {
       int exif_orientation = get_exif_orientation (fname);
@@ -3015,10 +3006,11 @@ void CTEA::fn_scale_image()
 
   QImage dest;
 
-  if (scale_by_side)
+  if (scale_by_side && side)
      dest = image_scale_by (source, true, side, transformMode);
   else
-      dest = image_scale_by (source, false, percent, transformMode);
+      if (percent)
+         dest = image_scale_by (source, false, percent, transformMode);
 
   QString fmt (settings->value ("output_image_fmt", "jpg").toString());
 
@@ -3041,6 +3033,8 @@ void CTEA::fn_use_snippet()
 
   QAction *a = qobject_cast<QAction *>(sender());
   QString s = qstring_load (a->data().toString());
+  if (s.isEmpty())
+     return;
 
   if (s.contains ("%s"))
      s = s.replace ("%s", d->get());
@@ -3082,12 +3076,8 @@ void CTEA::fn_run_script()
   if (ext == "lua")
      intrp = "lua";
   else
-  if (ext == "bat" || ext == "btm")
+  if (ext == "bat" || ext == "btm"  || ext == "cmd")
      intrp = "cmd.exe";
-  else
-  if (ext == "cmd") //REXX
-     intrp = "cmd.exe";
-
 
   if (intrp.isEmpty())
       return;
@@ -3340,7 +3330,7 @@ int latex_table_sort_col;
 
 bool latex_table_sort_fn (const QStringList &l1, const QStringList &l2)
 {
-  return l1.at(latex_table_sort_col) < l2.at(latex_table_sort_col);
+  return l1.at (latex_table_sort_col) < l2.at (latex_table_sort_col);
 }
 
 
@@ -3379,7 +3369,7 @@ void CTEA::fn_cells_latex_table_sort_by_col_abc()
           {
            QStringList sl_parsed = s->split (sep);
            if (latex_table_sort_col + 1 <= sl_parsed.size())
-            output.append (sl_parsed);
+              output.append (sl_parsed);
           }
       }
 
@@ -3478,7 +3468,6 @@ void CTEA::fn_cells_delete_by_col()
 
   if (t.indexOf (sep) == -1)
      return;
-
 
   QStringList sl_temp = t.split (QChar::ParagraphSeparator);
 
@@ -3683,10 +3672,10 @@ void CTEA::fn_filter_by_repetitions()
            }
 
        if (count == positions.size())
-           {
-            result += wrd;
-            result += "\n";
-           }
+          {
+           result += wrd;
+           result += "\n";
+          }
       }
 
       if (! result.isEmpty())
@@ -3773,7 +3762,6 @@ void CTEA::fn_math_number_flip_bits()
 }
 
 
-
 void CTEA::fn_math_sum_by_last_col()
 {
   last_action = sender();
@@ -3788,7 +3776,7 @@ void CTEA::fn_math_sum_by_last_col()
   if (t.isEmpty())
       return;
 
-  double sum = 0.0f;
+  double sum = 0.0;
 
   QStringList l = t.split (QChar::ParagraphSeparator);
 
@@ -3912,7 +3900,6 @@ void CTEA::fn_math_number_dms2dc()
   iqs = longtitude.indexOf (QChar (UQS));
   iqd = longtitude.indexOf (QChar (UQD));
 
-
   degrees1 = longtitude.left (iqdg);
   minutes1 = longtitude.mid (iqdg + 1, iqs - iqdg - 1);
   seconds1 = longtitude.mid (iqs + 1, iqd - iqs - 1);
@@ -3926,11 +3913,7 @@ void CTEA::fn_math_number_dms2dc()
 //  qDebug() << "decimal_degrees_N " << decimal_degrees_N;
 }
 
-
-
-
 /*
-
 degrees = floor (decimal_degrees)
 minutes = floor (60 * (decimal_degrees - degrees))
 seconds = 3600 * (decimal_degrees - degrees) - 60 * minites
@@ -4128,7 +4111,6 @@ void CTEA::fn_analyze_stat_words_lengths()
        l.append (s);
       }
 
-
   CDocument *nd = documents->create_new();
   if (nd)
      nd->put (l.join("\n"));
@@ -4149,24 +4131,24 @@ void CTEA::fn_analyze_count_rx()
 }
 
 
-bool pr_bigger_than(const pair<const QString &,int> &a,
-                    const pair<const QString &,int> &b)
+bool pr_bigger_than (const pair<const QString &,int> &a,
+                     const pair<const QString &,int> &b)
 {
-    return (a.second > b.second);
+  return (a.second > b.second);
 }
 
 
 bool pr_bigger_than_str (const pair<const QString &,int> &a,
                          const pair<const QString &,int> &b)
 {
-    return (a.first < b.first);
+  return (a.first < b.first);
 }
 
 
 bool pr_bigger_than_str_len (const pair<const QString &,int> &a,
-                         const pair<const QString &,int> &b)
+                             const pair<const QString &,int> &b)
 {
-    return (a.first.size() < b.first.size());
+  return (a.first.size() < b.first.size());
 }
 
 
@@ -4218,7 +4200,6 @@ void CTEA::fn_text_apply_to_each_line()
       t = t.remove (0, 2);
       t = qstring_load (fname);
      }
-
 
   for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
       {
@@ -4478,16 +4459,15 @@ void CTEA::fn_quotes_tex_angle_02()
 }
 
 
-
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
 void CTEA::fn_change_spell_lang()
 {
   last_action = sender();
 
-  QAction *Act = qobject_cast<QAction *>(sender());
-  settings->setValue ("spell_lang", Act->text());
-  spellchecker->change_lang (Act->text());
+  QAction *a = qobject_cast<QAction *>(sender());
+  settings->setValue ("spell_lang", a->text());
+  spellchecker->change_lang (a->text());
   fn_spell_check();
 }
 
@@ -4569,14 +4549,14 @@ void CTEA::fn_spell_check()
      cr.movePosition (QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
 
      QString stext = cr.selectedText();
-     if (! stext.isEmpty() && ends_with_badchar (stext))
+     if (! stext.isEmpty() && ends_with_badchar (stext)) //extend selection
         {
          cr.movePosition (QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
          stext = cr.selectedText();
         }
 
      if (! stext.isEmpty())
-     if (! spellchecker->check (cr.selectedText()))
+     if (! spellchecker->check (stext))
         {
          f = cr.blockCharFormat();
          f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
@@ -4590,7 +4570,6 @@ void CTEA::fn_spell_check()
         pb_status->setValue (i);
     }
    while (cr.movePosition (QTextCursor::NextWord));
-
 
   cr.setPosition (savepos);
   d->document()->setModified (false);
@@ -4611,10 +4590,7 @@ void CTEA::fn_spell_add_to_dict()
 
   QTextCursor cr = d->textCursor();
   cr.select (QTextCursor::WordUnderCursor); //плохо работает
-  QString s = cr.selectedText();
-
-  if (! s.isEmpty())
-     spellchecker->add_to_user_dict (s);
+  spellchecker->add_to_user_dict (cr.selectedText());
 }
 
 
@@ -4628,10 +4604,7 @@ void CTEA::fn_spell_remove_from_dict()
 
   QTextCursor cr = d->textCursor();
   cr.select (QTextCursor::WordUnderCursor);
-  QString s = cr.selectedText();
-
-  if (! s.isEmpty())
-     spellchecker->remove_from_user_dict (s);
+  spellchecker->remove_from_user_dict (cr.selectedText());
 }
 
 
@@ -4691,7 +4664,6 @@ Cal menu
 ===================
 */
 
-
 void CTEA::calendar_update()
 {
   if (settings->value ("start_week_on_sunday", "0").toBool())
@@ -4718,13 +4690,13 @@ void CTEA::calendar_update()
        QDate date (year, month, day);
        QString sdate;
 
-//       sdate = sdate.sprintf ("%02d-%02d-%02d", year, month, day);
+//      sdate = sdate.sprintf ("%02d-%02d-%02d", year, month, day);
 
-      sdate += QString("%1").arg (year, 2, 10, QChar('0'));
-      sdate += "-";
-      sdate += QString("%1").arg (month, 2, 10, QChar('0'));
-      sdate += "-";
-      sdate += QString("%1").arg (day, 2, 10, QChar('0'));
+       sdate += QString("%1").arg (year, 2, 10, QChar('0'));
+       sdate += "-";
+       sdate += QString("%1").arg (month, 2, 10, QChar('0'));
+       sdate += "-";
+       sdate += QString("%1").arg (day, 2, 10, QChar('0'));
 
        QString fname  = dir_days + "/" + sdate;
 
@@ -4740,7 +4712,6 @@ void CTEA::calendar_update()
             calendar->setDateTextFormat (date, format_normal);
       }
 }
-
 
 
 void CTEA::create_moon_phase_algos()
@@ -4813,15 +4784,15 @@ void CTEA::cal_gen_mooncal()
   QString date_format = settings->value("date_format", "dd/MM/yyyy").toString();
 
   for (int d = jdate1; d <= jdate2; d++)
-     {
-      QDate date = QDate::fromJulianDay (d);
-      int moon_day = moon_phase_trig2 (date.year(), date.month(), date.day());
+      {
+       QDate date = QDate::fromJulianDay (d);
+       int moon_day = moon_phase_trig2 (date.year(), date.month(), date.day());
 
-      s += date.toString (date_format);
-      s += " = ";
-      s += QString::number (moon_day);
-      s += "\n";
-     }
+       s += date.toString (date_format);
+       s += " = ";
+       s += QString::number (moon_day);
+       s += "\n";
+      }
 
   CDocument *nd = documents->create_new();
   nd->put (s);
@@ -4864,18 +4835,15 @@ void CTEA::ide_run()
   if (documents->fname_current_project.isEmpty())
      return;
 
-
   QFileInfo source_dir (documents->fname_current_project);
 
   QString dir_build = hash_get_val (documents->hash_project,
                                     "dir_build", source_dir.absolutePath());
 
-  if (dir_build[0] != '/') //dir is not absolute path
+  if (! path_is_abs (dir_build)) //dir is not absolute path
       dir_build = source_dir.absolutePath() + "/" + dir_build;
 
-  QString command_run = hash_get_val (documents->hash_project,
-                                      "command_run", "");
-
+  QString command_run = hash_get_val (documents->hash_project, "command_run", "");
 
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (dir_build);
@@ -4899,14 +4867,12 @@ void CTEA::ide_build()
 
   QFileInfo source_dir (documents->fname_current_project);
 
-  QString dir_build = hash_get_val (documents->hash_project,
-                                    "dir_build", source_dir.absolutePath());
+  QString dir_build = hash_get_val (documents->hash_project, "dir_build", source_dir.absolutePath());
 
-  if (dir_build[0] != '/') //dir is not absolute path
+  if (! path_is_abs (dir_build)) //dir is not absolute path
       dir_build = source_dir.absolutePath() + "/" + dir_build;
 
-  QString command_build = hash_get_val (documents->hash_project,
-                                       "command_build", "make");
+  QString command_build = hash_get_val (documents->hash_project, "command_build", "make");
 
   QProcess *process  = new QProcess (this);
   process->setWorkingDirectory (dir_build);
@@ -4928,27 +4894,23 @@ void CTEA::ide_clean()
   if (documents->fname_current_project.isEmpty())
       return;
 
-
   QFileInfo source_dir (documents->fname_current_project);
 
-  QString dir_build = hash_get_val (documents->hash_project,
-                                    "dir_build", source_dir.absolutePath());
+  QString dir_build = hash_get_val (documents->hash_project, "dir_build", source_dir.absolutePath());
 
 
-
-  if (dir_build[0] != '/') //dir is not absolute path
+  if (! path_is_abs (dir_build)) //dir is not absolute path
       dir_build = source_dir.absolutePath() + "/" + dir_build;
 
-    QString command_clean = hash_get_val (documents->hash_project,
-                                          "command_clean", "make");
+  QString command_clean = hash_get_val (documents->hash_project, "command_clean", "make");
 
-    QProcess *process  = new QProcess (this);
-    process->setWorkingDirectory (dir_build);
+  QProcess *process  = new QProcess (this);
+  process->setWorkingDirectory (dir_build);
 
-    connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
+  connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
 
-    process->setProcessChannelMode (QProcess::MergedChannels) ;
-    process->start (command_clean, QStringList());
+  process->setProcessChannelMode (QProcess::MergedChannels) ;
+  process->start (command_clean, QStringList());
 }
 
 
@@ -5017,7 +4979,7 @@ void CTEA::nav_goto_right_tab()
 {
   last_action = sender();
 
-  int i = 0;
+  int i;
 
   if (tab_editor->currentIndex() == (tab_editor->count() - 1))
      i = 0;
@@ -5033,7 +4995,7 @@ void CTEA::nav_goto_left_tab()
 {
   last_action = sender();
 
-  int i = 0;
+  int i;
 
   if (tab_editor->currentIndex() == 0)
      i = tab_editor->count() - 1;
@@ -5062,8 +5024,6 @@ void CTEA::nav_focus_to_editor()
 }
 
 
-
-
 void CTEA::nav_labels_update_list()
 {
   last_action = sender();
@@ -5075,7 +5035,6 @@ void CTEA::nav_labels_update_list()
   d->update_labels();
   update_labels_menu();
 }
-
 
 
 /*
@@ -5112,13 +5071,9 @@ void CTEA::fman_multi_rename_zeropad()
            QString ext = file_get_ext (fname);
 
 #if (QT_VERSION_MAJOR < 5)
-
            newname.remove(QRegExp("[a-zA-Z\\s]"));
-
 #else
-
            newname.remove(QRegularExpression("[a-zA-Z\\s]"));
-
 #endif
 
            if (newname.isEmpty())
@@ -5207,7 +5162,6 @@ void CTEA::fman_multi_rename_replace()
   update_dyn_menus();
   fman->refresh();
 }
-
 
 
 void CTEA::fman_multi_rename_apply_template()
@@ -5372,7 +5326,6 @@ void CTEA::fm_fileinfo_info()
       l.append (n);
      }
 
-
   l.append (tr ("file name: %1").arg (fi.absoluteFilePath()));
   l.append (tr ("size: %1 kbytes").arg (QString::number (fi.size() / 1024)));
   l.append (tr ("last modified: %1").arg (fi.lastModified().toString ("yyyy-MM-dd@hh:mm:ss")));
@@ -5466,7 +5419,6 @@ void CTEA::fman_zip_add()
 }
 
 
-
 void CTEA::fman_zip_save()
 {
   last_action = sender();
@@ -5486,7 +5438,7 @@ void CTEA::fman_zip_info()
 
   CZipper z;
 
-  QStringList sl = z.unzip_list (fman->get_sel_fname());
+  QStringList sl = z.unzip_list (fn);
 
   for (int i = 0; i < sl.size(); i++)
        sl[i] = sl[i].append ("<br>");
@@ -5525,7 +5477,6 @@ void CTEA::fman_zip_unpack()
        log->log ((*fname) + tr (" is unpacked"));
       }
 }
-
 
 
 void CTEA::fman_img_conv_by_side()
@@ -5651,19 +5602,14 @@ void CTEA::fman_img_make_gallery()
 }
 
 
-
 void CTEA::fman_home()
 {
   last_action = sender();
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
   fman->nav ("c:\\");
-
 #else
-
   fman->nav (QDir::homePath());
-
 #endif
 }
 
@@ -5952,7 +5898,6 @@ void CTEA::help_show_gpl()
 }
 
 
-
 /*
 ====================================
 Application stuff inits and updates
@@ -5963,17 +5908,14 @@ Application stuff inits and updates
 CTEA::CTEA()
 {
   mainSplitter = 0;
-
   ui_update = true;
-
   b_destroying_all = false;
-
   last_action = 0;
-
   b_recent_off = false;
-
   lv_menuitems = NULL;
   fm_entry_mode = FM_ENTRY_MODE_NONE;
+  calendar = 0;
+  capture_to_storage_file = false;
 
   date1 = QDate::currentDate();
   date2 = QDate::currentDate();
@@ -5985,15 +5927,10 @@ CTEA::CTEA()
   idx_tab_calendar = 0;
   idx_tab_keyboard = 0;
 
-  calendar = 0;
-
-  capture_to_storage_file = false;
-
   create_paths();
 
   QString sfilename = dir_config + "/tea.conf";
   settings = new QSettings (sfilename, QSettings::IniFormat);
-
 
   QString lng = settings->value ("lng", QLocale::system().name()).toString().left(2).toLower();
 
@@ -6003,21 +5940,16 @@ CTEA::CTEA()
 #if QT_VERSION >= 0x060000
   if (transl_app.load (QString ("qt_%1").arg (lng), QLibraryInfo::path (QLibraryInfo::TranslationsPath)))
      qApp->installTranslator (&transl_app);
-
 #else
-
   if (transl_system.load (QString ("qt_%1").arg (lng), QLibraryInfo::location (QLibraryInfo::TranslationsPath)))
-    qApp->installTranslator (&transl_system);
-
+     qApp->installTranslator (&transl_system);
 #endif
-
 
   if (transl_app.load (":/translations/" + lng))
       qApp->installTranslator (&transl_app);
 
   fname_stylesheet = settings->value ("fname_stylesheet", ":/themes/TEA").toString();
   theme_dir = get_file_path (fname_stylesheet) + "/";
-
 
   l_charset = new QLabel;
   l_status = new QLabel;
@@ -6031,21 +5963,17 @@ CTEA::CTEA()
 
   pb_status->hide();
 
-
   create_actions();
   create_menus();
   create_toolbars();
 
   update_styles();
-
   update_bookmarks();
   update_templates();
   update_tables();
   update_snippets();
   update_sessions();
   update_scripts();
-
-
   update_programs();
   update_palettes();
   update_themes();
@@ -6081,7 +6009,6 @@ CTEA::CTEA()
   documents->dir_config = dir_config;
   documents->todo.dir_days = dir_days;
   documents->fname_crapbook = fname_crapbook;
-
   documents->l_status_bar = l_status;
   documents->l_charset = l_charset;
 
@@ -6116,7 +6043,6 @@ CTEA::CTEA()
   documents->dir_last = settings->value ("dir_last", QDir::homePath()).toString();
   b_preview = settings->value ("b_preview", false).toBool();
 
-
   img_viewer = new CImgViewer;
 
   restoreState (settings->value ("state", QByteArray()).toByteArray());
@@ -6148,16 +6074,14 @@ CTEA::CTEA()
   QClipboard *clipboard = QApplication::clipboard();
   connect (clipboard , SIGNAL(dataChanged()), this, SLOT(clipboard_dataChanged()));
 
-
   setAcceptDrops (true);
 
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>Sites: semiletov.org/tea and tea.ourproject.org<br>Git: github.com/psemiletov/tea-qt<br>AUR: https://aur.archlinux.org/packages/tea-qt/<br>VK: vk.com/teaeditor<br>read the Manual under the <i>Manual</i> tab!").arg (QString (current_version_number)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>Sites: semiletov.org/tea and tea.ourproject.org<br>Git: github.com/psemiletov/tea-qt<br>AUR: https://aur.archlinux.org/packages/tea-qt/<br>Support TEA on https://www.patreon.com/semiletov<br>read the Manual under the <i>Manual</i> tab!").arg (QString (current_version_number)));
 
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
   qApp->setWindowIcon (QIcon (icon_fname));
   idx_tab_edit_activate();
 }
-
 
 
 void CTEA::handle_args()
@@ -6221,7 +6145,6 @@ void CTEA::create_paths()
   if (! dr.exists())
      dr.mkpath (dir_config);
 
-
   fname_crapbook = dir_config + "/crapbook.txt";
   hs_path["fname_crapbook"] = fname_crapbook;
 
@@ -6254,7 +6177,6 @@ void CTEA::create_paths()
   dr.setPath (dir_user_dict);
   if (! dr.exists())
      dr.mkpath (dir_user_dict);
-
 
   dir_profiles = dir_config + "/profiles";
 
@@ -6344,14 +6266,12 @@ void CTEA::setup_spellcheckers()
 #endif
      }
 
-
 #endif
 
 
 #ifdef HUNSPELL_ENABLE
    if (cur_spellchecker == "Hunspell")
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
-
 #endif
 
  create_spellcheck_menu();
@@ -6362,6 +6282,7 @@ void CTEA::create_spellcheck_menu()
 {
   menu_spell_langs->clear();
   spellchecker->get_speller_modules_list();
+
   if (spellchecker->modules_list.size() > 0)
      create_menu_from_list (this, menu_spell_langs, spellchecker->modules_list, SLOT(fn_change_spell_lang()));
 }
@@ -6393,19 +6314,16 @@ void CTEA::create_main_widget_splitter()
   connect (bt_close, SIGNAL(clicked()), this, SLOT(file_close()));
   tab_editor->setCornerWidget (bt_close);
 
-
   log = new CLogMemo;
 
   connect (log, SIGNAL(double_click (QString)),
            this, SLOT(logmemo_double_click (QString)));
-
 
   mainSplitter = new QSplitter (Qt::Vertical);
   v_box->addWidget (mainSplitter);
 
   main_tab_widget->setMinimumHeight (10);
   log->setMinimumHeight (10);
-
 
   mainSplitter->addWidget (main_tab_widget);
   mainSplitter->addWidget (log);
@@ -6622,7 +6540,6 @@ void CTEA::create_actions()
   QIcon ic_edit_copy = get_theme_icon ("edit-copy.png");
   ic_edit_copy.addFile (get_theme_icon_fname ("edit-copy-active.png"), QSize(), QIcon::Active);
 
-
   copyAct = new QAction (ic_edit_copy, tr("Copy"), this);
   copyAct->setShortcut (QKeySequence ("Ctrl+C"));
   copyAct->setStatusTip (tr ("Copy the current selection's contents to the clipboard"));
@@ -6630,7 +6547,6 @@ void CTEA::create_actions()
 
   QIcon ic_edit_paste = get_theme_icon ("edit-paste.png");
   ic_edit_paste.addFile (get_theme_icon_fname ("edit-paste-active.png"), QSize(), QIcon::Active);
-
 
   pasteAct = new QAction (ic_edit_paste, tr("Paste"), this);
   pasteAct->setShortcut (QKeySequence ("Ctrl+V"));
@@ -6654,6 +6570,12 @@ void CTEA::create_actions()
 
 void CTEA::create_menus()
 {
+/*
+===================
+File menu
+===================
+*/
+
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
 
@@ -6688,7 +6610,6 @@ void CTEA::create_menus()
   add_to_menu (menu_file_actions, tr ("Set Windows end of line"), SLOT(file_set_eol_win()));
   add_to_menu (menu_file_actions, tr ("Set old Mac end of line (CR)"), SLOT(file_set_eol_mac()));
 
-
   menu_file_recent = menu_file->addMenu (tr ("Recent files"));
 
   menu_file_bookmarks = menu_file->addMenu (tr ("Bookmarks"));
@@ -6716,6 +6637,11 @@ void CTEA::create_menus()
 
   menu_file->addAction (exitAct);
 
+/*
+===================
+Edit menu
+===================
+*/
 
   menu_edit = menuBar()->addMenu (tr ("Edit"));
   menu_edit->setTearOffEnabled (true);
@@ -6760,10 +6686,9 @@ void CTEA::create_menus()
 
 /*
 ===================
-Markup menu callbacks
+Markup menu
 ===================
 */
-
 
   menu_markup = menuBar()->addMenu (tr ("Markup"));
   menu_markup->setTearOffEnabled (true);
@@ -6865,7 +6790,7 @@ Search menu
 
 /*
 ===================
-Fn menu
+Functions menu
 ===================
 */
 
@@ -6878,8 +6803,6 @@ Fn menu
   menu_instr = menu_functions->addMenu (tr ("Tools"));
   menu_instr->setTearOffEnabled (true);
   add_to_menu (menu_instr, tr ("Scale image"), SLOT(fn_scale_image()));
-
-
 
   menu_fn_snippets = menu_functions->addMenu (tr ("Snippets"));
   menu_fn_scripts = menu_functions->addMenu (tr ("Scripts"));
@@ -6937,7 +6860,6 @@ Fn menu
   add_to_menu (tm, tr ("Remove after delimiter at each line"), SLOT(fn_filter_delete_after_sep()));
   add_to_menu (tm, tr ("Filter with regexp"), SLOT(fn_filter_with_regexp()));
   add_to_menu (tm, tr ("Filter by repetitions"), SLOT(fn_filter_by_repetitions()));
-
 
 
   tm = menu_functions->addMenu (tr ("Math"));
@@ -7122,10 +7044,8 @@ Fm menu callbacks
   menu_fm_file_infos = menu_fm->addMenu (tr ("File information"));
   menu_fm_file_infos->setTearOffEnabled (true);
 
-
   add_to_menu (menu_fm_file_infos, tr ("Count lines in selected files"), SLOT(fman_fileinfo_count_lines_in_selected_files()));
   add_to_menu (menu_fm_file_infos, tr ("Full info"), SLOT(fm_fileinfo_info()));
-
 
   menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
   menu_fm_zip->setTearOffEnabled (true);
@@ -7140,7 +7060,6 @@ Fm menu callbacks
 
   add_to_menu (menu_fm_zip, tr ("List ZIP content"), SLOT(fman_zip_info()));
   add_to_menu (menu_fm_zip, tr ("Unpack ZIP to current directory"), SLOT(fman_zip_unpack()));
-
 
   menu_fm_img_conv = menu_fm->addMenu (tr ("Images"));
   menu_fm_img_conv->setTearOffEnabled (true);
@@ -7258,7 +7177,6 @@ OPTIONS::INTERFACE
   if (default_style == "GTK+") //can be buggy, so disable it
      default_style = "Cleanlooks";
 
-
   cmb_styles = new_combobox (page_interface_layout,
                              tr ("UI style (TEA restart needed)"),
                              QStyleFactory::keys(),
@@ -7293,9 +7211,9 @@ OPTIONS::INTERFACE
   main_tab_widget->setTabPosition (int_to_tabpos (ui_tab_align ));
 
   QComboBox *cmb_ui_tabs_align = new_combobox (page_interface_layout,
-                             tr ("GUI tabs align"),
-                             sl_tabs_align,
-                             ui_tab_align);
+                                               tr ("GUI tabs align"),
+                                               sl_tabs_align,
+                                               ui_tab_align);
 
   connect (cmb_ui_tabs_align, SIGNAL(currentIndexChanged (int)),
            this, SLOT(cmb_ui_tabs_currentIndexChanged (int)));
@@ -7305,9 +7223,9 @@ OPTIONS::INTERFACE
 
 
   QComboBox *cmb_docs_tabs_align = new_combobox (page_interface_layout,
-                             tr ("Documents tabs align"),
-                             sl_tabs_align,
-                             docs_tab_align);
+                                                 tr ("Documents tabs align"),
+                                                 sl_tabs_align,
+                                                 docs_tab_align);
 
   connect (cmb_docs_tabs_align, SIGNAL(currentIndexChanged (int)),
            this, SLOT(cmb_docs_tabs_currentIndexChanged (int)));
@@ -7382,8 +7300,8 @@ OPTIONS::INTERFACE
   page_interface_layout->addWidget (cb_center_on_cursor);
 
   spb_cursor_blink_time = new_spin_box (page_interface_layout,
-                                   tr ("Cursor blink time (msecs, zero is OFF)"), 0, 10000,
-                                   settings->value ("cursor_blink_time", 0).toInt());
+                                        tr ("Cursor blink time (msecs, zero is OFF)"), 0, 10000,
+                                        settings->value ("cursor_blink_time", 0).toInt());
 
 
   spb_cursor_width = new_spin_box (page_interface_layout,
@@ -7424,7 +7342,6 @@ OPTIONS::INTERFACE
 OPTIONS::COMMON
 ----------------------
 */
-
 
   QWidget *page_common = new QWidget (tab_options);
   QVBoxLayout *page_common_layout = new QVBoxLayout;
@@ -7485,26 +7402,25 @@ OPTIONS::COMMON
 
 
   cmb_moon_phase_algos = new_combobox (page_common_layout,
-                             tr ("Moon phase algorithm"),
-                             moon_phase_algos.values(),
-                             settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
+                                       tr ("Moon phase algorithm"),
+                                       moon_phase_algos.values(),
+                                       settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
 
   cmb_cmdline_default_charset = new_combobox (page_common_layout,
-                             tr ("Charset for file open from command line"),
-                             sl_charsets,
-                             sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
+                                              tr ("Charset for file open from command line"),
+                                              sl_charsets,
+                                              sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
 
   cmb_zip_charset_in = new_combobox (page_common_layout,
-                             tr ("ZIP unpacking: file names charset"),
-                             sl_charsets,
-                             sl_charsets.indexOf (settings->value ("zip_charset_in", "UTF-8").toString()));
+                                     tr ("ZIP unpacking: file names charset"),
+                                     sl_charsets,
+                                     sl_charsets.indexOf (settings->value ("zip_charset_in", "UTF-8").toString()));
 
 
   cmb_zip_charset_out = new_combobox (page_common_layout,
-                             tr ("ZIP packing: file names charset"),
-                             sl_charsets,
-                             sl_charsets.indexOf (settings->value ("zip_charset_out", "UTF-8").toString()));
-
+                                      tr ("ZIP packing: file names charset"),
+                                      sl_charsets,
+                                      sl_charsets.indexOf (settings->value ("zip_charset_out", "UTF-8").toString()));
 
   page_common_layout->addWidget (cb_altmenu);
   page_common_layout->addWidget (cb_wasd);

@@ -36,5 +36,4 @@ QString morse_from_lang (const QString &s, const QString &lang);
 QString morse_to_lang (const QString &s, const QString &lang);
 int get_arab_num (std::string rom_str);
 
-
 #endif // TEXTPROC_H

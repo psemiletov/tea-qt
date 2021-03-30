@@ -55,6 +55,21 @@ some code is taken from Scribus::util.cpp:
 using namespace std;
 
 
+
+bool qstring_length_less_than (const QString& v1, const QString& v2)
+{
+   return v1.length() < v2.length();
+}
+
+/*
+QString int_to_binary (int n)
+{
+  std::bitset<sizeof (int)> bt (n);
+  return QString::fromStdString (bt.to_string<char,std::string::traits_type,std::string::allocator_type>());
+}
+*/
+
+
 int str_fuzzy_search (const QString &s, const QString &text_to_find, int start_pos, double q)
 {
   if (s.isEmpty() || text_to_find.isEmpty())
@@ -104,15 +119,403 @@ QString apply_table (const QString &s, const QString &fname, bool use_regexp)
        if (use_regexp)
 #if QT_VERSION < 0x050000
            result.replace (QRegExp (key), h.value (key));
+       else
 #else
            result.replace (QRegularExpression (key), h.value (key));
-#endif
-
        else
+#endif
            result.replace (key, h.value (key));
       }
 
   return result;
+}
+
+
+QString strip_html (const QString &source)
+{
+  bool do_copy = true;
+  QString dest;
+
+  for (int i = 0; i < source.length(); i++)
+      {
+       if (source[i] == '<')
+          do_copy = false;
+       else
+       if (source[i] == '>')
+          {
+           do_copy = true;
+           if (i < source.length() - 1)
+              i++;
+           else
+               break;
+          }
+
+       if (do_copy)
+          dest += source[i];
+      }
+
+  return dest;
+}
+
+
+QString qstringlist_process (const QString &s, const QString &params, int mode)
+{
+  QStringList sl;
+  QStringList l;
+  QString result;
+
+  if (mode != QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP && mode != QSTRL_PROC_LIST_FLIP_SEP)
+      sl = s.split (QChar::ParagraphSeparator);
+
+  switch (mode)
+         {
+          case QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP:
+                                                    {
+                                                     if (s.indexOf (params) == -1)
+                                                        return s;
+
+                                                     QStringList t = s.split (params);
+                                                     t.sort();
+                                                     result = t.join (params);
+                                                     return result;
+                                                    };
+
+          case QSTRL_PROC_LIST_FLIP_SEP:  {
+                                           if (s.indexOf (params) == -1)
+                                              return s;
+
+                                           QStringList t = s.split (params);
+                                           t.sort();
+
+                                           for (int i = 0; i < t.size(); i++)
+                                                l.prepend (t.at(i));
+
+                                           result = l.join (params);
+                                           return result;
+                                          };
+
+
+          case QSTRL_PROC_FLT_WITH_SORTNOCASECARE:
+                                                 {
+                                                  QMap <QString, QString> map;
+
+                                                  for (int i = 0; i < sl.size(); i++)
+                                                      map.insert (sl[i].toLower(), sl[i]);
+
+                                                  for (QMap<QString, QString>::const_iterator i = map.constBegin();
+                                                       i != map.constEnd();
+                                                       ++i)
+                                                       l.append (i.value());
+
+                                                  break;
+                                                 }
+
+          case QSTRL_PROC_FLT_WITH_SORTLEN:
+                                                 {
+                                                  l = sl;
+                                                  std::sort (l.begin(), l.end(), qstring_length_less_than);
+                                                  break;
+                                                 }
+
+
+          case QSTRL_PROC_FLT_REMOVE_EMPTY:
+                                           {
+                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
+                                                if (! i->isEmpty())
+                                                   l.append (*i);
+
+                                            break;
+                                           };
+
+
+          case QSTRL_PROC_FLT_REMOVE_DUPS:
+                                          {
+                                           for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
+                                               if (! l.contains (*i))
+                                                  l.append (*i);
+
+                                           break;
+                                          };
+
+          case QSTRL_PROC_REMOVE_FORMATTING:
+                                           {
+                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
+                                                 l.append (i->simplified());
+
+                                            break;
+                                           };
+
+           case QSTRL_PROC_FLT_WITH_REGEXP:
+                                          {
+#if QT_VERSION < 0x050000
+                                           l = sl.filter (QRegExp (params));
+#else
+                                           l = sl.filter (QRegularExpression (params));
+#endif
+                                           break;
+                                          }
+
+           case QSTRL_PROC_FLT_WITH_SORTCASECARE:
+                                                 {
+                                                  l = sl;
+                                                  l.sort();
+                                                  break;
+                                                 }
+
+           case QSTRL_PROC_LIST_FLIP:
+                                     {
+                                      for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
+                                           l.prepend (*i);
+
+                                      break;
+                                     }
+
+           case QSTRL_PROC_FLT_LESS:
+                                    {
+                                     int t = params.toInt();
+
+                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
+                                          if (i->size() > t)
+                                              l.append (*i);
+
+                                     break;
+                                    }
+
+           case QSTRL_PROC_FLT_GREATER:
+                                    {
+                                     int t = params.toInt();
+
+                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
+                                          if (i->size() < t)
+                                              l.append (*i);
+
+                                     break;
+                                    }
+         }
+
+  result = l.join ("\n");
+  return result;
+}
+
+
+QString string_reverse (const QString &s)
+{
+  QString sn;
+
+  int c = s.length() - 1;
+  int x = 0;
+
+  for (int i = c; i > -1; i--)
+       sn[x++] = s.at(i);
+
+ return sn;
+}
+
+
+QString conv_quotes (const QString &source, const QString &c1, const QString &c2)
+{
+  QString x;
+  QString dest;
+
+  bool flag = true;
+  int c = source.size() - 1;
+  for (int i = 0; i <= c; i++)
+      {
+       if (source.at(i) == '\"')
+          {
+           if (flag)
+              x = c1;
+           else
+               x = c2;
+
+           flag = ! flag;
+           dest += x;
+          }
+       else
+           dest += source[i];
+      }
+
+  return dest;
+}
+
+
+QStringList html_get_by_patt (const QString &s, const QString &spatt)
+{
+  QStringList result;
+
+  int c = s.size();
+  int i = 0;
+
+  while (i < c)
+        {
+         int start = s.indexOf (spatt, i, Qt::CaseInsensitive);
+
+         if (start == -1)
+             break;
+
+         int end = s.indexOf ('"', start + spatt.size());
+         if (end == -1)
+             break;
+
+         result.prepend (s.mid (start + spatt.size(), (end - start) - spatt.size()));
+
+         i = end + 1;
+        }
+
+  return result;
+}
+
+
+QStringList anagram (const QString &s)
+{
+  QString input = s;
+  QStringList sl;
+
+  sort (input.begin(), input.end());
+
+  do
+    sl.append (input);
+  while (next_permutation (input.begin(), input.end()));
+
+  return sl;
+}
+
+/*
+from:
+
+* roman.c by Adam Rogoyski (apoc@laker.net) Temperanc on EFNet irc
+ * Copyright (C) 1998 Adam Rogoyski
+ * Converts Decimal numbers to Roman Numerals and Roman Numberals to
+ * Decimals on the command line or in Interactive mode.
+ * Uses an expanded Roman Numeral set to handle numbers up to 999999999
+*/
+
+#define FROM_ROMAN_I 1
+#define FROM_ROMAN_V 5
+#define FROM_ROMAN_X 10
+#define FROM_ROMAN_L 50
+#define FROM_ROMAN_C 100
+#define FROM_ROMAN_D 500
+#define FROM_ROMAN_M 1000
+#define FROM_ROMAN_P 5000
+#define FROM_ROMAN_Q 10000
+#define FROM_ROMAN_R 50000
+#define FROM_ROMAN_S 100000
+#define FROM_ROMAN_T 500000
+#define FROM_ROMAN_U 1000000
+#define FROM_ROMAN_B 5000000
+#define FROM_ROMAN_W 10000000
+#define FROM_ROMAN_N 50000000
+#define FROM_ROMAN_Y 100000000
+#define FROM_ROMAN_Z 500000000
+
+int value (char c)
+{
+  switch (c)
+   {
+      case 'I':
+         return FROM_ROMAN_I;
+      case 'V':
+         return FROM_ROMAN_V;
+      case 'X':
+         return FROM_ROMAN_X;
+      case 'L':
+         return FROM_ROMAN_L;
+      case 'C':
+         return FROM_ROMAN_C;
+      case 'D':
+         return FROM_ROMAN_D;
+      case 'M':
+         return FROM_ROMAN_M;
+      case 'P':
+         return FROM_ROMAN_P;
+      case 'Q':
+         return FROM_ROMAN_Q;
+      case 'R':
+         return FROM_ROMAN_R;
+      case 'S':
+         return FROM_ROMAN_S;
+      case 'T':
+         return FROM_ROMAN_T;
+      case 'U':
+         return FROM_ROMAN_U;
+      case 'B':
+         return FROM_ROMAN_B;
+      case 'W':
+         return FROM_ROMAN_W;
+      case 'N':
+         return FROM_ROMAN_N;
+      case 'Y':
+         return FROM_ROMAN_Y;
+      case 'Z':
+         return FROM_ROMAN_Z;
+      default:
+         return 0;
+   }
+}
+
+
+int romanToDecimal (const char *roman)
+{
+  int decimal = 0;
+  for (; *roman; roman++)
+      {
+      /* Check for four of a letter in a fow */
+      if ((*(roman + 1) && *(roman + 2) && *(roman + 3))
+         && (*roman == *(roman + 1))
+         && (*roman == *(roman + 2))
+         && (*roman == *(roman + 3)))
+         return 0;
+      /* Check for two five type numbers */
+      if (  ((*roman == 'V') && (*(roman + 1) == 'V'))
+         || ((*roman == 'L') && (*(roman + 1) == 'L'))
+         || ((*roman == 'D') && (*(roman + 1) == 'D'))
+         || ((*roman == 'P') && (*(roman + 1) == 'P'))
+         || ((*roman == 'R') && (*(roman + 1) == 'R'))
+         || ((*roman == 'T') && (*(roman + 1) == 'T'))
+         || ((*roman == 'B') && (*(roman + 1) == 'B'))
+         || ((*roman == 'N') && (*(roman + 1) == 'N'))
+         || ((*roman == 'Z') && (*(roman + 1) == 'Z')))
+         return 0;
+      /* Check for two lower characters before a larger one */
+      if ((value(*roman) == value(*(roman + 1))) && (*(roman + 2))
+         && (value(*(roman + 1)) < value(*(roman + 2))))
+         return 0;
+      /* Check for the same character on either side of a larger one */
+      if ((*(roman + 1) && *(roman + 2))
+         && (value(*roman) == value(*(roman + 2)))
+         && (value(*roman) < value(*(roman + 1))))
+         return 0;
+      /* Check for illegal nine type numbers */
+      if (!strncmp(roman, "LXL", 3) || !strncmp(roman, "DCD", 3)
+       || !strncmp(roman, "PMP", 3) || !strncmp(roman, "RQR", 3)
+       || !strncmp(roman, "TST", 3) || !strncmp(roman, "BUB", 3)
+       || !strncmp(roman, "NWN", 3) || !strncmp(roman, "VIV", 3))
+         return 0;
+      if (value(*roman) < value(*(roman + 1)))
+      {
+         /* check that subtracted value is at least 10% larger,
+            i.e. 1990 is not MXM, but MCMXC */
+         if ((10 * value(*roman)) < value(*(roman + 1)))
+            return 0;
+         /* check for double subtraction, i.e. IVX */
+         if (value(*(roman + 1)) <= value(*(roman + 2)))
+            return 0;
+         /* check for subtracting by a number starting with a 5
+            ie.  VX, LD LM */
+         if (*roman == 'V' || *roman == 'L' || *roman == 'D'
+          || *roman == 'P' || *roman == 'R' || *roman == 'T'
+          || *roman == 'B' || *roman == 'N')
+            return 0;
+         decimal += value (*(roman + 1)) - value (*roman);
+         roman++;
+      }
+      else
+      {
+         decimal += value (*roman);
+      }
+   }
+   return decimal;
 }
 
 
@@ -227,306 +630,6 @@ QString arabicToRoman (int i)
 }
 
 
-
-/*
-from:
-
-* roman.c by Adam Rogoyski (apoc@laker.net) Temperanc on EFNet irc
- * Copyright (C) 1998 Adam Rogoyski
- * Converts Decimal numbers to Roman Numerals and Roman Numberals to
- * Decimals on the command line or in Interactive mode.
- * Uses an expanded Roman Numeral set to handle numbers up to 999999999
-*/
-
-#define FROM_ROMAN_I 1
-#define FROM_ROMAN_V 5
-#define FROM_ROMAN_X 10
-#define FROM_ROMAN_L 50
-#define FROM_ROMAN_C 100
-#define FROM_ROMAN_D 500
-#define FROM_ROMAN_M 1000
-#define FROM_ROMAN_P 5000
-#define FROM_ROMAN_Q 10000
-#define FROM_ROMAN_R 50000
-#define FROM_ROMAN_S 100000
-#define FROM_ROMAN_T 500000
-#define FROM_ROMAN_U 1000000
-#define FROM_ROMAN_B 5000000
-#define FROM_ROMAN_W 10000000
-#define FROM_ROMAN_N 50000000
-#define FROM_ROMAN_Y 100000000
-#define FROM_ROMAN_Z 500000000
-
-int value (char c)
-{
-   switch (c)
-   {
-      case 'I':
-         return FROM_ROMAN_I;
-      case 'V':
-         return FROM_ROMAN_V;
-      case 'X':
-         return FROM_ROMAN_X;
-      case 'L':
-         return FROM_ROMAN_L;
-      case 'C':
-         return FROM_ROMAN_C;
-      case 'D':
-         return FROM_ROMAN_D;
-      case 'M':
-         return FROM_ROMAN_M;
-      case 'P':
-         return FROM_ROMAN_P;
-      case 'Q':
-         return FROM_ROMAN_Q;
-      case 'R':
-         return FROM_ROMAN_R;
-      case 'S':
-         return FROM_ROMAN_S;
-      case 'T':
-         return FROM_ROMAN_T;
-      case 'U':
-         return FROM_ROMAN_U;
-      case 'B':
-         return FROM_ROMAN_B;
-      case 'W':
-         return FROM_ROMAN_W;
-      case 'N':
-         return FROM_ROMAN_N;
-      case 'Y':
-         return FROM_ROMAN_Y;
-      case 'Z':
-         return FROM_ROMAN_Z;
-      default:
-         return 0;
-   }
-}
-
-
-int romanToDecimal (const char *roman)
-{
-  int decimal = 0;
-  for (; *roman; roman++)
-      {
-      /* Check for four of a letter in a fow */
-      if ((*(roman + 1) && *(roman + 2) && *(roman + 3))
-         && (*roman == *(roman + 1))
-         && (*roman == *(roman + 2))
-         && (*roman == *(roman + 3)))
-         return 0;
-      /* Check for two five type numbers */
-      if (  ((*roman == 'V') && (*(roman + 1) == 'V'))
-         || ((*roman == 'L') && (*(roman + 1) == 'L'))
-         || ((*roman == 'D') && (*(roman + 1) == 'D'))
-         || ((*roman == 'P') && (*(roman + 1) == 'P'))
-         || ((*roman == 'R') && (*(roman + 1) == 'R'))
-         || ((*roman == 'T') && (*(roman + 1) == 'T'))
-         || ((*roman == 'B') && (*(roman + 1) == 'B'))
-         || ((*roman == 'N') && (*(roman + 1) == 'N'))
-         || ((*roman == 'Z') && (*(roman + 1) == 'Z')))
-         return 0;
-      /* Check for two lower characters before a larger one */
-      if ((value(*roman) == value(*(roman + 1))) && (*(roman + 2))
-         && (value(*(roman + 1)) < value(*(roman + 2))))
-         return 0;
-      /* Check for the same character on either side of a larger one */
-      if ((*(roman + 1) && *(roman + 2))
-         && (value(*roman) == value(*(roman + 2)))
-         && (value(*roman) < value(*(roman + 1))))
-         return 0;
-      /* Check for illegal nine type numbers */
-      if (!strncmp(roman, "LXL", 3) || !strncmp(roman, "DCD", 3)
-       || !strncmp(roman, "PMP", 3) || !strncmp(roman, "RQR", 3)
-       || !strncmp(roman, "TST", 3) || !strncmp(roman, "BUB", 3)
-       || !strncmp(roman, "NWN", 3) || !strncmp(roman, "VIV", 3))
-         return 0;
-      if (value(*roman) < value(*(roman + 1)))
-      {
-         /* check that subtracted value is at least 10% larger,
-            i.e. 1990 is not MXM, but MCMXC */
-         if ((10 * value(*roman)) < value(*(roman + 1)))
-            return 0;
-         /* check for double subtraction, i.e. IVX */
-         if (value(*(roman + 1)) <= value(*(roman + 2)))
-            return 0;
-         /* check for subtracting by a number starting with a 5
-            ie.  VX, LD LM */
-         if (*roman == 'V' || *roman == 'L' || *roman == 'D'
-          || *roman == 'P' || *roman == 'R' || *roman == 'T'
-          || *roman == 'B' || *roman == 'N')
-            return 0;
-         decimal += value (*(roman + 1)) - value (*roman);
-         roman++;
-      }
-      else
-      {
-         decimal += value (*roman);
-      }
-   }
-   return decimal;
-}
-
-
-bool qstring_length_less_than (const QString& v1, const QString& v2)
-{
-   return v1.length() < v2.length();
-}
-
-
-QString qstringlist_process (const QString &s, const QString &params, int mode)
-{
-  QStringList sl;
-  QStringList l;
-  QString result;
-
-  if (mode != QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP && mode != QSTRL_PROC_LIST_FLIP_SEP)
-     sl = s.split (QChar::ParagraphSeparator);
-
-  switch (mode)
-         {
-          case QSTRL_PROC_FLT_WITH_SORTCASECARE_SEP:
-                                                    {
-                                                     if (s.indexOf (params) == -1)
-                                                        return s;
-
-                                                     QStringList t = s.split (params);
-                                                     t.sort();
-                                                     result = t.join (params);
-                                                     return result;
-                                                    };
-
-          case QSTRL_PROC_LIST_FLIP_SEP:  {
-                                           if (s.indexOf (params) == -1)
-                                              return s;
-
-                                           QStringList t = s.split (params);
-                                           t.sort();
-
-                                           for (int i = 0; i < t.size(); i++)
-                                                l.prepend (t.at(i));
-
-                                           result = l.join (params);
-                                           return result;
-                                          };
-
-
-          case QSTRL_PROC_FLT_WITH_SORTNOCASECARE:
-                                                 {
-                                                  QMap <QString, QString> map;
-
-                                                  for (int i = 0; i < sl.size(); i++)
-                                                      map.insert (sl[i].toLower(), sl[i]);
-
-                                                  for (QMap<QString, QString>::const_iterator i = map.constBegin();
-                                                       i != map.constEnd();
-                                                       ++i)
-                                                       l.append (i.value());
-
-                                                  break;
-                                                 }
-
-          case QSTRL_PROC_FLT_WITH_SORTLEN:
-                                                 {
-                                                  l = sl;  
-                                                  std::sort (l.begin(), l.end(), qstring_length_less_than);
-                                                  break;
-                                                 }
-
-
-          case QSTRL_PROC_FLT_REMOVE_EMPTY:
-                                           {
-                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
-                                                if (! i->isEmpty())
-                                                   l.append (*i);
-
-                                            break;
-                                           };
-
-
-          case QSTRL_PROC_FLT_REMOVE_DUPS:
-                                          {
-                                           for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
-                                               if (! l.contains (*i))
-                                                  l.append (*i);
-                                           break;
-                                          };
-
-          case QSTRL_PROC_REMOVE_FORMATTING:
-                                           {
-                                            for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
-                                                 l.append (i->simplified());
-
-                                            break;
-                                           };
-
-           case QSTRL_PROC_FLT_WITH_REGEXP:
-                                          {
-#if QT_VERSION < 0x050000
-                                           l = sl.filter (QRegExp (params));
-#else
-                                           l = sl.filter (QRegularExpression (params));
-#endif
-                                           break;
-                                          }
-
-           case QSTRL_PROC_FLT_WITH_SORTCASECARE:
-                                                 {
-                                                  l = sl;
-                                                  l.sort();
-                                                  break;
-                                                 }
-
-
-           case QSTRL_PROC_LIST_FLIP:
-                                     {
-                                      for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
-                                           l.prepend (*i);
-
-                                      break;
-                                     }
-
-           case QSTRL_PROC_FLT_LESS:
-                                    {
-                                     int t = params.toInt();
-
-                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
-                                          if (i->size() > t)
-                                             l.append (*i);
-
-                                     break;
-                                    }
-
-           case QSTRL_PROC_FLT_GREATER:
-                                    {
-                                     int t = params.toInt();
-
-                                     for (QList <QString>::iterator i = sl.begin(); i != sl.end(); ++i)
-                                          if (i->size() < t)
-                                             l.append (*i);
-
-                                     break;
-                                    }
-         }
-
-  result = l.join ("\n");
-  return result;
-}
-
-
-QString string_reverse (const QString &s)
-{
-  QString sn;
-
-  int c = s.length() - 1;
-  int x = 0;
-
-  for (int i = c; i > -1; i--)
-      sn[x++] = s.at(i);
-
- return sn;
-}
-
-
 QString int_to_binary (int n)
 {
   QString result;
@@ -546,13 +649,6 @@ QString int_to_binary (int n)
   return result;
 }
 
-/*
-QString int_to_binary (int n)
-{
-  std::bitset<sizeof (int)> bt (n);
-  return QString::fromStdString (bt.to_string<char,std::string::traits_type,std::string::allocator_type>());
-}
-*/
 
 unsigned int bin_to_decimal (const QString &s)
 {
@@ -574,102 +670,6 @@ unsigned int bin_to_decimal (const QString &s)
          result += table[i];
 
   return result;
-}
-
-
-QString conv_quotes (const QString &source, const QString &c1, const QString &c2)
-{
-  QString x;
-  QString dest;
-
-  bool flag = true;
-  int c = source.size() - 1;
-  for (int i = 0; i <= c; i++)
-      {
-       if (source.at(i) == '\"')
-          {
-           if (flag)
-              x = c1;
-           else
-               x = c2;
-
-           flag = ! flag;
-           dest += x;
-          }
-       else
-           dest += source[i];
-      }
-
-  return dest;
-}
-
-
-QString strip_html (const QString &source)
-{
-  bool do_copy = true;
-  QString dest;
-
-  for (int i = 0; i < source.length(); i++)
-      {
-       if (source[i] == '<')
-          do_copy = false;
-       else
-       if (source[i] == '>')
-          {
-           do_copy = true;
-           if (i < source.length() - 1)
-              i++;
-           else
-               break;
-          }
-
-       if (do_copy)
-          dest += source[i];
-      }
-
-  return dest;
-}
-
-
-QStringList html_get_by_patt (const QString &s, const QString &spatt)
-{
-  QStringList result;
-
-  int c = s.size();
-  int i = 0;
-
-  while (i < c)
-        {
-         int start = s.indexOf (spatt, i, Qt::CaseInsensitive);
-
-         if (start == -1)
-             break;
-
-         int end = s.indexOf ('"', start + spatt.size());
-         if (end == -1)
-             break;
-
-         result.prepend (s.mid (start + spatt.size(), (end - start) - spatt.size()));
-
-         i = end + 1;
-        }
-
-  return result;
-}
-
-
-QStringList anagram (const QString &s)
-{
-  QString input = s;
-  QStringList sl;
-
-  sort (input.begin(), input.end());
-
-  do
-    sl.append (input);
-  while (next_permutation (input.begin(), input.end()));
-
-  return sl;
 }
 
 
@@ -724,7 +724,6 @@ QString morse_to_lang (const QString &s, const QString &lang)
 
   return result;
 }
-
 
 
 //from http://www.cyberforum.ru/cpp-beginners/thread125615.html

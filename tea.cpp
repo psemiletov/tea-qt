@@ -7564,9 +7564,6 @@ OPTIONS::FUNCTIONS
 
   tab_options->addTab (scra_functions, tr ("Functions"));
 
-
-/////////////
-
 /*
 ----------------------
 OPTIONS::IMAGES
@@ -7583,7 +7580,6 @@ OPTIONS::IMAGES
   vb_images->setAlignment (Qt::AlignTop);
 
   gb_images->setLayout (vb_images);
-
 
   cmb_output_image_fmt = new_combobox (vb_images,
                                        tr ("Image conversion output format"),
@@ -7652,7 +7648,6 @@ OPTIONS::KEYBOARD
   QWidget *page_keyboard = new QWidget (tab_options);
 
   QHBoxLayout *lt_h = new QHBoxLayout;
-
   QHBoxLayout *lt_shortcut = new QHBoxLayout;
   QVBoxLayout *lt_vkeys = new QVBoxLayout;
   QVBoxLayout *lt_vbuttons = new QVBoxLayout;
@@ -7696,10 +7691,8 @@ void CTEA::create_calendar()
   calendar = new CCalendarWidget (this, dir_days);
 
   calendar->moon_mode = settings->value ("moon_mode", "0").toBool();
-
   calendar->northern_hemisphere = settings->value ("northern_hemisphere", "1").toBool();
   calendar->moon_phase_algo = settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt();
-
   calendar->setGridVisible (true);
   calendar->setVerticalHeaderFormat (QCalendarWidget::NoVerticalHeader);
 
@@ -7791,7 +7784,6 @@ void CTEA::create_manual()
   QVBoxLayout *lv_t = new QVBoxLayout;
 
   QString loc = QLocale::system().name().left (2).toLower();
-
   QString ts = settings->value ("lng", loc).toString();
 
   QString filename (":/manuals/");
@@ -7843,18 +7835,6 @@ void CTEA::create_fman()
 
   tb_fman_dir = new QToolBar;
   tb_fman_dir->setObjectName ("tb_fman_dir");
-/*
-  QAction *act_fman_go = new QAction (get_theme_icon("go.png"), tr ("Go"), this);
-  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
-
-  QAction *act_fman_home = new QAction (get_theme_icon ("home.png"), tr ("Home"), this);
-  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
-
-  QAction *act_fman_refresh = new QAction (get_theme_icon ("refresh.png"), tr ("Refresh"), this);
-  QAction *act_fman_ops = new QAction (get_theme_icon ("create-dir.png"), tr ("Operations"), this);
-  act_fman_ops->setMenu (menu_fm_file_ops);
-*/
-
 
   QAction *act_fman_go = new QAction (style()->standardIcon(QStyle::SP_ArrowForward), tr ("Go"), this);
   connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
@@ -7866,18 +7846,6 @@ void CTEA::create_fman()
   QAction *act_fman_ops = new QAction (style()->standardIcon(QStyle::SP_DriveHDIcon), tr ("Actions"), this);
   act_fman_ops->setMenu (menu_fm_file_ops);
 
-
-/*
-  QAction *act_fman_go = new QAction (tr ("[>]"), this);
-  connect (act_fman_go, SIGNAL(triggered()), this, SLOT(fman_naventry_confirm()));
-
-  QAction *act_fman_home = new QAction (tr ("[=]"), this);
-  connect (act_fman_home, SIGNAL(triggered()), this, SLOT(fman_home()));
-
-  QAction *act_fman_refresh = new QAction (tr ("[*]"), this);
-  QAction *act_fman_ops = new QAction (tr ("[^]"), this);
-  act_fman_ops->setMenu (menu_fm_file_ops);
-*/
   tb_fman_dir->addAction (act_fman_go);
   tb_fman_dir->addAction (act_fman_home);
   tb_fman_dir->addAction (act_fman_refresh);
@@ -7928,13 +7896,11 @@ void CTEA::create_fman()
   connect (bt_fman_open, SIGNAL(clicked()), this, SLOT(fman_open()));
   bt_fman_open->setToolTip (tr ("Open a file from the file name provided above"));
 
-
   QPushButton *bt_fman_save_as = new QPushButton (tr ("Save as"), this);
   connect (bt_fman_save_as, SIGNAL(clicked()), this, SLOT(cb_button_saves_as()));
   bt_fman_save_as->setToolTip (tr ("Save the current opened file with the name provided above"));
 
   lah_controls->addWidget (l_t);
-
 
   QHBoxLayout *lt_hb = new QHBoxLayout;
 
@@ -7955,20 +7921,16 @@ void CTEA::create_fman()
   connect (act_fman_refresh, SIGNAL(triggered()), fman, SLOT(refresh()));
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-
   connect (cb_fman_drives, SIGNAL(currentIndexChanged (QString)),
           this, SLOT(fman_drives_changed(QString)));
-
 #endif
 
   w_right = new QWidget (this);
 
   w_right->setMinimumWidth (10);
 
-
   QVBoxLayout *lw_right = new QVBoxLayout;
   w_right->setLayout (lw_right);
-
   lw_right->addLayout (lah_controls);
 
   QFrame *vline = new QFrame;
@@ -7977,7 +7939,6 @@ void CTEA::create_fman()
 
   QLabel *l_bookmarks = new QLabel (tr ("<b>Bookmarks</b>"));
   lw_right->addWidget (l_bookmarks);
-
 
   QHBoxLayout *lah_places_bar = new QHBoxLayout;
   QPushButton *bt_add_bmk = new QPushButton ("+");
@@ -8128,7 +8089,7 @@ void CTEA::create_markup_hash()
 
 void CTEA::update_stylesheet (const QString &f)
 {
-//Update paletted
+//Update paletted stuff
 
   int darker_val = settings->value ("darker_val", 100).toInt();
 
@@ -8143,7 +8104,6 @@ void CTEA::update_stylesheet (const QString &f)
   QString logmemo_fontsize = "font-size:" + settings->value ("logmemo_font_size", "12").toString() + "pt;";
   QString logmemo_font = "font-family:" + settings->value ("logmemo_font", "Monospace").toString() + ";";
 
-
   QString stylesheet;
 
   stylesheet = "QWidget, QWidget * {" + fontfamily + fontsize + "}\n";
@@ -8151,7 +8111,6 @@ void CTEA::update_stylesheet (const QString &f)
   stylesheet += "QTextEdit {" + edfontfamily + edfontsize + "}\n";
   stylesheet += "CLogMemo {" + logmemo_font + logmemo_fontsize + "}\n";
   stylesheet += "CLineNumberArea {" + edfontfamily + edfontsize + "}\n";
-
 
   QString text_color = hash_get_val (global_palette, "text", "black");
   QString t_text_color = QColor (text_color).darker(darker_val).name();
@@ -8179,7 +8138,6 @@ void CTEA::update_stylesheet (const QString &f)
                                   t_sel_text_color).arg (
                                   t_sel_back_color);
 
-
   stylesheet += css_tea_edit;
 
   QString css_tea_man = QString ("QTextBrowser {color: %1; background-color: %2; selection-color: %3; selection-background-color: %4;}\n").arg (
@@ -8187,7 +8145,6 @@ void CTEA::update_stylesheet (const QString &f)
                                   t_back_color).arg (
                                   t_sel_text_color).arg (
                                   t_sel_back_color);
-
 
   stylesheet += css_tea_man;
 
@@ -8199,11 +8156,9 @@ void CTEA::update_stylesheet (const QString &f)
 
   stylesheet += css_fif;
 
-
-//Update themed
+//Update themed stuff
 
   QString cssfile = qstring_load (f);
-
   QString css_path = get_file_path (f) + "/";
 
   cssfile = cssfile.replace ("./", css_path);
@@ -8373,15 +8328,15 @@ void CTEA::update_hls()
 
 #if QT_VERSION >= 0x050000
 
-          QRegularExpression re (rgxp, QRegularExpression::CaseInsensitiveOption);
-          if (re.isValid())
-             documents->hl_files.push_back (std::make_pair (re, fname));
+           QRegularExpression re (rgxp, QRegularExpression::CaseInsensitiveOption);
+           if (re.isValid())
+              documents->hl_files.push_back (std::make_pair (re, fname));
 
 #else
 
-          QRegExp re (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2);
-          if (re.isValid())
-             documents->hl_files.push_back(std::make_pair (re, fname));
+           QRegExp re (rgxp, Qt::CaseInsensitive, QRegExp::RegExp2);
+           if (re.isValid())
+              documents->hl_files.push_back(std::make_pair (re, fname));
 
 #endif
           }
@@ -8542,7 +8497,7 @@ Misc callbacks
 
 void CTEA::select_label()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
   QAction *Act = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
@@ -8564,7 +8519,7 @@ void CTEA::select_label()
 
 void CTEA::run_program()
 {
-  last_action = qobject_cast<QAction *>(sender());
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -8612,6 +8567,9 @@ void CTEA::guess_enc()
 {
   QString enc;
   QString fn = fman->get_sel_fname();
+
+  if (! file_exists (fn))
+     return;
 
   if (settings->value ("use_enca_for_charset_detection", 0).toBool())
       {
@@ -8676,19 +8634,19 @@ void CTEA::main_tab_page_changed (int index)
       fm_entry_mode = FM_ENTRY_MODE_NONE;
       idx_tab_fman_activate();
      }
-  else
+
   if (index == idx_tab_calendar)
      {
       calendar_update();
       idx_tab_calendar_activate();
      }
-  else
+
   if (index == idx_tab_edit)
      idx_tab_edit_activate();
-  else
+
   if (index == idx_tab_tune)
      idx_tab_tune_activate();
-  else
+
   if (index == idx_tab_learn)
      idx_tab_learn_activate();
 }
@@ -8813,14 +8771,12 @@ QHash <QString, QString> CTEA::load_eclipse_theme_xml (const QString &fname)
                    result.insert ("operator", t);
                }
 
-
             if (tag_name == "string")
                {
                 QString t = xml.attributes().value ("color").toString();
                 if (! t.isEmpty())
                    result.insert ("quotes", t);
                }
-
 
             if (tag_name == "multiLineComment")
                {
@@ -9046,6 +9002,7 @@ QString CTEA::fif_get_text()
   return t;
 }
 
+
 QAction* CTEA::add_to_menu (QMenu *menu,
                             const QString &caption,
                             const char *method,
@@ -9073,8 +9030,8 @@ QIcon CTEA::get_theme_icon (const QString &name)
 
   if (file_exists (fname))
      return QIcon (fname);
-  else
-      return QIcon (":/icons/" + name);
+
+  return QIcon (":/icons/" + name);
 }
 
 
@@ -9084,8 +9041,8 @@ QString CTEA::get_theme_icon_fname (const QString &name)
 
   if (file_exists (fname))
      return fname;
-  else
-      return ":/icons/" + name;
+
+  return ":/icons/" + name;
 }
 
 
@@ -9097,8 +9054,6 @@ void CTEA::leaving_options()
   settings->setValue ("wasd", cb_wasd->isChecked());
 
   settings->setValue ("ui_mode", cmb_ui_mode->currentIndex());
-
-
 
 #if defined(JOYSTICK_SUPPORTED)
   settings->setValue ("use_joystick", cb_use_joystick->isChecked());
@@ -9207,7 +9162,6 @@ void CTEA::count_substring (bool use_regexp)
   else
       count = text.count (fif_get_text(), cs);
 
-
 #else
 
   if (use_regexp)
@@ -9215,9 +9169,7 @@ void CTEA::count_substring (bool use_regexp)
   else
       count = text.count (fif_get_text(), cs);
 
-
 #endif
-
 
   log->log (tr ("%1 number of occurrences of %2 is found").arg (count).arg (fif->text()));
 }
@@ -9257,8 +9209,7 @@ void CTEA::run_unitaz (int mode)
        pb_status->setValue (c++);
       }
 
-
-  vector< pair <QString, int> > uwords;
+  vector <pair <QString, int> > uwords;
 
   QList <QString> keys = h.keys();
   int sz = keys.size();
@@ -9267,7 +9218,6 @@ void CTEA::run_unitaz (int mode)
 
   for (int i = 0; i < sz; i++)
       uwords.push_back (make_pair(keys.at(i),h.value (keys.at(i))));
-
 
   if (mode == 0)
     std::sort (uwords.begin(), uwords.end(), pr_bigger_than);
@@ -9293,11 +9243,10 @@ void CTEA::run_unitaz (int mode)
 
   log->log (tr("elapsed milliseconds: %1").arg (time_start.elapsed()));
 
-
   CDocument *nd = documents->create_new();
   nd->put (outp.join ("\n"));
 
-   pb_status->hide();
+  pb_status->hide();
 }
 
 
@@ -9325,7 +9274,6 @@ void CTEA::fman_items_select_by_regexp (bool mode)
 #else
   l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegExp);
 #endif
-
 
   if (l_fman_find.size() < 1)
      return;
@@ -9359,6 +9307,7 @@ void CTEA::fn_filter_delete_by_sep (bool mode)
                s = s.right (s.size() - n);
            else
                s = s.left (n);
+
            sl[i] = s;
           }
       }
@@ -9436,8 +9385,7 @@ void CTEA::opt_shortcuts_find()
                                                     Qt::CaseInsensitive), from);
 #else
   int index = shortcuts->captions.indexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
-                                           QRegularExpression::CaseInsensitiveOption), from);
-
+                                                               QRegularExpression::CaseInsensitiveOption), from);
 #endif
 
   if (index != -1)
@@ -9456,8 +9404,7 @@ void CTEA::opt_shortcuts_find_next()
                                                     Qt::CaseInsensitive), from + 1);
 #else
   int index = shortcuts->captions.indexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
-                                                    QRegularExpression::CaseInsensitiveOption), from + 1);
-
+                                                               QRegularExpression::CaseInsensitiveOption), from + 1);
 
 #endif
 
@@ -9473,16 +9420,12 @@ void CTEA::opt_shortcuts_find_prev()
      from = 0;
 
 #if QT_VERSION < 0x050000
-
   int index = shortcuts->captions.lastIndexOf (QRegExp (opt_shortcuts_string_to_find + ".*",
-                                                  Qt::CaseInsensitive), from - 1);
-
+                                                        Qt::CaseInsensitive), from - 1);
 #else
 
   int index = shortcuts->captions.lastIndexOf (QRegularExpression (opt_shortcuts_string_to_find + ".*",
-                                                 QRegularExpression::CaseInsensitiveOption), from - 1);
-
-
+                                                                   QRegularExpression::CaseInsensitiveOption), from - 1);
 #endif
 
   if (index != -1)
@@ -9591,10 +9534,6 @@ void CTEA::man_find_prev()
   man->find (man_search_value, get_search_options() | QTextDocument::FindBackward);
 }
 
-
-
-
-
 /*
 ====================
 Tune page callbacks
@@ -9650,9 +9589,9 @@ void CTEA::cmb_docs_tabs_currentIndexChanged (int i)
 void CTEA::cmb_icon_sizes_currentIndexChanged (int index)
 {
 
- QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
 
- QString text = cmb->currentText();
+  QString text = cmb->currentText();
 
   settings->setValue ("icon_size", text);
 
@@ -9690,7 +9629,6 @@ void CTEA::pb_assign_hotkey_clicked()
 }
 
 
-
 void CTEA::pb_remove_hotkey_clicked()
 {
   if (! lv_menuitems->currentItem())
@@ -9721,24 +9659,21 @@ void CTEA::slot_font_logmemo_select()
      return;
 
   settings->setValue ("logmemo_font", font.family());
-  settings->setValue("logmemo_font_size", font.pointSize());
+  settings->setValue ("logmemo_font_size", font.pointSize());
   update_stylesheet (fname_stylesheet);
 }
-
-
 
 
 void CTEA::slot_font_interface_select()
 {
   bool ok;
   QFontInfo fi = QFontInfo (qApp->font());
-//fi.pointSize()).toInt()
   QFont font = QFontDialog::getFont (&ok, QFont (settings->value ("app_font_name", "Sans").toString(), settings->value ("app_font_size", fi.pointSize()).toInt()), this);
   if (! ok)
      return;
 
   settings->setValue ("app_font_name", font.family());
-  settings->setValue("app_font_size", font.pointSize());
+  settings->setValue ("app_font_size", font.pointSize());
   update_stylesheet (fname_stylesheet);
 }
 
@@ -9751,7 +9686,7 @@ void CTEA::slot_font_editor_select()
      return;
 
   settings->setValue ("editor_font_name", font.family());
-  settings->setValue("editor_font_size", font.pointSize());
+  settings->setValue ("editor_font_size", font.pointSize());
   update_stylesheet (fname_stylesheet);
 }
 
@@ -9770,8 +9705,6 @@ void CTEA::slot_style_currentIndexChanged (int)
 
   settings->setValue ("ui_style", text);
 }
-
-
 
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
@@ -9793,7 +9726,6 @@ void CTEA::cmb_spellchecker_currentIndexChanged (int)
   if (cur_spellchecker == "Aspell")
      spellchecker = new CAspellchecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString());
 #endif
-
 
 #ifdef HUNSPELL_ENABLE
    if (cur_spellchecker == "Hunspell")
@@ -9848,6 +9780,3 @@ void CTEA::pb_choose_aspell_path_clicked()
   create_spellcheck_menu();
 }
 #endif
-
-
-

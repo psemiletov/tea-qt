@@ -177,6 +177,8 @@ endif()
 
 if(USE_PDF)
 find_package(PkgConfig)
+
+if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt5")
 pkg_check_modules(QUIET popplerqt5 poppler-qt5)
 if(popplerqt5_FOUND)
   add_definitions(-DPOPPLER_ENABLE)
@@ -184,6 +186,18 @@ if(popplerqt5_FOUND)
   include_directories(${popplerqt5_INCLUDE_DIRS})
   message("+ poppler support")
 endif()
+endif()
+
+if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt6")
+pkg_check_modules(QUIET popplerqt6 poppler-qt6)
+if(popplerqt5_FOUND)
+  add_definitions(-DPOPPLER_ENABLE)
+  target_link_libraries(tea ${popplerqt6_LIBRARIES})
+  include_directories(${popplerqt6_INCLUDE_DIRS})
+  message("+ poppler support")
+endif()
+endif()
+
 endif()
 
 if(USE_DJVU)

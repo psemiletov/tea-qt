@@ -62,14 +62,25 @@ DJVU read code taken fromdvutxt.c:
 #include <zlib.h>
 //////////////////
 
-//FIXME: not good with cmake, cmake just use Qt5 here
-//#if defined (POPPLER_ENABLE) || defined(Q_OS_OS2)
+/*
+with cmake - Qt5/Qt6 poppler
+with qmake - Qt4/Qt5 poppler
+*/
+
 #if defined (POPPLER_ENABLE)
-#if QT_VERSION_MAJOR >= 5
+
+#if QT_VERSION_MAJOR == 6
+#include <poppler-qt6.h>
+#endif
+
+#if QT_VERSION_MAJOR == 5
 #include <poppler-qt5.h>
-#else
+#endif
+
+#if QT_VERSION_MAJOR == 4
 #include <poppler-qt4.h>
 #endif
+
 #endif
 
 
@@ -138,9 +149,7 @@ bool CTioPlainText::load (const QString &fname)
 {
   QFile file (fname);
 
-//  if (! file.open (QFile::ReadOnly | QIODevice::Text))
   if (! file.open (QFile::ReadOnly))
-
      {
       error_string = file.errorString();
       return false;
@@ -160,8 +169,6 @@ bool CTioPlainText::load (const QString &fname)
      eol = "\r";
 
   file.seek(0);
-
-
 
 //  QTextStream in (&file);
  // in.setCodec (charset.toUtf8().data());

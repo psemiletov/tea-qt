@@ -1,9 +1,7 @@
 #ifndef TIO_H
 #define TIO_H
 
-
 #include <vector>
-
 
 #include <QObject>
 #include <QList>
@@ -47,7 +45,6 @@ public:
   QString data;
   QString charset;
   QString error_string;
-
   QString eol;
 
   QStringList extensions;
@@ -158,9 +155,7 @@ public:
 };
 
 
-
 #if defined(POPPLER_ENABLE)
-
 class CTioPDF: public CTioReadOnly
 {
   Q_OBJECT
@@ -170,7 +165,6 @@ public:
   CTioPDF();
   bool load (const QString &fname);
 };
-
 #endif
 
 
@@ -184,7 +178,6 @@ public:
   CTioDJVU();
   bool load (const QString &fname);
 };
-
 #endif
 
 
@@ -207,4 +200,3 @@ public:
 
 
 #endif // TIO_H
-

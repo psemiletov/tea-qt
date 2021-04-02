@@ -4713,7 +4713,7 @@ void CTEA::calendar_update()
       }
 }
 
-
+/*
 void CTEA::create_moon_phase_algos()
 {
   moon_phase_algos.insert (MOON_PHASE_TRIG2, tr ("Trigonometric 2"));
@@ -4721,7 +4721,7 @@ void CTEA::create_moon_phase_algos()
   moon_phase_algos.insert (MOON_PHASE_CONWAY, tr ("Conway"));
   moon_phase_algos.insert (MOON_PHASE_LEUESHKANOV, tr ("Leueshkanov"));
 }
-
+*/
 
 void CTEA::cal_moon_mode()
 {
@@ -5980,7 +5980,7 @@ CTEA::CTEA()
   update_charsets();
   update_profiles();
   create_markup_hash();
-  create_moon_phase_algos();
+//  create_moon_phase_algos();
 
   setMinimumSize (12, 12);
 
@@ -7400,14 +7400,24 @@ OPTIONS::COMMON
   page_common_layout->addWidget (cb_start_on_sunday);
   page_common_layout->addWidget (cb_northern_hemisphere);
 
-  //QStringList sl_moon_algos;
-  //sl_icon_sizes << "0" << "1" << "2" << "3";
+  QStringList sl_moon_algos;
+  sl_moon_algos << "0" << "1" << "2" << "3";
 
-
+/*
   cmb_moon_phase_algos = new_combobox (page_common_layout,
                                        tr ("Moon phase algorithm"),
                                        moon_phase_algos.values(),
                                        settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
+*/
+
+
+  cmb_moon_phase_algos = new_combobox (page_common_layout,
+                                       tr ("Moon phase algorithm"),
+                                       sl_moon_algos,
+                                       settings->value ("moon_phase_algo", MOON_PHASE_TRIG2).toInt());
+
+  cmb_moon_phase_algos->setToolTip (tr ("0 - Trigonometrical v2, 1 - Trigonometrical v1, 2 - Conway, 3 - Leueshkanov"));
+
 
   cmb_cmdline_default_charset = new_combobox (page_common_layout,
                                               tr ("Charset for file open from command line"),
@@ -9098,7 +9108,14 @@ void CTEA::leaving_options()
 
   calendar->northern_hemisphere = bool (cb_northern_hemisphere->isChecked());
 
+  /*
   int i = moon_phase_algos.key (cmb_moon_phase_algos->currentText());
+  settings->setValue ("moon_phase_algo", i);
+  calendar->moon_phase_algo = i;
+*/
+
+
+  int i = cmb_moon_phase_algos->currentText().toInt();
   settings->setValue ("moon_phase_algo", i);
   calendar->moon_phase_algo = i;
 

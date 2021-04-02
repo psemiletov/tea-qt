@@ -12,15 +12,12 @@ Peter Semiletov
 #include <QHash>
 #include <QFileInfo>
 #include <QStringList>
-//#include <QDir>
-
 
 #if QT_VERSION < 0x050000
 #include <QRegExp>
 #else
 #include <QRegularExpression>
 #endif
-
 
 
 class CFilesList: public QObject
@@ -37,7 +34,6 @@ public:
 class CFTypeChecker: public QObject
 {
 public:
-
 
 #if QT_VERSION < 0x050000
   std::vector <QRegExp> patterns;
@@ -78,11 +74,9 @@ QString qstring_load (const QString &fileName, const char *enc = "UTF-8");
 QString qstring_load_first_line (const QString &fileName);
 QByteArray file_load (const QString &fileName);
 
-
-
 /* string/stringlist utils */
 
-bool str_check (char *s1, char *s2, int size);
+//bool str_check (char *s1, char *s2, int size);
 QString string_between (const QString &source, const QString &sep1, const QString &sep2);
 bool char_is_bad (const QChar &c);
 void qstring_list_print (const QStringList &l);

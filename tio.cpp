@@ -189,82 +189,6 @@ bool CTioPlainText::load (const QString &fname)
 }
 
 
-/*
-bool CTioPlainText::load (const QString &fname)
-{
-  QFile feol_detector (fname);
-
-  if (! feol_detector.open (QFile::ReadOnly))
-     {
-      error_string = feol_detector.errorString();
-      return false;
-     }
-
-  QByteArray block = feol_detector.read (4096);
-
-  eol = "\n";
-
-  if (block.indexOf ("\r\n") != -1)
-     eol = "\r\n";
-  else
-  if (block.indexOf ('\n') != -1)
-     eol = "\n";
-  else
-  if (block.indexOf ('\r') != -1)
-     eol = "\r";
-
-  feol_detector.close();
-
-  QFile file (fname);
-
-  if (! file.open (QFile::ReadOnly))
-     {
-      error_string = file.errorString();
-      return false;
-     }
-
-  QTextStream in (&file);
-  in.setCodec (charset.toUtf8().data());
-  data = in.readAll();
-
-  if (eol == "\r\n")
-     data.replace (eol, "\n");
-  else
-  if (eol == "\r")
-     data.replace (eol, "\n");
-
-  return true;
-}
-*/
-
-/*
-bool CTioPlainText::save (const QString &fname)
-{
-  QFile file (fname);
-  if (! file.open (QFile::WriteOnly))
-     {
-      error_string = file.errorString();
-      return false;
-     }
-
-  QTextStream out (&file);
-  out.setCodec (charset.toUtf8().data());
-  out << data;
-
-  return true;
-}
-*/
-
-
-
-/*
-
-QString string = "...";
-QTextCodec *codec = QTextCodec::codecForName("KOI8-R");
-QByteArray encodedString = codec->fromUnicode(string);
-
-*/
-
 bool CTioPlainText::save (const QString &fname)
 {
   QFile file (fname);
@@ -282,7 +206,6 @@ bool CTioPlainText::save (const QString &fname)
 
   return true;
 }
-
 
 
 CTioHandler::CTioHandler()
@@ -555,9 +478,9 @@ CCharsetMagic::~CCharsetMagic()
 
 
 //from https://stackoverflow.com/questions/28270310/how-to-easily-detect-utf8-encoding-in-the-string
-bool is_valid_utf8(const char * string)
+bool is_valid_utf8 (const char *string)
 {
-    if (!string)
+    if (! string)
         return true;
 
     const unsigned char * bytes = (const unsigned char *)string;
@@ -898,7 +821,7 @@ bool CTioRTF::load (const QString &fname)
        ansicgp.prepend ("CP");
 
        QTextCodec *codec = QTextCodec::codecForName (ansicgp.toUtf8().data());
-       qDebug() << "not unicode!";
+       //qDebug() << "not unicode!";
 
        while (i < l)
        if ((ba.at(i) == '\\') && (ba.at(i + 1) == '\''))
@@ -1123,7 +1046,6 @@ bool CTioEpub::load (const QString &fname)
        if (! zipper.read_as_utf8 (fname, html_files.at(i)))
            return false;
 
-
        QString t = extract_text_from_xml (zipper.string_data, tags);
        data += t;
        data += "\n";
@@ -1144,4 +1066,3 @@ QStringList CTioHandler::get_supported_exts()
   l.append ("txt");
   return l;
 }
-

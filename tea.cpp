@@ -7400,6 +7400,9 @@ OPTIONS::COMMON
   page_common_layout->addWidget (cb_start_on_sunday);
   page_common_layout->addWidget (cb_northern_hemisphere);
 
+  //QStringList sl_moon_algos;
+  //sl_icon_sizes << "0" << "1" << "2" << "3";
+
 
   cmb_moon_phase_algos = new_combobox (page_common_layout,
                                        tr ("Moon phase algorithm"),
@@ -8587,7 +8590,8 @@ void CTEA::guess_enc()
        enc = cm.guess_for_file (fn);
       }
 
-  cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
+  if (! enc.isEmpty())
+     cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
 }
 
 

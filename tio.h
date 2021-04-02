@@ -198,5 +198,4 @@ public:
   QStringList get_supported_exts();
 };
 
-
 #endif // TIO_H

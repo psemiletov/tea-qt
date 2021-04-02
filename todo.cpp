@@ -74,4 +74,3 @@ void CTodo::load_dayfile()
        table.insert (time, text);
       }
 }
-

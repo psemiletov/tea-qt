@@ -22,6 +22,9 @@ using namespace std;
 
 bool has_css_file (const QString &path)
 {
+  if (path.isEmpty())
+      return false;
+
   QDir d (path);
   QStringList l = d.entryList();
 
@@ -35,9 +38,11 @@ bool has_css_file (const QString &path)
 }
 
 
-
 QString guess_enc_for_file (const QString &fname)
 {
+  if (fname.isEmpty())
+      return QString();
+
   QString enc = "UTF-8";
 
   QProcess p;
@@ -56,6 +61,9 @@ QString guess_enc_for_file (const QString &fname)
 
 bool file_is_writable (const QString &fname)
 {
+  if (fname.isEmpty())
+      return false;
+
   QFile f (fname);
   return f.isWritable();
 }
@@ -63,6 +71,9 @@ bool file_is_writable (const QString &fname)
 
 bool file_is_readable (const QString &fname)
 {
+  if (fname.isEmpty())
+      return false;
+
   QFile f (fname);
   return f.isReadable();
 }
@@ -70,6 +81,9 @@ bool file_is_readable (const QString &fname)
 
 bool path_is_file (const QString &fname)
 {
+  if (fname.isEmpty())
+      return false;
+
   QFileInfo fi (fname);
   return fi.isFile();
 }
@@ -77,6 +91,9 @@ bool path_is_file (const QString &fname)
 
 bool path_is_dir (const QString &fname)
 {
+  if (fname.isEmpty())
+      return false;
+
   QFileInfo fi (fname);
   return fi.isDir();
 }
@@ -96,6 +113,9 @@ bool path_is_abs (const QString &fname)
 
 bool dir_exists (const QString &path)
 {
+  if (path.isEmpty())
+      return false;
+
   QDir d (path);
   return d.exists();
 }
@@ -146,9 +166,11 @@ QStringList read_dir_entries (const QString &path)
 
 /* io utils */
 
-
 bool qstring_save (const QString &fileName, const QString &data, const char *enc)
 {
+  if (fileName.isEmpty())
+      return false;
+
   QFile file (fileName);
   if (! file.open (QFile::WriteOnly))
       return false;
@@ -165,6 +187,9 @@ bool qstring_save (const QString &fileName, const QString &data, const char *enc
 
 QString qstring_load (const QString &fileName, const char *enc)
 {
+  if (fileName.isEmpty())
+      return QString();
+
   QFile file (fileName);
 
   if (! file.open (QFile::ReadOnly))
@@ -176,12 +201,14 @@ QString qstring_load (const QString &fileName, const char *enc)
   file.close();
 
   return codec->toUnicode(ba);
-
 }
 
 
 QString qstring_load_first_line (const QString &fileName)
 {
+  if (fileName.isEmpty())
+      return QString();
+
   QFile file (fileName);
 
   if (! file.open (QFile::ReadOnly | QFile::Text))
@@ -195,6 +222,9 @@ QString qstring_load_first_line (const QString &fileName)
 
 QByteArray file_load (const QString &fileName)
 {
+  if (fileName.isEmpty())
+      return QByteArray();
+
   QFile file (fileName);
   QByteArray b;
 
@@ -208,17 +238,6 @@ QByteArray file_load (const QString &fileName)
 
 
 /* string/stringlist utils */
-
-
-bool str_check (char *s1, char *s2, int size)
-{
-  for (int i = 0; i < size; i++)
-       if (s1[i] != s2[i])
-          return false;
-
-  return true;
-}
-
 
 void strlist_swap (QStringList &l, int a, int b)
 {
@@ -354,7 +373,6 @@ QString get_insert_image (const QString &file_name, const QString &full_path, co
   if (markup_mode == "HTML")
      result = QString ("<img src=\"%1\" alt=\"\" width=\"%2\" height=\"%3\">").arg (
                         dir.relativeFilePath (full_path)).arg (img.width()).arg (img.height());
-
   else
   if (markup_mode == "XHTML")
      result = QString ("<img src=\"%1\" border=\"0\" alt=\"\" width=\"%2\" height=\"%3\" />").arg (
@@ -396,6 +414,9 @@ void CFilesList::iterate (QFileInfo &fi)
 
 void CFilesList::get (const QString &path)
 {
+  if (path.isEmpty())
+     return;
+
   list.clear();
   QDir d (path);
   QFileInfoList lfi= d.entryInfoList (QDir::Dirs | QDir::Files | QDir::Readable | QDir::NoDotAndDotDot);
@@ -404,12 +425,13 @@ void CFilesList::get (const QString &path)
 }
 
 
-
 CFTypeChecker::CFTypeChecker()
 {
+
 #if QT_VERSION < 0x050000
 
   patterns.push_back (QRegExp (".*(readme|news|changelog|todo)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^\\..*(rc)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(txt|conf|md|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive));
@@ -445,12 +467,10 @@ CFTypeChecker::CFTypeChecker()
   patterns.push_back (QRegExp ("^.*\\.(v)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(wiki)$", Qt::CaseInsensitive));
 
-
 #else
 
-  //add rc
-
   patterns.push_back (QRegularExpression (".*(readme|news|changelog|todo)$", QRegularExpression::CaseInsensitiveOption));
+  patterns.push_back (QRegularExpression ("^\\..*(rc)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(txt|conf|md|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", QRegularExpression::CaseInsensitiveOption));
@@ -487,7 +507,6 @@ CFTypeChecker::CFTypeChecker()
   patterns.push_back (QRegularExpression ("^.*\\.(wiki)$", QRegularExpression::CaseInsensitiveOption));
 
 #endif
-
 }
 
 

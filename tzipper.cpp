@@ -12,7 +12,6 @@ extern QSettings *settings;
 //by Angius Fabrizio
 
 
-
 QString qstring_get_last_after (const QString &s, const QString &sep)
 {
   int i = s.lastIndexOf (sep);
@@ -86,7 +85,6 @@ bool CZipper::read_as_utf8 (const QString &archname, const QString &fname)
   QuaZip zip (archname);
   zip.setFileNameCodec (QTextCodec::codecForName((settings->value ("zip_charset_in", "UTF-8").toString().trimmed().toLatin1().data())));
 
-
   if (! zip.open (QuaZip::mdUnzip))
       return false;
 
@@ -100,7 +98,6 @@ bool CZipper::read_as_utf8 (const QString &archname, const QString &fname)
      return false;
 
   QuaZipFile file (&zip);
-
   if (! file.open (QIODevice::ReadOnly))
       return false;
 

@@ -34,6 +34,7 @@
 #include <QTranslator>
 #include <QProcess>
 #include <QProxyStyle>
+#include <QMap>
 
 #ifdef PRINTER_ENABLE
 #include <QPrinter>
@@ -206,7 +207,9 @@ Variables
   //QHash <QString, CMarkupPair*> hs_markup;
   QHash <QString, QString> programs;
   QHash <QString, QString> places_bookmarks;
-  QHash <int, QString> moon_phase_algos;
+//  QHash <int, QString> moon_phase_algos;
+  QMap <int, QString> moon_phase_algos;
+
 
   QTranslator transl_app;
   QTranslator transl_system;

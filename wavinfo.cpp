@@ -7,6 +7,16 @@
 #include "utils.h"
 
 
+//no range check, use in wavinfo only
+bool str_check (char *s1, char *s2, int size)
+{
+  for (int i = 0; i < size; i++)
+       if (s1[i] != s2[i])
+          return false;
+
+  return true;
+}
+
 
 bool CWavReader::get_info (const QString &fname)
 {

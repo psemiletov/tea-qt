@@ -33,12 +33,12 @@ https://www.facebook.com/groups/766324686841748/
 
 You can install TEA from the source in 4 ways, using build systems qmake/make, meson/ninja, cmake/make, cmake/ninja. But first, you need to install some development libraries.
 
-**Mandatory**
+**Mandatory:**
 
 Qt 4.8 or Qt 5.4+ or Qt 6
 zlib
 
-**Optional**
+**Optional:**
 
 libaspell (for spell checking engine), 
 libhunspell (for spell checking engine), 
@@ -190,11 +190,11 @@ Please note, that TEA source dir after unpacking will be tea-qt-${pkgver}
 
 3. TEA supports 3 build systems:
 
-  ** qmake ** - the traditional one, good for Qt4-Win32-OS/2-Slackware builds. TEA's qmake project file is old and obscure. 
+  **qmake** - the traditional one, good for Qt4-Win32-OS/2-Slackware builds. TEA's qmake project file is old and obscure. 
 
-  ** cmake ** - good for Qt5 build, the reference one for TEA. I recommend to use cmake to build TEA package.
+  **cmake** - good for Qt5 build, the reference one for TEA. I recommend to use cmake to build TEA package.
 
-  ** meson ** - I use it internally. Does not have the printer support.
+  **meson** - I use it internally. Does not have the printer support.
 
 4. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
 

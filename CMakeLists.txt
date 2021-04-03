@@ -35,7 +35,7 @@ add_definitions(${Qt${QT_VERSION_MAJOR}Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea-qt")
-project ($PROJECT VERSION 50.1.0 LANGUAGES CXX C)
+project ($PROJECT VERSION 60.0.0 LANGUAGES CXX C)
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 add_definitions(-DNOCRYPT=1)
 add_definitions(-DNOUNCRYPT=1)
@@ -67,11 +67,9 @@ endif()
 find_package(Qt${QT_VERSION_MAJOR} CONFIG REQUIRED Core Widgets)
 
 
-
 if(BUILD_TESTING)
   find_package(Qt${Test}${QT_VERSION_MAJOR} CONFIG REQUIRED)
 endif()
-
 
 
 if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt6")
@@ -242,7 +240,6 @@ endif()
 if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt5")
 target_link_libraries(tea Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core)
 endif()
-
 
 
 install (TARGETS tea DESTINATION bin)

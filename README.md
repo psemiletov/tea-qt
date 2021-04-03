@@ -192,7 +192,7 @@ Please note, that TEA source dir after unpacking will be tea-qt-${pkgver}
 
   **qmake** - the traditional one, good for Qt4-Win32-OS/2-Slackware builds. TEA's qmake project file is old and obscure. 
 
-  **cmake** - good for Qt5 build, the reference one for TEA. I recommend to use cmake to build TEA package.
+  **cmake** - good for Qt5/Qt6 build, the reference one for TEA. I recommend to use cmake to build TEA package.
 
   **meson** - I use it internally. Does not have the printer support.
 

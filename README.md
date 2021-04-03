@@ -62,11 +62,11 @@ With cmake, TEA supports Qt5 and Qt6 build.
 
 If you want to build and install TEA with cmake + make, run at the TEA source dir:
 
-mkdir b 
-cd b 
-cmake .. 
-make 
-make install (as root or with sudo) 
+mkdir b  
+cd b  
+cmake ..  
+make  
+make install (as root or with sudo)  
 
 
 To build and install TEA with cmake/ninja and GCC, do:

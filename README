@@ -23,7 +23,7 @@ CONTENTS OF THIS README:
 02 - NOTES FOR PACKAGE MAINTAINERS
 03 - NOTE FOR UBUNTU USERS
 04 - LICENSE NOTES
-05 - DONATE
+
 
 ==00: INTRO==
 
@@ -220,6 +220,3 @@ sudo apt-get autoremove appmenu-gtk appmenu-gtk3 appmenu-qt5
 ==04: LICENSE NOTES==
 
 TEA code is licensed under GPL V3 and, partially, as a Public Domain. TEA media (images, etc), manuals and translations are public domain. Note to contributors - please put your translations into the public domain or GPL.
-
-==05: DONATE==
-

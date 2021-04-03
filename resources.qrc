@@ -92,7 +92,7 @@
     <file>hls/r.xml</file>
 
     <file>INSTALL</file>
-    <file>README</file>
+    <file>README.md</file>
     <file>NEWS</file>
     <file>TODO</file>
     <file>NEWS-RU</file>

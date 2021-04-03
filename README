@@ -1,4 +1,4 @@
-===TEA===
+# TEA #
 
 Home sites >
 http://semiletov.org/tea
@@ -16,7 +16,7 @@ https://t.me/teaqt
 https://vk.com/teaeditor
 https://www.facebook.com/groups/766324686841748/
 
-CONTENTS OF THIS README:
+## CONTENTS OF THIS README: ##
 
 00 - INTRO
 01 - INSTALLATION FROM THE SOURCE
@@ -25,35 +25,35 @@ CONTENTS OF THIS README:
 04 - LICENSE NOTES
 
 
-==00: INTRO==
+### 00: INTRO ###
 
-TEA is a text editor with the hundreds of features. Yes.
+TEA is a text editor with the hundreds of features for Linux, *BSD, Mac, Windows, OS/2 and Haiku.
+ 
+#### 01: INSTALLATION FROM THE SOURCE ####
 
-==01: INSTALLATION FROM THE SOURCE===
-
-You can install TEA from the source by 4 ways, using build systems qmake/make, meson/ninja, cmake/make, cmake/ninja. But first, you need to install some development libraries.
+You can install TEA from the source in 4 ways, using build systems qmake/make, meson/ninja, cmake/make, cmake/ninja. But first, you need to install some development libraries.
 
 Mandatory:
 
-Qt 4, 5.4+ or Qt 6
+Qt 4.8 or Qt 5.4+ or Qt 6
 zlib
 
 Optional:
 
 libaspell (for spell checking engine)
 libhunspell (for spell checking engine)
-poppler-qt5 (to read the text from PDF)
+poppler-qt5 or poppler-qt6 (to read the text from PDF)
 ddjvuap (to read the text from DJVU)
 
 Note for FreeBSD users: you need the pkgconf package - pkg install pkgconf
 
-
 Which build system you should use?
 
-Use qmake for old distros and Windows.
-Use meson or cmake for modern distros. cmake is the mainline build system for TEA. meson is almost the same, but builds TEA without the printer support.
+Use qmake for: Qt 4, old distros and Windows.
+Use meson or cmake for modern distros. 
+cmake is the mainline build system for TEA. 
 
- 
+
 01.01 CMAKE
 
 With cmake, TEA supports Qt5 and Qt6 build.
@@ -75,9 +75,9 @@ cmake -GNinja ..
 ninja
 ninja install
 
-By default, cmake builds TEA without some features: QML, printer and aspell support, libpoppler and djvuapi. To enable them, use from the build directory:
+By default, cmake builds TEA without some features: printer and aspell support, libpoppler and djvuapi. To enable them, use from the build directory:
 
-cmake .. -DUSE_ASPELL=ON -DUSE_PRINTER=ON -DUSE_PDF=ON -DUSE_DJVU=ON -DUSE_QML=ON 
+cmake .. -DUSE_ASPELL=ON -DUSE_PRINTER=ON -DUSE_PDF=ON -DUSE_DJVU=ON
 
 If the Qt5 and Qt6 both are present on the system, use CMAKE_PREFIX_PATH variable to set the path to the QtN. Otherwise, Qt6 will be prefered.
    Examples:
@@ -95,7 +95,6 @@ cmake -DCMAKE_PREFIX_PATH=$HOME/Qt/6.0.0/gcc_64/lib/cmake ..
 01.02 MESON
 
 With meson, TEA supports Qt5 build.
-
 
 To build and install TEA with meson/ninja and GCC, do:
 
@@ -140,7 +139,6 @@ qmake "CONFIG+=useclang" "CONFIG+=noaspell"
 
 You can use some values:
 
-noqml - no QML support (the preferable mode)
 nosingleapp - do not build TEA with the single application mode support
 nodesktop - do not install desktop files and icons
 useclang - TEA will be compiled with Clang.

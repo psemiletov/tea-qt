@@ -62,20 +62,20 @@ With cmake, TEA supports Qt5 and Qt6 build.
 
 If you want to build and install TEA with cmake + make, run at the TEA source dir:
 
-```mkdir b
-cd b
-cmake ..
-make
-make install (as root or with sudo)```
+mkdir b 
+cd b 
+cmake .. 
+make 
+make install (as root or with sudo) 
 
 
 To build and install TEA with cmake/ninja and GCC, do:
 
-```mkdir b
+mkdir b
 cd b
 cmake -GNinja ..
 ninja
-ninja install```
+ninja install
 
 By default, cmake builds TEA without some features: printer and aspell support, libpoppler and djvuapi. To enable them, use from the build directory:
 

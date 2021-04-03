@@ -71,17 +71,18 @@ make install (as root or with sudo)
 
 To build and install TEA with cmake/ninja and GCC, do:
 
-mkdir b
-cd b
-cmake -GNinja ..
-ninja
-ninja install
+mkdir b  
+cd b  
+cmake -GNinja ..  
+ninja  
+ninja install  
 
 By default, cmake builds TEA without some features: printer and aspell support, libpoppler and djvuapi. To enable them, use from the build directory:
 
 cmake .. -DUSE_ASPELL=ON -DUSE_PRINTER=ON -DUSE_PDF=ON -DUSE_DJVU=ON
 
 If the Qt5 and Qt6 both are present on the system, use CMAKE_PREFIX_PATH variable to set the path to the QtN. Otherwise, Qt6 will be prefered.
+
    Examples:
 
 cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt ..
@@ -90,7 +91,7 @@ cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt ..
 cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt6 ..
 //usr/lib/qt6 is the directory with qt6
 
-cmake -DCMAKE_PREFIX_PATH=$HOME/Qt/6.0.0/gcc_64/lib/cmake ..
+cmake -DCMAKE_PREFIX_PATH=$HOME/Qt/6.0.0/gcc_64/lib/cmake ..  
 //here we point to the locally installed Qt6
 
 
@@ -100,31 +101,31 @@ With meson, TEA supports Qt5 build.
 
 To build and install TEA with meson/ninja and GCC, do:
 
-mkdir b
-meson
-cd b
-ninja
-ninja install
+mkdir b  
+meson  
+cd b  
+ninja  
+ninja install  
 
 To build and install TEA with meson/ninja and CLANG, do:
 
-mkdir b
-CC=clang CXX=clang++ meson b
-cd b
-ninja
-ninja install
+mkdir b  
+CC=clang CXX=clang++ meson b  
+cd b  
+ninja  
+ninja install  
 
 To enable PDF and DJVU text extraction support use, and Aspell support (disabled by default as well as the printing support):
 
-mkdir b
-meson b
-meson configure -Dpdf=enabled -Ddjvu=enabled -Daspell=enabled b
-cd b
-ninja
-ninja install
+mkdir b  
+meson b  
+meson configure -Dpdf=enabled -Ddjvu=enabled -Daspell=enabled b  
+cd b  
+ninja  
+ninja install  
 
 
-01.03 QMAKE
+#### 01.03 QMAKE ####
 
 With qmake, TEA supports Qt4 and Qt5 build.
 

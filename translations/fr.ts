@@ -90,10 +90,6 @@ Voulez-vous sauvegardez vos changements ?</translation>
         <translation></translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;Sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: https://aur.archlinux.org/packages/tea-qt/&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>All (*);;Text files (*.txt);;Markup files (*.xml *.html *.htm *.);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)</source>
         <translation></translation>
     </message>
@@ -103,7 +99,7 @@ Voulez-vous sauvegardez vos changements ?</translation>
     </message>
     <message>
         <source>This file is open in the read-only mode. You can save it with another name using &lt;b&gt;Save as&lt;/b&gt;</source>
-        <translation>Ce fichier est ouvert en mode lecture seule. Vous pouvez le sauvegarder sous un autre nom en utilisant &lt;b&gt;Sauvegarder sous&lt;/b&gt;</translation>
+        <translation type="vanished">Ce fichier est ouvert en mode lecture seule. Vous pouvez le sauvegarder sous un autre nom en utilisant &lt;b&gt;Sauvegarder sous&lt;/b&gt;</translation>
     </message>
     <message>
         <source>%1 already exists
@@ -549,10 +545,6 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Scale image</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Plugins</source>
         <translation></translation>
     </message>
     <message>
@@ -1044,10 +1036,6 @@ Voulez-vous le remplacer ?</translation>
         <translation>Informations complètes</translation>
     </message>
     <message>
-        <source>Checksum</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>ZIP</source>
         <translation>ZIP</translation>
     </message>
@@ -1121,7 +1109,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Highlighting mode</source>
-        <translation>Mode surlignage</translation>
+        <translation type="vanished">Mode surlignage</translation>
     </message>
     <message>
         <source>Profiles</source>
@@ -1572,7 +1560,7 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>Operations</source>
-        <translation>Opérations</translation>
+        <translation type="vanished">Opérations</translation>
     </message>
     <message>
         <source>Guess encoding!</source>
@@ -1591,15 +1579,6 @@ ff=firefox file:///%s</source>
         <translation></translation>
     </message>
     <message>
-        <source>It seems that %1 contains TEA plugin.
- Do you want to install it?</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cannot unzip and install plugin</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>new</source>
         <translation>nouveau</translation>
     </message>
@@ -1611,63 +1590,11 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>MD5 checksum for %1 is %2</source>
-        <translation>La somme MD5 de %1 est %2</translation>
+        <translation type="vanished">La somme MD5 de %1 est %2</translation>
     </message>
     <message>
         <source>MD4 checksum for %1 is %2</source>
-        <translation>La somme MD4 de %1 est %2</translation>
-    </message>
-    <message>
-        <source>SHA-1 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-224 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-384 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-256 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SHA-2 SHA-512 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SHA-3 224 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SHA-3 256 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SHA-3 384 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>SHA-3 512 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keccak 224 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keccak 256 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keccak 384 checksum for %1 is %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keccak 512 checksum for %1 is %2</source>
-        <translation></translation>
+        <translation type="vanished">La somme MD4 de %1 est %2</translation>
     </message>
     <message>
         <source>End of line: </source>
@@ -1808,22 +1735,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation></translation>
     </message>
     <message>
-        <source>Trigonometric 2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Trigonometric 1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Conway</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Leueshkanov</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Word length: </source>
         <translation></translation>
     </message>
@@ -1837,14 +1748,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>There is no stylesheet file</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>There is no plugin file</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error:&lt;/b&gt; </source>
         <translation></translation>
     </message>
     <message>
@@ -1862,6 +1765,50 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     <message>
         <source>Saved: %1</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>This file is opened in the read-only mode. You can save it with another name using &lt;b&gt;Save as&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The storage file is closed or not set.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are trying to rename the opened file, please close it first!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>matched</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>does not</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check regexp match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>0 - Trigonometrical v2, 1 - Trigonometrical v1, 2 - Conway, 3 - Leueshkanov</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a file from the file name provided above</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save the current opened file with the name provided above</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | semiletov.org/tea&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1913,6 +1860,11 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     <message>
         <source>Modified at</source>
         <translation>Modifié le</translation>
+    </message>
+    <message>
+        <source>Please set up spell checker dictionaries at
+ Options - Functions page</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

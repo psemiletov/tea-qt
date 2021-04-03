@@ -6076,7 +6076,12 @@ CTEA::CTEA()
 
   setAcceptDrops (true);
 
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov, tea@list.ru<br>Sites: semiletov.org/tea and tea.ourproject.org<br>Git: github.com/psemiletov/tea-qt<br>AUR: https://aur.archlinux.org/packages/tea-qt/<br>Support TEA on https://www.patreon.com/semiletov<br>read the Manual under the <i>Manual</i> tab!").arg (QString (current_version_number)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov | semiletov.org/tea<br>Support TEA on www.patreon.com/semiletov<br>Git: github.com/psemiletov/tea-qt<br>AUR: aur.archlinux.org/packages/tea-qt").arg (QString (current_version_number)));
+
+  QTextCursor cr = log->textCursor();
+  cr.movePosition (QTextCursor::Start);
+  log->setTextCursor (cr);
+
 
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
   qApp->setWindowIcon (QIcon (icon_fname));

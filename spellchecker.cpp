@@ -384,7 +384,7 @@ bool CHunspellChecker::check (const QString &word)
 {
   if (modules_list.size() == 0)
      {
-      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Tune - Functions page"));
+      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Options - Functions page"));
       return false;
      }
 

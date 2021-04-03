@@ -31,53 +31,51 @@ https://www.facebook.com/groups/766324686841748/
 
 ### 00: INTRO ###
 
-TEA is a text editor with the hundreds of features for Linux, *BSD, Mac, Windows, OS/2 and Haiku.
+TEA is a C++, Qt(4,5,6) text editor with the hundreds of features for Linux, *BSD, Mac, Windows, OS/2 and Haiku. 
  
-#### 01: INSTALLATION FROM THE SOURCE ####
+### 01: INSTALLATION FROM THE SOURCE ###
 
 You can install TEA from the source in 4 ways, using build systems qmake/make, meson/ninja, cmake/make, cmake/ninja. But first, you need to install some development libraries.
 
-Mandatory:
+**Mandatory**
 
 Qt 4.8 or Qt 5.4+ or Qt 6
 zlib
 
-Optional:
+**Optional**
 
-libaspell (for spell checking engine)
-libhunspell (for spell checking engine)
-poppler-qt5 or poppler-qt6 (to read the text from PDF)
-ddjvuap (to read the text from DJVU)
+libaspell (for spell checking engine), 
+libhunspell (for spell checking engine), 
+poppler-qt5 or poppler-qt6 (to read the text from PDF), ddjvuap (to read the text from DJVU)
 
-Note for FreeBSD users: you need the pkgconf package - pkg install pkgconf
+**Note for FreeBSD users**: you need the pkgconf package - pkg install pkgconf
 
 Which build system you should use?
 
-Use qmake for: Qt 4, old distros and Windows.
-Use meson or cmake for modern distros. 
+Use qmake for: Qt 4, old distros and Windows. Use meson or cmake for modern distros. 
 cmake is the mainline build system for TEA. 
 
 
-01.01 CMAKE
+#### 01.01 CMAKE #### 
 
 With cmake, TEA supports Qt5 and Qt6 build.
 
 If you want to build and install TEA with cmake + make, run at the TEA source dir:
 
-mkdir b
+```mkdir b
 cd b
 cmake ..
 make
-make install (as root or with sudo)
+make install (as root or with sudo)```
 
 
 To build and install TEA with cmake/ninja and GCC, do:
 
-mkdir b
+```mkdir b
 cd b
 cmake -GNinja ..
 ninja
-ninja install
+ninja install```
 
 By default, cmake builds TEA without some features: printer and aspell support, libpoppler and djvuapi. To enable them, use from the build directory:
 
@@ -96,7 +94,7 @@ cmake -DCMAKE_PREFIX_PATH=$HOME/Qt/6.0.0/gcc_64/lib/cmake ..
 //here we point to the locally installed Qt6
 
 
-01.02 MESON
+#### 01.02 MESON #### 
 
 With meson, TEA supports Qt5 build.
 

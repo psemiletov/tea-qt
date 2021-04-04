@@ -1,7 +1,6 @@
-<document exts="f;for;f90;f95" langs="Fortran" pattern="^.*\.(f|for|f90|f95)$">
+<document pattern="^.*\.(f|for|f90|f95)$">
 
-<item name="options" casecare="0" xml_format="1"> 
-</item>
+<item name="options" casecare="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(.and.|.eq.|.eqv.|.ge.|.gt.|.le.|.lt.|.ne.|.neqv.|.not.|.or.|call|case|contains|continue|cycle|default|do|else|elsewhere|end|enddo|ednforall|endwhere|endif|exit|forall|function|if|implicit|include|interface|module|module|print|program|recursive|return|select|stop|subroutine|then|type|use|where|while|write)\b</item>
 

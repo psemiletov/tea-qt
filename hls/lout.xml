@@ -1,6 +1,6 @@
-<document exts="lout" langs="Lout" pattern="^.*\.(lout)$">
+<document pattern="^.*\.(lout)$">
 
-<item name="options" wrap="1" xml_format="1"></item>
+<item name="options" wrap="1"></item>
 
 <item name="class" type="item" color="class" fontstyle="bold">@[A-Z,a-z]+</item>
 

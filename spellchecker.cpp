@@ -262,6 +262,7 @@ void CHunspellChecker::load_dict()
 {
   loaded = false;
 
+
   if (! dir_exists (dir_dicts) || language.isEmpty())
      return;
 

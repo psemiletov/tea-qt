@@ -1,7 +1,6 @@
-<document exts="php" langs="PHP" pattern="^.*\.(php)$">
+<document pattern="^.*\.(php)$">
 
-<item name="options" wrap="0" xml_format="1"> 
-</item>
+<item name="options" wrap="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(\b(and|abstract|array|as|break|case|catch|cfunction|class|clone|const|continue|declare|default|die|do|echo|else|elseif|empty|enddeclare|endfor|endforeach|endif|endswitch|endwhile|eval|exit|extends|false|final|for|foreach|function|global|goto|if|implements|include|include_once|instanceof|interface|isset|list|namespace|new|old_function|or|or|parent|print|private|protected|public|require|require_once|return|self|static|switch|throw|true|try|unset|use|var|while|xor)\b
 </item>

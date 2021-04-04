@@ -1,7 +1,6 @@
-<document exts="cpp;c;h;hh;cxx;hpp;cc;m;mm" langs="c++;c;objective c" pattern="^.*\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$">
+<document pattern="^.*\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$">
 
-<item name="options" xml_format="1"> 
-</item>
+<item name="options" casecare="1"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(asm|asm|auto|break|case|catch|catch|class|const|const_cast|const_cast|continue|default|delete|do|dynamic_cast|dynamic_cast|else|enum|explicit|export|extern|false|for|foreach|friend|goto|if|inline|mutable|namespace|namespace|new|noexcept|operator|private|protected|public|register|reinterpret_cast|reinterpret_cast|return|signals|sizeof|slots|static|static_cast|static_cast|struct|switch|template|this|throw|throw|true|try|typedef|typeid|typename|union|using|virtual|volatile|while)\b</item>
 

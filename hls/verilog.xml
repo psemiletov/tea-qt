@@ -1,6 +1,6 @@
-<document exts="v" lngs="verilog" pattern="^.*\.(v)$">
+<document pattern="^.*\.(v)$">
 
-<item name="options" wrap="0" xml_format="1"></item>
+<item name="options" wrap="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(\cleartrace|\error|\listb;log|always|always_comb|always_ff|always_latch|and|assert|assign|begin|bitstoread|break|buf|bufif0|bufif1|case|casex|casez|cast|class|cmos|constraint|continue|countdrivers|covergroup|coverpoint|deassign|default|defparam|disable|display|do|edge|else|end|endcase|endclass|endfunction|endgroup|endinterface|endmodule|endprimitive|endprogram|endproperty|endsequence|endspecify|endtable|endtask|enum|event|exit|export|fclose|fdisplay|final|finish|fmonitor|fopen|for|force|foreach|forever|fork|fstrobe|function|fwrite|getpattern|highz0|highz1|history|if|ifnone|import|incsave|initial|inout|input|input|interface|itor|join|key|large|macromodule|medium|module|monitor|nand|negedge|new|nmos|nokey|nor|not|notif0|notif1|or|output|packed|parameter|pmos|posedge|primitive|priority|program|property|pull0|pull1|pulldown|pullup|rcmos|readmemb|readmemh|real|realtime|reg|release|repeat|req|return|rnmos|rpmos|rtran|rtranif0|rtranif1|scalared|scope|sequence|settrace|showscopes|showvars|small|specify|specparam|stop|strength|strong0|strong1|struct|struct|supply0|supply1|table|task|time|time|tran|tranif0|tranif1|tri|tri0|tri1|triand|trior|trireg|typedef|unique|vectored|virtual|wait|wand|weak0|weak1|while|wire|wor|xnor|xor)\b</item>
 

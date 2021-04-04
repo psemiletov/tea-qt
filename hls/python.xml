@@ -1,11 +1,9 @@
-<document exts="py" langs="Python" pattern="^.*\.(py)$">
+<document pattern="^.*\.(py)$">
 
-<item name="options" wrap="0" xml_format="1"> 
-</item>
+<item name="options" wrap="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
 \b(and|assert|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|not|or|pass|print|raise|return|try|while|yield)\b</item>
-
 
 <item name="functions" type="keywords" color="functions">
 \b(__import__|abs|all|any|apply|basestring|bin|bool|buffer|bytearray|callable|chr|classmethod|cmp|coerce|compile|complex|delattr|dict|dir|divmod|enumerate|eval|execfile|file|filter|float|format|frozenset|getattr|globals|hasattr|hash|help|hex|id|input|int|intern|isinstance|issubclass|iter|len|list|locals|long|map|max|memoryview|min|next|object|oct|open|ord|pow|property|range|raw_input|reduce|reload|repr|reversed|round|set|setattr|slice|sorted|staticmethod|str|sum|super|tuple|type|unichr|unicode|vars|xrange|zip)\b</item>

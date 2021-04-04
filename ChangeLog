@@ -1,13 +1,12 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
-* Spellscheker module rewrite
+* Spellcheker module rewrite
 
 + lua is added for script intepritators (Fn - Script)
 + Fn::Script: bat, btm scripts support (Win)
 + Fn::Script: cmd //REXX  
 
-* old format for keywords (in syntax hl files) with ";" as the delimeter
-is dropped, use current one (regexp) instead if you write own hl files
+* old format for keywords (in syntax hl files) with ";" as the delimeter is dropped, use current one (regexp) instead if you write own hl files
 see /hls dir for examples
 
 + Ctrl-mouse wheel to zoom text at current tab

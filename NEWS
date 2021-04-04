@@ -1,14 +1,22 @@
 =====NEWS ABOUT TEA====
-TEA 60.0.0, march 2021
+TEA 60.0.0, april 2021
 ---------------------------------------
 
-   For the centuries of the development, TEA gains a thousands of features. Some of them becomes rarely used, some needs more dependencies, so I've decide to make a some sort of clean-up without the actual removing of such functions. Now they are just disabled by default at the build level, when you compile TEA with cmake and meson. The qmake subsystem still loves all TEA non-mandatory deps. 
-   So, by default, with meson and cmake, TEA does not searches and does not builds with: QML, Aspell, libpopplerqt5, ddjvuapi. You can enable all that stuff (see README) by yourself manually. I don't know the decisions of packagers, their choice of TEA features, now I'm speaking just about the build from the source.
-   TEA 50.1 also has a lot of fixes for Clang/Mac. 
-   My study of Voynich manuscript (the dead end, it is impossible to read it) lead me to add some new functions:
-+ Functions - Analysis - UNITAZ sorting length
-+ Functions - Filter - Filter by repetitions
-+ Functions - Sort - Sort by length
+   Why the version 60 after 51? To express the big changes of the code and compatibility with Qt 6. Yes, now TEA can be built against Qt 4 (for legacy systems), Qt 5 and Qt 6.
+   With TEA 60, the mature, 14-year old codebase was reviewed line by line and rewritten a lot. But I still don't use "modern C++" due to respect to old compilers. 
+   So, what is new in TEA 60?
+   * Input-output subsystem (not touched from the beginning) was rewritten. 
+  - QML support is dropped. No more plugins. But!
+  + Added 2/Rexx, Lua, Windows batch files as scripts support (to the already supported Bash, Perl, Ruby, Python).
+  * TEA now uses some icons from the desktop theme.
+  * Spellchecker module has been rewritten.
+  * Syntax highlighting engine is almost new, and old syntax highlighting rule file format is not supported anymore - TEA uses the new one, although based on the old one. 
+  + Use Ctrl-mouse wheel to zoom text at current file.
+  + TEA start time is shorter due to some improvements (spell checker now initialized on demand only).
+
+   NOTE FOR PACKAGERS
+
+   TEA 60 is stable with Qt6 as with Qt5. If built against Qt6, add to the deps the "Qt6-5compat" module.
 
    Stay tuned.
    Peter Semiletov

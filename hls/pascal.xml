@@ -1,7 +1,6 @@
-<document exts="pp;pas;dpr" langs="Pascal" pattern="^.*\.(pp|pas|dpr)$">
+<document pattern="^.*\.(pp|pas|dpr)$">
 
-<item name="options" casecare="0" xml_format="1"> 
-</item>
+<item name="options" casecare="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">
 \b(absolute|and|array|as|asm|begin|break|case|class|const|constructor|continue|destructor|dispose|div|do|downto|else|end|except|exit|exports|false|file|finalization|finally|for|function|goto|if|implementation|in|inherited|initialization|inline|interface|is|label|library|mod|new|nil|not|object|of|on|on|operator|or|out|packed|procedure|program|property|raise|record|reintroduce|repeat|self|set|shl|shr|string|then|threadvar|to|true|try|type|unit|until|uses|var|while|with|xor)\b</item>

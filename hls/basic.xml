@@ -1,6 +1,6 @@
-<document exts="bas;bi;vbs;vbe" langs="BASIC" pattern="^.*\.(bas|bi|vbs|vbe)$">
+<document pattern="^.*\.(bas|bi|vbs|vbe)$">
 
-<item name="options" casecare="0" wrap="0" xml_format="1"></item>
+<item name="options" casecare="0" wrap="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(and|andalso|as|byref|call|cast|circle|cls|color|const|cptr|declare|defint|defsng|defstr|delete|dim|do|draw|dynamic|else|end|enum|eqv|erase|exit)|explicit|extern|for|function|get|getkey|if|imp|inkey|input|is|line|locate|loop|mod|new|next|not|option|or|orelse|peek|poke|printprivate|procptr|public|put|redim|return|scope|screen|screenres|shared|shl|shr|sleep|strptr|sub|then|type|union|until|var|varptr|wend|while|with|xor\b</item>
 

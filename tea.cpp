@@ -4468,6 +4468,8 @@ void CTEA::fn_change_spell_lang()
   QAction *a = qobject_cast<QAction *>(sender());
   settings->setValue ("spell_lang", a->text());
   spellchecker->change_lang (a->text());
+  spellchecker->load_dict();
+
   fn_spell_check();
 }
 

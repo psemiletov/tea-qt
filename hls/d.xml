@@ -1,6 +1,6 @@
-<document exts="d" langs="D" pattern="^.*\.(d)$">
+<document pattern="^.*\.(d)$">
 
-<item name="options" wrap="0" xml_format="1"></item>
+<item name="options" wrap="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(alias|align|assert|auto|body|break|case|cast|catch|class|const|continue|default|delegate|delete|do|else|enum|finally|for|foreach|function|if|import|in|is|module|new|out|private|private|public|return|scope|static|struct|super|switch|template|this|throw|try|typedef|typeof|union|version|volatile|while)\b</item>
 

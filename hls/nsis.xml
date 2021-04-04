@@ -1,7 +1,6 @@
-<document exts="nsi" langs="NSIS" pattern="^.*\.(nsi)$">
+<document pattern="^.*\.(nsi)$">
 
-<item name="options" casecare="0" wrap="0" xml_format="1"> 
-</item>
+<item name="options" casecare="0" wrap="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(abort|break|call|case|crccheck|createdirectory|default|do|else|endif|endswitch|endwhile|file|for|function|functionend|goto|if|installdir|insttype|loopuntil|name|name|next|outfile|outfile|page|pageex|pageexend|requestexecutionlevel|requestexecutionlevel|section|sectionend|sectionend|sectiongroup|sectionin|setcompressor|setoutpath|setshellvarcontext|showinstdetails|showuninstdetails|switch|var|while|writeregstr|writeuninstaller)\b</item>
 

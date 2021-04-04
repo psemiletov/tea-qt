@@ -1,6 +1,6 @@
-<document exts="wiki" langs="Wikitext" pattern="^.*\.(wiki)$">
+<document pattern="^.*\.(wiki)$">
 
-<item name="options" wrap="1" xml_format="1"></item>
+<item name="options" wrap="1"></item>
 
 <item name="tags" type="keywords" color="tags" fontstyle="bold">(&lt;[a-zA-Z\d:]+\b|&lt;\?[a-zA-Z\d:]+\b|\?&gt;|&gt;|/&gt;|&lt;/[a-zA-Z\d:]+&gt;)</item>
 

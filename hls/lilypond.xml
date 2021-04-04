@@ -1,6 +1,6 @@
-<document exts="ly" langs="LilyPond"  pattern="^.*\.(ly)$">
+<document pattern="^.*\.(ly)$">
 
-<item name="options" wrap="0" xml_format="1"></item>
+<item name="options" wrap="0"></item>
 
 <item name="class" type="item" color="class" fontstyle="bold">\\[A-Za-z]+\b</item>
 

@@ -1,6 +1,6 @@
-<document exts="pl;pm" langs="Perl" pattern="^.*\.(pl|pm)$">
+<document pattern="^.*\.(pl|pm)$">
 
-<item name="options" wrap="0" xml_format="1"></item>
+<item name="options" wrap="0"></item>
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(\bmy|chdir|chomp|close|closedir|continue|defined|die|do|elsif|eof|eval|exists|foreach|getpwnam|given|glob|goto|grep|if|import|join|last|last|length|local|next|open|pop|print|printf|push|readline|redo|require|reset|return|say|scalar|shift|split|split|stat|sub|syscall|system|undef|unimport|unless|until|use|wait|waitpid|wantarray|warn|when|while)\b</item>
 

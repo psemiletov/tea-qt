@@ -2481,10 +2481,10 @@ void CTEA::search_find_next()
       if (menu_find_regexp->isChecked())
          cr = d->document()->find (QRegularExpression (d->text_to_search), d->textCursor().position(), get_search_options());
 #else
-#if QT_VERSION < 0x050500
+//#if QT_VERSION < 0x050500
       if (menu_find_regexp->isChecked())
          cr = d->document()->find (QRegExp (d->text_to_search), d->textCursor().position(), get_search_options());
-#endif
+//#endif
 #endif
 
       if (menu_find_fuzzy->isChecked())
@@ -9297,7 +9297,7 @@ void CTEA::fman_items_select_by_regexp (bool mode)
   if (ft.isEmpty())
       return;
 
-#if QT_VERSION >= 0x050500
+#if QT_VERSION >= 0x050F00
   l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegularExpression);
 #else
   l_fman_find = fman->mymodel->findItems (ft, Qt::MatchRegExp);

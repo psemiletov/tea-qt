@@ -1094,10 +1094,10 @@ extern int ZEXPORT zipOpenNewFileInZip4_64 (zipFile file, const char* filename, 
     int err = ZIP_OK;
     uLong version_to_extract;
 
-#    ifdef NOCRYPT
+//#    ifdef NOCRYPT
     if (password != NULL)
         return ZIP_PARAMERROR;
-#    endif
+//#    endif
 
     if (file == NULL)
         return ZIP_PARAMERROR;
@@ -1286,7 +1286,7 @@ extern int ZEXPORT zipOpenNewFileInZip4_64 (zipFile file, const char* filename, 
     }
 
 #    ifndef NOCRYPT
-    zi->ci.crypt_header_size = 0;
+/*    zi->ci.crypt_header_size = 0;
     if ((err==Z_OK) && (password != NULL))
     {
         unsigned char bufHead[RAND_HEAD_LEN];
@@ -1302,7 +1302,7 @@ extern int ZEXPORT zipOpenNewFileInZip4_64 (zipFile file, const char* filename, 
 
         if (ZWRITE64(zi->z_filefunc,zi->filestream,bufHead,sizeHead) != sizeHead)
                 err = ZIP_ERRNO;
-    }
+    }*/
 #    endif
 
     if (err==Z_OK)

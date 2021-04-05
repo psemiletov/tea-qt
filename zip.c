@@ -1293,9 +1293,10 @@ extern int ZEXPORT zipOpenNewFileInZip4_64 (zipFile file, const char* filename, 
         unsigned int sizeHead;
         zi->ci.encrypt = 1;
         zi->ci.pcrc_32_tab = get_crc_table();
-        /*init_keys(password,zi->ci.keys,zi->ci.pcrc_32_tab);*/
+    //    init_keys(password,zi->ci.keys,zi->ci.pcrc_32_tab);
+
         if (crcForCrypting == 0) {
-            crcForCrypting = (uLong)zi->ci.dosDate << 16; /* ATTANTION! Without this row, you don't unpack your password protected archive in other app. */
+            crcForCrypting = (uLong)zi->ci.dosDate << 16; // ATTANTION! Without this row, you don't unpack your password protected archive in other app.
         }
         sizeHead=crypthead(password,bufHead,RAND_HEAD_LEN,zi->ci.keys,zi->ci.pcrc_32_tab,crcForCrypting);
         zi->ci.crypt_header_size = sizeHead;

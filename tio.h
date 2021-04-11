@@ -198,4 +198,41 @@ public:
   QStringList get_supported_exts();
 };
 
+
+/*
+class CCharsetConverter
+{
+  Q_OBJECT
+
+public:
+
+  static virtual QStringList get_charsets() = 0;
+
+  virtual ~CCharsetConverter() {};
+};
+*/
+/*
+class CIconvCharsetConverter: public QObject
+{
+  Q_OBJECT
+
+public:
+
+  QStringList charsets;
+
+  QStringList charsets_for_locale (const QString &loc);
+
+  void load_charsets();
+
+  QString to_utf16 (const QString &enc_from, char *inbuf, int len);
+ // char* from_utf_16 (const QString &enc_to, const QString &data);
+
+
+};
+*/
+
+
+
+
+
 #endif // TIO_H

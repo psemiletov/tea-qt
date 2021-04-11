@@ -46,6 +46,8 @@ DJVU read code taken fromdvutxt.c:
 
 #include <iostream>
 
+//#include <iconv.h>
+
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QDataStream>
@@ -174,8 +176,8 @@ bool CTioPlainText::load (const QString &fname)
  // in.setCodec (charset.toUtf8().data());
 
   QByteArray ba = file.readAll();
-  QTextCodec *codec = QTextCodec::codecForName(charset.toUtf8().data());
-  data = codec->toUnicode(ba);
+  QTextCodec *codec = QTextCodec::codecForName (charset.toUtf8().data());
+  data = codec->toUnicode (ba);
 
   if (eol == "\r\n")
      data.replace (eol, "\n");
@@ -183,7 +185,7 @@ bool CTioPlainText::load (const QString &fname)
   if (eol == "\r")
      data.replace (eol, "\n");
 
-   file.close();
+  file.close();
 
   return true;
 }
@@ -1066,3 +1068,125 @@ QStringList CTioHandler::get_supported_exts()
   l.append ("txt");
   return l;
 }
+
+
+QString cp1251_to_utf16 (char *inbuf, int len)
+{
+  QString r;
+  char *outbuf = new char [len * 2];
+
+  iconv_t cd = iconv_open ("UTF-16","CP1251");
+  size_t inbytesleft;
+  size_t outbytesleft;
+
+
+  size_t s = iconv (cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+
+  QByteArray ba = QByteArray::fromRawData (outbuf, len * 2);
+
+  delete [] outbuf;
+
+  iconv_close (cd);
+  return r;
+}
+
+
+
+void CIconvCharsetConverter::load_charsets()
+{
+  charsets.prepend ("UTF-8");
+  charsets.prepend ("UTF-16");
+  charsets.prepend ("CP1251");
+  charsets.prepend ("KOI8-R");
+  charsets.prepend ("KOI8-U");
+  charsets.prepend ("DOS866");
+
+}
+
+/*
+
+  https://code.woboq.org/qt5/qtbase/src/corelib/codecs/qiconvcodec.cpp.html
+
+    QByteArray ba(outBytesLeft, Qt::Uninitialized);
+    char *outBytes = ba.data();
+
+  */
+/*
+QString CIconvCharsetConverter::to_utf16 (const QString &enc_from, char *inbuf, int len)
+{
+  QString r;
+  //char *outbuf = new char [len * 2 + 2]; //last 2 is bom
+  const char *inBytes = inbuf;
+
+  iconv_t cd = iconv_open ("UTF-8", enc_from.toLatin1().data());
+  size_t inbytesleft = len;
+  size_t outbytesleft = len * 4 + 2;
+
+  QByteArray ba (outbytesleft, Qt::Uninitialized);
+  char *outbuf = ba.data();
+
+  size_t total = outbytesleft;
+
+  qDebug() << "inbytesleft: " << inbytesleft;
+  qDebug() << "outbytesleft: " << outbytesleft;
+
+  while (inbytesleft > 0)
+        {
+         size_t e = iconv (cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+
+//         qDebug() << "e:" <<e;
+
+        }
+
+
+  //if (e != -1)
+    //r = QString::fromLatin1 (outbuf, len * 2);
+   //   r = QString::fromUtf8 (outbuf, total - outbytesleft);
+
+
+  qDebug() << "inbytesleft: " << inbytesleft;
+  qDebug() << "outbytesleft: " << outbytesleft;
+
+    //QByteArray ba = QByteArray::fromRawData (outbuf, len * 2);
+
+   //[static]QString QString::fromUtf8(const char * str, int size = -1)
+
+
+  iconv_close (cd);
+
+  //delete [] outbuf;
+
+  return QString (ba);
+}
+
+
+QStringList charsets_for_locale (const QString &loc)
+{
+  QStringList l;
+
+  return l;
+}
+*/
+/*
+char* CIconvCharsetConverter::from_utf_16 (const QString &enc_to, const QString &data)
+{
+  char *outbuf = new char [len * 2];
+
+  iconv_t cd = iconv_open ("UTF-16", enc_to.toLatin1().data());
+  size_t inbytesleft = len;
+  size_t outbytesleft = len * 2;
+
+
+  size_t e = iconv (cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+  if (e != -1)
+    r = QString::fromLatin1 (outbuf, len * 2);
+
+    //QByteArray ba = QByteArray::fromRawData (outbuf, len * 2);
+
+   //[static]QString QString::fromUtf8(const char * str, int size = -1)
+
+
+  iconv_close (cd);
+  return outbuf;
+}
+*/

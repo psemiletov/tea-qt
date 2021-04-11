@@ -1038,6 +1038,13 @@ File menu callbacks
 
 void CTEA::test()
 {
+ /* CIconvCharsetConverter c;
+  QByteArray ba = file_load ("/home/rox/devel/test/1251.txt");
+
+  QString s = c.to_utf16 ("CP1251", ba.data(), ba.size());
+ qDebug() << s;*/
+
+  QIconvCodec c;
 }
 
 
@@ -6586,7 +6593,7 @@ File menu
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
 
- // menu_file->addAction (act_test);
+  menu_file->addAction (act_test);
 
   menu_file->addAction (newAct);
   add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));

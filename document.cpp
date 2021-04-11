@@ -224,7 +224,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
 
-                     multiLineCommentFormat = fmt;
+                     fmt_multi_line_comment = fmt;
                      QString element = xml.readElementText().trimmed().remove('\n');
                      if (! element.isEmpty())
                         commentStartExpression = QRegExp (element, cs, QRegExp::RegExp);
@@ -321,7 +321,7 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
          else
              commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
 
-         setFormat (startIndex, commentLength, multiLineCommentFormat);
+         setFormat (startIndex, commentLength, fmt_multi_line_comment);
          startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
         }
 }

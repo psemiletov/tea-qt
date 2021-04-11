@@ -6593,7 +6593,7 @@ File menu
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
 
-  menu_file->addAction (act_test);
+ // menu_file->addAction (act_test);
 
   menu_file->addAction (newAct);
   add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));

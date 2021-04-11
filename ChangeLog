@@ -1,5 +1,7 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ qt 4.x compat again
+
 * Spellcheker module rewrite
 
 + lua is added for script intepritators (Fn - Script)

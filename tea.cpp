@@ -1044,7 +1044,7 @@ void CTEA::test()
   QString s = c.to_utf16 ("CP1251", ba.data(), ba.size());
  qDebug() << s;*/
 
-  QIconvCodec c;
+//  QIconvCodec c;
 }
 
 

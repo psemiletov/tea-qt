@@ -1069,6 +1069,7 @@ QStringList CTioHandler::get_supported_exts()
   return l;
 }
 
+/*
 
 QString cp1251_to_utf16 (char *inbuf, int len)
 {
@@ -1103,7 +1104,6 @@ void CIconvCharsetConverter::load_charsets()
 
 }
 
-/*
 
   https://code.woboq.org/qt5/qtbase/src/corelib/codecs/qiconvcodec.cpp.html
 

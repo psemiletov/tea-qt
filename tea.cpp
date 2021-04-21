@@ -3273,6 +3273,39 @@ void CTEA::fn_case_down()
 }
 
 
+void CTEA::fn_case_cap_sentences()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (!d)
+     return;
+
+  QString t = d->toPlainText();
+
+  bool cap = false;
+
+  for (int i = 0; i < t.size(); i++)
+      {
+       if (t.at(i) == '.')
+          {
+           cap = true;
+           continue;
+          }
+
+       if (t.at(i).isLetter() && cap)
+          {
+           t[i] = t.at(i).toUpper();
+           cap = false;
+          }
+      }
+
+
+  d->put (t);
+}
+
+
+
 void CTEA::fn_sort_casecare()
 {
   last_action = sender();
@@ -6840,6 +6873,7 @@ Functions menu
 
   add_to_menu (tm, tr ("UPCASE"), SLOT(fn_case_up()),"Ctrl+Up");
   add_to_menu (tm, tr ("lower case"), SLOT(fn_case_down()),"Ctrl+Down");
+  add_to_menu (tm, tr ("Capitalize sentences"), SLOT(fn_case_cap_sentences()));
 
 
   tm = menu_functions->addMenu (tr ("Sort"));

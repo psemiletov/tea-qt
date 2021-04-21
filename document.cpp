@@ -341,9 +341,6 @@ CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTex
 
 void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 {
-   //exts = "default";
- //langs = "default";
-
   if (! file_exists (fname))
      return;
 
@@ -365,12 +362,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
 
          if (xml.isStartElement())
             {
-             /*if (tag_name == "document")
-                {
-                 exts = xml.attributes().value ("exts").toString();
-                 langs = xml.attributes().value ("langs").toString();
-                }*/
-
              if (tag_name == "item")
                 {
                  QString attr_type = xml.attributes().value ("type").toString();

@@ -425,6 +425,58 @@ void CFilesList::get (const QString &path)
 }
 
 
+
+#if QT_VERSION < 0x050000
+#define ADDTEXTTYPE(expr) patterns.push_back (QRegExp (expr, Qt::CaseInsensitive));
+#else
+#define ADDTEXTTYPE(expr) patterns.push_back (QRegularExpression (expr, QRegularExpression::CaseInsensitiveOption));
+#endif
+
+
+
+CFTypeChecker::CFTypeChecker()
+{
+
+  ADDTEXTTYPE (".*(readme|news|changelog|todo)$");
+  ADDTEXTTYPE ("^\\..*(rc)$");
+  ADDTEXTTYPE ("^.*\\.(txt|conf|md|ini|bat|cfg|sbv|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$");
+  ADDTEXTTYPE ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$");
+  ADDTEXTTYPE ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$");
+#if defined(POPPLER_ENABLE)
+  ADDTEXTTYPE ("^.*\\.(pdf)$");
+#endif
+#if defined(DJVU_ENABLE)
+  ADDTEXTTYPE ("^.*\\.(djvu)$");
+#endif
+
+
+  ADDTEXTTYPE ("^.*\\.(awk)$");
+  ADDTEXTTYPE ("^.*\\.(sh)$");
+  ADDTEXTTYPE ("^.*\\.(bas|bi|vbs|vbe)$");
+  ADDTEXTTYPE ("^.*\\.(d)$");
+  ADDTEXTTYPE ("^.*\\.(f|for|f90|f95)$");
+  ADDTEXTTYPE ("^.*\\.(java|js)$");
+  ADDTEXTTYPE ("^.*\\.(ly)$");
+  ADDTEXTTYPE ("^.*\\.(lout)$");
+  ADDTEXTTYPE ("^.*\\.(lua)$");
+  ADDTEXTTYPE ("^.*\\.(asm)$");
+  ADDTEXTTYPE ("^.*\\.(nsi)$");
+  ADDTEXTTYPE ("^.*\\.(pp|pas|dpr)$");
+  ADDTEXTTYPE ("^.*\\.(pl|pm)$");
+  ADDTEXTTYPE ("^.*\\.(php)$");
+  ADDTEXTTYPE ("^.*\\.(po)$");
+  ADDTEXTTYPE ("^.*\\.(py)$");
+  ADDTEXTTYPE ("^.*\\.(r)$");
+  ADDTEXTTYPE ("^.*\\.(sd7)$");
+  ADDTEXTTYPE ("^.*\\.(tex|lyx)$");
+  ADDTEXTTYPE ("^.*\\.(vala)$");
+  ADDTEXTTYPE ("^.*\\.(v)$");
+  ADDTEXTTYPE ("^.*\\.(wiki)$");
+}
+
+
+
+/*
 CFTypeChecker::CFTypeChecker()
 {
 
@@ -432,7 +484,7 @@ CFTypeChecker::CFTypeChecker()
 
   patterns.push_back (QRegExp (".*(readme|news|changelog|todo)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^\\..*(rc)$", Qt::CaseInsensitive));
-  patterns.push_back (QRegExp ("^.*\\.(txt|conf|md|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(txt|conf|md|ini|bat|cfg|sbv|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive));
 
@@ -471,7 +523,7 @@ CFTypeChecker::CFTypeChecker()
 
   patterns.push_back (QRegularExpression (".*(readme|news|changelog|todo)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^\\..*(rc)$", QRegularExpression::CaseInsensitiveOption));
-  patterns.push_back (QRegularExpression ("^.*\\.(txt|conf|md|ini|bat|cfg|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", QRegularExpression::CaseInsensitiveOption));
+  patterns.push_back (QRegularExpression ("^.*\\.(txt|conf|md|ini|bat|cfg|sbv|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", QRegularExpression::CaseInsensitiveOption));
 
@@ -508,7 +560,7 @@ CFTypeChecker::CFTypeChecker()
 
 #endif
 }
-
+*/
 
 bool CFTypeChecker::check (const QString &fname) const
 {

@@ -767,4 +767,3 @@ int get_arab_num (std::string rom_str)
 
   return res;
 }
-

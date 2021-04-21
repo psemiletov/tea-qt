@@ -759,6 +759,7 @@ Fn menu callbacks
   void fn_insert_time();
   void fn_case_up();
   void fn_case_down();
+  void fn_case_cap_sentences();
   void fn_sort_casecare();
   void fn_sort_casecareless();
   void fn_sort_casecare_sep();

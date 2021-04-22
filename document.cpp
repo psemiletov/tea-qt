@@ -150,6 +150,9 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
   cs = Qt::CaseSensitive;
 
+  comment_start_expr = make_pair (QRegExp(), false);
+  comment_end_expr = make_pair (QRegExp(), false);
+
   QString temp = qstring_load (fname);
   if (temp.isEmpty())
      return;
@@ -227,14 +230,24 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                      fmt_multi_line_comment = fmt;
                      QString element = xml.readElementText().trimmed().remove('\n');
                      if (! element.isEmpty())
-                        commentStartExpression = QRegExp (element, cs, QRegExp::RegExp);
+                        //commentStartExpression = QRegExp (element, cs, QRegExp::RegExp);
+                       {
+                        comment_start_expr.first = QRegExp (element, cs, QRegExp::RegExp);
+                        comment_start_expr.second = true;
+                       }
+
                     }
                  else
                  if (attr_type == "mcomment-end")
                     {
                      QString element = xml.readElementText().trimmed().remove('\n');
                      if (! element.isEmpty())
-                        commentEndExpression = QRegExp (element, cs, QRegExp::RegExp);
+                        //commentEndExpression = QRegExp (element, cs, QRegExp::RegExp);
+                       {
+                        comment_end_expr.first = QRegExp (element, cs, QRegExp::RegExp);
+                        comment_end_expr.second = true;
+                       }
+
                     }
                  else
                  if (attr_type == "comment")
@@ -297,19 +310,23 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
       }
 
 
+  if (! comment_start_expr.second && ! comment_end_expr.second)
+     return;
+
+
   setCurrentBlockState (0);
 
   int startIndex = 0;
 
-  if (commentStartExpression.isEmpty() || commentEndExpression.isEmpty())
-     return;
+  //if (commentStartExpression.isEmpty() || commentEndExpression.isEmpty())
+    // return;
 
   if (previousBlockState() != 1)
-     startIndex = text.indexOf (commentStartExpression);
+     startIndex = text.indexOf (comment_start_expr.first);
 
   while (startIndex >= 0)
         {
-         int endIndex = commentEndExpression.indexIn (text, startIndex);
+         int endIndex = comment_end_expr.first.indexIn (text, startIndex);
 
          int commentLength;
 
@@ -319,10 +336,10 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
              commentLength = text.length() - startIndex;
             }
          else
-             commentLength = endIndex - startIndex + commentEndExpression.matchedLength();
+             commentLength = endIndex - startIndex + comment_end_expr.first.matchedLength();
 
          setFormat (startIndex, commentLength, fmt_multi_line_comment);
-         startIndex = text.indexOf (commentStartExpression, startIndex + commentLength);
+         startIndex = text.indexOf (comment_start_expr.first, startIndex + commentLength);
         }
 }
 
@@ -345,6 +362,9 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
      return;
 
   casecare = true;
+
+  comment_start_expr = make_pair (QRegularExpression(), false);
+  comment_end_expr = make_pair (QRegularExpression(), false);
 
   QString temp = qstring_load (fname);
   if (temp.isEmpty())
@@ -427,7 +447,11 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                       if (! rg.isValid())
                          qDebug() << "! valid " << rg.pattern();
                       else
-                          commentStartExpression = rg;
+                          //commentStartExpression = rg;
+                           {
+                            comment_start_expr.first = rg;
+                            comment_start_expr.second = true;
+                           }
                      }
                   else
                   if (attr_type == "mcomment-end")
@@ -440,7 +464,12 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                       if (! rg.isValid())
                          qDebug() << "! valid " << rg.pattern();
                       else
-                          commentEndExpression = rg;
+                          //commentEndExpression = rg;
+                        {
+                         comment_end_expr.first = rg;
+                         comment_end_expr.second = true;
+                        }
+
                      }
                   else
                   if (attr_type == "comment")
@@ -505,22 +534,27 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
        }
 */
 
+  if (! comment_start_expr.second && ! comment_end_expr.second)
+     return;
 
   setCurrentBlockState (0);
 
   int startIndex = 0;
 
-  if (! commentStartExpression.isValid() || ! commentEndExpression.isValid())
-     return;
+ // if (! commentStartExpression.isValid() || ! commentEndExpression.isValid())
+   //  return;
 
-  QRegularExpressionMatch m_start = commentStartExpression.match (text);
+//  QRegularExpressionMatch m_start = commentStartExpression.match (text);
+  QRegularExpressionMatch m_start = comment_start_expr.first.match (text);
+
 
   if (previousBlockState() != 1)
       startIndex = m_start.capturedStart();
 
   while (startIndex >= 0)
         {
-         QRegularExpressionMatch m_end = commentEndExpression.match (text, startIndex);
+         //QRegularExpressionMatch m_end = commentEndExpression.match (text, startIndex);
+         QRegularExpressionMatch m_end = comment_end_expr.first.match (text, startIndex);
 
          int endIndex = m_end.capturedStart();
 
@@ -536,7 +570,9 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 
          setFormat (startIndex, commentLength, fmt_multi_line_comment);
 
-         m_start = commentStartExpression.match (text, startIndex + commentLength);
+//         m_start = commentStartExpression.match (text, startIndex + commentLength);
+         m_start = comment_start_expr.first.match (text, startIndex + commentLength);
+
          startIndex = m_start.capturedStart();
         }
 }

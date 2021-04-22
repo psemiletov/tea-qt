@@ -99,8 +99,12 @@ public:
 
   vector <pair <QRegExp, QTextCharFormat> > hl_rules;
 
-  QRegExp commentStartExpression;
-  QRegExp commentEndExpression;
+  //QRegExp commentStartExpression;
+  //QRegExp commentEndExpression;
+
+  pair <QRegExp, bool> comment_start_expr;
+  pair <QRegExp, bool> comment_end_expr;
+
 
   Qt::CaseSensitivity cs;
 
@@ -123,9 +127,12 @@ public:
 
   vector <pair <QRegularExpression, QTextCharFormat> > hl_rules;
 
-  QRegularExpression commentStartExpression;
-  QRegularExpression commentEndExpression;
+  //QRegularExpression commentStartExpression;
+  //QRegularExpression commentEndExpression;
   QRegularExpression::PatternOptions pattern_opts;
+
+  pair <QRegularExpression, bool> comment_start_expr;
+  pair <QRegularExpression, bool> comment_end_expr;
 
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);

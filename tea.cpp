@@ -3287,7 +3287,9 @@ void CTEA::fn_case_cap_sentences()
 
   for (int i = 0; i < t.size(); i++)
       {
-       if (t.at(i) == '.')
+       QChar c = t.at(i);
+
+       if (c == '.' || c == '?' || c == '!')
           {
            cap = true;
            continue;

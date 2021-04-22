@@ -90,7 +90,7 @@
     <file>hls/lilypond.xml</file>
     <file>hls/wikitext.xml</file>
     <file>hls/r.xml</file>
-    <file>hls/vbs.xml</file>
+    <file>hls/sbv.xml</file>
 
     <file>INSTALL</file>
     <file>README.md</file>

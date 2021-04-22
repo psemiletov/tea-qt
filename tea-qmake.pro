@@ -238,8 +238,6 @@ DISTFILES += ChangeLog \
     icons/64/tea.png \
     icons/128/tea.png \
     icons/svg/tea.svg \
-    icons/create-dir.png \
-    icons/create-dir.png \
     icons/current-list.png \
     icons/edit-copy-active.png \
     icons/edit-copy.png \
@@ -253,8 +251,6 @@ icons/file-open.png \
 icons/file-save-active.png \
 icons/file-save-as.png \
 icons/file-save.png \ 
-icons/fn-spell-check.png \
-icons/go.png \
 icons/labels.png \
 icons/tea_icon_v2.png \
 icons/tea-icon-v3-01.png \

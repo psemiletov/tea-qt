@@ -35,8 +35,7 @@ You can install TEA from the source in 4 ways, using build systems qmake/make, m
 
 **Mandatory:**
 
-Qt 4.8 or Qt 5.4+ or Qt 6
-zlib
+Qt 4.8 or Qt 5.4+ or Qt 6, zlib
 
 **Optional:**
 

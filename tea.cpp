@@ -3140,17 +3140,10 @@ void CTEA::fn_use_table()
       else
           text = d->toPlainText();
 
-      int y = d->textCursor().block().blockNumber();
-
       if (d->textCursor().hasSelection())
          d->put (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
       else
          d->setPlainText (apply_table (text, a->data().toString(), menu_find_regexp->isChecked()));
-
-      QTextCursor cr = d->textCursor();
-      cr.movePosition (QTextCursor::Start);
-      cr.movePosition (QTextCursor::NextBlock, QTextCursor::MoveAnchor, y);
-      d->setTextCursor (cr);
      }
   else
       if (main_tab_widget->currentIndex() == idx_tab_fman)

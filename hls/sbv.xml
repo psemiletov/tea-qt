@@ -2,7 +2,7 @@
 
 <item name="options" casecare="0"></item>
 
-<item name="keywords" type="keywords" color="digits">\b\d{1,}:\d{1,}:\d{1,}\.\d{1,},\d{1,}:\d{1,}:\d{1,}\.\d{1,}\b</item>
+<item name="keywords" type="keywords" color="digits">\b\d{1,}:\d{1,}:\d{1,}\.\d{1,}\b</item>
 
 
 </document>

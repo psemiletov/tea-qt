@@ -91,6 +91,7 @@
     <file>hls/wikitext.xml</file>
     <file>hls/r.xml</file>
     <file>hls/sbv.xml</file>
+    <file>hls/hs.xml</file>
 
     <file>INSTALL</file>
     <file>README.md</file>

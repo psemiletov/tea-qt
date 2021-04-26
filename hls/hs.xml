@@ -1,0 +1,27 @@
+<document pattern="^.*\.(lhs|hs)$">
+
+<item name="options" casecare="0"></item>
+
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(as|case|class|of|data|family|instance|default|deriving|do|forall|foreign|hiding|if|then|else|import|infix|infixl|infixr|let|in|mdo|module|newtype|not|proc|qualified|rec|type|family|where)\b</item>
+
+<item name="functions" type="keywords" color="functions" fontstyle="bold">\b(head|init|tail|last|fst|snd|even)\b</item>
+
+<item name="types" type="keywords" color="type">\b(bool|char|double|float|int|integer|realfloat)\b</item>
+
+<item name="operator" type="item" color="operator">[-=\+\*\/\(\)\[]|]</item>
+
+<item name="quotes" type="item" color="quotes">("[^\"]*")</item>
+
+<item name="char" type="item" color="quotes">('[^']*')</item>
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">--[^\n]*</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">{-</item>
+
+<item name="mcomment-end" type="mcomment-end">-}</item>
+
+<item name="cm_mult" type="comment">/{-%s-}</item>
+
+<item name="cm_single" type="comment">--%s</item>
+
+</document>

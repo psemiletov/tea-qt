@@ -1,6 +1,7 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
-* Good olg bug with syntax hl engine (related to partial hl module file) is fixed
++ Basic Haskell hl
+* Good old bug with syntax hl engine (related to partial hl module file) is fixed
 + Youtube subtitles hl support
 + Fn - Case - Capitalize sentences
 

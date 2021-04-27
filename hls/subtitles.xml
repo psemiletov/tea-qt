@@ -1,0 +1,8 @@
+<document pattern="^.*\.(sbv|vtt|srt)$">
+
+<item name="options" casecare="0"></item>
+
+<item name="keywords1" type="keywords" color="digits">\b\d{1,}:\d{1,}:\d{1,}\.\d{1,}\b</item>
+<item name="keywords2" type="keywords" color="digits">\b\d{1,}:\d{1,}:\d{1,}\,\d{1,}\b</item>
+
+</document>

@@ -36,8 +36,6 @@ extern QSettings *settings;
 
 void CFMan::dir_up()
 {
-  //if (dir.path() == "/")
-    // return;
   if (dir.isRoot())
      return;
 
@@ -59,8 +57,14 @@ void CFMan::nav (const QString &path)
      return;
 
   QString p = path;
-  if (path.startsWith ("file://"))
-     p = p.remove (0, 7);
+  p = p.remove ("file://");
+
+  if (p.contains ("%"))
+     p = QUrl::fromPercentEncoding (p.toLatin1().constData());
+
+
+//  if (path.startsWith ("file://"))
+  //   p = p.remove (0, 7);
 
   dir.setPath (p);
   if (! dir.exists())
@@ -91,7 +95,6 @@ void CFMan::nav (const QString &path)
   QFileInfoList lst = dir.entryInfoList (QDir::Dirs | QDir::Hidden | QDir::NoDotAndDotDot|
                                          QDir::Files | QDir::Drives,
                                          sort_flags);
-
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
   if (path != "/")

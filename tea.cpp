@@ -62,7 +62,7 @@ started at 08 November 2007
 #include <QSettings>
 #include <QLibraryInfo>
 #include <QFontDialog>
-
+#include <QUrl>
 
 #ifdef PRINTER_ENABLE
 #include <QPrinter>
@@ -737,14 +737,26 @@ void CTEA::fman_add_bmk()
 void CTEA::fman_del_bmk()
 {
   int i = lv_places->currentRow();
-  if (i < 5) //user-wide bookmark, don't remove
+  if (i < 5) //TEA built-in bookmark, don't remove
      return;
+
+  if (i > sl_places_bmx.size() + 4) // -- GTK places
+     {
+      qDebug() << "GTK places, i: " << i;
+      return;
+     }
+
+  //else built-in places
+
+  qDebug() << "TEA places, i: " << i;
 
   QString s = lv_places->item(i)->text();
   if (s.isEmpty())
      return;
 
-  sl_places_bmx.removeAt (sl_places_bmx.indexOf (s));
+  sl_places_bmx.removeAt (sl_places_bmx.indexOf (s)); // поменять на индекс i + 5
+  //sl_places_bmx.removeAt (i);
+
   qstring_save (fname_places_bookmarks, sl_places_bmx.join ("\n"));
   update_places_bookmarks();
 }
@@ -821,6 +833,9 @@ void CTEA::fman_places_itemActivated (QListWidgetItem *item)
 
   if (i < 5)
      s = v[i];
+
+  if (i > sl_places_bmx.size() + 4)
+      s = sl_gtk_bookmarks[i - (sl_places_bmx.size() + 6)];
 
   fman->nav (s);
 }
@@ -8422,6 +8437,7 @@ void CTEA::update_scripts()
                         );
 }
 
+//KDE: $HOME/.local/share/user-places.xbel GNOME  $HOME/.config/gtk-3.0/bookmarks
 
 void CTEA::update_places_bookmarks()
 {
@@ -8440,15 +8456,47 @@ void CTEA::update_places_bookmarks()
      return;
 
   sl_places_bmx = qstring_load (fname_places_bookmarks).split ("\n");
+
+  sl_places_bmx.removeAll (QString (""));
+
   if (sl_places_bmx.size() != 0)
      lv_places->addItems (sl_places_bmx);
 
   QString fname_gtk_bookmarks = QDir::homePath() + "/" + ".gtk-bookmarks";
+  if (! file_exists (fname_gtk_bookmarks))
+     return;
 
-  QStringList sl_gtk_bookmarks = qstring_load (fname_gtk_bookmarks).split ("\n");
+  lv_places->addItem (tr ("GTK Bookmarks:"));
 
-  if (sl_gtk_bookmarks.size() > 0)
-     lv_places->addItems (sl_gtk_bookmarks);
+  sl_gtk_bookmarks = qstring_load (fname_gtk_bookmarks).split ("\n");
+
+  QStringList sl_filtered;
+
+  int sz = sl_gtk_bookmarks.size();
+
+  for (int i = 0; i < sz; i++)
+      {
+       QString s = sl_gtk_bookmarks.at(i);
+       int pos = s.lastIndexOf ('/');
+       if (pos == -1)
+          continue;
+
+       QString t = s.right (s.size() - ++pos);
+
+       if (t.contains ("%"))
+         {
+          //QUrl url (t);
+
+            t =  QUrl::fromPercentEncoding(t.toLatin1().constData());
+
+         }
+
+
+       sl_filtered.append (t);
+      }
+
+  if (sl_filtered.size() > 0)
+     lv_places->addItems (sl_filtered);
 }
 
 

@@ -161,7 +161,7 @@ Variables
   QStringList sl_charsets;
   QStringList sl_last_used_charsets;
   QStringList sl_fif_history;
-  QStringList sl_gtk_bookmarks;
+  //QStringList sl_gtk_bookmarks;
 
   int fm_entry_mode;
 

@@ -834,8 +834,8 @@ void CTEA::fman_places_itemActivated (QListWidgetItem *item)
   if (i < 5)
      s = v[i];
 
-  if (i > sl_places_bmx.size() + 4)
-      s = sl_gtk_bookmarks[i - (sl_places_bmx.size() + 6)];
+  //if (i > sl_places_bmx.size() + 4)
+    //  s = sl_gtk_bookmarks[i - (sl_places_bmx.size() + 6)];
 
   fman->nav (s);
 }
@@ -8468,7 +8468,7 @@ void CTEA::update_places_bookmarks()
 
   lv_places->addItem (tr ("GTK Bookmarks:"));
 
-  sl_gtk_bookmarks = qstring_load (fname_gtk_bookmarks).split ("\n");
+  QStringList sl_gtk_bookmarks = qstring_load (fname_gtk_bookmarks).split ("\n");
 
   QStringList sl_filtered;
 
@@ -8477,22 +8477,18 @@ void CTEA::update_places_bookmarks()
   for (int i = 0; i < sz; i++)
       {
        QString s = sl_gtk_bookmarks.at(i);
-       int pos = s.lastIndexOf ('/');
-       if (pos == -1)
-          continue;
+       //int pos = s.lastIndexOf ('/');
+       //if (pos == -1)
+         // continue;
 
-       QString t = s.right (s.size() - ++pos);
+       //QString t = s.right (s.size() - ++pos);
 
-       if (t.contains ("%"))
-         {
-          //QUrl url (t);
+       s = s.remove ("file://");
 
-            t =  QUrl::fromPercentEncoding(t.toLatin1().constData());
+       if (s.contains ("%"))
+          s =  QUrl::fromPercentEncoding (s.toLatin1().constData());
 
-         }
-
-
-       sl_filtered.append (t);
+       sl_filtered.append (s);
       }
 
   if (sl_filtered.size() > 0)

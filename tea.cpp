@@ -742,11 +742,11 @@ void CTEA::fman_del_bmk()
 
   if (i > sl_places_bmx.size() + 4) // -- GTK places
      {
-      qDebug() << "GTK places, i: " << i;
+      qDebug() << "GTK bookmarks, i: " << i;
       return;
      }
 
-  //else built-in places
+  //else TEA places
 
   qDebug() << "TEA places, i: " << i;
 

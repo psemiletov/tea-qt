@@ -4735,6 +4735,16 @@ void CTEA::calendar_update()
   format_past.setFontStrikeOut (true);
   format_future.setFontUnderline (true);
 
+  format_future.setForeground (Qt::red);
+  format_future.setBackground (Qt::darkBlue);
+
+  format_normal.setForeground (Qt::white);
+  format_normal.setBackground (Qt::black);
+
+  format_past.setForeground (Qt::white);
+  format_past.setBackground (Qt::darkGray);
+
+
   int days_count = dbase.daysInMonth();
 
   for (int day = 1; day <= days_count; day++)
@@ -8790,8 +8800,8 @@ void CTEA::calendar_activated (const QDate &date)
   if (! d)
      return;
 
-  if (fresh)
-     d->selectAll();
+ // if (fresh)
+   //  d->selectAll();
 
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }

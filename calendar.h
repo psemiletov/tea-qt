@@ -8,9 +8,7 @@ class CCalendarWidget: public QCalendarWidget
 {
 Q_OBJECT
 
-
 protected:
-
 
 #if QT_VERSION < 0x060000
   void paintCell (QPainter *painter, const QRect &rect, const QDate &date) const;

@@ -1,5 +1,6 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+* Dates panel upd
 + SRT hightlighting
 + Basic Haskell hightlighting
 * Good old bug with syntax hl engine (related to partial hl module file) is fixed

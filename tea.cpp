@@ -289,20 +289,20 @@ CAboutWindow::CAboutWindow()
   QPlainTextEdit *page_code = new QPlainTextEdit();
   QPlainTextEdit *page_thanks = new QPlainTextEdit();
   QPlainTextEdit *page_translators = new QPlainTextEdit();
-  QPlainTextEdit *page_maintainers = new QPlainTextEdit();
+//  QPlainTextEdit *page_maintainers = new QPlainTextEdit();
 
-  if (sl_t.size() == 4)
+  if (sl_t.size() == 3)
      {
       page_code->setPlainText (sl_t[0].trimmed());
-      page_thanks->setPlainText (sl_t[3].trimmed());
+      page_thanks->setPlainText (sl_t[2].trimmed());
       page_translators->setPlainText (sl_t[1].trimmed());
-      page_maintainers->setPlainText (sl_t[2].trimmed());
+      //page_maintainers->setPlainText (sl_t[2].trimmed());
      }
 
   tw->addTab (page_code, tr ("Code"));
   tw->addTab (page_thanks, tr ("Acknowledgements"));
   tw->addTab (page_translators, tr ("Translations"));
-  tw->addTab (page_maintainers, tr ("Packages"));
+  //tw->addTab (page_maintainers, tr ("Packages"));
 
   QVBoxLayout *layout = new QVBoxLayout();
 

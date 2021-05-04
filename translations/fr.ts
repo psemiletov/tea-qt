@@ -1810,6 +1810,14 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | semiletov.org/tea&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Capitalize sentences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GTK Bookmarks:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CTioReadOnly</name>

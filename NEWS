@@ -4,6 +4,7 @@ TEA 60.1.0, may 2021
 
    This release adds a sort of syntax highlighting for SRT and Youtube subtitles (sbv, vtt) formats (timecode highlighting). Haskell highlighting also featured. Such things leaded me to fix the very old bug in syntax highlighting engine, related to incomplete syntax hl module.
    Working with automatically generated subtitles I've discovered they are not parsed to sentences, thus, have not capitalized words. To help with that, I wrote new function, which you can use, of course, after the manual sentence division by ".", "!" and "?" - Fn - Case - Capitalize sentences.
+   Dates panel becomes more fancy.
 
    Stay tuned.
    Peter Semiletov

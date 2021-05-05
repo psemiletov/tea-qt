@@ -4,7 +4,7 @@
 
 <item name="keywords" type="keywords" color="keywords" fontstyle="bold">\b(as|break|const|continue|crate|else|enum|extern|false|fn|for|if|impl|in|let|loop|match|mod|move|mut|pub|ref|return|Self|self|static|struct|super|trait|true|type|unsafe|use|where|while|async|await|dyn|abstract|become|box|final|macro|override|priv|typeof|unsized|virtual|yield|try|union)\b</item>
 
-<item name="types" type="keywords" color="type">\b(bool|char|double|float|int|long|short|signed|size_t|unsigned|uint|void|wchar_t)\b</item>
+<item name="types" type="keywords" color="type">\b(bool|char|i8|i16|i32|i64|isize|u8|u16|u32|u64|usize|f32|f64|array|slice|str|tuple)\b</item>
 
 <item name="class" type="item" color="class">\bQ[A-Za-z0-9_]+\b</item>
 

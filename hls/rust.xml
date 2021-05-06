@@ -6,15 +6,11 @@
 
 <item name="types" type="keywords" color="type">\b(bool|char|i8|i16|i32|i64|isize|u8|u16|u32|u64|usize|f32|f64|array|slice|str|tuple)\b</item>
 
-<item name="class" type="item" color="class">\bQ[A-Za-z0-9_]+\b</item>
-
-<item name="class" type="item" color="class">\bC[A-Za-z0-9_]+\b</item>
-
 <item name="operator" type="item" color="operator">[-=\+\*\/\(\)\[]|]</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">^#include</item>
 
-<item name="label" type="item" color="label" fontstyle="bold">^[a-zA-Z_][a-zA-Z0-9_]*\:$</item>
+<item name="label" type="item" color="label" fontstyle="bold">^'[a-zA-Z_][a-zA-Z0-9_]*\:$</item>
 
 <item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
 

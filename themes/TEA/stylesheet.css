@@ -1,4 +1,4 @@
-QTabWidget::pane#tab_editor { 
-border-top: 0px solid grey; 
+QTabWidget::pane#tab_editor {
+border-top: 0px solid grey;
 background-color: grey;
 }

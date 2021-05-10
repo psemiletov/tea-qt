@@ -2710,10 +2710,17 @@ void CTEA::search_in_files()
 {
   last_action = sender();
 
+  if (main_tab_widget->currentIndex() != idx_tab_fman)
+     return;
+
+  QString text_to_search = fif_get_text();
+
+  if (text_to_search.isEmpty())
+     return;
+
   QStringList lresult;
   QString charset = cb_fman_codecs->currentText();
   QString path = fman->dir.path();
-  QString text_to_search = fif_get_text();
 
   CFTypeChecker fc;
 

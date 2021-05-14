@@ -34,6 +34,8 @@
 #include <QTranslator>
 #include <QProcess>
 #include <QProxyStyle>
+#include <QToolButton>
+
 //#include <QMap>
 
 #ifdef PRINTER_ENABLE
@@ -355,6 +357,7 @@ Main tab UI elements
   QComboBox *cmb_fif;
   QLabel *l_status;
   QProgressBar *pb_status;
+  QToolButton *tb_stop;
 
 /*
 ==============================
@@ -579,6 +582,9 @@ Application misc. methods
   void man_find_next();
   void man_find_prev();
 
+  void progress_show();
+  void progress_hide();
+
 protected:
 
   void closeEvent (QCloseEvent *event);
@@ -597,6 +603,7 @@ Main window slots
   void logmemo_double_click (const QString &txt);
   void receiveMessage (const QString &msg);
   void receiveMessageShared (const QStringList& msg);
+  void tb_stop_clicked();
 
 /*
 ===================

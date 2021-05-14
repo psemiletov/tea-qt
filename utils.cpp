@@ -12,10 +12,13 @@ Peter Semiletov
 #include <QImageReader>
 #include <QImage>
 #include <QProcess>
+#include <QApplication>
 
 #include "utils.h"
 
 using namespace std;
+
+bool boring;
 
 
 /* file utils */
@@ -399,6 +402,11 @@ QString get_insert_image (const QString &file_name, const QString &full_path, co
 
 void CFilesList::iterate (QFileInfo &fi)
 {
+  qApp->processEvents();
+
+  if (boring)
+     return;
+
   if (fi.isDir())
      {
       QDir d (fi.absoluteFilePath());

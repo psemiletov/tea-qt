@@ -194,6 +194,7 @@ public:
   bool draw_linenums;
   bool auto_indent;
   bool spaces_instead_of_tabs;
+  bool show_tabs_and_spaces;
 
   int position;
   int tab_sp_width; //in spaces

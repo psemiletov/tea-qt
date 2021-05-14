@@ -849,6 +849,24 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
   int tab_index = holder->tab_widget->addTab (this, file_name);
   tab_page = holder->tab_widget->widget (tab_index);
 
+ /* show_tabs_and_spaces = true;
+
+  QTextOption option = document()->defaultTextOption();
+  if (show_tabs_and_spaces)
+         option.setFlags(option.flags() | QTextOption::ShowTabsAndSpaces);
+  else
+       option.setFlags(option.flags() & ~QTextOption::ShowTabsAndSpaces);
+
+  option.setFlags(option.flags() | QTextOption::AddSpaceForLineAndParagraphSeparators);
+  document()->setDefaultTextOption(option);
+
+
+  ---
+  set dots color, put to hl init
+ spaceFormat = QtGui.QTextCharFormat()
+        spaceFormat.setForeground(QtCore.Qt.red)
+        self.highlightingRules.append((QtCore.QRegExp(" "), spaceFormat))
+*/
   setFocus (Qt::OtherFocusReason);
 }
 

@@ -101,6 +101,8 @@ extern QHash <QString, QString> global_palette;
 extern bool b_recent_off;
 extern bool b_destroying_all;
 extern int recent_list_max_items;
+extern bool boring;
+
 
 CTEA *main_window;
 CDox *documents;
@@ -556,6 +558,12 @@ void CTEA::receiveMessageShared (const QStringList &msg)
   show();
   activateWindow();
   raise();
+}
+
+
+void CTEA::tb_stop_clicked()
+{
+  boring = true;
 }
 
 
@@ -2724,6 +2732,8 @@ void CTEA::search_in_files()
 
   CFTypeChecker fc;
 
+  progress_show();
+
   log->log (tr ("Getting files list..."));
   qApp->processEvents();
 
@@ -2733,7 +2743,10 @@ void CTEA::search_in_files()
   log->log (tr ("Searching..."));
   qApp->processEvents();
 
-  pb_status->show();
+  //pb_status->show();
+
+  progress_show();
+
   pb_status->setRange (0, lf.list.size());
   pb_status->setFormat (tr ("%p% completed"));
   pb_status->setTextVisible (true);
@@ -2742,6 +2755,9 @@ void CTEA::search_in_files()
       {
        if (i % 100 == 0)
            qApp->processEvents();
+
+       if (boring)
+           break;
 
        pb_status->setValue (i);
 
@@ -2769,7 +2785,8 @@ void CTEA::search_in_files()
           lresult.append (fname + "," + charset + "," + QString::number (index));
       }
 
-  pb_status->hide();
+  //pb_status->hide();
+  progress_hide();
 
   CTextListWnd *w = new CTextListWnd (tr ("Search results"), tr ("Files"));
   w->move (this->x(), this->y());
@@ -5978,6 +5995,7 @@ CTEA::CTEA()
 {
   mainSplitter = 0;
   ui_update = true;
+  boring = false;
   b_destroying_all = false;
   last_action = 0;
   b_recent_off = false;
@@ -6026,11 +6044,17 @@ CTEA::CTEA()
   pb_status = new QProgressBar;
   pb_status->setRange (0, 0);
 
+  tb_stop = new QToolButton;
+  tb_stop->setIcon (style()->standardIcon(QStyle::SP_MediaStop));
+  connect (tb_stop, SIGNAL(clicked()), this, SLOT(tb_stop_clicked()));
+
   statusBar()->addWidget (l_status);
   statusBar()->addPermanentWidget (pb_status);
+  statusBar()->addPermanentWidget (tb_stop);
   statusBar()->addPermanentWidget (l_charset);
 
-  pb_status->hide();
+//  pb_status->hide();
+  progress_hide();
 
   create_actions();
   create_menus();
@@ -9306,7 +9330,10 @@ void CTEA::run_unitaz (int mode)
   if (! d)
      return;
 
-  pb_status->show();
+  //pb_status->show();
+
+  progress_show();
+
   pb_status->setFormat (tr ("%p% completed"));
   pb_status->setTextVisible (true);
 
@@ -9324,6 +9351,9 @@ void CTEA::run_unitaz (int mode)
       {
        if (c % 100 == 0)
           qApp->processEvents();
+
+       if (boring)
+           break;
 
        QHash<QString, int>::iterator i = h.find (total.at(j).toLower());
        if (i != h.end())
@@ -9371,7 +9401,9 @@ void CTEA::run_unitaz (int mode)
   CDocument *nd = documents->create_new();
   nd->put (outp.join ("\n"));
 
-  pb_status->hide();
+  //pb_status->hide();
+  progress_hide();
+
 }
 
 
@@ -9658,6 +9690,23 @@ void CTEA::man_find_prev()
 {
   man->find (man_search_value, get_search_options() | QTextDocument::FindBackward);
 }
+
+
+void CTEA::progress_show()
+{
+  pb_status->show();
+  tb_stop->show();
+  boring = false;
+}
+
+
+void CTEA::progress_hide()
+{
+  pb_status->hide();
+  tb_stop->hide();
+  boring = false;
+}
+
 
 /*
 ====================

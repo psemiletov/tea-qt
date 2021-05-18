@@ -206,7 +206,7 @@ RESOURCES += resources.qrc
 TRANSLATIONS = translations/ru.ts \
                translations/de.ts \
                translations/fr.ts \
-               translations/fr.pl
+               translations/pl.ts
 
 
 DISTFILES += ChangeLog \
@@ -226,6 +226,7 @@ DISTFILES += ChangeLog \
     translations/* \
     manuals/en.html \
     manuals/ru.html \
+    manuals/pl.html \
     themes/Cotton/stylesheet.css \
     themes/Plum/stylesheet.css \
     themes/Smaragd/stylesheet.css \

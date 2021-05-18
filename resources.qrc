@@ -35,6 +35,7 @@
 
     <file>manuals/en.html</file>
     <file>manuals/ru.html</file>
+    <file>manuals/pl.html</file>
 
     <file>text-data/lorem-ipsum</file>
     <file>text-data/morse-en</file>

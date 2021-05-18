@@ -1,0 +1,3139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Edytor TEA</title>
+</head>
+<body>
+<h1>Edytor TEA - Przewodnik po działaniu</h1>
+<br>
+<h2>Spis treści</h2>
+<br><br>
+
+    <a href="#mni_intro">Wprowadzenie</a><br>
+    <a href="#mni_interface">Interfejs</a><br>
+    <a href="#mni_manager">Menedżer plików</a><br>
+    <a href="#mni_todo">Panel dat</a><br>
+    <a href="#mni_file">Plik</a><br>
+    <a href="#mni_calendar">Kalendarz</a><br>
+    <a href="#mni_edit">Edycja</a><br>
+    <a href="#mni_markup">Znaczniki</a><br>
+    <a href="#mni_search">Szukaj</a><br>
+    <a href="#mni_functions">Funkcje</a><br>
+    <a href="#mni_spell">Sprawdzanie pisowni</a> <br>
+    <a href="#mni_ide">IDE</a> <br>
+    <a href="#mni_run">Uruchom</a> <br>
+    <a href="#mni_nav">Nawigacja</a> <br>
+    <a href="#mni_fm">Menedżer plików</a><br>
+    <a href="#mni_view">Widok</a><br>
+    <a href="#mni_prefs">Zakładka Opcje</a><br>
+    <a href="#mni_keyb">Klawiatura</a><br>
+    <a href="#mni_secret">Sekretna moc</a><br>
+    <a href="#mni_notes">Uwagi</a><br>
+    <a href="#mni_author">Inne projekty autora</a><br>
+    <a href="#mni_donate">Wspieraj rozwój</a><br>
+    <a name="mni_intro"></a>
+    <h3>Wprowadzenie</h3>
+    <p> TEA ma długą historię rozwoju. Jesienią 2000 roku miało miejsce
+      pierwsze wdrożenie TEA, napisane w Object Pascal przy użyciu
+      Borland Delphi. Od tego czasu TEA była wielokrotnie przepisywana
+      od zera (Pascal - C/Gtk - C ++/Qt) i otwierana jej źródło.
+      Początkowy interfejs TEA został zainspirowany przez Impulse
+      Tracker i Sound Forge. Później koncepcja przesuwanych paneli i
+      zakładek została wdrożona. </p>
+    <p> Teraz TEA ma TRZY gałęzie. To, TEA-Qt, jest nowoczesne. Są też
+      przestarzałe TEA-GTK (Gtk 2) i TEA-GTK (GTK 3), buggy i
+      zapomniany. Więc użyj TEA-Qt. </p>
+    <p> TEA ma dwie strony domowe: <a href="http://semiletov.org/tea">
+        semiletov.org/tea </a> i <a href="http://tea.ourproject.org/">
+        tea.ourproject.org.</a> Jeśli jeden z nich nie działa, przejdź
+      do innego. Happy Arch/Manjaro/ itp. użytkownicy mogą używać mojego
+      pakietu „tea-qt” z AUR (<a href="https://aur.archlinux.org/packages/tea-qt">
+        aur.archlinux.org/packages/tea-qt </a> ). Witaj na <a href="http://github.com/psemiletov/tea-qt">
+        github.com/psemiletov/tea-qt </a> - zawsze aktualne, ale może
+      być niestabilne.
+      <!-- p--> </p>
+    <p> Nazwa TEA nic nie znaczy. To nie jest „Text Editor Of Atomic
+      Era” czy coś, co można przeczytać w recenzjach TEA. Początkowo TEA
+      = "Edycja i tworzenie tekstu". Wtedy TEA kojarzyła się ze zwykłym
+      napojem (lubię pić herbatę). Ale na razie TEA to po prostu TEA lub
+      ТИА. </p>
+    <p> Zwykle TEA przechowuje swoje dane konfiguracyjne i inne pliki
+      pomocnicze w $ HOME /.config/tea (lub w oknie C: \ Documents and
+      Settings \ nazwa_użytkownika \ herbata). Ale jeśli chcesz
+      uruchomić TEA z pendrive'a w trybie przenośnym, TEA musi czytać/
+      zapisywać dane konfiguracyjne w katalogu z binarnym TEA. Aby
+      uruchomić TEA w trybie przenośnym, użyj opcji wiersza poleceń
+      „--p”: </p>
+    <p> tea - p </p>
+    <p> Jak wiesz, TEA pod * NIX to pojedynczy plik binarny. W katalogu
+      instalacyjnym Windows TEA znajduje się wszystko, co jest potrzebne
+      do uruchomienia przenośnego TEA. Należy pamiętać, że ustawienia
+      TRYBU NORMALNEGO nadal istnieją i są dostępne w dowolnym momencie,
+      gdy uruchomisz HERBATĘ BEZ klawisza „--p”. Preferencje TEA trybu
+      przenośnego i normalnego są od siebie niezależne i istnieją
+      równolegle. </p>
+    <a name="mni_interface"></a>
+    <h3>Interfejs</h3>
+    <p> TEA ma dwa tryby interfejsu - klasyczny i nowy, tzw. zadokowany.
+      Możesz przełączać się między nimi w <b> Opcje - Interfejs - Tryb
+        interfejsu użytkownika.</b> W trybie zadokowanym możesz oderwać
+      i/lub przenieść Logmemo i FIF (patrz poniżej). Domyślnym
+      interfejsem użytkownika jest klasyczny. Osobiście używam
+      klasycznej. </p>
+    <p> Od góry do dołu są: </p>
+    <p> 1. <b> Menu główne.</b> Zauważ, że możesz oderwać podmenu i
+      umieścić je gdzieś na pulpicie. Pozycje menu w dużym stopniu
+      zależą od bieżącego zadania, a nawet trybu edytora. Niektóre menu
+      mogą być widoczne lub ukryte w zależności od zadania (edycja,
+      przeglądanie plików itp.). </p>
+    <p> 2. <b> Obszar pasków narzędzi.</b> W rzeczywistości paski
+      narzędzi można zaparkować po dowolnej stronie okna TEA. Pozycje są
+      zapisywane między sesjami. Aby włączyć lub wyłączyć pasek
+      narzędzi, użyj menu kontekstowego paska narzędzi (kliknij prawym
+      przyciskiem myszy pasek narzędzi). Jeśli żaden pasek narzędzi nie
+      jest widoczny, kliknij prawym przyciskiem myszy na pasku menu. </p>
+    <p> 3. <b> Obszar z zakładkami.</b> Zawiera 5 głównych zakładek - <b>
+        edytor,</b> <b> pliki,</b> <b> opcje,</b> <dates> i <b>
+          podręcznik.</b> <b> Edytor </b> - to miejsce, w którym
+        widzisz otwarte dokumenty. <b> Pliki </b> - wbudowany menedżer
+        plików. <b> Opcje </b> - tutaj możesz zmienić preferencje TEA.
+        Wszystkie zmiany zostaną zastosowane natychmiast. <b> Daty </b>
+        - prosty kalendarz z funkcjami organizatora. <b> Instrukcja </b>
+        - wbudowana instrukcja obsługi. Ta doskonała! </dates></p>
+    <p> 4. <b> Logmemo.</b> Jest to obszar powiadamiania o wszystkich
+      ostrzeżeniach, wiadomościach informacyjnych i wynikach niektórych
+      funkcji przetwarzania tekstu. </p>
+    <p> 5. <b> Pole wejściowe Znane (FIF).</b> Pole tekstu wejściowego,
+      w którym można umieścić wartości funkcji przetwarzania tekstu.
+      Służy również do wyszukiwania/zamieniania (szczegółowe informacje
+      można znaleźć w menu <b> Wyszukaj </b>). FIF ma trzy przyciski -
+      <b> Znajdź,</b> <b> Znajdź poprzedni </b> i <b> Znajdź
+        następny.</b> FIF jest również używany do wyszukiwania w
+      podręczniku TEA, liście elementów menu (na stronie dostosowywania
+      skrótów klawiszowych), a nawet wbudowanym menedżerze plików. </p>
+    <p> 6. <b> Pasek stanu.</b> Zawartość paska stanu można
+      skonfigurować na stronie preferencji <b> Interfejs.</b></p>
+    <a name="mni_manager"></a>
+    <h3>Menedżer plików</h3>
+    <p> Menedżer plików TEA jest ukryty w zakładce <b> pliki.</b> Nie
+      jest to dodatkowe narzędzie typu bloatware, ale istotna część
+      edytora. Zastępuje standardowe okna dialogowe zapisywania/
+      otwierania plików (przy okazji można je przywrócić, używając pola
+      wyboru <b> Opcje &gt; Wspólne &gt; Użyj tradycyjnych okien
+        dialogowych Zapisz/Otwórz plik </b>). </p>
+    <p> Zobaczmy, jak olśniewa siła menedżera plików TEA. </p>
+    <p> Pasek katalogu znajduje się u góry. Znajduje się tam wpis z
+      aktualną ścieżką do katalogu oraz ładny pasek narzędzi z
+      następującymi przyciskami: </p>
+    <p> <b> Idź </b> - nawiguje do katalogu ze ścieżką z wpisu
+      tekstowego. </p>
+    <p> <b> Strona główna </b> - przenosi cię do przytulnego katalogu
+      domowego. </p>
+    <p> <b> Odśwież </b> - odświeża listę plików dla Twojej
+      przyjemności. </p>
+    <p> Przycisk <b> Operacje na plikach </b> z podmenu. Zawiera kilka
+      działań narzędziowych, takich jak <b> Utwórz nowy katalog,</b> <b>
+        Zmień nazwę </b> i <b> Usuń plik.</b> Należy pamiętać, że TEA
+      nie usuwa katalogów. </p>
+    <p> <b> Prawy panel </b> menedżera plików. </p>
+    <p> U góry znajduje się pole nazwy pliku. Tutaj możesz podać nazwę
+      pliku, aby go otworzyć lub zapisać. Aby zapisać bieżący plik pod
+      jakąś nazwą, po prostu umieść nazwę pliku we wpisie tekstowym <b>
+        Nazwa </b> i naciśnij przycisk <b> Zapisz jako.</b> Aby
+      otworzyć plik, kliknij dwukrotnie nazwę pliku na liście plików lub
+      umieść nazwę pliku we wpisie <b> Nazwa </b> i naciśnij przycisk
+      <b> Otwórz.</b> Możesz użyć klawisza Enter wewnątrz tego pola
+      wejściowego. Akcja jest powiązana z pozycją menu (Otwórz plik lub
+      Zapisz jako), której użyłeś do otwarcia karty menedżera plików. </p>
+    <p> </p>
+    <p> Możesz także wybrać kilka plików (kliknij z wciśniętym klawiszem
+      Ctrl lub klawisz INSERT), a następnie naciśnij przycisk <b>
+        Otwórz.</b></p>
+    <p> Wybrany plik jest zapisywany lub otwierany z kodowaniem wybranym
+      na liście zestawu znaków poniżej w pozycji <b> Nazwa.</b>
+      Istnieje również znak „?” przycisk. Wybierz plik i naciśnij ten
+      przycisk - próbuje automatycznie wykryć zestaw znaków pliku i
+      aktywować go na liście kodowań. Obecnie tylko pliki HTML lub
+      rosyjskie zestawy znaków są obsługiwane przez wbudowane
+      automatyczne wykrywanie i inne za pomocą narzędzia <b>Enca </b>
+      (patrz <b> Opcje - Wspólne </b>). </p>
+    <br>
+    <p> <b>Lista zakładek</b>. Możesz łatwo dodawać i usuwać zakładki
+      katalogów za pomocą przycisków „+” i „-”. Przycisk „+” dodaje
+      zakładkę do bieżącego katalogu drzewa systemu plików. Przycisk „-”
+      usuwa wybraną zakładkę. Aby aktywować zakładkę i przejść do
+      odpowiedniego katalogu, kliknij dwukrotnie zakładkę. </p>
+    <p> Na górze listy znajdują się specjalne zakładki: fragmenty,
+      szablony, skrypty. Nie możesz ich usunąć. Wskazują na specjalne
+      katalogi TEA dla elementów użytkownika, takich jak szablony,
+      fragmenty, itp. </p>
+    <p> Możesz włączyć <b> Opcje &gt; Wspólne &gt; Opcja automatycznego
+        podglądu obrazów w menedżerze plików,</b> aby pokazać małe okno
+      podglądu w pobliżu menedżera plików. Ponadto, gdy kursor znajduje
+      się na pliku obrazu, możesz użyć funkcji <b> Otwórz przy kursorze
+      </b> (F2), aby wyświetlić obraz w pełnym rozmiarze w innej
+      wbudowanej przeglądarce obrazów (patrz <b> Otwórz przy kursorze </b>
+      opis). </p>
+    <a name="mni_todo"></a>
+    <h3>Panel dat</h3>
+    <p> Jak możesz zauważyć, TEA ma wbudowany organizator kalendarza w
+      zakładce <b> daty </b> w oknie głównym. Dwukrotne kliknięcie dni
+      umożliwia tworzenie lub otwieranie dokumentów tekstowych typu plik
+      dziennie. Po zamknięciu takiego pliku jego zawartość zostanie
+      zapisana automatycznie. Aby usunąć rekord dnia, użyj opcji <b>
+        Kalendarz &gt; Usuń rekord dnia.</b></p>
+    <p> W tekście możesz określić sygnaturę czasową zdarzenia
+      alarmowego. Ten podpis ma format <i> [gg: mm] </i> w
+      24-godzinnym dniu. Cały tekst po takim podpisie a przed kolejnym
+      będzie traktowany jako komunikat alarmowy. Na przykład: </p>
+    <p> [20:00] idź do teatru <br>
+      [23:00] wyj do księżyca </p>
+    <p> Na pewno TEA musi być uruchomiona, aby zobaczyć komunikat
+      alarmowy! </p>
+    <p> Pojedyncze kliknięcie komórki daty pokazuje zapis dnia (jeśli
+      istnieje) w obszarze logmemo. </p>
+    <p> Na stronie <b> Opcje </b> można ustawić opcję <b>
+        Rozpoczynanie tygodnia w niedzielę </b> na „wł.”. Widżet
+      kalendarza może działać w dwóch trybach - normalnym i księżycowym.
+      Przeczytaj sekcję <a href="#mni_calendar"> Kalendarz,</a> aby
+      uzyskać szczegółowe informacje. </p>
+    <a name="mni_file"></a>
+    <h3>Plik</h3>
+    <p> <b> Nowość.</b> Niemożliwe! To jest rodzaj magii. Ta pozycja
+      menu tworzy nowy, pusty dokument, w którym możesz wpisać dowolne
+      słowa. Na przykład wpisz słowo „cześć”. To bardzo wesołe słowo. To
+      jest to, co zwykle mówimy wszystkim dobrym ludziom dookoła. Witaj!
+      Twój świat staje się jaśniejszy. </p>
+    <p> <b> Otwórz </b> - z pewnością ta pozycja menu pomaga otworzyć
+      każdy plik, który jest już zapisany na dysku twardym. </p>
+    <p> Jeśli korzystasz z wbudowanego menedżera plików, przeczytaj
+      rozdział <a href="#mni_manager"> Menedżer plików.</a> W
+      przeciwnym razie przeczytaj słowa true dotyczące okna dialogowego
+      Otwieranie pliku. </p>
+    <p> W oknie dialogowym Otwieranie pliku znajduje się mały sekret.
+      Zestaw znaków combobox. Tak. Dzięki temu wspaniałemu narzędziu w
+      pudełku możesz otworzyć plik tekstowy w dowolnym kodowaniu znanym
+      człowiekowi (właściwie <b> libiconv </b>). Ale bądź ostrożny!
+      Musisz dokładnie wiedzieć, jakiego kodowania potrzebujesz, aby
+      poprawnie odczytać plik. W przeciwnym razie zobaczysz wiele
+      dziwnych liter, które mogą naruszyć twój spokój ducha. Jeśli tak,
+      zamknij szybko oczy i siedem razy napisz „cześć”! Możesz też
+      spróbować załadować plik z innym wybranym kodowaniem. Więc
+      wybieraj mądrze. Nawiasem mówiąc, TEA może spróbować automatycznie
+      wykryć kodowanie - wystarczy nacisnąć „?” przycisk (po prawej
+      stronie listy zestawu znaków). Lepiej jest włączyć opcję <b> Użyj
+        Enca do wykrywania zestawu znaków </b> na stronie <b> Opcje -
+        Wspólne,</b> jeśli Enca jest zainstalowana. </p>
+    <p> TEA może otwierać wszystkie zwykłe pliki tekstowe, a także
+      formaty ODT (OpenDocument Text), KWD (stary format KWorda), FB2,
+      DOCX, RTF, SXW (stary format OOo/StarOffice), ABW (Abiword) i
+      pliki spakowane gzipem. Ale za pomocą TEA można zapisać tylko
+      zwykłe pliki tekstowe. O innych wymienionych formatach - TEA może
+      po prostu wyodrębnić z nich tekst, starając się zachować
+      podstawowy układ (wcięcia, akapity). Po skompilowaniu z obsługą
+      PDF i DVJU, TEA również wyodrębnia z nich tekst. W przypadku
+      korzystania z funkcji <b> Szukaj w plikach </b> TEA, TEA zagląda
+      do wszystkich plików w tych formatach. </p>
+    <p> <b> Zapisz </b> - jeśli plik jest już zapisany, ta pozycja
+      menu zapisuje go ponownie. Tak to działa. Ale jeśli plik nie
+      zostanie zapisany, zobaczysz niespodziankę! <a href="#mni_manager"> Menedżer plików.</a> Tam umieść nazwę pliku
+      w polu <b> Nazwa </b> i naciśnij przycisk <b> Zapisz jako.</b></p>
+    <p> <b> Ostatni zamknięty plik </b> - otwiera ostatni zamknięty
+      plik. To zdanie jest większym paradoksem XXI wieku n.e. </p>
+    <p> <b> Otwórz przy kursorze lub F2 jako skrót </b> - ta funkcja
+      przekształca użytkownika w tzw. „uzależnionego od F2”. Mogą
+      zdarzyć się dziwne przemiany umysłu i ciała, więc ostrzegamy! </p>
+    <p> Umieść kursor na nazwie pliku w href-link lub LaTeX, w tym
+      grafikach, wejściach, dołączaniu itp. Naciśnij F2. Widzisz ten
+      cud? TEA otwiera plik o wskazanej nazwie. Jeśli ten plik jest już
+      otwarty, jego zakładka będzie aktywna. Jeśli plik jest obrazem,
+      TEA pokaże go we wbudowanej przeglądarce obrazów. Ale co, jeśli
+      nie pracujesz z kodem [X] HTML, ale używasz prawdziwych nazw
+      plików w tekście i chcesz je otworzyć? TEA sobie z tym poradzi -
+      po prostu wybierz nazwę pliku (nie tylko umieść na niej kursor) i
+      naciśnij F2. </p>
+    <p> Jaka jest różnica? TEA może otworzyć „plik pod kursorem”, gdy
+      nazwa pliku jest ujęta w cudzysłów. Jak w HTML lub w większości
+      źródeł kodu. W innych przypadkach musisz ręcznie wybrać nazwę
+      pliku za pomocą klawiszy Shift-kursor lub myszy. </p>
+    <p> I trochę więcej - za pomocą <b> Otwórz przy kursorze </b>
+      możesz poruszać się po lokalnych linkach href. </p>
+    <p> Możesz także użyć <b> Otwórz przy kursorze </b> we wbudowanym
+      menedżerze plików, aby otworzyć plik obrazu w oknie podglądu. </p>
+    <p> Możesz także otworzyć plik w pozycji kursora za pomocą dowolnego
+      programu zewnętrznego. Przeczytaj o menu „Uruchom”, aby uzyskać
+      szczegółowe informacje. </p>
+    <p> <b>Brudnopis (Crapbook)&nbsp;</b> - otwiera specjalny plik, w
+      którym możesz umieścić notatki, fragmenty tekstu itp. Plik
+      crapbook zostanie automatycznie zapisany po zamknięciu. Jeśli plik
+      Crapbook jest otwarty i wychodzisz z TEA, zawartość Crapbooka
+      również jest zapisywana. </p>
+    <p> <b> Notatki </b> - coś w rodzaju crapbooka, ale połączonego z
+      bieżącym plikiem. Przydatne do umieszczania notatek związanych z
+      zawartością bieżącego pliku. Plik.notes jest automatycznie
+      zapisywany przy wyjściu. </p>
+    <p> <b> Zapisz jako inny &gt; Zapisz.bak </b> - zapisuje zawartość
+      aktualnego dokumentu wraz z nazwą, do której dodano rozszerzenie
+      „bak”. </p>
+    <p> <b> Zapisz jako inny &gt; Zapisz wersję z sygnaturą czasową </b>
+      - zapisuje zawartość aktualnego dokumentu wraz z nazwą, w której
+      dodawany jest znacznik czasu. Będziesz więc znać datę i godzinę
+      związaną z zapisaną wersją. Uwaga dotycząca formatu sygnatury
+      czasowej. Czy to rrrr-MM-dd-gg-mm-ss. Więc najpierw jest rok,
+      potem miesiąc, potem dni, godziny, minuty i sekundy. </p>
+    <p> <b> Najnowsze pliki.</b> Z tego podmenu można otworzyć jeden z
+      kilkunastu ostatnio otwartych plików. TEA zapamiętuje nazwę,
+      kodowanie i bieżącą pozycję pliku po zamknięciu dokumentu, więc
+      następnym razem TEA już zna zestaw znaków i pozycję, od której ma
+      rozpocząć edycję. </p>
+    <p> <b> Szablony </b> - aby utworzyć nowy plik z szablonu, wybierz
+      szablon z tego menu. Aby utworzyć nowy szablon, zapisz plik
+      tekstowy w katalogu TEA <i> templates.</i> Jest dostępny w
+      zakładce <i> szablony </i> w menedżerze plików TEA (lub na lewym
+      pasku bocznym w oknie dialogowym <b> Zapisz plik </b>). I
+      odwrotnie, aby otworzyć szablon, ponownie użyj zakładki <i>
+        szablony </i> menedżera plików. Zestaw znaków szablonów to
+      zawsze UTF-8. TEA ustawia to automatycznie, nawet jeśli wybierzesz
+      inne kodowanie. </p>
+    <p> Aby usunąć szablon lub zmienić jego nazwę, użyj menedżera plików
+      lub okien dialogowych Zapisz/otwórz plik. </p>
+    <p> <b> Sesje </b> - w tym menu dostępne są sesje. Sesja to prosta
+      lista otwartych plików. Aby załadować je wszystkie, po prostu
+      wybierz nazwę sesji z tego menu. Aby zapisać sesję, wpisz nazwę
+      sesji w polu Słynne, a następnie użyj przycisku <b> Plik &gt;
+        Zapisz inny &gt; Zapisz sesję.</b> Na stronie preferencji <b>
+        Wspólne </b> można zaznaczyć opcję <b> Przywróć ostatnią sesję
+        przy uruchomieniu.</b> Jeśli ta opcja jest włączona, TEA zapisze
+      sesję przy wyjściu (pod nazwą <i> def-session-777 </i>), a
+      następnie załaduje tę sesję podczas uruchamiania. </p>
+    <p> <b> Zakładki </b> - to menu jest podobne do <b> Ostatnie
+        pliki,</b> ale lista plików jest aktualizowana przez Ciebie, a
+      nie przez TEA. Aby dodać bieżący plik do tej listy, użyj przycisku
+      <b> Edytuj zakładki &gt; Dodaj do zakładek.</b> Jeśli lista
+      zakładek zawiera już dodawany plik, jego rekord zostanie
+      zaktualizowany o nowe wartości pozycji i zestawu znaków. Aby
+      usunąć zakładkę, otwórz listę zakładek na stronie <b> Plik &gt;
+        Konfiguracja,</b> usuń potrzebną linię i zapisz listę w zwykły
+      sposób. Błędną zakładkę można tymczasowo wyłączyć za pomocą
+      prefiksu „#”. Aby wyszukać błędne ścieżki i automatycznie wyłączyć
+      takie zakładki, użyj opcji <b> Edytuj zakładki &gt; Znajdź
+        przestarzałe ścieżki.</b></p>
+    <b> Podmenu </b>
+    <p> <b> Operacje na plikach.</b> Z tego menu możesz zrobić kilka
+      magicznych rzeczy. <b> Ustaw koniec wiersza w systemie UNIX,</b>
+      <b> Ustaw koniec wiersza w systemie Windows,</b> <b> Ustaw
+        tradycyjny koniec wiersza w systemie Mac </b> - te funkcje
+      umożliwiają nadpisanie końca wiersza linia (EOL). Kiedy zapiszesz
+      plik, wybrany EOL zostanie zastosowany. Aby sprawdzić EOL pliku,
+      wybierz plik we wbudowanym menedżerze plików i użyj <b> Fm &gt;
+        Informacje o pliku &gt; Pełne informacje.</b></p>
+    <p> <b> Nie dodawaj do najnowszych </b> - tymczasowo wyłącz
+      aktualizację listy ostatnich plików. Ta funkcja jest przydatna,
+      jeśli chcesz otworzyć wiele plików i nie chcesz nadpisywać listy
+      ostatnich plików. Dlatego użyj „nie dodawaj” przed zamknięciem
+      „niechcianych” plików, pracuj z nimi, zamknij, a następnie wyłącz
+      opcję „nie dodawaj”, aby przywrócić normalną funkcję listy
+      ostatnich ostatnich. </p>
+    <p> <b> Wyjście </b> - zamyka TEA. Aby zmniejszyć poziom
+      uciążliwości, TEA nie prosi o potwierdzenie. I jeszcze jedna
+      sprawa związana z potwierdzeniami - TEA automatycznie proponuje
+      zapisywanie tylko zmodyfikowanych istniejących plików. To znaczy,
+      jeśli zamkniesz (za pomocą TEA lub Ctrl-W) zmodyfikowany nowy,
+      nienazwany plik, TEA po cichu go zamknie. </p>
+    <a name="mni_calendar"></a>
+    <h3>Kalendarz</h3>
+    <p> To menu jest dostępne tylko wtedy, gdy panel <b> do zrobienia </b>
+      jest aktywny. </p>
+    <p> <b> Włączanie/wyłączanie trybu księżycowego </b> - przełącz
+      widżet kalendarza na tryb księżycowy/normalny. W pierwszym
+      pokazane są fazy księżyca. Zobaczysz również numer dnia
+      księżycowego po ukośniku (przed numerem dnia gregoriańskiego). To
+      znaczy format to: normalny numer dnia/księżycowy numer dnia. </p>
+    <p> Kilka słów o obliczaniu dnia księżycowego. Przede wszystkim
+      musisz wybrać odpowiednią półkulę Ziemi w <b> Opcje - Wspólna -
+        Półkula północna (wł./Wył.).</b> Inną ważną rzeczą jest algorytm
+      (<b> Opcje - Wspólne - Algorytm fazy księżyca </b>). Szybkość i
+      precyzja są różne, spróbuj sam. Wykorzystano kilka algorytmów.
+      Niektóre z nich są oparte na artykule Bena Danglisha na
+      www.ben-daglish.net/moon.shtml, a inny na artykule Alexandra
+      Leushkanova - www.astrogalaxy.ru/275.html. </p>
+    <p> Z powodów technicznych obraz fazy księżyca w dniach 12 i 13 jest
+      taki sam. </p>
+    <p> <b> Dodaj lub odejmij lata/miesiące/dni </b> - pozwala na
+      nawigację po kalendarzu wstecz i do przodu o N lat, miesięcy lub
+      dni. Na przykład, musisz zobaczyć dzień +6 po obecnym. Wpisz „6” w
+      Znane pole wprowadzania, a następnie użyj przycisku <b> Dodaj lub
+        odejmij &gt; dni.</b> Jeśli chcesz się cofnąć, wpisz wartość
+      ujemną do FIF, tj. „-6” zamiast „6”. </p>
+    <p> <b> Liczba dni między dwiema datami </b> - oblicza liczbę dni
+      między dwiema datami. Wybierz pierwszą datę w Kalendarzu i użyj
+      opcji menu <b> Zaznacz pierwszą datę.</b> Wybierz ostatnią datę w
+      kalendarzu i użyj opcji <b> Zaznacz ostatnią datę.</b> Użyj
+      funkcji <b> Liczba dni między dwiema datami,</b> aby zmierzyć
+      różnicę między pierwszą a drugą datą. </p>
+    <p> <b> Oblicz dni księżycowe między datami </b> - tworzy listę
+      dni księżycowych między dwiema datami (<b> Zaznacz pierwszą/
+        ostatnią datę </b>). </p>
+    <a name="mni_edit"></a>
+    <h3>Edycja</h3>
+    <p> Informacje o zaznaczeniu prostokątnym lub blokowym. TEA ma tak
+      ograniczone możliwości, że nie pasuje dobrze do architektury TEA,
+      a funkcje przetwarzania tekstu nie mogą być używane z selekcjami
+      bloków. Wszystko, co możesz z nimi zrobić, to wybrać za pomocą <b>
+        Początek bloku </b> i <b> Koniec bloku</b>, a następnie <b>
+        Kopiuj blok,</b> <b> Wytnij blok i <b> Wklej blok.</b></b></p>
+    <p> Kilka uwag na temat funkcji <b style="font-weight: bold;"> </b><b>Wcięcie/Usuń
+
+
+
+        wcięcie</b>. Istnieją dwa zakodowane na stałe skróty
+      klawiaturowe przypisane do tej funkcji<b style="font-weight:
+        bold;"> - Tab i Shift-Tab. </b>Jeśli żaden tekst nie jest
+      zaznaczony,<b style="font-weight: bold;"> Wcięcie (tabulator) </b>
+      wstawia znak tabulacji lub spację (spacje).<b style="font-weight:
+        bold;"> </b>Takie zachowanie zależy od<b style="font-weight:
+        bold;"> Opcje &gt; Interfejs &gt; Użyj spacji zamiast
+        tabulatorów </b> i opcji<b style="font-weight: bold;">
+        Szerokość tabulatora w spacjach</b><b>. </b></p>
+    <p> Jeśli opcja <b style="font-weight: bold;"> Użyj spacji zamiast
+        tabulatorów</b> <span style="font-weight: bold;"><span style="font-weight: normal;"> jest zaznaczona, edytor wstawi
+          (za pomocą klawisza Tab) liczbę spacji zdefiniowaną przy </span>
+        Szerokość tabulatora w spacjach.</span><b> </b>W przeciwnym
+      razie TEA wstawia pojedynczy tabulator. </p>
+    <p> TEA ma również opcję <b style="font-weight: bold;">
+        Automatyczne wcięcie</b><b>, </b>która jest domyślnie
+      wyłączona. </p>
+    <p> <b style="font-weight: bold;"> Wcięcie pierwszej linii </b> -
+      ta funkcja wcina wszystkie zaznaczone wiersze z takim samym
+      wcięciem jak pierwsze wiersze wcięcia zaznaczenia. </p>
+    <p> <b style="font-weight: bold;"> Pliki do przechowywania</b> <span style="font-weight: bold;"><span style="font-weight: normal;"> -
+          możesz użyć jakiegoś pliku jako pliku „przechowywania”, aby
+          skopiować bezpośrednio do niego tekst z różnych źródeł. </span>
+        Ustaw jako plik pamięci </span> wybiera aktualnie otwarty plik
+      jako plik pamięci. Następnie, jeśli chcesz skopiować i wkleić
+      tekst do tego pliku, po prostu użyj opcji <b> Kopiuj do pliku
+        pamięci.</b><b style="font-weight: bold;"> </b>Możesz także
+      przechwycić tekst ze schowka systemowego i umieścić go w pamięci
+      za pomocą <b> Uruchom/zatrzymaj przechwytywanie schowka do pliku</b>.<b>
+      </b>Możesz mieć tylko jeden plik pamięci na sesję. Gdy zamkniesz
+      plik magazynu, dalsze wklejanie do niego zostanie wyłączone,
+      dopóki nie ustawisz go ponownie. </p>
+    <p> Aby kontrolować tekst wstawiany do magazynu, możesz użyć pliku
+      szablonu o nazwie <i> cliptpl.txt </i> w katalogu
+      konfiguracyjnym TEA. Po prostu stwórz taki plik z kilkoma makrami,
+      na przykład: </p>
+    <pre style="font-weight: bold;"><pre style="font-variant-ligatures: normal; font-weight: 400; orphans: 2; widows: 2;">---
+%date
+%time
+%s
+---</pre></pre>
+    Gdzie: % s - tekst ze schowka, % date - aktualna data, % time -
+    aktualny czas.
+    <div><br>
+      &nbsp; <a name="mni_markup"></a>
+      <h3>Znaczniki</h3>
+      <p> Funkcje z tego menu działają głównie w zależności od wybranego
+        trybu <b style="font-weight: bold;"> znacznika. </b>Dostępnych
+        jest kilka trybów - HTML, XHTML, LaTeX, Wikitext, Markdown, Lout
+        i DocBook. Wybierając tryb z menu <b> Tryb, </b>ustawiasz tryb
+        znaczników dla bieżącego dokumentu. Tak więc różne dokumenty
+        mają różne, oddzielne tryby. Pozwala edytować jeden plik jako
+        HTML, a drugi jako DocBook XML z tą samą pozycją menu. Zatem
+        pozycje menu działają różnie w zależności od trybu znaczników
+        dokumentu. Aby użyć trybu Wikitext, ustaw ten tryb ręcznie w
+        menu Tryb lub użyj.wiki jako rozszerzenia nazwy pliku. </p>
+      <p> Możesz zaznaczyć tekst i użyć jakiejś funkcji, na przykład
+        „Akapit”. Jeśli nie zaznaczysz żadnego tekstu, TEA po prostu
+        wstaw znaczniki w miejscu kursora. </p>
+      <p> Oprócz funkcji związanych ze znacznikami, menu <b style="font-weight: bold;"> Znaczniki </b> zawiera zestaw
+        narzędzi [X]HTML. </p>
+      <p> <b style="font-weight: bold;"> [X]</b><b style="font-weight:
+          bold;">HTML</b><b style="font-weight: bold;">&nbsp;Narzędzia
+          &nbsp;- Zmień nazwę wybranego pliku </b> - zmienia nazwę
+        pliku i zmienia zaznaczony tekst. Na przykład masz (w dokumencie
+        HTML lub LaTeX) łącze do jakiegoś pliku. Chcesz zmienić nazwę
+        tego pliku. Wybierz nazwę pliku w tekście, a następnie umieść w
+        FIF nową nazwę pliku (bez pełnej ścieżki, tylko nazwa.rozkład) i
+        użyj tej funkcji. Voila!</p>
+      <p> <b style="font-weight: bold;"> [X]</b><b style="font-weight:
+          bold;">HTML</b><b style="font-weight: bold;">&nbsp;Narzędzia
+          &gt; Waga dokumentu </b> - oblicza całkowitą wagę dokumentu z
+        uwzględnieniem wszystkich pracowników SRC (obrazy, błyski itp.).
+        Poszukaj wyniku w Logmemo.</p>
+      <p> <b style="font-weight: bold;"> [X]</b><b style="font-weight:
+          bold;">HTML</b><b style="font-weight: bold;">&nbsp;Narzędzia
+          &gt; Konwertuj tagi na encje </b> - jeśli chcesz pokazać kod
+        otagowany HTML w dokumencie [X]HTML, wybierz swój kod i użyj tej
+        funkcji. Otrzymasz na przykład:</p>
+      <p style="font-weight: bold;"><span style="font-family: 'Times New
+          Roman'; font-variant-ligatures: normal; font-weight: 400;
+          orphans: 2; widows: 2;">&amp;lt;b&amp;gt;demo&amp;lt;/b&amp;gt;</span></p>
+      <p> <b style="font-weight: bold;"> [X]</b><b style="font-weight:
+          bold;">HTML</b><b style="font-weight: bold;">&nbsp;narzędzia
+          &gt; Text to HTML </b> - ta funkcja konwertuje zwykły tekst
+        na ładny kod w formacie HTML/XHTML przy użyciu CSS.</p>
+      <p> <b style="font-weight: bold;"> [X]</b><b style="font-weight:
+          bold;">HTML</b><b style="font-weight: bold;">&nbsp;narzędzia
+          &gt; Podgląd wybranego koloru </b> - podgląd zaznaczonego
+        koloru (w tekście) w FIF. Kolor może mieć postać wartości
+        szesnastkowej lub nazwanego koloru (ciemnoniebieski, czerwony,
+        biały itp.).</p>
+      <p> <b style="font-weight: bold;"> Antyspamowa poczta e-mail</b>
+        - sprawia, że ​​wybrany odsyłacz mailto jest prawdopodobnie
+        niewidoczny dla tych przeklętych spamerów zbierających pocztę
+        e-mail, poprzez konwersję adresu na encje zakodowane w liczbach
+        całkowitych. Na przykład, jeśli spojrzysz na źródło tego
+        dokumentu, <a href="&amp; # 109; &amp; # 97; &amp; # 105; &amp;
+          # 108; &amp; # 116; &amp; # 111; &amp; # 58; &amp; # 116 ;
+          &amp; # 101; &amp; # 97; &amp; # 64; &amp; # 108; &amp; # 105;
+          &amp; # 115; &amp; # 116; &amp; # 46; &amp; # 114; &amp; #
+          117; " style="font-weight: bold;"> mailto: tea@list.ru </a>
+        będzie wyglądać jak kupa śmieci. Mam nadzieję, że zbieracze
+        spamu tego nie rozumieją. </p>
+      <p><br>
+      </p>
+      <a name="mni_search"></a>
+      <h3 style="font-weight: bold;">Szukaj</h3>
+      <p> TEA nie ma okien dialogowych dla funkcji znajdź/zamień. TEA
+        używa słynnego pola wejściowego (FIF) i interfejsu opartego na
+        menu. </p>
+      <p> Aby znaleźć podciąg w tekście, umieść go w FIF (użyj Ctrl-F,
+        aby go wyostrzyć) i naciśnij Enter.<span style="font-weight:
+          bold;"> </span>Następnie możesz użyć funkcji <b style="font-weight: bold;"> Znajdź następny </b> lub<b style="font-weight: bold;"> Znajdź poprzedni.</b><b style="font-weight: bold;"> W pobliżu FIF znajdują się również
+          trzy przyciski. </b>Są to:<b style="font-weight: bold;">
+          Znajdź, Znajdź poprzedni </b>i<b style="font-weight: bold;">
+          Znajdź następny. </b>Wyszukiwanie w TEA zaczyna się <b style="font-weight: bold;">od pozycji kursora.</b><b style="font-weight: bold;"> </b>Możesz ustawić opcje <b>
+          Całe słowa </b> i <b> Rozróżniana wielkość liter</b>,
+        zaznaczając odpowiednie pozycje menu. </p>
+      <p> Aby zamienić zaznaczony tekst (tj. znaleziony tekst) na nowy,
+        umieść nową wartość w FIF i użyj funkcji <b style="font-weight:
+          bold;"> Zamień na.</b><b style="font-weight: bold;"> </b>W
+        ten sposób możesz przejść przez tekst za pomocą przycisku<b style="font-weight: bold;"> Znajdź następny </b> i zastosować
+        <b> Zamień na, </b>gdy zajdzie taka potrzeba. </p>
+      <p> Aby zamienić wszystkie wystąpienia podłańcucha w zaznaczonym
+        tekście, umieść specjalne polecenie w FIF: </p>
+      <p> stara wartość ~ nowa wartość </p>
+      <p> Zatem „~” jest ogranicznikiem. Na przykład chcesz zamienić
+        wszystkie wystąpienia słowa „kot” na „mysz”. Polecenie będzie
+        brzmiało: </p>
+      <p> kot ~ mysz </p>
+      <p> Więc umieść takie polecenie w FIF i zastosuj funkcję <b style="font-weight: bold;"> Zamień wszystko.</b><b></b></p>
+      <p> Jeśli chcesz usunąć jakiś podciąg z tekstu, użyj formuły <i>
+          podciąg </i><i style="font-weight: bold;">~.</i><b> </b>Na
+        przykład, aby usunąć wszystkie wystąpienia słowa „broń” z
+        tekstu, możesz użyć słowa „broń ~”. </p>
+      <p> Podczas wyszukiwania lub zamiany możesz używać wyrażeń
+        regularnych (TEA przez QT używa biblioteki PCRE2 ", która
+        implementuje dopasowywanie wzorców wyrażeń regularnych przy
+        użyciu tej samej składni i semantyki co Perl 5"). Aby to zrobić,
+        włącz opcję <b> Tryb wyrażenia regularnego (</b><b style="font-family: 'Times New Roman'; font-variant-ligatures:
+          normal; orphans: 2; widows: 2;">Regexp mode</b><b>)</b>
+        (poniżej <b> Całe słowa </b>). Na przykład, aby
+        przekonwertować znacznik kursywy HTML na znacznik TeX, możesz
+        użyć następujących formuł:</p>
+      <p><i style="font-family: 'Times New Roman';
+          font-variant-ligatures: normal; orphans: 2; widows: 2;">&lt;i&gt;([^&lt;]*)&lt;/i&gt;~\emph{\1}</i></p>
+      <p> Zwróć uwagę, że <i> \1 </i> zachowuje się jak zawartość
+        przechwyconej (z „nawiasami”) części ciągu źródłowego. Aby mieć
+        dostęp do drugiej takiej części, użyj \2, \3 dla trzeciej itd. </p>
+      <p> Inny przykład - jak znaleźć wszystkie liczby w tekście? Użyj
+        wyrażenia regularnego (<span style="font-family: 'Times New
+          Roman'; orphans: 2; widows: 2;">regexp</span>)&nbsp;<i> (\d +)
+        </i> w FIF.</p>
+      <p> Nie zapomnij wyłączyć <b style="font-weight: bold;"> trybu
+          wyrażenia regularnego (</b><span style="font-weight: bold;
+          font-family: 'Times New Roman'; orphans: 2; widows: 2;">regexp
+          mode</span><b style="font-weight: bold;">)</b><b style="font-weight: bold;">, </b>gdy musisz przeprowadzić
+        zwykłe wyszukiwanie. Ponadto <b style="font-weight: bold;">tryb
+          Wyrażenia regularne (</b><span style="font-weight: bold;
+          font-family: 'Times New Roman'; orphans: 2; widows: 2;">regexp
+          mode</span><b style="font-weight: bold;">)&nbsp;</b>zastępuje<b style="font-weight: bold;"> tryb Bez rozróżniania wielkości
+          liter</b><b style="font-weight: bold;">, </b>tj. w<b style="font-weight: bold;">&nbsp;Trybie wyrażenia regularnego
+        </b> <b style="font-weight: bold;"> Rozróżnianie wielkości
+          liter </b> jest domyślnie WŁĄCZONE.</p>
+      <p><span style="font-weight: bold;"> <b> Tryb rozmyty </b> - </span>włącza
+
+
+
+
+
+
+
+
+
+        bardzo podstawową obsługę "wyszukiwania rozmytego". Na przykład
+        musisz znaleźć jakieś słowo, ale nie pamiętasz, jak dokładnie
+        jest napisane. Tak więc w trybie rozmytym TEA może znaleźć
+        podobne słowo (jeśli mają tę samą długość, np. „paczka”,
+        „kaczka” itp.). Współczynnik podobieństwa można zdefiniować w<b style="font-weight: bold;"> Opcje - Funkcje - Różne -
+          Współczynnik wyszukiwania rozmytego</b><b>. </b></p>
+      <p> <b style="font-weight: bold;"> W trybie menedżera plików </b>
+        „Zastąp wszystko” działa ze wszystkimi wybranymi plikami i
+        zestawem znaków z selektora zestawu znaków w panelu menedżera
+        plików. </p>
+      <p> Ostatecznie&nbsp;<b style="font-weight: bold;"> Zastąp
+          wszystko w otwartych plikach </b> działa jak <b style="font-weight: bold;"> Zastąp wszystko</b><b>, </b>ale w
+        zakresie wszystkich otwartych plików. </p>
+      <p> <b style="font-weight: bold;"> Szukaj w plikach </b> -
+        przeszukuje tekst podany w FIF we wszystkich plikach tekstowych,
+        zaczynając od bieżącego katalogu we wbudowanym menedżerze plików
+        (zakładka Pliki ), i głębiej w podkatalogach. Do kodowania
+        tekstu TEA używa zestawu znaków wybranego z listy zestawów
+        znaków na karcie<span style="font-weight: bold;"> <b> Pliki.</b></span></p>
+      <p> Właściwie TEA nie wyszukuje we WSZYSTKICH plikach. W przypadku
+        jednostki centralnej nie ma różnicy między plikami tekstowymi,
+        plikami mp3 lub obrazami. Programy muszą znać różnicę, ale jak?
+        I dlaczego tak ważna jest identyfikacja pliku tekstowego? Jeśli
+        program nie może tego zrobić, przeszuka tekst we wszystkich
+        plikach - obrazach, dźwiękach, filmach itp. Za dużo czasu!
+        Dlatego TEA musi znać różnicę. Dlatego TEA zakłada, że ​​pliki
+        tekstowe to pliki z rozszerzeniami, które TEA rozpoznaje przy
+        podświetlaniu składni. TEA wie również, że pliki tekstowe to
+        txt, odt, kwd, docx i inne formaty obsługiwane przez TEA.
+        Wreszcie TEA wie o niektórych zdecydowanie tekstowych plikach,
+        które mają nazwy takie jak README, ChangeLog itp. </p>
+      <p> Dlatego TEA nie może wyszukiwać we wszystkich innych plikach i
+        obecnie nie ma możliwości zdefiniowania niestandardowej maski
+        nazwy pliku lub czegoś podobnego. </p>
+      <p> <b style="font-weight: bold;"> Zaznacz wszystkie
+          znalezione/Odznacz </b> - kolorowanie lub odbarwianie
+        wszystkich wyników wyszukiwania w tekście. Ta funkcja może
+        powodować niepoprawne ustawienia koloru tekstu podczas
+        korzystania z opcji Widok - Ciemniejszy, do czasu ponownego
+        uruchomienia TEA lub otwarcia i pracy z innym plikiem. </p>
+      <p><br>
+      </p>
+      <a name="mni_functions"></a>
+      <h3>Funkcje</h3>
+      <p> Aby korzystać z funkcji przetwarzania tekstu, musisz najpierw
+        zaznaczyć tekst. Niektóre funkcje (takie jak<span style="font-weight: bold;"> <b> Statystyka tekstu </b>) </span>mogą
+
+
+
+
+
+
+
+
+
+        działać z całym tekstem, jeśli nie jest zaznaczony żaden
+        fragment. Istnieją również specjalne przypadki, w których TEA
+        może traktować bieżące słowo jako zaznaczenie, gdy w
+        rzeczywistości nie ma tekstu. Na przykład jest to zachowanie
+        funkcji <b style="font-weight: bold;">wielkie litery </b><span style="font-weight: bold;"></span><span style="font-weight:
+          bold;"> </span>i<span style="font-weight: bold;"></span><b style="font-weight: bold;"> małe litery</b><b>. </b>Ale takie
+        zachowanie jest rzadkim wyjątkiem od reguły. </p>
+      <p> Niektóre funkcje przyjmują parametr, który należy umieścić w
+        słynnym polu wejściowym (FIF, wpis wejściowy na dole okna
+        głównego). Na przykład funkcja <b> Usuń linie &gt; Rozmiar N</b>
+        pobiera wartość N z pola wejściowego Znane, więc najpierw
+        wpisujesz wartość, a następnie wywołujesz funkcję. Brak wartości
+        domyślnych. </p>
+      <p> <b style="font-weight: bold;"> Funkcje &gt; Powtórz ostatnie
+        </b> - powtórz ostatnio używaną funkcję. Właściwie działa z
+        prawie wszystkimi pozycjami menu, nie tylko z menu Funkcje. </p>
+      <p> <b style="font-weight: bold;"> Funkcje &gt; Zdania pisane
+          wielką literą </b> - wszystkie zaznaczone znaczenia zamieniaj
+        wielką literą na pierwszą literę pierwszego słowa. Przydatne w
+        przypadku automatycznie generowanych napisów z YouTube, gdzie
+        ręcznie dodajesz „.”, „!” i „?”, a następnie zastosuj tę
+        funkcję. </p>
+      <p> <b style="font-weight: bold;"> Funkcje &gt; Narzędzia &gt;
+          Skaluj obraz </b> - skaluje obraz. W tekście wybierz nazwę
+        pliku obrazu lub ustaw na nim kursor. Wstawiamy do FIF parametry
+        skalowania. Zastosuj tę funkcję. </p>
+      <p> Format parametrów to: nazwa pliku ~ nowy rozmiar </p>
+      <p> Nazwa pliku to nazwa pliku wyjściowego. Może być zakodowany na
+        stałe (np. „Out.jpg”) lub zawierać makra:% filename (nazwa pliku
+        + rozszerzenie),% basename (nazwa pliku bez rozszerzenia),% ext
+        (rozszerzenie). Zatem pełna nazwa pliku źródłowego to%
+        basename.% Ext. Pełna ścieżka z nazwą pliku to makro% s. Jeśli
+        nie chcesz nadpisywać pliku źródłowego, możesz użyć przedrostka
+        lub przyrostka, aby zmienić nazwę pliku: </p>
+      <p><i>foo-%basename-bar.%ext~1024</i> </p>
+      <p> W tym przykładzie nazwa wyjściowego pliku obrazu powinna być
+        poprzedzona przedrostkiem „foo-” i zakończona końcówką „z -bar”.
+      </p>
+      <p> Drugi parametr to nowy rozmiar. Może być w pikselach lub
+        procentach (wystarczy dodać „%” po wartości): </p>
+      <p><i>foo-%basename.%ext~1024</i> </p>
+      <p><i>foo-%basename.%ext~50%</i> </p>
+      Podmenu<b>&nbsp;</b><b>Komórki </b> jest używane do przetwarzania
+      wszystkich danych przypominających tabelę. Mogą to być tabele
+      LaTeX, dane CSV itp. We wszystkich przypadkach musisz zdefiniować
+      (w FIF) separator kolumn, aby powiedzieć TEA, jak analizować
+      ciągi.
+      <p> <b> Funkcje &gt;Komórki &gt; Sortuj tabelę według kolumny ABC
+        </b> - sortuje tabelę tekstową według kolumny w kolejności ABC.
+      </p>
+      <p> Ciąg formatu dla FIF: <i> separator ~ numer kolumny </i> </p>
+      <p> Zakres kolumn zaczyna się od 0, tj. pierwsza kolumna to 0,
+        druga to 1 itd. </p>
+      <p> Na przykład mamy tabelę LaTeX z 4 wierszami, 2 kolumnami: </p>
+      <p> pies&amp;kot <br>
+        jagnię&amp;krowa <br>
+        wąż&amp;wombat <br>
+        wilk&amp;tygrys </p>
+      <p> Teraz chcemy posortować je według drugiej (1) kolumny (gdzie
+        „kot”, „krowa” itp.). Zaznacz tekst, umieść&nbsp;<span style="font-family: 'Times New Roman'; font-variant-ligatures:
+          normal; orphans: 2; widows: 2;">"&amp;~1"</span>&nbsp;w FIF i
+        wywołaj tę funkcję. Tabela zostanie posortowana według drugiej
+        kolumny. </p>
+      <p> Dobrze jest przetworzyć tabelę bez znaków końca wiersza
+        (np.&nbsp;<span style="font-family: 'Times New Roman';
+          font-variant-ligatures: normal; orphans: 2; widows: 2;">"\\"</span>&nbsp;w
+
+
+
+
+
+
+
+
+
+        LaTeX), a następnie dodać podziały wierszy do wyniku za pomocą
+        funkcji „Zastosuj do każdego wiersza” z wartością FIF&nbsp;<span style="font-family: 'Times New Roman'; font-variant-ligatures:
+          normal; orphans: 2; widows: 2;">"%s\\"</span>. </p>
+      <p> <b> Funkcje &gt; Komórki &gt; Zamień komórki</b> - zamienia
+        komórki tabeli kolumnami. </p>
+      <p> Ciąg formatu FIF: separator~kolumna1~kolumna2 </p>
+      <p> Na przykład (z poprzednią tabelą przykładową) chcemy zamienić
+        kolumnę 0 na 1 - kolumna z „cat” musi znajdować się przed
+        kolumną „dog”. Zaznacz tekst, umieść go w FIF „&amp; amp; ~ 0 ~
+        1” i wywołaj <b> Zamień komórki</b>. </p>
+      <p> <b> Funkcje &gt; Komórki &gt; Usuń według kolumny </b> -
+        usuwa kolumnę według podanego numeru (0..n). </p>
+      <p> Format FIF: separator~numer kolumny </p>
+      <p> 0 - pierwsza kolumna, 1 - druga itd. </p>
+      <p> <b> Funkcje &gt; Komórki &gt; Kopiuj według kolumn[y</b>] -
+        skopiuj kolumny do schowka. </p>
+      <p> Format FIF: separator~kolumna 1 [~ kolumna 2] </p>
+      <p> Jeśli nie podano kolumny 2, skopiowana zostanie kolumna 1, w
+        przeciwnym razie - z kolumny 1 do kolumny 2. </p>
+      <p> <b> Funkcje &gt; Analiza &gt; Statystyki tekstu</b> -
+        wyprowadza statystyki tekstu dla całego tekstu lub zaznaczenia
+        do Logmemo. </p>
+      <p> <b> Funkcje &gt; Analiza &gt; Długość słów </b> - ile słów o
+        długości od 1 do 32. </p>
+      <p> <b> Funkcje &gt; Analiza &gt; UNITAZ</b> - UNIversal Text
+        AnalyZer, który oblicza częstotliwości słów i podaje inne
+        powiązane informacje. </p>
+      <p> <b> Funkcje &gt; Analiza &gt; Policz podciąg</b> - liczbę
+        wystąpień podciągu (umieść go w słynnym polu wejściowym) w
+        dokumencie. Zobacz wynik na logmemo. Opcja „Wyszukiwanie z
+        rozróżnianiem wielkości liter” jest używana jako opcja. </p>
+      <p> <b> Funkcje &gt; Analiza &gt; Wyodrębnij słowa </b> -
+        wyodrębnia wszystkie słowa z dokumentu i umieszcza je w nowo
+        utworzonym. </p>
+      <h3> Funkcje &gt; Tabele </h3>
+      <p> W TEA, <i> tabele </i> to coś w rodzaju zestawu reguł
+        dotyczących zastępowania tekstu. Najpierw musisz utworzyć plik z
+        tabelą (format <i> klucz = wartość </i>). Oto przykład: </p>
+      <pre><pre style="font-variant-ligatures: normal; orphans: 2; widows: 2;">kot=pies
+miau=hau-hau</pre></pre>
+      <p> Następnie zapisz ten plik jako zastępczy plik tabeli w
+        specjalnym katalogu TEA o nazwie <i> tabele.</i> Jest dostępny
+        w panelu zakładek menedżera plików lub w oknie dialogowym
+        zapisywania plików. Po zapisaniu tabeli pod jakąś nazwą pojawi
+        się ona na stronie <b> Funkcje &gt; Menu Tabele</b>.</p>
+      <p> Teraz spróbuj zastosować tę tabelę. Utwórz nowy plik i napisz
+        tekst w ten sposób: <i> Kot powie: „miau”.</i> Wybierz ten
+        tekst, a następnie wybierz swój stół z menu i zobacz, co się
+        stanie. W rezultacie otrzymujemy nowe zdanie: <i> Pies mówi:
+          „hau-hau”.</i> Zatem tabele są sposobem na wielokrotne
+        zastąpienie. </p>
+      <p> Jeśli włączony jest tryb <b>Regexp</b> w <b>Opcjach
+          wyszukiwania</b>, tabela użyje <i> kluczy </i> jako wyrażeń
+        regularnych Perl5 (poprzez bibliotekę PCRE2 ). </p>
+      <p> W <b>trybie menedżera plików</b> tabele działają ze
+        wszystkimi wybranymi plikami i zestawem znaków z selektora
+        zestawu znaków w panelu menedżera plików. </p>
+      <h3> Funkcje &gt; Fragmenty </h3>
+      <p> Fragment to fragment kodu, który możesz wstawić do tekstu. TEA
+        przechowuje każdy fragment kodu jako pojedynczy plik w katalogu
+        <i> $HOME/.tea/snippets.</i> Nazwa pliku skrawka to pozycja menu
+        w Snippets-menu, tj. Zawartość menu Snippets to lista plików z <i>
+          $HOME/.tea/snippets.</i> Aby utworzyć nowy fragment, zrób tak:
+      </p>
+      <p> 1. Napisz jakiś tekst. <br>
+        2. <b>Plik &gt; Zapisz jako</b>. Kliknij zakładkę „fragmenty”,
+        aby otworzyć katalog skrawków, a następnie zapisz plik w zwykły
+        sposób. <font color="#ff0000">Uwaga: nie zapisuj fragmentu pod
+          nazwą żadnej innej pozycji menu TEA!</font> Nazwy pozycji menu
+        nie powinny się powielać, w przeciwnym razie TEA nie może
+        poprawnie ustawić skrótów klawiaturowych. Jest to ważne, gdy
+        podajesz nazwę dla fragmentu lub skryptu, szablonu, nazwy sesji
+        itp. <br>
+        3. Ciesz się :) </p>
+      <p> Możesz utworzyć urywek, który w jakiś sposób wykorzystuje
+        zaznaczenie tekstu. Na przykład chcesz utworzyć fragment, który
+        zamyka wybrany tekst w niektórych tagach HTML. Makro % s
+        reprezentuje zaznaczenie tekstu. Oto przykład takiego fragmentu:
+      </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+      </p>
+      <p style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">&lt;a href="%s"&gt;%s&lt;/a&gt;</p>
+      Po zastosowaniu tego fragmentu
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        letter-spacing: normal; orphans: 2; text-align: start;
+        text-indent: 0px; text-transform: none; white-space: normal;
+        widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+        text-decoration-thickness: initial; text-decoration-style:
+        initial; text-decoration-color: initial;">%s</b> zostanie
+      zastąpiony wybranym tekstem. Jeśli żaden tekst nie jest
+      zaznaczony, fragment kodu zostanie wstawiony do tekstu (ale bez
+      makra
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">"%s"</span>).
+      <p> Aby otworzyć fragment kodu do edycji, użyj zakładki katalogu <b>fragmenty</b>
+        w menedżerze plików TEA lub w oknie dialogowym Zapisz/otwórz
+        plik. Stamtąd możesz również zmienić nazwę lub usunąć fragmenty
+        (użyj menu kontekstowego - kliknij prawym przyciskiem myszy - w
+        oknach dialogowych Zapisz/otwórz plik). </p>
+      <h3><span style="font-weight: normal;"> <b>Funkcje &gt; Skrypty</b>
+        </span></h3>
+      <h4><span style="font-weight: normal;"> <b>Skrypty z punktu
+            widzenia użytkownika</b> </span></h4>
+      <p> Dzięki TEA możesz używać skryptów do przetwarzania <b>zaznaczonego
+
+
+
+
+
+
+
+
+
+          tekstu</b>, tak jak używasz wbudowanych funkcji TEA. Jeśli
+        skrypt obsługuje jakieś parametry, umieść je w polu <b>Znane</b>.
+      </p>
+      <p> TEA może współpracować ze skryptami napisanymi w formacie
+        wsadowym języków
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">Python, Perl, Ruby, Lua, Bash (Sh), 2/REXX</span>
+        i Windows. Aby zainstalować skrypt, po prostu umieść go w&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">$HOME/.config/tea/scripts</i> </i> (możesz użyć
+        skrótu „scripts” w oknie dialogowym Zapisz jako, aby zapisać
+        plik jako skrypt TEA). TEA „zobaczy” nowo zainstalowane skrypty
+        po ponownym uruchomieniu lub po zapisaniu skryptu z TEA.
+        Zarządzanie skryptami jest podobne do fragmentów. </p>
+      <h4><span style="font-weight: normal;"> <b>Skrypty z punktu
+            widzenia programisty</b> </span></h4>
+      <p> Jak napisać skrypt dla TEA? To całkiem proste. Ale pierwszą
+        rzeczą, którą musisz wiedzieć, jest to, w jaki sposób TEA
+        przekazuje tekst do skryptu i jak TEA przyjmuje przetworzony
+        tekst z powrotem, aby zastąpić nim zaznaczenie. </p>
+      <p> TEA uruchamia każdy skrypt z jednym lub dwoma parametrami. Oba
+        są nazwami plików. Pierwszy plik zawiera tekst (UTF-8). Ten
+        tekst jest zaznaczonym tekstem, który TEA pobiera w bieżącym
+        dokumencie. Drugi plik (jeśli istnieje) zawiera tekst (UTF-8) z
+        pola wejściowego <i>Znane</i>. Twój skrypt może więc odczytać
+        pierwszy plik, aby uzyskać dane tekstowe, i odczytać drugi plik,
+        aby uzyskać opcjonalne parametry skryptu. </p>
+      <p> Bądź ostrożny z obsługą tekstu - TEA wewnętrznie działa z
+        kodowaniem UTF-8, więc całe przetwarzanie tekstu w skrypcie musi
+        być bezpieczne dla UTF-8. OK, zobaczmy teraz, jak skrypt może
+        zwrócić przetworzony tekst. Po prostu zapisz ten przetworzony
+        tekst ponownie do pierwszego pliku, tj. Do pliku, którego nazwę
+        przyjmujesz z pierwszego parametru twojego skryptu. </p>
+      <p> Poniżej tych linii zobaczysz przykład skryptu Python z
+        bezpiecznym kodem UTF8, który pobiera tekst, zamienia wielkość
+        liter i zwraca przetworzony tekst z powrotem do TEA. </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">import sys
+import string
+import codecs
+f = codecs.open(sys.argv[1], "r", "utf-8" )
+u = f.read()
+f.close
+u = u.swapcase()
+f = codecs.open(sys.argv[1], "w+", "utf-8" )
+f.write (u)
+f.close<br class="Apple-interchange-newline"><pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">sys.argv[1]</span> zawiera nazwę pliku z tekstem
+        z TEA. Czytamy całą zawartość tego pliku, następnie przetwarzamy
+        tę zawartość, a następnie zapisujemy ją z powrotem do
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">sys.argv[1]-file</span>. Voila! Zwróć uwagę, jak
+        używać kodeków. </p>
+      <p> I kolejny przykład - kalkulator „wbudowany”. Tutaj nie używamy
+        żadnych kodeków, ponieważ pracujemy z danymi liczbowymi: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">import sys
+f = file (sys.argv[1], 'r')
+s = f.read()
+f.close
+t = eval (s)
+f = file (sys.argv[1], 'w+')
+f.write (str (t))
+f.close
+</pre>
+      <p> Ale co, jeśli potrzebujemy uzyskać do skryptu dodatkowe
+        parametry użytkownika? Są dostępne jako łańcuch i można je
+        odczytać z pliku o nazwie sys.argv [2] (w Pythonie). W
+        Bash-script, użyj $1, aby uzyskać pierwszy parametr i $2, aby
+        uzyskać drugi. Podsumowując, drugim parametrem jest plik, który
+        zawiera tekst z pola wejściowego <i>Znane</i>. Zauważ, że
+        skrypty Ruby przyjmują pierwszy parametr w <i> </i>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">ARGV[0]</i>, a drugi
+        w&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">ARGV[1]</i>.</i></p>
+      <p> Kilka uwag na temat skryptów BASH i rzeczy z sed/ed/etc.
+        Sztuczka polega na użyciu pliku czasowego. Najpierw skopiuj $1
+        do jakiegoś pliku temp., następnie przetwórz ten plik tymczasowy
+        i umieść wynik z powrotem w $1. Oto przykład (zastąpienie słowa
+        „pies” słowem „kot”) takiego skryptu: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">cp $1 /tmp/xyz.xyz
+sed 's/pies/kot/g' /tmp/xyz.xyz &gt; $1<br class="Apple-interchange-newline"><pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p> Jeśli chcesz wnieść jakieś skrypty do repozytorium skryptów
+        witryny TEA, rozważ nadanie skryptu statusu domeny publicznej.
+        Lub przynajmniej z wolną licencją. Przyda się również
+        umieszczenie napisów końcowych i opisu w komentarzach w swoim
+        skrypcie. </p>
+      <p> <b>Sortuj &gt; Sortuj z uwzględnieniem wielkości liter</b> -
+        sortuje wybrane wiersze alfabetycznie z uwzględnieniem wielkości
+        liter. </p>
+      <p> <b>Sortuj &gt; Sortuj z uwzględnieniem wielkości liter,
+          używając separatora</b> - sortuje podciągi oddzielone
+        ogranicznikiem. Umieść separator w FIF, a następnie użyj tej
+        funkcji na tekście. W ten sposób możesz sortować "trzy | cztery
+        | jeden | dwa" za pomocą "|" jako separator. </p>
+      <p> <b>Sortuj &gt; Sortuj według długości </b>- sortuje wybrane
+        wiersze według rozmiaru. Podaj rozmiar w FIF. </p>
+      <p> <b>Sortuj &gt; Odwróć listę</b> - odwraca kolejność wierszy.
+        Było: </p>
+      <p> Pies <br>
+        Kot <br>
+        Krowa </p>
+      <p> Będzie: </p>
+      <p> Krowa <br>
+        Kot <br>
+        Pies </p>
+      <p> <b>Sortuj &gt; Odwróć listę za pomocą separatora</b> -
+        odwraca kolejność podciągów oddzielonych separatorem w FIF. </p>
+      <p> <b>Filtr &gt; Usuń duplikaty</b> - przydatne, gdy lista
+        ciągów zawiera zduplikowane elementy. Wszelkie zduplikowane
+        elementy PO oryginalnym zostaną usunięte. Może działać wolno na
+        wolnych komputerach. </p>
+      <p> <b>Filtr &gt; Usuń puste linie</b> - puste linie są tak samo
+        przydatne jak puste oczy, w przeciwieństwie do pustych butelek.
+        W związku z tym potrzebne jest narzędzie do usuwania pustych
+        ciągów. I TEA to ma. </p>
+      <p> <b>Filtr &gt; Usuń linie &lt; Rozmiar N</b> - usuwa wiersze o
+        długości mniejszej niż N. N to liczba znaków. Wpisz liczbę w
+        polu Znane. </p>
+      <p> <b>Filtr &gt; Usuń linie &gt; Rozmiar N</b> - działa jak
+        poprzednia funkcja, ale usuwa wszystkie ciągi dłuższe niż N
+        znaków. </p>
+      <p> <b>Filtr &gt; przez powtórzenia</b> - pozostawia ciągi ze
+        wzorem, gdzie
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"0"</span> to dowolny znak, a
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"1"</span> to ten sam znak. </p>
+      <p> Na przykład wzorzec
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"kitten"</span> to
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;"><span>&nbsp;</span>"001100"</span>, gdzie
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"11"</span> oznacza
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"tt"</span>. </p>
+      <p> <b>Filtr &gt; Filtruj za pomocą wyrażenia regularnego</b> -
+        filtruj listę przy użyciu wyrażenia regularnego. Aby uzyskać
+        więcej informacji, zobacz <a href="http://www.regular-expressions.info">
+          www.regular-expressions.info.</a> Jednak tutaj jest krótki
+        przykład. Załóżmy, że masz listę: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">hello.doc</span><br style="color: rgb(0, 0, 0);
+          font-family: &quot;Times New Roman&quot;; font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; orphans: 2; text-align: start; text-indent: 0px;
+          text-transform: none; white-space: normal; widows: 2;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">example.txt</span><br style="color: rgb(0, 0,
+          0); font-family: &quot;Times New Roman&quot;; font-size:
+          medium; font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; orphans: 2; text-align: start; text-indent: 0px;
+          text-transform: none; white-space: normal; widows: 2;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">nature.jpeg</span><br style="color: rgb(0, 0,
+          0); font-family: &quot;Times New Roman&quot;; font-size:
+          medium; font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; orphans: 2; text-align: start; text-indent: 0px;
+          text-transform: none; white-space: normal; widows: 2;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">mytext.txt</span></p>
+      <p> I chcesz filtrować wszystkie elementy za pomocą rozszerzenia
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"txt"</span>. Zatem wyrażenie regularne (regexp)
+        dla tego będzie wyglądać następująco: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">.*\.txt$</span></p>
+      <p> Umieść go w polu Znane, zaznacz tekst i zastosuj funkcję.
+        Voila! </p>
+      <p> <b>Filtr &gt; Usuń po separatorze w każdym wierszu</b>. Usuwa
+        podciąg po separatorze w każdym wybranym wierszu. Musisz
+        umieścić separator w FIF. Na przykład separatorem jest
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">")"</span>, a wybrany tekst to: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">1.) Nirvana
+2.) Grajdanskaya Oborona
+3.) The Cranberries<br class="Apple-interchange-newline"><pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p> Zastosuj filtr, a otrzymasz: </p>
+      <pre>1.
+2.
+3. </pre>
+      <p> <b>Filtr &gt; Usuń przed separatorem w każdym wierszu</b>.
+        Usuwa podciąg PRZED ogranicznikiem w każdym wybranym wierszu.
+        Musisz umieścić separator w FIF. Na przykład separatorem jest
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">")"</span>, a wybrany tekst to: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">1.) Nirvana
+2.) Grajdanskaya Oborona
+3.) The Cranberries<br class="Apple-interchange-newline"><pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p> Zastosuj filtr, a otrzymasz: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">Nirvana
+Grajdanskaya Oborona
+The Cranberries<pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Math &gt; deg min
+          sec &gt; dec degrees</b> konwertuje współrzędne z formatu
+        „stopnie, minuty i sekundy” na „stopnie dziesiętne”. Przykład: </p>
+      <p> było:
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">40° 26′ 46″ N 79° 58′ 56″ W, wynik: 40.446° N
+          79.982° W</span></p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Math &gt; dec
+          degrees &gt; deg min sec</b> konwertuje współrzędne z formatu
+        „stopni dziesiętnych” na „stopnie minuty sekundy”. Przykład: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">było: 40.446° N 79.982° W, wynik: 40° 26′ 46″ N
+          79° 58′ 56″ W.</span></p>
+      <p> <b>Math &gt; Suma według ostatniej kolumny</b> - sumuje
+        wartości każdej ostatniej kolumny w zaznaczeniu. Na przykład
+        możemy obliczyć prostą listę tekstową: </p>
+      <p> Marchew 14 <br>
+        Jabłka 45,8 <br>
+        Pomarańcze 11 </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Math &gt; Oblicz</b>
+        - oblicza wyrażenie wybrane w tekście. Na przykład możesz
+        napisać
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">2+2</span>, a następnie wybrać go i zastosować
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Oblicz</b>. Po
+        takiej akcji zobaczysz wynik na logmemo. W swoim wyrażeniu można
+        użyć następujących operatorów:
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">+, -, *, /, ^</span>(potęga),% (pobierz wartość
+        procentową). Nawiasy klamrowe są obsługiwane. Oto kilka
+        przykładów: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">2/3*123
+5+5+5
+1-200*89
+2^8
+250%4 //what is 4 per cent of 250?<pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Math &gt; Dziesiętne
+          na dwójkowe</b> - konwertuje dziesiętną liczbę całkowitą na
+        jej binarną reprezentację. Przykład: było 255, będzie 0000 0000
+        0000 0000 0000 0000 1111 1111. </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Math &gt; Dwójkowe
+          na dziesiętne</b> - działa tylko z liczbami binarnymi bez
+        znaku int. </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Math &gt; Odwróć
+          bity (dopełnienie bitowe) -</b> Odwróć bity (dopełnienie
+        bitowe) - użyj tej funkcji do odwrócenia bitu wartości binarnej.
+        Przykład: było 0000 0010, będzie 1111 1101. </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Math &gt; W</b><b>ylicz
+          wiersze z zaznaczonego tekstu.</b> Umieść ciąg parametrów tej
+        funkcji w polu <i>Znane</i> dane wejściowe. Składnia:
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">step~zero_padding~prefix</i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">.</span></p>
+      <p> <i> Krok </i> to krok inkrementacji. Na przykład krok 1 daje
+        liczby 1, 2, 3 itd. Krok = 10 da nam 10, 20, 30. </p>
+      <p> <i> Wypełnienie zerami </i> określa, ile cyfr znajduje się w
+        każdej liczbie. Na przykład, jeśli <i> wypełnienie zerami,
+          czyli </i>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">zero padding</i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;"><span>&nbsp;</span>= 3</span>, a <i> krok,
+          czyli </i>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">step</i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;"><span>&nbsp;</span>= 1</span>, otrzymamy 001,
+        002, 003 itd. </p>
+      <p> <i> </i><i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">Prefix</i> </i>to przedrostek po liczbie, a przed
+        ciągiem. Przedrostek może mieć znaczące spacje końcowe. </p>
+      <p> Oto kilka przykładów i wyników: </p>
+      <p> przykład 1, parametry to
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"</span><i style="color: rgb(0, 0, 0);
+          font-family: &quot;Times New Roman&quot;; font-size: medium;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial;">1~3~)<span>&nbsp;</span></i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"</span> (bez cudzysłowów). Wynik to: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">001) dog
+002) cat
+003) mouse<pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p> przykład 2, parametry to
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"</span><i style="color: rgb(0, 0, 0);
+          font-family: &quot;Times New Roman&quot;; font-size: medium;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial;">10~1<span>&nbsp;</span></i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"</span> (bez cudzysłowów). Wynik to: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">10 dog
+20 cat
+30 mouse<pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p> przykład 3, parametr to
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"</span><i style="color: rgb(0, 0, 0);
+          font-family: &quot;Times New Roman&quot;; font-size: medium;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial;">1</i><span style="color:
+          rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;;
+          font-size: medium; font-style: normal; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline
+          !important; float: none;">"<span>&nbsp;</span></span> (bez
+        cudzysłowów). Wynik to: </p>
+      <pre><meta http-equiv="content-type" content="text/html; charset=UTF-8">1dog
+2cat
+3mouse<pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"></pre></pre>
+      <p> Możesz użyć tej funkcji nawet bez parametrów - w takim
+        przypadku padding = 0, step = 1, a prefiks jest pustym ciągiem.
+        Możesz użyć pojedynczego parametru <i> step </i> lub pary <i>
+          step </i> i <i> dopełnienia </i> lub wszystkich trzech
+        parametrów. </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Math &gt; Arabskie
+          na rzymskie</b> - konwertuje „zwykłe” liczby na rzymskie (np.
+        20 na XX). </p>
+      <h3>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+      </h3>
+      <h3 style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-style: normal; font-variant-ligatures: normal;
+        font-variant-caps: normal; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">Funkcje &gt; Kod Morse'a</h3>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">From Morse To
+          English</b><span style="color: rgb(0, 0, 0); font-family:
+          &quot;Times New Roman&quot;; font-size: medium; font-style:
+          normal; font-variant-ligatures: normal; font-variant-caps:
+          normal; font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">. </span>Z alfabetu Morse'a na angielski. Nie
+        jestem guru alfabetu Morse'a, ale mam nadzieję, że mój wysiłek,
+        aby wdrożyć taką funkcję jest słuszny. Za pomocą tej pozycji
+        menu możesz przetłumaczyć angielski tekst na alfabet Morse'a. Na
+        przykład było: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">tea and coffee</span></p>
+      <p> Będzie: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">-..-.- -. -.. -.-. ---..-...-...</span></p>
+      <p> Zauważ, że TEA umieszcza pojedynczą spację między dwoma kodami
+        Morse'a. </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">From English To
+          Morse.</b> Odwrotna akcja dla poprzedniej funkcji. Możesz
+        zdekodować dowolną wiadomość zakodowaną w alfabecie Morse'a.
+        Musisz wiedzieć, że TEA zakłada, że ​​między kodami Morse'a są
+        pojedyncze spacje, tak jak w powyższym przykładzie. </p>
+      <p> <b>Tekst &gt; Kompresuj</b> - usuwa wszystkie białe znaki w
+        zaznaczeniu. </p>
+      <p> <b>Tekst &gt; Anagram</b> - znajdź wszystkie anagramy
+        zaznaczonego tekstu. Może być BARDZO powolny i zjada dużo
+        pamięci, jeśli słowo jest duże. Więc TEA nie zamarznie, po
+        prostu myśli. Przykład anagramu dla „dog”: </p>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">dgo</span><br style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">dog</span><br style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">gdo</span><br style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">god</span><br style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">odg</span><br style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">ogd</span><br style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">
+      <p><b>Tekst &gt; Usuń formatowanie w każdym wierszu</b> - usuwa
+        formatowanie (tabulatory, nowe wiersze, podwójne spacje itp.) W
+        każdym wybranym wierszu. </p>
+      <p> <b>Tekst &gt; Usuń formatowanie</b> - usuwa formatowanie z
+        całego zaznaczonego tekstu, dzięki czemu tekst zostanie
+        przekonwertowany na jeden duży ciąg bez nowych linii, podwójnych
+        spacji itp. </p>
+      <p> <b>Tekst &gt; Zastosuj do każdego wiersza</b> to potężne
+        narzędzie do dodawania tekstu do każdego wiersza zaznaczenia. I
+        znowu używamy pola <i>Znane</i>. Na przykład chcę dodać <i>br-tag</i>
+        na końcu każdego wiersza. Więc wpisuję we wpisie: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+      </p>
+      <p style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">%s&lt;br&gt;</p>
+      Następnie stosuję tę funkcję, aby dodać znacznik br na końcu
+      każdej linii. Makro
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">%s</span>
+      wskazuje na każdy wiersz wyboru. Więc weź pod uwagę, że
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">%s</span>
+      reprezentuje tekst w każdym wierszu. W innym przykładzie chcę
+      zawrzeć każdy wiersz w parze znaczników <i>li</i>. Formuła pola
+      wejściowego <i>Znane</i> będzie wyglądać następująco:
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">&lt;li&gt;%s&lt;/li&gt;</span></p>
+      <p> I kolejny przykład: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">&lt;a href="%s"&gt;%s&lt;/a&gt;</span></p>
+      <p> Możesz także zastosować <i>fragmenty</i> (z katalogu <i>fragmentów</i>
+        TEA). Aby to zrobić, użyj <i> @@ snippetname </i> na FIF. Na
+        przykład, jeśli masz wycięty fragment o nazwie „myitalic”, użyj
+        <i> @@ myitalic.</i> Jak pamiętasz, fragmenty mogą zawierać
+        makro% s zastępujące zaznaczony tekst. W przypadku funkcji
+        „Zastosuj do każdego wiersza”% s będzie oznaczać tekst każdej
+        zaznaczonej linii. </p>
+      <p> <b>Tekst &gt; Uciekaj przed znakami specjalnymi (Escape
+          regexp)</b> - przydatne przy ucieczce przed znakami
+        specjalnymi wyrażenia regularnego, takimi jak $, *, +, [,] itd.
+      </p>
+      <p> <b>Tekst &gt; Sprawdź dopasowanie wyrażenia regularnego
+          (regexp)</b> - sprawdź wybrany tekst względem wyrażenia
+        regularnego (umieść wyrażenie regularne na FIF). </p>
+      <a name="mni_spell"></a>
+      <h3><span style="font-weight: normal;"><b>Funkcje &gt; Sprawdzanie
+            pisowni</b> </span></h3>
+      <p> TEA może korzystać z mocy dwóch silników sprawdzania pisowni:
+        Aspell i Hunspell. TEA można zbudować z nimi lub bez nich. W
+        pozytywnym przypadku, aby przełączać się między silnikami, użyj
+        listy Mechanizm sprawdzania pisowni na stronie <b>Opcje -
+          Funkcje</b>.</p>
+      <p> Silnik Aspell używa słowników zainstalowanych w całym systemie
+        (użyj menedżera pakietów dystrybucji Linuksa, aby je
+        zainstalować). W systemie Windows potrzebujesz kilku dodatkowych
+        rzeczy do zrobienia. Najpierw pobierz i zainstaluj pełny
+        instalator Aspell ze strony <a href="http://aspell.net/win32/">
+          http://aspell.net/win32/.</a> Następnie z tej samej strony
+        pobierz i zainstaluj kilka słowników. Musisz je umieścić w
+        katalogu, w którym jest zainstalowany Aspell. Domyślnie (w
+        Windows) jest to C:\Program Files\Aspell. Na koniec w TEA musisz
+        ustawić ścieżkę do Aspell - przejdź do <b>Opcje - Funkcje</b>,
+        zmień opcję <b>Katalog Aspell</b> na poprawną i zrestartuj
+        TEA.&nbsp; </p>
+      <p> W przypadku Hunspell musisz również samodzielnie ustawić
+        ścieżkę do słowników, ręcznie. Możliwe, że słowniki są już
+        zainstalowane, ponieważ Hunspell to mechanizm sprawdzania
+        pisowni dla przeglądarek Firefox i LibreOffice.org. Na przykład
+        Firefox (w przypadku instalacji lokalnego katalogu domowego
+        użytkownika) przechowuje słowniki w katalogu <i>
+          firefox/dictionaries</i>. Możesz także pobrać słowniki z
+        repozytoriów rozszerzeń LibreOffice. </p>
+      <p> Istnieją pliki z rozszerzeniem OXT. Wewnętrznie są to zwykłe
+        pliki ZIP. Więc pobierz i zmień nazwę filename.oxt
+        tofilenname.zip. Utwórz katalog na słowniki i rozpakuj pliki<i>.aff
+
+
+
+
+
+
+        </i> i<i>.dic </i> z ZIP. Następnie wybierz ten katalog za
+        pomocą przycisku Wybierz w opcji <b>Opcje - Funkcje - Ścieżka</b>
+        do słowników Hunspell. </p>
+      <p> Po skonfigurowaniu słownika musisz przejść do menu <b>Funkcje
+          - Języki</b> sprawdzania pisowni i wybrać język, którego
+        potrzebujesz. Bez tego ostatniego kroku sprawdzanie pisowni
+        zakończy się niepowodzeniem. Również wybierz język w ten sposób
+        po zmianie silnika z Aspell na Hunspell lub odwrotnie. </p>
+      <p> Po dodaniu słownika dobrze jest ponownie uruchomić TEA. </p>
+      <p> <b>Języki sprawdzania pisowni</b> - w tym menu możesz znaleźć
+        listę słowników zainstalowanych dla aspell (z dystrybucji lub
+        czegoś podobnego). Aby sprawdzić pisownię, użyj jednej z tych
+        pozycji menu. Działa z całym tekstem, a nie tylko z
+        zaznaczeniem. </p>
+      <p> Pozycja menu z nazwą języka służy również do ustawienia
+        domyślnego języka sprawdzania pisowni. Wartością domyślną jest
+        język Twojej lokalizacji. Aby dokonać prostego sprawdzenia z
+        domyślnym (ostatnio wybranym) językiem, użyj opcji menu <b>Sprawdź
+
+
+
+
+
+
+
+
+
+          pisownię</b>.</p>
+      <p> <b>Sugeruj</b> - pokazuje listę z sugestiami dotyczącymi
+        bieżącego błędnie napisanego słowa (właściwie słowa pod
+        kursorem). Aby skorzystać z tej funkcji, najpierw użyj <b>Sprawdzania
+
+
+
+
+
+
+
+
+
+          pisowni</b>. Prawdopodobnie niepoprawne słowa zostaną
+        podkreślone. </p>
+      <p> Możesz je naprawić za pomocą funkcji <b>Sugeruj</b> lub
+        ręcznie. Kiedy naprawisz błąd, zobaczysz, że poprawione słowo
+        jest kolorowe jak poprzednio. Dzieje się tak ze względu na
+        naturę modułu sprawdzania pisowni TEA - aktualizuje się on
+        ręcznie, więc aby zaktualizować znaki błędów, należy ponownie
+        wybrać tę samą pozycję menu sprawdzania pisowni. Aby wyłączyć
+        znaki błędów, użyj przycisku <b>Widok &gt; Ukryj znaki błędów</b>.
+      </p>
+      <p> <b>Dodaj do słownika</b> - dodaj słowo <u> podkreślone jako
+          nieprawidłowe </u> do lokalnego słownika użytkownika.
+        Właściwie ta funkcja dodaje do słownika dowolne słowo pod
+        kursorem. </p>
+      <p> Pamiętaj, że niektóre poprawne słowa TEA mogą oznaczać jako
+        nieprawidłowe. Jest to spowodowane obecnym parsowaniem słów,
+        zostanie to naprawione najszybciej, jak to możliwe. </p>
+      <p> <b>Usuń ze słownika</b> - ta funkcja jest dostępna tylko dla
+        Hunspell. Zaktualizowany słownik zostanie załadowany po
+        następnej sesji. </p>
+      <a name="mni_ide"></a>
+      <h3>IDE</h3>
+      <p> TEA ma kilka podstawowych funkcji IDE. Używanie TEA jako IDE
+        jest proste. </p>
+      <p> Po pierwsze, musisz utworzyć plik projektu. Aby to zrobić, po
+        prostu utwórz nowy plik i wstaw szablon pliku projektu TEA z<b>
+          Funkcje - Umieść - Szablon projektu TEA</b>. </p>
+      <p> Zapisz go w głównym katalogu źródłowym swojego projektu, pod
+        dowolną nazwą, ale z rozszerzeniem
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"teaproject"</span>, tj.
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">filename.teaproject</i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">.</span></p>
+      <p> plik teaproject jest prostym plikiem tekstowym
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">key=value</span> (klucz=wartość). Zawiera
+        ustawienia projektu. W ten sposób możesz przechowywać wiele
+        plików teaproject w tym samym katalogu. Oto na przykład pliki
+        teaproject TEA dla różnych systemów kompilacji (qmake, cmake i
+        meson): </p>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <p style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">tea-make.teaproject</p>
+      <pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">command_build=make
+command_clean=make clean
+command_run=bin/tea --m&amp;</pre>
+      <p style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">tea-meson.teaproject</p>
+      <pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">dir_build=b
+command_build=ninja
+command_clean=ninja -t clean
+command_run=./tea --m&amp;</pre>
+      <p style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">tea-cmake.teaproject</p>
+      <pre style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;">dir_build=cmake
+command_build=make
+command_clean=make clean
+command_run=./tea --m&amp;</pre>
+      <p> Składnia jest jasna: </p>
+      <p> <i> </i><i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">dir_build</i><span style="color: rgb(0, 0, 0);
+            font-family: &quot;Times New Roman&quot;; font-size: medium;
+            font-style: normal; font-variant-ligatures: normal;
+            font-variant-caps: normal; font-weight: 400; letter-spacing:
+            normal; orphans: 2; text-align: start; text-indent: 0px;
+            text-transform: none; white-space: normal; widows: 2;
+            word-spacing: 0px; -webkit-text-stroke-width: 0px;
+            text-decoration-thickness: initial; text-decoration-style:
+            initial; text-decoration-color: initial; display: inline
+            !important; float: none;"><span>&nbsp;</span></span> </i>-
+        katalog, w którym
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">command_build</i><i>
+        </i> będzie działać dla budowania. Jeśli nie ma<i> </i><i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">dir_build</i>,</i> to katalog pliku teaproject
+        zostanie użyty jako&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">dir_build</i>.</i> Katalog może być katalogiem
+        bezwzględnym, jeśli nie, zostanie użyty katalog względny do
+        katalogu pliku teaproject. </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">command_build</i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;"><span> </span></span>może być dowolne, jak
+        chcesz: make, ninja itp. </p>
+      <p> <i> </i><i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">command_run</i> </i>- działa na&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">dir_build</i></i>, aby uruchomić skompilowany plik
+        binarny. </p>
+      <p> <i> </i><i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">command_clean</i> </i>- uruchamia się pod
+        adresem&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">dir_build</i></i>, aby wyczyścić projekt. </p>
+      <p> Kiedy otwierasz, zapisujesz lub przełączasz (za pomocą
+        zakładki) do pliku teaproject, TEA wczytuje go do wewnętrznych
+        struktur i używa poleceń z teaproject po uruchomieniu elementów
+        menu z <b>menu IDE</b> : <b>Uruchom program</b>, <b>Kompiluj
+          program</b>, <b>Wyczyść program</b>. Należy pamiętać, że TEA
+        czyta ZAPISANĄ zawartość pliku teaproject, a nie bieżący stan
+        edycji. </p>
+      <p> Menu <b>IDE</b> jest przydatne w połączeniu z menu <b>Widok
+          - Profile</b>. Na przykład, możesz utworzyć
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"ide-profile"<span></span></span> z pewnymi
+        ustawieniami czcionki, szerokim oknem, bez zawijania wyrazów; i
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"text-profile"</span> z innym zestawem czcionek,
+        zawijaniem wyrazów, mniejszym oknem itp. Następnie możesz szybko
+        przełączać się między profilami za pomocą menu lub skrótów
+        klawiszowych. </p>
+      <p> Podczas budowania programu TEA wyświetla dane wyjściowe
+        kompilatora w Logmemo. Kliknij dwukrotnie pogrubiony tekst
+        (nazwa pliku: linia: kolumna), aby otworzyć błąd lub ostrzeżenie
+        w edytorze. </p>
+      <a name="mni_run"></a>
+      <h3>Uruchom</h3>
+      <p> To menu jest przeznaczone do uruchamiania bieżącego pliku za
+        pomocą zewnętrznych programów, na przykład przeglądarek. Aby
+        dodać kilka pozycji do menu, przejdź do <b>Plik &gt;
+          Konfiguracje &gt; Konfiguracja listy programów</b>, edytuj ten
+        plik, a następnie zapisz go. Plik konfiguracyjny ma prosty
+        format podobny do ini. Każda linia ma następujący format: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">meni item caption=command line</span>&nbsp;
+        (podpis pozycji menu=wiersz poleceń)<br>
+      </p>
+      <p> Przykład wiersza poleceń dla przeglądarki zaczynającej się: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">FF=firefox %s</span></p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">%s</span> jest makrem potrzebnym dla aktualnej
+        nazwy pliku, więc użyj go we właściwym miejscu. W przypadku
+        Win32 musisz użyć pełnej ścieżki do pliku wykonywalnego, z
+        podwójnymi cudzysłowami (makro% s również potrzebuje
+        cudzysłowów!). Na przykład: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">opera="C:\Program Files\Opera\opera.exe" "%s"</span></p>
+      <p> Dostępne są bardziej precyzyjne makra:
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">%basename, %filename, %ext, %dir.</span> Pozwala
+        to na wykorzystanie fragmentów ścieżki. Tak więc, jeśli mamy
+        pełną ścieżkę
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"/mnt/foo/bar.txt", %dir = "/mnt/foo", %basename
+          = "bar", %filename = "bar.txt", %fext = "txt".</span> Tak więc
+        pełną ścieżkę w wierszu poleceń można przedstawić w następujący
+        sposób:
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">%dir/%basename.%ext</span></p>
+      <p> Aby otworzyć aktualnie wybrany plik lub plik w miejscu kursora
+        na tekście (jak przy F2, ale z zewnętrznym programem) użyj
+        makra% i. </p>
+      <p> Na przykład, jeśli chcesz otworzyć plik obrazu za pomocą gimp,
+        umieść następującą linię poleceń w pliku konfiguracyjnym: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">gimp=gimp %i</span></p>
+      <p> Następnie w pliku HTML lub LaTeX przesuń kursor na nazwę pliku
+        obrazu. Następnie wywołaj pozycję menu „gimp” z menu
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"Uruchom"</span>. Ciesz się. </p>
+      <a name="mni_nav"></a>
+      <h3>Nawigacja</h3>
+      
+<p><b>Etykiety, Aktualizuj etykiety</b>. Możesz umieścić w tekście specjalnie sformatowane
+        etykiety, a następnie przełączać się między nimi z menu Etykiety
+        (or <img src=":/icons/labels.png" alt="" height="24" border="0" width="24"> lista rozwijana na pasku narzędzi). Jak to działa?
+        Etykieta to po prostu tekst objęty sekwencją otwierającą i
+        końcową (domyślnie
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"[?" i "?]"</span>, Wartości te można
+        przedefiniować w <b>Opcje - Funkcje - Etykiety</b>).
+        <!-- P --> </p>
+      <p> Na przykład umieść w swoim tekście kilka wierszy, takich jak
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"[? dogs ?]", "[? cats ?]"</span>. Następnie
+        poinformuj TEA o tych etykietach za pomocą pozycji menu <b>Aktualizuj
+
+
+
+
+
+
+
+          etykiety</b> lub naciśnij
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <img src=":/icons/labels.png" alt="" style="color: rgb(0, 0, 0);
+          font-family: &quot;Times New Roman&quot;; font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; orphans: 2; text-align: start; text-indent: 0px;
+          text-transform: none; white-space: normal; widows: 2;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;" height="24" border="0" width="24"><span style="color: rgb(0, 0, 0);
+          font-family: &quot;Times New Roman&quot;; font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; orphans: 2; text-align: start; text-indent: 0px;
+          text-transform: none; white-space: normal; widows: 2;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline
+          !important; float: none;"><span> </span></span>na pasku
+        narzędzi. Menu <b>Etykiety</b> i lista rozwijana <img src=":/icons/labels.png" alt="" height="24" border="0" width="24"> będą wypełnione etykietami
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"dogs" i "cats"</span>. Możesz wybrać je z menu
+        lub listy i przejść do tekstu obok wybranej etykiety. Pamiętaj,
+        że etykiety są aktualizowane tylko ręcznie. </p>
+      <p> <b>Idź do wiersza</b> - przesuwa kursor do numeru wiersza,
+        który podasz w polu Znane. </p>
+      <p> <b>Zapisz pozycję/Idź do zapisanej pozycji</b> - te funkcje
+        są dobre, aby szybko przeskoczyć przez duży tekst, gdy chcesz
+        coś spojrzeć w jedno miejsce, a następnie wrócić do aktualnie
+        edytowanego miejsca itp. </p>
+      <a name="mni_fm"></a>
+      <h3>Menedżer plików</h3>
+      <p> <b>Fm</b> oznacza <b>Menedżera plików</b>. To menu zawiera
+        funkcje związane z menedżerem plików TEA. Na przykład możesz
+        zmienić nazwy plików lub katalogów lub uzyskać sumę kontrolną
+        MD5. Przeglądaj i używaj! </p>
+      <p> W przypadku niektórych funkcji, takich jak <b>suma kontrolna
+          MD5</b>, najpierw wybierz plik, a następnie zastosuj funkcję.
+      </p>
+      <p> <b>Fm &gt; Podmenu Multi-rename</b> pomaga elastycznie
+        zmieniać nazwy plików. Wszystkie te funkcje używają parametru z
+        FIF. </p>
+      <p> <b>Fm &gt; Wiele zmian nazwy &gt; Nazwy plików z odstępami
+          zerowymi</b> - dołącz zera do każdej wybranej nazwy pliku,
+        której numeracja jest częścią nazwy pliku. Na przykład: strona1,
+        strona100. Takich plików nie można poprawnie posortować. </p>
+      <p> Ustaw więc długość nazwy pliku na FIF. Pliki będą numerowane
+        poprawnie, ale po usunięciu wszystkich znaków niebędących
+        cyframi. Przykład: </p>
+      <p> Mamy pliki: <br>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+      </p>
+      <p style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">page1.txt<br>
+        page100.txt</p>
+      Wpisz 5 do FIF, zastosuj funkcję.
+      <p> Teraz mamy: <br>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">00001.txt</span><br style="color: rgb(0, 0, 0);
+          font-family: &quot;Times New Roman&quot;; font-size: medium;
+          font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; orphans: 2; text-align: start; text-indent: 0px;
+          text-transform: none; white-space: normal; widows: 2;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">00100.txt</span></p>
+      <p> <b>Fm &gt; Wiele zmian nazwy &gt; Usuń N pierwszych znaków w
+          nazwach plików</b> - N to liczba z FIF. Usuwa N pierwszych
+        znaków z każdej wybranej nazwy pliku. </p>
+      <p> <b>Fm &gt; Wiele zmian nazwy &gt; Zastąp w nazwach plików</b>
+        - zastępuje podstawianie w każdej wybranej nazwie pliku. Format
+        FIF:&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">old~new</i> </i>(
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">stary~nowy</i>).
+        Przykład:
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+      </p>
+      <p style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial;">.jpeg~.jpg</p>
+      <b>Fm &gt; Wiele zmian nazwy &gt; Zastosuj szablon</b> - zastosuj
+      szablon do każdej wybranej nazwy pliku. Dostępne makra z częściami
+      oryginalnej nazwy pliku:
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">%filename (=
+        filename.ext), %ext (= ext), %basename ( = filename).</span> Na
+      przykład, musisz zmienić nazwę
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">01.jpeg,
+        02.jpeg to 01.jpg, 02.jpg</span>. Tak więc szablon musi wyglądać
+      następująco:&nbsp;<i>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">%basename.jpg</i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">,</span></i> tzn.<i><span style="color: rgb(0,
+          0, 0); font-family: &quot;Times New Roman&quot;; font-size:
+          medium; font-style: normal; font-variant-ligatures: normal;
+          font-variant-caps: normal; font-weight: 400; letter-spacing:
+          normal; orphans: 2; text-align: start; text-indent: 0px;
+          text-transform: none; white-space: normal; widows: 2;
+          word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial; display: inline
+          !important; float: none;">%basename</span></i> (nazwa pliku
+      bez rozszerzenia) zostanie uzupełnione o
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+        Roman&quot;; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        white-space: normal; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; text-decoration-thickness:
+        initial; text-decoration-style: initial; text-decoration-color:
+        initial; display: inline !important; float: none;">".jpg".</span>
+      <p> <b>Fm &gt; Wybierz według wyrażenia regularnego/Odznacz
+          według wyrażenia regularnego</b> - użyj tej funkcji, aby
+        zaznaczyć lub odznaczyć pliki według wzorca wyrażenia
+        regularnego. Na przykład, aby wybrać wszystkie pliki txt w
+        bieżącym katalogu, umieść następujące wyrażenia regularne w FIF:
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"</span><i style="color: rgb(0, 0, 0);
+          font-family: &quot;Times New Roman&quot;; font-size: medium;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial;">.*\.txt$</i><span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"</span> (bez cudzysłowów!), a następnie użyj <b>Wybierz
+
+
+
+
+
+
+
+          według wyrażenia regularnego</b> (
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <b style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Select by regexp</b>).
+
+
+
+
+
+
+
+        Następnie możesz nacisnąć przycisk Otwórz, aby otworzyć
+        wszystkie wybrane pliki. </p>
+      <p> <b>Fm &gt; Informacje o pliku &gt; Pełne informacje</b> -
+        zawiera pełne informacje o pliku (czas utworzenia/modyfikacji
+        itp.). Dla 16-bitowych plików PCM WAV oblicza RMS (dla obu
+        kanałów). W przypadku innych plików WAV pokazuje tylko
+        właściwości, takie jak głębia bitowa itp. </p>
+      <p> <b>Fm &gt; Informacje o pliku &gt; Policz wiersze w wybranych
+          plikach</b> - pamiętaj, że zliczane będą również puste
+        wiersze. </p>
+      <p> <b>Fm &gt; Obrazy &gt; Skalowanie procentowe/Skalowanie
+          według boku</b> - wśród innych funkcji niezwiązanych z tekstem
+        TEA ma możliwość wsadowej konwersji obrazów. Jest to przydatne,
+        gdy chcesz je przeskalować lub przekonwertować na inny format. </p>
+      <p> Na przykład chcemy przeskalować wybrane obrazy o 50 procent,
+        umieścić przetworzone obrazy w nowym katalogu i spakować ten
+        katalog: </p>
+      <p> 1. Wybierz pliki w menedżerze plików. Aby je zaznaczyć,
+        pomnożyć, użyj
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">Ctrl-Click</span> (lub Ctrl-A, aby zaznaczyć
+        wszystkie). <br>
+        2. Umieść żądaną wartość procentową w słynnym polu wprowadzania.
+        Wartość musi być prostą liczbą całkowitą bez znaku %. <br>
+        3. Na stronie <b>Opcje &gt; Obrazy</b> zaznacz opcję <b>Katalog
+
+
+
+
+
+
+
+          Zip z przetworzonymi obrazami</b>. <br>
+        4. Zastosuj funkcję Skaluj w procentach. </p>
+      <p> Następnie TEA tworzy nowy katalog jako podkatalog aktualnego.
+        Ten nowy katalog ma losową nazwę zaczynającą się od
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"images-out-"</span>. W tym katalogu TEA
+        umieszcza wszystkie przekonwertowane obrazy, pozostawiając
+        niezmodyfikowane oryginały. </p>
+      <p> Możesz chcieć dokładniej przeskalować obrazy i ręcznie
+        zdefiniować rozmiar. Aby to zrobić, umieść rozmiar strony obrazu
+        w słynnym polu wprowadzania i zastosuj <b>Skaluj według boku</b>
+        (
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">Scale by side</span>).
+
+
+
+
+
+
+
+        Jak wiesz, każde zdjęcie ma wymiary. Na przykład 640x480. Jeśli
+        szerokość jest większa niż wysokość, obraz ma orientację poziomą
+        (TEA nie obsługuje danych EXIF) i odwrotnie. Możemy więc użyć <i>
+          boku </i> - większego boku obrazu. Zwykle wszystkie zdjęcia
+        mają standardowe wymiary z uwzględnieniem pewnych proporcji,
+        więc większy bok dla wszystkich zdjęć jest taki sam. </p>
+      <p> Na przykład chcemy przeskalować wszystkie obrazy (zdjęcia o
+        odpowiednich proporcjach/wymiarach) do szerokości 640 i, jeśli
+        obraz ma orientację pionową, do wysokości 640. Umieść to 640 w
+        Znanym polu wprowadzania i zastosuj <b>Skaluj według boku</b>.
+      </p>
+      <p> Opcje konwersji obrazu znajdują się na stronie <b>Opcje &gt;
+          Obrazy</b>. Za pomocą listy <b>Format wyjściowy konwersji
+          obrazu</b> można ustawić format wyjściowy. Jakość obrazów
+        wyjściowych (od 0 do 100) jest używana głównie w przypadku
+        plików JPEG. Wartość domyślna to -1, co oznacza wewnętrznie
+        zdefiniowaną wartość. Pole wyboru <b>Skaluj obrazy z
+          filtrowaniem bilinearnym</b> wpływa na obrazy podczas ich
+        skalowania, aby je wygładzić i uczynić mniej
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"szorstkimi"</span>. </p>
+      <p> <b>Fm &gt; Obrazy &gt; Utwórz galerię internetową</b> - tak,
+        TEA może stworzyć prostą galerię internetową opartą na
+        oldschoolowych tabelach. Wykonaj następujące kroki: </p>
+      <p> 1. Umieść swoje obrazy w jakimś katalogu. Zapisz tam plik
+        html. Otwórz ten plik za pomocą TEA. <br>
+      </p>
+      <p> 2. Przejdź do menedżera plików TEA, wybierz pliki graficzne,
+        które chcesz umieścić w galerii internetowej. <br>
+      </p>
+      <p> 3. Użyj funkcji <b>Utwórz galerię internetową</b>. <br>
+      </p>
+      <p> 4. Zostaną utworzone miniatury i tabela HTML. </p>
+      <p> Galerię można dostosować za pomocą przycisku <b>Opcje &gt;
+          Obrazy &gt; Opcje galerii internetowej</b>. Istnieje rozmiar
+        miniatury, liczba komórek w wierszu itd. </p>
+      <p> <b>TEA jako urządzenie pakujące/rozpakowujące ZIP </b></p>
+      <p> TEA zapewnia proste funkcje do pakowania plików (nie
+        katalogów) do archiwum. Aby to zrobić, ustaw najpierw nazwę
+        archiwum (zrób to w katalogu, w którym chcesz utworzyć
+        archiwum): <br>
+        <b>Fm &gt; ZIP &gt; Utwórz nowy plik ZIP</b> <br>
+        Zostanie wyświetlone okno dialogowe do wprowadzania danych.
+        Następnie przejrzyj swoje katalogi. Wybierz dowolne pliki i użyj
+        polecenia <b>Dodaj do ZIP</b>, aby dodać je do archiwum. Uwaga
+        - wszystko to dzieje się wirtualnie, dopóki nie użyjesz funkcji
+        <b>Zapisz ZIP</b>. Aby fizycznie spakować pliki, zastosuj <b>Zapisz
+
+
+
+
+
+
+
+          ZIP</b>. </p>
+      <p> Wszystkie pliki zostaną spakowane do archiwum, które ma jedną
+        nazwę podkatalogu jako nazwę archiwum, ale bez rozszerzenia.zip.
+      </p>
+      <p> Możesz także rozpakować wybrany plik ZIP do bieżącego
+        katalogu. Użyj funkcji <b>Rozpakuj ZIP do bieżącego katalogu</b>.
+        Zwróć uwagę, że zestaw znaków nazw plików (wewnątrz archiwum
+        ZIP) jest kontrolowany przez opcje <b>Opcje - Wspólne -
+          Rozpakowywanie ZIP</b>: <b>zestaw znaków nazw
+          plików/Pakowanie ZIP</b>: <b>zestaw znaków nazw plików</b>.
+        Tak więc, jeśli zobaczysz dziwne znaki po rozpakowaniu pliku
+        ZIP, spróbuj Opcje zestawu znaków. Aby zrobić to mniej bolesnym,
+        wybierz zestaw znaków przy <b> rozpakowywaniu ZIP: zestaw
+          znaków nazw plików</b> i wypróbuj, jak wygląda nazwa pliku -
+        użyj opcji menu <b>Lista zawartości ZIP</b>. Po prostu
+        wyświetla zawartość archiwum (nazwy plików) w Logmemo, używając
+        wybranego zestawu znaków. </p>
+      <p> I jeszcze jedna uwaga - TEA nie obsługuje plików ZIP
+        chronionych hasłem. </p>
+      <a name="mni_view"></a>
+      <h3>Widok</h3>
+      <p> <b>Tryb podświetlania</b> - z tego podmenu można ręcznie
+        ustawić tryb podświetlania. Jest to przydatne w przypadku nowych
+        niezapisanych plików lub pliku bez rozszerzeń. </p>
+      <p> <b>Ukryj znaki błędów</b> - ukrywa podkreślone znaki, które
+        zostały ustawione przez moduł sprawdzania pisowni. </p>
+      <p> <b>Przełącz zawijanie słów</b> - włącz/wyłącz zawijanie słów
+        w bieżącym dokumencie. </p>
+      <p> <b>Palety</b> - z tego podmenu można wybrać schemat kolorów,
+        który ma wpływ na obszar edycji tekstu. Aby zdefiniować własne
+        kolory, możesz stworzyć własną paletę w oparciu o kilka
+        wbudowanych palet (patrz katalog źródłowy, podkatalog palet).
+        Następnie zapisz paletę w katalogu
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">$HOME/.config/tea/palettes</i><i>
+        </i> i wybierz jedną z menu Palettes. </p>
+      <p> TEA częściowo obsługuje motywy Eclipse IDE (<a href="http://eclipsecolorthemes.org"> eclipsecolorthemes.org </a>)
+        - wystarczy umieścić plik XML motywu w katalogu palet TEA i
+        wybrać go z menu jako natywna paleta TEA. To jest cud! Należy
+        pamiętać, że format palety TEA obsługuje więcej elementów
+        wyróżniających niż wtyczka Eclipse Color Theme, więc motywy
+        Eclipse nie będą tak kolorowe, jak natywne palety TEA. </p>
+      <p> <b>Profile</b> - to menu pozwala na przełączanie się między
+        profilami widoku (zawierają parametry takie jak pozycja okna,
+        rozmiar, czcionki, zawijanie wyrazów i ustawienia numeracji
+        wierszy itp.). Możesz więc zapisać swoje bieżące ustawienia za
+        pomocą funkcji Zapisz profil, a nazwany profil pojawi się w menu
+        Profile. W dowolnym momencie możesz wybrać, aby przywołać
+        zapisane ustawienia. </p>
+      <a name="mni_prefs"></a>
+      <h3><span style="font-weight: normal;"><b>Zakładka Opcje</b> </span></h3>
+      <p> Na zakładce <b>Klawiatura</b> możesz przypisać skróty do
+        elementów menu. Aby ustawić nowy klawisz skrótu, wybierz pozycję
+        menu z listy, a następnie naciśnij kombinację klawiszy skrótu
+        przy wpisie po prawej stronie listy i naciśnij przycisk <b>Przypisz</b>.
+        Aby usunąć klawisz skrótu, wybierz pozycję menu z listy i
+        naciśnij przycisk <b>Usuń</b>. Aby zmienić przypisanie już
+        używanego skrótu, wykonaj najpierw <b>Usuń</b> dla tego skrótu.
+      </p>
+      <p> W systemie Linux możesz użyć joysticka/joypada do przewijania
+        tekstu i przesuwania kursora. Jest domyślnie wyłączone i można
+        je włączyć za pomocą <b>Preferencje - Wspólne - Użyj joysticka
+          jako klawiszy kursora</b>. Po włączeniu odczytuje urządzenie
+        joysticka co 100 milisekund. Byłem potrzebny w obsłudze
+        joysticka, aby przewijać teksty do filmów z YouTube online,
+        kiedy muszę siedzieć w tej samej pozycji. </p>
+      <p><b> Zawijanie słów</b> - używaj zawijania słów globalnie dla
+        wszystkich dokumentów, w tym nowych. </p>
+      <p> <b>Użyj ustawienia zawijania z modułu podświetlania</b> na
+        stronie <b>Interfejs</b> oznacza, że ​​ustawienia zawijania
+        wyrazów będą pobierane z modułów podświetlania składni, a nie z
+        globalnej opcji <b>zawijania tekstu</b>. Niektóre moduły mają
+        włączone zawijanie słów, a inne wyłączone. Na przykład dla C ++
+        ustawienie zawijania wyrazów jest włączone. Dla zwykłego tekstu
+        lub dla HTML - jest wyłączone.</p>
+      <a name="mni_keyb"></a>
+      <h3><span style="font-weight: normal;"><b>Klawiatura</b> </span></h3>
+      <p> Oprócz standardowych operacji klawiaturowych TEA obsługuje
+        leworęczne operacje kursora, które można włączyć w <b>Opcje -
+          Wspólne - Użyj lewego Alt WASD</b>. </p>
+      <p> Gdy ta opcja jest włączona, użyj Lewego Alt + WASD do
+        przesuwania kursora, Lewego Alt + E i C do przewijania strony w
+        górę/w dół. Użyj lewego klawisza Win z WASDEC, aby zaznaczyć
+        tekst. </p>
+      <a name="mni_secret"></a>
+      <h3>Sekretna moc</h3>
+      <p> Poznaj prawdę! Gady zdominują ludzkość, jeśli nie masz odwagi
+        i wiedzy na temat tajnych opcji TEA. Nie mają GUI i musisz je
+        dodawać i edytować ręcznie w głównym pliku konfiguracyjnym TEA
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">$HOME/.config/tea\tea.conf</span> (lub w oknie,
+        na dysku:
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">\Documents and Settings\username\tea\tea.conf</span>).
+
+
+
+
+
+
+        Niektóre zmiany będą działać po ponownym uruchomieniu TEA. Więc
+        poznaj prawdę: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">recent_list.max_items=maximum
+
+
+
+
+
+
+          recent list items, default 21</i> </p>
+      <a name="mni_notes"></a>
+      <h3>Uwagi</h3>
+      <p> Obsługiwana jest starsza opcja wiersza poleceń
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"--charset=codepage"</span>. To polecenie
+        ustawia stronę kodową dla następujących plików. Na przykład: </p>
+      <p>
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">tea
+          --charset=window-1251 file1.txt file2.txt --charset=utf-8
+          file3.txt</i> </p>
+      <p> Domyślnie (jeśli nie zdefiniowano ręcznie zestawu znaków) TEA
+        używa UTF-8. </p>
+      <p> Ten podręcznik i wszystkie materiały multimedialne TEA
+        (palety, obrazy itp.) są własnością publiczną. Kod źródłowy TEA
+        jest objęty licencją GPL v3 i domeną publiczną. </p>
+      <p> Pliki hl składni użytkownika można dodać do katalogu&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">$HOME/.config/tea/hls</i>.</i> Zobacz robocze
+        pliki hl w katalogu źródłowym TEA, podkatalogu&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">hls</i>.</i> Zapraszam do przesyłania plików
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-variant-ligatures:
+          normal; font-variant-caps: normal; font-weight: 400;
+          letter-spacing: normal; orphans: 2; text-align: start;
+          text-indent: 0px; text-transform: none; white-space: normal;
+          widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+          text-decoration-thickness: initial; text-decoration-style:
+          initial; text-decoration-color: initial;">hl</i>. Użyj
+        odniesień kolorów z plików palet (spójrz na katalog&nbsp;<i>
+          <meta http-equiv="content-type" content="text/html;
+            charset=UTF-8">
+          <i style="color: rgb(0, 0, 0); font-family: &quot;Times New
+            Roman&quot;; font-size: medium; font-variant-ligatures:
+            normal; font-variant-caps: normal; font-weight: 400;
+            letter-spacing: normal; orphans: 2; text-align: start;
+            text-indent: 0px; text-transform: none; white-space: normal;
+            widows: 2; word-spacing: 0px; -webkit-text-stroke-width:
+            0px; text-decoration-thickness: initial;
+            text-decoration-style: initial; text-decoration-color:
+            initial;">palettes</i> </i> w źródle). To znaczy użyj
+        koloru
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"preproc"</span> lub
+        <meta http-equiv="content-type" content="text/html;
+          charset=UTF-8">
+        <span style="color: rgb(0, 0, 0); font-family: &quot;Times New
+          Roman&quot;; font-size: medium; font-style: normal;
+          font-variant-ligatures: normal; font-variant-caps: normal;
+          font-weight: 400; letter-spacing: normal; orphans: 2;
+          text-align: start; text-indent: 0px; text-transform: none;
+          white-space: normal; widows: 2; word-spacing: 0px;
+          -webkit-text-stroke-width: 0px; text-decoration-thickness:
+          initial; text-decoration-style: initial;
+          text-decoration-color: initial; display: inline !important;
+          float: none;">"types"</span> zamiast wartości szesnastkowej. </p>
+      <br>
+      <a name="mni_author"></a> <a name="mni_author"> </a>
+      <h3><span style="font-weight: normal;"> <b>Inne projekty autora</b>
+        </span></h3>
+      <p> <a href="http://semiletov.org/"> Moja witryna domowa z prozą,
+          programami, muzyką i innymi rzeczami. </a> </p>
+      <p> <a href="http://semiletov.org/"> Moja witryna domowa z prozą,
+          programami, muzyką i innymi rzeczami. </a> </p>
+      <p> <a href="https://www.bandlab.com/peter_semiletov"> Moja
+          muzyka </a> </p>
+      <br>
+      <a name="mni_donate"></a> <a name="mni_donate"> </a>
+      <h3><span style="font-weight: normal;"> <b>Wesprzyj rozwój</b> </span></h3>
+      <p> Jeśli chcesz wesprzeć rozwój TEA, oto <a href="https://www.patreon.com/semiletov"> moja strona
+          Patreon..</a></p>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style>
+      <style>body { color: #000000 }</style>
+      <style>a:link { color: #0000ff }</style>
+      <style>a:visited { color: #ff00ff }</style></div>
+    <style>body { color: #000000 }</style>
+    <style>a:link { color: #0000ff }</style>
+    <style>a:visited { color: #ff00ff }</style>
+  
+
+<style>body { color: #000000 }</style><style>a:link { color: #0000ff }</style><style>a:visited { color: #ff00ff }</style><style>body { color: #000000 }</style><style>a:link { color: #0000ff }</style><style>a:visited { color: #ff00ff }</style></body></html>

@@ -171,7 +171,7 @@ CONFIG += warn_on \
     qt \
     release \
     link_pkgconfig
- 
+
 
 QT += core
 QT += gui
@@ -205,7 +205,8 @@ INSTALLS -= desktop icon128 icon64 icon48 icon32 iconsvg
 RESOURCES += resources.qrc
 TRANSLATIONS = translations/ru.ts \
                translations/de.ts \
-               translations/fr.ts
+               translations/fr.ts \
+               translations/fr.pl
 
 
 DISTFILES += ChangeLog \

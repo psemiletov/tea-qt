@@ -1,0 +1,40 @@
+TEA to darmowy edytor tekstu dla systemów Linux, * BSD, OS / 2, Windows, Haicu. Zależy to od Qt 4.6+ lub Qt 5 lub Qt6, zlib i opcjonalnie od Aspell lub Hunspell. Stara (ale odnowiona) gałąź, TEA-GTK, zależy od GTK + 3 i GtkSourceView 3.
+
+Możliwości:
+Zrozumiała dokumentacja
+Funkcje IDE
+Uruchamianie zewnętrznych programów z aktualnie otwartym plikiem
+Funkcje (dla Qt)
+Mały rozmiar
+Skalowalny interfejs
+Wsparcie dla zapisu: zwykły tekst
+Obsługa odczytu: zwykły tekst, FB2, EPUB, ODT, RTF, DOCX, Abiword, KWord KWD, SWX (stary format OpenOffice.org), PDF, DJVU
+Wbudowany menedżer plików podobny do MC
+sprawdzanie pisowni (przy użyciu silników Aspell i/lub Hunspell)
+Silnik układu z zakładkami
+Podświetlanie składni dla C, C ++, Bash script, BASIC, C #, D, Fortran, Java, LilyPond, Lout, Lua, NASM, NSIS, Pascal, Perl, PHP, PO (gettext), Python, Seed7, TeX / LaTeX, Vala, Verilog, XML, HTML, XHTML, Dokuwiki, MediaWiki.
+Wsparcie dla wszystkich możliwych kodowań
+Automatyczne wykrywanie kodowania
+Obsługa etykiet (znaczników) w tekście
+Obsługa fragmentów kodu i szablonów
+Skrypty (Python, Perl, Ruby, Bash, Lua)
+Wtyczki JavaScript
+Dostosowywanie skrótów klawiszowych
+Możliwość przypisania „skrótów klawiszowych” do wszystkich pozycji menu, w tym dynamicznych, takich jak fragmenty
+Dziesiątki funkcji edytora tekstu
+Funkcja „Otwórz przy kursorze” dla plików HTML i obrazów
+Różne narzędzia HTML, narzędzia do edycji [X]HTML, Dokuwiki, MediaWiki, Docbook, LaTeX, Lout, Markdown
+Podgląd w zewnętrznych przeglądarkach
+Funkcje obsługi ciągów, takie jak sortowanie, odwracanie, usuwanie formatu, przycinanie, filtrowanie, konwersje, przetwarzanie tabel tekstowych itp.
+Uniwersalny analizator tekstu UNITAZ
+Zakładki
+Szablony
+Tłumacz alfabetu Morse'a
+Wbudowany kalendarz/organizator
+Obsługa motywów i palet, zmiana motywów, motywy projektowe
+Wsparcie Drag'n'drop (z plikami tekstowymi i obrazkami)
+Wbudowana przeglądarka obrazów (PNG, JPEG, GIF, WBMP, BMP, TIFF, TGA itp.)
+Wbudowany konwerter obrazu i zmiana rozmiaru
+Masowa zmiana rozmiaru zdjęć, ich formatu
+Wbudowany program pakujący/rozpakowujący ZIP z selektorem zestawu znaków nazw plików
+Obliczenie RMS dla 16-bitowych plików PCM WAV

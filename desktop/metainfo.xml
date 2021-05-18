@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016 Sorokin Alexei <sor.alexei@meowr.ru> -->
+<component type="desktop">
+  <id>org.semiletov.tea</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>TEA</name>
+  <summary>Powerful text editor in Qt</summary>
+  <description>
+    <p>
+      TEA is a Qt-based text editor for UNIX-like systems. With an
+      ultimate small size TEA provides you hundreds of functions.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">org.semiletov.tea.desktop</launchable>
+
+  <url type="homepage">http://semiletov.org/tea</url>
+  <developer_name>Peter Semiletov</developer_name>
+
+  <provides>
+    <binary>tea</binary>
+  </provides>
+</component>

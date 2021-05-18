@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.0.2)
 set (QT_MIN_VERSION "5.4.0")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -119,6 +119,11 @@ set(tea_DESKTOP
     ./desktop/tea.desktop
 )
 
+set(tea_METAINFO
+    ./desktop/metainfo.xml
+)
+
+set(TEA_FQN "org.semiletov.tea")
 
 #add_custom_target(dist
 #COMMAND git archive --prefix=${PROJECT}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}/ master | bzip2 >${PROJECT}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}.tar.bz2
@@ -241,13 +246,13 @@ if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt5")
 target_link_libraries(tea Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core)
 endif()
 
-
 install (TARGETS tea DESTINATION bin)
-install (FILES ${tea_ICONSVG} DESTINATION share/icons/hicolor/scalable/apps)
-install (FILES ${tea_ICONPNG32} DESTINATION share/icons/hicolor/32x32/apps)
-install (FILES ${tea_ICONPNG48} DESTINATION share/icons/hicolor/48x48/apps)
-install (FILES ${tea_ICONPNG64} DESTINATION share/icons/hicolor/64x64/apps)
+install (FILES ${tea_ICONSVG}    DESTINATION share/icons/hicolor/scalable/apps)
+install (FILES ${tea_ICONPNG32}  DESTINATION share/icons/hicolor/32x32/apps)
+install (FILES ${tea_ICONPNG48}  DESTINATION share/icons/hicolor/48x48/apps)
+install (FILES ${tea_ICONPNG64}  DESTINATION share/icons/hicolor/64x64/apps)
 install (FILES ${tea_ICONPNG128} DESTINATION share/icons/hicolor/128x128/apps)
 
-install (FILES ${tea_DESKTOP} DESTINATION share/applications)
+install (FILES ${tea_DESKTOP}  RENAME ${TEA_FQN}.desktop DESTINATION share/applications)
+install (FILES ${tea_METAINFO} RENAME ${TEA_FQN}.metainfo.xml DESTINATION share/metainfo)
 

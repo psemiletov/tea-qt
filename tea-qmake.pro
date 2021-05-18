@@ -1,7 +1,7 @@
-VERSION = 60.1.0
+VERSION = 60.2.0
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"60.1.0"\''
+DEFINES += 'VERSION_NUMBER=\'"60.2.0"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -54,6 +54,7 @@ unix: {
        PREFIX = $$replace(PREFIX, bin,)
        TARGET = bin/tea
        target.path = $$PREFIX/bin
+ 
        desktop.path = $$PREFIX/share/applications
        desktop.files = desktop/tea.desktop
 
@@ -88,6 +89,7 @@ noprinter{
 DEFINES -= PRINTER_ENABLE
 message ("Printer OFF")
 }
+
 
 useclang{
     message ("Clang enabled")

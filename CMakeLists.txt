@@ -41,7 +41,7 @@ add_definitions(-DNOCRYPT=1)
 add_definitions(-DNOUNCRYPT=1)
 add_definitions(-DQUAZIP_STATIC=1)
 
-option(USE_ASPELL "Use Aspell" ON)
+option(USE_ASPELL "Use Aspell" OFF)
 option(USE_PRINTER "Use printer support" OFF)
 option(USE_PDF "Use libpoppler" OFF)
 option(USE_DJVU "Use djvu support" OFF)
@@ -57,7 +57,9 @@ message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 
 
 find_package(PkgConfig REQUIRED)
+
 pkg_check_modules(QUIET hunspell)
+#pkg_check_modules(REQUIRED hunspell)
 if(hunspell_FOUND)
   add_definitions(-DHUNSPELL_ENABLE)
   message("+ hunspell support")

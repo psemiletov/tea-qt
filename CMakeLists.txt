@@ -58,7 +58,7 @@ message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 
 find_package(PkgConfig REQUIRED)
 
-pkg_check_modules(QUIET hunspell)
+pkg_check_modules(hunspell QUIET hunspell)
 #pkg_check_modules(REQUIRED hunspell)
 if(hunspell_FOUND)
   add_definitions(-DHUNSPELL_ENABLE)

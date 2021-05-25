@@ -153,7 +153,8 @@ endif()
 
 
 if(USE_ASPELL)
- message("SEARCH ASPELL")
+
+message("SEARCH ASPELL")
 find_path(ASPELL_INCLUDES aspell.h
          "/usr/include/"
          "/usr/local/"

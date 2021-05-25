@@ -11,7 +11,10 @@ https://github.com/psemiletov/tea-qt
 
 AUR > https://aur.archlinux.org/packages/tea-qt/
 
-Donate > https://www.patreon.com/semiletov
+Donate > 
+
+By bitcoin: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
+Or Patreon: https://www.patreon.com/semiletov
 
 Communities >
 https://t.me/teaqt

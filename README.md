@@ -14,6 +14,7 @@ AUR > https://aur.archlinux.org/packages/tea-qt/
 Donate > 
 
 By bitcoin: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
+
 Or Patreon: https://www.patreon.com/semiletov
 
 Communities >

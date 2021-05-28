@@ -3321,6 +3321,12 @@ void CTEA::fn_case_cap_sentences()
       {
        QChar c = t.at(i);
 
+       if (c.isDigit())
+          {
+           cap = false; //probably timecode
+           continue;
+          }
+
        if (c == '.' || c == '?' || c == '!')
           {
            cap = true;

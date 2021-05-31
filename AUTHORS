@@ -1,9 +1,12 @@
 Code and design:
 Peter Semiletov <peter.semiletov@gmail.com, http://semiletov.org>
 
-PHP hl module by Boo-boo.
+Contributors from github: toddy15, ryandesign, yurikoles, grahamperrin, yurchor
 
-Code from other projects: Diego Iastrubni, Qxt Foundation, Trolltech ASA, Franz Schmid, Adam Rogoyski, Michael Protasov, Angius Fabrizio, Kostya Gancov.
+
+PHP hl module by Boo-boo
+
+Code from other projects: Diego Iastrubni, Qxt Foundation, Trolltech ASA, Franz Schmid, Adam Rogoyski, Michael Protasov, Angius Fabrizio, Kostya Gancov
 
 ZIP and Zlib stuff by:
 Zlib - (C) 1995-2005 Jean-loup Gailly and Mark Adler
@@ -14,7 +17,6 @@ exif.h/cpp - public domain code from http://imonad.com (based on Exif Jpeg heade
 Some code snippets were taken from qtcentre programming forum.
 
 ##
-
 Translators:
 
 Russian UI translation and documentation: Peter Semiletov

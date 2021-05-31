@@ -1,9 +1,9 @@
 project('tea', ['cpp','c'],
          default_options : ['cpp_std=c++11'],
-         version : '60.2.0',
+         version : '60.3.0',
          license : 'GPLv3')
 
-add_global_arguments('-DVERSION_NUMBER="60.2.0"', language : 'cpp')
+add_global_arguments('-DVERSION_NUMBER="60.3.0"', language : 'cpp')
 add_global_arguments('-DNOCRYPT="1"', language : 'cpp')
 add_global_arguments('-DNOUNCRYPT="1"', language : 'cpp')
 add_global_arguments('-DQUAZIP_STATIC="1"', language : 'cpp')
@@ -72,9 +72,9 @@ tea_headers_moc = [
         'quaziodevice.h',
         'quazipfile.h',
         'tea.h',
-    'todo.h',
-    'document.h',
-    'calendar.h',
+        'todo.h',
+        'document.h',
+        'calendar.h',
     'fman.h',
     'shortcuts.h',
     'logmemo.h',

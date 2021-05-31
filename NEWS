@@ -1,10 +1,11 @@
 ====NEWS ABOUT TEA====
-TEA 60.2.0, may 2021
+TEA 60.3.0, June 2021
 ---------------------------------------
 
 + Polish UI and Manual translation by Krzysztof Jaśkiewicz
 + Rust hl support
 + The time consuming operations such as "Find in files" can be interrupted.
+* Hunspell engine support is available again with cmake (was: broken)
 
    Stay tuned.
    Peter Semiletov

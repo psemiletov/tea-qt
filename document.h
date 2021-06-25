@@ -333,8 +333,14 @@ public:
 
   void close_by_idx (int i);
   void close_current();
+
   void save_to_session (const QString &fileName);
   void load_from_session (const QString &fileName);
+
+  void save_buffers (const QString &fileName);
+  void load_from_buffers (const QString &fileName);
+
+
   void apply_settings();
   void apply_settings_single (CDocument *d);
 

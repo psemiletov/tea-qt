@@ -36,8 +36,6 @@
 #include <QProxyStyle>
 #include <QToolButton>
 
-//#include <QMap>
-
 #ifdef PRINTER_ENABLE
 #include <QPrinter>
 #endif
@@ -207,11 +205,8 @@ Variables
   QString man_search_value;
   QString markup_mode;
 
-  //QHash <QString, CMarkupPair*> hs_markup;
   QHash <QString, QString> programs;
   QHash <QString, QString> places_bookmarks;
-//  QHash <int, QString> moon_phase_algos;
-  //QMap <int, QString> moon_phase_algos;
 
 
   QTranslator transl_app;
@@ -246,8 +241,8 @@ Variables
   QString fname_programs;
   QString fname_places_bookmarks;
 
- // QString bookmarks;
   QString fname_crapbook;
+  QString fname_saved_buffers;
   QString fname_tempfile;
   QString fname_tempparamfile;
 
@@ -414,6 +409,9 @@ Preferences tab :: Common page UI elements
   QComboBox *cmb_cmdline_default_charset;
   QComboBox *cmb_zip_charset_in;
   QComboBox *cmb_zip_charset_out;
+
+  QCheckBox *cb_save_buffers;
+
   QCheckBox *cb_altmenu;
   QCheckBox *cb_wasd;
 

@@ -52,6 +52,8 @@ code from qwriter:
 #include <QDir>
 #include <QXmlStreamReader>
 #include <QMimeData>
+#include <QFile>
+
 #include <QTimer>
 
 #include "document.h"
@@ -826,9 +828,9 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 
   line_num_area = new CLineNumberArea (this);
 
-  connect(this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
-  connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
-  connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
+  connect (this, SIGNAL(selectionChanged()), this, SLOT(slot_selectionChanged()));
+  connect (this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth()));
+  connect (this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
   connect (this, SIGNAL(cursorPositionChanged()), this, SLOT(cb_cursorPositionChanged()));
 
   updateLineNumberAreaWidth();
@@ -963,7 +965,6 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
              if (lt.at(0) == file_name)
                 i.remove();
         }
-
 
   return true;
 }
@@ -2256,6 +2257,47 @@ void CDox::load_from_session (const QString &fileName)
 
   for (int i = 0; i < l.size(); i++)
       open_file_triplex (l[i]);
+
+  fname_current_session = fileName;
+}
+
+void CDox::save_buffers (const QString &fileName)
+{
+  QFile::remove (fileName);
+
+  if (items.size() == 0)
+     return;
+
+  fname_current_session = fileName;
+  QString l;
+
+  for (vector <CDocument*>::iterator i = items.begin(); i != items.end(); ++i)
+      {
+       if (! file_exists ((*i)->file_name))
+          {
+           l += (*i)->toPlainText();
+           l += '\f';
+          }
+      }
+
+  qstring_save (fileName, l.trimmed());
+}
+
+
+void CDox::load_from_buffers (const QString &fileName)
+{
+  if (! file_exists (fileName))
+     return;
+
+  QStringList l = qstring_load (fileName).split ("\f");
+  if (l.size() < 0)
+     return;
+
+  for (int i = 0; i < l.size(); i++)
+      {
+       CDocument *d = create_new();
+       d->put (l[i]);
+      }
 
   fname_current_session = fileName;
 }

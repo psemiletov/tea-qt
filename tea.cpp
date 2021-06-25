@@ -414,6 +414,10 @@ void CTEA::closeEvent (QCloseEvent *event)
       documents->save_to_session (fname_session);
      }
 
+  if (settings->value("save_buffers", true).toBool())
+      documents->save_buffers (fname_saved_buffers);
+
+
   write_search_options();
   write_settings();
 
@@ -610,6 +614,7 @@ void CTEA::write_settings()
   settings->setValue ("word_wrap", cb_wordwrap->isChecked());
   settings->setValue ("show_linenums", cb_show_linenums->isChecked());
   settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->isChecked());
+  settings->setValue ("save_buffers", cb_save_buffers->isChecked());
 
   delete settings;
 }
@@ -6079,7 +6084,6 @@ CTEA::CTEA()
   update_charsets();
   update_profiles();
   create_markup_hash();
-//  create_moon_phase_algos();
 
   setMinimumSize (12, 12);
 
@@ -6163,6 +6167,10 @@ CTEA::CTEA()
       fname_session.append ("/def-session-777");
       documents->load_from_session (fname_session);
      }
+
+  if (settings->value ("save_buffers", true).toBool())
+      documents->load_from_buffers (fname_saved_buffers);
+
 
   handle_args();
   ui_update = false;
@@ -6251,6 +6259,9 @@ void CTEA::create_paths()
 
   fname_crapbook = dir_config + "/crapbook.txt";
   hs_path["fname_crapbook"] = fname_crapbook;
+
+  fname_saved_buffers = dir_config + "/saved_buffers.txt";
+  hs_path["saved_buffers"] = fname_saved_buffers;
 
   fname_fif = dir_config + "/fif";
   hs_path["fname_fif"] = fname_fif;
@@ -7553,6 +7564,21 @@ OPTIONS::COMMON
   page_common_layout->addWidget (cb_use_enca_for_charset_detection);
 
   page_common_layout->addLayout (hb_imgvovr);
+
+
+
+  QGroupBox *gb_common_autosave = new QGroupBox (tr ("Autosaving"));
+  QVBoxLayout *vb_common_autosave = new QVBoxLayout;
+  vb_common_autosave->setAlignment (Qt::AlignTop);
+  gb_common_autosave->setLayout (vb_common_autosave);
+
+  cb_save_buffers = new QCheckBox (tr ("Temporary save unsaved buffers on exit"), tab_options);
+  cb_save_buffers->setChecked (settings->value ("save_buffers", "0").toBool());
+  vb_common_autosave->addWidget (cb_save_buffers);
+
+  page_common_layout->addWidget (gb_common_autosave);
+
+
   page_common->setLayout (page_common_layout);
   page_common->show();
 

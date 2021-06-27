@@ -89,6 +89,7 @@ void strlist_swap (QStringList &l, int a, int b);
 QString hash_get_val (QHash<QString, QString> &h, const QString &key, const QString &def_val);
 QString qstring_load_value (const QString &fileName, const QString &key, const QString &def);
 QHash<QString, QString> hash_load_keyval (const QString &fname);
+void hash_save_keyval (const QString &fname, const QHash <QString, QString> &h);
 
 
 /* image utils */

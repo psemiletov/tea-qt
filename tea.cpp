@@ -423,6 +423,9 @@ void CTEA::closeEvent (QCloseEvent *event)
 
   qstring_save (fname_fif, sl_fif_history.join ("\n"));
 
+  hash_save_keyval (fname_autosaving_files, documents->autosave_files);
+
+
   delete documents;
   delete img_viewer;
 
@@ -1587,6 +1590,36 @@ void CTEA::file_set_eol_mac()
   CDocument *d = documents->get_current();
   if (d)
      d->eol = "\r";
+}
+
+
+void CTEA::file_set_autosaving_file()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! file_exists (d->file_name))
+     return;
+
+  documents->autosave_files.insert (d->file_name, d->file_name);
+}
+
+
+void CTEA::file_unset_autosaving_file()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  if (! file_exists (d->file_name))
+     return;
+
+  documents->autosave_files.remove (d->file_name);
 }
 
 
@@ -6115,6 +6148,9 @@ CTEA::CTEA()
   documents->l_status_bar = l_status;
   documents->l_charset = l_charset;
 
+  documents->autosave_files = hash_load_keyval (fname_autosaving_files);
+
+
   load_palette (fname_def_palette);
 
   update_stylesheet (fname_stylesheet);
@@ -6262,6 +6298,9 @@ void CTEA::create_paths()
 
   fname_saved_buffers = dir_config + "/saved_buffers.txt";
   hs_path["saved_buffers"] = fname_saved_buffers;
+
+  fname_autosaving_files = dir_config + "/autosaving_files.txt";
+  hs_path["autosaving_files"] = fname_autosaving_files;
 
   fname_fif = dir_config + "/fif";
   hs_path["fname_fif"] = fname_fif;
@@ -6594,7 +6633,6 @@ void CTEA::create_main_widget_docked()
       addDockWidget (Qt::BottomDockWidgetArea, dock_fif);
      }
 
-
   idx_tab_edit = main_tab_widget->addTab (tab_editor, tr ("editor"));
 
   connect (tab_editor, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
@@ -6724,6 +6762,10 @@ File menu
   add_to_menu (menu_file_actions, tr ("Set UNIX end of line"), SLOT(file_set_eol_unix()));
   add_to_menu (menu_file_actions, tr ("Set Windows end of line"), SLOT(file_set_eol_win()));
   add_to_menu (menu_file_actions, tr ("Set old Mac end of line (CR)"), SLOT(file_set_eol_mac()));
+  menu_file_actions->addSeparator();
+  add_to_menu (menu_file_actions, tr ("Set as autosaving file"), SLOT(file_set_autosaving_file()));
+  add_to_menu (menu_file_actions, tr ("Unset the autosaving file"), SLOT(file_unset_autosaving_file()));
+
 
   menu_file_recent = menu_file->addMenu (tr ("Recent files"));
 

@@ -244,6 +244,7 @@ Variables
   QString fname_crapbook;
   QString fname_saved_buffers;
   QString fname_tempfile;
+  QString fname_autosaving_files;
   QString fname_tempparamfile;
 
 
@@ -653,6 +654,9 @@ File menu callbacks
   void file_set_eol_unix();
   void file_set_eol_win();
   void file_set_eol_mac();
+  void file_set_autosaving_file();
+  void file_unset_autosaving_file();
+
 
 #ifdef PRINTER_ENABLE
   void file_print();

@@ -289,6 +289,7 @@ public:
 
   QHash <QString, QString> markup_modes;
   QHash <QString, QString> hash_project;
+  QHash <QString, QString> autosave_files;
 
   CTioHandler tio_handler;
   CTodo todo;

@@ -875,21 +875,25 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 
 CDocument::~CDocument()
 {
+  if (holder->autosave_files.contains (file_name))
+     {
+      file_save_with_name (file_name, charset);
+      document()->setModified (false);
+     }
+
   if (file_name.endsWith (".notes") && document()->isModified())
      file_save_with_name_plain (file_name);
   else
   if (file_name.startsWith (holder->dir_config) && document()->isModified())
      file_save_with_name_plain (file_name);
   else
-  if (document()->isModified() && file_exists (file_name))
-     {
-      if (QMessageBox::warning (0, "TEA",
-                                tr ("%1 has been modified.\n"
-                                "Do you want to save your changes?").arg (file_name),
-                                QMessageBox::Yes | QMessageBox::Default,
-                                QMessageBox::No | QMessageBox::Escape) == QMessageBox::Yes)
-         file_save_with_name (file_name, charset);
-     }
+      if (document()->isModified() && file_exists (file_name))
+         if (QMessageBox::warning (0, "TEA",
+                                   tr ("%1 has been modified.\n"
+                                       "Do you want to save your changes?").arg (file_name),
+                                       QMessageBox::Yes | QMessageBox::Default,
+                                       QMessageBox::No | QMessageBox::Escape) == QMessageBox::Yes)
+            file_save_with_name (file_name, charset);
 
   if (! file_name.startsWith (holder->dir_config) && ! file_name.endsWith (".notes"))
      {

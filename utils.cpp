@@ -341,6 +341,23 @@ QHash <QString, QString> hash_load_keyval (const QString &fname)
 }
 
 
+void hash_save_keyval (const QString &fname, const QHash <QString, QString> &h)
+{
+  QFile::remove (fname);
+
+  QStringList l;
+
+  QHash<QString, QString>::const_iterator i = h.constBegin();
+  while (i != h.constEnd())
+        {
+         l+= (i.key() + "=" + i.value());
+          ++i;
+        }
+
+  qstring_save (fname, l.join ("\n"));
+}
+
+
 /* image utils */
 
 bool is_image (const QString &filename)

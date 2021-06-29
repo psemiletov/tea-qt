@@ -1986,8 +1986,12 @@ CDox::CDox()
   l_status_bar = 0;
   l_charset = 0;
 
-  timer = new QTimer (this);
-  timer->setInterval (100);
+  //timer_autosave = new QTimer (this);
+  timer_autosave.setInterval (settings->value ("timer_autosave_period", "1000").toInt() * 1000);
+  connect(&timer_autosave, SIGNAL(timeout()), this, SLOT(autosave()));
+
+  //timer_joystick = new QTimer (this);
+  timer_joystick.setInterval (100);
 
 #if defined(JOYSTICK_SUPPORTED)
 
@@ -1995,12 +1999,14 @@ CDox::CDox()
 
   if (joystick->initialized)
      {
-      connect(timer, SIGNAL(timeout()), joystick, SLOT(read_joystick()));
+      connect(&timer_joystick, SIGNAL(timeout()), joystick, SLOT(read_joystick()));
 
       if (settings->value ("use_joystick", "0").toBool())
-         timer->start();
+         timer_joystick.start();
      }
 #endif
+
+
 }
 
 
@@ -2390,6 +2396,27 @@ void CDox::open_current()
   if (d)
       tab_widget->setCurrentIndex (tab_widget->indexOf (d->tab_page));
 }
+
+
+void CDox::autosave()
+{
+//  log->log ("AUTOSAVE");
+
+  if (! settings->value ("autosave", false).toBool())
+      return;
+
+  if (items.size() == 0)
+     return;
+
+  for (vector <CDocument *>::iterator i = items.begin(); i != items.end(); ++i)
+      {
+       if (autosave_files.contains ((*i)->file_name))
+          (*i)->file_save_with_name ((*i)->file_name, (*i)->charset);
+      }
+
+  save_buffers (fname_saved_buffers);
+}
+
 
 
 void CDox::move_cursor_up()

@@ -299,6 +299,8 @@ public:
   QString fname_current_project;
   QString dir_config;
   QString fname_crapbook;
+  QString fname_saved_buffers;
+
   QString markup_mode;
   QString recent_list_fname;
 
@@ -309,7 +311,8 @@ public:
   QTabWidget *tab_widget; //uplink
   QTabWidget *main_tab_widget; //uplink
   QMenu *menu_recent; //uplink
-  QTimer *timer;
+  QTimer timer_joystick;
+  QTimer timer_autosave;
 
 #if defined(JOYSTICK_SUPPORTED)
   CJoystick *joystick;
@@ -341,7 +344,6 @@ public:
   void save_buffers (const QString &fileName);
   void load_from_buffers (const QString &fileName);
 
-
   void apply_settings();
   void apply_settings_single (CDocument *d);
 
@@ -355,6 +357,8 @@ public slots:
 
   void open_recent();
   void open_current();
+
+  void autosave();
 
   void move_cursor_up();
   void move_cursor_down();

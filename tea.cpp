@@ -6145,6 +6145,8 @@ CTEA::CTEA()
   documents->dir_config = dir_config;
   documents->todo.dir_days = dir_days;
   documents->fname_crapbook = fname_crapbook;
+
+  documents->fname_saved_buffers = fname_saved_buffers;
   documents->l_status_bar = l_status;
   documents->l_charset = l_charset;
 
@@ -7617,6 +7619,22 @@ OPTIONS::COMMON
   cb_save_buffers = new QCheckBox (tr ("Temporary save unsaved buffers on exit"), tab_options);
   cb_save_buffers->setChecked (settings->value ("save_buffers", "0").toBool());
   vb_common_autosave->addWidget (cb_save_buffers);
+
+  cb_autosave = new QCheckBox (tr ("Autosave buffers and autosaving files (each N seconds)"), tab_options);
+  cb_autosave->setChecked (settings->value ("autosave", "0").toBool());
+
+  spb_autosave_period = new QSpinBox;
+  spb_autosave_period->setMinimum (5);
+  spb_autosave_period->setValue (settings->value ("autosave_period", 30).toInt());
+
+  QHBoxLayout *lt_autosave = new QHBoxLayout;
+
+  lt_autosave->insertWidget (-1, cb_autosave, 0, Qt::AlignLeft);
+  lt_autosave->insertWidget (-1, spb_autosave_period, 1, Qt::AlignLeft);
+
+  vb_common_autosave->addLayout (lt_autosave);
+
+
 
   page_common_layout->addWidget (gb_common_autosave);
 
@@ -9296,6 +9314,13 @@ void CTEA::leaving_options()
   settings->setValue ("margin_pos", spb_margin_pos->value());
   settings->setValue ("b_preview", cb_auto_img_preview->isChecked());
   settings->setValue ("cursor_blink_time", spb_cursor_blink_time->value());
+  settings->setValue ("autosave_period", spb_autosave_period->value());
+  settings->setValue ("autosave", cb_autosave->isChecked());
+
+  documents->timer_autosave.stop();
+  documents->timer_autosave.setInterval (spb_autosave_period->value() * 1000);
+  documents->timer_autosave.start();
+
 
   MyProxyStyle::cursor_blink_time = spb_cursor_blink_time->value();
 
@@ -9801,9 +9826,9 @@ void CTEA::cb_use_joystick_stateChanged (int state)
   settings->setValue ("use_joystick", b);
 
   if (b)
-     documents->timer->start (100);
+     documents->timer_joystick.start (100);
   else
-      documents->timer->stop();
+      documents->timer_joystick.stop();
 }
 
 #endif

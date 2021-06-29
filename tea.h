@@ -411,8 +411,6 @@ Preferences tab :: Common page UI elements
   QComboBox *cmb_zip_charset_in;
   QComboBox *cmb_zip_charset_out;
 
-  QCheckBox *cb_save_buffers;
-
   QCheckBox *cb_altmenu;
   QCheckBox *cb_wasd;
 
@@ -424,8 +422,16 @@ Preferences tab :: Common page UI elements
   QCheckBox *cb_session_restore;
   QCheckBox *cb_use_trad_dialogs;
   QCheckBox *cb_use_enca_for_charset_detection;
+
+
+
   QCheckBox *cb_override_img_viewer;
   QLineEdit *ed_img_viewer_override;
+
+
+  QCheckBox *cb_save_buffers;
+  QCheckBox *cb_autosave;
+  QSpinBox *spb_autosave_period;
 
 /*
 =============================================

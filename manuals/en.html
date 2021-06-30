@@ -27,7 +27,8 @@
 <a href="#mni_fm">Fm</a><br>
 <a href="#mni_view">View</a><br>
 <a href="#mni_prefs">Options tab</a><br>
-<a href="#mni_keyb">Keyboard</a><br>
+<a href="#mni_keyb">Options - Keyboard</a><br>
+<a href="#mni_autosave">On autosaving</a><br>
 <a href="#mni_secret">Secret power</a><br>
 
 <a href="#mni_notes">Notes</a><br>
@@ -902,6 +903,16 @@ The input dialog box will be provided. Then, walk through your directories. Sele
 
 <p>When enabled, use Left Alt plus WASD for cursor movement, Left Alt plus E and C for page up/down. Use Left Win key with WASDEC to select the text.</p>
 
+
+<br>
+<a name="mni_autosave"></a>
+<h3>On autosaving</h3>
+
+<p>TEA has some features related to the auto-saved files.</p>
+
+<p>The first one is saving on unsaved files. When you create a new file, it exist as the buffer. You use "Temporary save unsaved buffers on exit" option (at <b>Options - Common</b>). If it is turned on, TEA save such buffers on TEA exit (not on the closing buffer tab manually), and then restores them on the next start. So, it is like the session saving. But, if you just close some unsaved file tab, it will not be saved.</p>
+
+<p>Another option there, is "Autosave buffers and autosaving files (each N seconds)". It saves buffers each N seconds, also it saves the ordinary files that checked as "autosaved". You can set/unset file as autosaved at <b>File - File actions - Set as autosaving file/Unset the autosaving file</b>. Such autosaved files also automatically saved when you close them.</p>
 
 <br>
 <a name="mni_secret"></a>

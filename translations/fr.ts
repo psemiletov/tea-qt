@@ -17,7 +17,7 @@
     </message>
     <message>
         <source>Packages</source>
-        <translation>Paquets</translation>
+        <translation type="vanished">Paquets</translation>
     </message>
     <message>
         <source>About</source>
@@ -1816,6 +1816,26 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>GTK Bookmarks:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set as autosaving file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unset the autosaving file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Autosaving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temporary save unsaved buffers on exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Autosave buffers and autosaving files (each N seconds)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

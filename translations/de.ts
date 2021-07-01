@@ -17,7 +17,7 @@
     </message>
     <message>
         <source>Packages</source>
-        <translation>Pakete</translation>
+        <translation type="vanished">Pakete</translation>
     </message>
     <message>
         <source>About</source>
@@ -1793,6 +1793,26 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>GTK Bookmarks:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set as autosaving file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unset the autosaving file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Autosaving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temporary save unsaved buffers on exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Autosave buffers and autosaving files (each N seconds)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

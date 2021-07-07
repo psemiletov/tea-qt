@@ -10,7 +10,9 @@
 
 <item name="class" type="item" color="class">\bC[A-Za-z0-9_]+\b</item>
 
-<item name="operator" type="item" color="operator">[-=\+\*\/\(\)\[]|]</item>
+<item name="operator" type="item" color="operator">[-=\+\*\/\|]</item>
+
+<item name="bracket" type="item" color="brackets">[\(\)\[\]]</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">^#include</item>
 

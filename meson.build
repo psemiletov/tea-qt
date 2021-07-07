@@ -61,11 +61,9 @@ endif
 
 zlib_dep = dependency('zlib', required : true)
 
-#qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets', 'Network']) 
 qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets']) 
 
 qt5 = import('qt5') 
-
 
 tea_headers_moc = [
         'quagzipfile.h',

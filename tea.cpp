@@ -106,7 +106,7 @@ extern bool boring;
 
 CTEA *main_window;
 CDox *documents;
-QVariantMap hs_path;
+//QVariantMap hs_path;
 
 QString current_version_number;
 std::vector <CTextListWnd*> text_window_list;
@@ -6289,38 +6289,38 @@ void CTEA::create_paths()
   dir_config.append ("/.config/tea");
 #endif
 
-  hs_path["dir_config"] = dir_config;
+//  hs_path["dir_config"] = dir_config;
 
   dr.setPath (dir_config);
   if (! dr.exists())
      dr.mkpath (dir_config);
 
   fname_crapbook = dir_config + "/crapbook.txt";
-  hs_path["fname_crapbook"] = fname_crapbook;
+//  hs_path["fname_crapbook"] = fname_crapbook;
 
   fname_saved_buffers = dir_config + "/saved_buffers.txt";
-  hs_path["saved_buffers"] = fname_saved_buffers;
+  //hs_path["saved_buffers"] = fname_saved_buffers;
 
   fname_autosaving_files = dir_config + "/autosaving_files.txt";
-  hs_path["autosaving_files"] = fname_autosaving_files;
+  //hs_path["autosaving_files"] = fname_autosaving_files;
 
   fname_fif = dir_config + "/fif";
-  hs_path["fname_fif"] = fname_fif;
+  //hs_path["fname_fif"] = fname_fif;
 
   fname_bookmarks = dir_config + "/tea_bmx";
-  hs_path["fname_bookmarks"] = fname_bookmarks;
+  //hs_path["fname_bookmarks"] = fname_bookmarks;
 
   fname_programs = dir_config + "/programs";
-  hs_path["fname_programs"] = fname_programs;
+  //hs_path["fname_programs"] = fname_programs;
 
   fname_places_bookmarks = dir_config + "/places_bookmarks";
-  hs_path["fname_places_bookmarks"] = fname_places_bookmarks;
+  //hs_path["fname_places_bookmarks"] = fname_places_bookmarks;
 
   fname_tempfile = QDir::tempPath() + "/tea.tmp";
-  hs_path["fname_tempfile"] = fname_tempfile;
+  //hs_path["fname_tempfile"] = fname_tempfile;
 
   fname_tempparamfile = QDir::tempPath() + "/teaparam.tmp";
-  hs_path["fname_tempparamfile"] = fname_tempparamfile;
+  //hs_path["fname_tempparamfile"] = fname_tempparamfile;
 
   dir_tables = dir_config + "/tables";
 

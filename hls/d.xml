@@ -6,6 +6,10 @@
 
 <item name="types" type="keywords" color="type">\b(bit|bool||byte|cdouble|cent|cfloat|char|creal|dchar|double|float|ifloat|ifoduble|int|ireal|long|real|short|ubyte|ucent|uint|ulong|ushort|void|wchar)\b</item>
 
+<item name="operator" type="item" color="operator">[-=\+\*\/\|]</item>
+
+<item name="bracket" type="item" color="brackets">[\(\)\[\]]</item>
+
 <item name="quotes" type="item" color="quotes">("[^\"]*")</item>
 
 <item name="char" type="item" color="quotes">('[^']*')</item>

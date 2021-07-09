@@ -9,6 +9,10 @@
 \$[A-Za-z_][0-9A-Za-z_]*\b
 </item>
 
+<item name="operator" type="item" color="operator">[-=\+\*\/\|]</item>
+
+<item name="bracket" type="item" color="brackets">[\(\)\[\]]</item>
+
 <item name="char" type="item" color="quotes">('[^']*')</item>
 
 <item name="quotes" type="item" color="quotes">("[^\"]*")</item>

@@ -6,7 +6,9 @@
 
 <item name="types" type="keywords" color="type">\b(bool|char|i8|i16|i32|i64|isize|u8|u16|u32|u64|usize|f32|f64|array|slice|str|tuple)\b</item>
 
-<item name="operator" type="item" color="operator">[-=\+\*\/\(\)\[]|]</item>
+<item name="operator" type="item" color="operator">[-=\+\*\/\|]</item>
+
+<item name="bracket" type="item" color="brackets">[\(\)\[\]]</item>
 
 <item name="include" type="item" color="include" fontstyle="italic">^#include</item>
 

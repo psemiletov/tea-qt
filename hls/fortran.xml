@@ -12,7 +12,9 @@
 
 <item name="char" type="item" color="quotes">('[^']*')</item>
 
-<item name="operator" type="item" color="operator">[-=\+\*\/\(\)\[]|]</item>
+<item name="operator" type="item" color="operator">[-=\+\*\/\|]</item>
+
+<item name="bracket" type="item" color="brackets">[\(\)\[\]]</item>
 
 <item name="single comment" type="item" color="single comment" fontstyle="italic">![^\n]*</item>
 

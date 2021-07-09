@@ -8,6 +8,10 @@
 
 <item name="preproc" type="item" color="preproc" fontstyle="italic">^#.*</item>
 
+<item name="operator" type="item" color="operator">[-=\+\*\/\|]</item>
+
+<item name="bracket" type="item" color="brackets">[\(\)\[\]]</item>
+
 <item name="quotes" type="item" color="quotes">("[^\"]*")</item>
 
 <item name="char" type="item" color="quotes">('[^']*')</item>

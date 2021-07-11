@@ -1,0 +1,153 @@
+.table_top_cell
+{
+vertical-align: top;
+width: 50%;
+}
+
+
+body
+{
+background-color: white;
+}
+
+a:link 
+{
+/*color: #3535c9;*/
+color: #0f0570;
+}
+
+a:visited 
+{
+/*color: #3535c9;*/
+color: #0f0570;
+}
+
+a:active 
+{
+/*color: #e71c1c;*/
+color: #0f0570;
+}
+
+a:hover 
+{
+text-decoration: none; 
+color: black;
+outline: thin dashed black; 
+}
+
+
+.tea_caption
+{
+color: #3b72e4;
+font-size: xx-large;
+font-style: italic;
+font-weight: bold;
+}          
+
+.p_org
+{
+display: inline ; 
+font-weight: bold;
+clear: both;
+color: #ff430f;
+}
+
+.b_date
+{
+color: #3b72e4;
+}
+
+.p_text 
+{
+text-indent: 2em; 
+}
+
+.table_main
+{
+width: 100%;
+background-color: white;
+}
+
+.table_main_cell
+{
+padding-left: 1.5em;
+vertical-align: top;
+border-left-width: 1px;
+border-left-style: dashed;
+border-bottom-width: 1px;
+border-bottom-style: dashed;
+}
+
+.table_main_menu_cell
+{
+padding-top: 1.5em;
+width: 20%;
+vertical-align: top; 
+border-bottom-width: 1px;
+border-bottom-style: dashed;
+}
+
+
+.im_centered
+{
+text-align:center;
+margin-top:0px;
+margin-bottom:0px;
+padding:0px;
+}
+
+.top_table
+{
+/*background-color: #0f0570;*/
+background-color: #20262d;
+color: white;
+width: 100%;
+}
+
+.top_table_info
+{
+padding-left: 1.5em;
+font-size: smaller;
+}
+
+.table_content
+{
+width: 100%;
+}
+
+.p_centered
+{
+text-align: center;
+}
+
+.packages_table
+{
+border-width: 1px;
+border-style: solid;
+}
+
+.packages_td
+{
+border-style: solid dotted none none;
+#border-style: none solid none none; 
+border-width: thin;
+}
+
+.packages_td_head
+{
+color : white;
+background : #0f0570;
+border-style: none solid none none; 
+border-width: medium 1px medium medium;
+}
+
+.packages_td_head_right
+{
+color : white;
+background : #0f0570;
+}
+
+.formats_td
+{
+padding-right : 21px;
+}

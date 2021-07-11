@@ -449,11 +449,10 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                       if (! rg.isValid())
                          qDebug() << "! valid " << rg.pattern();
                       else
-                          //commentStartExpression = rg;
-                           {
-                            comment_start_expr.first = rg;
-                            comment_start_expr.second = true;
-                           }
+                          {
+                           comment_start_expr.first = rg;
+                           comment_start_expr.second = true;
+                          }
                      }
                   else
                   if (attr_type == "mcomment-end")
@@ -466,11 +465,10 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
                       if (! rg.isValid())
                          qDebug() << "! valid " << rg.pattern();
                       else
-                          //commentEndExpression = rg;
-                        {
-                         comment_end_expr.first = rg;
-                         comment_end_expr.second = true;
-                        }
+                          {
+                           comment_end_expr.first = rg;
+                           comment_end_expr.second = true;
+                          }
 
                      }
                   else
@@ -543,10 +541,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 
   int startIndex = 0;
 
- // if (! commentStartExpression.isValid() || ! commentEndExpression.isValid())
-   //  return;
-
-//  QRegularExpressionMatch m_start = commentStartExpression.match (text);
   QRegularExpressionMatch m_start = comment_start_expr.first.match (text);
 
 
@@ -555,7 +549,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 
   while (startIndex >= 0)
         {
-         //QRegularExpressionMatch m_end = commentEndExpression.match (text, startIndex);
          QRegularExpressionMatch m_end = comment_end_expr.first.match (text, startIndex);
 
          int endIndex = m_end.capturedStart();
@@ -572,7 +565,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 
          setFormat (startIndex, commentLength, fmt_multi_line_comment);
 
-//         m_start = commentStartExpression.match (text, startIndex + commentLength);
          m_start = comment_start_expr.first.match (text, startIndex + commentLength);
 
          startIndex = m_start.capturedStart();

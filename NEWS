@@ -1,11 +1,9 @@
 ====NEWS ABOUT TEA====
-TEA 60.3.0, June 2021
+TEA 60.4.0, July 2021
 ---------------------------------------
 
-+ Polish UI and Manual translation by Krzysztof Jaśkiewicz
-+ Rust hl support
-+ The time consuming operations such as "Find in files" can be interrupted.
-* Hunspell engine support is available again with cmake (was: broken)
+   Namaste! This release features the long awaited functions of autosave. See the Manual "On autosaving" chapter for a details. All that stuff is optional and turned off by default. In short, now TEA can temporary save newly created unsaved files and then load them with a new session. Also, you can mark any file as "autosaved" and TEA shall save it on close or by the timer.
+   Fixes: braces highlighting and palettes.
 
    Stay tuned.
    Peter Semiletov

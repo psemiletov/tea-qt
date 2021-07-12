@@ -6221,7 +6221,7 @@ CTEA::CTEA()
 
   setAcceptDrops (true);
 
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov | semiletov.org/tea<br>Support TEA on www.patreon.com/semiletov<br>Git: github.com/psemiletov/tea-qt<br>AUR: aur.archlinux.org/packages/tea-qt").arg (QString (current_version_number)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov | psemiletov.github.io/tea-qt/<br>Support TEA on www.patreon.com/semiletov<br>Git: github.com/psemiletov/tea-qt<br>AUR: aur.archlinux.org/packages/tea-qt").arg (QString (current_version_number)));
 
   QTextCursor cr = log->textCursor();
   cr.movePosition (QTextCursor::Start);

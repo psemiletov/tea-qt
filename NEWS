@@ -1,9 +1,12 @@
 ====NEWS ABOUT TEA====
 TEA 60.4.0, July 2021
----------------------------------------
+---------------------------------------------------
+http://psemiletov.github.io/tea-qt/
+---------------------------------------------------
 
    Namaste! This release features the long awaited functions of autosave. See the Manual "On autosaving" chapter for a details. All that stuff is optional and turned off by default. In short, now TEA can temporary save newly created unsaved files and then load them with a new session. Also, you can mark any file as "autosaved" and TEA shall save it on close or by the timer.
    Fixes: braces highlighting and palettes.
+   New: unified TEA site on http://psemiletov.github.io/tea-qt/. Old semiletov.org/tea and tea.ourproject.org are still alive, but as mirrors.
 
    Stay tuned.
    Peter Semiletov

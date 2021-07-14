@@ -39,33 +39,33 @@
 <context>
     <name>CDocument</name>
     <message>
-        <location filename="../document.cpp" line="942"/>
+        <location filename="../document.cpp" line="934"/>
         <source>cannot open %1 because of: %2</source>
         <translation>Не могу открыть %1, ибо %2</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="996"/>
+        <location filename="../document.cpp" line="988"/>
         <source>cannot save %1 because of: %2</source>
         <translation>не могу сохранить %1, ибо %2</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="1009"/>
+        <location filename="../document.cpp" line="1001"/>
         <source>%1 is saved</source>
         <translation>%1 сохранён</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="892"/>
+        <location filename="../document.cpp" line="884"/>
         <source>%1 has been modified.
 Do you want to save your changes?</source>
         <translation>%1 был изменен. Желаете сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="961"/>
+        <location filename="../document.cpp" line="953"/>
         <source>%1 is open</source>
         <translation>%1 открыт</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="806"/>
+        <location filename="../document.cpp" line="798"/>
         <source>new[%1]</source>
         <translation>новый[%1]</translation>
     </message>
@@ -119,10 +119,6 @@ Do you want to save your changes?</source>
         <location filename="../tea.cpp" line="6593"/>
         <source>famous input field</source>
         <translation>знаменитое поле ввода</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;Sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: https://aur.archlinux.org/packages/tea-qt/&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
-        <translation type="vanished">&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова, tea@list.ru&lt;br&gt;Сайты: semiletov.org/tea and tea.ourproject.org&lt;br&gt;Гит: github.com/psemiletov/tea-qt&lt;br&gt;AUR: https://aur.archlinux.org/packages/tea-qt/&lt;br&gt;ВК: vk.com/teaeditor&lt;br&gt;читайте Руководство на одноименной вкладке</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="1160"/>
@@ -335,11 +331,6 @@ Do you want to overwrite?</source>
         <location filename="../tea.cpp" line="6762"/>
         <source>Reload with encoding</source>
         <translation>Перечитать в кодировке</translation>
-    </message>
-    <message>
-        <location filename="../tea.cpp" line="6224"/>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | semiletov.org/tea&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</source>
-        <translation>&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова | semiletov.org/tea&lt;br&gt;Поддержать разработку на www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="6764"/>
@@ -1520,6 +1511,11 @@ Do you want to overwrite?</source>
         <translation>не совпадает</translation>
     </message>
     <message>
+        <location filename="../tea.cpp" line="6224"/>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</source>
+        <translation>&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова | tea.ourproject.org&lt;br&gt;Поддержать разработку на www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</translation>
+    </message>
+    <message>
         <location filename="../tea.cpp" line="6768"/>
         <source>Set as autosaving file</source>
         <translation>Пометить как автосохраняемый файл</translation>
@@ -2624,10 +2620,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="vanished">ЗПВ</translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov - tea@list.ru&lt;br&gt;site 1: http://semiletov.org/tea&lt;br&gt;site 2: http://tea.ourproject.org&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
-        <translation type="obsolete">&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова - tea@list.ru&lt;br&gt;сайт 1: http://semiletov.org/tea&lt;br&gt;сайт 2: http://tea.ourproject.org&lt;br&gt;читайте Руководство на вкладке &lt;i&gt;Узнать&lt;/i&gt;!</translation>
-    </message>
-    <message>
         <source>Save As</source>
         <translation type="vanished">Сохранить как</translation>
     </message>
@@ -3564,10 +3556,6 @@ ff=firefox file:///%s</translation>
         <translation type="vanished">Календарь</translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;site 1: http://semiletov.org/tea&lt;br&gt;site 2: http://tea.ourproject.org&lt;br&gt;site 3 (development): https://github.com/psemiletov/tea-qt&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
-        <translation type="obsolete">&lt;b&gt;TEA %1&lt;/b&gt; Петр Семилетов, tea@list.ru&lt;br&gt;site 1: http://semiletov.org/tea&lt;br&gt;site 2: http://tea.ourproject.org&lt;br&gt;site 3 (разработка): https://github.com/psemiletov/tea-qt&lt;br&gt;читайте руководство на вкладке &lt;i&gt;Узнать&lt;/i&gt;!</translation>
-    </message>
-    <message>
         <source>LaTeX: Straight to curly double quotes</source>
         <translation type="vanished">LaTeX: прямые двойные в нижние и верхние</translation>
     </message>
@@ -3656,10 +3644,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     <message>
         <source>Evaluate</source>
         <translation type="vanished">Вычислить</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
-        <translation type="obsolete">&lt;b&gt;TEA %1&lt;/b&gt; Петр Семилетов, tea@list.ru&lt;br&gt;сайты: semiletov.org/tea и tea.ourproject.org&lt;br&gt;разработка: github.com/psemiletov/tea-qt&lt;br&gt;ВК: vk.com/teaeditor&lt;br&gt;читайте руководство на вкладке &lt;i&gt;Познать&lt;/i&gt;!</translation>
     </message>
     <message>
         <source>Next tab</source>
@@ -3770,10 +3754,6 @@ Do you want to overwrite?</source>
     <message>
         <source>editor</source>
         <translation type="vanished">правка</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;development: github.com/psemiletov/tea-qt&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
-        <translation type="vanished">&lt;b&gt;TEA %1&lt;/b&gt; Петр Семилетов, tea@list.ru&lt;br&gt;офсайты: semiletov.org/tea и tea.ourproject.org&lt;br&gt;разработка: github.com/psemiletov/tea-qt&lt;br&gt;ВК-сообщество: vk.com/teaeditor&lt;br&gt;читайте Руководство под одноименной вкладкой справа!</translation>
     </message>
     <message>
         <source>Bold</source>
@@ -4072,10 +4052,6 @@ opera=opera %s</translation>
         <translation type="vanished">Знаменитое поле ввода (ЗПВ) - для поиска и замены, для параметров функций</translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov, tea@list.ru&lt;br&gt;Sites: semiletov.org/tea and tea.ourproject.org&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: https://aur.archlinux.org/packages/tea-qt/&lt;br&gt;VK: vk.com/teaeditor&lt;br&gt;read the Manual under the &lt;i&gt;Manual&lt;/i&gt; tab!</source>
-        <translation type="vanished">&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова, tea@list.ru&lt;br&gt;Сайты: semiletov.org/tea and tea.ourproject.org&lt;br&gt;Гит: github.com/psemiletov/tea-qt&lt;br&gt;AUR: https://aur.archlinux.org/packages/tea-qt/&lt;br&gt;ВК: vk.com/teaeditor&lt;br&gt;читайте Руководство на одноименной вкладке</translation>
-    </message>
-    <message>
         <source>Spell checking</source>
         <translation type="vanished">Проверка правописания</translation>
     </message>
@@ -4248,10 +4224,6 @@ opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
     <message>
         <source>MD5 checksum for %1 is %2</source>
         <translation type="vanished">Проверочная сумма MD5 для %1 такова: %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;TEA %1 @ http://semiletov.org/tea&lt;/b&gt;&lt;br&gt;by Peter Semiletov (e-mail: tea@list.ru, site: semiletov.org)&lt;br&gt;read the Manual under the &lt;i&gt;Learn&lt;/i&gt; tab!</source>
-        <translation type="obsolete">&lt;b&gt;TEA %1 @ http://semiletov.org/tea&lt;/b&gt;&lt;br&gt;Петр Семилетов (мыло: tea@list.ru, сайт: semiletov.org)&lt;br&gt;читайте руководство на вкладе &lt;i&gt;Узнать&lt;/i&gt;!</translation>
     </message>
     <message>
         <source>Set old Mac end of line (CR)</source>

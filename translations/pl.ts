@@ -39,33 +39,33 @@
 <context>
     <name>CDocument</name>
     <message>
-        <location filename="../document.cpp" line="942"/>
+        <location filename="../document.cpp" line="934"/>
         <source>cannot open %1 because of: %2</source>
         <translation>Nie można otworzyć %1, z powodu %2</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="996"/>
+        <location filename="../document.cpp" line="988"/>
         <source>cannot save %1 because of: %2</source>
         <translation>nie można zapisać %1, z powodu %2</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="1009"/>
+        <location filename="../document.cpp" line="1001"/>
         <source>%1 is saved</source>
         <translation>%1 jest zapisany</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="892"/>
+        <location filename="../document.cpp" line="884"/>
         <source>%1 has been modified.
 Do you want to save your changes?</source>
         <translation>%1 został zmodyfikowany. Czy chcesz zachować zmiany?</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="961"/>
+        <location filename="../document.cpp" line="953"/>
         <source>%1 is open</source>
         <translation>%1 jest otwarty</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="806"/>
+        <location filename="../document.cpp" line="798"/>
         <source>new[%1]</source>
         <translation>nowy[%1]</translation>
     </message>
@@ -337,9 +337,8 @@ Chcesz nadpisać?</translation>
         <translation>Załaduj ponownie z kodowaniem</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6224"/>
         <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | semiletov.org/tea&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</source>
-        <translation type="unfinished">&lt;b&gt;TEA %1&lt;/b&gt; autorstwa Piotra Semiletowa | semiletov.org/tea&lt;br&gt;Wspieraj rozwój na www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</translation>
+        <translation type="obsolete">&lt;b&gt;TEA %1&lt;/b&gt; autorstwa Piotra Semiletowa | semiletov.org/tea&lt;br&gt;Wspieraj rozwój na www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="6764"/>
@@ -1518,6 +1517,11 @@ Chcesz nadpisać?</translation>
         <location filename="../tea.cpp" line="4504"/>
         <source>does not</source>
         <translation>nie pasuje</translation>
+    </message>
+    <message>
+        <location filename="../tea.cpp" line="6224"/>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="6768"/>

@@ -1,3 +1,6 @@
+Add VIM color themes
+Example: https://github.com/benbusby/vim-earthbound-themes/blob/76f4b4f5678307947f9f5ce5c90b61e35ce76d9e/colors/cave-of-the-past.vim
+
 add Qt6 to Meson
 
 show empty spaces (at EOL? for Markdown)
@@ -5,13 +8,13 @@ show empty spaces (at EOL? for Markdown)
 Chess visualizer window
 "Места" в ФП
 
-remove lout support
+remove lout support?
                    
 https://api.kde.org/frameworks/syntax-highlighting/html/index.html
 
 *вернуться к SVG-иконкам?
 
-ПЕЧАТЬ НЕ РАБОТАЕТ!
+ПЕЧАТЬ НЕ РАБОТАЕТ под вындой!
 
 Фильтр - Больше размера > - удаляет всё?
 
@@ -22,7 +25,6 @@ cmake dist creates wrong tarball that cannot be build with meson
 
 JAMSpell support? (https://github.com/bakwc/JamSpell)
 
-gtk_bookmarks в places предваряются пустой строкой - почему?
 при повторении последней функции, сендер-ту становится от пункта меню "повторить"
 
 избранное для ЗПВ
@@ -35,7 +37,7 @@ filesToolbar странно меняет размер иконки
 спеллчекер плохо работает с кавычками елочкой
 вставка картинки как base64?
 в сборке Qt5, шорткаты с Alt стали языко-зависимыми?
-CSound, Ada, JS, gas, List hl
+CSound, Ada, gas, List hl
 массовая перекодировка выделенных файлов. окно ИЗ - В
 вытащить меню таблиц мультизамен в режим фприказчика, проверить обработку
 batch-обработка картинок: обрезка, масштабирование, поворот, зеркало?
@@ -49,7 +51,6 @@ gradient colorization in palettes
 autoscroll //useful for musicians or youtube bloggers. define the speed in bpm?
 numbers into words
 ctags support
-make max recent items user-modified
 units conversion
 unicode table window
 split document panel
@@ -63,6 +64,4 @@ epub support
 gz file save?
 select code block
 
-планы:
-
-использовать libretta::CPainFile вместо QSettings
+использовать libretta::CPainFile вместо QSettings?

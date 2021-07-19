@@ -6221,7 +6221,7 @@ CTEA::CTEA()
 
   setAcceptDrops (true);
 
-  log->log (tr ("<b>TEA %1</b> by Peter Semiletov | tea.ourproject.org<br>Support TEA on www.patreon.com/semiletov<br>Git: github.com/psemiletov/tea-qt<br>AUR: aur.archlinux.org/packages/tea-qt").arg (QString (current_version_number)));
+  log->log (tr ("<b>TEA %1</b> by Peter Semiletov | tea.ourproject.org<br>Support TEA on www.patreon.com/semiletov<br>Git: github.com/psemiletov/tea-qt<br>AUR: aur.archlinux.org/packages/tea-qt-git").arg (QString (current_version_number)));
 
   QTextCursor cr = log->textCursor();
   cr.movePosition (QTextCursor::Start);
@@ -6459,7 +6459,6 @@ void CTEA::create_main_widget_splitter()
   tab_editor = new QTabWidget;
   tab_editor->setUsesScrollButtons (true);
 
-//#if QT_VERSION >= 0x040500
 #if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
   tab_editor->setMovable (true);
 #endif

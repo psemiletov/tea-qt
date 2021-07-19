@@ -127,8 +127,6 @@ public:
 
   vector <pair <QRegularExpression, QTextCharFormat> > hl_rules;
 
-  //QRegularExpression commentStartExpression;
-  //QRegularExpression commentEndExpression;
   QRegularExpression::PatternOptions pattern_opts;
 
   pair <QRegularExpression, bool> comment_start_expr;
@@ -306,6 +304,7 @@ public:
 
   QLabel *l_status_bar;
   QLabel *l_charset;
+
   CLogMemo *log; //uplink
   QMainWindow *parent_wnd; //uplink
   QTabWidget *tab_widget; //uplink

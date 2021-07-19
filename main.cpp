@@ -44,6 +44,7 @@ int main (int argc, char *argv[])
   return app.exec();
   
 #else
+
  CSingleApplicationShared app (argc, argv, "tea unique id 1977");
  
  bool single_mode = true;

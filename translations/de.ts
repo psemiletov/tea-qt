@@ -1812,7 +1812,7 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</source>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

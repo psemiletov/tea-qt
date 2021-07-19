@@ -1,5 +1,8 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ poppler-qt6 support with cmake
+* DJVU support with cmake - fixed
+
 + autosave
 * braces hl megafix
 

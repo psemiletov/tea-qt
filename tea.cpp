@@ -6227,7 +6227,6 @@ CTEA::CTEA()
   cr.movePosition (QTextCursor::Start);
   log->setTextCursor (cr);
 
-
   QString icon_fname = ":/icons/tea-icon-v3-0" + settings->value ("icon_fname", "1").toString() + ".png";
   qApp->setWindowIcon (QIcon (icon_fname));
   idx_tab_edit_activate();

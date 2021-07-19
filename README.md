@@ -9,11 +9,11 @@ http://semiletov.org/tea (MIRROR)
 Development >
 https://github.com/psemiletov/tea-qt
 
-AUR > https://aur.archlinux.org/packages/tea-qt/
+My hot AUR package > https://aur.archlinux.org/packages/tea-qt-git/
 
 Donate > 
 
-By bitcoin: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
+BTC: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
 
 Or Patreon: https://www.patreon.com/semiletov
 

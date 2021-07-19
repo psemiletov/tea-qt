@@ -15,6 +15,7 @@ class CSignaturesList: public QObject
   Q_OBJECT
 
 public:
+
   QString encname;
   QList <QByteArray> words;
 };

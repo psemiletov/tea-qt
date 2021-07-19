@@ -202,7 +202,7 @@ endif()
 
 if(USE_DJVU)
 find_package(PkgConfig)
-pkg_check_modules(QUIET ddjvuapi ddjvuapi)
+pkg_check_modules(ddjvuapi QUIET ddjvuapi)
 if(ddjvuapi_FOUND)
   add_definitions(-DDJVU_ENABLE)
   target_link_libraries(tea ${ddjvuapi_LIBRARIES})

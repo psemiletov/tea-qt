@@ -853,6 +853,9 @@ CTioPDF::CTioPDF()
 }
 
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+
+
 bool CTioPDF::load (const QString &fname)
 {
   Poppler::Document *d = Poppler::Document::load (fname);
@@ -888,6 +891,50 @@ bool CTioPDF::load (const QString &fname)
   delete d;
   return true;
 }
+
+#endif
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && QT_VERSION < QT_VERSION_CHECK(7, 0, 0))
+
+
+bool CTioPDF::load (const QString &fname)
+{
+  std::unique_ptr<Poppler::Document> d = Poppler::Document::load (fname);
+
+  if (! d)
+     return false;
+
+  if (d->isLocked())
+     {
+    //  delete d;
+      return false;
+     }
+
+
+  int pages_count = d->numPages();
+
+  for (int i = 0; i < pages_count; i++)
+      {
+      std::unique_ptr<Poppler::Page> p = d->page (i);
+
+       std::vector<std::unique_ptr<Poppler::TextBox> > tb = p->textList();
+
+       for (int j = 0; j < tb.size(); j++)
+           {
+            data += tb[j]->text();
+            //if (tb[j]->hasSpaceAfter())
+            data += " ";
+
+           // delete tb[j];
+           }
+      }
+
+ // delete d;
+  return true;
+}
+
+#endif
+
 
 #endif
 

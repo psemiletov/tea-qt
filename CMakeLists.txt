@@ -190,7 +190,7 @@ endif()
 
 if(Qt${QT_VERSION_MAJOR} STREQUAL "Qt6")
 pkg_check_modules(popplerqt6 QUIET poppler-qt6)
-if(popplerqt5_FOUND)
+if(popplerqt6_FOUND)
   add_definitions(-DPOPPLER_ENABLE)
   target_link_libraries(tea ${popplerqt6_LIBRARIES})
   include_directories(${popplerqt6_INCLUDE_DIRS})

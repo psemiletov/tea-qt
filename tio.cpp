@@ -625,6 +625,10 @@ bool CTioFB2::load (const QString &fname)
 
              if (tag_name == "section")
                  data.append ("\n");
+
+             if (tag_name == "empty-line")
+                 data.append ("\n");
+
             }
 
          if (tt && xml.isCharacters())

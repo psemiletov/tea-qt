@@ -1,5 +1,6 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ FB2 support improvements
 + poppler-qt6 support with cmake
 * DJVU support with cmake - fixed
 

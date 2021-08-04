@@ -3889,10 +3889,11 @@ void CTEA::fn_math_sum_by_last_col()
       return;
 
   QString t = d->get();
-  t = t.replace (",", ".");
 
   if (t.isEmpty())
       return;
+
+  t = t.replace (",", ".");
 
   double sum = 0.0;
 

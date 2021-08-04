@@ -2299,6 +2299,13 @@ void CDox::load_from_buffers (const QString &fileName)
       {
        CDocument *d = create_new();
        d->put (l[i]);
+
+       QTextCursor cr = d->textCursor();
+       if (! cr.isNull())
+          {
+           cr.movePosition (QTextCursor::Start, QTextCursor::MoveAnchor);
+           d->setTextCursor (cr);
+          }
       }
 
   fname_current_session = fileName;
@@ -2392,8 +2399,6 @@ void CDox::open_current()
 
 void CDox::autosave()
 {
-//  log->log ("AUTOSAVE");
-
   if (! settings->value ("autosave", false).toBool())
       return;
 
@@ -2408,7 +2413,6 @@ void CDox::autosave()
 
   save_buffers (fname_saved_buffers);
 }
-
 
 
 void CDox::move_cursor_up()

@@ -3900,16 +3900,22 @@ void CTEA::fn_math_sum_by_last_col()
 
   for (int i = 0; i < l.size(); i++)
       {
+       if (l[i].isNull())
+          continue;
+
        if (l[i].startsWith ("//") ||  l[i].startsWith ("#") || l[i].startsWith (";"))
           continue;
 
        QStringList lt = l[i].split (" ");
        if (lt.size() > 0)
           {
-           QString s = lt.at(lt.size() - 1);
-           std::string utf8_text = s.toUtf8().constData();
-           double f = calculate (utf8_text);
-           sum += f;
+           QString s = lt.at (lt.size() - 1);
+           if (! s.isNull())
+              {
+               std::string utf8_text = s.toUtf8().constData();
+               double f = calculate (utf8_text);
+               sum += f;
+              }
           }
       }
 

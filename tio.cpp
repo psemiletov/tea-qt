@@ -610,10 +610,8 @@ bool CTioFB2::load (const QString &fname)
          QString tag_name = xml.qualifiedName().toString().toLower();
 
          if (xml.isStartElement())
-            {
              if (tag_name == ts)
                 tt = true;
-            }
 
          if (xml.isEndElement())
             {
@@ -628,7 +626,6 @@ bool CTioFB2::load (const QString &fname)
 
              if (tag_name == "empty-line")
                  data.append ("\n");
-
             }
 
          if (tt && xml.isCharacters())

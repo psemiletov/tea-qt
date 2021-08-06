@@ -45,25 +45,30 @@ int main (int argc, char *argv[])
   
 #else
 
- CSingleApplicationShared app (argc, argv, "tea unique id 1977");
+  CSingleApplicationShared app (argc, argv, "tea unique id 1977");
  
- bool single_mode = true;
+
+  bool single_mode = true;
  
   if (argc > 1)
      if (strcmp(argv[1], "--m") == 0)
         single_mode = false;
-    
+
+
   if (single_mode && app.alreadyExists())
      {
       if (argc > 1)
          for (int i = 1; i < argc; i++) 
-              app.sendMessage (QString(argv[i]));
+             {
+              app.sendMessage (QString (argv[i]));
+             }
              
       return 0;
      }
     
 #endif
     
+
   main_window = new CTEA();
 
 #if !defined (NO_SINGLE_APP)
@@ -71,7 +76,7 @@ int main (int argc, char *argv[])
 #endif
    
   main_window->show();
-  
+
   return app.exec();   
 }
 

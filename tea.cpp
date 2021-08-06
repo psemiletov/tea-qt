@@ -560,7 +560,18 @@ void CTEA::receiveMessage (const QString &msg)
 void CTEA::receiveMessageShared (const QStringList &msg)
 {
   for (int i = 0; i < msg.size(); i++)
-      documents->open_file (msg[i], "UTF-8");
+      {
+       QFileInfo f (msg.at(i));
+
+      if (! f.isAbsolute())
+         {
+          QString fullname (QDir::currentPath());
+          fullname.append ("/").append (msg.at(i));
+          documents->open_file (fullname, charset);
+         }
+     else
+          documents->open_file (msg.at(i), charset);
+    }
 
   show();
   activateWindow();

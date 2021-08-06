@@ -72,7 +72,8 @@ bool CSingleApplicationShared::sendMessage (const QString &message)
  //we cannot send message if we are master process!
   if (isMasterApp())
      return false;
- 
+
+
   QByteArray byteArray;
     
   byteArray.append (char(message.size()));
@@ -92,6 +93,5 @@ bool CSingleApplicationShared::sendMessage (const QString &message)
   memcpy (to, from, qMin(sharedMemory.size(), byteArray.size()));
   sharedMemory.unlock();
     
-
  return true;
 }

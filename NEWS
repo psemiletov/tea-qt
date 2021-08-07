@@ -1,11 +1,11 @@
 ====NEWS ABOUT TEA====
-TEA 60.4.0, July 2021
+TEA 60.5.0, August 2021
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   Namaste! This release features the long awaited functions of autosave. See the Manual "On autosaving" chapter for a details. All that stuff is optional and turned off by default. In short, now TEA can temporary save newly created unsaved files and then load them with a new session. Also, you can mark any file as "autosaved" and TEA shall save it on close or by the timer.
-   Fixes: braces highlighting and palettes.
+   This release fixes many things. The Single application mode fixed forever! DJVU support and poppler-qt6 detected by cmake properly.
+   Also, FB2 reader has been improved a lot - TEA now becomes a very fast FB2-reader without image support.
 
    Stay tuned.
    Peter Semiletov

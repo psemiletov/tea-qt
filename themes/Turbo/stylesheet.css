@@ -5,33 +5,39 @@ QWidget
 }
 
 
-QLineEdit {
-           border: 2px solid gray;
-           padding: 0 2px;
-           background-color: #1818b2;
-           color: white;
-           selection-background-color: darkgray;
-          }
+QLineEdit
+{
+  border: 2px solid gray;
+  padding: 0 2px;
+  background-color: #1818b2;
+  color: white;
+  selection-background-color: darkgray;
+}
+
 
 QMenuBar
 {
-   background-color: #b2b2b2;
+  background-color: #b2b2b2;
 }
 
 
-QMenu 
+QMenu
 {
-   margin: 16px;
-   background-color: #b2b2b2;
-   border: 1px solid black;
+  margin: 16px;
+  background-color: #b2b2b2;
+  border: 1px solid black;
 }
 
-QMenu::item {
-    background-color: transparent;
+
+QMenu::item 
+{
+  background-color: transparent;
 }
 
-QMenu::item:selected { 
-    background-color: #18b218;
+
+QMenu::item:selected 
+{
+  background-color: #18b218;
 }
 
 
@@ -50,61 +56,58 @@ QListView
   background-color: #18b2b2;
   selection-color: white;
   selection-background-color: #18b218;
-
-}
-
-QScrollBar:vertical {
-    width: 24px;
-    border: 1px solid grey;
 }
 
 
-QPushButton 
-{ 
-border-width: 1px;
-color: black;
-background-color: #159d15;
-border-color: black;
-border-top: 4px solid black;
-border-right: 4px solid black;
-min-width: 24px;
-}
-
-
-QPushButton:pressed 
+QScrollBar:vertical
 {
-border-width: 1px;
-color: black;
-background-color: #159d15;
-border-color: black;
-border-top: 1px solid black;
-min-width: 24px;
+  width: 24px;
+  border: 1px solid grey;
 }
 
 
-QTabBar::tab {
-    background: #b2b2b2;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    border-bottom: 0px;
-    padding: 4px;
-    color: grey;
+QPushButton
+{
+  border-width: 1px;
+  color: black;
+  background-color: #159d15;
+  border-color: black;
+  border-top: 4px solid black;
+  border-right: 4px solid black;
+  min-width: 24px;
 }
 
-QTabBar::tab:selected {
-    background: #b2b2b2;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    border-bottom: 0px;
-    padding: 4px;
-    color: yellow;
+
+QPushButton:pressed
+{
+  border-width: 1px;
+  color: black;
+  background-color: #159d15;
+  border-color: black;
+  border-top: 1px solid black;
+  min-width: 24px;
 }
 
-/*
-QTabBar::tab:!selected {
-    margin-top: 1px;
-    border-bottom: 0px;
+
+QTabBar::tab 
+{
+  background: #b2b2b2;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 0px;
+  padding: 4px;
+  color: grey;
 }
-*/
+
+
+QTabBar::tab:selected 
+{
+  background: #b2b2b2;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 0px;
+  padding: 4px;
+  color: yellow;
+}

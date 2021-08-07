@@ -152,11 +152,14 @@ QString file_get_ext (const QString &file_name)
   if (file_name.isEmpty())
       return QString();
 
-  int i = file_name.lastIndexOf (".");
+/*  int i = file_name.lastIndexOf (".");
   if (i == -1)
       return QString();
 
-  return file_name.mid (i + 1).toLower();
+  return file_name.mid (i + 1).toLower();*/
+
+  QFileInfo fi (file_name);
+  return fi.completeSuffix();
 }
 
 
@@ -464,7 +467,7 @@ CFTypeChecker::CFTypeChecker()
 
   ADDTEXTTYPE (".*(readme|news|changelog|todo)$");
   ADDTEXTTYPE ("^\\..*(rc)$");
-  ADDTEXTTYPE ("^.*\\.(txt|conf|md|ini|bat|cfg|sbv|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$");
+  ADDTEXTTYPE ("^.*\\.(txt|conf|md|ini|bat|cfg|sbv|log|odt|docx|kwd|fb2|fb2.zip|fbz|abw|rtf|epub|sxw)$");
   ADDTEXTTYPE ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$");
   ADDTEXTTYPE ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$");
 #if defined(POPPLER_ENABLE)
@@ -509,7 +512,7 @@ CFTypeChecker::CFTypeChecker()
 
   patterns.push_back (QRegExp (".*(readme|news|changelog|todo)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^\\..*(rc)$", Qt::CaseInsensitive));
-  patterns.push_back (QRegExp ("^.*\\.(txt|conf|md|ini|bat|cfg|sbv|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(txt|conf|md|ini|bat|cfg|sbv|log|odt|docx|kwd|fb2|abw|rtf|epub|sxw|fb2.zip)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$", Qt::CaseInsensitive));
 

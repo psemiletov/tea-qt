@@ -576,6 +576,8 @@ CTioFB2::CTioFB2()
 {
   ronly = true;
   extensions.append ("fb2");
+  extensions.append ("fbz");
+  extensions.append ("fb2.zip");
 }
 
 
@@ -583,19 +585,41 @@ bool CTioFB2::load (const QString &fname)
 {
   data.clear();
 
-  QByteArray ba = file_load (fname);
-  if (ba.isEmpty())
-     return false;
+  QString ext = file_get_ext (fname);
 
-  //read encoding:
+  QString temp;
 
-  QString enc = string_between (QString (ba), "encoding=\"", "\"");
+  CZipper zipper;
 
-  if (enc.isEmpty())
-     enc = "UTF-8";
+  if (ext == "fb2.zip" || ext == "fbz")
+     {
+      CZipper zipper;
+      QFileInfo f (fname);
 
-  QTextCodec *codec = QTextCodec::codecForName (enc.toLatin1().data());
-  QString temp = codec->toUnicode (ba);
+      QString source_fname = f.baseName() + ".fb2";
+
+      if (! zipper.read_as_utf8 (fname, source_fname))
+          return false;
+
+      temp = zipper.string_data;
+     }
+
+ if (ext == "fb2")
+    {
+     QByteArray ba = file_load (fname);
+     if (ba.isEmpty())
+        return false;
+
+     //read encoding:
+
+     QString enc = string_between (QString (ba), "encoding=\"", "\"");
+     if (enc.isEmpty())
+        enc = "UTF-8";
+
+     QTextCodec *codec = QTextCodec::codecForName (enc.toLatin1().data());
+     temp = codec->toUnicode (ba);
+   }
+
 
   QString ts = "p";
 

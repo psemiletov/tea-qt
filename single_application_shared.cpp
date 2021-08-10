@@ -73,7 +73,6 @@ bool CSingleApplicationShared::sendMessage (const QString &message)
   if (isMasterApp())
      return false;
 
-
   QByteArray byteArray;
     
   byteArray.append (char(message.size()));

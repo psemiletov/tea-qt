@@ -563,13 +563,13 @@ void CTEA::receiveMessageShared (const QStringList &msg)
       {
        QFileInfo f (msg.at(i));
 
-      if (! f.isAbsolute())
-         {
-          QString fullname (QDir::currentPath());
-          fullname.append ("/").append (msg.at(i));
-          documents->open_file (fullname, charset);
-         }
-     else
+       if (! f.isAbsolute())
+          {
+           QString fullname (QDir::currentPath());
+           fullname.append ("/").append (msg.at(i));
+           documents->open_file (fullname, charset);
+          }
+      else
           documents->open_file (msg.at(i), charset);
     }
 
@@ -2303,7 +2303,7 @@ void CTEA::mrkup_antispam_email()
   QString result;
 
   for (int i = 0; i < s.size(); i++)
-      result = "&#" + QString::number (s.at (i).unicode()) + ";";
+      result = result + "&#" + QString::number (s.at (i).unicode()) + ";";
 
   d->put (result);
 }

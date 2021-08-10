@@ -54,7 +54,12 @@ int main (int argc, char *argv[])
      if (strcmp(argv[1], "--m") == 0)
         single_mode = false;
 
+  //QStringList l = qApp->arguments();
+//  int size = l.size();
+  //if (size < 2)
+    // return;
 
+/*
   if (single_mode && app.alreadyExists())
      {
       if (argc > 1)
@@ -65,7 +70,19 @@ int main (int argc, char *argv[])
              
       return 0;
      }
-    
+  */
+
+  if (single_mode && app.alreadyExists())
+     {
+      if (argc > 1)
+         for (int i = 1; i < argc; i++)
+             {
+              app.sendMessage (QString (argv[i]));
+             }
+
+      return 0;
+     }
+
 #endif
     
 

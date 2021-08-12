@@ -22,7 +22,7 @@ https://api.kde.org/frameworks/syntax-highlighting/html/index.html
 
 OS/2::File manager, double click on folders work with the right double click only
 
-shift-up/dn для выделения в ФП не работает, и никогда не работала
+shift-up/dn для выделения в ФП не работает, и никогда не работало
 cmake dist creates wrong tarball that cannot be build with meson
 
 JAMSpell support? (https://github.com/bakwc/JamSpell)

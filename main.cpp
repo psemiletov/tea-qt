@@ -47,11 +47,10 @@ int main (int argc, char *argv[])
 
   CSingleApplicationShared app (argc, argv, "tea unique id 1977");
  
-
   bool single_mode = true;
  
   if (argc > 1)
-     if (strcmp(argv[1], "--m") == 0)
+     if (strcmp (argv[1], "--m") == 0)
         single_mode = false;
 
   //QStringList l = qApp->arguments();
@@ -89,7 +88,7 @@ int main (int argc, char *argv[])
   main_window = new CTEA();
 
 #if !defined (NO_SINGLE_APP)
- QObject::connect(&app, SIGNAL(messageAvailable(QStringList)), main_window, SLOT(receiveMessageShared(QStringList)));
+ QObject::connect (&app, SIGNAL(messageAvailable(QStringList)), main_window, SLOT(receiveMessageShared(QStringList)));
 #endif
    
   main_window->show();

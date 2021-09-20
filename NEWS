@@ -1,11 +1,11 @@
 ====NEWS ABOUT TEA====
-TEA 60.5.0, August 2021
+TEA 60.5.1, September 2021
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   This release fixes many things. The Single application mode fixed forever! DJVU support and poppler-qt6 detected by cmake properly.
-   Also, FB2 reader has been improved a lot - TEA now becomes a very fast FB2-reader without image support.
+   FB2.ZIP, FBZ has been added.
+   If you install TEA from AUR, please note that TEA binary is renamed in AUR packages from "tea" to "tea-qt" due to conflict with another program package at the official Arch repo. 
 
    Stay tuned.
    Peter Semiletov

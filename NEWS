@@ -1,11 +1,10 @@
 ====NEWS ABOUT TEA====
-TEA 60.5.1, September 2021
+TEA 60.6.0, October 2021
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   FB2.ZIP, FBZ has been added.
-   If you install TEA from AUR, please note that TEA binary is renamed in AUR packages from "tea" to "tea-qt" due to conflict with another program package at the official Arch repo. 
+    + Spanish UI translation by Luis Montgomery.
 
    Stay tuned.
    Peter Semiletov

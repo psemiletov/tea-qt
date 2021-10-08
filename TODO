@@ -1,3 +1,5 @@
+* некоторые темы оформления в Win32 глючат - см. цвета корешков табов
+
 make single application with Dbus?
 
 опять single app не пашет при открытии файлов из thunar 

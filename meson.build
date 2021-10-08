@@ -1,9 +1,9 @@
 project('tea', ['cpp','c'],
          default_options : ['cpp_std=c++11'],
-         version : '60.5.1',
+         version : '60.6.0',
          license : 'GPLv3')
 
-add_global_arguments('-DVERSION_NUMBER="60.5.1"', language : 'cpp')
+add_global_arguments('-DVERSION_NUMBER="60.6.0"', language : 'cpp')
 add_global_arguments('-DNOCRYPT="1"', language : 'cpp')
 add_global_arguments('-DNOUNCRYPT="1"', language : 'cpp')
 add_global_arguments('-DQUAZIP_STATIC="1"', language : 'cpp')

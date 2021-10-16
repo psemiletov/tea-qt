@@ -1,4 +1,4 @@
-* некоторые темы оформления в Win32 глючат - см. цвета корешков табов
+* темы оформления в Win32 глючат при стиле интерфейса Windows XP
 
 make single application with Dbus?
 
@@ -66,7 +66,6 @@ parse the compiler output, goto the error by clicking at logmemo
 0-9 markers
 goto start/end of the code block
 PalmDOC (pdb) read-only support? http://wiki.mobileread.com/wiki/PalmDOC, http://www.hotpaw.com/rhn/palm/pdb.txt
-epub support
 gz file save?
 select code block
 

@@ -53,6 +53,7 @@ code from qwriter:
 #include <QXmlStreamReader>
 #include <QMimeData>
 #include <QFile>
+#include <QMessageBox>
 
 #include <QTimer>
 
@@ -883,9 +884,11 @@ CDocument::~CDocument()
          if (QMessageBox::warning (0, "TEA",
                                    tr ("%1 has been modified.\n"
                                        "Do you want to save your changes?").arg (file_name),
-                                       QMessageBox::Yes | QMessageBox::Default,
-                                       QMessageBox::No | QMessageBox::Escape) == QMessageBox::Yes)
+                                       QMessageBox::Yes,
+                                       QMessageBox::No) == QMessageBox::Yes)
             file_save_with_name (file_name, charset);
+
+
 
   if (! file_name.startsWith (holder->dir_config) && ! file_name.endsWith (".notes"))
      {
@@ -1997,8 +2000,6 @@ CDox::CDox()
          timer_joystick.start();
      }
 #endif
-
-
 }
 
 

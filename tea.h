@@ -228,6 +228,7 @@ Variables
   QString dir_templates;
   QString dir_sessions;
   QString dir_hls;
+  QString dir_keyboards;
   QString dir_themes;
   QString dir_snippets;
   QString dir_scripts;
@@ -277,6 +278,7 @@ Main menu items
   QMenu *menu_fn_sessions;
   QMenu *menu_fn_scripts;
   QMenu *menu_view_themes;
+  QMenu *menu_view_keyboards;
   QMenu *menu_markup;
   QMenu *menu_functions;
   QMenu *menu_functions_case;
@@ -511,6 +513,8 @@ public:
   void update_bookmarks();
   void update_templates();
   void update_snippets();
+  void update_keyboards();
+
   void update_sessions();
   void update_palettes();
   void update_labels_menu();
@@ -546,7 +550,9 @@ Application misc. methods
   void load_palette (const QString &fileName);
   void fman_convert_images (bool by_side, int value);
   QTextDocument::FindFlags get_search_options();
-  Q_INVOKABLE QString fif_get_text();
+  QString fif_get_text();
+
+  QWidget* create_keyboard (const QString &fname);
 
   QAction* add_to_menu (QMenu *menu,
                         const QString &caption,
@@ -864,7 +870,6 @@ Run menu callbacks
 */
 
 
-
 /*
 ===================
 IDE menu callbacks
@@ -931,6 +936,7 @@ View menu callbacks
   void view_use_palette();
   void view_use_profile();
   void view_profile_save_as();
+  void view_use_keyboard();
   void view_toggle_wrap();
   void view_hide_error_marks();
   void view_toggle_fs();
@@ -966,6 +972,7 @@ Misc callbacks
   void calendar_activated (const QDate &date);
   void calendar_currentPageChanged (int year, int month);
   void process_readyReadStandardOutput();
+  void virt_keyb_clicked();
 
 /*
 ====================

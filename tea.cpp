@@ -894,8 +894,8 @@ void CTEA::cb_button_saves_as()
                                tr ("%1 already exists\n"
                                "Do you want to overwrite?")
                                .arg (filename),
-                               QMessageBox::Yes | QMessageBox::Default,
-                               QMessageBox::Cancel | QMessageBox::Escape) == QMessageBox::Cancel)
+                               QMessageBox::Yes,
+                               QMessageBox::Cancel) == QMessageBox::Cancel)
          return;
 
 
@@ -1440,8 +1440,8 @@ bool CTEA::file_save_as()
                                           tr ("%1 already exists\n"
                                           "Do you want to overwrite?")
                                            .arg (fileName),
-                                          QMessageBox::Yes | QMessageBox::Default,
-                                          QMessageBox::Cancel | QMessageBox::Escape);
+                                          QMessageBox::Yes,
+                                          QMessageBox::Cancel);
 
           if (ret == QMessageBox::Cancel)
              return false;
@@ -3135,6 +3135,19 @@ void CTEA::fn_use_snippet()
      s = s.replace ("%s", d->get());
 
   d->put (s);
+}
+
+
+void CTEA::view_use_keyboard()
+{
+  last_action = sender();
+
+  QAction *a = qobject_cast<QAction *>(sender());
+  QString fname = a->data().toString();
+
+  QWidget *w = create_keyboard (fname);
+  if (w)
+     w->show();
 }
 
 
@@ -5412,8 +5425,8 @@ void CTEA::fman_fileop_delete()
   if (QMessageBox::warning (this, "TEA",
                             tr ("Are you sure to delete\n"
                             "%1?").arg (fname),
-                            QMessageBox::Yes | QMessageBox::Default,
-                            QMessageBox::No | QMessageBox::Escape) == QMessageBox::No)
+                            QMessageBox::Yes,
+                            QMessageBox::No) == QMessageBox::No)
       return;
 
   QFile::remove (fname);
@@ -6132,6 +6145,7 @@ CTEA::CTEA()
   update_programs();
   update_palettes();
   update_themes();
+  update_keyboards();
   update_charsets();
   update_profiles();
   create_markup_hash();
@@ -6386,6 +6400,14 @@ void CTEA::create_paths()
   dr.setPath (dir_sessions);
   if (! dr.exists())
      dr.mkpath (dir_sessions);
+
+
+  dir_keyboards = dir_config + "/keyboards";
+
+  dr.setPath (dir_keyboards);
+  if (! dr.exists())
+     dr.mkpath (dir_keyboards);
+
 
   dir_themes = dir_config + "/themes";
 
@@ -7264,6 +7286,10 @@ View menu
 
   menu_view_palettes = menu_view->addMenu (tr ("Palettes"));
   menu_view_palettes->setTearOffEnabled (true);
+
+  menu_view_keyboards = menu_view->addMenu (tr ("Keyboards"));
+  menu_view_keyboards->setTearOffEnabled (true);
+
 
   //menu_view_hl = menu_view->addMenu (tr ("Highlighting mode"));
   //menu_view_hl->setTearOffEnabled (true);
@@ -8418,6 +8444,7 @@ void CTEA::update_dyn_menus()
 {
   update_templates();
   update_snippets();
+  update_keyboards();
   update_scripts();
   update_palettes();
   update_themes();
@@ -8468,6 +8495,20 @@ void CTEA::update_snippets()
                          menu_fn_snippets,
                          dir_snippets,
                          SLOT (fn_use_snippet())
+                        );
+}
+
+
+void CTEA::update_keyboards()
+{
+  qDebug() << "update_keyboards()";
+  qDebug() << dir_keyboards;
+
+   menu_view_keyboards->clear();
+   create_menu_from_dir (this,
+                         menu_view_keyboards,
+                         dir_keyboards,
+                         SLOT (view_use_keyboard())
                         );
 }
 
@@ -8966,6 +9007,19 @@ void CTEA::process_readyReadStandardOutput()
 }
 
 
+void CTEA::virt_keyb_clicked()
+{
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QPushButton* bsender = qobject_cast<QPushButton*>(sender());
+  QString t = bsender->text();
+
+  d->insertPlainText (t);
+}
+
+
 /*
 ===========================
 Application misc. methods
@@ -9251,6 +9305,49 @@ QString CTEA::fif_get_text()
 
   return t;
 }
+
+
+QWidget* CTEA::create_keyboard (const QString &fname)
+{
+  if (! file_exists (fname))
+     return 0;
+
+  QStringList l = qstring_load (fname).split ("\n");
+  if (l.size() == 0)
+     return 0;
+
+  QWidget *w = new QWidget;
+
+  QFileInfo fi (fname);
+
+  w->setWindowTitle (fi.fileName());
+
+  Qt::WindowFlags flags;
+  flags = Qt::Window | Qt::Tool | Qt::WindowStaysOnTopHint;
+
+  w->setWindowFlags (flags);
+
+  QVBoxLayout *lv = new QVBoxLayout;
+  w->setLayout (lv);
+
+  for (int y = 0; y< l.size(); y++)
+      {
+       QStringList row = l[y].split ("|");
+       QHBoxLayout *lh = new QHBoxLayout;
+       lv->addLayout (lh);
+
+       for (int x = 0; x < row.size(); x++)
+           {
+            QPushButton *b = new QPushButton;
+            connect (b, SIGNAL(clicked()), this, SLOT(virt_keyb_clicked()));
+            b->setText (row[x]);
+            lh->addWidget (b);
+           }
+      }
+
+  return w;
+}
+
 
 
 QAction* CTEA::add_to_menu (QMenu *menu,

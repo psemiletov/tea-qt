@@ -167,7 +167,7 @@ QuaZipFile::QuaZipFile(QuaZip *zip, QObject *parent):
 QuaZipFile::~QuaZipFile()
 {
   if (isOpen())
-    close();
+    QuaZipFile::close();
   delete p;
 }
 

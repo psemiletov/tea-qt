@@ -115,7 +115,7 @@ void CFMan::nav (const QString &path)
        add_entry (lst.at(i));
 
   setModel (mymodel);
-  connect (selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)), this, SLOT(fman_currentChanged (QModelIndex,QModelIndex)));
+  connect (selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(fman_currentChanged(QModelIndex,QModelIndex)));
   emit dir_changed (p);
 }
 
@@ -257,7 +257,7 @@ CFMan::CFMan (QWidget *parent): QTreeView (parent)
   header()->setSortIndicator (sort_mode, sort_order);
   header()->setSortIndicatorShown (true);
 
-  connect (header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(header_view_sortIndicatorChanged(int, Qt::SortOrder)));
+  connect (header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(header_view_sortIndicatorChanged(int,Qt::SortOrder)));
 
   header()->setStretchLastSection (false);
 

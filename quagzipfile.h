@@ -83,7 +83,7 @@ public:
     \param mode Can be either QIODevice::Write or QIODevice::Read.
     ReadWrite and Append aren't supported.
     */
-  virtual bool open(QIODevice::OpenMode mode);
+ /* virtual*/ bool open(QIODevice::OpenMode mode);
   /// Opens the file.
   /**
     \overload
@@ -91,7 +91,7 @@ public:
     \param mode Can be either QIODevice::Write or QIODevice::Read.
     ReadWrite and Append aren't supported.
     */
-  virtual bool open(int fd, QIODevice::OpenMode mode);
+  /*virtual*/ bool open(int fd, QIODevice::OpenMode mode);
   /// Flushes data to file.
   /**
     The data is written using Z_SYNC_FLUSH mode. Doesn't make any sense
@@ -99,12 +99,12 @@ public:
     */
   virtual bool flush();
   /// Closes the file.
-  virtual void close();
+  /*virtual*/ void close();
 protected:
   /// Implementation of QIODevice::readData().
-  virtual qint64 readData(char *data, qint64 maxSize);
+  /*virtual*/ qint64 readData(char *data, qint64 maxSize);
   /// Implementation of QIODevice::writeData().
-  virtual qint64 writeData(const char *data, qint64 maxSize);
+  /*virtual*/ qint64 writeData(const char *data, qint64 maxSize);
 private:
     // not implemented by design to disable copy
     QuaGzipFile(const QuaGzipFile &that);

@@ -26,6 +26,8 @@ started at 08 November 2007
 #include <algorithm>
 #include <iostream>
 #include <stdlib.h>
+#include <cstdlib>
+
 
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
@@ -1231,7 +1233,10 @@ void CTEA::file_open_at_cursor()
          {
           QString command = settings->value ("img_viewer_override_command", "display %s").toString();
           command = command.replace ("%s", fname);
-          QProcess::startDetached (command, QStringList());
+          //QProcess::startDetached (command, QStringList());
+
+          system (command.toUtf8().data());
+
           return;
          }
       else
@@ -1567,8 +1572,8 @@ void CTEA::file_reload_enc()
   else
       w->list->addItems (sl_charsets);
 
-  connect (w->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)),
-           this, SLOT(file_reload_enc_itemDoubleClicked ( QListWidgetItem *)));
+  connect (w->list, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+           this, SLOT(file_reload_enc_itemDoubleClicked(QListWidgetItem*)));
 
   w->show();
 }
@@ -2842,8 +2847,8 @@ void CTEA::search_in_files()
 
   w->list->addItems (lresult);
 
-  connect (w->list, SIGNAL(itemDoubleClicked ( QListWidgetItem *)),
-           this, SLOT(search_in_files_results_dclicked ( QListWidgetItem *)));
+  connect (w->list, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+           this, SLOT(search_in_files_results_dclicked(QListWidgetItem*)));
 
   w->resize (width() - 10, (int) height() / 2);
   w->show();
@@ -3200,9 +3205,16 @@ void CTEA::fn_run_script()
                              fname_tempparamfile);
 
   QProcess *process = new QProcess (this);
-  connect(process, SIGNAL(finished ( int, QProcess::ExitStatus )), this, SLOT(cb_script_finished (int, QProcess::ExitStatus )));
+  connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(cb_script_finished(int,QProcess::ExitStatus)));
 
-  process->start (command, QStringList());
+  //process->start (command, QStringList());
+
+#if QT_VERSION >= 0x060000
+  process->startCommand (command);
+#else
+  process->startCommand (command);
+#endif
+
 }
 
 
@@ -5012,7 +5024,14 @@ void CTEA::ide_run()
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
   process->setProcessChannelMode (QProcess::MergedChannels) ;
 
-  process->start (command_run, QStringList());
+
+#if QT_VERSION >= 0x060000
+  process->startCommand (command_run);
+#else
+  process->startCommand (command_run);
+#endif
+
+  //process->start (command_run, QStringList());
 }
 
 
@@ -5041,7 +5060,13 @@ void CTEA::ide_build()
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
 
   process->setProcessChannelMode (QProcess::MergedChannels) ;
-  process->start (command_build, QStringList());
+ // process->start (command_build, QStringList());
+
+#if QT_VERSION >= 0x060000
+  process->startCommand (command_build);
+#else
+  process->startCommand (command_build);
+#endif
 }
 
 
@@ -5071,7 +5096,14 @@ void CTEA::ide_clean()
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
 
   process->setProcessChannelMode (QProcess::MergedChannels) ;
-  process->start (command_clean, QStringList());
+ // process->start (command_clean, QStringList());
+
+#if QT_VERSION >= 0x060000
+  process->startCommand (command_clean);
+#else
+  process->startCommand (command_clean);
+#endif
+
 }
 
 
@@ -6510,8 +6542,7 @@ void CTEA::create_main_widget_splitter()
 
   log = new CLogMemo;
 
-  connect (log, SIGNAL(double_click (QString)),
-           this, SLOT(logmemo_double_click (QString)));
+  connect (log, SIGNAL(double_click(QString)), this, SLOT(logmemo_double_click(QString)));
 
   mainSplitter = new QSplitter (Qt::Vertical);
   v_box->addWidget (mainSplitter);
@@ -6616,8 +6647,7 @@ void CTEA::create_main_widget_docked()
 
   log = new CLogMemo (dock_logmemo);
 
-  connect (log, SIGNAL(double_click (QString)),
-           this, SLOT(logmemo_double_click (QString)));
+  connect (log, SIGNAL(double_click(QString)), this, SLOT(logmemo_double_click(QString)));
 
   dock_logmemo->setWidget (log);
   dock_logmemo->setObjectName ("dock_log");
@@ -7385,8 +7415,8 @@ OPTIONS::INTERFACE
                              settings->value ("ui_style", default_style).toString());
 
 
-  connect (cmb_styles, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(slot_style_currentIndexChanged (int)));
+  connect (cmb_styles, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(slot_style_currentIndexChanged(int)));
 
 
   QPushButton *bt_font_interface = new QPushButton (tr ("Interface font"), this);
@@ -7417,8 +7447,8 @@ OPTIONS::INTERFACE
                                                sl_tabs_align,
                                                ui_tab_align);
 
-  connect (cmb_ui_tabs_align, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_ui_tabs_currentIndexChanged (int)));
+  connect (cmb_ui_tabs_align, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(cmb_ui_tabs_currentIndexChanged(int)));
 
   int docs_tab_align = settings->value ("docs_tabs_align", "0").toInt();
   tab_editor->setTabPosition (int_to_tabpos (docs_tab_align));
@@ -7429,8 +7459,8 @@ OPTIONS::INTERFACE
                                                  sl_tabs_align,
                                                  docs_tab_align);
 
-  connect (cmb_docs_tabs_align, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_docs_tabs_currentIndexChanged (int)));
+  connect (cmb_docs_tabs_align, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(cmb_docs_tabs_currentIndexChanged(int)));
 
 
   QStringList sl_icon_sizes;
@@ -7441,8 +7471,8 @@ OPTIONS::INTERFACE
                                 sl_icon_sizes,
                                 settings->value ("icon_size", "32").toString());
 
-  connect (cmb_icon_size, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_icon_sizes_currentIndexChanged (int)));
+  connect (cmb_icon_size, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(cmb_icon_sizes_currentIndexChanged(int)));
 
   QStringList sl_tea_icons;
   sl_tea_icons.append ("1");
@@ -7454,8 +7484,8 @@ OPTIONS::INTERFACE
                                 sl_tea_icons,
                                 settings->value ("icon_fname", "1").toString());
 
-  connect (cmb_tea_icons, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_tea_icons_currentIndexChanged (int)));
+  connect (cmb_tea_icons, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(cmb_tea_icons_currentIndexChanged(int)));
 
   cb_fif_at_toolbar = new QCheckBox (tr ("FIF at the top (restart needed)"), tab_options);
   cb_fif_at_toolbar->setChecked (settings->value ("fif_at_toolbar", "0").toBool());
@@ -7552,8 +7582,8 @@ OPTIONS::COMMON
   cb_altmenu = new QCheckBox (tr ("Use Alt key to access main menu"), tab_options);
   cb_altmenu->setChecked (MyProxyStyle::b_altmenu);
 
-  connect (cb_altmenu, SIGNAL(stateChanged (int)),
-           this, SLOT(cb_altmenu_stateChanged (int)));
+  connect (cb_altmenu, SIGNAL(stateChanged(int)),
+           this, SLOT(cb_altmenu_stateChanged(int)));
 
   cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
   cb_wasd->setChecked (settings->value ("wasd", "0").toBool());
@@ -7563,8 +7593,7 @@ OPTIONS::COMMON
 
   cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
   cb_use_joystick->setChecked (settings->value ("use_joystick", "0").toBool());
-  connect (cb_use_joystick, SIGNAL(stateChanged (int)),
-           this, SLOT(cb_use_joystick_stateChanged (int)));
+  connect (cb_use_joystick, SIGNAL(stateChanged(int)), this, SLOT(cb_use_joystick_stateChanged(int)));
 #endif
 
   cb_auto_img_preview = new QCheckBox (tr ("Automatic preview images at file manager"), tab_options);
@@ -7784,8 +7813,8 @@ OPTIONS::FUNCTIONS
 
 #endif
 
-  connect (cmb_spellcheckers, SIGNAL(currentIndexChanged (int)),
-           this, SLOT(cmb_spellchecker_currentIndexChanged (int)));
+  connect (cmb_spellcheckers, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(cmb_spellchecker_currentIndexChanged(int)));
 
   page_functions_layout->addWidget (gb_spell);
 
@@ -7902,8 +7931,8 @@ OPTIONS::KEYBOARD
 
   lt_vkeys->addWidget (lv_menuitems);
 
-  connect (lv_menuitems, SIGNAL(currentItemChanged (QListWidgetItem *, QListWidgetItem *)),
-           this, SLOT(slot_lv_menuitems_currentItemChanged (QListWidgetItem *, QListWidgetItem *)));
+  connect (lv_menuitems, SIGNAL(currentItemChanged (QListWidgetItem*,QListWidgetItem*)),
+           this, SLOT(slot_lv_menuitems_currentItemChanged(QListWidgetItem*,QListWidgetItem*)));
 
   ent_shtcut = new CShortcutEntry;
   QLabel *l_shortcut = new QLabel (tr ("Shortcut"));
@@ -7947,9 +7976,9 @@ void CTEA::create_calendar()
   else
       calendar->setFirstDayOfWeek (Qt::Monday);
 
-  connect (calendar, SIGNAL(clicked (QDate)), this, SLOT(calendar_clicked (QDate)));
-  connect (calendar, SIGNAL(activated (QDate)), this, SLOT(calendar_activated (QDate)));
-  connect (calendar, SIGNAL(currentPageChanged (int, int)), this, SLOT(calendar_currentPageChanged (int, int)));
+  connect (calendar, SIGNAL(clicked(QDate)), this, SLOT(calendar_clicked(QDate)));
+  connect (calendar, SIGNAL(activated(QDate)), this, SLOT(calendar_activated(QDate)));
+  connect (calendar, SIGNAL(currentPageChanged(int,int)), this, SLOT(calendar_currentPageChanged(int,int)));
 
   idx_tab_calendar = main_tab_widget->addTab (calendar, tr ("dates"));
 }
@@ -8160,9 +8189,9 @@ void CTEA::create_fman()
 
   fman = new CFMan;
 
-  connect (fman, SIGNAL(file_activated (QString)), this, SLOT(fman_file_activated (QString)));
-  connect (fman, SIGNAL(dir_changed  (QString)), this, SLOT(fman_dir_changed  (QString)));
-  connect (fman, SIGNAL(current_file_changed  (QString, QString)), this, SLOT(fman_current_file_changed  (QString, QString)));
+  connect (fman, SIGNAL(file_activated(QString)), this, SLOT(fman_file_activated(QString)));
+  connect (fman, SIGNAL(dir_changed(QString)), this, SLOT(fman_dir_changed(QString)));
+  connect (fman, SIGNAL(current_file_changed(QString,QString)), this, SLOT(fman_current_file_changed(QString,QString)));
 
   connect (act_fman_refresh, SIGNAL(triggered()), fman, SLOT(refresh()));
 
@@ -8199,7 +8228,7 @@ void CTEA::create_fman()
   //lv_places->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOn);
 
   update_places_bookmarks();
-  connect (lv_places, SIGNAL(itemActivated (QListWidgetItem *)), this, SLOT(fman_places_itemActivated (QListWidgetItem *)));
+  connect (lv_places, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(fman_places_itemActivated(QListWidgetItem*)));
 
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->addLayout (lah_places_bar);
@@ -8849,9 +8878,18 @@ void CTEA::run_program()
   connect (process, SIGNAL(readyReadStandardOutput()), this, SLOT(process_readyReadStandardOutput()));
   process->setProcessChannelMode (QProcess::MergedChannels) ;
 
-  process->start (command, QStringList());
-}
 
+#if QT_VERSION >= 0x060000
+  process->startCommand (command);
+#else
+  process->startCommand (command);
+#endif
+
+//  process->start (command, QStringList());
+
+
+//system (command.toUtf8().data());
+}
 
 void CTEA::guess_enc()
 {

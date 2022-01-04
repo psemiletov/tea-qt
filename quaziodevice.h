@@ -71,31 +71,34 @@ public:
     pointer is not zero.
     */
   virtual bool flush();
+
   /// Opens the device.
   /**
     \param mode Neither QIODevice::ReadWrite nor QIODevice::Append are
     not supported.
     */
-  virtual bool open(QIODevice::OpenMode mode);
+ /* virtual*/ bool open(QIODevice::OpenMode mode);
+
+
   /// Closes this device, but not the underlying one.
   /**
     The underlying QIODevice is not closed in case you want to write
     something else to it.
     */
-  virtual void close();
+  /*virtual */void close();
   /// Returns the underlying device.
   QIODevice *getIoDevice() const;
   /// Returns true.
-  virtual bool isSequential() const;
+ /* virtual*/ bool isSequential() const;
   /// Returns true iff the end of the compressed stream is reached.
-  virtual bool atEnd() const;
+/*  virtual */bool atEnd() const;
   /// Returns the number of the bytes buffered.
-  virtual qint64 bytesAvailable() const;
+/*  virtual */qint64 bytesAvailable() const;
 protected:
   /// Implementation of QIODevice::readData().
-  virtual qint64 readData(char *data, qint64 maxSize);
+ /* virtual */qint64 readData(char *data, qint64 maxSize);
   /// Implementation of QIODevice::writeData().
-  virtual qint64 writeData(const char *data, qint64 maxSize);
+ /* virtual */qint64 writeData(const char *data, qint64 maxSize);
 private:
   QuaZIODevicePrivate *d;
 };

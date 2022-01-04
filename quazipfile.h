@@ -366,7 +366,7 @@ class QuaZipFile: public QIODevice {
      * Error code returned by getZipError() is not affected by this
      * function call.
      **/
-    virtual qint64 pos()const;
+  /*  virtual */qint64 pos()const;
     /// Returns \c true if the end of file was reached.
     /** This function returns \c false in the case of error. This means
      * that you called this function on either not open file, or a file
@@ -384,7 +384,7 @@ class QuaZipFile: public QIODevice {
      * Error code returned by getZipError() is not affected by this
      * function call.
      **/
-    virtual bool atEnd()const;
+   /* virtual */bool atEnd()const;
     /// Returns file size.
     /** This function returns csize() if the file is open for reading in
      * raw mode, usize() if it is open for reading in normal mode and
@@ -446,7 +446,7 @@ class QuaZipFile: public QIODevice {
     /// Closes the file.
     /** Call getZipError() to determine if the close was successful.
      **/
-    virtual void close();
+    /*virtual */void close();
     /// Returns the error code returned by the last ZIP/UNZIP API call.
     int getZipError() const;
     /// Returns the number of bytes available for reading.

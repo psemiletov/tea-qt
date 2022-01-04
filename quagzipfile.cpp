@@ -102,9 +102,15 @@ d(new QuaGzipFilePrivate(fileName))
 
 QuaGzipFile::~QuaGzipFile()
 {
-  if (isOpen()) {
-    close();
-  }
+  if (isOpen())
+    // close();
+    {
+      QIODevice::close();
+    gzclose(d->gzd);
+    };
+
+
+
   delete d;
 }
 

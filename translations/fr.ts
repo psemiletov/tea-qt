@@ -1838,6 +1838,10 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Keyboards</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CTioReadOnly</name>

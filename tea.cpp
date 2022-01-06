@@ -3212,7 +3212,7 @@ void CTEA::fn_run_script()
 #if QT_VERSION >= 0x060000
   process->startCommand (command);
 #else
-  process->startCommand (command);
+  process->start (command);
 #endif
 
 }
@@ -5028,7 +5028,7 @@ void CTEA::ide_run()
 #if QT_VERSION >= 0x060000
   process->startCommand (command_run);
 #else
-  process->startCommand (command_run);
+  process->start (command_run);
 #endif
 
   //process->start (command_run, QStringList());
@@ -5065,7 +5065,7 @@ void CTEA::ide_build()
 #if QT_VERSION >= 0x060000
   process->startCommand (command_build);
 #else
-  process->startCommand (command_build);
+  process->start (command_build);
 #endif
 }
 
@@ -5101,7 +5101,7 @@ void CTEA::ide_clean()
 #if QT_VERSION >= 0x060000
   process->startCommand (command_clean);
 #else
-  process->startCommand (command_clean);
+  process->start (command_clean);
 #endif
 
 }
@@ -8882,7 +8882,7 @@ void CTEA::run_program()
 #if QT_VERSION >= 0x060000
   process->startCommand (command);
 #else
-  process->startCommand (command);
+  process->start (command);
 #endif
 
 //  process->start (command, QStringList());

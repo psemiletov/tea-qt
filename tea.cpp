@@ -1,8 +1,8 @@
 /***************************************************************************
- *   2007-2021 by Peter Semiletov                                          *
+ *   2000-2022 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
 
-started at 08 November 2007
+C++/Qt branch started at 08 November 2007
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

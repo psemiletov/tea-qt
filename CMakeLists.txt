@@ -35,7 +35,7 @@ add_definitions(${Qt${QT_VERSION_MAJOR}Widgets_COMPILE_DEFINITIONS})
 
 
 set(PROJECT "tea-qt")
-project ($PROJECT VERSION 60.6.0 LANGUAGES CXX C)
+project ($PROJECT VERSION 60.7.0 LANGUAGES CXX C)
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 add_definitions(-DNOCRYPT=1)
 add_definitions(-DNOUNCRYPT=1)
@@ -252,4 +252,3 @@ install (FILES ${tea_ICONPNG64} DESTINATION share/icons/hicolor/64x64/apps)
 install (FILES ${tea_ICONPNG128} DESTINATION share/icons/hicolor/128x128/apps)
 
 install (FILES ${tea_DESKTOP} DESTINATION share/applications)
-

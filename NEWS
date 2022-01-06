@@ -1,10 +1,13 @@
 ====NEWS ABOUT TEA====
-TEA 60.6.0, October 2021
+TEA 60.7.0, January 2022
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-    + Spanish UI translation by Luis Montgomery.
+   Hello world!
+   This version fixed all stuff related to external processes when TEA is compiled against Qt6.
+   Some bundled Quazip fixes has been made. 
+   Also TEA features user-defined virtual keyboards for quick mouse-type letters or whole words. See the Manual about "Keyboards", and the "View" menu.
 
    Stay tuned.
    Peter Semiletov

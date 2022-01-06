@@ -1,7 +1,7 @@
-VERSION = 60.6.0
+VERSION = 60.7.0
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"60.6.0"\''
+DEFINES += 'VERSION_NUMBER=\'"60.7.0"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -415,7 +415,6 @@ system(pkg-config --exists ddjvuapi) {
             DEFINES += DJVU_ENABLE
         }
 }
-
 
 }
 

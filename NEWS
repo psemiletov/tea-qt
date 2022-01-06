@@ -5,7 +5,7 @@ http://tea.ourproject.org
 ---------------------------------------------------
 
    Hello world!
-   This version fixed all stuff related to external processes when TEA is compiled against Qt6.
+   This version fixes all stuff related to external processes when TEA is compiled against Qt6.
    Some bundled Quazip fixes has been made. 
    Also TEA features user-defined virtual keyboards for quick mouse-type letters or whole words. See the Manual about "Keyboards", and the "View" menu.
 

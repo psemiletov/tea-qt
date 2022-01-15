@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2021 by Peter Semiletov                                          *
+ *   2007-2022 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -2381,8 +2381,8 @@ void CDox::open_recent()
      return;
 
   CDocument *d = open_file_triplex (recent_files[i]);
-  dir_last = get_file_path (d->file_name);
-
+  if (d)
+      dir_last = get_file_path (d->file_name);
 
   update_recent_menu();
 }

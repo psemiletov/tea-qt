@@ -333,9 +333,8 @@ Do you want to overwrite?</source>
         <translation>Перечитать в кодировке</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6288"/>
         <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</source>
-        <translation>&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова | tea.ourproject.org&lt;br&gt;Поддержать TEA на www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</translation>
+        <translation type="vanished">&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова | tea.ourproject.org&lt;br&gt;Поддержать TEA на www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="6832"/>
@@ -1058,6 +1057,11 @@ Do you want to overwrite?</source>
         <location filename="../tea.cpp" line="7136"/>
         <source>Remove trailing spaces</source>
         <translation>Удалить хвостовые пробелы</translation>
+    </message>
+    <message>
+        <location filename="../tea.cpp" line="6288"/>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA via PayPal: peter.semiletov@gmail.com&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</source>
+        <translation>&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова | tea.ourproject.org&lt;br&gt;Поддержать TEA через PayPal: peter.semiletov@gmail.com&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="7139"/>

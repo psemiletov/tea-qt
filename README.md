@@ -13,6 +13,7 @@ My hot AUR package > https://aur.archlinux.org/packages/tea-qt-git/
 
 Donate > 
 
+PayPal: peter.semiletov@gmail.com
 BTC: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
 
 Or Patreon: https://www.patreon.com/semiletov

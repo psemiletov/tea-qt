@@ -1063,11 +1063,6 @@ Chcesz nadpisać?</translation>
         <translation>Usuń końcowe spacje</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6288"/>
-        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA on www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../tea.cpp" line="7139"/>
         <source>Escape regexp</source>
         <translation>Uciekaj przed znakami specjalnymi (Escape regexp)</translation>
@@ -1522,6 +1517,11 @@ Chcesz nadpisać?</translation>
         <location filename="../tea.cpp" line="4547"/>
         <source>does not</source>
         <translation>nie pasuje</translation>
+    </message>
+    <message>
+        <location filename="../tea.cpp" line="6288"/>
+        <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA via PayPal: peter.semiletov@gmail.com&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="6836"/>

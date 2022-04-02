@@ -9,7 +9,7 @@ make single application with Dbus?
 Add VIM color themes
 Example: https://github.com/benbusby/vim-earthbound-themes/blob/76f4b4f5678307947f9f5ce5c90b61e35ce76d9e/colors/cave-of-the-past.vim
 
-add Qt6 to Meson
+add Qt6 to Meson or drop Meson support at all?
 
 show empty spaces (at EOL? for Markdown)
 

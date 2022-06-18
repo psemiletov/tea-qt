@@ -152,12 +152,12 @@ QString file_get_ext (const QString &file_name)
   if (file_name.isEmpty())
       return QString();
 
-/*  int i = file_name.lastIndexOf (".");
+ /* int i = file_name.lastIndexOf (".");
   if (i == -1)
       return QString();
 
-  return file_name.mid (i + 1).toLower();*/
-
+  return file_name.mid (i + 1).toLower();
+*/
   QFileInfo fi (file_name);
   return fi.completeSuffix();
 }

@@ -134,6 +134,8 @@ public:
 
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
   void load_from_xml (const QString &fname);
+  void load_from_xml_pugi (const QString &fname);
+
 };
 #endif
 

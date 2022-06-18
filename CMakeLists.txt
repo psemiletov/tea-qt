@@ -90,7 +90,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt${QT_VERSION_MAJOR}Widgets_EXECUTABL
 
 
 file(GLOB tea_SRCS "*.c" "*.cpp")
-file(GLOB tea_HEADERS "*.h")
+file(GLOB tea_HEADERS "*.h" ".*hpp")
 
 
 set(tea_ICONPNG32

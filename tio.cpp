@@ -103,8 +103,99 @@ with qmake - Qt4/Qt5 poppler
 #include "tzipper.h"
 #include "textproc.h"
 
+#include "pugixml.hpp"
 
 using namespace std;
+
+
+
+class CXML_walker: public pugi::xml_tree_walker
+{
+public:
+
+  QString *text;
+  QStringList paragraphs;
+
+  bool begin (pugi::xml_node &node);
+  bool end (pugi::xml_node &node);
+  bool for_each (pugi::xml_node& node);
+};
+
+
+bool CXML_walker::begin (pugi::xml_node &node)
+{
+ // std::cout << "begin node name = " << node.name() << std::endl;
+  return true;
+}
+
+
+bool CXML_walker::end (pugi::xml_node &node)
+{
+//  std::cout << "end node name = " << node.name() << std::endl;
+  return true;
+}
+
+
+
+bool CXML_walker::for_each (pugi::xml_node &node)
+{
+  if (node.type() != pugi::node_element)
+      return true;
+
+  std::cout << "for_each name = " << node.name() << std::endl;
+
+  QString node_name = node.name();
+
+  //if (strcmp (node.name(), "text:p") == 0)
+  if (paragraphs.contains (node_name, Qt::CaseInsensitive))
+     {
+      QString t = node.text().as_string();
+
+//      qDebug() << "t: " << t;
+
+      if (! t.isEmpty())
+         {
+          text->append (t);
+          if (t.size() > 1)
+             text->append ("\n");
+         }
+      }
+
+//               cout << "rect-> x:" << r->x << " y:" << r->y << " w: " << r->w << " h:" << r->h << endl;
+
+
+//           for (pugi::xml_attribute attr: obj.attributes())
+    //          {
+      //          std::cout << " " << attr.name() << "=" << attr.value() << endl;
+        //     }
+
+
+
+
+  return true;
+}
+
+
+
+
+
+QString extract_text_from_xml_pugi (const QString &string_data, const QStringList &tags)
+{
+  QString data;
+
+  pugi::xml_document doc;
+  pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
+                                                   string_data.toUtf8().size(), pugi::xml_encoding::encoding_utf8);
+
+   CXML_walker walker;
+   walker.text = &data;
+   walker.paragraphs.append (tags);
+
+   doc.traverse (walker);
+
+  return data;
+}
+
 
 QString extract_text_from_xml (const QString &string_data, const QStringList &tags)
 {
@@ -239,11 +330,15 @@ CTioHandler::~CTioHandler()
           delete list[i];
 }
 
-
+/*
 CTio* CTioHandler::get_for_fname (const QString &fname)
 {
+//  qDebug() << "CTioHandler::get_for_fname ";
+
   CTio *instance;
   QString ext = file_get_ext (fname).toLower();
+
+//  qDebug() << "ext: " << ext;
 
   for (vector <size_t>::size_type i = 0; i < list.size(); i++)
       {
@@ -254,10 +349,43 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
 
   return default_handler;
 }
+*/
+
+CTio* CTioHandler::get_for_fname (const QString &fname)
+{
+//  qDebug() << "CTioHandler::get_for_fname ";
+
+  CTio *instance = 0;
+  //QString ext = file_get_ext (fname).toLower();
+
+//  qDebug() << "ext: " << ext;
+
+  for (vector <size_t>::size_type i = 0; i < list.size(); i++)
+      {
+       instance = list.at (i);
+
+       for (int i = 0; i < instance->extensions.size(); i++)
+           {
+            QString ext = "." + instance->extensions[i];
+            if (fname.endsWith (ext))
+                {
+                 qDebug() << "!!!! << " << ext;
+                 return instance;
+                }
+
+
+           }
+
+
+     }
+
+  return default_handler;
+}
 
 
 CTioPlainText::CTioPlainText()
 {
+ // name = "CTioPlainText";
   ronly = false;
 }
 
@@ -303,7 +431,84 @@ bool CTioABW::load (const QString &fname)
   return true;
 }
 
+/*
+bool CTioODT::load (const QString &fname)
+{
+  data.clear();
 
+  CZipper zipper;
+
+  if (! zipper.read_as_utf8 (fname, "content.xml"))
+     {
+      qDebug() << "cannot read content.xml";
+      return false;
+     }
+
+  QXmlStreamReader xml (zipper.string_data);
+
+  bool tt = false;
+  while (! xml.atEnd())
+        {
+         xml.readNext();
+
+//         QString tag_name = xml.qualifiedName().toString().toLower();
+
+         QString prefix = xml.prefix().toString().toLower();
+
+         QString tag_name = xml.name().toString().toLower();
+
+//         if (tag_name.isEmpty())
+  //           continue;
+            qDebug() << "prefix:" << xml.prefix().toString();
+
+            qDebug() << "tag_name:" << tag_name;
+            qDebug() << xml.text().toString();
+
+
+
+         if (xml.isStartElement())
+            {
+             if (prefix == "text" && (tag_name == "s" || tag_name == "p"))
+                {
+                 QXmlStreamAttributes attrs = xml.attributes();
+                 if (attrs.hasAttribute("text:c"))
+                    {
+                     QString av = attrs.value ("text:c").toString();
+                     QString fillval;
+                     fillval = fillval.fill (' ', av.toInt());
+                     data.append (fillval);
+                    }
+                 }
+            }
+
+         if (xml.isEndElement())
+            {
+             if (prefix == "text" && (tag_name == "p" || tag_name == "s"))
+                if (tag_name != "span")
+                   tt = true;
+            }
+
+         if (xml.isCharacters() && tt)
+            {
+             tt = false;
+             data.append (xml.text().toString());
+             data.append ("\n");
+            }
+
+
+
+        }
+
+   data = data.trimmed();
+
+   if (xml.hasError())
+      qDebug() << "xml parse error";
+
+  return true;
+}
+*/
+
+/*
 bool CTioODT::load (const QString &fname)
 {
   data.clear();
@@ -325,9 +530,19 @@ bool CTioODT::load (const QString &fname)
 
          QString tag_name = xml.qualifiedName().toString().toLower();
 
+
+//         if (tag_name.isEmpty())
+  //           continue;
+//            qDebug() << "prefix:" << xml.prefix().toString();
+
+  //            qDebug() << "tag_name:" << tag_name;
+           //   qDebug() << xml.text().toString();
+
+
+
          if (xml.isStartElement())
             {
-             if (tag_name == "text:s")
+             if (tag_name == "text:s" || tag_name == "text:p")
                 {
                  QXmlStreamAttributes attrs = xml.attributes();
                  if (attrs.hasAttribute("text:c"))
@@ -342,23 +557,129 @@ bool CTioODT::load (const QString &fname)
 
          if (xml.isEndElement())
             {
-             if (tag_name.startsWith ("text") && tag_name != "text:span")
+             if ((tag_name.startsWith ("text")) && tag_name != "text:span")
                 tt = true;
             }
 
          if (xml.isCharacters() && tt)
             {
              tt = false;
-             data.append (xml.text().toString());
-             data.append ("\n");
+             QString t = xml.text().toString();
+
+             if (! t.isEmpty())
+                 {
+                  data.append (t);
+                  if (t.size() > 1)
+                     data.append ("\n");
+               }
             }
         }
+
+   data = data.trimmed();
 
    if (xml.hasError())
       qDebug() << "xml parse error";
 
   return true;
 }
+*/
+
+
+
+class CODT_walker: public pugi::xml_tree_walker
+{
+public:
+
+  QString *text;
+
+  bool begin (pugi::xml_node &node);
+  bool end (pugi::xml_node &node);
+  bool for_each (pugi::xml_node& node);
+};
+
+
+bool CODT_walker::begin (pugi::xml_node &node)
+{
+ // std::cout << "begin node name = " << node.name() << std::endl;
+  return true;
+}
+
+
+bool CODT_walker::end (pugi::xml_node &node)
+{
+//  std::cout << "end node name = " << node.name() << std::endl;
+  return true;
+}
+
+
+
+bool CODT_walker::for_each (pugi::xml_node &node)
+{
+  if (node.type() != pugi::node_element)
+      return true;
+
+  //std::cout << "for_each name = " << node.name() << std::endl;
+
+  QString node_name = node.name();
+
+  //if (strcmp (node.name(), "text:p") == 0)
+  if (node_name == "text:p" || node_name == "text:s")
+     {
+      //read map attrs
+      QString t = node.text().as_string();
+
+      //qDebug() << "t: " << t;
+
+      if (! t.isEmpty())
+         {
+          text->append (t);
+          if (t.size() > 1)
+             text->append ("\n");
+         }
+      }
+
+//               cout << "rect-> x:" << r->x << " y:" << r->y << " w: " << r->w << " h:" << r->h << endl;
+
+
+//           for (pugi::xml_attribute attr: obj.attributes())
+    //          {
+      //          std::cout << " " << attr.name() << "=" << attr.value() << endl;
+        //     }
+
+
+
+
+  return true;
+}
+
+
+
+
+bool CTioODT::load (const QString &fname)
+{
+  data.clear();
+
+  CZipper zipper;
+
+  if (! zipper.read_as_utf8 (fname, "content.xml"))
+     {
+      qDebug() << "cannot read content.xml";
+      return false;
+     }
+
+  pugi::xml_document doc;
+  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.toUtf8().data(),
+                                                   zipper.string_data.toUtf8().size(), pugi::xml_encoding::encoding_utf8);
+
+   CODT_walker walker;
+   walker.text = &data;
+
+   doc.traverse (walker);
+
+
+  return true;
+}
+
 
 
 CTioODT::CTioODT()
@@ -408,7 +729,7 @@ bool CTioXMLZipped::load (const QString &fname)
   QStringList tags;
   tags.append (ts);
 
-  data = extract_text_from_xml (zipper.string_data, tags);
+  data = extract_text_from_xml_pugi (zipper.string_data, tags);
 
   return true;
 }
@@ -1065,7 +1386,11 @@ CTioEpub::CTioEpub()
 
 bool CTioEpub::load (const QString &fname)
 {
+  qDebug() << "CTioEpub::load";
+
   data.clear();
+
+  qDebug() << "fname: " << fname;
 
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
@@ -1082,8 +1407,8 @@ bool CTioEpub::load (const QString &fname)
   opf_fname = zipper.string_data.mid (start + 11, end - start - 11);
   opf_dir = opf_fname.left (opf_fname.indexOf ("/"));
 
-  //std::cout << opf_fname.toStdString() << std::endl;
-  //std::cout << opf_dir.toStdString() << std::endl;
+  std::cout << opf_fname.toStdString() << std::endl;
+  std::cout << opf_dir.toStdString() << std::endl;
 
   //READ FILES LIST. PARSE OPF FILE
 

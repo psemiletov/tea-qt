@@ -43,6 +43,7 @@ class CTio: public QObject
 public:
 
   bool ronly;
+ // QString name;
   QString data;
   QString charset;
   QString error_string;

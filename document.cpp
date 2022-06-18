@@ -50,7 +50,7 @@ code from qwriter:
 #include <QDebug>
 #include <QUrl>
 #include <QDir>
-#include <QXmlStreamReader>
+//#include <QXmlStreamReader>
 #include <QMimeData>
 #include <QFile>
 #include <QMessageBox>
@@ -231,7 +231,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
                  if (attr_type == "mcomment-start")
                     {
                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
-                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("color").toString(), color, darker_val);
+                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
 
                      fmt_multi_line_comment = fmt;
                      QString element = xml.readElementText().trimmed().remove('\n');
@@ -349,163 +349,15 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
         }
 }
 
-#endif
-
-
-#if QT_VERSION >= 0x050000
-
-CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
-                                                                            CSyntaxHighlighter (parent, doc, fname)
-{
-  document = doc;
-  load_from_xml_pugi (fname);
-}
-
-
-void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
-{
-  if (! file_exists (fname))
-     return;
-
-  casecare = true;
-
-  comment_start_expr = make_pair (QRegularExpression(), false);
-  comment_end_expr = make_pair (QRegularExpression(), false);
-
-  QString temp = qstring_load (fname);
-  if (temp.isEmpty())
-     return;
-
-  int darker_val = settings->value ("darker_val", 100).toInt();
-
-  QXmlStreamReader xml (temp);
-
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.name().toString().toLower();
-
-         if (xml.isStartElement())
-            {
-             if (tag_name == "item")
-                {
-                 QString attr_type = xml.attributes().value ("type").toString();
-                 QString attr_name = xml.attributes().value ("name").toString();
-
-                 if (attr_name == "options")
-                    {
-                     QString s_casecare = xml.attributes().value ("casecare").toString();
-                     if (! s_casecare.isEmpty())
-                        if (s_casecare == "0" || s_casecare == "false")
-                           casecare = false;
-
-                     if (! casecare)
-                        pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;
-                    }
-
-                 if (attr_type == "keywords")
-                    {
-                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
-                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                     QString element = xml.readElementText().trimmed().remove('\n');
-                     if (element.isEmpty())
-                        continue;
-
-                     QRegularExpression rg = QRegularExpression (element, pattern_opts);
-
-                     if (! rg.isValid())
-                        qDebug() << "! valid " << rg.pattern();
-                     else
-                          hl_rules.push_back (make_pair (rg, fmt));
-
-                     } //keywords
-                 else
-                 if (attr_type == "item")
-                    {
-                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
-                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                     QString element = xml.readElementText().trimmed().remove('\n');
-                     if (element.isEmpty())
-                        continue;
-
-                     QRegularExpression rg = QRegularExpression (element, pattern_opts);
-                     if (! rg.isValid())
-                        qDebug() << "! valid " << rg.pattern();
-                     else
-                         hl_rules.push_back (make_pair (rg, fmt));
-                    }
-                  else
-                  if (attr_type == "mcomment-start")
-                     {
-                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
-                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
-
-                      fmt_multi_line_comment = fmt;
-
-                      QString element = xml.readElementText().trimmed().remove('\n');
-                      if (element.isEmpty())
-                         continue;
-
-                      QRegularExpression rg = QRegularExpression (element, pattern_opts);
-                      if (! rg.isValid())
-                         qDebug() << "! valid " << rg.pattern();
-                      else
-                          {
-                           comment_start_expr.first = rg;
-                           comment_start_expr.second = true;
-                          }
-                     }
-                  else
-                  if (attr_type == "mcomment-end")
-                     {
-                      QString element = xml.readElementText().trimmed().remove('\n');
-                      if (element.isEmpty())
-                         continue;
-
-                      QRegularExpression rg = QRegularExpression (element, pattern_opts);
-                      if (! rg.isValid())
-                         qDebug() << "! valid " << rg.pattern();
-                      else
-                          {
-                           comment_end_expr.first = rg;
-                           comment_end_expr.second = true;
-                          }
-
-                     }
-                  else
-                  if (attr_type == "comment")
-                     {
-                      if (xml.attributes().value ("name").toString() == "cm_mult")
-                          comment_mult = xml.readElementText().trimmed();
-                      else
-                      if (xml.attributes().value ("name").toString() == "cm_single")
-                          comment_single = xml.readElementText().trimmed();
-                     }
-
-                 }//item
-
-       }//end of "is start"
-
-   if (xml.hasError())
-      qDebug() << "xml parse error";
-
-  } //cycle
-}
-
 
 
 class CXMLHL_walker: public pugi::xml_tree_walker
 {
 public:
 
-  CSyntaxHighlighterQRegularExpression *hl;
+  CSyntaxHighlighterQRegExp *hl;
   int darker_val;
 
-  //QString *text;
-  //QStringList paragraphs;
 
   bool begin (pugi::xml_node &node);
   bool end (pugi::xml_node &node);
@@ -536,7 +388,7 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
   //int darker_val = settings->value ("darker_val", 100).toInt();
 
 
-  std::cout << "for_each name = " << node.name() << std::endl;
+//  std::cout << "for_each name = " << node.name() << std::endl;
 
   QString tag_name = node.name();
 
@@ -669,38 +521,24 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
 
       }//item
 
-
-  //if (strcmp (node.name(), "text:p") == 0)
-
-//               cout << "rect-> x:" << r->x << " y:" << r->y << " w: " << r->w << " h:" << r->h << endl;
-
-
-//           for (pugi::xml_attribute attr: obj.attributes())
-    //          {
-      //          std::cout << " " << attr.name() << "=" << attr.value() << endl;
-        //     }
-
-
-
-
   return true;
 }
 
 
-void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fname)
+
+void CSyntaxHighlighterQRegExp::load_from_xml_pugi (const QString &fname)
 {
   if (! file_exists (fname))
      return;
 
-  casecare = true;
+  cs = Qt::CaseSensitive;
 
-  comment_start_expr = make_pair (QRegularExpression(), false);
-  comment_end_expr = make_pair (QRegularExpression(), false);
+  comment_start_expr = make_pair (QRegExp(), false);
+  comment_end_expr = make_pair (QRegExp(), false);
 
   QString temp = qstring_load (fname);
   if (temp.isEmpty())
      return;
-
 
 
   int darker_val = settings->value ("darker_val", 100).toInt();
@@ -715,6 +553,9 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fn
    walker.hl = this;
 
    doc.traverse (walker);
+
+
+
 
 
   QXmlStreamReader xml (temp);
@@ -832,6 +673,363 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fn
       qDebug() << "xml parse error";
 
   } //cycle
+}
+
+
+
+#endif
+
+
+#if QT_VERSION >= 0x050000
+
+CSyntaxHighlighterQRegularExpression::CSyntaxHighlighterQRegularExpression (QTextDocument *parent, CDocument *doc, const QString &fname):
+                                                                            CSyntaxHighlighter (parent, doc, fname)
+{
+  document = doc;
+  load_from_xml_pugi (fname);
+}
+
+/*
+void CSyntaxHighlighterQRegularExpression::load_from_xml (const QString &fname)
+{
+  if (! file_exists (fname))
+     return;
+
+  casecare = true;
+
+  comment_start_expr = make_pair (QRegularExpression(), false);
+  comment_end_expr = make_pair (QRegularExpression(), false);
+
+  QString temp = qstring_load (fname);
+  if (temp.isEmpty())
+     return;
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+  QXmlStreamReader xml (temp);
+
+  while (! xml.atEnd())
+        {
+         xml.readNext();
+
+         QString tag_name = xml.name().toString().toLower();
+
+         if (xml.isStartElement())
+            {
+             if (tag_name == "item")
+                {
+                 QString attr_type = xml.attributes().value ("type").toString();
+                 QString attr_name = xml.attributes().value ("name").toString();
+
+                 if (attr_name == "options")
+                    {
+                     QString s_casecare = xml.attributes().value ("casecare").toString();
+                     if (! s_casecare.isEmpty())
+                        if (s_casecare == "0" || s_casecare == "false")
+                           casecare = false;
+
+                     if (! casecare)
+                        pattern_opts = pattern_opts | QRegularExpression::CaseInsensitiveOption;
+                    }
+
+                 if (attr_type == "keywords")
+                    {
+                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
+                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
+
+                     QString element = xml.readElementText().trimmed().remove('\n');
+                     if (element.isEmpty())
+                        continue;
+
+                     QRegularExpression rg = QRegularExpression (element, pattern_opts);
+
+                     if (! rg.isValid())
+                        qDebug() << "! valid " << rg.pattern();
+                     else
+                          hl_rules.push_back (make_pair (rg, fmt));
+
+                     } //keywords
+                 else
+                 if (attr_type == "item")
+                    {
+                     QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "darkBlue");
+                     QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
+
+                     QString element = xml.readElementText().trimmed().remove('\n');
+                     if (element.isEmpty())
+                        continue;
+
+                     QRegularExpression rg = QRegularExpression (element, pattern_opts);
+                     if (! rg.isValid())
+                        qDebug() << "! valid " << rg.pattern();
+                     else
+                         hl_rules.push_back (make_pair (rg, fmt));
+                    }
+                  else
+                  if (attr_type == "mcomment-start")
+                     {
+                      QString color = hash_get_val (global_palette, xml.attributes().value ("color").toString(), "gray");
+                      QTextCharFormat fmt = tformat_from_style (xml.attributes().value ("fontstyle").toString(), color, darker_val);
+
+                      fmt_multi_line_comment = fmt;
+
+                      QString element = xml.readElementText().trimmed().remove('\n');
+                      if (element.isEmpty())
+                         continue;
+
+                      QRegularExpression rg = QRegularExpression (element, pattern_opts);
+                      if (! rg.isValid())
+                         qDebug() << "! valid " << rg.pattern();
+                      else
+                          {
+                           comment_start_expr.first = rg;
+                           comment_start_expr.second = true;
+                          }
+                     }
+                  else
+                  if (attr_type == "mcomment-end")
+                     {
+                      QString element = xml.readElementText().trimmed().remove('\n');
+                      if (element.isEmpty())
+                         continue;
+
+                      QRegularExpression rg = QRegularExpression (element, pattern_opts);
+                      if (! rg.isValid())
+                         qDebug() << "! valid " << rg.pattern();
+                      else
+                          {
+                           comment_end_expr.first = rg;
+                           comment_end_expr.second = true;
+                          }
+
+                     }
+                  else
+                  if (attr_type == "comment")
+                     {
+                      if (xml.attributes().value ("name").toString() == "cm_mult")
+                          comment_mult = xml.readElementText().trimmed();
+                      else
+                      if (xml.attributes().value ("name").toString() == "cm_single")
+                          comment_single = xml.readElementText().trimmed();
+                     }
+
+                 }//item
+
+       }//end of "is start"
+
+   if (xml.hasError())
+      qDebug() << "xml parse error";
+
+  } //cycle
+}
+*/
+
+
+class CXMLHL_walker: public pugi::xml_tree_walker
+{
+public:
+
+  CSyntaxHighlighterQRegularExpression *hl;
+  int darker_val;
+
+  //QString *text;
+  //QStringList paragraphs;
+
+  bool begin (pugi::xml_node &node);
+  bool end (pugi::xml_node &node);
+  bool for_each (pugi::xml_node& node);
+};
+
+
+bool CXMLHL_walker::begin (pugi::xml_node &node)
+{
+ // std::cout << "begin node name = " << node.name() << std::endl;
+  return true;
+}
+
+
+bool CXMLHL_walker::end (pugi::xml_node &node)
+{
+//  std::cout << "end node name = " << node.name() << std::endl;
+  return true;
+}
+
+
+
+bool CXMLHL_walker::for_each (pugi::xml_node &node)
+{
+  if (node.type() != pugi::node_element)
+      return true;
+
+  //int darker_val = settings->value ("darker_val", 100).toInt();
+
+
+//  std::cout << "for_each name = " << node.name() << std::endl;
+
+  QString tag_name = node.name();
+
+
+  if (tag_name == "item")
+     {
+
+      pugi::xml_attribute attr = node.attribute ("type");
+      QString attr_type = attr.as_string();
+      attr = node.attribute ("name");
+      QString attr_name = attr.as_string();
+
+      if (attr_name == "options")
+         {
+          attr = node.attribute ("casecare");
+
+          QString s_casecare = attr.as_string();
+          if (! s_casecare.isEmpty())
+             if (s_casecare == "0" || s_casecare == "false")
+                hl->casecare = false;
+
+          if (! hl->casecare)
+             hl->pattern_opts = hl->pattern_opts | QRegularExpression::CaseInsensitiveOption;
+         }
+
+      if (attr_type == "keywords")
+         {
+          attr = node.attribute ("color");
+          QString color = hash_get_val (global_palette, attr.as_string(), "darkBlue");
+
+          attr = node.attribute ("fontstyle");
+          QTextCharFormat fmt = tformat_from_style (attr.as_string(), color, darker_val);
+
+          QString t = node.text().as_string();
+          QString element = t.trimmed().remove('\n');
+          if (element.isEmpty())
+             return true;
+
+          QRegularExpression rg = QRegularExpression (element, hl->pattern_opts);
+
+          if (! rg.isValid())
+             qDebug() << "! valid " << rg.pattern();
+          else
+               hl->hl_rules.push_back (make_pair (rg, fmt));
+
+          } //keywords
+      else
+      if (attr_type == "item")
+         {
+          attr = node.attribute ("color");
+          QString color = hash_get_val (global_palette, attr.as_string(), "darkBlue");
+
+          attr = node.attribute ("fontstyle");
+          QTextCharFormat fmt = tformat_from_style (attr.as_string(), color, darker_val);
+
+          QString t = node.text().as_string();
+          QString element = t.trimmed().remove('\n');
+          if (element.isEmpty())
+             return true;
+
+          QRegularExpression rg = QRegularExpression (element, hl->pattern_opts);
+          if (! rg.isValid())
+             qDebug() << "! valid " << rg.pattern();
+          else
+              hl->hl_rules.push_back (make_pair (rg, fmt));
+         }
+       else
+       if (attr_type == "mcomment-start")
+          {
+           attr = node.attribute ("color");
+
+           QString color = hash_get_val (global_palette, attr.as_string(), "gray");
+
+           attr = node.attribute ("fontstyle");
+
+           QString fontstyle = attr.as_string();
+           QTextCharFormat fmt = tformat_from_style (fontstyle, color, darker_val);
+
+           hl->fmt_multi_line_comment = fmt;
+
+           QString t = node.text().as_string();
+           QString element = t.trimmed().remove('\n');
+           if (element.isEmpty())
+              return true;
+
+           QRegularExpression rg = QRegularExpression (element, hl->pattern_opts);
+           if (! rg.isValid())
+              qDebug() << "! valid " << rg.pattern();
+           else
+               {
+                hl->comment_start_expr.first = rg;
+                hl->comment_start_expr.second = true;
+               }
+          }
+       else
+       if (attr_type == "mcomment-end")
+          {
+           QString t = node.text().as_string();
+           QString element = t.trimmed().remove('\n');
+           if (element.isEmpty())
+              return true;
+
+           QRegularExpression rg = QRegularExpression (element, hl->pattern_opts);
+           if (! rg.isValid())
+              qDebug() << "! valid " << rg.pattern();
+           else
+               {
+                hl->comment_end_expr.first = rg;
+                hl->comment_end_expr.second = true;
+               }
+
+          }
+       else
+       if (attr_type == "comment")
+          {
+           attr = node.attribute ("name");
+           QString name = attr.as_string();
+
+           QString t = node.text().as_string();
+           QString element = t.trimmed().remove('\n');
+           if (element.isEmpty())
+              return true;
+
+           if (name == "cm_mult")
+               hl->comment_mult = element;
+           else
+           if (name == "cm_single")
+               hl->comment_single = element;
+          }
+
+      }//item
+
+  return true;
+}
+
+
+void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fname)
+{
+  if (! file_exists (fname))
+     return;
+
+  casecare = true;
+
+  comment_start_expr = make_pair (QRegularExpression(), false);
+  comment_end_expr = make_pair (QRegularExpression(), false);
+
+  QString temp = qstring_load (fname);
+  if (temp.isEmpty())
+     return;
+
+
+
+  int darker_val = settings->value ("darker_val", 100).toInt();
+
+
+  pugi::xml_document doc;
+  pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
+                                                   temp.toUtf8().size(), pugi::xml_encoding::encoding_utf8);
+
+   CXMLHL_walker walker;
+   walker.darker_val = darker_val;
+   walker.hl = this;
+
+   doc.traverse (walker);
+
 }
 
 

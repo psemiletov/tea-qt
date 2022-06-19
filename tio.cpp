@@ -142,13 +142,11 @@ bool CXML_walker::for_each (pugi::xml_node &node)
   if (node.type() != pugi::node_element)
       return true;
 
-
   QString node_name = node.name();
 
   if (paragraphs.contains (node_name, Qt::CaseInsensitive))
      {
       QString t = node.text().as_string();
-
 
       if (! t.isEmpty())
          {
@@ -158,11 +156,8 @@ bool CXML_walker::for_each (pugi::xml_node &node)
          }
       }
 
-
   return true;
 }
-
-
 
 
 QString extract_text_from_xml_pugi (const QString &string_data, const QStringList &tags)
@@ -183,6 +178,8 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
 }
 
 
+
+/*
 QString extract_text_from_xml (const QString &string_data, const QStringList &tags)
 {
   QString data;
@@ -221,7 +218,7 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
 
   return data;
 }
-
+*/
 
 bool CTioPlainText::load (const QString &fname)
 {
@@ -409,7 +406,7 @@ bool CTioABW::load (const QString &fname)
   QStringList tags;
   tags.append ("p");
 
-  data = extract_text_from_xml (temp, tags);
+  data = extract_text_from_xml_pugi (temp, tags);
 
   return true;
 }
@@ -595,23 +592,16 @@ bool CODT_walker::end (pugi::xml_node &node)
 }
 
 
-
 bool CODT_walker::for_each (pugi::xml_node &node)
 {
   if (node.type() != pugi::node_element)
       return true;
 
-  //std::cout << "for_each name = " << node.name() << std::endl;
-
   QString node_name = node.name();
 
-  //if (strcmp (node.name(), "text:p") == 0)
   if (node_name == "text:p" || node_name == "text:s")
      {
-      //read map attrs
       QString t = node.text().as_string();
-
-      //qDebug() << "t: " << t;
 
       if (! t.isEmpty())
          {
@@ -621,20 +611,9 @@ bool CODT_walker::for_each (pugi::xml_node &node)
          }
       }
 
-//               cout << "rect-> x:" << r->x << " y:" << r->y << " w: " << r->w << " h:" << r->h << endl;
-
-
-//           for (pugi::xml_attribute attr: obj.attributes())
-    //          {
-      //          std::cout << " " << attr.name() << "=" << attr.value() << endl;
-        //     }
-
-
-
 
   return true;
 }
-
 
 
 
@@ -885,6 +864,122 @@ CTioFB2::CTioFB2()
 }
 
 
+class CFB2_walker: public pugi::xml_tree_walker
+{
+public:
+
+  QString *text;
+
+  bool begin (pugi::xml_node &node);
+  bool end (pugi::xml_node &node);
+  bool for_each (pugi::xml_node& node);
+};
+
+
+bool CFB2_walker::begin (pugi::xml_node &node)
+{
+ // std::cout << "begin node name = " << node.name() << std::endl;
+  return true;
+}
+
+
+bool CFB2_walker::end (pugi::xml_node &node)
+{
+//  std::cout << "end node name = " << node.name() << std::endl;
+  return true;
+}
+
+
+bool CFB2_walker::for_each (pugi::xml_node &node)
+{
+  if (node.type() != pugi::node_element)
+      return true;
+
+  QString node_name = node.name();
+
+
+  if (node_name == "p")
+     {
+      QString t = node.text().as_string();
+      //if (! t.isEmpty())
+         {
+      //    text->append ("   ");
+
+          if (! t.startsWith (" "))
+            text->append ("   ");
+          text->append (t);
+          text->append ("\n");
+         }
+      }
+
+
+  if (node_name == "title" || node_name == "section" || node_name == "empty-line")
+      text->append ("\n"); //НЕ ДОБАВЛЯЕТСЯ?
+
+
+  return true;
+}
+
+
+
+bool CTioFB2::load (const QString &fname)
+{
+  data.clear();
+
+  QString ext = file_get_ext (fname);
+
+  QString temp;
+
+  CZipper zipper;
+
+  if (ext == "fb2.zip" || ext == "fbz")
+     {
+      CZipper zipper;
+      QFileInfo f (fname);
+
+      QString source_fname = f.baseName() + ".fb2";
+
+      if (! zipper.read_as_utf8 (fname, source_fname))
+          return false;
+
+      temp = zipper.string_data;
+     }
+
+ if (ext == "fb2")
+    {
+     QByteArray ba = file_load (fname);
+     if (ba.isEmpty())
+        return false;
+
+     //read encoding:
+
+     QString enc = string_between (QString (ba), "encoding=\"", "\"");
+     if (enc.isEmpty())
+        enc = "UTF-8";
+
+     QTextCodec *codec = QTextCodec::codecForName (enc.toLatin1().data());
+     temp = codec->toUnicode (ba);
+   }
+
+
+  //QString ts = "p";
+
+  pugi::xml_document doc;
+  pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
+                                                   temp.toUtf8().size());
+
+   CFB2_walker walker;
+   walker.text = &data;
+
+   doc.traverse (walker);
+
+
+
+  return true;
+}
+
+
+/*
 bool CTioFB2::load (const QString &fname)
 {
   data.clear();
@@ -973,7 +1068,7 @@ bool CTioFB2::load (const QString &fname)
 
   return true;
 }
-
+*/
 
 //www.codeguru.com/forum/archive/index.php/t-201658.html
 //rewritten by Peter Semiletov
@@ -1369,7 +1464,7 @@ CTioEpub::CTioEpub()
 
 bool CTioEpub::load (const QString &fname)
 {
-  qDebug() << "CTioEpub::load";
+/*  qDebug() << "CTioEpub::load";
 
   data.clear();
 
@@ -1430,7 +1525,7 @@ bool CTioEpub::load (const QString &fname)
        data += t;
        data += "\n";
       }
-
+*/
   return true;
 }
 

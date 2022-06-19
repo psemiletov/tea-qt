@@ -145,7 +145,7 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
                                                       CSyntaxHighlighter (parent, doc, fname)
 {
   document = doc;
-  load_from_xml (fname);
+  load_from_xml_pugi (fname);
 }
 
 /*

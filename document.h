@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2021 by Peter Semiletov <peter.semiletov@gmail.com>                            *
+ *   2007-2022 by Peter Semiletov <peter.semiletov@gmail.com>                            *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -99,17 +99,13 @@ public:
 
   vector <pair <QRegExp, QTextCharFormat> > hl_rules;
 
-  //QRegExp commentStartExpression;
-  //QRegExp commentEndExpression;
-
   pair <QRegExp, bool> comment_start_expr;
   pair <QRegExp, bool> comment_end_expr;
-
 
   Qt::CaseSensitivity cs;
 
   CSyntaxHighlighterQRegExp (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
-  void load_from_xml (const QString &fname);
+  //void load_from_xml (const QString &fname);
   void load_from_xml_pugi (const QString &fname);
 
 };
@@ -135,7 +131,7 @@ public:
   pair <QRegularExpression, bool> comment_end_expr;
 
   CSyntaxHighlighterQRegularExpression (QTextDocument *parent = 0, CDocument *doc = 0, const QString &fname = "none");
-  void load_from_xml (const QString &fname);
+  //void load_from_xml (const QString &fname);
   void load_from_xml_pugi (const QString &fname);
 
 };

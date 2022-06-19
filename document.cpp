@@ -148,7 +148,7 @@ CSyntaxHighlighterQRegExp::CSyntaxHighlighterQRegExp (QTextDocument *parent, CDo
   load_from_xml (fname);
 }
 
-
+/*
 void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 {
   if (! file_exists (fname))
@@ -175,11 +175,11 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
          if (xml.isStartElement())
             {
-             /*if (tag_name == "document")
-                {
-                 exts = xml.attributes().value ("exts").toString();
-                 langs = xml.attributes().value ("langs").toString();
-                }*/
+             //if (tag_name == "document")
+               // {
+               //  exts = xml.attributes().value ("exts").toString();
+               //  langs = xml.attributes().value ("langs").toString();
+              //  }
 
              if (tag_name == "item")
                 {
@@ -277,7 +277,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml (const QString &fname)
 
   } //cycle
 }
-
+*/
 
 void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 {
@@ -542,8 +542,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml_pugi (const QString &fname)
    doc.traverse (walker);
 
 }
-
-
 
 #endif
 

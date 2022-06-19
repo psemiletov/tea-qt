@@ -349,14 +349,10 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
             QString ext = "." + instance->extensions[i];
             if (fname.endsWith (ext))
                 {
-                 qDebug() << "!!!! << " << ext;
+//                 qDebug() << "!!!! << " << ext;
                  return instance;
                 }
-
-
            }
-
-
      }
 
   return default_handler;
@@ -901,12 +897,9 @@ bool CFB2_walker::for_each (pugi::xml_node &node)
   if (node_name == "p")
      {
       QString t = node.text().as_string();
-      //if (! t.isEmpty())
          {
-      //    text->append ("   ");
-
-          if (! t.startsWith (" "))
-            text->append ("   ");
+ //         if (! t.startsWith (" "))
+   //          text->append ("   ");
           text->append (t);
           text->append ("\n");
          }
@@ -1462,9 +1455,89 @@ CTioEpub::CTioEpub()
 }
 
 
+
 bool CTioEpub::load (const QString &fname)
 {
-/*  qDebug() << "CTioEpub::load";
+  qDebug() << "CTioEpub::load";
+
+  data.clear();
+
+  qDebug() << "fname: " << fname;
+
+  CZipper zipper;
+  if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
+       return false;
+
+  QStringList html_files;
+
+  QString opf_fname;
+  QString opf_dir;
+
+  int start = zipper.string_data.indexOf ("full-path=\"");
+  int end = zipper.string_data.indexOf ("\"", start + 11);
+
+  opf_fname = zipper.string_data.mid (start + 11, end - start - 11);
+  opf_dir = opf_fname.left (opf_fname.indexOf ("/"));
+
+  std::cout << opf_fname.toStdString() << std::endl;
+  std::cout << opf_dir.toStdString() << std::endl;
+
+  //READ FILES LIST. PARSE OPF FILE
+
+  if (! zipper.read_as_utf8 (fname, opf_fname))
+       return false;
+
+  pugi::xml_document doc;
+  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.toUtf8().data(),
+                                                   zipper.string_data.toUtf8().size());
+
+   if (! result)
+      return false;
+
+   for (pugi::xml_node_iterator it = doc.begin(); it != doc.end(); ++it)
+   {
+       QString tag_name = it->name();
+
+       if (tag_name == "item")
+          {
+           QString attr_href = it->attribute("href").value();
+           QString ext = file_get_ext (attr_href);
+           if (ext == "html" || ext == "htm" || ext == "xml")
+              html_files.append (opf_dir + "/" + attr_href);
+           //std::cout << attr_href.toStdString() << std::endl;
+          }
+
+
+       for (pugi::xml_attribute_iterator ait = it->attributes_begin(); ait != it->attributes_end(); ++ait)
+       {
+           std::cout << " " << ait->name() << "=" << ait->value();
+
+       }
+
+       std::cout << std::endl;
+   }
+
+
+  QStringList tags;
+  tags.append ("p");
+
+  for (int i = 0; i < html_files.size(); i++)
+      {
+       if (! zipper.read_as_utf8 (fname, html_files.at(i)))
+           return false;
+
+       QString t = extract_text_from_xml_pugi (zipper.string_data, tags);
+       data += t;
+       data += "\n";
+      }
+
+  return true;
+}
+
+/*
+bool CTioEpub::load (const QString &fname)
+{
+  qDebug() << "CTioEpub::load";
 
   data.clear();
 
@@ -1525,10 +1598,10 @@ bool CTioEpub::load (const QString &fname)
        data += t;
        data += "\n";
       }
-*/
+
   return true;
 }
-
+*/
 
 QStringList CTioHandler::get_supported_exts()
 {

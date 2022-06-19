@@ -117,7 +117,8 @@ SOURCES += tea.cpp \
     tzipper.cpp \
     single_application_shared.cpp \
     exif_reader.cpp \
-    myjoystick.cpp
+    myjoystick.cpp \
+    pugixml.cpp
 
 
 HEADERS += tea.h \
@@ -138,7 +139,10 @@ HEADERS += tea.h \
     tzipper.h \
     single_application_shared.h \
     exif_reader.h \
-    myjoystick.h
+    myjoystick.h \
+    pugixml.hpp \
+    pugiconfig.hpp
+    
 
 
 HEADERS += \

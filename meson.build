@@ -80,7 +80,9 @@ tea_headers_moc = [
     'tio.h',
     'tzipper.h',
     'single_application_shared.h',
-    'myjoystick.h']
+    'myjoystick.h',
+    'pugixml.hpp',
+    'pugiconfig.hpp']
 
 
 src_processed = qt5.preprocess(
@@ -119,7 +121,8 @@ tea_source = ['tea.cpp',
     'quazipfileinfo.cpp',
     'quazipnewinfo.cpp',
     'unzip.c',
-    'zip.c']
+    'zip.c',
+    'pugixml.cpp']
 
 
 tea_exe = executable ('tea',

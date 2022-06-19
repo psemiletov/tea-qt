@@ -48,7 +48,7 @@ DJVU read code taken fromdvutxt.c:
 
 
 #include <QFile>
-#include <QXmlStreamReader>
+//#include <QXmlStreamReader>
 #include <QDataStream>
 #include <QTextStream>
 #include <QDebug>

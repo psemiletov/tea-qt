@@ -385,13 +385,10 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
   if (node.type() != pugi::node_element)
       return true;
 
-
   QString tag_name = node.name();
-
 
   if (tag_name == "item")
      {
-
       pugi::xml_attribute attr = node.attribute ("type");
       QString attr_type = attr.as_string();
       attr = node.attribute ("name");
@@ -406,7 +403,7 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
              if (s_casecare == "0" || s_casecare == "false")
                 hl->casecare = false;
 
-          if (! casecare)
+          if (! hl->casecare)
               hl->cs = Qt::CaseInsensitive;
          }
 
@@ -533,7 +530,7 @@ void CSyntaxHighlighterQRegExp::load_from_xml_pugi (const QString &fname)
 
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
-                                                   temp.toUtf8().size(), pugi::xml_encoding::encoding_utf8);
+                                                   temp.toUtf8().size());
 
    CXMLHL_walker walker;
    walker.darker_val = darker_val;
@@ -885,7 +882,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fn
 
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
-                                                   temp.toUtf8().size(), pugi::xml_encoding::encoding_utf8);
+                                                   temp.toUtf8().size());
 
    CXMLHL_walker walker;
    walker.darker_val = darker_val;

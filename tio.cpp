@@ -142,16 +142,13 @@ bool CXML_walker::for_each (pugi::xml_node &node)
   if (node.type() != pugi::node_element)
       return true;
 
-  std::cout << "for_each name = " << node.name() << std::endl;
 
   QString node_name = node.name();
 
-  //if (strcmp (node.name(), "text:p") == 0)
   if (paragraphs.contains (node_name, Qt::CaseInsensitive))
      {
       QString t = node.text().as_string();
 
-//      qDebug() << "t: " << t;
 
       if (! t.isEmpty())
          {
@@ -161,20 +158,9 @@ bool CXML_walker::for_each (pugi::xml_node &node)
          }
       }
 
-//               cout << "rect-> x:" << r->x << " y:" << r->y << " w: " << r->w << " h:" << r->h << endl;
-
-
-//           for (pugi::xml_attribute attr: obj.attributes())
-    //          {
-      //          std::cout << " " << attr.name() << "=" << attr.value() << endl;
-        //     }
-
-
-
 
   return true;
 }
-
 
 
 
@@ -185,7 +171,7 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
 
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
-                                                   string_data.toUtf8().size(), pugi::xml_encoding::encoding_utf8);
+                                                   string_data.toUtf8().size());
 
    CXML_walker walker;
    walker.text = &data;
@@ -261,9 +247,6 @@ bool CTioPlainText::load (const QString &fname)
      eol = "\r";
 
   file.seek(0);
-
-//  QTextStream in (&file);
- // in.setCodec (charset.toUtf8().data());
 
   QByteArray ba = file.readAll();
   QTextCodec *codec = QTextCodec::codecForName (charset.toUtf8().data());
@@ -669,7 +652,7 @@ bool CTioODT::load (const QString &fname)
 
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.toUtf8().data(),
-                                                   zipper.string_data.toUtf8().size(), pugi::xml_encoding::encoding_utf8);
+                                                   zipper.string_data.toUtf8().size());
 
    CODT_walker walker;
    walker.text = &data;

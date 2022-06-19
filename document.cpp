@@ -420,7 +420,7 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
           if (element.isEmpty())
              return true;
 
-          QRegExp rg (element, cs);
+          QRegExp rg (element, hl->cs);
 
           if (! rg.isValid())
              qDebug() << "! valid " << rg.pattern();
@@ -442,7 +442,7 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
           if (element.isEmpty())
              return true;
 
-          QRegExp rg (element, cs);
+          QRegExp rg (element, hl->cs);
           if (rg.isValid())
               hl->hl_rules.push_back (make_pair (rg, fmt));
           }

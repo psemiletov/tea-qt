@@ -1324,7 +1324,7 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
 {
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
 
-//  qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
+  qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
 
   if (! tio)
       return false;

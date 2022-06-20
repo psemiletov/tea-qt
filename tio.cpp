@@ -165,8 +165,12 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
   QString data;
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
-                                                   string_data.toUtf8().size());
+  //pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
+    //                                               string_data.toUtf8().size());
+
+  pugi::xml_parse_result result = doc.load_buffer (string_data.utf16(),
+                                                   string_data.size(), pugi::encoding_utf16);
+
 
    CXML_walker walker;
    walker.text = &data;
@@ -333,7 +337,7 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
 
 CTio* CTioHandler::get_for_fname (const QString &fname)
 {
-//  qDebug() << "CTioHandler::get_for_fname ";
+  qDebug() << "CTioHandler::get_for_fname ";
 
   CTio *instance = 0;
   //QString ext = file_get_ext (fname).toLower();
@@ -349,7 +353,7 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
             QString ext = "." + instance->extensions[i];
             if (fname.endsWith (ext))
                 {
-//                 qDebug() << "!!!! << " << ext;
+                 qDebug() << "!!!! << " << ext;
                  return instance;
                 }
            }
@@ -1479,13 +1483,15 @@ bool CTioEpub::load (const QString &fname)
   opf_fname = zipper.string_data.mid (start + 11, end - start - 11);
   opf_dir = opf_fname.left (opf_fname.indexOf ("/"));
 
-  std::cout << opf_fname.toStdString() << std::endl;
-  std::cout << opf_dir.toStdString() << std::endl;
+  std::cout << "opf_fname: " << opf_fname.toStdString() << std::endl;
+  std::cout << "opf_dir: " << opf_dir.toStdString() << std::endl;
 
   //READ FILES LIST. PARSE OPF FILE
 
   if (! zipper.read_as_utf8 (fname, opf_fname))
        return false;
+
+  qDebug() << "PARSE XML";
 
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.toUtf8().data(),
@@ -1494,29 +1500,37 @@ bool CTioEpub::load (const QString &fname)
    if (! result)
       return false;
 
+   qDebug() << "1";
+
    for (pugi::xml_node_iterator it = doc.begin(); it != doc.end(); ++it)
-   {
+      {
        QString tag_name = it->name();
+
+       qDebug() << "tag_name: " << tag_name;
+
 
        if (tag_name == "item")
           {
            QString attr_href = it->attribute("href").value();
            QString ext = file_get_ext (attr_href);
+
+           qDebug() << "attr_href: " << attr_href;
+
            if (ext == "html" || ext == "htm" || ext == "xml")
               html_files.append (opf_dir + "/" + attr_href);
            //std::cout << attr_href.toStdString() << std::endl;
           }
+        }
+
+//       for (pugi::xml_attribute_iterator ait = it->attributes_begin(); ait != it->attributes_end(); ++ait)
+  //        {
+    //       std::cout << " " << ait->name() << "=" << ait->value();
+      //     }
+
+       //std::cout << std::endl;
 
 
-       for (pugi::xml_attribute_iterator ait = it->attributes_begin(); ait != it->attributes_end(); ++ait)
-       {
-           std::cout << " " << ait->name() << "=" << ait->value();
-
-       }
-
-       std::cout << std::endl;
-   }
-
+   qDebug() << "2";
 
   QStringList tags;
   tags.append ("p");

@@ -630,8 +630,8 @@ bool CTioODT::load (const QString &fname)
      }
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.toUtf8().data(),
-                                                   zipper.string_data.toUtf8().size());
+  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
+                                                   zipper.string_data.size(), pugi::encoding_utf16);
 
    CODT_walker walker;
    walker.text = &data;
@@ -962,8 +962,7 @@ bool CTioFB2::load (const QString &fname)
   //QString ts = "p";
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
-                                                   temp.toUtf8().size());
+  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(), temp.size(), pugi::encoding_utf16);
 
    CFB2_walker walker;
    walker.text = &data;
@@ -1494,8 +1493,8 @@ bool CTioEpub::load (const QString &fname)
   qDebug() << "PARSE XML";
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.toUtf8().data(),
-                                                   zipper.string_data.toUtf8().size());
+  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
+                                                   zipper.string_data.size(), pugi::encoding_utf16);
 
    if (! result)
       return false;

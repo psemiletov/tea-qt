@@ -529,8 +529,8 @@ void CSyntaxHighlighterQRegExp::load_from_xml_pugi (const QString &fname)
 
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
-                                                   temp.toUtf8().size());
+  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(),
+                                                   temp.size(), pugi::encoding_utf16);
 
    CXMLHL_walker walker;
    walker.darker_val = darker_val;
@@ -881,8 +881,8 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fn
 
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
-                                                   temp.toUtf8().size());
+  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(),
+                                                   temp.size(), pugi::encoding_utf16);
 
    CXMLHL_walker walker;
    walker.darker_val = darker_val;

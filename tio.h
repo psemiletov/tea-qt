@@ -101,7 +101,7 @@ public:
   bool load (const QString &fname);
 };
 
-
+#if QT_VERSION >= 0x050000
 class CTioEpub: public CTioReadOnly
 {
   Q_OBJECT
@@ -111,7 +111,7 @@ public:
   CTioEpub();
   bool load (const QString &fname);
 };
-
+#endif
 
 class CTioODT: public CTioReadOnly
 {

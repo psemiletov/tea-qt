@@ -320,7 +320,10 @@ CTioHandler::CTioHandler()
   list.push_back (new CTioABW);
   list.push_back (new CTioFB2);
   list.push_back (new CTioRTF);
+
+#if QT_VERSION >= 0x050000
   list.push_back (new CTioEpub);
+#endif
 
 #if defined (POPPLER_ENABLE)
   list.push_back (new CTioPDF);
@@ -1478,6 +1481,9 @@ bool CTioDJVU::load (const QString &fname)
 #endif
 
 
+#if QT_VERSION >= 0x050000
+
+
 CTioEpub::CTioEpub()
 {
   ronly = true;
@@ -1520,7 +1526,9 @@ bool CTioEpub::load (const QString &fname)
   qDebug() << "PARSE XML";
 
 
-  QString regex = R"(href="([^"]*))";
+  //QString regex = R"(href="([^"]*))";
+  QString regex = "(href=\"([^\"]*))";
+
 
    QRegularExpression re(regex);
    QRegularExpressionMatchIterator i = re.globalMatch (zipper.string_data);
@@ -1538,14 +1546,9 @@ bool CTioEpub::load (const QString &fname)
 
       QString ext = file_get_ext (ts);
 
-      //QUrl url;
-      //url.setUrl (ts, QUrl::DecodedMode);
-      //qDebug() << "ts: " << url.toString(QUrl::PrettyDecoded);
 
       if (ext == "html" || ext == "htm" || ext == "xml")
          html_files.append (opf_dir + "/" + ts);
-
-
 
       //qDebug().noquote() << match.captured();
     }
@@ -1700,6 +1703,8 @@ bool CTioEpub::load (const QString &fname)
   return true;
 }
 */
+
+#endif
 
 QStringList CTioHandler::get_supported_exts()
 {

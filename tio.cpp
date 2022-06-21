@@ -48,11 +48,20 @@ DJVU read code taken fromdvutxt.c:
 
 
 #include <QFile>
+#include <QUrl>
+
 //#include <QXmlStreamReader>
 #include <QDataStream>
 #include <QTextStream>
 #include <QDebug>
 #include <QTextCodec>
+#include <QTextBrowser>
+
+#if QT_VERSION >= 0x050000
+#include <QRegularExpression>
+#else
+#include <QRegExp>
+#endif
 
 
 //////////////////FOR PDF
@@ -160,6 +169,14 @@ bool CXML_walker::for_each (pugi::xml_node &node)
 }
 
 
+QString extract_text_from_html (const QString &string_data)
+{
+  QTextBrowser br;
+  br.setHtml (string_data);
+  return br.toPlainText();
+}
+
+
 QString extract_text_from_xml_pugi (const QString &string_data, const QStringList &tags)
 {
   QString data;
@@ -169,7 +186,15 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
     //                                               string_data.toUtf8().size());
 
   pugi::xml_parse_result result = doc.load_buffer (string_data.utf16(),
-                                                   string_data.size(), pugi::encoding_utf16);
+                                                   string_data.size(),
+                                                   pugi::parse_default,
+                                                   pugi::encoding_utf16);
+
+   if (! result)
+      {
+       qDebug() << "NOT PARSED";
+       return data;
+      }
 
 
    CXML_walker walker;
@@ -631,7 +656,9 @@ bool CTioODT::load (const QString &fname)
 
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
-                                                   zipper.string_data.size(), pugi::encoding_utf16);
+                                                   zipper.string_data.size(),
+                                                   pugi::parse_default,
+                                                   pugi::encoding_utf16);
 
    CODT_walker walker;
    walker.text = &data;
@@ -962,7 +989,7 @@ bool CTioFB2::load (const QString &fname)
   //QString ts = "p";
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(), temp.size(), pugi::encoding_utf16);
+  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(), temp.size(), pugi::parse_default, pugi::encoding_utf16);
 
    CFB2_walker walker;
    walker.text = &data;
@@ -1492,9 +1519,57 @@ bool CTioEpub::load (const QString &fname)
 
   qDebug() << "PARSE XML";
 
+
+  QString regex = R"(href="([^"]*))";
+
+   QRegularExpression re(regex);
+   QRegularExpressionMatchIterator i = re.globalMatch (zipper.string_data);
+    while (i.hasNext())
+      {
+      QRegularExpressionMatch match = i.next();
+
+      QString ts = match.captured().mid(6);
+
+      ts = ts.replace ("%2C", ",");
+      ts = ts.replace ("%20", " ");
+      ts = ts.replace ("%5B", "[");
+      ts = ts.replace ("%5D", "]");
+
+
+      QString ext = file_get_ext (ts);
+
+      //QUrl url;
+      //url.setUrl (ts, QUrl::DecodedMode);
+      //qDebug() << "ts: " << url.toString(QUrl::PrettyDecoded);
+
+      if (ext == "html" || ext == "htm" || ext == "xml")
+         html_files.append (opf_dir + "/" + ts);
+
+
+
+      //qDebug().noquote() << match.captured();
+    }
+
+
+  //qDebug() << "html_files.size(): " << html_files.size();
+
+
+/*
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
-                                                   zipper.string_data.size(), pugi::encoding_utf16);
+                                                   zipper.string_data.size(),
+                                                   pugi::parse_default | pugi::parse_fragment,
+                                                   pugi::encoding_utf16);
+
+
+  std::cout << "RESULT: " << result.description() << std::endl;
+  //std::cout << "Error offset: " << result.offset << "n\n";
+
+
+  std::cout << "Error description: " << result.description() << "\n";
+     std::cout << "Error offset: " << result.offset << " (error at [..." << (zipper.string_data.utf16() + result.offset)
+               << "]\n\n";
+
 
    if (! result)
       return false;
@@ -1528,7 +1603,7 @@ bool CTioEpub::load (const QString &fname)
 
        //std::cout << std::endl;
 
-
+*/
    qDebug() << "2";
 
   QStringList tags;
@@ -1536,12 +1611,22 @@ bool CTioEpub::load (const QString &fname)
 
   for (int i = 0; i < html_files.size(); i++)
       {
-       if (! zipper.read_as_utf8 (fname, html_files.at(i)))
-           return false;
+          qDebug() << "3";
 
-       QString t = extract_text_from_xml_pugi (zipper.string_data, tags);
-       data += t;
-       data += "\n";
+          qDebug() << html_files.at(i);
+
+       if (zipper.read_as_utf8 (fname, html_files.at(i)))
+          {
+          qDebug() << "yes";
+          //QString t = extract_text_from_xml_pugi (zipper.string_data, tags);
+          QString t = extract_text_from_html (zipper.string_data);
+          data += t;
+          data += "\n";
+         }
+       else
+         qDebug() << "no";
+
+
       }
 
   return true;

@@ -1,5 +1,12 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+* old bookmarks file automatically converts to new format
+* bookmarks and recent files has a new format (with a separator *)
+* recent files list will be updated to new format on use, so the old records
+will be lost
+
+* xml parser changed to pugixml
+
 + FB2.ZIP, FBZ support
 * single application mode fixes
 

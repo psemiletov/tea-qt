@@ -1455,11 +1455,11 @@ QString CDocument::get_triplex()
      return QString ("");
 
   QString s (file_name);
-  s += ",";
+  s += "*";
   s += charset;
-  s += ",";
+  s += "*";
   s += QString::number (textCursor().position());
-  s += ",";
+  s += "*";
 
   if (! get_word_wrap())
      s+="0";
@@ -2570,7 +2570,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 
 CDocument* CDox::open_file_triplex (const QString &triplex)
 {
-  QStringList sl = triplex.split (",");
+  QStringList sl = triplex.split ("*");
   if (sl.size() < 3)
      return 0;
 

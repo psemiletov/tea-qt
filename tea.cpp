@@ -1702,7 +1702,7 @@ void CTEA::file_find_obsolete_paths()
 
   for (int i = 0; i < l_bookmarks.size(); i++)
       {
-       QStringList t = l_bookmarks[i].split (",");
+       QStringList t = l_bookmarks[i].split ("*");
        if (! file_exists (t[0]))
           l_bookmarks[i] = "#" + l_bookmarks[i]; //comment out the bookmark line
       }
@@ -6370,8 +6370,21 @@ void CTEA::create_paths()
   fname_fif = dir_config + "/fif";
   //hs_path["fname_fif"] = fname_fif;
 
-  fname_bookmarks = dir_config + "/tea_bmx";
+  QString old_bmx_file = dir_config + "/tea_bmx";
+  fname_bookmarks = dir_config + "/bookmarks";
   //hs_path["fname_bookmarks"] = fname_bookmarks;
+
+  if (file_exists (old_bmx_file))
+     {
+      QString file_content = qstring_load (old_bmx_file);
+      file_content = file_content.replace (",", "*");
+      qstring_save (fname_bookmarks, file_content);
+
+      QFile f (old_bmx_file);
+      f.rename (old_bmx_file + ".bak");
+     }
+
+
 
   fname_programs = dir_config + "/programs";
   //hs_path["fname_programs"] = fname_programs;

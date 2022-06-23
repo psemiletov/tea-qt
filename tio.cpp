@@ -188,14 +188,14 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
   QString data;
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
-                                                   string_data.toUtf8().size());
-/*
+ // pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
+   //                                                string_data.toUtf8().size());
+
   pugi::xml_parse_result result = doc.load_buffer (string_data.utf16(),
-                                                   string_data.size(),
+                                                   string_data.size() * 2,
                                                    pugi::parse_default,
                                                    pugi::encoding_utf16);
-*/
+
 
 
    if (! result)
@@ -326,7 +326,7 @@ CTioHandler::CTioHandler()
   list.push_back (default_handler);
   list.push_back (new CTioGzip);
   list.push_back (new CTioXMLZipped);
-  list.push_back (new CTioODT);
+ // list.push_back (new CTioODT);
   list.push_back (new CTioABW);
   list.push_back (new CTioFB2);
   list.push_back (new CTioRTF);
@@ -720,6 +720,10 @@ CTioXMLZipped::CTioXMLZipped()
 
   extensions.append ("kwd");
   extensions.append ("docx");
+  extensions.append ("odt");
+  extensions.append ("sxw");
+
+
 }
 
 
@@ -727,30 +731,39 @@ bool CTioXMLZipped::load (const QString &fname)
 {
   data.clear();
 
+  QStringList tags;
+
   QString source_fname;
-  QString ts;
+//  QString ts;
 
   QString ext = file_get_ext (fname);
 
   if (ext == "kwd")
      {
       source_fname = "maindoc.xml";
-      ts = "text";
+      tags.append ("text");
      }
   else
   if (ext == "docx")
      {
       source_fname = "word/document.xml";
-      ts = "w:t";
+      tags.append ("w:t");
      }
+  else
+  if (ext == "odt" || ext == "sxw" )
+     {
+      source_fname = "content.xml";
+      tags.append ( "text:p");
+      tags.append ( "text:s");
+     }
+
 
 
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, source_fname))
       return false;
 
-  QStringList tags;
-  tags.append (ts);
+  //tags.append (ts);
 
   data = extract_text_from_xml_pugi (zipper.string_data, tags);
 

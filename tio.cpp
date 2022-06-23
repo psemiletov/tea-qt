@@ -126,6 +126,7 @@ public:
 
   QString *text;
   QStringList paragraphs;
+  bool fine_spaces;
 
   bool begin (pugi::xml_node &node);
   bool end (pugi::xml_node &node);
@@ -161,6 +162,9 @@ bool CXML_walker::for_each (pugi::xml_node &node)
 
       if (! t.isEmpty())
          {
+          if (fine_spaces)
+            text->append ("   ");
+
           text->append (t);
           if (t.size() > 1)
              text->append ("\n");
@@ -203,6 +207,8 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
 
    CXML_walker walker;
    walker.text = &data;
+   walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
+
    walker.paragraphs.append (tags);
 
    doc.traverse (walker);

@@ -56,6 +56,7 @@ DJVU read code taken fromdvutxt.c:
 #include <QDebug>
 #include <QTextCodec>
 #include <QTextBrowser>
+#include <QSettings>
 
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
@@ -116,6 +117,7 @@ with qmake - Qt4/Qt5 poppler
 
 using namespace std;
 
+extern QSettings *settings;
 
 
 class CXML_walker: public pugi::xml_tree_walker
@@ -182,13 +184,15 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
   QString data;
 
   pugi::xml_document doc;
-  //pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
-    //                                               string_data.toUtf8().size());
-
+  pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
+                                                   string_data.toUtf8().size());
+/*
   pugi::xml_parse_result result = doc.load_buffer (string_data.utf16(),
                                                    string_data.size(),
                                                    pugi::parse_default,
                                                    pugi::encoding_utf16);
+*/
+
 
    if (! result)
       {
@@ -599,6 +603,7 @@ class CODT_walker: public pugi::xml_tree_walker
 public:
 
   QString *text;
+  bool fine_spaces;
 
   bool begin (pugi::xml_node &node);
   bool end (pugi::xml_node &node);
@@ -631,14 +636,18 @@ bool CODT_walker::for_each (pugi::xml_node &node)
      {
       QString t = node.text().as_string();
 
+     // qDebug() << t;
+
       if (! t.isEmpty())
          {
+          if (fine_spaces)
+             text->append ("   ");
+
           text->append (t);
           if (t.size() > 1)
              text->append ("\n");
          }
       }
-
 
   return true;
 }
@@ -658,13 +667,29 @@ bool CTioODT::load (const QString &fname)
      }
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
+  /*pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
                                                    zipper.string_data.size(),
                                                    pugi::parse_default,
                                                    pugi::encoding_utf16);
+*/
+
+
+
+
+
+  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.toUtf8().data(),
+                                                   zipper.string_data.toUtf8().size());
+
+
+   if (! result)
+       {
+        qDebug() << "cannot parse " << fname;
+        return false;
+       }
 
    CODT_walker walker;
    walker.text = &data;
+   walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
 
    doc.traverse (walker);
 

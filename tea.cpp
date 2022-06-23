@@ -6201,7 +6201,7 @@ CTEA::CTEA()
   documents->main_tab_widget = main_tab_widget;
 
   documents->menu_recent = menu_file_recent;
-  documents->recent_list_fname = dir_config + "/tea_recent";
+  documents->recent_list_fname = dir_config + "/recentfiles";
   documents->reload_recent_list();
   documents->update_recent_menu();
   documents->log = log;
@@ -7843,8 +7843,16 @@ OPTIONS::FUNCTIONS
 
   page_functions_layout->addWidget (gb_func_misc);
 
+  cb_show_ebooks_fine = new QCheckBox (tr ("Show ebooks fine"), tab_options);
+  cb_show_ebooks_fine->setChecked (settings->value ("show_ebooks_fine", "0").toBool());
+
+  vb_func_misc->addWidget (cb_show_ebooks_fine);
+
+
   page_functions->setLayout (page_functions_layout);
   page_functions->show();
+
+
 
   QScrollArea *scra_functions = new QScrollArea;
   scra_functions->setWidgetResizable (true);
@@ -9520,6 +9528,9 @@ void CTEA::leaving_options()
   settings->setValue ("output_image_fmt", cmb_output_image_fmt->currentText());
   settings->setValue ("img_filter", cb_output_image_flt->isChecked());
   settings->setValue("fuzzy_q", spb_fuzzy_q->value());
+
+  settings->setValue ("show_ebooks_fine", cb_show_ebooks_fine->isChecked());
+
   settings->setValue("img_quality", spb_img_quality->value());
   settings->setValue ("img_post_proc", cb_zip_after_scale->isChecked());
   settings->setValue ("cb_exif_rotate", cb_exif_rotate->isChecked());

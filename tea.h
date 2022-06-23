@@ -450,6 +450,7 @@ Preferences tab :: Functions page UI elements
   QLineEdit *ed_spellcheck_path;
   QLineEdit *ed_aspellcheck_path;
   QSpinBox *spb_fuzzy_q;
+  QCheckBox *cb_show_ebooks_fine;
 
 /*
 =============================================

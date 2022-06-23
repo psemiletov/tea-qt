@@ -2454,11 +2454,11 @@ void CDox::add_to_recent (CDocument *d)
      return;
 
   QString s (d->file_name);
-  s += ",";
+  s += "*";
   s += d->charset;
-  s += ",";
+  s += "*";
   s += QString::number (d->textCursor().position());
-  s += ",";
+  s += "*";
 
   if (! d->get_word_wrap())
      s+="0";

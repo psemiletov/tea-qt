@@ -1,5 +1,6 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+- Individual ODT/SXW reader class, the functionality moved to common zipped XML reader
 + Tune - Functions - Misc - Show ebooks fine (adds spaces before each paragraph)
 * old bookmarks file automatically converts to new format
 * bookmarks and recent files has a new format (with a separator *)

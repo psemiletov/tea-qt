@@ -128,12 +128,12 @@ public:
   QStringList paragraphs;
   bool fine_spaces;
 
-  bool begin (pugi::xml_node &node);
-  bool end (pugi::xml_node &node);
+//  bool begin (pugi::xml_node &node);
+//  bool end (pugi::xml_node &node);
   bool for_each (pugi::xml_node& node);
 };
 
-
+/*
 bool CXML_walker::begin (pugi::xml_node &node)
 {
  // std::cout << "begin node name = " << node.name() << std::endl;
@@ -146,7 +146,7 @@ bool CXML_walker::end (pugi::xml_node &node)
 //  std::cout << "end node name = " << node.name() << std::endl;
   return true;
 }
-
+*/
 
 
 bool CXML_walker::for_each (pugi::xml_node &node)
@@ -188,8 +188,6 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
   QString data;
 
   pugi::xml_document doc;
- // pugi::xml_parse_result result = doc.load_buffer (string_data.toUtf8().data(),
-   //                                                string_data.toUtf8().size());
 
   pugi::xml_parse_result result = doc.load_buffer (string_data.utf16(),
                                                    string_data.size() * 2,
@@ -198,20 +196,18 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
 
 
 
-   if (! result)
-      {
-       qDebug() << "NOT PARSED";
-       return data;
-      }
+  if (! result)
+     {
+      qDebug() << "NOT PARSED";
+      return data;
+     }
 
+  CXML_walker walker;
+  walker.text = &data;
+  walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
+  walker.paragraphs.append (tags);
 
-   CXML_walker walker;
-   walker.text = &data;
-   walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
-
-   walker.paragraphs.append (tags);
-
-   doc.traverse (walker);
+  doc.traverse (walker);
 
   return data;
 }
@@ -375,12 +371,7 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
 
 CTio* CTioHandler::get_for_fname (const QString &fname)
 {
-  qDebug() << "CTioHandler::get_for_fname ";
-
   CTio *instance = 0;
-  //QString ext = file_get_ext (fname).toLower();
-
-//  qDebug() << "ext: " << ext;
 
   for (vector <size_t>::size_type i = 0; i < list.size(); i++)
       {
@@ -390,10 +381,7 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
            {
             QString ext = "." + instance->extensions[i];
             if (fname.endsWith (ext))
-                {
-                 qDebug() << "!!!! << " << ext;
-                 return instance;
-                }
+                return instance;
            }
      }
 
@@ -403,7 +391,6 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
 
 CTioPlainText::CTioPlainText()
 {
- // name = "CTioPlainText";
   ronly = false;
 }
 
@@ -513,8 +500,6 @@ bool CTioODT::load (const QString &fname)
              data.append ("\n");
             }
 
-
-
         }
 
    data = data.trimmed();
@@ -603,7 +588,7 @@ bool CTioODT::load (const QString &fname)
 */
 
 
-
+/*
 class CODT_walker: public pugi::xml_tree_walker
 {
 public:
@@ -673,11 +658,11 @@ bool CTioODT::load (const QString &fname)
      }
 
   pugi::xml_document doc;
-  /*pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
-                                                   zipper.string_data.size(),
-                                                   pugi::parse_default,
-                                                   pugi::encoding_utf16);
-*/
+  //pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
+    //                                               zipper.string_data.size(),
+      //                                             pugi::parse_default,
+        //                                           pugi::encoding_utf16);
+
 
 
 
@@ -712,7 +697,7 @@ CTioODT::CTioODT()
   extensions.append ("odt");
   extensions.append ("sxw");
 }
-
+*/
 
 CTioXMLZipped::CTioXMLZipped()
 {
@@ -732,9 +717,7 @@ bool CTioXMLZipped::load (const QString &fname)
   data.clear();
 
   QStringList tags;
-
   QString source_fname;
-//  QString ts;
 
   QString ext = file_get_ext (fname);
 
@@ -758,12 +741,9 @@ bool CTioXMLZipped::load (const QString &fname)
      }
 
 
-
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, source_fname))
       return false;
-
-  //tags.append (ts);
 
   data = extract_text_from_xml_pugi (zipper.string_data, tags);
 
@@ -796,7 +776,6 @@ CCharsetMagic::CCharsetMagic()
 
        if (fn == "KOI8-U")
           koi8u = sl;
-
 
        //fill with signatures
        for (int j = 0; j < bsl.count(); j++)
@@ -943,25 +922,10 @@ class CFB2_walker: public pugi::xml_tree_walker
 public:
 
   QString *text;
+  bool fine_spaces;
 
-  bool begin (pugi::xml_node &node);
-  bool end (pugi::xml_node &node);
   bool for_each (pugi::xml_node& node);
 };
-
-
-bool CFB2_walker::begin (pugi::xml_node &node)
-{
- // std::cout << "begin node name = " << node.name() << std::endl;
-  return true;
-}
-
-
-bool CFB2_walker::end (pugi::xml_node &node)
-{
-//  std::cout << "end node name = " << node.name() << std::endl;
-  return true;
-}
 
 
 bool CFB2_walker::for_each (pugi::xml_node &node)
@@ -971,22 +935,18 @@ bool CFB2_walker::for_each (pugi::xml_node &node)
 
   QString node_name = node.name();
 
-
   if (node_name == "p")
      {
-      QString t = node.text().as_string();
-         {
- //         if (! t.startsWith (" "))
-   //          text->append ("   ");
-          text->append (t);
-          text->append ("\n");
-         }
-      }
+      if (fine_spaces)
+        text->append ("   ");
 
+      QString t = node.text().as_string();
+      text->append (t);
+      text->append ("\n");
+     }
 
   if (node_name == "title" || node_name == "section" || node_name == "empty-line")
       text->append ("\n"); //НЕ ДОБАВЛЯЕТСЯ?
-
 
   return true;
 }
@@ -997,13 +957,17 @@ bool CTioFB2::load (const QString &fname)
 {
   data.clear();
 
-  QString ext = file_get_ext (fname);
+  //QString ext = file_get_ext (fname);
+
+  //qDebug () << "ext: " << ext;
+
 
   QString temp;
 
   CZipper zipper;
 
-  if (ext == "fb2.zip" || ext == "fbz")
+  if (fname.endsWith (".fb2.zip") || fname.endsWith (".fbz"))
+  //if (ext == "fb2.zip" || ext == "fbz")
      {
       CZipper zipper;
       QFileInfo f (fname);
@@ -1016,7 +980,7 @@ bool CTioFB2::load (const QString &fname)
       temp = zipper.string_data;
      }
 
- if (ext == "fb2")
+ if (fname.endsWith ("fb2"))
     {
      QByteArray ba = file_load (fname);
      if (ba.isEmpty())
@@ -1032,18 +996,28 @@ bool CTioFB2::load (const QString &fname)
      temp = codec->toUnicode (ba);
    }
 
-
-  //QString ts = "p";
+// qDebug() << temp;
 
   pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(), temp.size(), pugi::parse_default, pugi::encoding_utf16);
+//  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(), temp.size() * 2,
+  //                                                 pugi::parse_default,
+    //                                               pugi::encoding_utf16);
 
-   CFB2_walker walker;
-   walker.text = &data;
+  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(), temp.size() * 2,
+                                                   pugi::parse_default,
+                                                   pugi::encoding_utf16);
 
-   doc.traverse (walker);
 
+  if (! result)
+     return false;
 
+  //qDebug () << "2";
+
+  CFB2_walker walker;
+  walker.text = &data;
+  walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
+
+  doc.traverse (walker);
 
   return true;
 }

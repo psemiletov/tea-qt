@@ -43,7 +43,7 @@ class CTio: public QObject
 public:
 
   bool ronly;
- // QString name;
+
   QString data;
   QString charset;
   QString error_string;
@@ -113,6 +113,7 @@ public:
 };
 #endif
 
+/*
 class CTioODT: public CTioReadOnly
 {
   Q_OBJECT
@@ -122,7 +123,7 @@ public:
   CTioODT();
   bool load (const QString &fname);
 };
-
+*/
 
 class CTioABW: public CTioReadOnly
 {
@@ -232,9 +233,6 @@ public:
 
 };
 */
-
-
-
 
 
 #endif // TIO_H

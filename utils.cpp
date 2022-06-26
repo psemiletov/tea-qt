@@ -33,7 +33,7 @@ bool has_css_file (const QString &path)
 
   for (int i = 0; i < l.size(); i++)
       {
-       if (l.at(i).endsWith(".css"))
+       if (l.at(i).endsWith(".css", Qt::CaseInsensitive))
            return true;
       }
 
@@ -182,9 +182,9 @@ bool qstring_save (const QString &fileName, const QString &data, const char *enc
       return false;
 
   QTextCodec *codec = QTextCodec::codecForName (enc);
-  QByteArray ba = codec->fromUnicode(data);
+  QByteArray ba = codec->fromUnicode (data);
 
-  file.write(ba);
+  file.write (ba);
   file.close();
 
   return true;
@@ -202,11 +202,11 @@ QString qstring_load (const QString &fileName, const char *enc)
       return QString();
 
   QByteArray ba = file.readAll();
-  QTextCodec *codec = QTextCodec::codecForName(enc);
+  QTextCodec *codec = QTextCodec::codecForName (enc);
 
   file.close();
 
-  return codec->toUnicode(ba);
+  return codec->toUnicode (ba);
 }
 
 
@@ -354,7 +354,7 @@ void hash_save_keyval (const QString &fname, const QHash <QString, QString> &h)
   while (i != h.constEnd())
         {
          l+= (i.key() + "=" + i.value());
-          ++i;
+         ++i;
         }
 
   qstring_save (fname, l.join ("\n"));
@@ -431,12 +431,13 @@ void CFilesList::iterate (QFileInfo &fi)
      {
       QDir d (fi.absoluteFilePath());
       QFileInfoList lfi= d.entryInfoList (QDir::Dirs | QDir::Files | QDir::Readable | QDir::NoDotAndDotDot);
+
       for (int i = 0; i < lfi.count(); i++)
            iterate (lfi[i]);
      }
   else
   if (fi.isFile())
-     list.append (fi.absoluteFilePath());
+      list.append (fi.absoluteFilePath());
 }
 
 
@@ -448,6 +449,7 @@ void CFilesList::get (const QString &path)
   list.clear();
   QDir d (path);
   QFileInfoList lfi= d.entryInfoList (QDir::Dirs | QDir::Files | QDir::Readable | QDir::NoDotAndDotDot);
+
   for (int i = 0; i < lfi.count(); i++)
       iterate (lfi[i]);
 }
@@ -461,22 +463,20 @@ void CFilesList::get (const QString &path)
 #endif
 
 
-
 CFTypeChecker::CFTypeChecker()
 {
-
   ADDTEXTTYPE (".*(readme|news|changelog|todo)$");
   ADDTEXTTYPE ("^\\..*(rc)$");
   ADDTEXTTYPE ("^.*\\.(txt|conf|md|ini|bat|cfg|sbv|log|odt|docx|kwd|fb2|fb2.zip|fbz|abw|rtf|epub|sxw)$");
   ADDTEXTTYPE ("^.*\\.(cpp|c|h|hh|cxx|hpp|cc|m|mm)$");
   ADDTEXTTYPE ("^.*\\.(htm|html|xml|xhtml|ts|osm|xsl)$");
+
 #if defined(POPPLER_ENABLE)
   ADDTEXTTYPE ("^.*\\.(pdf)$");
 #endif
 #if defined(DJVU_ENABLE)
   ADDTEXTTYPE ("^.*\\.(djvu)$");
 #endif
-
 
   ADDTEXTTYPE ("^.*\\.(awk)$");
   ADDTEXTTYPE ("^.*\\.(sh)$");
@@ -596,27 +596,21 @@ bool CFTypeChecker::check (const QString &fname) const
 #if QT_VERSION < 0x050000
 
   for (size_t i = 0; i < patterns.size(); ++i)
-     {
-      if (patterns[i].exactMatch(fname))
-         return true;
-     }
+      {
+       if (patterns[i].exactMatch(fname))
+          return true;
+      }
 
 #else
 
   for (size_t i = 0; i < patterns.size(); ++i)
-     {
-      QRegularExpressionMatch match = patterns[i].match(fname);
-      if (match.hasMatch())
-         return true;
-      }
+      {
+       QRegularExpressionMatch match = patterns[i].match(fname);
+       if (match.hasMatch())
+          return true;
+       }
 
 #endif
 
   return false;
 }
-
-
-/*
-GUI functions
-*/
-

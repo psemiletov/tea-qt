@@ -127,26 +127,8 @@ public:
   QString *text;
   QStringList paragraphs;
   bool fine_spaces;
-
-//  bool begin (pugi::xml_node &node);
-//  bool end (pugi::xml_node &node);
   bool for_each (pugi::xml_node& node);
 };
-
-/*
-bool CXML_walker::begin (pugi::xml_node &node)
-{
- // std::cout << "begin node name = " << node.name() << std::endl;
-  return true;
-}
-
-
-bool CXML_walker::end (pugi::xml_node &node)
-{
-//  std::cout << "end node name = " << node.name() << std::endl;
-  return true;
-}
-*/
 
 
 bool CXML_walker::for_each (pugi::xml_node &node)
@@ -193,8 +175,6 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
                                                    string_data.size() * 2,
                                                    pugi::parse_default,
                                                    pugi::encoding_utf16);
-
-
 
   if (! result)
      {
@@ -254,6 +234,7 @@ QString extract_text_from_xml (const QString &string_data, const QStringList &ta
   return data;
 }
 */
+
 
 bool CTioPlainText::load (const QString &fname)
 {
@@ -368,6 +349,7 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
   return default_handler;
 }
 */
+
 
 CTio* CTioHandler::get_for_fname (const QString &fname)
 {
@@ -707,8 +689,6 @@ CTioXMLZipped::CTioXMLZipped()
   extensions.append ("docx");
   extensions.append ("odt");
   extensions.append ("sxw");
-
-
 }
 
 

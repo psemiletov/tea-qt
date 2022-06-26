@@ -350,7 +350,6 @@ void CSyntaxHighlighterQRegExp::highlightBlock (const QString &text)
 }
 
 
-
 class CXMLHL_walker: public pugi::xml_tree_walker
 {
 public:
@@ -359,25 +358,8 @@ public:
   int darker_val;
 
 
-  bool begin (pugi::xml_node &node);
-  bool end (pugi::xml_node &node);
   bool for_each (pugi::xml_node& node);
 };
-
-
-bool CXMLHL_walker::begin (pugi::xml_node &node)
-{
- // std::cout << "begin node name = " << node.name() << std::endl;
-  return true;
-}
-
-
-bool CXMLHL_walker::end (pugi::xml_node &node)
-{
-//  std::cout << "end node name = " << node.name() << std::endl;
-  return true;
-}
-
 
 
 bool CXMLHL_walker::for_each (pugi::xml_node &node)
@@ -509,7 +491,6 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
 }
 
 
-
 void CSyntaxHighlighterQRegExp::load_from_xml_pugi (const QString &fname)
 {
   if (! file_exists (fname))
@@ -523,7 +504,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml_pugi (const QString &fname)
   QString temp = qstring_load (fname);
   if (temp.isEmpty())
      return;
-
 
   int darker_val = settings->value ("darker_val", 100).toInt();
 
@@ -704,25 +684,8 @@ public:
   CSyntaxHighlighterQRegularExpression *hl;
   int darker_val;
 
-  bool begin (pugi::xml_node &node);
-  bool end (pugi::xml_node &node);
   bool for_each (pugi::xml_node& node);
 };
-
-
-bool CXMLHL_walker::begin (pugi::xml_node &node)
-{
- // std::cout << "begin node name = " << node.name() << std::endl;
-  return true;
-}
-
-
-bool CXMLHL_walker::end (pugi::xml_node &node)
-{
-//  std::cout << "end node name = " << node.name() << std::endl;
-  return true;
-}
-
 
 
 bool CXMLHL_walker::for_each (pugi::xml_node &node)
@@ -737,7 +700,6 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
 
   QString tag_name = node.name();
 
-
   if (tag_name == "item")
      {
 
@@ -748,9 +710,9 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
 
       if (attr_name == "options")
          {
-          attr = node.attribute ("casecare");
+//          attr = node.attribute ("casecare");
 
-          QString s_casecare = attr.as_string();
+          QString s_casecare = node.attribute ("casecare").as_string();
           if (! s_casecare.isEmpty())
              if (s_casecare == "0" || s_casecare == "false")
                 hl->casecare = false;
@@ -761,11 +723,11 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
 
       if (attr_type == "keywords")
          {
-          attr = node.attribute ("color");
-          QString color = hash_get_val (global_palette, attr.as_string(), "darkBlue");
+          //attr = node.attribute ("color");
+          QString color = hash_get_val (global_palette, node.attribute ("color").as_string(), "darkBlue");
 
-          attr = node.attribute ("fontstyle");
-          QTextCharFormat fmt = tformat_from_style (attr.as_string(), color, darker_val);
+          //attr = node.attribute ("fontstyle");
+          QTextCharFormat fmt = tformat_from_style (node.attribute ("fontstyle").as_string(), color, darker_val);
 
           QString t = node.text().as_string();
           QString element = t.trimmed().remove('\n');
@@ -777,17 +739,17 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
           if (! rg.isValid())
              qDebug() << "! valid " << rg.pattern();
           else
-               hl->hl_rules.push_back (make_pair (rg, fmt));
+              hl->hl_rules.push_back (make_pair (rg, fmt));
 
           } //keywords
       else
       if (attr_type == "item")
          {
-          attr = node.attribute ("color");
-          QString color = hash_get_val (global_palette, attr.as_string(), "darkBlue");
+//          attr = node.attribute ("color");
+          QString color = hash_get_val (global_palette, node.attribute ("color").as_string(), "darkBlue");
 
-          attr = node.attribute ("fontstyle");
-          QTextCharFormat fmt = tformat_from_style (attr.as_string(), color, darker_val);
+//          attr = node.attribute ("fontstyle");
+          QTextCharFormat fmt = tformat_from_style (node.attribute ("fontstyle").as_string(), color, darker_val);
 
           QString t = node.text().as_string();
           QString element = t.trimmed().remove('\n');
@@ -803,13 +765,11 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
        else
        if (attr_type == "mcomment-start")
           {
-           attr = node.attribute ("color");
+  //         attr = node.attribute ("color");
+           QString color = hash_get_val (global_palette, node.attribute ("color").as_string(), "gray");
 
-           QString color = hash_get_val (global_palette, attr.as_string(), "gray");
-
-           attr = node.attribute ("fontstyle");
-
-           QString fontstyle = attr.as_string();
+           //attr = node.attribute ("fontstyle");
+           QString fontstyle = node.attribute ("fontstyle").as_string();
            QTextCharFormat fmt = tformat_from_style (fontstyle, color, darker_val);
 
            hl->fmt_multi_line_comment = fmt;
@@ -849,8 +809,8 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
        else
        if (attr_type == "comment")
           {
-           attr = node.attribute ("name");
-           QString name = attr.as_string();
+           //attr = node.attribute ("name");
+           QString name = node.attribute ("name").as_string();
 
            QString t = node.text().as_string();
            QString element = t.trimmed().remove('\n');
@@ -884,10 +844,7 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fn
   if (temp.isEmpty())
      return;
 
-
-
   int darker_val = settings->value ("darker_val", 100).toInt();
-
 
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (temp.utf16(),
@@ -902,13 +859,11 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fn
   if (! result)
      return;
 
-
    CXMLHL_walker walker;
    walker.darker_val = darker_val;
    walker.hl = this;
 
    doc.traverse (walker);
-
 }
 
 

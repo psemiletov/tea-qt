@@ -851,11 +851,6 @@ void CSyntaxHighlighterQRegularExpression::load_from_xml_pugi (const QString &fn
                                                    temp.size() * 2,
                                                    pugi::parse_default,
                                                    pugi::encoding_utf16);
-
-
-//  pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
-  //                                                 temp.toUtf8().size());
-
   if (! result)
      return;
 
@@ -918,7 +913,6 @@ void CSyntaxHighlighterQRegularExpression::highlightBlock (const QString &text)
 
   QRegularExpressionMatch m_start = comment_start_expr.first.match (text);
 
-
   if (previousBlockState() != 1)
       startIndex = m_start.capturedStart();
 
@@ -976,6 +970,7 @@ void CDocument::insertFromMimeData (const QMimeData *source)
   QFileInfo info;
 
   bool b_ins_plain_text = ! source->hasUrls();
+
   if (source->hasUrls() && source->urls().at(0).scheme() != "file")
       b_ins_plain_text = true;
 
@@ -1263,7 +1258,6 @@ CDocument::~CDocument()
             file_save_with_name (file_name, charset);
 
 
-
   if (! file_name.startsWith (holder->dir_config) && ! file_name.endsWith (".notes"))
      {
       holder->add_to_recent (this);
@@ -1298,7 +1292,7 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
 {
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
 
-  qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
+//  qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
 
   if (! tio)
       return false;
@@ -1335,7 +1329,7 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
 
   while (i.hasNext())
         {
-         QStringList lt = i.next().split (",");
+         QStringList lt = i.next().split ("*");
          if (lt.size() > 0)
              if (lt.at(0) == file_name)
                 i.remove();

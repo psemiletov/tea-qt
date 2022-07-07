@@ -693,9 +693,6 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
   if (node.type() != pugi::node_element)
       return true;
 
-  //int darker_val = settings->value ("darker_val", 100).toInt();
-
-
 //  std::cout << "for_each name = " << node.name() << std::endl;
 
   QString tag_name = node.name();
@@ -804,7 +801,6 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
                 hl->comment_end_expr.first = rg;
                 hl->comment_end_expr.second = true;
                }
-
           }
        else
        if (attr_type == "comment")
@@ -1267,7 +1263,9 @@ CDocument::~CDocument()
   if (file_name.startsWith (holder->todo.dir_days))
       holder->todo.load_dayfile();
 
-  QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
+//  QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
+  QMainWindow *w = holder->parent_wnd;
+
   w->setWindowTitle ("");
 
   int i = holder->tab_widget->indexOf (tab_page);
@@ -1597,6 +1595,7 @@ void CDocument::set_hl (bool mode_auto, const QString &theext)
        }
 
 #else
+
    for (vector<pair<QRegExp, QString> >::iterator p = holder->hl_files.begin(); p != holder->hl_files.end(); ++p)
        {
         if (p->first.isValid())
@@ -1669,7 +1668,9 @@ void CDocument::update_title (bool fullname)
   if (! holder->parent_wnd)
      return;
 
-  QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
+ // QMainWindow *w = qobject_cast <QMainWindow *> (holder->parent_wnd);
+
+  QMainWindow *w = holder->parent_wnd;
 
   if (fullname)
       w->setWindowTitle (file_name);
@@ -1829,10 +1830,10 @@ void CDocument::calc_auto_indent()
      {
       for (int i = 0; i < len; i++)
           if (s.at(i) != '\t')
-            {
-             aindent = i;
-             break;
-            }
+             {
+              aindent = i;
+              break;
+             }
      }
 
 

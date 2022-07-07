@@ -1,13 +1,16 @@
 ====NEWS ABOUT TEA====
-TEA 60.7.0, January 2022
+TEA 61.0.0, July 2022
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
    Hello world!
-   This version fixes all stuff related to external processes when TEA is compiled against Qt6.
-   Some bundled Quazip fixes has been made. 
-   Also TEA features user-defined virtual keyboards for quick mouse-type letters or whole words. See the Manual about "Keyboards", and the "View" menu.
+
+   This version is cool in many reasons. 
+   All inner XML parsing has been moved to pugixml instead of Qt's XML parser. I feel that pugixml is faster and more useful for TEA. XML parsing is used at some text formats support (such as FB2, ODT, etc.) and the syntax highlighting engine, so all that stuff was heavy rewritten. 
+   To deal with complex file names, new TEA used a new format for the bookmarks and the "Recent" list. The bookmarks file will be converted to the new format automatically, and - TEA uses now a different file to hold bookmarks. The Recent list will be updated by opening files.
+   New option: Tune - Functions - Misc - Show ebooks fine. It adds spaces before each paragraph, when you open FB2, Epub, etc.
+
 
    Stay tuned.
    Peter Semiletov

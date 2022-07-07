@@ -39,33 +39,33 @@
 <context>
     <name>CDocument</name>
     <message>
-        <location filename="../document.cpp" line="937"/>
+        <location filename="../document.cpp" line="1305"/>
         <source>cannot open %1 because of: %2</source>
         <translation>Nie można otworzyć %1, z powodu %2</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="991"/>
+        <location filename="../document.cpp" line="1359"/>
         <source>cannot save %1 because of: %2</source>
         <translation>nie można zapisać %1, z powodu %2</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="1004"/>
+        <location filename="../document.cpp" line="1372"/>
         <source>%1 is saved</source>
         <translation>%1 jest zapisany</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="885"/>
+        <location filename="../document.cpp" line="1250"/>
         <source>%1 has been modified.
 Do you want to save your changes?</source>
         <translation>%1 został zmodyfikowany. Czy chcesz zachować zmiany?</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="956"/>
+        <location filename="../document.cpp" line="1324"/>
         <source>%1 is open</source>
         <translation>%1 jest otwarty</translation>
     </message>
     <message>
-        <location filename="../document.cpp" line="799"/>
+        <location filename="../document.cpp" line="1164"/>
         <source>new[%1]</source>
         <translation>nowy[%1]</translation>
     </message>
@@ -92,31 +92,31 @@ Do you want to save your changes?</source>
 <context>
     <name>CTEA</name>
     <message>
-        <location filename="../tea.cpp" line="6568"/>
-        <location filename="../tea.cpp" line="6675"/>
+        <location filename="../tea.cpp" line="6581"/>
+        <location filename="../tea.cpp" line="6688"/>
         <source>The famous input field. Use for search/replace, function parameters</source>
         <translation>Znane pole wprowadzania. Służy do wyszukiwania/zamiany, parametrów funkcji</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6598"/>
-        <location filename="../tea.cpp" line="6696"/>
-        <location filename="../tea.cpp" line="8025"/>
+        <location filename="../tea.cpp" line="6611"/>
+        <location filename="../tea.cpp" line="6709"/>
+        <location filename="../tea.cpp" line="8046"/>
         <source>FIF</source>
         <translation>FIF</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6608"/>
-        <location filename="../tea.cpp" line="6706"/>
+        <location filename="../tea.cpp" line="6621"/>
+        <location filename="../tea.cpp" line="6719"/>
         <source>editor</source>
         <translation>Edycja</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6644"/>
+        <location filename="../tea.cpp" line="6657"/>
         <source>logmemo</source>
         <translation>logmemo</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6661"/>
+        <location filename="../tea.cpp" line="6674"/>
         <source>famous input field</source>
         <translation>znane pole wejściowe</translation>
     </message>
@@ -133,7 +133,7 @@ Do you want to save your changes?</source>
         <location filename="../tea.cpp" line="1175"/>
         <location filename="../tea.cpp" line="1423"/>
         <location filename="../tea.cpp" line="1568"/>
-        <location filename="../tea.cpp" line="8146"/>
+        <location filename="../tea.cpp" line="8167"/>
         <source>Charset</source>
         <translation>Kodowanie</translation>
     </message>
@@ -150,189 +150,189 @@ Do you want to overwrite?</source>
 Chcesz nadpisać?</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6716"/>
+        <location filename="../tea.cpp" line="6729"/>
         <source>Test</source>
         <translation>Test</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="2845"/>
-        <location filename="../tea.cpp" line="6719"/>
-        <location filename="../tea.cpp" line="8011"/>
+        <location filename="../tea.cpp" line="6732"/>
+        <location filename="../tea.cpp" line="8032"/>
         <source>Files</source>
         <translation>Pliki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6721"/>
-        <location filename="../tea.cpp" line="7242"/>
-        <location filename="../tea.cpp" line="7733"/>
+        <location filename="../tea.cpp" line="6734"/>
+        <location filename="../tea.cpp" line="7255"/>
+        <location filename="../tea.cpp" line="7746"/>
         <source>Labels</source>
         <translation>Etykiety</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6724"/>
+        <location filename="../tea.cpp" line="6737"/>
         <source>New</source>
         <translation>Nowy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6727"/>
+        <location filename="../tea.cpp" line="6740"/>
         <source>Create a new file</source>
         <translation>Utwórz nowy plik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6733"/>
+        <location filename="../tea.cpp" line="6746"/>
         <source>Open file</source>
         <translation>Otwórz plik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6735"/>
+        <location filename="../tea.cpp" line="6748"/>
         <source>Open an existing file</source>
         <translation>Otwórz istniejący plik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6741"/>
+        <location filename="../tea.cpp" line="6754"/>
         <source>Save</source>
         <translation>Zachowaj</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6743"/>
+        <location filename="../tea.cpp" line="6756"/>
         <source>Save the document to disk</source>
         <translation>Zapisz dokument na dysku</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6746"/>
+        <location filename="../tea.cpp" line="6759"/>
         <source>Save As</source>
         <translation>Zachowaj jako</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6747"/>
+        <location filename="../tea.cpp" line="6760"/>
         <source>Save the document under a new name</source>
         <translation>Zapisz dokument pod nową nazwą</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6750"/>
+        <location filename="../tea.cpp" line="6763"/>
         <source>Exit</source>
         <translation>Wyjście</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6752"/>
+        <location filename="../tea.cpp" line="6765"/>
         <source>Exit the application</source>
         <translation>Wyjdź z programu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6758"/>
+        <location filename="../tea.cpp" line="6771"/>
         <source>Cut</source>
         <translation>Wytnij</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6760"/>
+        <location filename="../tea.cpp" line="6773"/>
         <source>Cut the current selection&apos;s contents to the clipboard</source>
         <translation>Wytnij bieżące zaznaczenie do schowka</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6766"/>
+        <location filename="../tea.cpp" line="6779"/>
         <source>Copy</source>
         <translation>Kopiuj</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6768"/>
+        <location filename="../tea.cpp" line="6781"/>
         <source>Copy the current selection&apos;s contents to the clipboard</source>
         <translation>Skopiuj bieżące zaznaczenie do schowka</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6774"/>
+        <location filename="../tea.cpp" line="6787"/>
         <source>Paste</source>
         <translation>Wklej</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6776"/>
+        <location filename="../tea.cpp" line="6789"/>
         <source>Paste the clipboard&apos;s contents into the current selection</source>
         <translation>Wklej ze schowka</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6779"/>
+        <location filename="../tea.cpp" line="6792"/>
         <source>Undo</source>
         <translation>Cofnij</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6783"/>
+        <location filename="../tea.cpp" line="6796"/>
         <source>Redo</source>
         <translation>Ponów</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6786"/>
+        <location filename="../tea.cpp" line="6799"/>
         <source>About</source>
         <translation>O programie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6789"/>
+        <location filename="../tea.cpp" line="6802"/>
         <source>About Qt</source>
         <translation>O Qt</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6802"/>
-        <location filename="../tea.cpp" line="7993"/>
+        <location filename="../tea.cpp" line="6815"/>
+        <location filename="../tea.cpp" line="8014"/>
         <source>File</source>
         <translation>Plik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6808"/>
-        <location filename="../tea.cpp" line="8170"/>
+        <location filename="../tea.cpp" line="6821"/>
+        <location filename="../tea.cpp" line="8191"/>
         <source>Open</source>
         <translation>Otwórz</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6809"/>
+        <location filename="../tea.cpp" line="6822"/>
         <source>Last closed file</source>
         <translation>Ostatni zamknięty plik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6810"/>
+        <location filename="../tea.cpp" line="6823"/>
         <source>Open at cursor</source>
         <translation>Otwórz pod kursorem</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6811"/>
+        <location filename="../tea.cpp" line="6824"/>
         <source>Crapbook</source>
         <translation>Brudnopis (Crapbook)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6812"/>
+        <location filename="../tea.cpp" line="6825"/>
         <source>Notes</source>
         <translation>Notatki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6819"/>
+        <location filename="../tea.cpp" line="6832"/>
         <source>Save as different</source>
         <translation>Zapisz jako inny</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6822"/>
+        <location filename="../tea.cpp" line="6835"/>
         <source>Save .bak</source>
         <translation>Zapisz kopię zapasową</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6823"/>
+        <location filename="../tea.cpp" line="6836"/>
         <source>Save timestamped version</source>
         <translation>Zapisz wersję według czasu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6824"/>
+        <location filename="../tea.cpp" line="6837"/>
         <source>Save session</source>
         <translation>Zapisz sesję</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6828"/>
+        <location filename="../tea.cpp" line="6841"/>
         <source>File actions</source>
         <translation>Działania na plikach</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6829"/>
+        <location filename="../tea.cpp" line="6842"/>
         <source>Reload</source>
         <translation>Przeczytaj ponownie</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="1568"/>
-        <location filename="../tea.cpp" line="6830"/>
+        <location filename="../tea.cpp" line="6843"/>
         <source>Reload with encoding</source>
         <translation>Załaduj ponownie z kodowaniem</translation>
     </message>
@@ -341,385 +341,385 @@ Chcesz nadpisać?</translation>
         <translation type="obsolete">&lt;b&gt;TEA %1&lt;/b&gt; autorstwa Piotra Semiletowa | semiletov.org/tea&lt;br&gt;Wspieraj rozwój na www.patreon.com/semiletov&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6832"/>
+        <location filename="../tea.cpp" line="6845"/>
         <source>Set UNIX end of line</source>
         <translation>Ustaw koniec wiersza w systemie UNIX</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6833"/>
+        <location filename="../tea.cpp" line="6846"/>
         <source>Set Windows end of line</source>
         <translation>Ustaw koniec linii w systemie Windows</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6834"/>
+        <location filename="../tea.cpp" line="6847"/>
         <source>Set old Mac end of line (CR)</source>
         <translation>Ustaw koniec wiersza według starego Maca (CR)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6840"/>
+        <location filename="../tea.cpp" line="6853"/>
         <source>Recent files</source>
         <translation>Ostatnie pliki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6842"/>
+        <location filename="../tea.cpp" line="6855"/>
         <source>Bookmarks</source>
         <translation>Zakładki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6844"/>
+        <location filename="../tea.cpp" line="6857"/>
         <source>Edit bookmarks</source>
         <translation>Edytuj zakładki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6845"/>
+        <location filename="../tea.cpp" line="6858"/>
         <source>Add to bookmarks</source>
         <translation>Dodaj do zakładek</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6846"/>
+        <location filename="../tea.cpp" line="6859"/>
         <source>Find obsolete paths</source>
         <translation>Znajdź przestarzałe ścieżki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6848"/>
+        <location filename="../tea.cpp" line="6861"/>
         <source>Templates</source>
         <translation>Szablony</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6849"/>
+        <location filename="../tea.cpp" line="6862"/>
         <source>Sessions</source>
         <translation>Sesje</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6851"/>
+        <location filename="../tea.cpp" line="6864"/>
         <source>Configs</source>
         <translation>Konfiguracje</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6852"/>
+        <location filename="../tea.cpp" line="6865"/>
         <source>Bookmarks list</source>
         <translation>Lista zakładek</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6853"/>
+        <location filename="../tea.cpp" line="6866"/>
         <source>Programs list</source>
         <translation>Lista programów</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6857"/>
+        <location filename="../tea.cpp" line="6870"/>
         <source>Do not add to recent</source>
         <translation>Nie dodawaj do ostatnich plików</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6860"/>
+        <location filename="../tea.cpp" line="6873"/>
         <source>Print</source>
         <translation>Drukuj</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6863"/>
+        <location filename="../tea.cpp" line="6876"/>
         <source>Close current</source>
         <translation>Zamknij bieżący plik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6873"/>
-        <location filename="../tea.cpp" line="7999"/>
+        <location filename="../tea.cpp" line="6886"/>
+        <location filename="../tea.cpp" line="8020"/>
         <source>Edit</source>
         <translation>Edycja</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6882"/>
+        <location filename="../tea.cpp" line="6895"/>
         <source>Block start</source>
         <translation>Początek bloku</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6883"/>
+        <location filename="../tea.cpp" line="6896"/>
         <source>Block end</source>
         <translation>Koniec bloku</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6884"/>
+        <location filename="../tea.cpp" line="6897"/>
         <source>Copy block</source>
         <translation>Kopiuj blok</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6885"/>
+        <location filename="../tea.cpp" line="6898"/>
         <source>Paste block</source>
         <translation>Wklej blok</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6886"/>
+        <location filename="../tea.cpp" line="6899"/>
         <source>Cut block</source>
         <translation>Wytnij blok</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6890"/>
+        <location filename="../tea.cpp" line="6903"/>
         <source>Copy current file name</source>
         <translation>Kopiuj nazwę bieżącego pliku</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6899"/>
+        <location filename="../tea.cpp" line="6912"/>
         <source>Indent (tab)</source>
         <translation>Wcięcie (tab)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6900"/>
+        <location filename="../tea.cpp" line="6913"/>
         <source>Un-indent (shift+tab)</source>
         <translation>Cofnij wcięcie (shift-tab)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6901"/>
+        <location filename="../tea.cpp" line="6914"/>
         <source>Indent by first line</source>
         <translation>Wcięcie w pierwszej linii</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6905"/>
+        <location filename="../tea.cpp" line="6918"/>
         <source>Comment selection</source>
         <translation>Skomentuj zaznaczone</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6909"/>
+        <location filename="../tea.cpp" line="6922"/>
         <source>Set as storage file</source>
         <translation>Ustaw jako plik pamięci</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6910"/>
+        <location filename="../tea.cpp" line="6923"/>
         <source>Copy to storage file</source>
         <translation>Skopiuj do pliku pamięci</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6911"/>
+        <location filename="../tea.cpp" line="6924"/>
         <source>Start/stop capture clipboard to storage file</source>
         <translation>Uruchom/zatrzymaj przechwytywanie schowka do pliku pamięci</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6920"/>
+        <location filename="../tea.cpp" line="6933"/>
         <source>Markup</source>
         <translation>Znaczniki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6923"/>
+        <location filename="../tea.cpp" line="6936"/>
         <source>Mode</source>
         <translation>Tryb</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6930"/>
+        <location filename="../tea.cpp" line="6943"/>
         <source>Header</source>
         <translation>Nagłówek</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6937"/>
+        <location filename="../tea.cpp" line="6950"/>
         <source>Align</source>
         <translation>Wyrównanie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6940"/>
+        <location filename="../tea.cpp" line="6953"/>
         <source>Center</source>
         <translation>Do środka</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6941"/>
-        <location filename="../tea.cpp" line="7439"/>
+        <location filename="../tea.cpp" line="6954"/>
+        <location filename="../tea.cpp" line="7452"/>
         <source>Left</source>
         <translation>Do lewej</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6942"/>
-        <location filename="../tea.cpp" line="7440"/>
+        <location filename="../tea.cpp" line="6955"/>
+        <location filename="../tea.cpp" line="7453"/>
         <source>Right</source>
         <translation>Do prawej</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6943"/>
+        <location filename="../tea.cpp" line="6956"/>
         <source>Justify</source>
         <translation>Wyśrodkowanie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6945"/>
+        <location filename="../tea.cpp" line="6958"/>
         <source>Bold</source>
         <translation>Pogrubienie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6946"/>
+        <location filename="../tea.cpp" line="6959"/>
         <source>Italic</source>
         <translation>Kursywa</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6947"/>
+        <location filename="../tea.cpp" line="6960"/>
         <source>Underline</source>
         <translation>Podkreślenie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6949"/>
+        <location filename="../tea.cpp" line="6962"/>
         <source>Link</source>
         <translation>Odnośnik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6950"/>
+        <location filename="../tea.cpp" line="6963"/>
         <source>Paragraph</source>
         <translation>Paragraf</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6951"/>
+        <location filename="../tea.cpp" line="6964"/>
         <source>Color</source>
         <translation>Kolor</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6953"/>
+        <location filename="../tea.cpp" line="6966"/>
         <source>Break line</source>
         <translation>Przeniesienie linii</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6954"/>
+        <location filename="../tea.cpp" line="6967"/>
         <source>Non-breaking space</source>
         <translation>Niełamliwa spacja</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6955"/>
+        <location filename="../tea.cpp" line="6968"/>
         <source>Insert image</source>
         <translation>Wstawianie obrazu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6957"/>
+        <location filename="../tea.cpp" line="6970"/>
         <source>[X]HTML tools</source>
         <translation>Narzędzia [X]HTML</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6960"/>
+        <location filename="../tea.cpp" line="6973"/>
         <source>Text to [X]HTML</source>
         <translation>Tekst na [X]HTML</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6961"/>
+        <location filename="../tea.cpp" line="6974"/>
         <source>Convert tags to entities</source>
         <translation>Konwertowanie znaczników na encje</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6962"/>
+        <location filename="../tea.cpp" line="6975"/>
         <source>Antispam e-mail</source>
         <translation>Koduj swój adres e-mail przed spamem</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6963"/>
+        <location filename="../tea.cpp" line="6976"/>
         <source>Document weight</source>
         <translation>Zważ dokument</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6964"/>
+        <location filename="../tea.cpp" line="6977"/>
         <source>Preview selected color</source>
         <translation>Zobacz wyróżniony kolor</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6965"/>
+        <location filename="../tea.cpp" line="6978"/>
         <source>Strip HTML tags</source>
         <translation>Wyczyść tagi HTML</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6966"/>
+        <location filename="../tea.cpp" line="6979"/>
         <source>Rename selected file</source>
         <translation>Zmień nazwę wybranego pliku</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6974"/>
+        <location filename="../tea.cpp" line="6987"/>
         <source>Search</source>
         <translation>Szukaj</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6587"/>
-        <location filename="../tea.cpp" line="6685"/>
-        <location filename="../tea.cpp" line="6977"/>
-        <location filename="../tea.cpp" line="8041"/>
+        <location filename="../tea.cpp" line="6600"/>
+        <location filename="../tea.cpp" line="6698"/>
+        <location filename="../tea.cpp" line="6990"/>
+        <location filename="../tea.cpp" line="8062"/>
         <source>Find</source>
         <translation>Znajdź</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6595"/>
-        <location filename="../tea.cpp" line="6689"/>
-        <location filename="../tea.cpp" line="6978"/>
-        <location filename="../tea.cpp" line="8045"/>
+        <location filename="../tea.cpp" line="6608"/>
+        <location filename="../tea.cpp" line="6702"/>
+        <location filename="../tea.cpp" line="6991"/>
+        <location filename="../tea.cpp" line="8066"/>
         <source>Find next</source>
         <translation>Znajdź następny</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6591"/>
-        <location filename="../tea.cpp" line="6693"/>
-        <location filename="../tea.cpp" line="6979"/>
-        <location filename="../tea.cpp" line="8049"/>
+        <location filename="../tea.cpp" line="6604"/>
+        <location filename="../tea.cpp" line="6706"/>
+        <location filename="../tea.cpp" line="6992"/>
+        <location filename="../tea.cpp" line="8070"/>
         <source>Find previous</source>
         <translation>Znajdź poprzedni</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6983"/>
+        <location filename="../tea.cpp" line="6996"/>
         <source>Find in files</source>
         <translation>Znajdź w plikach</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6987"/>
+        <location filename="../tea.cpp" line="7000"/>
         <source>Replace with</source>
         <translation>Zamień na</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6988"/>
+        <location filename="../tea.cpp" line="7001"/>
         <source>Replace all</source>
         <translation>Zamień wszystkie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6989"/>
+        <location filename="../tea.cpp" line="7002"/>
         <source>Replace all in opened files</source>
         <translation>Zastąp wszystko w otwartych plikach</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6993"/>
+        <location filename="../tea.cpp" line="7006"/>
         <source>Mark all found</source>
         <translation>Oznacz wszystkie znalezione</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6994"/>
+        <location filename="../tea.cpp" line="7007"/>
         <source>Unmark</source>
         <translation>Usuń zaznaczenia</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6998"/>
+        <location filename="../tea.cpp" line="7011"/>
         <source>Case sensitive</source>
         <translation>Rozróżnianie wielkości liter</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7001"/>
+        <location filename="../tea.cpp" line="7014"/>
         <source>Whole words</source>
         <translation>Całe słowa</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7005"/>
+        <location filename="../tea.cpp" line="7018"/>
         <source>From cursor</source>
         <translation>Od kursora</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7009"/>
+        <location filename="../tea.cpp" line="7022"/>
         <source>Regexp mode</source>
         <translation>W trybie wyrażeń regularnych</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7013"/>
+        <location filename="../tea.cpp" line="7026"/>
         <source>Fuzzy mode</source>
         <translation>W trybie rozmytym</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7025"/>
-        <location filename="../tea.cpp" line="7840"/>
+        <location filename="../tea.cpp" line="7038"/>
+        <location filename="../tea.cpp" line="7861"/>
         <source>Functions</source>
         <translation>Funkcje</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7028"/>
+        <location filename="../tea.cpp" line="7041"/>
         <source>Repeat last</source>
         <translation>Powtórz ostatni</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7030"/>
+        <location filename="../tea.cpp" line="7043"/>
         <source>Tools</source>
         <translation>Narzędzia</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7032"/>
+        <location filename="../tea.cpp" line="7045"/>
         <source>Scale image</source>
         <translation>Skaluj obraz</translation>
     </message>
@@ -728,612 +728,612 @@ Chcesz nadpisać?</translation>
         <translation type="vanished">Wtyczki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7034"/>
+        <location filename="../tea.cpp" line="7047"/>
         <source>Snippets</source>
         <translation>Fragmenty</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7035"/>
+        <location filename="../tea.cpp" line="7048"/>
         <source>Scripts</source>
         <translation>Skrypty</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7036"/>
+        <location filename="../tea.cpp" line="7049"/>
         <source>Tables</source>
         <translation>Tabele</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7038"/>
+        <location filename="../tea.cpp" line="7051"/>
         <source>Place</source>
         <translation>Umieść</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7042"/>
+        <location filename="../tea.cpp" line="7055"/>
         <source>TEA project template</source>
         <translation>Szablon projektu TEA</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7043"/>
+        <location filename="../tea.cpp" line="7056"/>
         <source>HTML template</source>
         <translation>Szablon HTML</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7044"/>
+        <location filename="../tea.cpp" line="7057"/>
         <source>HTML5 template</source>
         <translation>Szablon HTML5</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7045"/>
+        <location filename="../tea.cpp" line="7058"/>
         <source>C++ template</source>
         <translation>Szablon C++</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7046"/>
+        <location filename="../tea.cpp" line="7059"/>
         <source>C template</source>
         <translation>Szablon C</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7047"/>
+        <location filename="../tea.cpp" line="7060"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7048"/>
+        <location filename="../tea.cpp" line="7061"/>
         <source>Time</source>
         <translation>Czas</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7051"/>
+        <location filename="../tea.cpp" line="7064"/>
         <source>Case</source>
         <translation>Wielkość liter</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7054"/>
+        <location filename="../tea.cpp" line="7067"/>
         <source>UPCASE</source>
         <translation>wielkie litery</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7055"/>
+        <location filename="../tea.cpp" line="7068"/>
         <source>lower case</source>
         <translation>małe litery</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7059"/>
+        <location filename="../tea.cpp" line="7072"/>
         <source>Sort</source>
         <translation>Sortowanie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7062"/>
+        <location filename="../tea.cpp" line="7075"/>
         <source>Sort case sensitively</source>
         <translation>Sortuj z uwzględnieniem wielkości liter</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7063"/>
+        <location filename="../tea.cpp" line="7076"/>
         <source>Sort case insensitively</source>
         <translation>Sortuj bez uwzględnienia wielkości liter</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7064"/>
+        <location filename="../tea.cpp" line="7077"/>
         <source>Sort case sensitively, with separator</source>
         <translation>Sortuj z uwzględnieniem wielkości liter, używając separatora</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7065"/>
+        <location filename="../tea.cpp" line="7078"/>
         <source>Sort by length</source>
         <translation>Sortuj według długości</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7067"/>
+        <location filename="../tea.cpp" line="7080"/>
         <source>Flip a list</source>
         <translation>Odwróć listę</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7068"/>
+        <location filename="../tea.cpp" line="7081"/>
         <source>Flip a list with separator</source>
         <translation>Odwróć listę oddzieloną separatorami</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7071"/>
+        <location filename="../tea.cpp" line="7084"/>
         <source>Cells</source>
         <translation>Komórki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7074"/>
+        <location filename="../tea.cpp" line="7087"/>
         <source>Sort table by column ABC</source>
         <translation>Sortuj tabelę według kolumny w kolejności alfabetycznej</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7075"/>
+        <location filename="../tea.cpp" line="7088"/>
         <source>Swap cells</source>
         <translation>Zamień komórki miejscami</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7076"/>
+        <location filename="../tea.cpp" line="7089"/>
         <source>Delete by column</source>
         <translation>Usuń według kolumny</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7077"/>
+        <location filename="../tea.cpp" line="7090"/>
         <source>Copy by column[s]</source>
         <translation>Kopiuj według kolumn[y]</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7080"/>
+        <location filename="../tea.cpp" line="7093"/>
         <source>Filter</source>
         <translation>Filtr</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7083"/>
+        <location filename="../tea.cpp" line="7096"/>
         <source>Remove duplicates</source>
         <translation>Usuń powtórzenia</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7084"/>
+        <location filename="../tea.cpp" line="7097"/>
         <source>Remove empty lines</source>
         <translation>Usuń puste linie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7085"/>
+        <location filename="../tea.cpp" line="7098"/>
         <source>Remove lines &lt; N size</source>
         <translation>Usuń linie &lt; o rozmiarze N</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7086"/>
+        <location filename="../tea.cpp" line="7099"/>
         <source>Remove lines &gt; N size</source>
         <translation>Usuń linie &gt; o rozmiarze N</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7087"/>
+        <location filename="../tea.cpp" line="7100"/>
         <source>Remove before delimiter at each line</source>
         <translation>Usuń przed separatorem w każdym wierszu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7088"/>
+        <location filename="../tea.cpp" line="7101"/>
         <source>Remove after delimiter at each line</source>
         <translation>Usuń po separatorze w każdym wierszu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7089"/>
+        <location filename="../tea.cpp" line="7102"/>
         <source>Filter with regexp</source>
         <translation>Filtruj za pomocą wyrażenia regularnego</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7090"/>
+        <location filename="../tea.cpp" line="7103"/>
         <source>Filter by repetitions</source>
         <translation>Filtruj według powtórzeń</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7093"/>
+        <location filename="../tea.cpp" line="7106"/>
         <source>Math</source>
         <translation>Matematyka</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7096"/>
+        <location filename="../tea.cpp" line="7109"/>
         <source>Evaluate</source>
         <translation>Przeliczniki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7097"/>
+        <location filename="../tea.cpp" line="7110"/>
         <source>Arabic to Roman</source>
         <translation>Arabskie na rzymskie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7098"/>
+        <location filename="../tea.cpp" line="7111"/>
         <source>Roman to Arabic</source>
         <translation>Rzymskie na arabskie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7099"/>
+        <location filename="../tea.cpp" line="7112"/>
         <source>Decimal to binary</source>
         <translation>Dziesiętne na dwójkowe</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7100"/>
+        <location filename="../tea.cpp" line="7113"/>
         <source>Binary to decimal</source>
         <translation>Dwójkowe na dziesiętne</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7101"/>
+        <location filename="../tea.cpp" line="7114"/>
         <source>Flip bits (bitwise complement)</source>
         <translation>Odwróć bity (dopełnienie bitowe)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7102"/>
+        <location filename="../tea.cpp" line="7115"/>
         <source>Enumerate</source>
         <translation>Ponumeruj</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7103"/>
+        <location filename="../tea.cpp" line="7116"/>
         <source>Sum by last column</source>
         <translation>Suma według ostatniej kolumny</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7104"/>
+        <location filename="../tea.cpp" line="7117"/>
         <source>deg min sec &gt; dec degrees</source>
         <translation>stopnie minuty sekundy &gt; stopnie dziesiętne</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7105"/>
+        <location filename="../tea.cpp" line="7118"/>
         <source>dec degrees &gt; deg min sec</source>
         <translation>stopnie dziesiętne &gt; stopnie minuty sekundy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7108"/>
+        <location filename="../tea.cpp" line="7121"/>
         <source>Morse code</source>
         <translation>Alfabet Morse&apos;a</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7111"/>
+        <location filename="../tea.cpp" line="7124"/>
         <source>From Russian to Morse</source>
         <translation>Z rosyjskiego na alfabet Morse&apos;a</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7112"/>
+        <location filename="../tea.cpp" line="7125"/>
         <source>From Morse To Russian</source>
         <translation>Z alfabetu Morse&apos;a na rosyjski</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7113"/>
+        <location filename="../tea.cpp" line="7126"/>
         <source>From English to Morse</source>
         <translation>Z angielskiego na alfabet Morse&apos;a</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7114"/>
+        <location filename="../tea.cpp" line="7127"/>
         <source>From Morse To English</source>
         <translation>Z alfabetu Morse&apos;a na angielski</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7117"/>
+        <location filename="../tea.cpp" line="7130"/>
         <source>Analyze</source>
         <translation>Analiza</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7120"/>
+        <location filename="../tea.cpp" line="7133"/>
         <source>Text statistics</source>
         <translation>Statystyki tekstu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7121"/>
+        <location filename="../tea.cpp" line="7134"/>
         <source>Extract words</source>
         <translation>Wyodrębnianie wyrazów</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7122"/>
+        <location filename="../tea.cpp" line="7135"/>
         <source>Words lengths</source>
         <translation>Długości słów</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7123"/>
+        <location filename="../tea.cpp" line="7136"/>
         <source>Count the substring</source>
         <translation>Zliczanie podciągów</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7124"/>
+        <location filename="../tea.cpp" line="7137"/>
         <source>Count the substring (regexp)</source>
         <translation>Policz wystąpienia podłańcucha (wyrażenie regularne)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7125"/>
+        <location filename="../tea.cpp" line="7138"/>
         <source>UNITAZ quantity sorting</source>
         <translation>UNITAZ posortowane według ilości</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7126"/>
+        <location filename="../tea.cpp" line="7139"/>
         <source>UNITAZ sorting by alphabet</source>
         <translation>UNITAZ posortowane alfabetycznie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7127"/>
+        <location filename="../tea.cpp" line="7140"/>
         <source>UNITAZ sorting by length</source>
         <translation>UNITAZ posortowane według długości</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7130"/>
+        <location filename="../tea.cpp" line="7143"/>
         <source>Text</source>
         <translation>Tekst</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7133"/>
+        <location filename="../tea.cpp" line="7146"/>
         <source>Apply to each line</source>
         <translation>Zastosuj do każdego wiersza</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7134"/>
+        <location filename="../tea.cpp" line="7147"/>
         <source>Remove formatting</source>
         <translation>Usuń formatowanie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7135"/>
+        <location filename="../tea.cpp" line="7148"/>
         <source>Remove formatting at each line</source>
         <translation>Usuń formatowanie w każdym wierszu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7137"/>
+        <location filename="../tea.cpp" line="7150"/>
         <source>Compress</source>
         <translation>Ściśnij</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7138"/>
+        <location filename="../tea.cpp" line="7151"/>
         <source>Anagram</source>
         <translation>Anagram</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7136"/>
+        <location filename="../tea.cpp" line="7149"/>
         <source>Remove trailing spaces</source>
         <translation>Usuń końcowe spacje</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7139"/>
+        <location filename="../tea.cpp" line="7152"/>
         <source>Escape regexp</source>
         <translation>Uciekaj przed znakami specjalnymi (Escape regexp)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7140"/>
+        <location filename="../tea.cpp" line="7153"/>
         <source>Reverse</source>
         <translation>Odwrotnie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7141"/>
+        <location filename="../tea.cpp" line="7154"/>
         <source>Compare two strings</source>
         <translation>Porównaj dwa ciągi</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7145"/>
+        <location filename="../tea.cpp" line="7158"/>
         <source>Quotes</source>
         <translation>Cudzysłowy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7148"/>
+        <location filename="../tea.cpp" line="7161"/>
         <source>Straight to double angle quotes</source>
         <translation>Cudzysłowy proste do podwójnego kąta</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7149"/>
+        <location filename="../tea.cpp" line="7162"/>
         <source>Straight to curly double quotes</source>
         <translation>Cudzysłowy proste podwójne na dole i na górze</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7150"/>
+        <location filename="../tea.cpp" line="7163"/>
         <source>LaTeX: Straight to curly double quotes</source>
         <translation>LaTeX: cudzysłowy proste podwójne na dole i na górze</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7151"/>
+        <location filename="../tea.cpp" line="7164"/>
         <source>LaTeX: Straight to double angle quotes</source>
         <translation>LaTeX: cudzysłowy proste podwójne w jodełkę wariant 1</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7152"/>
+        <location filename="../tea.cpp" line="7165"/>
         <source>LaTeX: Straight to double angle quotes v2</source>
         <translation>LaTeX: cudzysłowy proste podwójne w jodełkę wariant 2</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7158"/>
+        <location filename="../tea.cpp" line="7171"/>
         <source>Spell-checker languages</source>
         <translation>Języki sprawdzania pisowni</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7161"/>
+        <location filename="../tea.cpp" line="7174"/>
         <source>Spell check</source>
         <translation>Sprawdź pisownię</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7162"/>
+        <location filename="../tea.cpp" line="7175"/>
         <source>Suggest</source>
         <translation>Sugestie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7163"/>
+        <location filename="../tea.cpp" line="7176"/>
         <source>Add to dictionary</source>
         <translation>Dodaj do słownika</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7164"/>
+        <location filename="../tea.cpp" line="7177"/>
         <source>Remove from dictionary</source>
         <translation>Usuń ze słownika</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7177"/>
+        <location filename="../tea.cpp" line="7190"/>
         <source>Calendar</source>
         <translation>Kalendarz</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7180"/>
+        <location filename="../tea.cpp" line="7193"/>
         <source>Moon mode on/off</source>
         <translation>Tryb księżycowy on/off</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7181"/>
+        <location filename="../tea.cpp" line="7194"/>
         <source>Mark first date</source>
         <translation>Zaznacz pierwszą datę</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7182"/>
+        <location filename="../tea.cpp" line="7195"/>
         <source>Mark last date</source>
         <translation>Zaznacz ostatnią datę</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7184"/>
+        <location filename="../tea.cpp" line="7197"/>
         <source>Add or subtract</source>
         <translation>Dodaj lub odejmij</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7187"/>
+        <location filename="../tea.cpp" line="7200"/>
         <source>Days</source>
         <translation>Dni</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7188"/>
+        <location filename="../tea.cpp" line="7201"/>
         <source>Months</source>
         <translation>Miesiące</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7189"/>
+        <location filename="../tea.cpp" line="7202"/>
         <source>Years</source>
         <translation>Lata</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7193"/>
+        <location filename="../tea.cpp" line="7206"/>
         <source>Go to current date</source>
         <translation>Przejdź do aktualnej daty</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7194"/>
+        <location filename="../tea.cpp" line="7207"/>
         <source>Calculate moon days between dates</source>
         <translation>Oblicz dni księżycowe między datami</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7195"/>
+        <location filename="../tea.cpp" line="7208"/>
         <source>Number of days between two dates</source>
         <translation>Liczba dni między dwiema datami</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7196"/>
+        <location filename="../tea.cpp" line="7209"/>
         <source>Remove day record</source>
         <translation>Usuń dane dnia</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7204"/>
+        <location filename="../tea.cpp" line="7217"/>
         <source>Run</source>
         <translation>Uruchom</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7213"/>
+        <location filename="../tea.cpp" line="7226"/>
         <source>IDE</source>
         <translation>IDE</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7216"/>
+        <location filename="../tea.cpp" line="7229"/>
         <source>Run program</source>
         <translation>Uruchom program</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7217"/>
+        <location filename="../tea.cpp" line="7230"/>
         <source>Build program</source>
         <translation>Zbuduj program (Build program)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7218"/>
+        <location filename="../tea.cpp" line="7231"/>
         <source>Clean program</source>
         <translation>Oczyść pliki budowania (Clean program)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7222"/>
+        <location filename="../tea.cpp" line="7235"/>
         <source>Toggle header/source</source>
         <translation>Przełączanie nagłówka/źródła (header/source)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7231"/>
+        <location filename="../tea.cpp" line="7244"/>
         <source>Nav</source>
         <translation>Nawigacja</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7234"/>
+        <location filename="../tea.cpp" line="7247"/>
         <source>Save position</source>
         <translation>Zachowaj pozycję</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7235"/>
+        <location filename="../tea.cpp" line="7248"/>
         <source>Go to saved position</source>
         <translation>Idź do zapisanej pozycji</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7236"/>
+        <location filename="../tea.cpp" line="7249"/>
         <source>Go to line</source>
         <translation>Idź do linii</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7237"/>
+        <location filename="../tea.cpp" line="7250"/>
         <source>Next tab</source>
         <translation>Następna zakładka</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7238"/>
+        <location filename="../tea.cpp" line="7251"/>
         <source>Prev tab</source>
         <translation>Poprzednia zakładka</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7239"/>
+        <location filename="../tea.cpp" line="7252"/>
         <source>Focus the Famous input field</source>
         <translation>Skoncentruj się na znanym polu wprowadzania</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7240"/>
+        <location filename="../tea.cpp" line="7253"/>
         <source>Focus the editor</source>
         <translation>Skoncentruj się na edytorze</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7243"/>
+        <location filename="../tea.cpp" line="7256"/>
         <source>Refresh labels</source>
         <translation>Zaktualizuj etykiety</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7245"/>
+        <location filename="../tea.cpp" line="7258"/>
         <source>Current files</source>
         <translation>Bieżące pliki</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7253"/>
+        <location filename="../tea.cpp" line="7266"/>
         <source>Fm</source>
         <translation>Menedżer plików</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7256"/>
+        <location filename="../tea.cpp" line="7269"/>
         <source>Multi-rename</source>
         <translation>Wielokrotna zmiana nazwy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7259"/>
+        <location filename="../tea.cpp" line="7272"/>
         <source>Zero pad file names</source>
         <translation>Dodaj zera do nazw</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7260"/>
+        <location filename="../tea.cpp" line="7273"/>
         <source>Delete N first chars at file names</source>
         <translation>Usuń pierwsze N znaków z nazw</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7261"/>
+        <location filename="../tea.cpp" line="7274"/>
         <source>Replace in file names</source>
         <translation>Zastąp w nazwach plików</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7262"/>
+        <location filename="../tea.cpp" line="7275"/>
         <source>Apply template</source>
         <translation>Zastosuj szablon</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7264"/>
+        <location filename="../tea.cpp" line="7277"/>
         <source>File operations</source>
         <translation>Działania na plikach</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7267"/>
+        <location filename="../tea.cpp" line="7280"/>
         <source>Create new directory</source>
         <translation>Utwórz nowy katalog</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7268"/>
+        <location filename="../tea.cpp" line="7281"/>
         <source>Rename</source>
         <translation>Zmień nazwę</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7269"/>
+        <location filename="../tea.cpp" line="7282"/>
         <source>Delete file</source>
         <translation>Usuń plik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7272"/>
+        <location filename="../tea.cpp" line="7285"/>
         <source>File information</source>
         <translation>Informacje o pliku</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7275"/>
+        <location filename="../tea.cpp" line="7288"/>
         <source>Count lines in selected files</source>
         <translation>Policz wiersze w wybranych plikach</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7276"/>
+        <location filename="../tea.cpp" line="7289"/>
         <source>Full info</source>
         <translation>Pełne informacje</translation>
     </message>
@@ -1342,93 +1342,93 @@ Chcesz nadpisać?</translation>
         <translation type="vanished">Suma kontrolna</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7278"/>
+        <location filename="../tea.cpp" line="7291"/>
         <source>ZIP</source>
         <translation>Kompresja ZIP</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7283"/>
+        <location filename="../tea.cpp" line="7296"/>
         <source>Create new ZIP</source>
         <translation>Utwórz nowe archiwum ZIP</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7284"/>
+        <location filename="../tea.cpp" line="7297"/>
         <source>Add to ZIP</source>
         <translation>Dodaj do archiwum ZIP</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7285"/>
+        <location filename="../tea.cpp" line="7298"/>
         <source>Save ZIP</source>
         <translation>Zapisz archiwum ZIP</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7289"/>
+        <location filename="../tea.cpp" line="7302"/>
         <source>List ZIP content</source>
         <translation>Pokaż zawartość ZIP</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7290"/>
+        <location filename="../tea.cpp" line="7303"/>
         <source>Unpack ZIP to current directory</source>
         <translation>Rozpakuj archiwum ZIP do bieżącego katalogu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7292"/>
-        <location filename="../tea.cpp" line="7913"/>
+        <location filename="../tea.cpp" line="7305"/>
+        <location filename="../tea.cpp" line="7934"/>
         <source>Images</source>
         <translation>Obrazy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7295"/>
+        <location filename="../tea.cpp" line="7308"/>
         <source>Scale by side</source>
         <translation>Skaluj według boku</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7296"/>
+        <location filename="../tea.cpp" line="7309"/>
         <source>Scale by percentages</source>
         <translation>Skaluj w procentach</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7297"/>
+        <location filename="../tea.cpp" line="7310"/>
         <source>Create web gallery</source>
         <translation>Utwórz galerię internetową</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7299"/>
+        <location filename="../tea.cpp" line="7312"/>
         <source>Go to home dir</source>
         <translation>Do katalogu domowego</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7300"/>
+        <location filename="../tea.cpp" line="7313"/>
         <source>Refresh current dir</source>
         <translation>Odśwież bieżący katalog</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7301"/>
+        <location filename="../tea.cpp" line="7314"/>
         <source>Preview image</source>
         <translation>Podgląd obrazu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7302"/>
+        <location filename="../tea.cpp" line="7315"/>
         <source>Select by regexp</source>
         <translation>Oznacz według wyrażenia regularnego</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7303"/>
+        <location filename="../tea.cpp" line="7316"/>
         <source>Deselect by regexp</source>
         <translation>Odznacz według wyrażenia regularnego</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7311"/>
+        <location filename="../tea.cpp" line="7324"/>
         <source>View</source>
         <translation>Widok</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7314"/>
+        <location filename="../tea.cpp" line="7327"/>
         <source>Themes</source>
         <translation>Motywy (Themes)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7317"/>
+        <location filename="../tea.cpp" line="7330"/>
         <source>Palettes</source>
         <translation>Palety</translation>
     </message>
@@ -1437,47 +1437,47 @@ Chcesz nadpisać?</translation>
         <translation type="vanished">Tryb podświetlania</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7327"/>
+        <location filename="../tea.cpp" line="7340"/>
         <source>Profiles</source>
         <translation>Profile</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7330"/>
+        <location filename="../tea.cpp" line="7343"/>
         <source>Save profile</source>
         <translation>Zapisz profil</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7331"/>
+        <location filename="../tea.cpp" line="7344"/>
         <source>Toggle word wrap</source>
         <translation>Przełącz zawijanie wyrazów</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7332"/>
+        <location filename="../tea.cpp" line="7345"/>
         <source>Hide error marks</source>
         <translation>Ukryj oznaczone jako błędy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7333"/>
+        <location filename="../tea.cpp" line="7346"/>
         <source>Toggle fullscreen</source>
         <translation>Przełącz tryb pełnoekranowy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7334"/>
+        <location filename="../tea.cpp" line="7347"/>
         <source>Stay on top</source>
         <translation>Nad innymi oknami</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7335"/>
+        <location filename="../tea.cpp" line="7348"/>
         <source>Darker</source>
         <translation>Ciemniejsze</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7348"/>
+        <location filename="../tea.cpp" line="7361"/>
         <source>NEWS</source>
         <translation>Nowości</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7351"/>
+        <location filename="../tea.cpp" line="7364"/>
         <source>License</source>
         <translation>Licencja</translation>
     </message>
@@ -1524,420 +1524,425 @@ Chcesz nadpisać?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6836"/>
+        <location filename="../tea.cpp" line="6849"/>
         <source>Set as autosaving file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="6837"/>
+        <location filename="../tea.cpp" line="6850"/>
         <source>Unset the autosaving file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7056"/>
+        <location filename="../tea.cpp" line="7069"/>
         <source>Capitalize sentences</source>
         <translation>Wielkie litery zdań</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7142"/>
+        <location filename="../tea.cpp" line="7155"/>
         <source>Check regexp match</source>
         <translation>Sprawdź dopasowanie według wyrażenia regularnego</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7320"/>
+        <location filename="../tea.cpp" line="7333"/>
         <source>Keyboards</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7365"/>
+        <location filename="../tea.cpp" line="7378"/>
         <source>options</source>
         <translation>opcje</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7380"/>
+        <location filename="../tea.cpp" line="7393"/>
         <source>Classic</source>
         <translation>Klasyczny</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7380"/>
+        <location filename="../tea.cpp" line="7393"/>
         <source>Docked</source>
         <translation>Zadokowany</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7383"/>
+        <location filename="../tea.cpp" line="7396"/>
         <source>UI mode (TEA restart needed)</source>
         <translation>Tryb interfejsu (konieczne będzie ponowne uruchomienie TEA)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7403"/>
+        <location filename="../tea.cpp" line="7416"/>
         <source>UI language (TEA restart needed)</source>
         <translation>Język interfejsu (konieczne będzie ponowne uruchomienie TEA)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7413"/>
+        <location filename="../tea.cpp" line="7426"/>
         <source>UI style (TEA restart needed)</source>
         <translation>Styl interfejsu (konieczne będzie ponowne uruchomienie TEA)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7422"/>
+        <location filename="../tea.cpp" line="7435"/>
         <source>Interface font</source>
         <translation>Czcionka interfejsu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7425"/>
+        <location filename="../tea.cpp" line="7438"/>
         <source>Editor font</source>
         <translation>Czcionka edytora</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7428"/>
+        <location filename="../tea.cpp" line="7441"/>
         <source>Logmemo font</source>
         <translation>Czcionka Logmemo</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7437"/>
+        <location filename="../tea.cpp" line="7450"/>
         <source>Up</source>
         <translation>W górę</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7438"/>
+        <location filename="../tea.cpp" line="7451"/>
         <source>Bottom</source>
         <translation>W dół</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7446"/>
+        <location filename="../tea.cpp" line="7459"/>
         <source>GUI tabs align</source>
         <translation>Wyrównywanie zakładek interfejsu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7458"/>
+        <location filename="../tea.cpp" line="7471"/>
         <source>Documents tabs align</source>
         <translation>Położenie zakładek dokumentu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7470"/>
+        <location filename="../tea.cpp" line="7483"/>
         <source>Icons size</source>
         <translation>Rozmiar ikon</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7483"/>
+        <location filename="../tea.cpp" line="7496"/>
         <source>TEA program icon</source>
         <translation>Ikona programu TEA</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7490"/>
+        <location filename="../tea.cpp" line="7503"/>
         <source>FIF at the top (restart needed)</source>
         <translation>Pole wejściowe Znane (FIF) na górze (potrzebny restart)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7494"/>
+        <location filename="../tea.cpp" line="7507"/>
         <source>Show line numbers</source>
         <translation>Pokaż numery wierszy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7498"/>
+        <location filename="../tea.cpp" line="7511"/>
         <source>Word wrap</source>
         <translation>Zawijanie wierszy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7502"/>
+        <location filename="../tea.cpp" line="7515"/>
         <source>Syntax highlighting enabled</source>
         <translation>Podświetlanie składni jest włączone</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7506"/>
+        <location filename="../tea.cpp" line="7519"/>
         <source>Highlight current line</source>
         <translation>Podświetl bieżący wiersz</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7510"/>
+        <location filename="../tea.cpp" line="7523"/>
         <source>Highlight paired brackets</source>
         <translation>Podświetl sparowane nawiasy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7514"/>
+        <location filename="../tea.cpp" line="7527"/>
         <source>Automatic indent</source>
         <translation>Wcięcie automatyczne</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7518"/>
+        <location filename="../tea.cpp" line="7531"/>
         <source>Use spaces instead of tabs</source>
         <translation>Użyj spacji zamiast tabulatorów</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7523"/>
+        <location filename="../tea.cpp" line="7536"/>
         <source>Tab width in spaces</source>
         <translation>Szerokość tabulatora w spacjach</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7526"/>
+        <location filename="../tea.cpp" line="7539"/>
         <source>Show cursor position</source>
         <translation>Pokaż pozycję kursora</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7530"/>
+        <location filename="../tea.cpp" line="7543"/>
         <source>Cursor center on scroll</source>
         <translation>Wyśrodkuj kursor podczas przewijania</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7535"/>
+        <location filename="../tea.cpp" line="7548"/>
         <source>Cursor blink time (msecs, zero is OFF)</source>
         <translation>Czas migania kursora (ms, zero - wyłączone)</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7540"/>
+        <location filename="../tea.cpp" line="7553"/>
         <source>Cursor width</source>
         <translation>Szerokość kursora</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7545"/>
+        <location filename="../tea.cpp" line="7558"/>
         <source>Show margin at</source>
         <translation>Pokaż margines na</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7558"/>
+        <location filename="../tea.cpp" line="7571"/>
         <source>Show full path at window title</source>
         <translation>Pokaż pełną ścieżkę w tytule okna</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7570"/>
+        <location filename="../tea.cpp" line="7583"/>
         <source>Interface</source>
         <translation>Interfejs</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7582"/>
+        <location filename="../tea.cpp" line="7595"/>
         <source>Use Alt key to access main menu</source>
         <translation>Użyj klawisza Alt, aby uzyskać dostęp do menu głównego</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7588"/>
+        <location filename="../tea.cpp" line="7601"/>
         <source>Use Left Alt + WASD as additional cursor keys</source>
         <translation>Użyj lewego klawisza Alt + WASD jako dodatkowych klawiszy kursora</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7594"/>
+        <location filename="../tea.cpp" line="7607"/>
         <source>Use joystick as cursor keys</source>
         <translation>Użyj joysticka jako klawiszy kursora</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7599"/>
+        <location filename="../tea.cpp" line="7612"/>
         <source>Automatic preview images at file manager</source>
         <translation>Automatyczny podgląd obrazów w menedżerze plików</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7602"/>
+        <location filename="../tea.cpp" line="7615"/>
         <source>Restore the last session on start-up</source>
         <translation>Przywróć ostatnią sesję przy uruchomieniu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7605"/>
+        <location filename="../tea.cpp" line="7618"/>
         <source>Use Enca for charset detection</source>
         <translation>Użyj Enca do wykrywania zestawu znaków</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7608"/>
+        <location filename="../tea.cpp" line="7621"/>
         <source>Use external image viewer for F2</source>
         <translation>Użyj zewnętrznej przeglądarki obrazów dla F2</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7622"/>
+        <location filename="../tea.cpp" line="7635"/>
         <source>Use traditional File Save/Open dialogs</source>
         <translation>Użyj tradycyjnych okien dialogowych Zapisz/Otwórz plik</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7625"/>
+        <location filename="../tea.cpp" line="7638"/>
         <source>Start week on Sunday</source>
         <translation>Rozpocznij tydzień w niedzielę</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7628"/>
+        <location filename="../tea.cpp" line="7641"/>
         <source>Northern hemisphere</source>
         <translation>Półkula północna</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7646"/>
+        <location filename="../tea.cpp" line="7659"/>
         <source>Moon phase algorithm</source>
         <translation>Algorytm fazy księżyca</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7650"/>
+        <location filename="../tea.cpp" line="7663"/>
         <source>0 - Trigonometrical v2, 1 - Trigonometrical v1, 2 - Conway, 3 - Leueshkanov</source>
         <translation>0 - Trygonometryczny wer.2, 1 - Trygonometryczny wer.1, 2 - Conway,  3 - Leueshkanov</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7654"/>
+        <location filename="../tea.cpp" line="7667"/>
         <source>Charset for file open from command line</source>
         <translation>Zestaw znaków dla pliku otwieranego z linii poleceń</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7659"/>
+        <location filename="../tea.cpp" line="7672"/>
         <source>ZIP unpacking: file names charset</source>
         <translation>Rozpakowywanie ZIP: zestaw znaków nazw plików</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7665"/>
+        <location filename="../tea.cpp" line="7678"/>
         <source>ZIP packing: file names charset</source>
         <translation>Pakowanie ZIP: zestaw znaków nazw plików</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7685"/>
+        <location filename="../tea.cpp" line="7698"/>
         <source>Autosaving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7690"/>
+        <location filename="../tea.cpp" line="7703"/>
         <source>Temporary save unsaved buffers on exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7694"/>
+        <location filename="../tea.cpp" line="7707"/>
         <source>Autosave buffers and autosaving files (each N seconds)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7720"/>
+        <location filename="../tea.cpp" line="7733"/>
         <source>Common</source>
         <translation>Ogólne</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7737"/>
+        <location filename="../tea.cpp" line="7750"/>
         <source>Label starts with: </source>
         <translation>Etykieta zaczyna się od: </translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7738"/>
+        <location filename="../tea.cpp" line="7751"/>
         <source>Label ends with: </source>
         <translation>Etykieta kończy się: </translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7742"/>
+        <location filename="../tea.cpp" line="7755"/>
         <source>Date and time</source>
         <translation>Data i godzina</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7746"/>
+        <location filename="../tea.cpp" line="7759"/>
         <source>Date format</source>
         <translation>Format daty</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7747"/>
+        <location filename="../tea.cpp" line="7760"/>
         <source>Time format</source>
         <translation>Format czasu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7755"/>
+        <location filename="../tea.cpp" line="7768"/>
         <source>Spell checking</source>
         <translation>Sprawdzanie pisowni</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7762"/>
+        <location filename="../tea.cpp" line="7775"/>
         <source>Spell checker engine</source>
         <translation>Silnik sprawdzania pisowni</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7771"/>
+        <location filename="../tea.cpp" line="7784"/>
         <source>Hunspell dictionaries directory</source>
         <translation>Katalog słowników Hunspell</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7778"/>
-        <location filename="../tea.cpp" line="7802"/>
+        <location filename="../tea.cpp" line="7791"/>
+        <location filename="../tea.cpp" line="7815"/>
         <source>Select</source>
         <translation>Wybierz</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7796"/>
+        <location filename="../tea.cpp" line="7809"/>
         <source>Aspell directory</source>
         <translation>Katalog Aspell</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7824"/>
-        <location filename="../tea.cpp" line="7853"/>
+        <location filename="../tea.cpp" line="7837"/>
+        <location filename="../tea.cpp" line="7874"/>
         <source>Miscellaneous</source>
         <translation>Różne</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7829"/>
+        <location filename="../tea.cpp" line="7842"/>
         <source>Fuzzy search factor</source>
         <translation>Rozmyty współczynnik wyszukiwania</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7860"/>
+        <location filename="../tea.cpp" line="7846"/>
+        <source>Show ebooks fine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tea.cpp" line="7881"/>
         <source>Image conversion output format</source>
         <translation>Format wyjściowy konwersji obrazu</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7864"/>
-        <location filename="../tea.cpp" line="7874"/>
+        <location filename="../tea.cpp" line="7885"/>
+        <location filename="../tea.cpp" line="7895"/>
         <source>Scale images with bilinear filtering</source>
         <translation>Skaluj obrazy z filtrowaniem dwuliniowym</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7869"/>
+        <location filename="../tea.cpp" line="7890"/>
         <source>Output images quality</source>
         <translation>Jakość obrazów wyjściowych</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7871"/>
+        <location filename="../tea.cpp" line="7892"/>
         <source>Apply hard rotation by EXIF data</source>
         <translation>Zastosuj twardą rotację według danych EXIF</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7879"/>
+        <location filename="../tea.cpp" line="7900"/>
         <source>Zip directory with processed images</source>
         <translation>Katalog Zip z przetworzonymi obrazami</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7886"/>
+        <location filename="../tea.cpp" line="7907"/>
         <source>Web gallery options</source>
         <translation>Opcje galerii internetowej</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7890"/>
+        <location filename="../tea.cpp" line="7911"/>
         <source>Size of the side</source>
         <translation>Rozmiar boku</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7891"/>
+        <location filename="../tea.cpp" line="7912"/>
         <source>Link options</source>
         <translation>Opcje linków</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7892"/>
+        <location filename="../tea.cpp" line="7913"/>
         <source>Columns per row</source>
         <translation>Kolumny na wiersz</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7897"/>
+        <location filename="../tea.cpp" line="7918"/>
         <source>EXIF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7902"/>
+        <location filename="../tea.cpp" line="7923"/>
         <source>Use EXIF orientation at image viewer</source>
         <translation>Użyj orientacji EXIF w przeglądarce obrazów</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7938"/>
+        <location filename="../tea.cpp" line="7959"/>
         <source>Shortcut</source>
         <translation>Skrót klawiszowy</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7945"/>
+        <location filename="../tea.cpp" line="7966"/>
         <source>Assign</source>
         <translation>Przypisać</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7946"/>
+        <location filename="../tea.cpp" line="7967"/>
         <source>Remove</source>
         <translation>Usuń powiązanie</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7960"/>
+        <location filename="../tea.cpp" line="7981"/>
         <source>Keyboard</source>
         <translation>Klawiatura</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8092"/>
+        <location filename="../tea.cpp" line="8113"/>
         <source>manual</source>
         <translation>Podręcznik</translation>
     </message>
@@ -1960,14 +1965,14 @@ Chcesz nadpisać?</translation>
         <location filename="../tea.cpp" line="2805"/>
         <location filename="../tea.cpp" line="4668"/>
         <location filename="../tea.cpp" line="5720"/>
-        <location filename="../tea.cpp" line="9241"/>
-        <location filename="../tea.cpp" line="9587"/>
+        <location filename="../tea.cpp" line="9262"/>
+        <location filename="../tea.cpp" line="9611"/>
         <source>%p% completed</source>
         <translation>%p% postępu</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="4742"/>
-        <location filename="../tea.cpp" line="9649"/>
+        <location filename="../tea.cpp" line="9673"/>
         <source>elapsed milliseconds: %1</source>
         <translation>minęło milisekund: %1</translation>
     </message>
@@ -2007,32 +2012,32 @@ ff=firefox file:///%s</source>
 ff=firefox file:///%s</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8856"/>
+        <location filename="../tea.cpp" line="8877"/>
         <source>Save the file first!</source>
         <translation>Najpierw zapisz plik!</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8666"/>
+        <location filename="../tea.cpp" line="8687"/>
         <source>templates</source>
         <translation>szablony</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8667"/>
+        <location filename="../tea.cpp" line="8688"/>
         <source>snippets</source>
         <translation>fragmenty</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8668"/>
+        <location filename="../tea.cpp" line="8689"/>
         <source>scripts</source>
         <translation>skrypty</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8669"/>
+        <location filename="../tea.cpp" line="8690"/>
         <source>tables</source>
         <translation>tabele</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8670"/>
+        <location filename="../tea.cpp" line="8691"/>
         <source>configs</source>
         <translation>konfiguracje</translation>
     </message>
@@ -2069,22 +2074,22 @@ ff=firefox file:///%s</translation>
         <translation>&lt;span style=&quot;%1&quot;&gt;PRÓBKA KOLORU&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8104"/>
+        <location filename="../tea.cpp" line="8125"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8114"/>
+        <location filename="../tea.cpp" line="8135"/>
         <source>Go</source>
         <translation>Idź</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8117"/>
+        <location filename="../tea.cpp" line="8138"/>
         <source>Home</source>
         <translation>Strona główna</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8120"/>
+        <location filename="../tea.cpp" line="8141"/>
         <source>Refresh</source>
         <translation>Odśwież</translation>
     </message>
@@ -2093,22 +2098,22 @@ ff=firefox file:///%s</translation>
         <translation type="vanished">Operacje</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8149"/>
+        <location filename="../tea.cpp" line="8170"/>
         <source>Guess encoding!</source>
         <translation>Spróbuj wykryć sposób kodowania pliku tekstowego!</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8174"/>
+        <location filename="../tea.cpp" line="8195"/>
         <source>Save as</source>
         <translation>Zapisz jako</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8215"/>
+        <location filename="../tea.cpp" line="8236"/>
         <source>&lt;b&gt;Bookmarks&lt;/b&gt;</source>
         <translation>&lt;b&gt;Zakładki&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8257"/>
+        <location filename="../tea.cpp" line="8278"/>
         <source>files</source>
         <translation>pliki</translation>
     </message>
@@ -2234,57 +2239,57 @@ ff=firefox file:///%s</translation>
         <translation>RMS dla wszystkich kanałów: %1 dB</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8121"/>
+        <location filename="../tea.cpp" line="8142"/>
         <source>Actions</source>
         <translation>Działania</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8172"/>
+        <location filename="../tea.cpp" line="8193"/>
         <source>Open a file from the file name provided above</source>
         <translation>Otwórz plik o nazwie podanej powyżej</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8176"/>
+        <location filename="../tea.cpp" line="8197"/>
         <source>Save the current opened file with the name provided above</source>
         <translation>Zapisz aktualnie otwarty plik pod nazwą podaną powyżej</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8688"/>
+        <location filename="../tea.cpp" line="8709"/>
         <source>GTK Bookmarks:</source>
         <translation>Zakładki GTK:</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9642"/>
+        <location filename="../tea.cpp" line="9666"/>
         <source>total to unique per cent diff: %1</source>
         <translation>łącznie do unikalnej różnicy procentowej: %1</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9643"/>
+        <location filename="../tea.cpp" line="9667"/>
         <source>total / unique: %1</source>
         <translation>całkowity / unikalny: %1</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9644"/>
+        <location filename="../tea.cpp" line="9668"/>
         <source>words unique: %1</source>
         <translation>wyrazów, nie licząc powtórek: %1</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9645"/>
+        <location filename="../tea.cpp" line="9669"/>
         <source>words total: %1</source>
         <translation>wyrazów razem: %1</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9646"/>
+        <location filename="../tea.cpp" line="9670"/>
         <source>text analysis of: %1</source>
         <translation>analiza tekstu dla: %1</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9647"/>
+        <location filename="../tea.cpp" line="9671"/>
         <source>UNITAZ: UNIverlsal Text AnalyZer</source>
         <translation>UNITAZ: UNIwersalny Tekstu AnaliZator</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9573"/>
+        <location filename="../tea.cpp" line="9597"/>
         <source>%1 number of occurrences of %2 is found</source>
         <translation>%1 liczba wystąpień % 2 została znaleziona</translation>
     </message>
@@ -2299,8 +2304,8 @@ ff=firefox file:///%s</translation>
         <translation>nowe_archiwum</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="10169"/>
-        <location filename="../tea.cpp" line="10191"/>
+        <location filename="../tea.cpp" line="10193"/>
+        <location filename="../tea.cpp" line="10215"/>
         <source>Open Directory</source>
         <translation>Otwórz katalog</translation>
     </message>
@@ -2335,12 +2340,12 @@ ff=firefox file:///%s</translation>
         <translation>%1 wierszy w plikach %2</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="8907"/>
+        <location filename="../tea.cpp" line="8928"/>
         <source>Enca is not installed, falling back to the built-in detection</source>
         <translation>Enca nie jest zainstalowana, cofam się do wbudowanego wykrywania</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9005"/>
+        <location filename="../tea.cpp" line="9026"/>
         <source>Enter your daily notes here.
 To use time-based reminders, specify the time signature in 24-hour format [hh:mm], i.e.:
 [06:00]good morning!
@@ -2351,12 +2356,12 @@ Aby korzystać z przypomnień czasowych, określ sygnaturę czasu w formacie 24-
 [20:10]kupić chleb, bo jutro sklepy zamknięte</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="9013"/>
+        <location filename="../tea.cpp" line="9034"/>
         <source>Enter your daily notes here.</source>
         <translation>Tutaj możesz zapisywać swoje notatki.</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7983"/>
+        <location filename="../tea.cpp" line="8004"/>
         <source>dates</source>
         <translation>daty</translation>
     </message>
@@ -2457,7 +2462,7 @@ Aby korzystać z przypomnień czasowych, określ sygnaturę czasu w formacie 24-
         <translation type="vanished">zapisywanie tego formatu nie jest obsługiwane</translation>
     </message>
     <message>
-        <location filename="../tio.cpp" line="282"/>
+        <location filename="../tio.cpp" line="397"/>
         <source>Saving for this format is not supported</source>
         <translation>Zapisywanie w tym formacie nie jest obsługiwane</translation>
     </message>

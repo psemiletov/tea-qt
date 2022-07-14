@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2021 by Peter Semiletov                                          *
+ *   2007-2022 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,7 +39,7 @@ some code is taken from Scribus::util.cpp:
 #include <QString>
 #include <QMap>
 #include <QDebug>
-
+//#include <QStringBuilder>
 
 #if QT_VERSION < 0x050000
 #include <QRegExp>
@@ -151,7 +151,9 @@ QString strip_html (const QString &source)
           }
 
        if (do_copy)
-          dest += source[i];
+         dest += source[i]; //% from QStringBuilder
+
+//          dest = dest % source[i]; //% from QStringBuilder
       }
 
   return dest;

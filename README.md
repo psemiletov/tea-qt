@@ -2,39 +2,37 @@
 
 TEA is a C++, Qt(4,5,6) text editor with the hundreds of features for Linux, *BSD, Mac, Windows, OS/2 and Haiku. 
 
+## Links: ##
+
 Home sites >
-http://tea.ourproject.org
-http://semiletov.org/tea (MIRROR)
+* http://tea.ourproject.org
+* http://semiletov.org/tea (MIRROR)
 
 Development >
-https://github.com/psemiletov/tea-qt
+* https://github.com/psemiletov/tea-qt
 
-My hot AUR package > https://aur.archlinux.org/packages/tea-qt-git/
+My hot AUR package > 
+* https://aur.archlinux.org/packages/tea-qt-git/
 
 Donate > 
-
-PayPal: peter.semiletov@gmail.com
-BTC: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
-
-Or Patreon: https://www.patreon.com/semiletov
+* PayPal: peter.semiletov@gmail.com
+* BTC: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
+* Patreon: https://www.patreon.com/semiletov
 
 Communities >
-https://t.me/teaqt
-https://vk.com/teaeditor
-https://www.facebook.com/groups/766324686841748/
+* https://t.me/teaqt
+* https://vk.com/teaeditor
+* https://www.facebook.com/groups/766324686841748/
 
 ## CONTENTS OF THIS README: ##
 
-01 - INSTALLATION FROM THE SOURCE
-
-02 - NOTES FOR PACKAGE MAINTAINERS
-
-03 - NOTE FOR UBUNTU USERS
-
-04 - LICENSE NOTES
+* 01 - INSTALLATION FROM THE SOURCE
+* 02 - NOTES FOR PACKAGE MAINTAINERS
+* 03 - NOTE FOR UBUNTU USERS
+* 04 - LICENSE NOTES
 
  
-### 01: INSTALLATION FROM THE SOURCE ###
+## 01: INSTALLATION FROM THE SOURCE ###
 
 You can install TEA from the source in 4 ways, using build systems qmake/make, meson/ninja, cmake/make, cmake/ninja. But first, you need to install some development libraries.
 
@@ -56,7 +54,7 @@ Use qmake for: Qt 4, old distros and Windows. Use meson or cmake for modern dist
 cmake is the mainline build system for TEA. 
 
 
-#### 01.01 CMAKE #### 
+### 01.01 CMAKE #### 
 
 With cmake, TEA supports Qt5 and Qt6 build.
 
@@ -107,7 +105,7 @@ cmake -DCMAKE_PREFIX_PATH=$HOME/Qt/6.0.0/gcc_64/lib/cmake ..
 ```
 
 
-#### 01.02 MESON #### 
+### 01.02 MESON #### 
 
 With meson, TEA supports Qt5 build.
 
@@ -143,7 +141,7 @@ ninja install
 ```
 
 
-#### 01.03 QMAKE ####
+### 01.03 QMAKE ####
 
 With qmake, TEA supports Qt4 and Qt5 build.
 
@@ -207,7 +205,7 @@ sudo make install
 */
 
 
-### 02: NOTES FOR PACKAGE MAINTAINERS ### 
+## 02: NOTES FOR PACKAGE MAINTAINERS ### 
 
 0. Thank you for packaging TEA!
 
@@ -235,7 +233,7 @@ make install
 ```
 
 
-### 03: NOTE FOR UBUNTU USERS ###
+## 03: NOTE FOR UBUNTU USERS ###
 
 User defined hotkeys may not work due to Qt5 and Unity global menu feature. To remove global menu support in Qt5 apps, do
 
@@ -250,6 +248,6 @@ sudo apt-get autoremove appmenu-gtk appmenu-gtk3 appmenu-qt5
 ```
 
 
-### 04: LICENSE NOTES ###
+## 04: LICENSE NOTES ###
 
 TEA code is licensed under GPL V3 and, partially, as a Public Domain. TEA media (images, etc), manuals and translations are public domain. Note to contributors - please put your translations into the public domain or GPL.

@@ -2,7 +2,7 @@
 
 TEA is a C++, Qt(4,5,6) text editor with the hundreds of features for Linux, *BSD, Mac, Windows, OS/2 and Haiku. 
 
-## Links: ##
+## LINKS: ##
 
 Home sites >
 * http://tea.ourproject.org

@@ -62,37 +62,49 @@ With cmake, TEA supports Qt5 and Qt6 build.
 
 If you want to build and install TEA with cmake + make, run at the TEA source dir:
 
+```bash
 mkdir b  
 cd b  
 cmake ..  
 make  
-make install (as root or with sudo)  
+make install # (as root or with sudo)  
+```
 
 
 To build and install TEA with cmake/ninja and GCC, do:
 
+```bash
 mkdir b  
 cd b  
 cmake -GNinja ..  
 ninja  
 ninja install  
+```
 
 By default, cmake builds TEA without some features: printer and aspell support, libpoppler and djvuapi. To enable them, use from the build directory:
 
+```bash
 cmake .. -DUSE_ASPELL=ON -DUSE_PRINTER=ON -DUSE_PDF=ON -DUSE_DJVU=ON
+```
 
 If the Qt5 and Qt6 both are present on the system, use CMAKE_PREFIX_PATH variable to set the path to the QtN. Otherwise, Qt6 will be prefered.
 
    Examples:
 
+```bash
+# /usr/lib/qt is the directory with qt5
 cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt ..
-//usr/lib/qt is the directory with qt5
+```
 
+```bash
+# /usr/lib/qt6 is the directory with qt6
 cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt6 ..
-//usr/lib/qt6 is the directory with qt6
+```
 
+```bash
+# here we point to the locally installed Qt6
 cmake -DCMAKE_PREFIX_PATH=$HOME/Qt/6.0.0/gcc_64/lib/cmake ..  
-//here we point to the locally installed Qt6
+```
 
 
 #### 01.02 MESON #### 
@@ -101,28 +113,34 @@ With meson, TEA supports Qt5 build.
 
 To build and install TEA with meson/ninja and GCC, do:
 
+```bash
 mkdir b  
 meson  
 cd b  
 ninja  
 ninja install  
+```
 
 To build and install TEA with meson/ninja and CLANG, do:
 
+```bash
 mkdir b  
 CC=clang CXX=clang++ meson b  
 cd b  
 ninja  
 ninja install  
+```
 
 To enable PDF and DJVU text extraction support use, and Aspell support (disabled by default as well as the printing support):
 
+```bash
 mkdir b  
 meson b  
 meson configure -Dpdf=enabled -Ddjvu=enabled -Daspell=enabled b  
 cd b  
 ninja  
 ninja install  
+```
 
 
 #### 01.03 QMAKE ####
@@ -131,14 +149,18 @@ With qmake, TEA supports Qt4 and Qt5 build.
 
 With qmake to build is simple:
 
+```bash
 qmake  
 make  
-make install (as root or with sudo)  
+make install # (as root or with sudo)  
+```
 
 
 To make some source configuration (with qmake), use CONFIG variable at qmake command line parameter. For example:
 
+```bash
 qmake "CONFIG+=useclang" "CONFIG+=noaspell"
+```
 
 You can use some values:
 
@@ -161,6 +183,7 @@ noprinter - disable printing support
 /*
 Basic snippet for Ubuntu users (Qt5 build) - run this from Terminal at the TEA source directory (unpacked):
 
+```bash
 sudo apt-get install g++ pkg-config  
 sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev  
 sudo apt-get install qt5-default qttools5-dev-tools  
@@ -168,16 +191,19 @@ sudo apt-get install libqt5qml5 libqt5quick5 qtdeclarative5-dev
 qmake  
 make  
 sudo make install  
+```
 
 
 Snippet for Ubuntu users (Qt4 build):
 
+```bash
 sudo apt-get install g++ pkg-config  
 sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev  
 sudo apt-get install libqt4-dev qt4-dev-tools  
 qmake  
 make  
 sudo make install  
+```
 */
 
 
@@ -202,20 +228,26 @@ Please note, that TEA source dir after unpacking will be tea-qt-${pkgver}
 
 4. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
 
+```bash
 qmake PREFIX=your_path  
 make  
 make install  
+```
 
 
 ### 03: NOTE FOR UBUNTU USERS ###
 
 User defined hotkeys may not work due to Qt5 and Unity global menu feature. To remove global menu support in Qt5 apps, do
 
+```bash
 sudo apt-get autoremove appmenu-qt5
+```
 
 or, if you want to remove also GTK global menus, use:
 
+```bash
 sudo apt-get autoremove appmenu-gtk appmenu-gtk3 appmenu-qt5
+```
 
 
 ### 04: LICENSE NOTES ###

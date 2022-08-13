@@ -2836,7 +2836,7 @@ void CTEA::search_in_files()
 
        int index = tio->data.indexOf (text_to_search, 0, cs);
        if (index != -1)
-          lresult.append (fname + "," + charset + "," + QString::number (index));
+          lresult.append (fname + "*" + charset + "*" + QString::number (index));
       }
 
   //pb_status->hide();

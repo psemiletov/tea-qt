@@ -388,6 +388,8 @@ void CFMan::mouseMoveEvent (QMouseEvent *event)
 
 void CFMan::keyPressEvent (QKeyEvent *event)
 {
+  //заменить это фуфло на          selectionModel()->setCurrentIndex (indexBelow (currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::Toggle);
+/*
   if (event->key() == Qt::Key_Insert)
      {
       bool sel = false;
@@ -410,6 +412,21 @@ void CFMan::keyPressEvent (QKeyEvent *event)
           selectionModel()->setCurrentIndex (newindex, QItemSelectionModel::Current | QItemSelectionModel::Rows);
           scrollTo (newindex);
          }
+
+      event->accept();
+      return;
+     }
+*/
+
+  if (event->key() == Qt::Key_Insert)
+     {
+      if (currentIndex().row() == mymodel->rowCount() - 1)
+         {
+          event->accept();
+          return;
+         }
+
+      selectionModel()->setCurrentIndex (indexBelow (currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::Toggle);
 
       event->accept();
       return;
@@ -440,6 +457,7 @@ void CFMan::keyPressEvent (QKeyEvent *event)
           return;
          }
 
+
       if (event->modifiers() & Qt::ShiftModifier)
          selectionModel()->setCurrentIndex (indexAbove (currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::Toggle);
       else
@@ -450,7 +468,7 @@ void CFMan::keyPressEvent (QKeyEvent *event)
      }
 
 
-  if (event->key() == Qt::Key_Down || event->key() == Qt::Key_Space)
+  if (event->key() == Qt::Key_Down)
      {
       if (currentIndex().row() == mymodel->rowCount() - 1)
          {

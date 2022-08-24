@@ -26,10 +26,11 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QSettings>
+#include <QMouseEvent>
 
 #include "fman.h"
 #include "utils.h"
-#include "logmemo.h"
+//#include "logmemo.h"
 
 
 extern QSettings *settings;
@@ -403,7 +404,6 @@ void CFMan::keyPressEvent (QKeyEvent *event)
       else
           selectionModel()->select (index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
 
-
       if (row < mymodel->rowCount() - 1)
          {
           QModelIndex newindex = mymodel->index (++row, 0);
@@ -440,13 +440,17 @@ void CFMan::keyPressEvent (QKeyEvent *event)
           return;
          }
 
-      selectionModel()->setCurrentIndex (indexAbove (currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::NoUpdate);
+      if (event->modifiers() & Qt::ShiftModifier)
+         selectionModel()->setCurrentIndex (indexAbove (currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::Toggle);
+      else
+          selectionModel()->setCurrentIndex (indexAbove (currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::NoUpdate);
+
       event->accept();
       return;
      }
 
 
-  if (event->key() == Qt::Key_Down)
+  if (event->key() == Qt::Key_Down || event->key() == Qt::Key_Space)
      {
       if (currentIndex().row() == mymodel->rowCount() - 1)
          {
@@ -454,7 +458,11 @@ void CFMan::keyPressEvent (QKeyEvent *event)
           return;
          }
 
-      selectionModel()->setCurrentIndex (indexBelow(currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::NoUpdate);
+      if (event->modifiers() & Qt::ShiftModifier)
+         selectionModel()->setCurrentIndex (indexBelow (currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::Toggle);
+      else
+           selectionModel()->setCurrentIndex (indexBelow(currentIndex()), QItemSelectionModel::Rows | QItemSelectionModel::NoUpdate);
+
       event->accept();
       return;
      }
@@ -485,7 +493,6 @@ void CFMan::keyPressEvent (QKeyEvent *event)
       event->accept();
       return;
      }
-
 
    if (event->key() == Qt::Key_Home)
       {

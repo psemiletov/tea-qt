@@ -1,15 +1,11 @@
                             
 !!! вылет при open recent, если файл удален или переименован
 
-
-* темы оформления в Win32 глючат при стиле интерфейса Windows XP
+* темы оформления в Win32 глючат при стиле интерфейса Windows XP //так и должно быть
 
 make single application with Dbus?
 
-опять single app не пашет при открытии файлов из thunar 
-
-Add VIM color themes
-Example: https://github.com/benbusby/vim-earthbound-themes/blob/76f4b4f5678307947f9f5ce5c90b61e35ce76d9e/colors/cave-of-the-past.vim
+опять single app не пашет при открытии файлов из thunar
 
 add Qt6 to Meson or drop Meson support at all?
 
@@ -19,7 +15,7 @@ Chess visualizer window
 "Места" в ФП
 
 remove lout support?
-                   
+
 https://api.kde.org/frameworks/syntax-highlighting/html/index.html
 
 *вернуться к SVG-иконкам?
@@ -31,6 +27,7 @@ https://api.kde.org/frameworks/syntax-highlighting/html/index.html
 OS/2::File manager, double click on folders work with the right double click only
 
 shift-up/dn для выделения в ФП не работает, и никогда не работало
+
 cmake dist creates wrong tarball that cannot be build with meson
 
 JAMSpell support? (https://github.com/bakwc/JamSpell)

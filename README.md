@@ -4,7 +4,7 @@ TEA is a C++, Qt(4,5,6) text editor with the hundreds of features for Linux, *BS
 
 ## LINKS: ##
 
-Home sites >
+Home site >
 * http://tea.ourproject.org
 
 Development >
@@ -20,7 +20,6 @@ Donate >
 
 Communities >
 * https://t.me/teaqt
-* https://vk.com/teaeditor
 * https://www.facebook.com/groups/766324686841748/
 
 ## CONTENTS OF THIS README: ##

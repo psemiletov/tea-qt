@@ -6,7 +6,6 @@ TEA is a C++, Qt(4,5,6) text editor with the hundreds of features for Linux, *BS
 
 Home sites >
 * http://tea.ourproject.org
-* http://semiletov.org/tea (MIRROR)
 
 Development >
 * https://github.com/psemiletov/tea-qt

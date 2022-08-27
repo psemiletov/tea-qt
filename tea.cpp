@@ -7512,6 +7512,11 @@ OPTIONS::INTERFACE
   cb_wordwrap->setChecked (settings->value ("word_wrap", "1").toBool());
   page_interface_layout->addWidget (cb_wordwrap);
 
+  cb_show_tabs_and_spaces = new QCheckBox (tr ("Show tabs and spaces"), tab_options);
+  cb_show_tabs_and_spaces->setChecked (settings->value ("show_tabs_and_spaces", "0").toBool());
+  page_interface_layout->addWidget (cb_show_tabs_and_spaces);
+
+
   cb_hl_enabled = new QCheckBox (tr ("Syntax highlighting enabled"), tab_options);
   cb_hl_enabled->setChecked (settings->value ("hl_enabled", "1").toBool());
   page_interface_layout->addWidget (cb_hl_enabled);
@@ -9479,6 +9484,7 @@ void CTEA::leaving_options()
   settings->setValue ("hl_brackets", cb_hl_brackets->isChecked());
   settings->setValue ("auto_indent", cb_auto_indent->isChecked());
   settings->setValue ("spaces_instead_of_tabs", cb_spaces_instead_of_tabs->isChecked());
+  settings->setValue ("show_tabs_and_spaces", cb_show_tabs_and_spaces->isChecked());
   settings->setValue ("cursor_xy_visible", cb_cursor_xy_visible->isChecked());
   settings->setValue ("tab_sp_width", spb_tab_sp_width->value());
   settings->setValue ("center_on_scroll", cb_center_on_cursor->isChecked());
@@ -9527,11 +9533,11 @@ void CTEA::leaving_options()
   settings->setValue ("label_start", ed_label_start->text());
   settings->setValue ("output_image_fmt", cmb_output_image_fmt->currentText());
   settings->setValue ("img_filter", cb_output_image_flt->isChecked());
-  settings->setValue("fuzzy_q", spb_fuzzy_q->value());
+  settings->setValue ("fuzzy_q", spb_fuzzy_q->value());
 
   settings->setValue ("show_ebooks_fine", cb_show_ebooks_fine->isChecked());
 
-  settings->setValue("img_quality", spb_img_quality->value());
+  settings->setValue ("img_quality", spb_img_quality->value());
   settings->setValue ("img_post_proc", cb_zip_after_scale->isChecked());
   settings->setValue ("cb_exif_rotate", cb_exif_rotate->isChecked());
   settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->isChecked());

@@ -60,7 +60,7 @@ code from qwriter:
 #include "document.h"
 #include "utils.h"
 #include "gui_utils.h"
-#include "textproc.h"
+//#include "textproc.h"
 
 #include "pugixml.hpp"
 
@@ -1174,6 +1174,7 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
   tab_sp_width = 8;
   spaces_instead_of_tabs = true;
   highlight_current_line = false;
+  show_tabs_and_spaces = false;
 
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
   eol = "\r\n";
@@ -1209,19 +1210,8 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
   int tab_index = holder->tab_widget->addTab (this, file_name);
   tab_page = holder->tab_widget->widget (tab_index);
 
- /* show_tabs_and_spaces = true;
 
-  QTextOption option = document()->defaultTextOption();
-  if (show_tabs_and_spaces)
-         option.setFlags(option.flags() | QTextOption::ShowTabsAndSpaces);
-  else
-       option.setFlags(option.flags() & ~QTextOption::ShowTabsAndSpaces);
-
-  option.setFlags(option.flags() | QTextOption::AddSpaceForLineAndParagraphSeparators);
-  document()->setDefaultTextOption(option);
-
-
-  ---
+/*
   set dots color, put to hl init
  spaceFormat = QtGui.QTextCharFormat()
         spaceFormat.setForeground(QtCore.Qt.red)
@@ -2719,6 +2709,20 @@ void CDox::apply_settings_single (CDocument *d)
   d->setup_brace_width();
 
   d->set_show_linenums (settings->value ("show_linenums", false).toBool());
+
+  d->show_tabs_and_spaces = settings->value ("show_tabs_and_spaces", false).toBool();
+
+  QTextOption option = d->document()->defaultTextOption();
+  if (d->show_tabs_and_spaces)
+     option.setFlags(option.flags() | QTextOption::ShowTabsAndSpaces);
+  else
+     option.setFlags(option.flags() & ~QTextOption::ShowTabsAndSpaces);
+
+  option.setFlags (option.flags() | QTextOption::AddSpaceForLineAndParagraphSeparators);
+  d->document()->setDefaultTextOption (option);
+
+
+
   d->set_show_margin (settings->value ("show_margin", false).toBool());
   d->set_margin_pos (settings->value ("margin_pos", 72).toInt());
   d->highlight_current_line = settings->value ("additional_hl", false).toBool();

@@ -384,6 +384,8 @@ Preferences tab :: Interface page UI elements
   QComboBox *cmb_tea_icons;
   QCheckBox *cb_show_linenums;
   QCheckBox *cb_wordwrap;
+  QCheckBox *cb_show_tabs_and_spaces;
+
   QCheckBox *cb_hl_enabled;
   QCheckBox *cb_hl_current_line;
   QCheckBox *cb_hl_brackets;

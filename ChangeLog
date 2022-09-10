@@ -1,5 +1,8 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
++ Functions - Text - SRT subs - shift timecode by msecs
+  put msecs to FIF. msecs can be negative, i.e "-2000" shifts timecodes by 2000 msecs earlier
+
 + Options - Interface - Show tabs and spaces
 * find in files FIX
 * TEA theme FIX

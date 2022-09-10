@@ -50,7 +50,6 @@ code from qwriter:
 #include <QDebug>
 #include <QUrl>
 #include <QDir>
-//#include <QXmlStreamReader>
 #include <QMimeData>
 #include <QFile>
 #include <QMessageBox>

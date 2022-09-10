@@ -64,8 +64,6 @@ chords to tabs, heh heh
 parse the compiler output, goto the error by clicking at logmemo
 0-9 markers
 goto start/end of the code block
-PalmDOC (pdb) read-only support? http://wiki.mobileread.com/wiki/PalmDOC, http://www.hotpaw.com/rhn/palm/pdb.txt
 gz file save?
-select code block
 
 использовать libretta::CPainFile вместо QSettings?

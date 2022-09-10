@@ -832,6 +832,13 @@ Fn menu callbacks
   void fn_text_remove_trailing_spaces();
   void fn_text_anagram();
   void fn_text_regexp_match_check();
+
+#if QT_VERSION >= 0x050000
+
+  void fn_text_srt_shift();
+
+#endif
+
   void fn_quotes_to_angle();
   void fn_quotes_curly();
   void fn_quotes_tex_curly();

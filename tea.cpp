@@ -1089,6 +1089,7 @@ void CTEA::test()
  qDebug() << s;*/
 
 //  QIconvCodec c;
+
 }
 
 
@@ -4550,6 +4551,45 @@ void CTEA::fn_text_regexp_match_check()
 }
 
 
+#if QT_VERSION >= 0x050000
+
+void CTEA::fn_text_srt_shift()
+{
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString s_msecs = fif_get_text();
+  if (s_msecs.isEmpty())
+     return;
+
+  int msecs = s_msecs.toInt();
+
+  QString text = d->get();
+  if (text.isEmpty())
+      return;
+
+  QString output = text;
+
+
+  QRegularExpression re ("\\d{1,}:\\d{1,}:\\d{1,}\\,\\d{1,}");
+
+  QRegularExpressionMatchIterator i = re.globalMatch (text);
+  while (i.hasNext())
+       {
+        QRegularExpressionMatch match = i.next();
+        QString t (match.captured());
+        QTime tm = QTime::fromString (t, Qt::ISODateWithMs);
+        tm = tm.addMSecs (msecs);
+        output.replace (t, tm.toString (Qt::ISODateWithMs));
+       }
+
+      d->put (output);
+}
+#endif
+
+
 void CTEA::fn_quotes_to_angle()
 {
   last_action = sender();
@@ -6815,7 +6855,7 @@ File menu
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
 
- // menu_file->addAction (act_test);
+  //menu_file->addAction (act_test);
 
   menu_file->addAction (newAct);
   add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -7154,6 +7194,11 @@ Functions menu
   add_to_menu (tm, tr ("Compare two strings"), SLOT(fn_text_compare_two_strings()));
   add_to_menu (tm, tr ("Check regexp match"), SLOT(fn_text_regexp_match_check()));
 
+#if QT_VERSION >= 0x050000
+
+  add_to_menu (tm, tr ("SRT subs - shift timecode by msecs"), SLOT(fn_text_srt_shift()));
+
+#endif
 
   tm = menu_functions->addMenu (tr ("Quotes"));
   tm->setTearOffEnabled (true);

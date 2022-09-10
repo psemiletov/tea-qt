@@ -4572,10 +4572,7 @@ void CTEA::fn_text_srt_shift()
 
   QString output = text;
 
-
-  //QRegularExpression re ("\\d{1,}:\\d{1,}:\\d{1,}\\,\\d{1,}");
   QRegularExpression re ("\\d{1,}:\\d{1,}:\\d{1,}(\\,|\\.)\\d{1,}");
-  //не хочет ютубовские! заменяет на ничто
 
   QString format;
 
@@ -4591,21 +4588,11 @@ void CTEA::fn_text_srt_shift()
          QRegularExpressionMatch match = i.next();
          QString t_in (match.captured());
 
-         qDebug() << t_in;
-
-         //if (d->file_name.endsWith (".sbv"))
-           //  t_in = t_in.replace (".", ",");
-
          QTime tm = QTime::fromString (t_in, format);
-
-         //qDebug() << tm;
 
          tm = tm.addMSecs (msecs);
 
          QString t_out = tm.toString (format);
-
-    //     if (d->file_name.endsWith (".sbv"))
-      //      t_out = t_out.replace (",", ".");
 
          output.replace (t_in, t_out);
         }

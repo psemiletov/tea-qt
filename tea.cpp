@@ -4573,17 +4573,42 @@ void CTEA::fn_text_srt_shift()
   QString output = text;
 
 
-  QRegularExpression re ("\\d{1,}:\\d{1,}:\\d{1,}\\,\\d{1,}");
+  //QRegularExpression re ("\\d{1,}:\\d{1,}:\\d{1,}\\,\\d{1,}");
+  QRegularExpression re ("\\d{1,}:\\d{1,}:\\d{1,}(\\,|\\.)\\d{1,}");
+  //не хочет ютубовские! заменяет на ничто
+
+  QString format;
+
+  if (d->file_name.endsWith (".sbv"))
+     format = "h:mm:ss.zzz";
+  else
+      format = "hh:mm:ss,zzz";
+
 
   QRegularExpressionMatchIterator i = re.globalMatch (text);
   while (i.hasNext())
-       {
-        QRegularExpressionMatch match = i.next();
-        QString t (match.captured());
-        QTime tm = QTime::fromString (t, Qt::ISODateWithMs);
-        tm = tm.addMSecs (msecs);
-        output.replace (t, tm.toString (Qt::ISODateWithMs));
-       }
+        {
+         QRegularExpressionMatch match = i.next();
+         QString t_in (match.captured());
+
+         qDebug() << t_in;
+
+         //if (d->file_name.endsWith (".sbv"))
+           //  t_in = t_in.replace (".", ",");
+
+         QTime tm = QTime::fromString (t_in, format);
+
+         //qDebug() << tm;
+
+         tm = tm.addMSecs (msecs);
+
+         QString t_out = tm.toString (format);
+
+    //     if (d->file_name.endsWith (".sbv"))
+      //      t_out = t_out.replace (",", ".");
+
+         output.replace (t_in, t_out);
+        }
 
       d->put (output);
 }

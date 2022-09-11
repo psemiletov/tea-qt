@@ -4136,6 +4136,60 @@ void CTEA::fn_math_number_dd2dms()
 }
 
 
+#if QT_VERSION >= 0x060000
+
+void CTEA::fn_math_srt_shift()
+{
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString s_msecs = fif_get_text();
+  if (s_msecs.isEmpty())
+     return;
+
+  int msecs = s_msecs.toInt();
+
+  QString text = d->get();
+  if (text.isEmpty())
+      return;
+
+  QString output = text;
+
+  QRegularExpression re ("\\d{1,}:\\d{1,}:\\d{1,}(\\,|\\.)\\d{1,}");
+
+  QString format;
+
+  if (d->file_name.endsWith (".sbv"))
+     format = "h:mm:ss.zzz";
+  else
+      format = "hh:mm:ss,zzz";
+
+
+  QRegularExpressionMatchIterator i = re.globalMatch (text);
+  while (i.hasNext())
+        {
+         QRegularExpressionMatch match = i.next();
+         QString t_in (match.captured());
+
+         QTime tm = QTime::fromString (t_in, format);
+
+         if (! tm.isValid())
+            continue;
+
+         tm = tm.addMSecs (msecs);
+
+         QString t_out = tm.toString (format);
+
+         output.replace (t_in, t_out);
+        }
+
+      d->put (output);
+}
+#endif
+
+
 void CTEA::fn_morse_from_ru()
 {
   last_action = sender();
@@ -4550,56 +4604,6 @@ void CTEA::fn_text_regexp_match_check()
 #endif
 }
 
-
-#if QT_VERSION >= 0x050000
-
-void CTEA::fn_text_srt_shift()
-{
-
-  CDocument *d = documents->get_current();
-  if (! d)
-     return;
-
-  QString s_msecs = fif_get_text();
-  if (s_msecs.isEmpty())
-     return;
-
-  int msecs = s_msecs.toInt();
-
-  QString text = d->get();
-  if (text.isEmpty())
-      return;
-
-  QString output = text;
-
-  QRegularExpression re ("\\d{1,}:\\d{1,}:\\d{1,}(\\,|\\.)\\d{1,}");
-
-  QString format;
-
-  if (d->file_name.endsWith (".sbv"))
-     format = "h:mm:ss.zzz";
-  else
-      format = "hh:mm:ss,zzz";
-
-
-  QRegularExpressionMatchIterator i = re.globalMatch (text);
-  while (i.hasNext())
-        {
-         QRegularExpressionMatch match = i.next();
-         QString t_in (match.captured());
-
-         QTime tm = QTime::fromString (t_in, format);
-
-         tm = tm.addMSecs (msecs);
-
-         QString t_out = tm.toString (format);
-
-         output.replace (t_in, t_out);
-        }
-
-      d->put (output);
-}
-#endif
 
 
 void CTEA::fn_quotes_to_angle()
@@ -7169,6 +7173,11 @@ Functions menu
   add_to_menu (tm, tr ("deg min sec > dec degrees"), SLOT(fn_math_number_dms2dc()));
   add_to_menu (tm, tr ("dec degrees > deg min sec"), SLOT(fn_math_number_dd2dms()));
 
+#if QT_VERSION >= 0x060000
+
+  add_to_menu (tm, tr ("SRT subs - shift timecode by msecs"), SLOT(fn_math_srt_shift()));
+
+#endif
 
   tm = menu_functions->addMenu (tr ("Morse code"));
   tm->setTearOffEnabled (true);
@@ -7205,12 +7214,6 @@ Functions menu
   add_to_menu (tm, tr ("Reverse"), SLOT(fn_text_reverse()));
   add_to_menu (tm, tr ("Compare two strings"), SLOT(fn_text_compare_two_strings()));
   add_to_menu (tm, tr ("Check regexp match"), SLOT(fn_text_regexp_match_check()));
-
-#if QT_VERSION >= 0x050000
-
-  add_to_menu (tm, tr ("SRT subs - shift timecode by msecs"), SLOT(fn_text_srt_shift()));
-
-#endif
 
   tm = menu_functions->addMenu (tr ("Quotes"));
   tm->setTearOffEnabled (true);

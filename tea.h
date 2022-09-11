@@ -833,9 +833,9 @@ Fn menu callbacks
   void fn_text_anagram();
   void fn_text_regexp_match_check();
 
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= 0x060000
 
-  void fn_text_srt_shift();
+  void fn_math_srt_shift();
 
 #endif
 

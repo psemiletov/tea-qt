@@ -1,6 +1,6 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
-+ QT6 only: Functions - Text - SRT subs - shift timecode by msecs 
++ QT6 only: Functions - Math - Subtitles: shift timecode by msecs 
             put msecs to FIF. msecs can be negative, i.e "-2000" shifts timecodes by 2000 msecs earlier
             //works also for Youtube subs
 

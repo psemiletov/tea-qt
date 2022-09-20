@@ -1037,6 +1037,11 @@ Do you want to overwrite?</source>
         <translation>&lt;b&gt;TEA %1&lt;/b&gt; от Петра Семилетова | tea.ourproject.org&lt;br&gt;Поддержать TEA через PayPal: peter.semiletov@gmail.com&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</translation>
     </message>
     <message>
+        <location filename="../tea.cpp" line="7178"/>
+        <source>Subtitles: shift timecodes by msecs</source>
+        <translation>Субтитры: сдвинуть таймкоды на миллисекунды</translation>
+    </message>
+    <message>
         <location filename="../tea.cpp" line="7213"/>
         <source>Escape regexp</source>
         <translation>Escape regexp</translation>
@@ -1500,9 +1505,8 @@ Do you want to overwrite?</source>
         <translation>Предложения с большой буквы</translation>
     </message>
     <message>
-        <location filename="../tea.cpp" line="7178"/>
         <source>Subtitles: shift timecode by msecs</source>
-        <translation>Субтитры: сдвинуть таймкоды на миллисекунды</translation>
+        <translation type="vanished">Субтитры: сдвинуть таймкоды на миллисекунды</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="7216"/>

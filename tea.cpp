@@ -7175,7 +7175,7 @@ Functions menu
 
 #if QT_VERSION >= 0x060000
 
-  add_to_menu (tm, tr ("Subtitles: shift timecode by msecs"), SLOT(fn_math_srt_shift()));
+  add_to_menu (tm, tr ("Subtitles: shift timecodes by msecs"), SLOT(fn_math_srt_shift()));
 
 #endif
 

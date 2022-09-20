@@ -1823,11 +1823,11 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Subtitles: shift timecode by msecs</source>
+        <source>Show tabs and spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show tabs and spaces</source>
+        <source>Subtitles: shift timecodes by msecs</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

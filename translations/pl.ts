@@ -1032,6 +1032,11 @@ Chcesz nadpisać?</translation>
         <translation>Usuń końcowe spacje</translation>
     </message>
     <message>
+        <location filename="../tea.cpp" line="7178"/>
+        <source>Subtitles: shift timecodes by msecs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../tea.cpp" line="7213"/>
         <source>Escape regexp</source>
         <translation>Uciekaj przed znakami specjalnymi (Escape regexp)</translation>
@@ -1498,11 +1503,6 @@ Chcesz nadpisać?</translation>
         <location filename="../tea.cpp" line="7125"/>
         <source>Capitalize sentences</source>
         <translation>Wielkie litery zdań</translation>
-    </message>
-    <message>
-        <location filename="../tea.cpp" line="7178"/>
-        <source>Subtitles: shift timecode by msecs</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="7216"/>

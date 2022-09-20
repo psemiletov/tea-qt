@@ -1,16 +1,12 @@
 ====NEWS ABOUT TEA====
-TEA 61.0.0, July 2022
+TEA 61.1.0, September 2022
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   Hello world!
-
-   This version is cool in many reasons. 
-   All inner XML parsing has been moved to pugixml instead of Qt's XML parser. I feel that pugixml is faster and more useful for TEA. XML parsing is used at some text formats support (such as FB2, ODT, etc.) and the syntax highlighting engine, so all that stuff was heavy rewritten. 
-   To deal with complex file names, new TEA used a new format for the bookmarks and the "Recent" list. The bookmarks file will be converted to the new format automatically, and - TEA uses now a different file to hold bookmarks. The Recent list will be updated by opening files.
-   New option: Tune - Functions - Misc - Show ebooks fine. It adds spaces before each paragraph, when you open FB2, Epub, etc.
-
+   Hello!
+   This release fixes "Find in files" function and TEA default theme. Meet the new option - "Options - Interface - Show tabs and spaces".
+   Also, for Qt6 builds, "Functions - Math - Subtitles: shift timecodes by msecs" function can shift timecodes in SRT and Youtube subtitles. Put msecs to FIF. msecs can be negative, i.e "-2000" shifts timecodes by 2000 msecs earlier.
 
    Stay tuned.
    Peter Semiletov

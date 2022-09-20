@@ -1816,11 +1816,11 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Subtitles: shift timecode by msecs</source>
+        <source>Show tabs and spaces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show tabs and spaces</source>
+        <source>Subtitles: shift timecodes by msecs</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

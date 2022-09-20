@@ -151,7 +151,7 @@ QString strip_html (const QString &source)
           }
 
        if (do_copy)
-         dest += source[i]; //% from QStringBuilder
+          dest += source[i]; //% from QStringBuilder
 
 //          dest = dest % source[i]; //% from QStringBuilder
       }

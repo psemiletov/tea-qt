@@ -1,7 +1,7 @@
-VERSION = 61.0.0
+VERSION = 61.1.0
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"61.0.0"\''
+DEFINES += 'VERSION_NUMBER=\'"61.1.0"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }
@@ -142,7 +142,6 @@ HEADERS += tea.h \
     myjoystick.h \
     pugixml.hpp \
     pugiconfig.hpp
-    
 
 
 HEADERS += \

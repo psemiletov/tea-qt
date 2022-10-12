@@ -293,20 +293,17 @@ CAboutWindow::CAboutWindow()
   QPlainTextEdit *page_code = new QPlainTextEdit();
   QPlainTextEdit *page_thanks = new QPlainTextEdit();
   QPlainTextEdit *page_translators = new QPlainTextEdit();
-//  QPlainTextEdit *page_maintainers = new QPlainTextEdit();
 
   if (sl_t.size() == 3)
      {
       page_code->setPlainText (sl_t[0].trimmed());
       page_thanks->setPlainText (sl_t[2].trimmed());
       page_translators->setPlainText (sl_t[1].trimmed());
-      //page_maintainers->setPlainText (sl_t[2].trimmed());
      }
 
   tw->addTab (page_code, tr ("Code"));
   tw->addTab (page_thanks, tr ("Acknowledgements"));
   tw->addTab (page_translators, tr ("Translations"));
-  //tw->addTab (page_maintainers, tr ("Packages"));
 
   QVBoxLayout *layout = new QVBoxLayout();
 
@@ -1213,6 +1210,8 @@ void CTEA::file_open()
 
 void CTEA::file_open_at_cursor()
 {
+  last_action = sender();
+
   if (main_tab_widget->currentIndex() == idx_tab_fman)
      {
       fman_preview_image();
@@ -2840,7 +2839,6 @@ void CTEA::search_in_files()
           lresult.append (fname + "*" + charset + "*" + QString::number (index));
       }
 
-  //pb_status->hide();
   progress_hide();
 
   CTextListWnd *w = new CTextListWnd (tr ("Search results"), tr ("Files"));
@@ -3961,7 +3959,6 @@ void CTEA::fn_math_sum_by_last_col()
 }
 
 
-
 void CTEA::fn_math_enum()
 {
   last_action = sender();
@@ -4140,6 +4137,7 @@ void CTEA::fn_math_number_dd2dms()
 
 void CTEA::fn_math_srt_shift()
 {
+  last_action = sender();
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -6365,7 +6363,7 @@ void CTEA::handle_args()
   for (int i = 1; i < size; i++)
       {
        QString t = l.at(i);
-       if (t.startsWith("--charset"))
+       if (t.startsWith ("--charset"))
           {
            QStringList pair = t.split ("=");
            if (pair.size() > 1)

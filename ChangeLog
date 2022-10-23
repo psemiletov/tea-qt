@@ -1,5 +1,8 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+
++ View - Preview Markdown //Qt 5.14+ 
+
 + QT6 only: Functions - Math - Subtitles: shift timecode by msecs 
             put msecs to FIF. msecs can be negative, i.e "-2000" shifts timecodes by 2000 msecs earlier
             //works also for Youtube subs

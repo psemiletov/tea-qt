@@ -3167,6 +3167,8 @@ void CTEA::view_use_keyboard()
 }
 
 
+#if QT_VERSION >= 0x051400
+
 void CTEA::view_preview_md()
 {
   last_action = sender();
@@ -3181,7 +3183,7 @@ void CTEA::view_preview_md()
   md_viewer.show();
 
 }
-
+#endif
 
 void CTEA::fn_run_script()
 {
@@ -7426,8 +7428,9 @@ View menu
   menu_view_profiles = menu_view->addMenu (tr ("Profiles"));
   menu_view_profiles->setTearOffEnabled (true);
 
+#if QT_VERSION >= 0x051400
   add_to_menu (menu_view, tr ("Preview Markdown"), SLOT(view_preview_md()));
-
+#endif
 
 
   add_to_menu (menu_view, tr ("Save profile"), SLOT(view_profile_save_as()));
@@ -9145,7 +9148,6 @@ void CTEA::calendar_currentPageChanged (int year, int month)
 {
   calendar_update();
 }
-
 
 
 void CTEA::process_readyReadStandardOutput()

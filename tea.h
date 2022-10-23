@@ -955,7 +955,10 @@ View menu callbacks
   void view_toggle_fs();
   void view_stay_on_top();
   void view_darker();
+
+#if QT_VERSION >= 0x051400
   void view_preview_md();
+#endif
 
 
 /*-----------------------------*/

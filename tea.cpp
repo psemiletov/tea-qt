@@ -22,6 +22,7 @@ C++/Qt branch started at 08 November 2007
 
 
 
+#include "document.h"
 #include <math.h>
 #include <algorithm>
 #include <iostream>
@@ -599,6 +600,7 @@ void CTEA::read_settings()
   charset = settings->value ("charset", "UTF-8").toString();
   fname_def_palette = settings->value ("fname_def_palette", ":/palettes/TEA").toString();
 
+
   QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
   QSize size = settings->value ("size", QSize (800, 512)).toSize();
 
@@ -607,6 +609,12 @@ void CTEA::read_settings()
 
   resize (size);
   move (pos);
+
+  pos = settings->value ("md_viewer_pos", QPoint (1, 200)).toPoint();
+  size = settings->value ("md_viewer_size", QSize (800, 512)).toSize();
+  md_viewer.resize (size);
+  md_viewer.move (pos);
+
 }
 
 
@@ -628,6 +636,10 @@ void CTEA::write_settings()
   settings->setValue ("show_linenums", cb_show_linenums->isChecked());
   settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->isChecked());
   settings->setValue ("save_buffers", cb_save_buffers->isChecked());
+
+  settings->setValue ("md_viewer_pos", md_viewer.pos());
+  settings->setValue ("md_viewer_size", md_viewer.size());
+
 
   delete settings;
 }
@@ -3152,6 +3164,22 @@ void CTEA::view_use_keyboard()
   QWidget *w = create_keyboard (fname);
   if (w)
      w->show();
+}
+
+
+void CTEA::view_preview_md()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  //qDebug() << d->toPlainText();
+
+  md_viewer.setMarkdown (d->toPlainText());
+  md_viewer.show();
+
 }
 
 
@@ -7398,6 +7426,10 @@ View menu
   menu_view_profiles = menu_view->addMenu (tr ("Profiles"));
   menu_view_profiles->setTearOffEnabled (true);
 
+  add_to_menu (menu_view, tr ("Preview Markdown"), SLOT(view_preview_md()));
+
+
+
   add_to_menu (menu_view, tr ("Save profile"), SLOT(view_profile_save_as()));
   add_to_menu (menu_view, tr ("Toggle word wrap"), SLOT(view_toggle_wrap()));
   add_to_menu (menu_view, tr ("Hide error marks"), SLOT(view_hide_error_marks()));
@@ -8428,7 +8460,7 @@ void CTEA::create_markup_hash()
   h9["HTML"] = "<a href=\"\">%s</a>";
   h9["XHTML"] = "<a href=\"\">%s</a>";
   h9["LaTeX"] = "\\href{}{%s}";
-  h9["Markdown"] = "[](%s)";
+  h9["Markdown"] = "![](%s)";
 
   hash_markup.insert ("link", h9);
 

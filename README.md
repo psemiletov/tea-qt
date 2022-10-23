@@ -12,14 +12,22 @@ My hot AUR package >
 https://aur.archlinux.org/packages/tea-qt-git/
 
 Donate > 
+
 PayPal: peter.semiletov@gmail.com
+
 BTC: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
-Or Patreon: https://www.patreon.com/semiletov
+
+Patreon: https://www.patreon.com/semiletov
+
 
 Communities >
+
 https://t.me/teaqt
+
 https://vk.com/teaeditor
+
 https://www.facebook.com/groups/766324686841748/
+
 
 ## CONTENTS OF THIS README: ##
 

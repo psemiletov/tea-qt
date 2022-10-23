@@ -35,6 +35,7 @@
 #include <QProcess>
 #include <QProxyStyle>
 #include <QToolButton>
+#include <QMainWindow>
 
 #ifdef PRINTER_ENABLE
 #include <QPrinter>
@@ -176,6 +177,8 @@ Variables
   CShortcuts *shortcuts;
   CFMan *fman;
   CImgViewer *img_viewer;
+
+  QTextBrowser md_viewer;
 
   CSpellchecker *spellchecker;
   QStringList spellcheckers;
@@ -952,6 +955,8 @@ View menu callbacks
   void view_toggle_fs();
   void view_stay_on_top();
   void view_darker();
+  void view_preview_md();
+
 
 /*-----------------------------*/
 

@@ -1436,15 +1436,30 @@ QString CDocument::get_filename_at_cursor()
 
   QString x;
 
+  QString sep_start;
+  QString sep_end;
+
   if (markup_mode == "LaTeX")
+     {
+      sep_start = "{";
+      sep_end = "}";
+     }
+  else
+  if (markup_mode == "Markdown")
+     {
+      sep_start = "(";
+      sep_end = ")";
+     }
+
+  if (markup_mode == "LaTeX" || markup_mode == "Markdown")
      {
       int pos = textCursor().positionInBlock();
 
-      int end = s.indexOf ("}", pos);
+      int end = s.indexOf (sep_end, pos);
       if (end == -1)
          return x;
 
-      int start = s.lastIndexOf ("{", pos);
+      int start = s.lastIndexOf (sep_start, pos);
       if (start == -1)
          return x;
 

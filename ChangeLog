@@ -1,5 +1,7 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+* Qt6 copy text with new lines - fixed
+* Markdown functions - fixes 
 
 + View - Preview Markdown //Qt 5.14+ 
 

@@ -1125,14 +1125,10 @@ void CDocument::keyPressEvent (QKeyEvent *event)
           return;
          }
 
-#ifdef Q_OS_WIN
-
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
       t = t.replace (QChar::ParagraphSeparator, "\r\n");
-
-#else
-
+#elif defined(Q_OS_UNIX)
       t = t.replace (QChar::ParagraphSeparator, "\n");
-
 #endif
 
       QClipboard *clipboard = QApplication::clipboard();

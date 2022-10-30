@@ -1823,6 +1823,10 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <source>Subtitles: shift timecodes by msecs</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Preview Markdown</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CTioReadOnly</name>

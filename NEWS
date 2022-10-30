@@ -5,6 +5,7 @@ http://tea.ourproject.org
 ---------------------------------------------------
 
    Hello! This release features bugfixes, and most important the Qt6 text copy to clipboard bug among them (the line breaks bug).
++View - Preview Markdown //preview a currently opened md-file
 
    Stay tuned.
    Peter Semiletov

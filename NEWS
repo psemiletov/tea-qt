@@ -1,12 +1,10 @@
 ====NEWS ABOUT TEA====
-TEA 61.1.0, September 2022
+TEA 61.2.0, October 2022
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   Hello!
-   This release fixes "Find in files" function and TEA default theme. Meet the new option - "Options - Interface - Show tabs and spaces".
-   Also, for Qt6 builds, "Functions - Math - Subtitles: shift timecodes by msecs" function can shift timecodes in SRT and Youtube subtitles. Put msecs to FIF. msecs can be negative, i.e "-2000" shifts timecodes by 2000 msecs earlier.
+   Hello! This release features bugfixes, and most important the Qt6 text copy to clipboard bug among them (the line breaks bug).
 
    Stay tuned.
    Peter Semiletov

@@ -1113,6 +1113,38 @@ void CDocument::keyPressEvent (QKeyEvent *event)
       return;
      }
 
+#if QT_VERSION >= 0x050000
+
+  if (event->key() == Qt::Key_C && (event->modifiers().testFlag(Qt::ControlModifier)))
+     {
+      QString t = get();
+
+      if (t.isEmpty())
+         {
+          event->accept();
+          return;
+         }
+
+#ifdef Q_OS_WIN
+
+      t = t.replace (QChar::ParagraphSeparator, "\r\n");
+
+#else
+
+      t = t.replace (QChar::ParagraphSeparator, "\n");
+
+#endif
+
+      QClipboard *clipboard = QApplication::clipboard();
+
+      clipboard->setText (t);
+
+      event->accept();
+      return;
+     }
+#endif
+
+
   QPlainTextEdit::keyPressEvent (event);
 }
 

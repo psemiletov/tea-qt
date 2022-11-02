@@ -206,6 +206,12 @@ public:
   QString get() const; //return selected text
   void put (const QString &value); //replace selection or insert text at cursor
 
+  void ed_copy();
+  void ed_cut();
+  void ed_paste();
+
+  bool has_selection();
+
   bool file_open (const QString &fileName, const QString &codec);
   bool file_save_with_name (const QString &fileName, const QString &codec);
   bool file_save_with_name_plain (const QString &fileName);

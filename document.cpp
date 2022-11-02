@@ -1113,9 +1113,26 @@ void CDocument::keyPressEvent (QKeyEvent *event)
       return;
      }
 
-#if QT_VERSION >= 0x050000
+//#if QT_VERSION >= 0x050000
 
   if (event->key() == Qt::Key_C && (event->modifiers().testFlag(Qt::ControlModifier)))
+     {
+
+      QString t = get();
+
+      if (t.isEmpty())
+         {
+          event->accept();
+          return;
+         }
+
+      ed_copy();
+
+      event->accept();
+      return;
+     }
+
+  if (event->key() == Qt::Key_X && (event->modifiers().testFlag(Qt::ControlModifier)))
      {
       QString t = get();
 
@@ -1125,20 +1142,31 @@ void CDocument::keyPressEvent (QKeyEvent *event)
           return;
          }
 
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-      t = t.replace (QChar::ParagraphSeparator, "\r\n");
-#elif defined(Q_OS_UNIX)
-      t = t.replace (QChar::ParagraphSeparator, "\n");
-#endif
-
-      QClipboard *clipboard = QApplication::clipboard();
-
-      clipboard->setText (t);
+      ed_cut();
 
       event->accept();
       return;
      }
-#endif
+
+  if (event->key() == Qt::Key_P && (event->modifiers().testFlag(Qt::ControlModifier)))
+     {
+      QString t = get();
+
+      if (t.isEmpty())
+         {
+          event->accept();
+          return;
+         }
+
+      ed_paste();
+
+      event->accept();
+      return;
+     }
+
+
+
+//#endif
 
 
   QPlainTextEdit::keyPressEvent (event);
@@ -1301,6 +1329,62 @@ void CDocument::put (const QString &value)
 {
   textCursor().insertText (value);
 }
+
+
+void CDocument::ed_copy()
+{
+  if (! has_selection())
+     return;
+
+  QString t;
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+  t = t.replace (QChar::ParagraphSeparator, "\r\n");
+#elif defined(Q_OS_UNIX)
+  t = t.replace (QChar::ParagraphSeparator, "\n");
+#endif
+
+  QClipboard *clipboard = QApplication::clipboard();
+
+  clipboard->setText (t);
+}
+
+
+void CDocument::ed_cut()
+{
+  if (! has_selection())
+     return;
+
+  QString t;
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+  t = t.replace (QChar::ParagraphSeparator, "\r\n");
+#elif defined(Q_OS_UNIX)
+  t = t.replace (QChar::ParagraphSeparator, "\n");
+#endif
+
+  QClipboard *clipboard = QApplication::clipboard();
+
+  clipboard->setText (t);
+
+  textCursor().insertText ("");
+}
+
+
+void CDocument::ed_paste()
+{
+  QClipboard *clipboard = QApplication::clipboard();
+
+  textCursor().insertText (clipboard->text());
+}
+
+
+bool CDocument::has_selection()
+{
+   return textCursor().hasSelection();
+}
+
+
 
 
 bool CDocument::file_open (const QString &fileName, const QString &codec)

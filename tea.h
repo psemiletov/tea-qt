@@ -696,6 +696,7 @@ Edit menu callbacks
   void ed_copy();
   void ed_paste();
   void ed_cut();
+  void ed_select_all();
   void ed_block_start();
   void ed_block_end();
   void ed_block_copy();

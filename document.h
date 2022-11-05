@@ -150,6 +150,10 @@ private:
 
 protected:
 
+  QAction *actCopy;
+  QAction *actCut;
+  QAction *actPaste;
+
   QMimeData* createMimeDataFromSelection() const;
   bool canInsertFromMimeData (const QMimeData *source) const;
   void insertFromMimeData (const QMimeData *source);
@@ -157,6 +161,7 @@ protected:
   void keyPressEvent (QKeyEvent *event);
   void resizeEvent (QResizeEvent *event);
   void wheelEvent (QWheelEvent *e);
+  //QMenu* createStandardContextMenu();
 
 public:
 
@@ -211,6 +216,7 @@ public:
   void ed_paste();
 
   bool has_selection();
+
 
   bool file_open (const QString &fileName, const QString &codec);
   bool file_save_with_name (const QString &fileName, const QString &codec);

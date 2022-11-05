@@ -1159,13 +1159,12 @@ void CDocument::keyPressEvent (QKeyEvent *event)
       return;
      }
 
-  if (event->key() == Qt::Key_P && (event->modifiers().testFlag(Qt::ControlModifier)))
+  if (event->key() == Qt::Key_V && (event->modifiers().testFlag(Qt::ControlModifier)))
      {
       ed_paste();
       event->accept();
       return;
      }
-
 
 
 #endif
@@ -1267,6 +1266,15 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
   int tab_index = holder->tab_widget->addTab (this, file_name);
   tab_page = holder->tab_widget->widget (tab_index);
 
+
+  //QAction *actCopy;
+//  QAction *actCut;
+  //QAction *actPaste;
+
+  //actCopy = new QAction (tr("Copy"), this);
+  //connect (actCopy, SIGNAL(triggered()), this, SLOT(ed_copy()));
+
+   setContextMenuPolicy (Qt::PreventContextMenu);
 
 /*
   set dots color, put to hl init
@@ -1380,7 +1388,6 @@ bool CDocument::ed_cut()
 void CDocument::ed_paste()
 {
   QClipboard *clipboard = QApplication::clipboard();
-
   textCursor().insertText (clipboard->text());
 }
 
@@ -1390,7 +1397,16 @@ bool CDocument::has_selection()
    return textCursor().hasSelection();
 }
 
+/*
+QMenu* CDocument::createStandardContextMenu()
+{
+  QMenu *m = new QMenu();
 
+  m->addAction (actCopy);
+
+  return m;
+}
+*/
 
 
 bool CDocument::file_open (const QString &fileName, const QString &codec)

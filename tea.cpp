@@ -1141,6 +1141,11 @@ void CTEA::file_open()
   dialog.setFilter (QDir::AllEntries | QDir::Hidden);
   dialog.setOption (QFileDialog::DontUseNativeDialog, true);
 
+#if QT_VERSION >= 0x050200
+  dialog.setOption (QFileDialog::DontUseCustomDirectoryIcons, true);
+#endif
+
+
   QList<QUrl> sidebarUrls = dialog.sidebarUrls();
   QList<QUrl> sidebarUrls_old = dialog.sidebarUrls();
 
@@ -1180,7 +1185,7 @@ void CTEA::file_open()
   else
       dialog.setDirectory (documents->dir_last);
 
-  dialog.setNameFilter (tr ("All (*);;Text files (*.txt);;Markup files (*.xml *.html *.htm *.);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)"));
+  dialog.setNameFilter (tr ("All (*);;Text files (*.txt);;Markup files (*.xml *.html *.xhtml *.htm *.md);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)"));
 
   QLabel *l = new QLabel (tr ("Charset"));
   QComboBox *cb_codecs = new QComboBox (&dialog);
@@ -1837,6 +1842,17 @@ void CTEA::ed_cut()
   if (d)
       d->cut();
 }
+
+
+void CTEA::ed_select_all()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (d)
+      d->selectAll();
+}
+
 
 
 void CTEA::ed_block_start()
@@ -6976,6 +6992,10 @@ Edit menu
 
   menu_edit->addSeparator();
 
+  add_to_menu (menu_edit, tr ("Select all"), SLOT(ed_select_all()));
+
+  menu_edit->addSeparator();
+
   add_to_menu (menu_edit, tr ("Block start"), SLOT(ed_block_start()));
   add_to_menu (menu_edit, tr ("Block end"), SLOT(ed_block_end()));
   add_to_menu (menu_edit, tr ("Copy block"), SLOT(ed_block_copy()));
@@ -7731,7 +7751,7 @@ OPTIONS::COMMON
   hb_imgvovr->insertWidget (-1, ed_img_viewer_override, 1, Qt::AlignLeft);
 
   cb_use_trad_dialogs = new QCheckBox (tr ("Use traditional File Save/Open dialogs"), tab_options);
-  cb_use_trad_dialogs->setChecked (settings->value ("use_trad_dialogs", "0").toBool());
+  cb_use_trad_dialogs->setChecked (settings->value ("use_trad_dialogs", "1").toBool());
 
   cb_start_on_sunday = new QCheckBox (tr ("Start week on Sunday"), tab_options);
   cb_start_on_sunday->setChecked (settings->value ("start_week_on_sunday", "0").toBool());

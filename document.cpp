@@ -1210,6 +1210,34 @@ void CDocument::wheelEvent (QWheelEvent *e)
 }
 
 
+void CDocument::contextMenuEvent (QContextMenuEvent *event)
+{
+  QMenu *menu = new QMenu (this);
+
+  QAction *a = menu->addAction (tr("Copy"));
+  connect (a, SIGNAL(triggered()), this, SLOT(ed_copy()));
+
+  a = menu->addAction (tr("Cut"));
+  connect (a, SIGNAL(triggered()), this, SLOT(ed_cut()));
+
+  a = menu->addAction (tr("Paste"));
+  connect (a, SIGNAL(triggered()), this, SLOT(ed_paste()));
+
+  menu->addSeparator();
+
+  a = menu->addAction (tr("Undo"));
+  connect (a, SIGNAL(triggered()), this, SLOT(undo()));
+
+  a = menu->addAction (tr("Redo"));
+  connect (a, SIGNAL(triggered()), this, SLOT(redo()));
+
+//  menu->show();
+
+  menu->exec(event->globalPos());
+  delete menu;
+}
+
+
 CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
 {
   holder = hldr;
@@ -1274,7 +1302,7 @@ CDocument::CDocument (CDox *hldr, QWidget *parent): QPlainTextEdit (parent)
   //actCopy = new QAction (tr("Copy"), this);
   //connect (actCopy, SIGNAL(triggered()), this, SLOT(ed_copy()));
 
-   setContextMenuPolicy (Qt::PreventContextMenu);
+//   setContextMenuPolicy (Qt::PreventContextMenu);
 
 /*
   set dots color, put to hl init

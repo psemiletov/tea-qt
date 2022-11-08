@@ -473,7 +473,6 @@ void CTEA::dropEvent (QDropEvent *event)
   event->accept();
 }
 
-
 /*
 ===========================
 Main window slots

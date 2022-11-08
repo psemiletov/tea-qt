@@ -161,6 +161,9 @@ protected:
   void keyPressEvent (QKeyEvent *event);
   void resizeEvent (QResizeEvent *event);
   void wheelEvent (QWheelEvent *e);
+  void contextMenuEvent (QContextMenuEvent *event);
+
+
   //QMenu* createStandardContextMenu();
 
 public:
@@ -210,10 +213,6 @@ public:
 
   QString get() const; //return selected text
   void put (const QString &value); //replace selection or insert text at cursor
-
-  bool ed_copy();
-  bool ed_cut();
-  void ed_paste();
 
   bool has_selection();
 
@@ -277,6 +276,11 @@ public slots:
   void cb_cursorPositionChanged();
   void updateLineNumberArea (const QRect &, int);
   void slot_selectionChanged();
+
+  bool ed_copy();
+  bool ed_cut();
+  void ed_paste();
+
 };
 
 

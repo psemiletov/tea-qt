@@ -54,6 +54,26 @@
 Do you want to save your changes?</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Kopieren</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="unfinished">Ausschneiden</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished">Einfügen</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished">Rückgängig</translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation type="unfinished">Wiederholen</translation>
+    </message>
 </context>
 <context>
     <name>CImgViewer</name>
@@ -82,10 +102,6 @@ Do you want to save your changes?</source>
     </message>
     <message>
         <source>famous input field</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>All (*);;Text files (*.txt);;Markup files (*.xml *.html *.htm *.);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)</source>
         <translation></translation>
     </message>
     <message>
@@ -1825,6 +1841,14 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Preview Markdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All (*);;Text files (*.txt);;Markup files (*.xml *.html *.xhtml *.htm *.md);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select all</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

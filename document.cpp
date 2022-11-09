@@ -1231,8 +1231,6 @@ void CDocument::contextMenuEvent (QContextMenuEvent *event)
   a = menu->addAction (tr("Redo"));
   connect (a, SIGNAL(triggered()), this, SLOT(redo()));
 
-//  menu->show();
-
   menu->exec(event->globalPos());
   delete menu;
 }

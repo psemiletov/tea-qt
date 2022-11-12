@@ -1111,8 +1111,8 @@ void CDocument::keyPressEvent (QKeyEvent *event)
       event->accept();
       return;
      }
+/*
 
-  /*
 #if QT_VERSION >= 0x050000
 
   if (event->key() == Qt::Key_C && (event->modifiers().testFlag(Qt::ControlModifier)))
@@ -1141,7 +1141,6 @@ void CDocument::keyPressEvent (QKeyEvent *event)
 #endif
 */
 
-#if QT_VERSION >= 0x050000
 
   if (event->key() == Qt::Key_C && (event->modifiers().testFlag(Qt::ControlModifier)))
      {
@@ -1164,9 +1163,6 @@ void CDocument::keyPressEvent (QKeyEvent *event)
       event->accept();
       return;
      }
-
-
-#endif
 
 
   QPlainTextEdit::keyPressEvent (event);
@@ -1373,10 +1369,12 @@ void CDocument::ed_copy()
 
   QString t = get();
 
+#if defined(Q_OS_UNIX)
+    t = t.replace (QChar::ParagraphSeparator, "\n");
+#endif
+
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-  t = t.replace (QChar::ParagraphSeparator, "\r\n");
-#elif defined(Q_OS_UNIX)
-  t = t.replace (QChar::ParagraphSeparator, "\n");
+    t = t.replace (QChar::ParagraphSeparator, "\r\n");
 #endif
 
   QClipboard *clipboard = QApplication::clipboard();
@@ -1392,10 +1390,12 @@ void CDocument::ed_cut()
 
   QString t = get();
 
+#if defined(Q_OS_UNIX)
+  t = t.replace (QChar::ParagraphSeparator, "\n");
+#endif
+
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
   t = t.replace (QChar::ParagraphSeparator, "\r\n");
-#elif defined(Q_OS_UNIX)
-  t = t.replace (QChar::ParagraphSeparator, "\n");
 #endif
 
   QClipboard *clipboard = QApplication::clipboard();
@@ -1415,7 +1415,7 @@ void CDocument::ed_paste()
 
 bool CDocument::has_selection()
 {
-   return textCursor().hasSelection();
+  return textCursor().hasSelection();
 }
 
 /*

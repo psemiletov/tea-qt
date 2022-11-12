@@ -1,11 +1,12 @@
 ====NEWS ABOUT TEA====
-TEA 61.2.0, October 2022
+TEA 62.0.0, November 2022
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   Hello! This release features bugfixes, and most important the Qt6 text copy to clipboard bug among them (the line breaks bug).
-+View - Preview Markdown //preview a currently opened md-file
+   From the dawn of the humanity I've heard that TEA's interface is obscure. And I know why - due to the built-in file manager that is used by default instead of the traditional file save/open dialogs. TEA all that time has such dialogs, but they are turned off by default.
+   Now, in the sake of the user-friendliness, behold! The file save/open dialogs are turned on by default, when you start TEA in a first time. For all old users things remains the same as has been.
+   Beside this new outstanding feature, TEA 62 has all copy/paste stuff rewritten from the ground to avoid the strange clipboard interaction at some Qt 6.x release
 
    Stay tuned.
    Peter Semiletov

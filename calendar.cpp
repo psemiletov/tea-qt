@@ -11,7 +11,7 @@ this code is Public Domain
 #include <QTextCharFormat>
 #include <QDebug>
 
-#include "utils.h"
+//#include "utils.h"
 #include "calendar.h"
 
 

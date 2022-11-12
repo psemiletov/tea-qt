@@ -277,9 +277,10 @@ public slots:
   void updateLineNumberArea (const QRect &, int);
   void slot_selectionChanged();
 
-  bool ed_copy();
-  bool ed_cut();
+  void ed_copy();
+  void ed_cut();
   void ed_paste();
+
 
 };
 

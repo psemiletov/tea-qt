@@ -59,7 +59,6 @@ code from qwriter:
 #include "document.h"
 #include "utils.h"
 #include "gui_utils.h"
-//#include "textproc.h"
 
 #include "pugixml.hpp"
 
@@ -1367,10 +1366,10 @@ void CDocument::put (const QString &value)
 }
 
 
-bool CDocument::ed_copy()
+void CDocument::ed_copy()
 {
   if (! has_selection())
-     return false;
+     return;
 
   QString t = get();
 
@@ -1383,15 +1382,13 @@ bool CDocument::ed_copy()
   QClipboard *clipboard = QApplication::clipboard();
 
   clipboard->setText (t);
-
-  return true;
 }
 
 
-bool CDocument::ed_cut()
+void CDocument::ed_cut()
 {
   if (! has_selection())
-     return false;
+     return;
 
   QString t = get();
 
@@ -1406,8 +1403,6 @@ bool CDocument::ed_cut()
   clipboard->setText (t);
 
   textCursor().insertText ("");
-
-  return true;
 }
 
 

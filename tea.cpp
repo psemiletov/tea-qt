@@ -1113,7 +1113,7 @@ void CTEA::file_open()
 {
   last_action = sender();
 
-  if (! settings->value ("use_trad_dialogs", "0").toBool())
+  if (! settings->value ("use_trad_dialogs", "1").toBool())
      {
       CDocument *d = documents->get_current();
 
@@ -1379,7 +1379,7 @@ bool CTEA::file_save_as()
   if (! d)
      return false;
 
-  if (! settings->value ("use_trad_dialogs", "0").toBool())
+  if (! settings->value ("use_trad_dialogs", "1").toBool())
      {
       main_tab_widget->setCurrentIndex (idx_tab_fman);
       fm_entry_mode = FM_ENTRY_MODE_SAVE;

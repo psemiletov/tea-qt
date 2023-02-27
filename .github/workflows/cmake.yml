@@ -3,19 +3,17 @@ name: CMake for Linux
 on: workflow_dispatch
 
 env:
-
   BUILD_TYPE: Release
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
 
 
-     name: Install Qt
+    - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
         version: '6.5.0'

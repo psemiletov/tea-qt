@@ -1,4 +1,4 @@
-name: CMake for Linux
+name: CMake for MacOS
 
 on: workflow_dispatch
 
@@ -7,7 +7,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -15,9 +15,9 @@ jobs:
       uses: jurplel/install-qt-action@v3
       with:
         version: '6.5.0'
-        host: 'linux'
+        host: 'mac'
         target: 'desktop'
-        arch: 'gcc_64'
+        arch: 'clang_64'
         install-deps: 'true'
         modules: 'qt5compat'
         cache: 'true'
@@ -38,5 +38,5 @@ jobs:
     - name: Archive production artifacts
       uses: actions/upload-artifact@v3
       with:
-       name: tea-ubuntu-binary
+       name: tea-mac-binary
        path: ${{github.workspace}}/build/tea

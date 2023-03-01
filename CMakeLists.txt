@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.0)
-#cmake_minimum_required(VERSION 3.21.1)
+#cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.21.1)
 
 set (QT_MIN_VERSION "5.4.0")
 
@@ -47,6 +47,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
    add_definitions(-DQ_OS_LINUX)
    add_definitions(-DQ_OS_UNIX)
 endif()
+
 
 message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 
@@ -116,6 +117,14 @@ WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 
 add_executable(tea ${tea_SRCS} ${QT_RESOURCES})
 
+#if (USE_MAC)
+#set_target_properties(tea PROPERTIES MACOSX_BUNDLE TRUE)
+#endif()
+
+set_target_properties(tea PROPERTIES
+    WIN32_EXECUTABLE ON
+    MACOSX_BUNDLE ON
+)
 
 
 if(USE_PRINTER)

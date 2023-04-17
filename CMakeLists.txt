@@ -11,7 +11,6 @@ set(CMAKE_AUTORCC ON)
 enable_language(CXX)
 enable_language(C)
 
-
 find_package(Qt6 COMPONENTS Core Widgets)
 if (NOT Qt6_FOUND)
     find_package(Qt5 5.15 REQUIRED COMPONENTS Core Widgets)
@@ -19,6 +18,7 @@ endif()
 
 
 if (Qt6_FOUND)
+message("+ Qt6 found")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 COMPONENTS Core5Compat REQUIRED)
@@ -61,16 +61,9 @@ if(hunspell_FOUND)
 endif()
 
 
-
 qt_add_resources(QT_RESOURCES resources.qrc)
 
-
-#qt6_add_resources(QT_RESOURCES resources.qrc)
-#Qt${QT_VERSION_MAJOR}_add_resources(QT_RESOURCES resources.qrc)
-
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt6Widgets_EXECUTABLE_COMPILE_FLAGS}")
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${QtWidgets_EXECUTABLE_COMPILE_FLAGS}")
 
 file(GLOB tea_SRCS "*.c" "*.cpp")
 file(GLOB tea_HEADERS "*.h" ".*hpp")

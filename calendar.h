@@ -47,4 +47,3 @@ int moon_phase_trig1 (int year, int month, int day);
 int moon_phase_leueshkanov (int year, int month, int day);
 
 #endif // CALENDAR_H
-

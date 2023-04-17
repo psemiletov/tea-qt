@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2022 by Peter Semiletov                                          *
+ *   2007-2023 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -53,7 +53,6 @@ code from qwriter:
 #include <QMimeData>
 #include <QFile>
 #include <QMessageBox>
-
 #include <QTimer>
 
 #include "document.h"
@@ -355,7 +354,6 @@ public:
   CSyntaxHighlighterQRegExp *hl;
   int darker_val;
 
-
   bool for_each (pugi::xml_node& node);
 };
 
@@ -505,13 +503,11 @@ void CSyntaxHighlighterQRegExp::load_from_xml_pugi (const QString &fname)
 
   int darker_val = settings->value ("darker_val", 100).toInt();
 
-
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_buffer (temp.utf16(),
                                                    temp.size() * 2,
                                                    pugi::parse_default,
                                                    pugi::encoding_utf16);
-
 
    //pugi::xml_parse_result result = doc.load_buffer (temp.toUtf8().data(),
      //                                               temp.toUtf8().size());
@@ -524,7 +520,6 @@ void CSyntaxHighlighterQRegExp::load_from_xml_pugi (const QString &fname)
    walker.hl = this;
 
    doc.traverse (walker);
-
 }
 
 #endif
@@ -697,7 +692,6 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
 
   if (tag_name == "item")
      {
-
       pugi::xml_attribute attr = node.attribute ("type");
       QString attr_type = attr.as_string();
       attr = node.attribute ("name");
@@ -706,7 +700,6 @@ bool CXMLHL_walker::for_each (pugi::xml_node &node)
       if (attr_name == "options")
          {
 //          attr = node.attribute ("casecare");
-
           QString s_casecare = node.attribute ("casecare").as_string();
           if (! s_casecare.isEmpty())
              if (s_casecare == "0" || s_casecare == "false")

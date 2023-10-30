@@ -96,12 +96,6 @@ set(tea_DESKTOP
     ./desktop/tea.desktop
 )
 
-
-#add_custom_target(dist
-#COMMAND git archive --prefix=${PROJECT}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}/ master | bzip2 >${PROJECT}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}.tar.bz2
-#WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-#)
-
 add_custom_target(dist
 COMMAND git archive --format=tar --prefix=${PROJECT}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}/ HEAD | gzip >${PROJECT}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}.tar.gz
 WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
@@ -219,10 +213,6 @@ if(hunspell_FOUND)
   target_link_libraries(tea ${hunspell_LIBRARIES} )
 endif()
 
-
-#find_package(Qt6 REQUIRED COMPONENTS Core5Compat)
-
-#target_link_libraries(tea PRIVATE Qt6::Core5Compat)
 
 if (Qt6_FOUND)
 target_link_libraries(tea Qt::Core5Compat)

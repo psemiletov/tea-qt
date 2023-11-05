@@ -137,9 +137,5 @@ inline QString get_file_path (const QString &fileName)
 }
 
 
-/*
-GUI functions
-*/
-
 
 #endif

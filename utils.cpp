@@ -182,6 +182,10 @@ bool qstring_save (const QString &fileName, const QString &data, const char *enc
       return false;
 
   QTextCodec *codec = QTextCodec::codecForName (enc);
+  if (! codec)
+     return false;
+
+
   QByteArray ba = codec->fromUnicode (data);
 
   file.write (ba);
@@ -203,6 +207,9 @@ QString qstring_load (const QString &fileName, const char *enc)
 
   QByteArray ba = file.readAll();
   QTextCodec *codec = QTextCodec::codecForName (enc);
+
+  if (! codec)
+     return QString();
 
   file.close();
 

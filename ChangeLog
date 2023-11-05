@@ -1,5 +1,10 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+62.1.0
++ new version of pugixml XML parser
+* cmake support is rewritten a lot.
+
+
 * 62.0.1 quick fix
 + Edit - Select all
 

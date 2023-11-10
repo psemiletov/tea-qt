@@ -1,10 +1,10 @@
 ====NEWS ABOUT TEA====
-TEA 62.1.0, November 2023
+TEA 62.1.1, November 2023
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   This is maintanance release mostly, no visible changes. TEA uses now the new version of pugixml XML parser. cmake support is rewritten a lot.
+   PDF loading fix
 
 
    Stay tuned.

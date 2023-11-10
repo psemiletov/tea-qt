@@ -1425,9 +1425,11 @@ QMenu* CDocument::createStandardContextMenu()
 
 bool CDocument::file_open (const QString &fileName, const QString &codec)
 {
+  //qDebug() << "CDocument::file_open " << fileName;
+
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
 
-//  qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
+  //qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
 
   if (! tio)
       return false;
@@ -2660,6 +2662,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
       return td;
      }
 
+
   CDocument *d = get_document_by_fname (fileName);
   if (d)
      {
@@ -2667,6 +2670,7 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
       d->reload (codec);
       return d;
      }
+
 
 //else truly create the new doc
   d = create_new();

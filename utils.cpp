@@ -380,6 +380,10 @@ bool is_image (const QString &filename)
   for (QList <QByteArray>::iterator i = a.begin(); i != a.end(); ++i)
       {
        QString t (i->data());
+
+       if (t == "pdf") //hack for qt6
+          continue;
+
        if (filename.endsWith (t.prepend ("."), Qt::CaseInsensitive))
           return true;
       }

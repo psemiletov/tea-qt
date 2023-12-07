@@ -181,13 +181,13 @@ endif()
 
 if (Qt6_FOUND)
 
-find_package(Qt6 REQUIRED COMPONENTS Pdf)
-if (Qt6::Pdf_FOUND)
-  add_definitions(-DPDF6)
-  target_link_libraries(tea Qt6::Pdf)
-  message("+ Qt 6.6 PDF support")
+#find_package(Qt6 REQUIRED COMPONENTS Pdf)
+#if (Qt6::Pdf_FOUND)
+#  add_definitions(-DPDF6)
+#  target_link_libraries(tea Qt6::Pdf)
+#  message("+ Qt 6.6 PDF support")
 
-else()
+#else()
 
 pkg_check_modules(popplerqt6 QUIET poppler-qt6)
 if(popplerqt6_FOUND)

@@ -29,7 +29,7 @@ qt_standard_project_setup()
 
 
 set(PROJECT "tea-qt")
-project ($PROJECT VERSION 62.1.1 LANGUAGES CXX C)
+project ($PROJECT VERSION 62.1.2 LANGUAGES CXX C)
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
 add_definitions(-DNOCRYPT=1)
 add_definitions(-DNOUNCRYPT=1)
@@ -168,7 +168,27 @@ if(popplerqt5_FOUND)
 endif()
 endif()
 
+#if (Qt6_FOUND)
+#pkg_check_modules(popplerqt6 QUIET poppler-qt6)
+#if(popplerqt6_FOUND)
+#  add_definitions(-DPOPPLER_ENABLE)
+#  target_link_libraries(tea ${popplerqt6_LIBRARIES})
+#  include_directories(${popplerqt6_INCLUDE_DIRS})
+#  message("+ popplerqt6 support")
+#endif()
+#endif()
+
+
 if (Qt6_FOUND)
+
+find_package(Qt6 REQUIRED COMPONENTS Pdf)
+if (Qt6::Pdf_FOUND)
+  add_definitions(-DPDF6)
+  target_link_libraries(tea Qt6::Pdf)
+  message("+ Qt 6.6 PDF support")
+
+else()
+
 pkg_check_modules(popplerqt6 QUIET poppler-qt6)
 if(popplerqt6_FOUND)
   add_definitions(-DPOPPLER_ENABLE)
@@ -176,6 +196,9 @@ if(popplerqt6_FOUND)
   include_directories(${popplerqt6_INCLUDE_DIRS})
   message("+ popplerqt6 support")
 endif()
+endif()
+
+
 endif()
 
 endif()

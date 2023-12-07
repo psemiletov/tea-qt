@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2000-2022 by Peter Semiletov                                          *
+ *   2000-2023 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
 
 C++/Qt branch started at 08 November 2007
@@ -599,7 +599,6 @@ void CTEA::read_settings()
   charset = settings->value ("charset", "UTF-8").toString();
   fname_def_palette = settings->value ("fname_def_palette", ":/palettes/TEA").toString();
 
-
   QPoint pos = settings->value ("pos", QPoint (1, 200)).toPoint();
   QSize size = settings->value ("size", QSize (800, 512)).toSize();
 
@@ -613,7 +612,6 @@ void CTEA::read_settings()
   size = settings->value ("md_viewer_size", QSize (800, 512)).toSize();
   md_viewer.resize (size);
   md_viewer.move (pos);
-
 }
 
 
@@ -635,10 +633,8 @@ void CTEA::write_settings()
   settings->setValue ("show_linenums", cb_show_linenums->isChecked());
   settings->setValue ("fif_at_toolbar", cb_fif_at_toolbar->isChecked());
   settings->setValue ("save_buffers", cb_save_buffers->isChecked());
-
   settings->setValue ("md_viewer_pos", md_viewer.pos());
   settings->setValue ("md_viewer_size", md_viewer.size());
-
 
   delete settings;
 }
@@ -1426,7 +1422,6 @@ bool CTEA::file_save_as()
 
   for (int i = 0; i < volumes2.size(); i++)
       sidebarUrls.append (QUrl::fromLocalFile ("/media/" + volumes2.at(i)));
-
 
 #endif
 
@@ -4753,6 +4748,12 @@ void CTEA::fn_spell_check()
 {
   last_action = sender();
 
+  if (spellchecker->modules_list.size() == 0)
+     {
+      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Options - Functions page"));
+      return;
+     }
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4846,6 +4847,12 @@ void CTEA::fn_spell_add_to_dict()
 {
   last_action = sender();
 
+  if (spellchecker->modules_list.size() == 0)
+     {
+      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Options - Functions page"));
+      return;
+     }
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4860,6 +4867,13 @@ void CTEA::fn_spell_remove_from_dict()
 {
   last_action = qobject_cast<QAction *>(sender());
 
+  if (spellchecker->modules_list.size() == 0)
+     {
+      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Options - Functions page"));
+      return;
+     }
+
+
   CDocument *d = documents->get_current();
   if (! d)
      return;
@@ -4873,6 +4887,13 @@ void CTEA::fn_spell_remove_from_dict()
 void CTEA::fn_spell_suggest_callback()
 {
   last_action = sender();
+
+  if (spellchecker->modules_list.size() == 0)
+     {
+      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Options - Functions page"));
+      return;
+     }
+
 
   CDocument *d = documents->get_current();
   if (! d)

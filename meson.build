@@ -3,7 +3,7 @@ project('tea', ['cpp','c'],
          version : '62.1.1',
          license : 'GPLv3')
 
-add_global_arguments('-DVERSION_NUMBER="62.1.1"', language : 'cpp')
+add_global_arguments('-DVERSION_NUMBER="62.1.2"', language : 'cpp')
 add_global_arguments('-DNOCRYPT="1"', language : 'cpp')
 add_global_arguments('-DNOUNCRYPT="1"', language : 'cpp')
 add_global_arguments('-DQUAZIP_STATIC="1"', language : 'cpp')

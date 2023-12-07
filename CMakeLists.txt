@@ -201,8 +201,6 @@ endif()
 
 endif()
 
-endif()
-
 if(USE_DJVU)
 find_package(PkgConfig)
 pkg_check_modules(ddjvuapi QUIET ddjvuapi)

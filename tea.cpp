@@ -278,7 +278,7 @@ void CAboutWindow::update_image()
 
 CAboutWindow::CAboutWindow()
 {
-  setAttribute (Qt::WA_DeleteOnClose);
+ // setAttribute (Qt::WA_DeleteOnClose);
 
   QStringList sl_t = qstring_load (":/AUTHORS").split ("##");
 
@@ -428,6 +428,12 @@ void CTEA::closeEvent (QCloseEvent *event)
 
   delete documents;
   delete img_viewer;
+
+  if (wnd_about)
+     {
+      wnd_about->close();
+      delete wnd_about;
+    }
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   delete spellchecker;
@@ -6195,9 +6201,12 @@ void CTEA::view_darker()
 
 void CTEA::help_show_about()
 {
-  CAboutWindow *a = new CAboutWindow();
-  a->move (x() + 20, y() + 20);
-  a->show();
+  //CAboutWindow *a = new CAboutWindow();
+  if (! wnd_about)
+     wnd_about = new CAboutWindow();
+
+  wnd_about->move (x() + 20, y() + 20);
+  wnd_about->show();
 }
 
 
@@ -6246,6 +6255,7 @@ Application stuff inits and updates
 
 CTEA::CTEA()
 {
+  wnd_about = 0;
   mainSplitter = 0;
   ui_update = true;
   boring = false;

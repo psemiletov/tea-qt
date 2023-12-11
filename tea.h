@@ -179,6 +179,7 @@ Variables
   CImgViewer *img_viewer;
 
   QTextBrowser md_viewer;
+  QWidget *wnd_about;
 
   CSpellchecker *spellchecker;
   QStringList spellcheckers;

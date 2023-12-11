@@ -1,7 +1,7 @@
-VERSION = 62.2.0
+VERSION = 62.2.1
 
 os2: {
-DEFINES += 'VERSION_NUMBER=\'"62.2.0"\''
+DEFINES += 'VERSION_NUMBER=\'"62.2.1"\''
 } else: {
   DEFINES += 'VERSION_NUMBER=\\\"$${VERSION}\\\"'
 }

@@ -7230,7 +7230,7 @@ Functions menu
 
   add_to_menu (tm, tr ("UPCASE"), SLOT(fn_case_up()),"Ctrl+Up");
   add_to_menu (tm, tr ("lower case"), SLOT(fn_case_down()),"Ctrl+Down");
-  add_to_menu (tm, tr ("Case inverse"), SLOT(fn_case_inverse()),"Ctrl+Down");
+  add_to_menu (tm, tr ("Case inverse"), SLOT(fn_case_inverse()));
 
   add_to_menu (tm, tr ("Capitalize sentences"), SLOT(fn_case_cap_sentences()));
 

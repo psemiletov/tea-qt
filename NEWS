@@ -1,11 +1,17 @@
 ====NEWS ABOUT TEA====
-TEA 62.1.2, December 2023
+TEA 62.2.0, December 2023
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   Spellcheker fix
+   This release has fixes and one new function. Thank to Ryan Carsten Schmidt and Bernd Storck for ideas and some fixes.
 
++ Functions - Case - Case inverse
+* fix for Mac/Qt4 - at least it not crash
+* qt5 cmake build fix
+* markdown link fix
+* markdown insert image fix
+* about window :: close on tea exit
 
    Stay tuned.
    Peter Semiletov

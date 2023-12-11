@@ -1858,6 +1858,10 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <source>Select all</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Case inverse</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CTioReadOnly</name>

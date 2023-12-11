@@ -1851,6 +1851,10 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <source>Select all</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Case inverse</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CTioReadOnly</name>

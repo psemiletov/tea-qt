@@ -1,9 +1,19 @@
 =====НОВОСТИ ПРО ТИА====
-ТИА 62.1.2, декабрь 2023
+ТИА 62.2.0, декабрь 2023
 ======================
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   Исправление проверки правописания.
+   Разные исправления, а также добавление функции "переворачивания" регистра текста. Спасибо Ryan Carsten Schmidt и Bernd Storck за идеи и некоторые фиксы.
+
++ Funtions - Case - Case inverse
+* fix for Mac/Qt4 - at least it not crash
+* qt5 cmake build fix
+* markdown link fix
+* markdown insert image fix
+* about window :: close on tea exit
+
+   Stay tuned.
+   Peter Semiletov
 
    С кирпичным пролетарским приветом, Петр Семилетов!

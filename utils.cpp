@@ -423,7 +423,7 @@ QString get_insert_image (const QString &file_name, const QString &full_path, co
       result = QString ("@IncludeGraphic {%1}").arg (dir.relativeFilePath (full_path));
   else
   if (markup_mode == "Markdown")
-      result = QString ("![alt_text]({%1})").arg (dir.relativeFilePath (full_path));
+      result = QString ("![alt_text](%1)").arg (dir.relativeFilePath (full_path));
 
   return result;
 }

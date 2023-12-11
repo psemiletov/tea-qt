@@ -1585,7 +1585,7 @@ Do you want to overwrite?</source>
     <message>
         <location filename="../tea.cpp" line="7538"/>
         <source>UI style (TEA restart needed)</source>
-        <translation>Стиль интрефейса (ТИА надо будет перезапустить)</translation>
+        <translation>Стиль интерфейса (ТИА надо будет перезапустить)</translation>
     </message>
     <message>
         <location filename="../tea.cpp" line="7547"/>

@@ -25,7 +25,10 @@ find_package(Qt6 COMPONENTS Core5Compat REQUIRED)
 endif()
 
 
-qt_standard_project_setup()
+#qt_standard_project_setup()
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
 
 set(PROJECT "tea-qt")

@@ -6932,6 +6932,10 @@ File menu
 ===================
 */
 
+#if QT_VERSION < 0x050000
+  QApplication::instance()->setAttribute(Qt::AA_DontUseNativeMenuBar);
+#endif
+
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
 

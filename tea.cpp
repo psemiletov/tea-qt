@@ -8535,7 +8535,7 @@ void CTEA::create_markup_hash()
   h9["HTML"] = "<a href=\"\">%s</a>";
   h9["XHTML"] = "<a href=\"\">%s</a>";
   h9["LaTeX"] = "\\href{}{%s}";
-  h9["Markdown"] = "[](%s)";
+  h9["Markdown"] = "[%s]()";
 
   hash_markup.insert ("link", h9);
 

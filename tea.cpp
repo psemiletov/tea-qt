@@ -3418,6 +3418,32 @@ void CTEA::fn_case_down()
 }
 
 
+void CTEA::fn_case_inverse()
+{
+  last_action = sender();
+
+  CDocument *d = documents->get_current();
+  if (! d)
+      return;
+
+  if (! d->has_selection())
+     return;
+
+  QString s = d->get();
+
+  for (int i = 0; i < s.size(); i++)
+      {
+       if (s[i].isUpper())
+          s[i] = s[i].toLower();
+       else
+           s[i] = s[i].toUpper();
+
+      }
+
+      d->put (s);
+}
+
+
 void CTEA::fn_case_cap_sentences()
 {
   last_action = sender();
@@ -7194,6 +7220,8 @@ Functions menu
 
   add_to_menu (tm, tr ("UPCASE"), SLOT(fn_case_up()),"Ctrl+Up");
   add_to_menu (tm, tr ("lower case"), SLOT(fn_case_down()),"Ctrl+Down");
+  add_to_menu (tm, tr ("Case inverse"), SLOT(fn_case_inverse()),"Ctrl+Down");
+
   add_to_menu (tm, tr ("Capitalize sentences"), SLOT(fn_case_cap_sentences()));
 
 

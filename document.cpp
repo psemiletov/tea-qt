@@ -2691,7 +2691,12 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 
 CDocument* CDox::open_file_triplex (const QString &triplex)
 {
-  QStringList sl = triplex.split ("*");
+  qDebug() << "open_file_triplex ";
+
+  QString tp = triplex;
+  tp.remove ("&");
+
+  QStringList sl = tp.split ("*");
   if (sl.size() < 3)
      return 0;
 
@@ -2917,7 +2922,12 @@ void CDox::open_recent()
 {
   QAction *act = qobject_cast<QAction *>(sender());
 
-  int i = recent_files.indexOf (act->text());
+  QString t = act->text();
+  t.remove ("&");
+
+  //qDebug() << "t:" << t;
+
+  int i = recent_files.indexOf (t);
   if (i == -1)
      return;
 

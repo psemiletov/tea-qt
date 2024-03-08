@@ -15,7 +15,7 @@ Donate >
 
 PayPal: peter.semiletov@gmail.com
 
-BTC: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
+BuyMeACoffee: https://www.buymeacoffee.com/semiletov
 
 Patreon: https://www.patreon.com/semiletov
 

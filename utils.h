@@ -137,5 +137,11 @@ inline QString get_file_path (const QString &fileName)
 }
 
 
+inline QString qstring_clear (const QString &s)
+{
+  QString t = s;
+  return t.remove ("&");
+}
+
 
 #endif

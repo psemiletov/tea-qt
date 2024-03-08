@@ -28,6 +28,7 @@ void create_menu_from_list (QObject *handler,
        if (! i->startsWith ("#"))
           {
            QAction *act = menu->addAction (*i);
+           act->setData (*i);
            handler->connect (act, SIGNAL(triggered()), handler, method);
           }
       }

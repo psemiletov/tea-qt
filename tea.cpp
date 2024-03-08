@@ -1761,7 +1761,7 @@ void CTEA::file_open_programs_file()
 void CTEA::file_open_bookmark()
 {
   last_action = sender();
-  documents->open_file_triplex (qobject_cast<QAction *>(last_action)->text());
+  documents->open_file_triplex (qobject_cast<QAction *>(last_action)->data().toString());
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
@@ -2097,7 +2097,7 @@ void CTEA::mrkup_mode_choosed()
   last_action = sender();
 
   QAction *a = qobject_cast<QAction *>(sender());
-  markup_mode = a->text();
+  markup_mode = a->data().toString();
   documents->markup_mode = markup_mode;
 
   CDocument *d = documents->get_current();
@@ -2121,13 +2121,13 @@ void CTEA::mrkup_header()
   if (documents->markup_mode == "Markdown")
      {
       QString t;
-      int n = a->text().toLower()[1].digitValue();
+      int n = a->data().toString().toLower()[1].digitValue();
       t.fill ('#', n);
       r = t + " " + d->get();
      }
   else
       r = QString ("<%1>%2</%1>").arg (
-                   a->text().toLower()).arg (
+                   a->data().toString().toLower()).arg (
                    d->get());
 
   d->put (r);
@@ -4753,8 +4753,8 @@ void CTEA::fn_change_spell_lang()
   last_action = sender();
 
   QAction *a = qobject_cast<QAction *>(sender());
-  settings->setValue ("spell_lang", a->text());
-  spellchecker->change_lang (a->text());
+  settings->setValue ("spell_lang", a->data().toString());
+  spellchecker->change_lang (a->data().toString());
   spellchecker->load_dict();
 
   fn_spell_check();
@@ -4931,8 +4931,8 @@ void CTEA::fn_spell_suggest_callback()
   if (! d)
      return;
 
-  QAction *act = qobject_cast<QAction *>(sender());
-  QString new_text = act->text();
+  QAction *a = qobject_cast<QAction *>(sender());
+  QString new_text = a->data().toString();
 
   QTextCursor cr = d->textCursor();
 
@@ -6035,10 +6035,13 @@ void CTEA::view_use_palette()
   last_action = sender();
 
   QAction *a = qobject_cast<QAction *>(sender());
-  QString fname = dir_palettes + "/" + a->text();
+
+//  QString tf = qstring_clear (a->text());
+
+  QString fname = dir_palettes + "/" + a->data().toString();
 
   if (! file_exists (fname))
-     fname = ":/palettes/" + a->text();
+     fname = ":/palettes/" + a->data().toString();
 
   fname_def_palette = fname;
   load_palette (fname);
@@ -8731,8 +8734,8 @@ void CTEA::update_snippets()
 
 void CTEA::update_keyboards()
 {
-  qDebug() << "update_keyboards()";
-  qDebug() << dir_keyboards;
+ // qDebug() << "update_keyboards()";
+//  qDebug() << dir_keyboards;
 
    menu_view_keyboards->clear();
    create_menu_from_dir (this,
@@ -9018,7 +9021,7 @@ Misc callbacks
 void CTEA::select_label()
 {
   last_action = sender();
-  QAction *Act = qobject_cast<QAction *>(sender());
+  QAction *a = qobject_cast<QAction *>(sender());
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -9027,7 +9030,7 @@ void CTEA::select_label()
   QTextCursor cr;
 
   QString text_to_find = settings->value ("label_start", "[?").toString()
-                         + Act->text()
+                         + a->data().toString()
                          + settings->value ("label_end", "?]").toString();
 
   cr = d->document()->find (text_to_find);
@@ -9046,7 +9049,7 @@ void CTEA::run_program()
      return;
 
   QAction *a = qobject_cast<QAction *>(sender());
-  QString command = programs.value(a->text());
+  QString command = programs.value (a->data().toString());
   if (command.isEmpty())
      return;
 

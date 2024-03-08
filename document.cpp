@@ -2691,12 +2691,12 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
 
 CDocument* CDox::open_file_triplex (const QString &triplex)
 {
-  qDebug() << "open_file_triplex ";
+  //qDebug() << "open_file_triplex ";
 
-  QString tp = triplex;
-  tp.remove ("&");
+  //QString tp = triplex;
+//  tp.remove ("&");
 
-  QStringList sl = tp.split ("*");
+  QStringList sl = triplex.split ("*");
   if (sl.size() < 3)
      return 0;
 

@@ -197,6 +197,8 @@ Variables
   int idx_tab_fman;
   int idx_tab_learn;
   int idx_tab_keyboard;
+  int idx_tab_speech;
+
   int idx_prev;
 
   int fman_find_idx;
@@ -473,6 +475,19 @@ Preferences tab :: Images page UI elements
   QLineEdit *ed_link_options;
   QLineEdit *ed_cols_per_row;
   QCheckBox *cb_zor_use_exif;
+
+
+
+/*
+=============================================
+Preferences tab :: Speech page UI elements
+=============================================
+*/
+
+  QComboBox *cmb_cpeech_engines;
+  QComboBox *cmb_cpeech_locales;
+  QComboBox *cmb_cpeech_voices;
+
 
 /*
 =============================================
@@ -1018,6 +1033,11 @@ Tune page callbacks
   void slot_font_interface_select();
   void slot_font_editor_select();
   void slot_style_currentIndexChanged (int);
+
+  void cmb_cpeech_engines_currentIndexChanged (int i);
+  void cmb_cpeech_locales_currentIndexChanged (int i);
+  void cmb_cpeech_voices_currentIndexChanged (int i);
+
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   void cmb_spellchecker_currentIndexChanged (int);

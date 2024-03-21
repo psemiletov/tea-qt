@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2000-2023 by Peter Semiletov                                          *
+ *   2000-2024 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
 
 C++/Qt branch started at 08 November 2007
@@ -1092,6 +1092,9 @@ File menu callbacks
 
 void CTEA::test()
 {
+  documents->speech_thing.print_engines();
+  documents->speech_thing.print_languages();
+
  /* CIconvCharsetConverter c;
   QByteArray ba = file_load ("/home/rox/devel/test/1251.txt");
 
@@ -6978,7 +6981,7 @@ File menu
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
 
-  //menu_file->addAction (act_test);
+  menu_file->addAction (act_test);
 
   menu_file->addAction (newAct);
   add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -7790,6 +7793,7 @@ OPTIONS::COMMON
   cb_use_joystick = new QCheckBox (tr ("Use joystick as cursor keys"), tab_options);
   cb_use_joystick->setChecked (settings->value ("use_joystick", "0").toBool());
   connect (cb_use_joystick, SIGNAL(stateChanged(int)), this, SLOT(cb_use_joystick_stateChanged(int)));
+
 #endif
 
   cb_auto_img_preview = new QCheckBox (tr ("Automatic preview images at file manager"), tab_options);
@@ -8116,6 +8120,44 @@ OPTIONS::IMAGES
 
   tab_options->addTab (scra_images, tr ("Images"));
 
+
+
+/*
+  ----------------------
+  OPTIONS::SPEECH
+  ----------------------
+*/
+
+  QWidget *page_speech = new QWidget (tab_options);
+
+  page_speech->setObjectName ("page_speech");
+
+  QVBoxLayout *page_speech_layout = new QVBoxLayout;
+  page_speech_layout->setAlignment (Qt::AlignTop);
+  page_speech->setLayout (page_speech_layout);
+
+ // QComboBox *cmb_cpeech_voices;
+
+  cmb_cpeech_engines = new_combobox (page_speech_layout,
+                                     tr ("Speech engine"),
+                                     documents->speech_thing.speaker.availableEngines(),
+                                     settings->value ("speech_engine", "mock").toString());
+
+
+  cmb_cpeech_locales = new_combobox (page_speech_layout,
+                                     tr ("Speach locale"),
+                                     documents->speech_thing.get_locales(),
+                                     settings->value ("speech_locale", QLocale::system().name()).toString());
+
+
+  cmb_cpeech_voices = new_combobox (page_speech_layout,
+                                     tr ("Speach voice"),
+                                     documents->speech_thing.get_voices(),
+                                     settings->value ("speech_voice", "").toString());
+
+
+
+  idx_tab_speech = tab_options->addTab (page_speech, tr ("Speech"));
 
 /*
 ----------------------
@@ -10336,6 +10378,41 @@ void CTEA::slot_style_currentIndexChanged (int)
 
   settings->setValue ("ui_style", text);
 }
+
+
+void CTEA::cmb_cpeech_engines_currentIndexChanged (int i)
+{
+  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+
+  QString engine_name = documents->speech_thing.speaker.availableEngines().at(i);
+
+  if (! documents->speech_thing.speaker.setEngine (engine_name))
+     {
+      qDebug() << "Cannot change engine to: " << engine_name;
+
+     return;
+    }
+
+
+  cmb_cpeech_engines->clear();
+
+
+}
+
+
+void CTEA::cmb_cpeech_locales_currentIndexChanged (int i)
+{
+
+
+}
+
+
+void CTEA::cmb_cpeech_voices_currentIndexChanged (int i)
+{
+
+
+}
+
 
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)

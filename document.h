@@ -57,6 +57,9 @@ code from qwriter:
 #include "myjoystick.h"
 #endif
 
+
+#include "speech.h"
+
 #include "logmemo.h"
 #include "tio.h"
 #include "todo.h"
@@ -292,6 +295,10 @@ class CDox: public QObject
 public:
 
   QStringList recent_files;
+
+
+  CSpeech speech_thing;
+
 
 //regexp pattern and file name of syntax hl rules
 #if QT_VERSION >= 0x050000

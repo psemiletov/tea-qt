@@ -238,7 +238,17 @@ if(hunspell_FOUND)
 endif()
 
 
+
+
 if (Qt6_FOUND)
+
+find_package(Qt6 REQUIRED COMPONENTS TextToSpeech)
+#if (Qt6::TextToSpeech_FOUND)
+#message("+ Qt6::TextToSpeech_FOUND")
+target_link_libraries(tea Qt6::TextToSpeech)
+#endif()
+
+
 target_link_libraries(tea Qt::Core5Compat)
 endif()
 

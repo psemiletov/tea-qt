@@ -10396,11 +10396,16 @@ void CTEA::cmb_cpeech_engines_currentIndexChanged (int i)
 
   cmb_cpeech_locales->clear();
   cmb_cpeech_locales->addItems (documents->speech_thing.get_locales());
+  cmb_cpeech_locales->setCurrentIndex (0);
 
   cmb_cpeech_voices->clear();
   cmb_cpeech_voices->addItems (documents->speech_thing.get_voices());
+  cmb_cpeech_voices->setCurrentIndex (0);
 
-  //SET NEW COMBO VALUES AND VOICE HERE!!!
+  documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(0));
+
+
+  //SET NEW VOICE HERE!!!
 
 }
 
@@ -10415,9 +10420,11 @@ void CTEA::cmb_cpeech_locales_currentIndexChanged (int i)
 
   cmb_cpeech_voices->clear();
   cmb_cpeech_voices->addItems (documents->speech_thing.get_voices());
+  cmb_cpeech_voices->setCurrentIndex (0);
 
+  documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(0));
 
-  //SET NEW COMBO VALUES AND VOICE HERE!!!
+  //SET NEW VOICE HERE!!!
 
 
 }
@@ -10432,6 +10439,7 @@ void CTEA::cmb_cpeech_voices_currentIndexChanged (int i)
   //documents->speech_thing.speaker.setLocale (documents->speech_thing.speaker.availableLocales().at(i));
 
 
+  documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(i));
 
   //SET NEW COMBO VALUES AND VOICE HERE!!!
 

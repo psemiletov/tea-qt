@@ -10394,14 +10394,30 @@ void CTEA::cmb_cpeech_engines_currentIndexChanged (int i)
     }
 
 
-  cmb_cpeech_engines->clear();
+  cmb_cpeech_locales->clear();
+  cmb_cpeech_locales->addItems (documents->speech_thing.get_locales());
 
+  cmb_cpeech_voices->clear();
+  cmb_cpeech_voices->addItems (documents->speech_thing.get_voices());
+
+  //SET NEW COMBO VALUES AND VOICE HERE!!!
 
 }
 
 
 void CTEA::cmb_cpeech_locales_currentIndexChanged (int i)
 {
+  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+
+ // QString locale_name = documents->speech_thing.get_locales().at(i);
+
+  documents->speech_thing.speaker.setLocale (documents->speech_thing.speaker.availableLocales().at(i));
+
+  cmb_cpeech_voices->clear();
+  cmb_cpeech_voices->addItems (documents->speech_thing.get_voices());
+
+
+  //SET NEW COMBO VALUES AND VOICE HERE!!!
 
 
 }
@@ -10409,6 +10425,15 @@ void CTEA::cmb_cpeech_locales_currentIndexChanged (int i)
 
 void CTEA::cmb_cpeech_voices_currentIndexChanged (int i)
 {
+  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
+
+  QString voice_name = documents->speech_thing.get_voices().at(i);
+
+  //documents->speech_thing.speaker.setLocale (documents->speech_thing.speaker.availableLocales().at(i));
+
+
+
+  //SET NEW COMBO VALUES AND VOICE HERE!!!
 
 
 }

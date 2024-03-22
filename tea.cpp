@@ -6405,6 +6405,8 @@ CTEA::CTEA()
   create_calendar();
   create_manual();
 
+  create_speech();
+
   update_fonts();
 
   documents->dir_last = settings->value ("dir_last", QDir::homePath()).toString();
@@ -8143,18 +8145,26 @@ OPTIONS::IMAGES
                                      documents->speech_thing.speaker.availableEngines(),
                                      settings->value ("speech_engine", "mock").toString());
 
+  connect (cmb_cpeech_engines, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(cmb_cpeech_engines_currentIndexChanged(int)));
+
 
   cmb_cpeech_locales = new_combobox (page_speech_layout,
-                                     tr ("Speach locale"),
+                                     tr ("Speech locale"),
                                      documents->speech_thing.get_locales(),
-                                     settings->value ("speech_locale", QLocale::system().name()).toString());
+                                     settings->value ("speech_locale", 0).toInt());
+
+  connect (cmb_cpeech_locales, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(cmb_cpeech_locales_currentIndexChanged(int)));
 
 
   cmb_cpeech_voices = new_combobox (page_speech_layout,
                                      tr ("Speach voice"),
                                      documents->speech_thing.get_voices(),
-                                     settings->value ("speech_voice", "").toString());
+                                     settings->value ("speech_voice", 0).toInt());
 
+  connect (cmb_cpeech_voices, SIGNAL(currentIndexChanged(int)),
+           this, SLOT(cmb_cpeech_voices_currentIndexChanged(int)));
 
 
   idx_tab_speech = tab_options->addTab (page_speech, tr ("Speech"));
@@ -8296,6 +8306,51 @@ void CTEA::create_toolbars()
       connect (act_fif_find_prev, SIGNAL(triggered()), this, SLOT(search_find_prev()));
      }
 }
+
+
+void CTEA::create_speech()
+{
+  qDebug() << "---------CTEA::create_speech()---------";
+
+  //QStringList l = documents->speech_thing.speaker.availableEngines();
+  //l.sort();
+
+  //for (int i = 0; i < l.count(); i++)
+    //  qDebug() << l.at(i);
+
+  //QString engine_name = l.at (settings->value ("speech_engine", "mock").toString());
+  QString engine_name = settings->value ("speech_engine", "mock").toString();
+
+  if (! documents->speech_thing.speaker.setEngine (engine_name))
+     {
+      qDebug() << "engine loading error: " << engine_name;
+      documents->speech_thing.speaker.setEngine ("mock");
+      settings->setValue ("speech_engine", "mock");
+
+/*
+      int pos = 0;
+
+      for (int i = 0; i < l.count(); i++)
+          {
+           if (l.at(i) == "mock")
+              {
+               pos = i;
+               break;
+              }
+
+          }
+
+      settings->setValue ("speech_engine", pos);*/
+     }
+
+  // int locale_index = settings->value ("speech_locale", 0).toInt();
+//   documents->speech_thing.speaker.setLocale (documents->speech_thing.speaker.availableLocales().at(locale_index));
+
+//   int voice_index = settings->value ("speech_voice", 0).toInt();
+  // documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(voice_index));
+
+}
+
 
 
 void CTEA::create_manual()
@@ -10382,31 +10437,59 @@ void CTEA::slot_style_currentIndexChanged (int)
 
 void CTEA::cmb_cpeech_engines_currentIndexChanged (int i)
 {
+  qDebug() << "---------void CTEA::cmb_cpeech_engines_currentIndexChanged (int i)------";
+
   QComboBox *cmb = qobject_cast<QComboBox*>(sender());
 
-  QString engine_name = documents->speech_thing.speaker.availableEngines().at(i);
+  QString engine_name = documents->speech_thing.speaker.engine();
 
-  if (! documents->speech_thing.speaker.setEngine (engine_name))
-     {
-      qDebug() << "Cannot change engine to: " << engine_name;
+//  QString new_engine_name = documents->speech_thing.speaker.availableEngines().at(i);
 
+  QString new_engine_name = cmb->currentText();
+
+
+  if (new_engine_name.isEmpty())
      return;
+
+  //пробуем загрузить новый движок
+  if (! documents->speech_thing.speaker.setEngine (new_engine_name))
+     {
+      //ах, не получается
+      qDebug() << "Cannot change engine to: " << new_engine_name;
+     /// cmb->setCurrentText ("mock");
+      cmb->setCurrentIndex (cmb->findText ("mock"));
+      return;
     }
 
+  engine_name = new_engine_name;
+
+  settings->setValue ("speech_engine", engine_name);
+
+  //ставим дефолтные
+/*
 
   cmb_cpeech_locales->clear();
+
+  QList <QLocale> locales_list = documents->speech_thing.speaker.availableLocales();
+  if (locales_list.count() == 0)
+     return;
+
   cmb_cpeech_locales->addItems (documents->speech_thing.get_locales());
   cmb_cpeech_locales->setCurrentIndex (0);
+  settings->setValue ("cpeech_locale", 0);
+
+*/
+/*
+  QList <QVoice> voices_list = documents->speech_thing.speaker.availableVoices();
+  if (voices_list.count() == 0)
+     return;
 
   cmb_cpeech_voices->clear();
   cmb_cpeech_voices->addItems (documents->speech_thing.get_voices());
   cmb_cpeech_voices->setCurrentIndex (0);
+  settings->setValue ("speech_voice", 0);
 
-  documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(0));
-
-
-  //SET NEW VOICE HERE!!!
-
+  documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(0));*/
 }
 
 
@@ -10418,13 +10501,15 @@ void CTEA::cmb_cpeech_locales_currentIndexChanged (int i)
 
   documents->speech_thing.speaker.setLocale (documents->speech_thing.speaker.availableLocales().at(i));
 
+  settings->setValue ("cpeech_locale", i);
+
+
   cmb_cpeech_voices->clear();
   cmb_cpeech_voices->addItems (documents->speech_thing.get_voices());
   cmb_cpeech_voices->setCurrentIndex (0);
+  settings->setValue ("speech_voice", 0);
 
   documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(0));
-
-  //SET NEW VOICE HERE!!!
 
 
 }
@@ -10434,12 +10519,15 @@ void CTEA::cmb_cpeech_voices_currentIndexChanged (int i)
 {
   QComboBox *cmb = qobject_cast<QComboBox*>(sender());
 
-  QString voice_name = documents->speech_thing.get_voices().at(i);
+  //QString voice_name = documents->speech_thing.get_voices().at(i);
 
   //documents->speech_thing.speaker.setLocale (documents->speech_thing.speaker.availableLocales().at(i));
 
 
   documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(i));
+
+  settings->setValue ("speech_voice", i);
+
 
   //SET NEW COMBO VALUES AND VOICE HERE!!!
 

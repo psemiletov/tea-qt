@@ -524,6 +524,8 @@ public:
   void create_options();
   void create_calendar();
   void create_toolbars();
+  void create_speech();
+
   void create_manual();
   void create_fman();
   void create_markup_hash();

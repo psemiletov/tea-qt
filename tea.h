@@ -501,8 +501,7 @@ Preferences tab :: Speech page UI elements
 
 #ifdef SPEECH_ENABLE
 
-  QComboBox *cmb_cpeech_engines;
-  QComboBox *cmb_cpeech_locales;
+  QCheckBox *cb_speech_enable;
   QComboBox *cmb_cpeech_voices;
 
 #endif
@@ -1059,8 +1058,6 @@ Tune page callbacks
 
 #ifdef SPEECH_ENABLE
 
-  void cmb_cpeech_engines_currentIndexChanged (int i);
-  void cmb_cpeech_locales_currentIndexChanged (int i);
   void cmb_cpeech_voices_currentIndexChanged (int i);
 
 #endif

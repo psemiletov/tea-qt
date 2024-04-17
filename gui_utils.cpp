@@ -207,3 +207,28 @@ QComboBox* new_combobox (QBoxLayout *layout,
 
   return r;
 }
+
+
+QComboBox* new_combobox_from_vector (QBoxLayout *layout,
+                        const QString &label,
+                        std::vector <std::string> items,
+                        int index)
+{
+    QHBoxLayout *lt_h = new QHBoxLayout;
+    QLabel *l = new QLabel (label);
+    QComboBox *r = new QComboBox;
+
+    //r->addItems (items);
+
+    for (size_t i = 0; i < items.size(); i++)
+        r->addItem (QString::fromStdString (items[i]));
+
+    r->setCurrentIndex (index);
+
+    lt_h->insertWidget (-1, l, 0, Qt::AlignLeft);
+    lt_h->insertWidget (-1, r, 1, Qt::AlignLeft);
+
+    layout->addLayout (lt_h);
+
+    return r;
+}

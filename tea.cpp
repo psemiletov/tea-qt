@@ -642,12 +642,6 @@ void CTEA::write_settings()
   settings->setValue ("md_viewer_pos", md_viewer.pos());
   settings->setValue ("md_viewer_size", md_viewer.size());
 
-#ifdef SPEECH_ENABLE
-
-  settings->setValue ("locale_only", speech.locale_only);
-  settings->setValue ("current_voice_index", speech.current_voice_index);
-#endif
-
   delete settings;
 }
 
@@ -8117,7 +8111,7 @@ OPTIONS::IMAGES
   gb_exif->setLayout(vb_exif);
   page_images_layout->addWidget (gb_exif);
 
-  cb_zor_use_exif= new QCheckBox (tr ("Use EXIF orientation at image viewer"), this);
+  cb_zor_use_exif = new QCheckBox (tr ("Use EXIF orientation at image viewer"), this);
   cb_zor_use_exif->setChecked (settings->value ("zor_use_exif_orientation", 0).toBool());
   vb_exif->addWidget (cb_zor_use_exif);
 
@@ -8138,7 +8132,7 @@ OPTIONS::IMAGES
   ----------------------
 */
 #ifdef SPEECH_ENABLE
-/*
+
   QWidget *page_speech = new QWidget (tab_options);
 
   page_speech->setObjectName ("page_speech");
@@ -8147,36 +8141,24 @@ OPTIONS::IMAGES
   page_speech_layout->setAlignment (Qt::AlignTop);
   page_speech->setLayout (page_speech_layout);
 
- // QComboBox *cmb_cpeech_voices;
-
-  cmb_cpeech_engines = new_combobox (page_speech_layout,
-                                     tr ("Speech engine"),
-                                     documents->speech_thing.speaker.availableEngines(),
-                                     settings->value ("speech_engine", "mock").toString());
-
-  connect (cmb_cpeech_engines, SIGNAL(currentIndexChanged(int)),
-           this, SLOT(cmb_cpeech_engines_currentIndexChanged(int)));
+  cb_speech_enable = new QCheckBox (tr ("Enable speech"), this);
+  cb_speech_enable->setChecked (settings->value ("speech_enabled", 0).toBool());
+  page_speech_layout->addWidget (cb_speech_enable);
 
 
-  cmb_cpeech_locales = new_combobox (page_speech_layout,
-                                     tr ("Speech locale"),
-                                     documents->speech_thing.get_locales(),
-                                     settings->value ("speech_locale", "C").toString());
-
-  connect (cmb_cpeech_locales, SIGNAL(currentIndexChanged(int)),
-           this, SLOT(cmb_cpeech_locales_currentIndexChanged(int)));
-
-
-  cmb_cpeech_voices = new_combobox (page_speech_layout,
-                                     tr ("Speach voice"),
-                                     documents->speech_thing.get_voices(),
-                                     settings->value ("speech_voice", 0).toInt());
+  speech.get_voices (speech.locale_only);
+  cmb_cpeech_voices = new_combobox_from_vector (page_speech_layout,
+                                                tr ("Speach voice"),
+                                                speech.voices,
+                                                settings->value ("speech_voice", 0).toInt());
 
   connect (cmb_cpeech_voices, SIGNAL(currentIndexChanged(int)),
            this, SLOT(cmb_cpeech_voices_currentIndexChanged(int)));
 
 
-  idx_tab_speech = tab_options->addTab (page_speech, tr ("Speech"));*/
+  //добавить locale_only
+
+  idx_tab_speech = tab_options->addTab (page_speech, tr ("Speech"));
 #endif
 
 /*
@@ -8323,10 +8305,14 @@ void CTEA::create_speech()
 {
   qDebug() << "---------CTEA::create_speech()---------";
 
+  if (! settings->value ("speech_enabled", false).toBool())
+     return;
+
+  speech.init ("tea");
   speech.locale_only = settings->value ("locale_only", 1).toInt();
   speech.get_voices (speech.locale_only);
   speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
-  set_voice_by_index (speech.current_voice_index);
+  speech.set_voice_by_index (speech.current_voice_index);
 }
 
 #endif
@@ -9730,6 +9716,29 @@ void CTEA::leaving_options()
 //  settings->setValue ("qregexpsyntaxhl", cb_use_qregexpsyntaxhl->isChecked());
 #endif
 
+#ifdef SPEECH_ENABLE
+
+  settings->setValue ("locale_only", speech.locale_only);
+  settings->setValue ("current_voice_index", speech.current_voice_index);
+
+  settings->setValue ("speech_enabled", cb_speech_enable->isChecked());
+  if (cb_speech_enable->isChecked())
+     {
+      speech.init ("tea");
+      speech.locale_only = settings->value ("locale_only", 1).toInt();
+
+      //НЕУДОБНО, сделать при переборе элементов комбо
+
+      //speech.get_voices (speech.locale_only);
+      //speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
+      //set_voice_by_index (speech.current_voice_index); //FIXME!!!!!!!!
+     }
+  else
+      speech.done();
+
+
+#endif
+
   settings->setValue ("additional_hl", cb_hl_current_line->isChecked());
   settings->setValue ("session_restore", cb_session_restore->isChecked());
   settings->setValue ("show_linenums", cb_show_linenums->isChecked());
@@ -10415,105 +10424,23 @@ void CTEA::slot_style_currentIndexChanged (int)
 
 #ifdef SPEECH_ENABLE
 
-void CTEA::cmb_cpeech_engines_currentIndexChanged (int i)
-{
-  qDebug() << "---------void CTEA::cmb_cpeech_engines_currentIndexChanged (int i)------";
 
-  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
-
-  QString engine_name = documents->speech_thing.speaker.engine();
-  QString new_engine_name = cmb->currentText();
-
-  if (new_engine_name.isEmpty())
-     return;
-
-  //пробуем загрузить новый движок
-  if (! documents->speech_thing.speaker.setEngine (new_engine_name))
-     {
-      //ах, не получается
-      qDebug() << "Cannot change engine to: " << new_engine_name;
-     /// cmb->setCurrentText ("mock");
-      cmb->setCurrentIndex (cmb->findText ("mock"));
-      return;
-    }
-
-  engine_name = new_engine_name;
-
-  settings->setValue ("speech_engine", engine_name);
-
-  //ставим дефолтные
-
-  cmb_cpeech_locales->clear();
-
-  QList <QLocale> locales_list = documents->speech_thing.speaker.availableLocales();
-  if (locales_list.count() == 0)
-     return;
-
-  cmb_cpeech_locales->addItems (documents->speech_thing.get_locales());
-  cmb_cpeech_locales->setCurrentIndex (0);
-  settings->setValue ("speech_locale", 0);
-
-
-/*
-  QList <QVoice> voices_list = documents->speech_thing.speaker.availableVoices();
-  if (voices_list.count() == 0)
-     return;
-
-  cmb_cpeech_voices->clear();
-  cmb_cpeech_voices->addItems (documents->speech_thing.get_voices());
-  cmb_cpeech_voices->setCurrentIndex (0);
-  settings->setValue ("speech_voice", 0);
-
-  documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(0));*/
-}
-
-
-void CTEA::cmb_cpeech_locales_currentIndexChanged (int i)
-{
-  qDebug() << "void CTEA::cmb_cpeech_locales_currentIndexChanged (int i)";
-
-
-  QComboBox *cmb = qobject_cast<QComboBox*>(sender());
-
-  if (cmb->count() == 0)
-     return;
-
-  QString locale_name = cmb->currentText();
-      //documents->speech_thing.get_locales().at(i);
-
-  qDebug() << "locale_name: " << locale_name;
-  settings->setValue ("speech_locale", locale_name);
-
-  int index = documents->speech_thing.get_locale_index (locale_name);
-
-  qDebug() << "index: " << index;
-
-
-  documents->speech_thing.speaker.setLocale (documents->speech_thing.speaker.availableLocales().at(index));
-
-}
-#endif
 
 void CTEA::cmb_cpeech_voices_currentIndexChanged (int i)
 {
   QComboBox *cmb = qobject_cast<QComboBox*>(sender());
 
-  //QString voice_name = documents->speech_thing.get_voices().at(i);
+  if (! speech.initialized)
+     return;
 
-  //documents->speech_thing.speaker.setLocale (documents->speech_thing.speaker.availableLocales().at(i));
+  if (speech.current_voice_index > speech.voices.size() - 1)
+     return;
 
-
-  documents->speech_thing.speaker.setVoice (documents->speech_thing.speaker.availableVoices().at(i));
-
-  settings->setValue ("speech_voice", i);
-
-
-  //SET NEW COMBO VALUES AND VOICE HERE!!!
-
-
+  speech.current_voice_index = i;
+  speech.set_voice_by_index (speech.current_voice_index);
 }
-*/
 
+#endif
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 void CTEA::cmb_spellchecker_currentIndexChanged (int)

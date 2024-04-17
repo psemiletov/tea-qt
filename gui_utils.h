@@ -48,5 +48,9 @@ QComboBox* new_combobox (QBoxLayout *layout,
                          const QStringList &items,
                          int index);
 
+QComboBox* new_combobox_from_vector (QBoxLayout *layout,
+                        const QString &label,
+                        std::vector <std::string> items,
+                        int index);
 #endif // GUI_UTILS_H
 

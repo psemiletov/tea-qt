@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2022 by Peter Semiletov <peter.semiletov@gmail.com>                            *
+ *   2007-2024 by Peter Semiletov <peter.semiletov@gmail.com>              *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -57,8 +57,6 @@ code from qwriter:
 #include "myjoystick.h"
 #endif
 
-
-#include "speech.h"
 
 #include "logmemo.h"
 #include "tio.h"
@@ -297,7 +295,7 @@ public:
   QStringList recent_files;
 
 
-  CSpeech speech_thing;
+//  CSpeech speech_thing;
 
 
 //regexp pattern and file name of syntax hl rules

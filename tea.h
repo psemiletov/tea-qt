@@ -48,6 +48,9 @@
 #include "img_viewer.h"
 #include "spellchecker.h"
 
+#ifdef SPEECH_ENABLE
+#include "speech.h"
+#endif
 
 class CDarkerWindow: public QWidget
 {
@@ -155,6 +158,13 @@ Variables
 =========================
 */
 
+#ifdef SPEECH_ENABLE
+
+   CSpeech speech;
+
+#endif
+
+
   QString charset;
 
   QStringList sl_places_bmx;
@@ -197,7 +207,12 @@ Variables
   int idx_tab_fman;
   int idx_tab_learn;
   int idx_tab_keyboard;
+
+#ifdef SPEECH_ENABLE
+
   int idx_tab_speech;
+
+#endif
 
   int idx_prev;
 
@@ -484,10 +499,13 @@ Preferences tab :: Speech page UI elements
 =============================================
 */
 
+#ifdef SPEECH_ENABLE
+
   QComboBox *cmb_cpeech_engines;
   QComboBox *cmb_cpeech_locales;
   QComboBox *cmb_cpeech_voices;
 
+#endif
 
 /*
 =============================================
@@ -524,7 +542,10 @@ public:
   void create_options();
   void create_calendar();
   void create_toolbars();
-  void create_speech();
+
+#ifdef SPEECH_ENABLE
+   void create_speech();
+#endif
 
   void create_manual();
   void create_fman();
@@ -1036,10 +1057,13 @@ Tune page callbacks
   void slot_font_editor_select();
   void slot_style_currentIndexChanged (int);
 
+#ifdef SPEECH_ENABLE
+
   void cmb_cpeech_engines_currentIndexChanged (int i);
   void cmb_cpeech_locales_currentIndexChanged (int i);
   void cmb_cpeech_voices_currentIndexChanged (int i);
 
+#endif
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
   void cmb_spellchecker_currentIndexChanged (int);

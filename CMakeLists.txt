@@ -43,6 +43,7 @@ option(USE_PRINTER "Use printer support" OFF)
 option(USE_PDF "Use libpoppler" OFF)
 option(USE_DJVU "Use djvu support" OFF)
 option(USE_MAC "Build for Mac" OFF)
+option(USE_SPEECH "Use Speech Dispatcher" OFF)
 
 
 
@@ -115,6 +116,18 @@ set_target_properties(tea PROPERTIES
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
 )
+
+
+if(USE_SPEECH)
+pkg_check_modules(SPEECH REQUIRED speech-dispatcher>=0.0.1)
+if (SPEECH_FOUND)
+   Message ("+ speech support")
+   add_definitions(-DSPEECH_ENABLE)
+   target_include_directories(tea PUBLIC ${SPEECH_INCLUDE_DIRS})
+   target_link_libraries(tea ${SPEECH_LIBRARIES})
+endif()
+endif()
+
 
 
 if(USE_PRINTER)
@@ -242,19 +255,13 @@ endif()
 
 if (Qt6_FOUND)
 
-find_package(Qt6 REQUIRED COMPONENTS TextToSpeech)
-#if (Qt6::TextToSpeech_FOUND)
-#message("+ Qt6::TextToSpeech_FOUND")
-target_link_libraries(tea Qt6::TextToSpeech)
-#endif()
-
-
+#find_package(Qt6 REQUIRED COMPONENTS TextToSpeech)
+#target_link_libraries(tea Qt6::TextToSpeech)
 target_link_libraries(tea Qt::Core5Compat)
+
 endif()
 
 target_link_libraries(tea Qt::Widgets Qt::Core)
-
-
 
 install (TARGETS tea DESTINATION bin)
 install (FILES ${tea_ICONSVG} DESTINATION share/icons/hicolor/scalable/apps)

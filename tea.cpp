@@ -8147,13 +8147,13 @@ OPTIONS::IMAGES
   page_speech_layout->addWidget (cb_speech_enable);
 
   cb_locale_only = new QCheckBox (tr ("Enable locale only voices"), this);
-  cb_locale_only->setChecked (settings->value ("cb_locale_only", 0).toBool());
+  cb_locale_only->setChecked (settings->value ("locale_only", 0).toBool());
   page_speech_layout->addWidget (cb_locale_only);
 
   cmb_cpeech_voices = new_combobox_from_vector (page_speech_layout,
                                                 tr ("Speach voice"),
                                                 speech.voices,
-                                                settings->value ("speech_voice", 0).toInt());
+                                                speech.current_voice_index);
 
   connect (cmb_cpeech_voices, SIGNAL(currentIndexChanged(int)),
            this, SLOT(cmb_cpeech_voices_currentIndexChanged(int)));
@@ -9708,7 +9708,7 @@ void CTEA::leaving_options()
 {
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
-  settings->setValue ("img_viewer_override_command", ed_img_viewer_override->text());
+  settings->setValue ("img_viewer_8156override_command", ed_img_viewer_override->text());
   settings->setValue ("wasd", cb_wasd->isChecked());
 
   settings->setValue ("ui_mode", cmb_ui_mode->currentIndex());
@@ -9729,18 +9729,11 @@ void CTEA::leaving_options()
   settings->setValue ("speech_enabled", cb_speech_enable->isChecked());
   settings->setValue ("locale_only", cb_locale_only->isChecked());
   settings->setValue ("current_voice_index", cmb_cpeech_voices->currentIndex());
-
+/*
   if (cb_speech_enable->isChecked())
      {
       speech.init ("tea");
       speech.locale_only = settings->value ("locale_only", 1).toInt();
-
-     // speech.get_voices (speech.locale_only);
-
-      //НЕУДОБНО, сделать при переборе элементов комбо
-
-      //speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
-      //set_voice_by_index (speech.current_voice_index); //FIXME!!!!!!!!
      }
   else
       {
@@ -9748,7 +9741,7 @@ void CTEA::leaving_options()
        //cmb_cpeech_voices->items.clear();
       }
 
-
+*/
 #endif
 
   settings->setValue ("additional_hl", cb_hl_current_line->isChecked());

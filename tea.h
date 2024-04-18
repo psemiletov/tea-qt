@@ -502,6 +502,8 @@ Preferences tab :: Speech page UI elements
 #ifdef SPEECH_ENABLE
 
   QCheckBox *cb_speech_enable;
+  QCheckBox *cb_locale_only;
+
   QComboBox *cmb_cpeech_voices;
 
 #endif

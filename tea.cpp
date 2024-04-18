@@ -425,6 +425,7 @@ void CTEA::closeEvent (QCloseEvent *event)
 
   hash_save_keyval (fname_autosaving_files, documents->autosave_files);
 
+  speech.done();
 
   delete documents;
   delete img_viewer;
@@ -6400,14 +6401,14 @@ CTEA::CTEA()
   cmb_fif->addItems (sl_fif_history);
   cmb_fif->clearEditText();
 
+#ifdef SPEECH_ENABLE
+  create_speech();
+#endif
   create_fman();
   create_options();
   create_calendar();
   create_manual();
 
-#ifdef SPEECH_ENABLE
-  create_speech();
-#endif
 
   update_fonts();
 
@@ -8145,8 +8146,10 @@ OPTIONS::IMAGES
   cb_speech_enable->setChecked (settings->value ("speech_enabled", 0).toBool());
   page_speech_layout->addWidget (cb_speech_enable);
 
+  cb_locale_only = new QCheckBox (tr ("Enable locale only voices"), this);
+  cb_locale_only->setChecked (settings->value ("cb_locale_only", 0).toBool());
+  page_speech_layout->addWidget (cb_locale_only);
 
-  speech.get_voices (speech.locale_only);
   cmb_cpeech_voices = new_combobox_from_vector (page_speech_layout,
                                                 tr ("Speach voice"),
                                                 speech.voices,
@@ -8156,7 +8159,6 @@ OPTIONS::IMAGES
            this, SLOT(cmb_cpeech_voices_currentIndexChanged(int)));
 
 
-  //добавить locale_only
 
   idx_tab_speech = tab_options->addTab (page_speech, tr ("Speech"));
 #endif
@@ -8303,16 +8305,22 @@ void CTEA::create_toolbars()
 
 void CTEA::create_speech()
 {
-  qDebug() << "---------CTEA::create_speech()---------";
+  qDebug() << "---------CTEA::create_speech()--------1";
+
+  speech.locale_only = settings->value ("locale_only", 1).toInt();
+  speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
 
   if (! settings->value ("speech_enabled", false).toBool())
      return;
 
   speech.init ("tea");
-  speech.locale_only = settings->value ("locale_only", 1).toInt();
   speech.get_voices (speech.locale_only);
-  speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
   speech.set_voice_by_index (speech.current_voice_index);
+
+  qDebug() << "speech.voices.size(): " << speech.voices.size();
+
+  qDebug() << "---------CTEA::create_speech()--------2";
+
 }
 
 #endif
@@ -9718,23 +9726,27 @@ void CTEA::leaving_options()
 
 #ifdef SPEECH_ENABLE
 
-  settings->setValue ("locale_only", speech.locale_only);
-  settings->setValue ("current_voice_index", speech.current_voice_index);
-
   settings->setValue ("speech_enabled", cb_speech_enable->isChecked());
+  settings->setValue ("locale_only", cb_locale_only->isChecked());
+  settings->setValue ("current_voice_index", cmb_cpeech_voices->currentIndex());
+
   if (cb_speech_enable->isChecked())
      {
       speech.init ("tea");
       speech.locale_only = settings->value ("locale_only", 1).toInt();
 
+     // speech.get_voices (speech.locale_only);
+
       //НЕУДОБНО, сделать при переборе элементов комбо
 
-      //speech.get_voices (speech.locale_only);
       //speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
       //set_voice_by_index (speech.current_voice_index); //FIXME!!!!!!!!
      }
   else
-      speech.done();
+      {
+       speech.done();
+       //cmb_cpeech_voices->items.clear();
+      }
 
 
 #endif
@@ -10423,8 +10435,6 @@ void CTEA::slot_style_currentIndexChanged (int)
 }
 
 #ifdef SPEECH_ENABLE
-
-
 
 void CTEA::cmb_cpeech_voices_currentIndexChanged (int i)
 {

@@ -98,75 +98,75 @@ useclang{
     QMAKE_CXXFLAGS += -std=c++11
 }
 
-SOURCES += tea.cpp \
-    main.cpp \
-    todo.cpp \
-    textproc.cpp \
-    libretta_calc.cpp \
-    wavinfo.cpp \
-    calendar.cpp \
-    gui_utils.cpp \
-    document.cpp \
-    utils.cpp \
-    spellchecker.cpp \
-    fman.cpp \
-    shortcuts.cpp \
-    logmemo.cpp \
-    img_viewer.cpp \
-    tio.cpp \
-    tzipper.cpp \
-    single_application_shared.cpp \
-    exif_reader.cpp \
-    myjoystick.cpp \
-    pugixml.cpp
+SOURCES += src/tea.cpp \
+    src/main.cpp \
+    src/todo.cpp \
+    src/textproc.cpp \
+    src/libretta_calc.cpp \
+    src/wavinfo.cpp \
+    src/calendar.cpp \
+    src/gui_utils.cpp \
+    src/document.cpp \
+    src/utils.cpp \
+    src/spellchecker.cpp \
+    src/fman.cpp \
+    src/shortcuts.cpp \
+    src/logmemo.cpp \
+    src/img_viewer.cpp \
+    src/tio.cpp \
+    src/tzipper.cpp \
+    src/single_application_shared.cpp \
+    src/exif_reader.cpp \
+    src/myjoystick.cpp \
+    src/pugixml.cpp
 
 
-HEADERS += tea.h \
-    todo.h \
-    document.h \
-    utils.h \
-    textproc.h \
-    calendar.h \
-    libretta_calc.h \
-    spellchecker.h \
-    fman.h \
-    shortcuts.h \
-    logmemo.h \
-    img_viewer.h \
-    gui_utils.h \
-    wavinfo.h \
-    tio.h \
-    tzipper.h \
-    single_application_shared.h \
-    exif_reader.h \
-    myjoystick.h \
-    pugixml.hpp \
-    pugiconfig.hpp
+HEADERS += src/tea.h \
+    src/todo.h \
+    src/document.h \
+    src/utils.h \
+    src/textproc.h \
+    src/calendar.h \
+    src/libretta_calc.h \
+    src/spellchecker.h \
+    src/fman.h \
+    src/shortcuts.h \
+    src/logmemo.h \
+    src/img_viewer.h \
+    src/gui_utils.h \
+    src/wavinfo.h \
+    src/tio.h \
+    src/tzipper.h \
+    src/single_application_shared.h \
+    src/exif_reader.h \
+    src/myjoystick.h \
+    src/pugixml.hpp \
+    src/pugiconfig.hpp
 
 
 HEADERS += \
-        ioapi.h \
-        quagzipfile.h \
-        quaziodevice.h \
-        quazipdir.h \
-        quazipfile.h \
-        quazipfileinfo.h \
-        quazip_global.h \
-        quazip.h \
-        quazipnewinfo.h \
-        unzip.h \
-        zip.h
+        src/ioapi.h \
+        src/quagzipfile.h \
+        src/quaziodevice.h \
+        src/quazipdir.h \
+        src/quazipfile.h \
+        src/quazipfileinfo.h \
+        src/quazip_global.h \
+        src/quazip.h \
+        src/quazipnewinfo.h \
+        src/unzip.h \
+        src/zip.h
 
-SOURCES += qioapi.cpp \
-           quagzipfile.cpp \
-           quaziodevice.cpp \
-           quazip.cpp \
-           quazipdir.cpp \
-           quazipfile.cpp \
-           quazipfileinfo.cpp \
-           quazipnewinfo.cpp \
-           unzip.c \
-           zip.c
+SOURCES += src/qioapi.cpp \
+           src/quagzipfile.cpp \
+           src/quaziodevice.cpp \
+           src/quazip.cpp \
+           src/quazipdir.cpp \
+           src/quazipfile.cpp \
+           src/quazipfileinfo.cpp \
+           src/quazipnewinfo.cpp \
+           src/unzip.c \
+           src/zip.c
 
 
 TEMPLATE = app

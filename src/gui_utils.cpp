@@ -214,7 +214,7 @@ QComboBox* new_combobox_from_vector (QBoxLayout *layout,
                         std::vector <std::string> items,
                         int index)
 {
-    qDebug() << "new_combobox_from_vector items.size:" << items.size();
+    //qDebug() << "new_combobox_from_vector items.size:" << items.size();
 
     QHBoxLayout *lt_h = new QHBoxLayout;
     QLabel *l = new QLabel (label);
@@ -225,7 +225,7 @@ QComboBox* new_combobox_from_vector (QBoxLayout *layout,
     for (size_t i = 0; i < items.size(); i++)
        {
         r->addItem (QString::fromStdString (items[i]));
-        qDebug() << items[i];
+    //    qDebug() << items[i];
        }
 
     r->setCurrentIndex (index);

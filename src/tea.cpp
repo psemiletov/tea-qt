@@ -424,8 +424,9 @@ void CTEA::closeEvent (QCloseEvent *event)
   qstring_save (fname_fif, sl_fif_history.join ("\n"));
 
   hash_save_keyval (fname_autosaving_files, documents->autosave_files);
-
+#ifdef SPEECH_ENABLE
   speech.done();
+#endif
 
   delete documents;
   delete img_viewer;

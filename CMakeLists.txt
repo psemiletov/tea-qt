@@ -69,8 +69,8 @@ qt_add_resources(QT_RESOURCES resources.qrc)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${QtWidgets_EXECUTABLE_COMPILE_FLAGS}")
 
-file(GLOB tea_SRCS "*.c" "*.cpp")
-file(GLOB tea_HEADERS "*.h" ".*hpp")
+file(GLOB tea_SRCS "src/*.c" "src/*.cpp")
+file(GLOB tea_HEADERS "src/*.h" "src/.*hpp")
 
 
 set(tea_ICONPNG32

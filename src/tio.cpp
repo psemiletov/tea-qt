@@ -110,14 +110,18 @@ with qmake - Qt4/Qt5 poppler
 
 #include "tio.h"
 #include "utils.h"
-#include "tzipper.h"
+//#include "tzipper.h"
 #include "textproc.h"
 
 #include "pugixml.hpp"
 
+#include "zip.h"
+
 using namespace std;
 
 extern QSettings *settings;
+
+
 
 
 class CXML_walker: public pugi::xml_tree_walker
@@ -141,6 +145,7 @@ bool CXML_walker::for_each (pugi::xml_node &node)
   if (paragraphs.contains (node_name, Qt::CaseInsensitive))
      {
       QString t = node.text().as_string();
+      //QString t = QString::fromUtf8 (node.text().get());
 
       if (! t.isEmpty())
          {
@@ -157,12 +162,65 @@ bool CXML_walker::for_each (pugi::xml_node &node)
 }
 
 
-QString extract_text_from_html (const QString &string_data)
+/*
+QString extract_text_from_xml_pugi (const char *string_data, size_t datasizebytes, std::vector <std::string> tags)
 {
-  QTextBrowser br;
-  br.setHtml (string_data);
-  return br.toPlainText();
+//  std::cout << "extract_text_from_xml_pugi 1" << std::endl;
+
+  pugi::xml_document doc;
+
+  pugi::xml_parse_result result = doc.load_buffer (string_data,
+                                                   datasizebytes,
+                                                   pugi::parse_default,
+                                                   pugi::encoding_utf8);
+
+  if (! result)
+     {
+      std::cout << "NOT PARSED" << std::endl;
+      return QString("");
+     }
+
+  CXML_walker walker;
+
+  walker.paragraphs.reserve (tags.size());
+  std::copy (tags.begin(), tags.end(), back_inserter(walker.paragraphs));
+
+  doc.traverse (walker);
+
+  return walker.text;
 }
+*/
+
+
+
+QString extract_text_from_xml_pugi (const char *string_data, size_t datasizebytes, const QStringList &tags)
+{
+//  std::cout << "extract_text_from_xml_pugi 1" << std::endl;
+  QString data;
+
+  pugi::xml_document doc;
+
+  pugi::xml_parse_result result = doc.load_buffer (string_data,
+                                                   datasizebytes,
+                                                   pugi::parse_default,
+                                                   pugi::encoding_utf8);
+
+  if (! result)
+     {
+      std::cout << "NOT PARSED" << std::endl;
+      return QString("");
+     }
+
+  CXML_walker walker;
+  walker.text = &data;
+  walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
+  walker.paragraphs.append (tags);
+
+  doc.traverse (walker);
+
+  return data;
+}
+
 
 
 QString extract_text_from_xml_pugi (const QString &string_data, const QStringList &tags)
@@ -194,46 +252,15 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
 
 
 
-/*
-QString extract_text_from_xml (const QString &string_data, const QStringList &tags)
+
+QString extract_text_from_html (const QString &string_data)
 {
-  QString data;
-  QXmlStreamReader xml (string_data);
-
-  bool tt = false;
-
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.qualifiedName().toString().toLower();
-
-         for (QList <QString>::const_iterator ts = tags.begin(); ts != tags.end(); ++ts)
-             {
-              if (xml.isStartElement() && tag_name == *ts)
-                  tt = true;
-
-              if (xml.isEndElement() && tag_name == *ts)
-                  tt = false;
-             }
-
-         if (tt && xml.isCharacters())
-            {
-             QString s = xml.text().toString();
-             if (! s.isEmpty())
-               {
-                data.append (s);
-                data.append("\n");
-               }
-             }
-        }
-
-   if (xml.hasError())
-      qDebug() << "xml parse error";
-
-  return data;
+  QTextBrowser br;
+  br.setHtml (string_data);
+  return br.toPlainText();
 }
-*/
+
+
 
 
 bool CTioPlainText::load (const QString &fname)
@@ -303,7 +330,6 @@ CTioHandler::CTioHandler()
   list.push_back (default_handler);
   list.push_back (new CTioGzip);
   list.push_back (new CTioXMLZipped);
- // list.push_back (new CTioODT);
   list.push_back (new CTioABW);
   list.push_back (new CTioFB2);
   list.push_back (new CTioRTF);
@@ -328,27 +354,6 @@ CTioHandler::~CTioHandler()
      for (vector <size_t>::size_type i = 0; i < list.size(); i++)
           delete list[i];
 }
-
-/*
-CTio* CTioHandler::get_for_fname (const QString &fname)
-{
-//  qDebug() << "CTioHandler::get_for_fname ";
-
-  CTio *instance;
-  QString ext = file_get_ext (fname).toLower();
-
-//  qDebug() << "ext: " << ext;
-
-  for (vector <size_t>::size_type i = 0; i < list.size(); i++)
-      {
-       instance = list.at (i);
-       if (instance->extensions.indexOf (ext) != -1)
-          return instance;
-      }
-
-  return default_handler;
-}
-*/
 
 
 CTio* CTioHandler::get_for_fname (const QString &fname)
@@ -418,268 +423,6 @@ bool CTioABW::load (const QString &fname)
   return true;
 }
 
-/*
-bool CTioODT::load (const QString &fname)
-{
-  data.clear();
-
-  CZipper zipper;
-
-  if (! zipper.read_as_utf8 (fname, "content.xml"))
-     {
-      qDebug() << "cannot read content.xml";
-      return false;
-     }
-
-  QXmlStreamReader xml (zipper.string_data);
-
-  bool tt = false;
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-//         QString tag_name = xml.qualifiedName().toString().toLower();
-
-         QString prefix = xml.prefix().toString().toLower();
-
-         QString tag_name = xml.name().toString().toLower();
-
-//         if (tag_name.isEmpty())
-  //           continue;
-            qDebug() << "prefix:" << xml.prefix().toString();
-
-            qDebug() << "tag_name:" << tag_name;
-            qDebug() << xml.text().toString();
-
-
-
-         if (xml.isStartElement())
-            {
-             if (prefix == "text" && (tag_name == "s" || tag_name == "p"))
-                {
-                 QXmlStreamAttributes attrs = xml.attributes();
-                 if (attrs.hasAttribute("text:c"))
-                    {
-                     QString av = attrs.value ("text:c").toString();
-                     QString fillval;
-                     fillval = fillval.fill (' ', av.toInt());
-                     data.append (fillval);
-                    }
-                 }
-            }
-
-         if (xml.isEndElement())
-            {
-             if (prefix == "text" && (tag_name == "p" || tag_name == "s"))
-                if (tag_name != "span")
-                   tt = true;
-            }
-
-         if (xml.isCharacters() && tt)
-            {
-             tt = false;
-             data.append (xml.text().toString());
-             data.append ("\n");
-            }
-
-        }
-
-   data = data.trimmed();
-
-   if (xml.hasError())
-      qDebug() << "xml parse error";
-
-  return true;
-}
-*/
-
-/*
-bool CTioODT::load (const QString &fname)
-{
-  data.clear();
-
-  CZipper zipper;
-
-  if (! zipper.read_as_utf8 (fname, "content.xml"))
-     {
-      qDebug() << "cannot read content.xml";
-      return false;
-     }
-
-  QXmlStreamReader xml (zipper.string_data);
-
-  bool tt = false;
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.qualifiedName().toString().toLower();
-
-
-//         if (tag_name.isEmpty())
-  //           continue;
-//            qDebug() << "prefix:" << xml.prefix().toString();
-
-  //            qDebug() << "tag_name:" << tag_name;
-           //   qDebug() << xml.text().toString();
-
-
-
-         if (xml.isStartElement())
-            {
-             if (tag_name == "text:s" || tag_name == "text:p")
-                {
-                 QXmlStreamAttributes attrs = xml.attributes();
-                 if (attrs.hasAttribute("text:c"))
-                    {
-                     QString av = attrs.value ("text:c").toString();
-                     QString fillval;
-                     fillval = fillval.fill (' ', av.toInt());
-                     data.append (fillval);
-                    }
-                 }
-            }
-
-         if (xml.isEndElement())
-            {
-             if ((tag_name.startsWith ("text")) && tag_name != "text:span")
-                tt = true;
-            }
-
-         if (xml.isCharacters() && tt)
-            {
-             tt = false;
-             QString t = xml.text().toString();
-
-             if (! t.isEmpty())
-                 {
-                  data.append (t);
-                  if (t.size() > 1)
-                     data.append ("\n");
-               }
-            }
-        }
-
-   data = data.trimmed();
-
-   if (xml.hasError())
-      qDebug() << "xml parse error";
-
-  return true;
-}
-*/
-
-
-/*
-class CODT_walker: public pugi::xml_tree_walker
-{
-public:
-
-  QString *text;
-  bool fine_spaces;
-
-  bool begin (pugi::xml_node &node);
-  bool end (pugi::xml_node &node);
-  bool for_each (pugi::xml_node& node);
-};
-
-
-bool CODT_walker::begin (pugi::xml_node &node)
-{
- // std::cout << "begin node name = " << node.name() << std::endl;
-  return true;
-}
-
-
-bool CODT_walker::end (pugi::xml_node &node)
-{
-//  std::cout << "end node name = " << node.name() << std::endl;
-  return true;
-}
-
-
-bool CODT_walker::for_each (pugi::xml_node &node)
-{
-  if (node.type() != pugi::node_element)
-      return true;
-
-  QString node_name = node.name();
-
-  if (node_name == "text:p" || node_name == "text:s")
-     {
-      QString t = node.text().as_string();
-
-     // qDebug() << t;
-
-      if (! t.isEmpty())
-         {
-          if (fine_spaces)
-             text->append ("   ");
-
-          text->append (t);
-          if (t.size() > 1)
-             text->append ("\n");
-         }
-      }
-
-  return true;
-}
-
-
-
-bool CTioODT::load (const QString &fname)
-{
-  data.clear();
-
-  CZipper zipper;
-
-  if (! zipper.read_as_utf8 (fname, "content.xml"))
-     {
-      qDebug() << "cannot read content.xml";
-      return false;
-     }
-
-  pugi::xml_document doc;
-  //pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
-    //                                               zipper.string_data.size(),
-      //                                             pugi::parse_default,
-        //                                           pugi::encoding_utf16);
-
-
-
-
-
-
-  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.toUtf8().data(),
-                                                   zipper.string_data.toUtf8().size());
-
-
-   if (! result)
-       {
-        qDebug() << "cannot parse " << fname;
-        return false;
-       }
-
-   CODT_walker walker;
-   walker.text = &data;
-   walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
-
-   doc.traverse (walker);
-
-
-  return true;
-}
-
-
-
-CTioODT::CTioODT()
-{
-  ronly = true;
-
-  extensions.append ("odt");
-  extensions.append ("sxw");
-}
-*/
 
 CTioXMLZipped::CTioXMLZipped()
 {
@@ -1002,97 +745,6 @@ bool CTioFB2::load (const QString &fname)
   return true;
 }
 
-
-/*
-bool CTioFB2::load (const QString &fname)
-{
-  data.clear();
-
-  QString ext = file_get_ext (fname);
-
-  QString temp;
-
-  CZipper zipper;
-
-  if (ext == "fb2.zip" || ext == "fbz")
-     {
-      CZipper zipper;
-      QFileInfo f (fname);
-
-      QString source_fname = f.baseName() + ".fb2";
-
-      if (! zipper.read_as_utf8 (fname, source_fname))
-          return false;
-
-      temp = zipper.string_data;
-     }
-
- if (ext == "fb2")
-    {
-     QByteArray ba = file_load (fname);
-     if (ba.isEmpty())
-        return false;
-
-     //read encoding:
-
-     QString enc = string_between (QString (ba), "encoding=\"", "\"");
-     if (enc.isEmpty())
-        enc = "UTF-8";
-
-     QTextCodec *codec = QTextCodec::codecForName (enc.toLatin1().data());
-     temp = codec->toUnicode (ba);
-   }
-
-
-  QString ts = "p";
-
-  QXmlStreamReader xml (temp);
-
-  bool tt = false;
-
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.qualifiedName().toString().toLower();
-
-         if (xml.isStartElement())
-             if (tag_name == ts)
-                tt = true;
-
-         if (xml.isEndElement())
-            {
-             if (tag_name == ts)
-                 tt = false;
-
-             if (tag_name == "title")
-                 data.append ("\n");
-
-             if (tag_name == "section")
-                 data.append ("\n");
-
-             if (tag_name == "empty-line")
-                 data.append ("\n");
-            }
-
-         if (tt && xml.isCharacters())
-            {
-             QString s = xml.text().toString();
-             if (! s.isEmpty())
-                {
-                 data.append ("   ");
-                 data.append (s);
-                 data.append ("\n");
-                }
-            }
-        }
-
-  if (xml.hasError())
-    qDebug() << "xml parse error";
-
-  return true;
-}
-*/
 
 //www.codeguru.com/forum/archive/index.php/t-201658.html
 //rewritten by Peter Semiletov
@@ -1555,56 +1207,6 @@ bool CTioEpub::load (const QString &fname)
   //qDebug() << "html_files.size(): " << html_files.size();
 
 
-/*
-  pugi::xml_document doc;
-  pugi::xml_parse_result result = doc.load_buffer (zipper.string_data.utf16(),
-                                                   zipper.string_data.size(),
-                                                   pugi::parse_default | pugi::parse_fragment,
-                                                   pugi::encoding_utf16);
-
-
-  std::cout << "RESULT: " << result.description() << std::endl;
-  //std::cout << "Error offset: " << result.offset << "n\n";
-
-
-  std::cout << "Error description: " << result.description() << "\n";
-     std::cout << "Error offset: " << result.offset << " (error at [..." << (zipper.string_data.utf16() + result.offset)
-               << "]\n\n";
-
-
-   if (! result)
-      return false;
-
-   qDebug() << "1";
-
-   for (pugi::xml_node_iterator it = doc.begin(); it != doc.end(); ++it)
-      {
-       QString tag_name = it->name();
-
-       qDebug() << "tag_name: " << tag_name;
-
-
-       if (tag_name == "item")
-          {
-           QString attr_href = it->attribute("href").value();
-           QString ext = file_get_ext (attr_href);
-
-           qDebug() << "attr_href: " << attr_href;
-
-           if (ext == "html" || ext == "htm" || ext == "xml")
-              html_files.append (opf_dir + "/" + attr_href);
-           //std::cout << attr_href.toStdString() << std::endl;
-          }
-        }
-
-//       for (pugi::xml_attribute_iterator ait = it->attributes_begin(); ait != it->attributes_end(); ++ait)
-  //        {
-    //       std::cout << " " << ait->name() << "=" << ait->value();
-      //     }
-
-       //std::cout << std::endl;
-
-*/
    qDebug() << "2";
 
   QStringList tags;
@@ -1633,74 +1235,6 @@ bool CTioEpub::load (const QString &fname)
   return true;
 }
 
-/*
-bool CTioEpub::load (const QString &fname)
-{
-  qDebug() << "CTioEpub::load";
-
-  data.clear();
-
-  qDebug() << "fname: " << fname;
-
-  CZipper zipper;
-  if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
-       return false;
-
-  QStringList html_files;
-
-  QString opf_fname;
-  QString opf_dir;
-
-  int start = zipper.string_data.indexOf ("full-path=\"");
-  int end = zipper.string_data.indexOf ("\"", start + 11);
-
-  opf_fname = zipper.string_data.mid (start + 11, end - start - 11);
-  opf_dir = opf_fname.left (opf_fname.indexOf ("/"));
-
-  std::cout << opf_fname.toStdString() << std::endl;
-  std::cout << opf_dir.toStdString() << std::endl;
-
-  //READ FILES LIST. PARSE OPF FILE
-
-  if (! zipper.read_as_utf8 (fname, opf_fname))
-       return false;
-
-  QXmlStreamReader xml (zipper.string_data);
-
-  while (! xml.atEnd())
-        {
-         xml.readNext();
-
-         QString tag_name = xml.qualifiedName().toString().toLower();
-         if (tag_name == "item")
-            {
-             QString attr_href = xml.attributes().value ("href").toString();
-             QString ext = file_get_ext (attr_href);
-             if (ext == "html" || ext == "htm" || ext == "xml")
-                html_files.append (opf_dir + "/" + attr_href);
-             //std::cout << attr_href.toStdString() << std::endl;
-            }
-        }
-
-  if (xml.hasError())
-      qDebug() << "xml parse error";
-
-  QStringList tags;
-  tags.append ("p");
-
-  for (int i = 0; i < html_files.size(); i++)
-      {
-       if (! zipper.read_as_utf8 (fname, html_files.at(i)))
-           return false;
-
-       QString t = extract_text_from_xml (zipper.string_data, tags);
-       data += t;
-       data += "\n";
-      }
-
-  return true;
-}
-*/
 
 #endif
 

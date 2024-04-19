@@ -1,8 +1,13 @@
-#ifdef SPEECH_ENABLE
-
 #include <iostream>
+#include <ncurses.h>
 
 #include "speech.h"
+
+
+//sem_t g_semaphore;
+
+
+//bool saying;
 
 
 int g_state;
@@ -23,29 +28,27 @@ void f_signal_handler (int signal)
 }
 
 
-// Callback for Speech Dispatcher notifications
+/* Callback for Speech Dispatcher notifications */
 void cbk_end_of_speech (size_t msg_id, size_t client_id, SPDNotificationType type)
 {
 
   if (type == SPD_EVENT_END)
        g_position++;
-/*
-  if (type == SPD_EVENT_CANCEL)
-     {
-      addstr("*SPD_CANCEL*");
-     }
-*/
 
 //  sem_post(&g_semaphore);
+
 }
 
 
 void cbk_cancel_of_speech (size_t msg_id, size_t client_id, SPDNotificationType type)
 {
+//  addstr("*cbk_cancel_of_speech*");
+
   if (type == SPD_EVENT_CANCEL)
      {
      // addstr("*SPD_EVENT_CANCEL*");
      }
+
 }
 
 
@@ -54,39 +57,56 @@ CSpeech::CSpeech()
   initialized = false;
   spd_connection = 0;
 
-  locale_only = 1;
   current_voice_index = -1;
 
   g_state = SPCH_STATE_STOPPED;
 
-  std::string temp_locale = setlocale(LC_ALL, "");
-  locale_name = temp_locale.substr (0, 2);
+  char* locval = setlocale(LC_ALL, "");
 
+  std::string temp_locale;
+
+  if (locval)
+    {
+     temp_locale = locval;
+     locale_name = temp_locale.substr (0, 2);
+    }
+  else
+      locale_name = "en";
 //  std::cout << "LOC: " << locale_name << std::endl;
+
+
   //sem_init (&g_semaphore, 0, 0);
+
 }
 
 
 CSpeech::~CSpeech()
 {
-  if (initialized && spd_connection)
-     spd_close (spd_connection);
+  if (initialized)
+     if (spd_connection)
+         spd_close (spd_connection);
+
 }
 
 
 void CSpeech::done()
 {
-   if (initialized && spd_connection)
-      {
-       spd_close (spd_connection);
-       spd_connection = 0;
-       initialized = false;
-      }
+  if (initialized)
+     if (spd_connection)
+        {
+         spd_close (spd_connection);
+         spd_connection = 0;
+         initialized = false;
+         //sem_close (&g_semaphore);
+         //sem_destroy (&g_semaphore);
+        }
+
 }
 
 
 void CSpeech::init (const char* client_name)
 {
+
 
   spd_connection = spd_open (client_name,
                              "main",
@@ -102,27 +122,29 @@ void CSpeech::init (const char* client_name)
       spd_connection->callback_end = cbk_end_of_speech;
      // spd_connection->callback_cancel = cbk_cancel_of_speech;
 
-      spd_set_notification_on (spd_connection, SPD_END);
+      spd_set_notification_on(spd_connection, SPD_END);
 
       char *s = NULL;
 
       s = spd_get_output_module (spd_connection);
 
       if (s)
-         {
-          output_module_name = s;
-         // std::cout << "output_module_name: " << output_module_name  << std::endl;
-
-          free (s);
-         }
+        {
+         output_module_name = s;
+         free (s);
+        }
 
       s = spd_get_language (spd_connection);
       if (s)
          {
           language_name = s;
-//          std::cout << "language_name: " << language_name  << std::endl;
           free (s);
          }
+
+    //   spd_set_language(spd_connection, "ru");
+
+
+    //  get_voices();
 
       current_voice_index = 0;
      }
@@ -140,6 +162,9 @@ void CSpeech::say (const char* text)
 
   if (result == -1)
      std::cout << "say error!" << std::endl;
+
+   //А ЕСЛИ НЕ ЖДАТЬ?
+  //sem_wait (&g_semaphore);
 }
 
 
@@ -174,6 +199,7 @@ void CSpeech::play()
 }
 
 
+
 void CSpeech::resume()
 {
   if (! initialized)
@@ -182,6 +208,7 @@ void CSpeech::resume()
    if (spd_resume (spd_connection) != -1)
       g_state = SPCH_STATE_SAYING;
 }
+
 
 
 void CSpeech::cancel()
@@ -199,6 +226,10 @@ void CSpeech::cancel()
 
 void CSpeech::get_voices (int locale_only)
 {
+//  char  **voices_array = spd_list_synthesis_voices2 (spd_connection,
+  //                                                    setlocale(LC_ALL, NULL),
+    //
+
   if (! initialized)
       return;
 
@@ -209,36 +240,66 @@ void CSpeech::get_voices (int locale_only)
   //for > 0.15 API
     //char  **voices_array = (char**)spd_list_synthesis_voices2 (spd_connection, "ru", NULL);
 
+
   if (voices_array == NULL)
      return;
 
+
   std::string lang_name_short;
+
+  //SPDVoice  **voice = arr_voices;
 
   int i = 0;
   while (voices_array[i] != NULL)
-        {
-         SPDVoice* voice = (SPDVoice*)voices_array[i]; // Приведение типа к SPDVoice*
+       {
+        SPDVoice* voice = (SPDVoice*)voices_array[i]; // Приведение типа к SPDVoice*
 
-         if (locale_only == 1)
-            {
-             std::string voice_name = voice->name;
+    /*   CVoice v;
+           v.name = voice->name;
+           v.language = voice->language;
 
-             lang_name_short = voice->language;
-             lang_name_short = lang_name_short.substr(0, 2);
-             // std::cout << "v.language: " << v.language << std::endl;
-             //std::cout << "language_name: " << language_name << std::endl;
+           voices.push_back (v);
+*/
 
-             if (lang_name_short == language_name)
-                voices.push_back (voice_name);
-            }
-         else
-             {
-              std::string voice_name = voice->name;
-              voices.push_back (voice_name);
-             }
+       if (locale_only == 1)
+          {
+           /*CVoice v;
+           v.name = voice->name;
+
+           lang_name_short = voice->language;
+           lang_name_short = lang_name_short.substr(0, 2);
+           v.language = lang_name_short;
+
+           if (v.language == language_name)
+              voices.push_back (v);*/
+
+           std::string voice_name = voice->name;
+
+           lang_name_short = voice->language;
+           lang_name_short = lang_name_short.substr(0, 2);
+
+           if (lang_name_short == language_name)
+               voices.push_back (voice_name);
+
+          }
+       else
+          {
+           /*CVoice v;
+           v.name = voice->name;
+
+           lang_name_short = voice->language;
+           lang_name_short = lang_name_short.substr(0, 2);
+           v.language = lang_name_short;
+
+           voices.push_back (v);*/
+           std::string voice_name = voice->name;
+            voices.push_back (voice_name);
+
+          }
 
 
-         current_voice_index = 0;
+       current_voice_index = 0;
+
 
     // Вывод информации о голосе
 /*
@@ -249,11 +310,13 @@ void CSpeech::get_voices (int locale_only)
     printf("\n");
 */
     ++i;
-   }
+}
 
- std::cout << "voices count: " << voices.size() << std::endl;
+
+ //std::cout << "voices count: " << voices.size() << std::endl;
 
  free_spd_voices((SPDVoice**)voices_array);
+
 }
 
 
@@ -265,11 +328,13 @@ void CSpeech::set_voice_by_index (int index)
   if (index > voices.size() - 1)
      return;
 
-  if (spd_set_synthesis_voice (spd_connection, voices[index].c_str()))
+  if (spd_set_synthesis_voice (spd_connection, voices[index].name.c_str()))
       std::cout << "ERRRRR" << std::endl;
+
 
  // std::cout << "spd_set_synthesis_voice: " <<  voices[index].name << std::endl;
 }
 
 
-#endif
+
+// int spd_set_synthesis_voice(SPDConnection* connection, const char* voice_name);

@@ -1,9 +1,16 @@
-#ifdef SPEECH_ENABLE
-
-
 #ifndef SPEECH_H
 #define SPEECH_H
 
+/*
+
+ usr/include/speech-dispatcher/libspeechd.h
+usr/include/speech-dispatcher/libspeechd_version.h
+usr/include/speech-dispatcher/spd_audio_plugin.h
+usr/include/speech-dispatcher/speechd_defines.h
+usr/include/speech-dispatcher/speechd_types.h
+
+
+ */
 
 
 #include <libspeechd.h>
@@ -37,12 +44,11 @@ class CSpeech
 
   SPDConnection *spd_connection;
 
-//  std::vector <CVoice> voices; //module-specific
   std::vector <std::string> voices; //module-specific
 
-  std::string locale_name;
+//  std::vector <CVoice> voices; //module-specific
 
-  int locale_only;
+  std::string locale_name;
 
   bool initialized;
 
@@ -58,6 +64,7 @@ class CSpeech
   void say (const char* text);
 
   void done();
+
 
   void stop();
   void pause();
@@ -77,12 +84,13 @@ class CSpeech
 
 namespace
 {
-   volatile sig_atomic_t g_signal;
+//  volatile std::sig_atomic_t g_signal;
+    volatile sig_atomic_t g_signal;
+
+//  volatile int sockfd;
 }
 
 
 void f_signal_handler (int signal);
-
-#endif
 
 #endif

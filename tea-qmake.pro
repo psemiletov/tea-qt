@@ -141,7 +141,8 @@ HEADERS += src/tea.h \
     src/exif_reader.h \
     src/myjoystick.h \
     src/pugixml.hpp \
-    src/pugiconfig.hpp
+    src/pugiconfig.hpp \
+    src/miniz.h
 
 
 HEADERS += \

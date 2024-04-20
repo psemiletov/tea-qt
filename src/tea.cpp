@@ -5718,10 +5718,10 @@ void CTEA::fman_fileinfo_count_lines_in_selected_files()
   log->log (tr ("There are %1 lines at %2 files").arg (sum).arg (sl.size()));
 }
 
-
+/*
 void CTEA::fman_zip_create()
 {
- /* last_action = sender();
+ last_action = sender();
 
   bool ok;
 
@@ -5738,13 +5738,13 @@ void CTEA::fman_zip_create()
   if (! name.endsWith (".zip"))
      name.append (".zip");
 
-  fman->zipper.archive_fullpath = fman->dir.path() + "/" + name;*/
+  fman->zipper.archive_fullpath = fman->dir.path() + "/" + name;
 }
 
 
 void CTEA::fman_zip_add()
 {
-  /*last_action = sender();
+  last_action = sender();
 
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
@@ -5764,22 +5764,22 @@ void CTEA::fman_zip_add()
      }
 
   for (int i = 0; i < li.size(); i++)
-      fman->zipper.files_list.append (li.at(i));*/
+      fman->zipper.files_list.append (li.at(i));
 }
 
 
 void CTEA::fman_zip_save()
 {
-/*  last_action = sender();
+  last_action = sender();
 
   fman->zipper.pack_prepared();
-  fman->refresh();*/
+  fman->refresh();
 }
 
 
 void CTEA::fman_zip_info()
 {
-  /*last_action = sender();
+  last_action = sender();
 
   QString fn = fman->get_sel_fname();
   if (fn.isEmpty())
@@ -5792,13 +5792,13 @@ void CTEA::fman_zip_info()
   for (int i = 0; i < sl.size(); i++)
        sl[i] = sl[i].append ("<br>");
 
-  log->log (sl.join("\n"));*/
+  log->log (sl.join("\n"));
 }
 
 
 void CTEA::fman_zip_unpack()
 {
-  /*last_action = sender();
+  last_action = sender();
 
   CZipper z;
 
@@ -5824,9 +5824,9 @@ void CTEA::fman_zip_unpack()
       {
        z.unzip ((*fname), fman->dir.path());
        log->log ((*fname) + tr (" is unpacked"));
-      }*/
+      }
 }
-
+*/
 
 void CTEA::fman_img_conv_by_side()
 {
@@ -7469,7 +7469,7 @@ Fm menu callbacks
   add_to_menu (menu_fm_file_infos, tr ("Count lines in selected files"), SLOT(fman_fileinfo_count_lines_in_selected_files()));
   add_to_menu (menu_fm_file_infos, tr ("Full info"), SLOT(fm_fileinfo_info()));
 
-  menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
+  /*menu_fm_zip = menu_fm->addMenu (tr ("ZIP"));
   menu_fm_zip->setTearOffEnabled (true);
 
   menu_fm_zip->addSeparator();
@@ -7482,7 +7482,7 @@ Fm menu callbacks
 
   add_to_menu (menu_fm_zip, tr ("List ZIP content"), SLOT(fman_zip_info()));
   add_to_menu (menu_fm_zip, tr ("Unpack ZIP to current directory"), SLOT(fman_zip_unpack()));
-
+*/
   menu_fm_img_conv = menu_fm->addMenu (tr ("Images"));
   menu_fm_img_conv->setTearOffEnabled (true);
 
@@ -7859,7 +7859,7 @@ OPTIONS::COMMON
                                               tr ("Charset for file open from command line"),
                                               sl_charsets,
                                               sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
-
+/*
   cmb_zip_charset_in = new_combobox (page_common_layout,
                                      tr ("ZIP unpacking: file names charset"),
                                      sl_charsets,
@@ -7870,7 +7870,7 @@ OPTIONS::COMMON
                                       tr ("ZIP packing: file names charset"),
                                       sl_charsets,
                                       sl_charsets.indexOf (settings->value ("zip_charset_out", "UTF-8").toString()));
-
+*/
   page_common_layout->addWidget (cb_altmenu);
   page_common_layout->addWidget (cb_wasd);
 
@@ -8089,10 +8089,10 @@ OPTIONS::IMAGES
 
   vb_images->addWidget (cb_output_image_flt);
 
-  cb_zip_after_scale = new QCheckBox (tr ("Zip directory with processed images"), this);
-  cb_zip_after_scale->setChecked (settings->value ("img_post_proc", 0).toBool());
+  //cb_zip_after_scale = new QCheckBox (tr ("Zip directory with processed images"), this);
+  //cb_zip_after_scale->setChecked (settings->value ("img_post_proc", 0).toBool());
 
-  vb_images->addWidget (cb_zip_after_scale);
+  //vb_images->addWidget (cb_zip_after_scale);
   vb_images->addWidget (cb_exif_rotate);
   page_images_layout->addWidget (gb_images);
 
@@ -9793,8 +9793,8 @@ void CTEA::leaving_options()
 
   settings->setValue ("lng", cmb_lng->currentText());
 
-  settings->setValue ("zip_charset_in", cmb_zip_charset_in->currentText());
-  settings->setValue ("zip_charset_out", cmb_zip_charset_out->currentText());
+ // settings->setValue ("zip_charset_in", cmb_zip_charset_in->currentText());
+//  settings->setValue ("zip_charset_out", cmb_zip_charset_out->currentText());
   settings->setValue ("cmdline_default_charset", cmb_cmdline_default_charset->currentText());
   settings->setValue ("label_end", ed_label_end->text());
   settings->setValue ("label_start", ed_label_start->text());
@@ -9805,7 +9805,7 @@ void CTEA::leaving_options()
   settings->setValue ("show_ebooks_fine", cb_show_ebooks_fine->isChecked());
 
   settings->setValue ("img_quality", spb_img_quality->value());
-  settings->setValue ("img_post_proc", cb_zip_after_scale->isChecked());
+  //settings->setValue ("img_post_proc", cb_zip_after_scale->isChecked());
   settings->setValue ("cb_exif_rotate", cb_exif_rotate->isChecked());
   settings->setValue ("zor_use_exif_orientation", cb_zor_use_exif->isChecked());
   settings->setValue ("ed_side_size", ed_side_size->text());

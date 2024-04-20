@@ -1,5 +1,5 @@
 /**************************************************************************
- *   2007-2021 by Peter Semiletov                            *
+ *   2007-2024 by Peter Semiletov                            *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -311,7 +311,7 @@ Main menu items
   QMenu *menu_fm_multi_rename;
   QMenu *menu_fm_file_infos;
   QMenu *menu_fm_img_conv;
-  QMenu *menu_fm_zip;
+ // QMenu *menu_fm_zip;
   QMenu *menu_fm_checksums;
   QMenu *menu_view;
   QMenu *menu_spell_langs;
@@ -433,8 +433,8 @@ Preferences tab :: Common page UI elements
   QCheckBox *cb_northern_hemisphere;
   QComboBox *cmb_moon_phase_algos;
   QComboBox *cmb_cmdline_default_charset;
-  QComboBox *cmb_zip_charset_in;
-  QComboBox *cmb_zip_charset_out;
+  //QComboBox *cmb_zip_charset_in;
+  //QComboBox *cmb_zip_charset_out;
 
   QCheckBox *cb_altmenu;
   QCheckBox *cb_wasd;
@@ -484,7 +484,7 @@ Preferences tab :: Images page UI elements
   QComboBox *cmb_output_image_fmt;
   QCheckBox *cb_output_image_flt;
   QSpinBox *spb_img_quality;
-  QCheckBox *cb_zip_after_scale;
+  //QCheckBox *cb_zip_after_scale;
   QCheckBox *cb_exif_rotate;
   QLineEdit *ed_side_size;
   QLineEdit *ed_link_options;
@@ -967,11 +967,12 @@ Fm menu callbacks
   void fman_fileop_delete();
   void fm_fileinfo_info();
   void fman_fileinfo_count_lines_in_selected_files();
-  void fman_zip_create();
+
+  /*void fman_zip_create();
   void fman_zip_add();
   void fman_zip_save();
   void fman_zip_info();
-  void fman_zip_unpack();
+  void fman_zip_unpack();*/
   void fman_img_conv_by_side();
   void fman_img_conv_by_percent();
   void fman_img_make_gallery();

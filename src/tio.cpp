@@ -403,10 +403,7 @@ CTioHandler::CTioHandler()
   list.push_back (new CTioABW);
   list.push_back (new CTioFB2);
   list.push_back (new CTioRTF);
-
-#if QT_VERSION >= 0x050000
   list.push_back (new CTioEpub);
-#endif
 
 #if defined (POPPLER_ENABLE)
   list.push_back (new CTioPDF);
@@ -1355,7 +1352,6 @@ bool CTioDJVU::load (const QString &fname)
 #endif
 
 
-#if QT_VERSION >= 0x050000
 
 
 CTioEpub::CTioEpub()
@@ -1494,6 +1490,8 @@ std::vector <std::string> split_string_to_vector (const string& s, const string&
 bool CTioEpub::load (const QString &fn)
 {
 
+  qDebug() << "CTioEpub::load " << fn;
+
   std::string fname = fn.toStdString();
   std::vector <std::string> tags;
   //std::vector <std::string> lines; //lines from all html contained at epub
@@ -1509,7 +1507,10 @@ bool CTioEpub::load (const QString &fn)
   size_t bufsize;
 
    if (zip_entry_open (zip, "OEBPS/content.opf") < 0)
-     return false;
+     {
+       if (zip_entry_open (zip, "OPS/content.opf") < 0)
+          return false;
+     }
 
   zip_entry_read (zip, &contentopf, &bufsize);
 
@@ -1586,7 +1587,6 @@ bool CTioEpub::load (const QString &fn)
 }
 
 
-#endif
 
 QStringList CTioHandler::get_supported_exts()
 {

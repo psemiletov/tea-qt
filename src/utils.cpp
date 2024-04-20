@@ -14,6 +14,8 @@ Peter Semiletov
 #include <QProcess>
 #include <QApplication>
 
+#include <fstream>
+
 #include "utils.h"
 
 using namespace std;
@@ -251,6 +253,22 @@ QByteArray file_load (const QString &fileName)
 
 
 /* string/stringlist utils */
+
+
+std::string string_file_load (const std::string &fname)
+{
+ if (fname.empty())
+    return std::string();
+
+ std::ifstream t (fname.c_str());
+ std::string s ((std::istreambuf_iterator<char>(t)),
+                 std::istreambuf_iterator<char>());
+
+ return s;
+}
+
+
+
 
 void strlist_swap (QStringList &l, int a, int b)
 {

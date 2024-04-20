@@ -162,6 +162,76 @@ bool CXML_walker::for_each (pugi::xml_node &node)
 }
 
 
+std::string html_strip (const std::string &source)
+{
+  std::string html = source;
+
+    while (html.find("<") != std::string::npos)
+    {
+        auto startpos = html.find("<");
+        auto endpos = html.find(">") + 1;
+
+        if (endpos != std::string::npos)
+        {
+            html.erase(startpos, endpos - startpos);
+        }
+    }
+
+   return html;
+}
+
+
+
+bool ends_with (std::string const & value, std::string const & ending)
+{
+    if (ending.size() > value.size())
+       return false;
+
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+
+
+std::vector <std::string> extract_hrefs (const std::string &source, const std::string &prefix)
+{
+ std::vector <std::string> result;
+
+
+ size_t i = 0;
+ size_t limit = source.size() - 1;
+ std::string signature_str = "<item href=\"";
+ size_t signature_size = signature_str.size();
+
+
+ while (i < limit)
+       {
+        size_t pos_start = source.find (signature_str, i);
+        if (pos_start == string::npos)
+           break;
+
+        size_t pos_end = source.find ("\"", pos_start + signature_size);
+        if (pos_end == string::npos)
+           break;
+
+        //else
+
+        std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
+
+        if (ends_with (url, "html") || ends_with (url, "xhtml"))
+           if (url.rfind("wrap", 0) != 0)
+              {
+                  result.push_back (prefix + url);
+                     //     std::cout << "url: " << url << std::endl;
+
+              }
+
+        i = pos_end + 1;
+       }
+
+   return result;
+}
+
+
 /*
 QString extract_text_from_xml_pugi (const char *string_data, size_t datasizebytes, std::vector <std::string> tags)
 {
@@ -328,7 +398,7 @@ CTioHandler::CTioHandler()
   default_handler = new CTioPlainText;
 
   list.push_back (default_handler);
-  list.push_back (new CTioGzip);
+  //list.push_back (new CTioGzip);
   list.push_back (new CTioXMLZipped);
   list.push_back (new CTioABW);
   list.push_back (new CTioFB2);
@@ -391,9 +461,10 @@ CTioGzip::CTioGzip()
 
 bool CTioGzip::load (const QString &fname)
 {
-  QByteArray a = gzip_deflateFile (fname);
+/*  QByteArray a = gzip_deflateFile (fname);
   data = a.data();
-  return true;
+  return true;*/
+  return false;
 }
 
 
@@ -439,8 +510,10 @@ bool CTioXMLZipped::load (const QString &fname)
 {
   data.clear();
 
+  std::string fn = fname.toStdString();
+
   QStringList tags;
-  QString source_fname;
+  std::string source_fname;
 
   QString ext = file_get_ext (fname);
 
@@ -463,12 +536,36 @@ bool CTioXMLZipped::load (const QString &fname)
       tags.append ( "text:s");
      }
 
-
+/*
   CZipper zipper;
   if (! zipper.read_as_utf8 (fname, source_fname))
       return false;
+*/
 
-  data = extract_text_from_xml_pugi (zipper.string_data, tags);
+
+  void *buf = NULL;
+  size_t bufsize = 0;
+
+  struct zip_t *zip = zip_open(fn.c_str(), 0, 'r');
+
+  if (! zip)
+     return false;
+
+
+  if (zip_entry_open(zip, source_fname.c_str()) < 0)
+     return false;
+
+
+  zip_entry_read (zip, &buf, &bufsize);
+
+  zip_entry_close (zip);
+
+  data = extract_text_from_xml_pugi ((char*)buf, bufsize, tags);
+
+  zip_close (zip);
+  free(buf);
+
+  //data = extract_text_from_xml_pugi (zipper.string_data, tags);
 
   return true;
 }
@@ -680,9 +777,136 @@ bool CTioFB2::load (const QString &fname)
 {
   data.clear();
 
-  //QString ext = file_get_ext (fname);
+  //std::vector <std::string> tags;
+  //tags.push_back ("p");
 
-  //qDebug () << "ext: " << ext;
+  QStringList tags;
+  tags.append ("p");
+
+
+  std::string zip_file_name = fname.toStdString();
+
+  if (fname.endsWith ("fb2"))
+     {
+      std::string stemp = string_file_load (zip_file_name);
+
+      data = extract_text_from_xml_pugi (stemp.c_str(), stemp.size(), tags);
+
+      if (data.isEmpty())
+         return false;
+      else
+          return true;
+     }
+
+   // else
+ // if (fname.endsWith (".fb2.zip") || fname.endsWith (".fbz"))
+
+
+
+  std::string source_fname; //достаем его из зипа
+
+  //we can have malformed internal filename, so find the first fb2 at the archive
+
+  struct zip_t *zip = zip_open (zip_file_name.c_str(), 0, 'r');
+
+  if (! zip)
+     return false;
+
+
+
+
+
+  int i, n = zip_entries_total(zip);
+  for (i = 0; i < n; ++i)
+      {
+       zip_entry_openbyindex(zip, i);
+
+       const char *name = zip_entry_name(zip);
+
+       std::string tname = name;
+        if (ends_with (tname, "fb2"))
+           {
+            source_fname = tname;
+            zip_entry_close(zip);
+            break;
+           }
+
+        //int isdir = zip_entry_isdir(zip);
+        //unsigned long long size = zip_entry_size(zip);
+        //unsigned int crc32 = zip_entry_crc32(zip);
+       zip_entry_close(zip);
+      }
+
+
+
+
+
+  if (source_fname.empty())
+      return false;
+
+
+
+
+  void *buf = NULL;
+  size_t bufsize;
+
+ // struct zip_t *zip = zip_open (fname.c_str(), 0, 'r');
+
+  if (zip_entry_open (zip, source_fname.c_str()) < 0)
+     return false;
+
+
+
+ qDebug() << "wwwwwwwwwww 1";
+  zip_entry_read(zip, &buf, &bufsize);
+
+
+  zip_entry_close(zip);
+
+//  data = extract_text_from_xml_pugi ((char*)buf, bufsize, tags);
+
+  zip_close(zip);
+
+
+
+
+
+
+ //qDebug() << "buf: " << (char*)buf;
+// qDebug() << "bufsize: " << bufsize;
+
+  pugi::xml_document doc;
+//  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(), temp.size() * 2,
+  //                                                 pugi::parse_default,
+    //                                               pugi::encoding_utf16);
+
+  pugi::xml_parse_result result = doc.load_buffer ((char*)buf, bufsize,
+                                                   pugi::parse_default,
+                                                   pugi::encoding_utf8);
+
+
+  free(buf);
+
+  if (! result)
+     return false;
+
+  //qDebug () << "2";
+
+
+  qDebug() << "wwwwwwwwwww 2";
+
+  CFB2_walker walker;
+  walker.text = &data;
+  walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
+
+  doc.traverse (walker);
+
+  return true;
+}
+/*
+bool CTioFB2::load (const QString &fname)
+{
+  data.clear();
 
 
   QString temp;
@@ -744,7 +968,7 @@ bool CTioFB2::load (const QString &fname)
 
   return true;
 }
-
+*/
 
 //www.codeguru.com/forum/archive/index.php/t-201658.html
 //rewritten by Peter Semiletov
@@ -1141,7 +1365,7 @@ CTioEpub::CTioEpub()
 }
 
 
-
+/*
 bool CTioEpub::load (const QString &fname)
 {
   qDebug() << "CTioEpub::load";
@@ -1231,6 +1455,132 @@ bool CTioEpub::load (const QString &fname)
 
 
       }
+
+  return true;
+}
+*/
+
+std::vector <std::string> split_string_to_vector (const string& s, const string& delimeter, const bool keep_empty)
+{
+  vector <string> result;
+
+  if (delimeter.empty())
+     {
+      result.push_back (s);
+      return result;
+     }
+
+  string::const_iterator substart = s.begin(), subend;
+
+  while (true)
+        {
+         subend = search (substart, s.end(), delimeter.begin(), delimeter.end());
+
+         string temp (substart, subend);
+
+         if (keep_empty || ! temp.empty())
+             result.push_back (temp);
+
+         if (subend == s.end())
+             break;
+
+         substart = subend + delimeter.size();
+        }
+
+  return result;
+}
+
+
+bool CTioEpub::load (const QString &fn)
+{
+
+  std::string fname = fn.toStdString();
+  std::vector <std::string> tags;
+  //std::vector <std::string> lines; //lines from all html contained at epub
+
+  struct zip_t *zip = zip_open (fname.c_str(), 0, 'r');
+
+  if (! zip)
+     return false;
+
+  //read content.opf
+
+  void *contentopf = NULL;
+  size_t bufsize;
+
+   if (zip_entry_open (zip, "OEBPS/content.opf") < 0)
+     return false;
+
+  zip_entry_read (zip, &contentopf, &bufsize);
+
+  zip_entry_close (zip);
+
+  if (bufsize == 0)
+    return false;
+
+ // done with contentopf
+  std::string content ((char*)contentopf);
+  free (contentopf);
+
+  std::vector <std::string> urls = extract_hrefs (content, "OEBPS/");
+
+  //HERE WE ALREADY PARSED URLS
+
+  if (urls.size() == 0)
+    return false;
+
+  tags.push_back ("p");
+
+  //read urls from epub
+
+  for (size_t i = 0; i < urls.size(); i++)
+      {
+//      std::cout << i << std::endl;
+  //    std::cout << "open: " << urls[i] << std::endl;
+
+      void *temp = NULL;
+
+      if (zip_entry_open (zip, urls[i].c_str()) >= 0)
+         {
+
+//           std::cout << "ok" << std::endl;
+
+           zip_entry_read (zip, &temp, &bufsize);
+           zip_entry_close (zip);
+
+  //         std::cout << "bufsize: " << bufsize << std::endl;
+
+           //std::cout << (char*) temp << std::endl;
+
+           std::string st = (char*) temp;
+           std::string st_cleaned = html_strip (st);
+
+           //std::cout << st_cleaned << std::endl;
+
+
+
+           //file_lines = extract_text_from_xml_pugi ((char*) temp, bufsize, tags);
+
+           //print_lines (file_lines);
+
+
+
+           //if (file_lines.size() > 0)
+            //  lines.insert(std::end(lines), std::begin(file_lines), std::end(file_lines));
+
+           data += QString::fromStdString (st_cleaned);
+
+
+          free (temp);
+         }
+      }
+
+  zip_close(zip);
+
+ // print_lines (lines);
+
+//  std::cout << "2222\n";
+
 
   return true;
 }

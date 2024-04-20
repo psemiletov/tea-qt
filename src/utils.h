@@ -76,6 +76,7 @@ QByteArray file_load (const QString &fileName);
 
 /* string/stringlist utils */
 
+std::string string_file_load (const std::string &fname);
 //bool str_check (char *s1, char *s2, int size);
 QString string_between (const QString &source, const QString &sep1, const QString &sep2);
 bool char_is_bad (const QChar &c);

@@ -79,7 +79,6 @@ C++/Qt branch started at 08 November 2007
 #include "libretta_calc.h"
 #include "textproc.h"
 #include "logmemo.h"
-#include "tzipper.h"
 #include "wavinfo.h"
 #include "exif_reader.h"
 
@@ -705,7 +704,7 @@ void CTEA::fman_current_file_changed (const QString &full_path, const QString &j
 
 void CTEA::fman_file_activated (const QString &full_path)
 {
-  if (file_get_ext (full_path) == ("zip"))
+ /* if (file_get_ext (full_path) == ("zip"))
      {
       CZipper z;
       QStringList sl = z.unzip_list (full_path);
@@ -716,7 +715,7 @@ void CTEA::fman_file_activated (const QString &full_path)
       log->log (sl.join("\n"));
       return;
      }
-
+*/
 
   if (is_image (full_path))
      {
@@ -5722,7 +5721,7 @@ void CTEA::fman_fileinfo_count_lines_in_selected_files()
 
 void CTEA::fman_zip_create()
 {
-  last_action = sender();
+ /* last_action = sender();
 
   bool ok;
 
@@ -5739,13 +5738,13 @@ void CTEA::fman_zip_create()
   if (! name.endsWith (".zip"))
      name.append (".zip");
 
-  fman->zipper.archive_fullpath = fman->dir.path() + "/" + name;
+  fman->zipper.archive_fullpath = fman->dir.path() + "/" + name;*/
 }
 
 
 void CTEA::fman_zip_add()
 {
-  last_action = sender();
+  /*last_action = sender();
 
   QString f = ed_fman_fname->text().trimmed();
   QStringList li = fman->get_sel_fnames();
@@ -5765,22 +5764,22 @@ void CTEA::fman_zip_add()
      }
 
   for (int i = 0; i < li.size(); i++)
-      fman->zipper.files_list.append (li.at(i));
+      fman->zipper.files_list.append (li.at(i));*/
 }
 
 
 void CTEA::fman_zip_save()
 {
-  last_action = sender();
+/*  last_action = sender();
 
   fman->zipper.pack_prepared();
-  fman->refresh();
+  fman->refresh();*/
 }
 
 
 void CTEA::fman_zip_info()
 {
-  last_action = sender();
+  /*last_action = sender();
 
   QString fn = fman->get_sel_fname();
   if (fn.isEmpty())
@@ -5793,13 +5792,13 @@ void CTEA::fman_zip_info()
   for (int i = 0; i < sl.size(); i++)
        sl[i] = sl[i].append ("<br>");
 
-  log->log (sl.join("\n"));
+  log->log (sl.join("\n"));*/
 }
 
 
 void CTEA::fman_zip_unpack()
 {
-  last_action = sender();
+  /*last_action = sender();
 
   CZipper z;
 
@@ -5825,7 +5824,7 @@ void CTEA::fman_zip_unpack()
       {
        z.unzip ((*fname), fman->dir.path());
        log->log ((*fname) + tr (" is unpacked"));
-      }
+      }*/
 }
 
 
@@ -9576,8 +9575,8 @@ void CTEA::fman_convert_images (bool by_side, int value)
 
   if (settings->value ("img_post_proc", 0).toBool())
      {
-      CZipper zipper;
-      zipper.zip_directory (fman->dir.absolutePath(), dir_out);
+      /*CZipper zipper;
+      zipper.zip_directory (fman->dir.absolutePath(), dir_out);*/
      }
 
   fman->refresh();

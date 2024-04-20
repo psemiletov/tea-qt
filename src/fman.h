@@ -31,7 +31,6 @@
 #include <QDrag>
 #include <QPainter>
 
-#include "tzipper.h"
 
 
 class CFMan: public QTreeView
@@ -40,7 +39,7 @@ class CFMan: public QTreeView
 
 public:
 
-  CZipper zipper;
+//  CZipper zipper;
   QDir dir;
   
   int sort_mode;

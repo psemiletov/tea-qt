@@ -1,5 +1,8 @@
+#ifdef SPEECH_ENABLE
+
+
 #include <iostream>
-#include <ncurses.h>
+//#include <ncurses.h>
 
 #include "speech.h"
 
@@ -56,6 +59,7 @@ CSpeech::CSpeech()
 {
   initialized = false;
   spd_connection = 0;
+  locale_only = 0;
 
   current_voice_index = -1;
 
@@ -328,7 +332,9 @@ void CSpeech::set_voice_by_index (int index)
   if (index > voices.size() - 1)
      return;
 
-  if (spd_set_synthesis_voice (spd_connection, voices[index].name.c_str()))
+//  if (spd_set_synthesis_voice (spd_connection, voices[index].name.c_str()))
+  //    std::cout << "ERRRRR" << std::endl;
+  if (spd_set_synthesis_voice (spd_connection, voices[index].c_str()))
       std::cout << "ERRRRR" << std::endl;
 
 
@@ -338,3 +344,4 @@ void CSpeech::set_voice_by_index (int index)
 
 
 // int spd_set_synthesis_voice(SPDConnection* connection, const char* voice_name);
+#endif

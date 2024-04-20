@@ -109,7 +109,7 @@ class CTioEpub: public CTioReadOnly
 public:
 
   CTioEpub();
-  bool load (const QString &fname);
+  bool load (const QString &fn);
 };
 #endif
 

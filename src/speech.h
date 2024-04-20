@@ -1,6 +1,8 @@
 #ifndef SPEECH_H
 #define SPEECH_H
 
+#ifdef SPEECH_ENABLE
+
 /*
 
  usr/include/speech-dispatcher/libspeechd.h
@@ -26,7 +28,7 @@ usr/include/speech-dispatcher/speechd_types.h
 #define SPCH_STATE_PAUSED 2
 #define SPCH_STATE_NEXT 3
 
-
+/*
 class CVoice
 {
 public:
@@ -36,11 +38,13 @@ public:
 
 
 };
-
+*/
 
 class CSpeech
 {
   public:
+
+  int locale_only;
 
   SPDConnection *spd_connection;
 
@@ -92,5 +96,8 @@ namespace
 
 
 void f_signal_handler (int signal);
+
+#endif
+
 
 #endif

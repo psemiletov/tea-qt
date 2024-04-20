@@ -487,7 +487,7 @@ bool CTioABW::load (const QString &fname)
   QString temp = qstring_load (fname);
 
   QStringList tags;
-  tags.append ("p");
+  tags.append ("c");
 
   data = extract_text_from_xml_pugi (temp, tags);
 

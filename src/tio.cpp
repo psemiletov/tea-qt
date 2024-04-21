@@ -80,17 +80,8 @@ with qmake - Qt4/Qt5 poppler
 
 #if defined (POPPLER_ENABLE)
 
-#if QT_VERSION_MAJOR == 6
-#include <poppler-qt6.h>
-#endif
-
-#if QT_VERSION_MAJOR == 5
-#include <poppler-qt5.h>
-#endif
-
-#if QT_VERSION_MAJOR == 4
-#include <poppler-qt4.h>
-#endif
+#include <poppler/cpp/poppler-document.h>
+#include <poppler/cpp/poppler-page.h>
 
 #endif
 
@@ -230,36 +221,6 @@ std::vector <std::string> extract_hrefs (const std::string &source, const std::s
 
    return result;
 }
-
-
-/*
-QString extract_text_from_xml_pugi (const char *string_data, size_t datasizebytes, std::vector <std::string> tags)
-{
-//  std::cout << "extract_text_from_xml_pugi 1" << std::endl;
-
-  pugi::xml_document doc;
-
-  pugi::xml_parse_result result = doc.load_buffer (string_data,
-                                                   datasizebytes,
-                                                   pugi::parse_default,
-                                                   pugi::encoding_utf8);
-
-  if (! result)
-     {
-      std::cout << "NOT PARSED" << std::endl;
-      return QString("");
-     }
-
-  CXML_walker walker;
-
-  walker.paragraphs.reserve (tags.size());
-  std::copy (tags.begin(), tags.end(), back_inserter(walker.paragraphs));
-
-  doc.traverse (walker);
-
-  return walker.text;
-}
-*/
 
 
 
@@ -1174,70 +1135,45 @@ CTioPDF::CTioPDF()
 }
 
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-
-
 bool CTioPDF::load (const QString &fname)
 {
-  Poppler::Document *d = Poppler::Document::load (fname);
+  //std::unique_ptr<poppler::document> d = poppler::document::load_from_file (fname.toStdString ());
+   poppler::document *d = poppler::document::load_from_file (fname.toStdString ());
 
   if (! d)
      return false;
 
-  if (d->isLocked())
-     {
-      delete d;
-      return false;
-     }
-
-
-  int pages_count = d->numPages();
-
-  for (int i = 0; i < pages_count; i++)
-      {
-       Poppler::Page *p = d->page (i);
-
-       QList<Poppler::TextBox*> tb = p->textList();
-
-       for (int j = 0; j < tb.size(); j++)
-           {
-            data += tb[j]->text();
-            //if (tb[j]->hasSpaceAfter())
-            data += " ";
-
-            delete tb[j];
-           }
-      }
-
-  delete d;
-  return true;
-}
-
-#endif
-
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && QT_VERSION < QT_VERSION_CHECK(7, 0, 0))
-
-
-bool CTioPDF::load (const QString &fname)
-{
-  std::unique_ptr<Poppler::Document> d = Poppler::Document::load (fname);
-
-  if (! d)
-     return false;
-
-  if (d->isLocked())
+  if (d->is_locked())
      {
     //  delete d;
       return false;
      }
 
 
-  int pages_count = d->numPages();
+  int pages_count = d->pages();
 
   for (int i = 0; i < pages_count; i++)
       {
-      std::unique_ptr<Poppler::Page> p = d->page (i);
+       //std::unique_ptr<poppler::page> p = d->create_page (i);
+       poppler::page *p = d->create_page (i);
 
+       if (! p)
+          continue;
+
+        poppler::ustring text_from_page = p->text();
+       // std::string s = text_from_page.to_latin1();
+
+        //char *str = text_from_page.to_utf8();
+
+       poppler::byte_array ba = text_from_page.to_utf8();
+
+       char *str = &*ba.begin();
+
+      // std::cout << str << std::endl;
+
+        data += QString::fromUtf8 (str);
+
+       /*
        std::vector<std::unique_ptr<Poppler::TextBox> > tb = p->textList();
 
        for (int j = 0; j < tb.size(); j++)
@@ -1246,15 +1182,14 @@ bool CTioPDF::load (const QString &fname)
             //if (tb[j]->hasSpaceAfter())
             data += " ";
 
-           // delete tb[j];
-           }
+         }         */
+
       }
 
  // delete d;
   return true;
 }
 
-#endif
 
 
 #endif
@@ -1360,101 +1295,6 @@ CTioEpub::CTioEpub()
   extensions.append ("epub");
 }
 
-
-/*
-bool CTioEpub::load (const QString &fname)
-{
-  qDebug() << "CTioEpub::load";
-
-  data.clear();
-
-  qDebug() << "fname: " << fname;
-
-  CZipper zipper;
-  if (! zipper.read_as_utf8 (fname, "META-INF/container.xml"))
-       return false;
-
-  QStringList html_files;
-
-  QString opf_fname;
-  QString opf_dir;
-
-  int start = zipper.string_data.indexOf ("full-path=\"");
-  int end = zipper.string_data.indexOf ("\"", start + 11);
-
-  opf_fname = zipper.string_data.mid (start + 11, end - start - 11);
-  opf_dir = opf_fname.left (opf_fname.indexOf ("/"));
-
-  std::cout << "opf_fname: " << opf_fname.toStdString() << std::endl;
-  std::cout << "opf_dir: " << opf_dir.toStdString() << std::endl;
-
-  //READ FILES LIST. PARSE OPF FILE
-
-  if (! zipper.read_as_utf8 (fname, opf_fname))
-       return false;
-
-  qDebug() << "PARSE XML";
-
-
-  //QString regex = R"(href="([^"]*))";
-  QString regex = "(href=\"([^\"]*))";
-
-
-   QRegularExpression re(regex);
-   QRegularExpressionMatchIterator i = re.globalMatch (zipper.string_data);
-    while (i.hasNext())
-      {
-      QRegularExpressionMatch match = i.next();
-
-      QString ts = match.captured().mid(6);
-
-      ts = ts.replace ("%2C", ",");
-      ts = ts.replace ("%20", " ");
-      ts = ts.replace ("%5B", "[");
-      ts = ts.replace ("%5D", "]");
-
-
-      QString ext = file_get_ext (ts);
-
-
-      if (ext == "html" || ext == "htm" || ext == "xml")
-         html_files.append (opf_dir + "/" + ts);
-
-      //qDebug().noquote() << match.captured();
-    }
-
-
-  //qDebug() << "html_files.size(): " << html_files.size();
-
-
-   qDebug() << "2";
-
-  QStringList tags;
-  tags.append ("p");
-
-  for (int i = 0; i < html_files.size(); i++)
-      {
-          qDebug() << "3";
-
-          qDebug() << html_files.at(i);
-
-       if (zipper.read_as_utf8 (fname, html_files.at(i)))
-          {
-          qDebug() << "yes";
-          //QString t = extract_text_from_xml_pugi (zipper.string_data, tags);
-          QString t = extract_text_from_html (zipper.string_data);
-          data += t;
-          data += "\n";
-         }
-       else
-         qDebug() << "no";
-
-
-      }
-
-  return true;
-}
-*/
 
 std::vector <std::string> split_string_to_vector (const string& s, const string& delimeter, const bool keep_empty)
 {

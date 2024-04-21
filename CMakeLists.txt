@@ -174,44 +174,12 @@ if(USE_PDF)
 find_package(PkgConfig)
 
 
-if (NOT Qt6_FOUND)
-pkg_check_modules(popplerqt5 QUIET poppler-qt5)
-if(popplerqt5_FOUND)
+pkg_check_modules(popplercpp QUIET poppler-cpp)
+if(popplercpp_FOUND)
   add_definitions(-DPOPPLER_ENABLE)
-  target_link_libraries(tea ${popplerqt5_LIBRARIES})
-  include_directories(${popplerqt5_INCLUDE_DIRS})
-  message("+ popplerqt5 support")
-endif()
-endif()
-
-#if (Qt6_FOUND)
-#pkg_check_modules(popplerqt6 QUIET poppler-qt6)
-#if(popplerqt6_FOUND)
-#  add_definitions(-DPOPPLER_ENABLE)
-#  target_link_libraries(tea ${popplerqt6_LIBRARIES})
-#  include_directories(${popplerqt6_INCLUDE_DIRS})
-#  message("+ popplerqt6 support")
-#endif()
-#endif()
-
-
-if (Qt6_FOUND)
-
-#find_package(Qt6 REQUIRED COMPONENTS Pdf)
-#if (Qt6::Pdf_FOUND)
-#  add_definitions(-DPDF6)
-#  target_link_libraries(tea Qt6::Pdf)
-#  message("+ Qt 6.6 PDF support")
-
-#else()
-
-pkg_check_modules(popplerqt6 QUIET poppler-qt6)
-if(popplerqt6_FOUND)
-  add_definitions(-DPOPPLER_ENABLE)
-  target_link_libraries(tea ${popplerqt6_LIBRARIES})
-  include_directories(${popplerqt6_INCLUDE_DIRS})
-  message("+ popplerqt6 support")
-endif()
+  target_link_libraries(tea ${popplercpp_LIBRARIES})
+  include_directories(${popplercpp_INCLUDE_DIRS})
+  message("+ popplercpp support")
 endif()
 
 

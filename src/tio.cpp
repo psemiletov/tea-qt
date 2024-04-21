@@ -292,8 +292,6 @@ QString extract_text_from_html (const QString &string_data)
 }
 
 
-
-
 bool CTioPlainText::load (const QString &fname)
 {
   QFile file (fname);
@@ -772,8 +770,6 @@ bool CTioFB2::load (const QString &fname)
 
 
 
-
-
   int i, n = zip_entries_total(zip);
   for (i = 0; i < n; ++i)
       {
@@ -813,11 +809,7 @@ bool CTioFB2::load (const QString &fname)
   if (zip_entry_open (zip, source_fname.c_str()) < 0)
      return false;
 
-
-
- qDebug() << "wwwwwwwwwww 1";
   zip_entry_read(zip, &buf, &bufsize);
-
 
   zip_entry_close(zip);
 
@@ -825,18 +817,7 @@ bool CTioFB2::load (const QString &fname)
 
   zip_close(zip);
 
-
-
-
-
-
- //qDebug() << "buf: " << (char*)buf;
-// qDebug() << "bufsize: " << bufsize;
-
   pugi::xml_document doc;
-//  pugi::xml_parse_result result = doc.load_buffer (temp.utf16(), temp.size() * 2,
-  //                                                 pugi::parse_default,
-    //                                               pugi::encoding_utf16);
 
   pugi::xml_parse_result result = doc.load_buffer ((char*)buf, bufsize,
                                                    pugi::parse_default,
@@ -847,11 +828,6 @@ bool CTioFB2::load (const QString &fname)
 
   if (! result)
      return false;
-
-  //qDebug () << "2";
-
-
-  qDebug() << "wwwwwwwwwww 2";
 
   CFB2_walker walker;
   walker.text = &data;
@@ -1137,59 +1113,39 @@ CTioPDF::CTioPDF()
 
 bool CTioPDF::load (const QString &fname)
 {
-  //std::unique_ptr<poppler::document> d = poppler::document::load_from_file (fname.toStdString ());
-   poppler::document *d = poppler::document::load_from_file (fname.toStdString ());
+  poppler::document *d = poppler::document::load_from_file (fname.toStdString ());
 
   if (! d)
      return false;
 
   if (d->is_locked())
      {
-    //  delete d;
+      delete d;
       return false;
      }
-
 
   int pages_count = d->pages();
 
   for (int i = 0; i < pages_count; i++)
       {
-       //std::unique_ptr<poppler::page> p = d->create_page (i);
        poppler::page *p = d->create_page (i);
 
        if (! p)
           continue;
 
-        poppler::ustring text_from_page = p->text();
-       // std::string s = text_from_page.to_latin1();
-
-        //char *str = text_from_page.to_utf8();
+       poppler::ustring text_from_page = p->text();
 
        poppler::byte_array ba = text_from_page.to_utf8();
 
        char *str = &*ba.begin();
+       data += QString::fromUtf8 (str);
 
-      // std::cout << str << std::endl;
-
-        data += QString::fromUtf8 (str);
-
-       /*
-       std::vector<std::unique_ptr<Poppler::TextBox> > tb = p->textList();
-
-       for (int j = 0; j < tb.size(); j++)
-           {
-            data += tb[j]->text();
-            //if (tb[j]->hasSpaceAfter())
-            data += " ";
-
-         }         */
-
+       delete p;
       }
 
- // delete d;
+  delete d;
   return true;
 }
-
 
 
 #endif

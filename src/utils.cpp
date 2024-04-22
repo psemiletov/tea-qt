@@ -255,6 +255,16 @@ QByteArray file_load (const QString &fileName)
 /* string/stringlist utils */
 
 
+bool ends_with (std::string const &value, std::string const &ending)
+{
+  if (ending.size() > value.size())
+     return false;
+
+  return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+
+
 std::string string_file_load (const std::string &fname)
 {
  if (fname.empty())

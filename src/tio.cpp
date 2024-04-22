@@ -64,25 +64,20 @@ DJVU read code taken fromdvutxt.c:
 #include <QRegExp>
 #endif
 
+#include <algorithm>
 
 //////////////////FOR PDF
 #include <stdio.h>
 //YOur project must also include zdll.lib (ZLIB) as a dependency.
 //ZLIB can be freely downloaded from the internet, www.zlib.org
 //Use 4 byte struct alignment in your project!
-#include <zlib.h>
+//#include <zlib.h>
 //////////////////
 
-/*
-with cmake - Qt5/Qt6 poppler
-with qmake - Qt4/Qt5 poppler
-*/
 
 #if defined (POPPLER_ENABLE)
-
 #include <poppler/cpp/poppler-document.h>
 #include <poppler/cpp/poppler-page.h>
-
 #endif
 
 
@@ -98,20 +93,16 @@ with qmake - Qt4/Qt5 poppler
 #include <libdjvu/ddjvuapi.h>
 #endif
 
+#include "pugixml.hpp"
 
 #include "tio.h"
 #include "utils.h"
-//#include "tzipper.h"
 #include "textproc.h"
-
-#include "pugixml.hpp"
-
 #include "zip.h"
 
 using namespace std;
 
 extern QSettings *settings;
-
 
 
 
@@ -157,76 +148,63 @@ std::string html_strip (const std::string &source)
 {
   std::string html = source;
 
-    while (html.find("<") != std::string::npos)
-    {
-        auto startpos = html.find("<");
-        auto endpos = html.find(">") + 1;
-
-        if (endpos != std::string::npos)
+  while (html.find ("<") != std::string::npos)
         {
+         auto startpos = html.find("<");
+         auto endpos = html.find(">") + 1;
+
+         if (endpos != std::string::npos)
             html.erase(startpos, endpos - startpos);
         }
-    }
 
-   return html;
+  return html;
 }
 
 
-
-bool ends_with (std::string const & value, std::string const & ending)
+template <typename T>
+void remove_duplicates(std::vector<T>& vec)
 {
-    if (ending.size() > value.size())
-       return false;
-
-    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+  std::sort(vec.begin(), vec.end());
+  vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
 }
-
-
 
 std::vector <std::string> extract_hrefs (const std::string &source, const std::string &prefix)
 {
- std::vector <std::string> result;
+  std::vector <std::string> result;
+
+  size_t i = 0;
+  size_t limit = source.size() - 1;
+  std::string signature_str = "<item href=\"";
+  size_t signature_size = signature_str.size();
 
 
- size_t i = 0;
- size_t limit = source.size() - 1;
- std::string signature_str = "<item href=\"";
- size_t signature_size = signature_str.size();
+  while (i < limit)
+        {
+         size_t pos_start = source.find (signature_str, i);
+         if (pos_start == string::npos)
+            break;
 
-
- while (i < limit)
-       {
-        size_t pos_start = source.find (signature_str, i);
-        if (pos_start == string::npos)
-           break;
-
-        size_t pos_end = source.find ("\"", pos_start + signature_size);
-        if (pos_end == string::npos)
-           break;
+         size_t pos_end = source.find ("\"", pos_start + signature_size);
+         if (pos_end == string::npos)
+            break;
 
         //else
 
-        std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
+         std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
 
-        if (ends_with (url, "html") || ends_with (url, "xhtml"))
-           if (url.rfind("wrap", 0) != 0)
-              {
-                  result.push_back (prefix + url);
-                     //     std::cout << "url: " << url << std::endl;
+         if (ends_with (url, "html") || ends_with (url, "xhtml"))
+            if (url.rfind("wrap", 0) != 0)
+                 result.push_back (prefix + url);
 
-              }
+         i = pos_end + 1;
+        }
 
-        i = pos_end + 1;
-       }
-
-   return result;
+  return result;
 }
-
 
 
 QString extract_text_from_xml_pugi (const char *string_data, size_t datasizebytes, const QStringList &tags)
 {
-//  std::cout << "extract_text_from_xml_pugi 1" << std::endl;
   QString data;
 
   pugi::xml_document doc;
@@ -235,7 +213,6 @@ QString extract_text_from_xml_pugi (const char *string_data, size_t datasizebyte
                                                    datasizebytes,
                                                    pugi::parse_default,
                                                    pugi::encoding_utf8);
-
   if (! result)
      {
       std::cout << "NOT PARSED" << std::endl;
@@ -251,7 +228,6 @@ QString extract_text_from_xml_pugi (const char *string_data, size_t datasizebyte
 
   return data;
 }
-
 
 
 QString extract_text_from_xml_pugi (const QString &string_data, const QStringList &tags)
@@ -281,15 +257,14 @@ QString extract_text_from_xml_pugi (const QString &string_data, const QStringLis
   return data;
 }
 
-
-
-
+/*
 QString extract_text_from_html (const QString &string_data)
 {
   QTextBrowser br;
   br.setHtml (string_data);
   return br.toPlainText();
 }
+*/
 
 
 bool CTioPlainText::load (const QString &fname)
@@ -919,8 +894,7 @@ QString rtf_strip (const QString &rtf)
   if ( start < 1)
      return QString();
 
-  QString strCopy;
-  strCopy.reserve (length);
+  QString strCopy;strCopy.reserve (length);
 
   int k = 0;
 
@@ -1283,6 +1257,73 @@ std::vector <std::string> split_string_to_vector (const string& s, const string&
 }
 
 
+
+
+std::vector <std::string> extract_src_from_toc (const std::string &source, const std::string &prefix)
+{
+ std::vector <std::string> result;
+
+ size_t i = 0;
+ size_t limit = source.size() - 1;
+ std::string signature_str = "src=\"";
+ size_t signature_size = signature_str.size();
+
+ while (i < limit)
+       {
+        size_t pos_start = source.find (signature_str, i);
+        if (pos_start == std::string::npos)
+           break;
+
+        size_t pos_end = source.find ("\"", pos_start + signature_size);
+        if (pos_end == std::string::npos)
+           break;
+
+        //else
+
+        std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
+
+        //find "#" if any
+        //remove after # to the end of string
+
+        size_t pos_part = url.find ("#");
+        if (pos_end != std::string::npos)
+            url = url.substr (0, pos_part);
+
+
+
+
+        if (ends_with (url, "html") || ends_with (url, "xhtml"))
+         //  if (url.rfind("wrap", 0) != 0)
+              {
+               std::string url_to_add = prefix + url;
+
+               //if (result.size() != 0)
+                 // std::cout << result [result.size() - 1] << std::endl;
+
+
+                 result.push_back (url_to_add);
+
+
+                 // std::cout << "url: " << url_to_add << std::endl;
+                 //  if (*result.end() != url_to_add)
+
+               //if (result.size() >= 2)
+                 // if (result.at (result.size() - 2) == url_to_add)
+                   //   result.pop_back();
+
+
+
+                //std::cout << "*result.end(): " << *result.end() <<std::endl;
+
+             //  std::cout << "url: " << url << std::endl;
+              }
+
+        i = pos_end + 1;
+       }
+
+   return result;
+}
+
 bool CTioEpub::load (const QString &fn)
 {
 
@@ -1290,25 +1331,28 @@ bool CTioEpub::load (const QString &fn)
 
   std::string fname = fn.toStdString();
   std::vector <std::string> tags;
-  //std::vector <std::string> lines; //lines from all html contained at epub
 
   struct zip_t *zip = zip_open (fname.c_str(), 0, 'r');
 
   if (! zip)
      return false;
 
-  //read content.opf
+  //read toc.ncx
 
-  void *contentopf = NULL;
+  void *toc = NULL;
   size_t bufsize;
 
-   if (zip_entry_open (zip, "OEBPS/content.opf") < 0)
+   std::string subdir = "OEBPS/";
+
+  if (zip_entry_open (zip, "OEBPS/toc.ncx") < 0)
      {
-       if (zip_entry_open (zip, "OPS/content.opf") < 0)
+      if (zip_entry_open (zip, "OPS/toc.ncx") < 0)
           return false;
+
+      subdir = "OPS/";
      }
 
-  zip_entry_read (zip, &contentopf, &bufsize);
+  zip_entry_read (zip, &toc, &bufsize);
 
   zip_entry_close (zip);
 
@@ -1316,15 +1360,16 @@ bool CTioEpub::load (const QString &fn)
     return false;
 
  // done with contentopf
-  std::string content ((char*)contentopf);
-  free (contentopf);
+  std::string content ((char*)toc);
+  free (toc);
 
-  std::vector <std::string> urls = extract_hrefs (content, "OEBPS/");
+  std::vector <std::string> urls = extract_src_from_toc (content, subdir);
+//  remove_duplicates (urls);
 
   //HERE WE ALREADY PARSED URLS
 
   if (urls.size() == 0)
-    return false;
+     return false;
 
   tags.push_back ("p");
 
@@ -1332,58 +1377,42 @@ bool CTioEpub::load (const QString &fn)
 
   for (size_t i = 0; i < urls.size(); i++)
       {
-//      std::cout << i << std::endl;
-  //    std::cout << "open: " << urls[i] << std::endl;
+        if (i + 1 != urls.size())
+           if (urls[i] == urls[i+1])
+              continue;
 
-      void *temp = NULL;
+       std::cout << "open: " << urls[i] << std::endl;
 
-      if (zip_entry_open (zip, urls[i].c_str()) >= 0)
+       void *temp = NULL;
+
+       if (zip_entry_open (zip, urls[i].c_str()) >= 0)
          {
+          zip_entry_read (zip, &temp, &bufsize);
+          zip_entry_close (zip);
 
-//           std::cout << "ok" << std::endl;
+          std::string st = (char*) temp;
+          std::string st_cleaned = html_strip (st);
 
-           zip_entry_read (zip, &temp, &bufsize);
-           zip_entry_close (zip);
+          //print_lines (file_lines);
 
-  //         std::cout << "bufsize: " << bufsize << std::endl;
+          //if (file_lines.size() > 0)
+           //  lines.insert(std::end(lines), std::begin(file_lines), std::end(file_lines));
 
-           //std::cout << (char*) temp << std::endl;
-
-           std::string st = (char*) temp;
-           std::string st_cleaned = html_strip (st);
-
-           //std::cout << st_cleaned << std::endl;
-
-
-
-           //file_lines = extract_text_from_xml_pugi ((char*) temp, bufsize, tags);
-
-           //print_lines (file_lines);
-
-
-
-           //if (file_lines.size() > 0)
-            //  lines.insert(std::end(lines), std::begin(file_lines), std::end(file_lines));
-
-           data += QString::fromStdString (st_cleaned);
-
-
+          data += QString::fromStdString (st_cleaned);
+          data += "\n";
           free (temp);
          }
       }
 
   zip_close(zip);
 
- // print_lines (lines);
-
-//  std::cout << "2222\n";
 
 
   return true;
 }
 
 
-
+/*
 QStringList CTioHandler::get_supported_exts()
 {
   QStringList l;
@@ -1395,3 +1424,4 @@ QStringList CTioHandler::get_supported_exts()
   l.append ("txt");
   return l;
 }
+*/

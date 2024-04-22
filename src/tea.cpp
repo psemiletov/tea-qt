@@ -4750,6 +4750,38 @@ void CTEA::fn_quotes_tex_angle_02()
 }
 
 
+#ifdef SPEECH_ENABLE
+void CTEA::fn_speech_say_selection()
+{
+  last_action = sender();
+
+  if (! speech.initialized)
+     return;
+
+  qDebug() << "speech.locale_name: " << speech.locale_name;
+  qDebug() << "speech.language_name: " << speech.language_name;
+  qDebug() << "voice: " << speech.voices [speech.current_voice_index];
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  QString text = d->get();
+  if (text.isEmpty())
+     return;
+
+
+ // std::string s = text.toStdString();
+
+  //speech.say (s.c_str());
+
+   qDebug() << text;
+
+    speech.say (text.toUtf8().data());
+
+}
+#endif
+
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
 void CTEA::fn_change_spell_lang()
@@ -6893,8 +6925,8 @@ void CTEA::create_actions()
 {
   icon_size = settings->value ("icon_size", "32").toInt();
 
-  act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
-  connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
+ // act_test = new QAction (get_theme_icon("file-save.png"), tr ("Test"), this);
+  //connect (act_test, SIGNAL(triggered()), this, SLOT(test()));
 
   filesAct = new QAction (get_theme_icon ("current-list.png"), tr ("Files"), this);
 
@@ -7344,6 +7376,16 @@ Functions menu
   add_to_menu (tm, tr ("LaTeX: Straight to curly double quotes"), SLOT(fn_quotes_tex_curly()));
   add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes"), SLOT(fn_quotes_tex_angle_01()));
   add_to_menu (tm, tr ("LaTeX: Straight to double angle quotes v2"), SLOT(fn_quotes_tex_angle_02()));
+
+#ifdef SPEECH_ENABLE
+
+  tm = menu_functions->addMenu (tr ("Speech"));
+  tm->setTearOffEnabled (true);
+
+  add_to_menu (tm, tr ("Say the selected"), SLOT(fn_speech_say_selection()));
+
+#endif
+
 
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
@@ -8147,7 +8189,7 @@ OPTIONS::IMAGES
   page_speech_layout->addWidget (cb_speech_enable);
 
   cb_locale_only = new QCheckBox (tr ("Enable locale only voices"), this);
-  cb_locale_only->setChecked (settings->value ("locale_only", 0).toBool());
+  cb_locale_only->setChecked (settings->value ("locale_only", 1).toBool());
   page_speech_layout->addWidget (cb_locale_only);
 
   cmb_cpeech_voices = new_combobox_from_vector (page_speech_layout,
@@ -8308,13 +8350,15 @@ void CTEA::create_speech()
   qDebug() << "---------CTEA::create_speech()--------1";
 
   speech.locale_only = settings->value ("locale_only", 1).toInt();
-  speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
 
   if (! settings->value ("speech_enabled", false).toBool())
      return;
 
   speech.init ("tea");
+
   speech.get_voices (speech.locale_only);
+
+  speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
   speech.set_voice_by_index (speech.current_voice_index);
 
   qDebug() << "speech.voices.size(): " << speech.voices.size();
@@ -9728,7 +9772,21 @@ void CTEA::leaving_options()
 
   settings->setValue ("speech_enabled", cb_speech_enable->isChecked());
   settings->setValue ("locale_only", cb_locale_only->isChecked());
+
+  if (cb_locale_only->isChecked())
+      speech.locale_only = 1;
+  else
+      speech.locale_only = 0;
+
+//РАЗОБРАТЬСЯ В ПЕРЕЗАГРУЗКОЙ ГОЛОСОВ НА УРОВНЕ НАЖАТИЯ НА ЧЕКБОКСЫ
+
+
   settings->setValue ("current_voice_index", cmb_cpeech_voices->currentIndex());
+  speech.current_voice_index = cmb_cpeech_voices->currentIndex();
+
+
+
+
 /*
   if (cb_speech_enable->isChecked())
      {

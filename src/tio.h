@@ -53,11 +53,14 @@ public:
 
   virtual bool load (const QString &fname) = 0;
   virtual bool save (const QString &fname) = 0;
+// virtual bool understand (const QString &fname) = 0;
+
 
   virtual ~CTio() {};
 };
 
 
+//default handler
 class CTioPlainText: public CTio
 {
   Q_OBJECT
@@ -67,6 +70,8 @@ public:
   CTioPlainText();
   bool load (const QString &fname);
   bool save (const QString &fname);
+  //bool understand (const QString &fname) {return false};
+
 };
 
 
@@ -187,7 +192,7 @@ public:
   ~CTioHandler();
 
   CTio* get_for_fname (const QString &fname);
-  QStringList get_supported_exts();
+ // QStringList get_supported_exts();
 };
 
 

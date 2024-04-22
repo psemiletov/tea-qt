@@ -891,6 +891,13 @@ Fn menu callbacks
   void fn_quotes_tex_angle_01();
   void fn_quotes_tex_angle_02();
 
+#ifdef SPEECH_ENABLE
+  void fn_speech_say_selection();
+
+
+#endif
+
+
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
   void fn_change_spell_lang();

@@ -1289,40 +1289,18 @@ std::vector <std::string> extract_src_from_toc (const std::string &source, const
         if (pos_end != std::string::npos)
             url = url.substr (0, pos_part);
 
-
-
-
         if (ends_with (url, "html") || ends_with (url, "xhtml"))
-         //  if (url.rfind("wrap", 0) != 0)
-              {
-               std::string url_to_add = prefix + url;
-
-               //if (result.size() != 0)
-                 // std::cout << result [result.size() - 1] << std::endl;
-
-
-                 result.push_back (url_to_add);
-
-
-                 // std::cout << "url: " << url_to_add << std::endl;
-                 //  if (*result.end() != url_to_add)
-
-               //if (result.size() >= 2)
-                 // if (result.at (result.size() - 2) == url_to_add)
-                   //   result.pop_back();
-
-
-
-                //std::cout << "*result.end(): " << *result.end() <<std::endl;
-
-             //  std::cout << "url: " << url << std::endl;
-              }
+           {
+            std::string url_to_add = prefix + url;
+            result.push_back (url_to_add);
+           }
 
         i = pos_end + 1;
        }
 
    return result;
 }
+
 
 bool CTioEpub::load (const QString &fn)
 {

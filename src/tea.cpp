@@ -423,6 +423,7 @@ void CTEA::closeEvent (QCloseEvent *event)
   qstring_save (fname_fif, sl_fif_history.join ("\n"));
 
   hash_save_keyval (fname_autosaving_files, documents->autosave_files);
+
 #ifdef SPEECH_ENABLE
   speech.done();
 #endif
@@ -4751,6 +4752,7 @@ void CTEA::fn_quotes_tex_angle_02()
 
 
 #ifdef SPEECH_ENABLE
+
 void CTEA::fn_speech_say_selection()
 {
   last_action = sender();
@@ -4770,17 +4772,42 @@ void CTEA::fn_speech_say_selection()
   if (text.isEmpty())
      return;
 
-
- // std::string s = text.toStdString();
-
-  //speech.say (s.c_str());
-
-   qDebug() << text;
-
-    speech.say (text.toUtf8().data());
-
+  speech.say (text.toUtf8().data());
 }
+
+
+
+void CTEA::cb_locale_only_stateChanged (int state)
+{
+  if (state == Qt::Unchecked)
+      speech.locale_only = 0;
+  else
+      speech.locale_only = 1;
+
+   speech.get_voices (speech.locale_only);
+
+   speech.current_voice_index = 0;
+
+   if (speech.voices.size() != 0)
+      {
+       cmb_cpeech_voices->clear();
+
+       for (int i = 0; i < speech.voices.size(); i++)
+          {
+           QString item = QString::fromStdString (speech.voices.at(i));
+           cmb_cpeech_voices->addItem(item);
+          }
+
+      }
+
+
+   speech.set_voice_by_index (0);
+   cmb_cpeech_voices->setCurrentIndex (0);
+}
+
+
 #endif
+
 
 #if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
 
@@ -7018,7 +7045,7 @@ File menu
   menu_file = menuBar()->addMenu (tr ("File"));
   menu_file->setTearOffEnabled (true);
 
-  menu_file->addAction (act_test);
+  //menu_file->addAction (act_test);
 
   menu_file->addAction (newAct);
   add_to_menu (menu_file, tr ("Open"), SLOT(file_open()), "Ctrl+O", get_theme_icon_fname ("file-open.png"));
@@ -7381,8 +7408,7 @@ Functions menu
 
   tm = menu_functions->addMenu (tr ("Speech"));
   tm->setTearOffEnabled (true);
-
-  add_to_menu (tm, tr ("Say the selected"), SLOT(fn_speech_say_selection()));
+  add_to_menu (tm, tr ("Say the selected text"), SLOT(fn_speech_say_selection()));
 
 #endif
 
@@ -8192,6 +8218,10 @@ OPTIONS::IMAGES
   cb_locale_only->setChecked (settings->value ("locale_only", 1).toBool());
   page_speech_layout->addWidget (cb_locale_only);
 
+  connect (cb_locale_only, SIGNAL(stateChanged(int)),
+           this, SLOT(cb_locale_only_stateChanged(int)));
+
+
   cmb_cpeech_voices = new_combobox_from_vector (page_speech_layout,
                                                 tr ("Speach voice"),
                                                 speech.voices,
@@ -8200,9 +8230,8 @@ OPTIONS::IMAGES
   connect (cmb_cpeech_voices, SIGNAL(currentIndexChanged(int)),
            this, SLOT(cmb_cpeech_voices_currentIndexChanged(int)));
 
-
-
   idx_tab_speech = tab_options->addTab (page_speech, tr ("Speech"));
+
 #endif
 
 /*
@@ -8354,17 +8383,20 @@ void CTEA::create_speech()
   if (! settings->value ("speech_enabled", false).toBool())
      return;
 
+  //else init
+
   speech.init ("tea");
 
   speech.get_voices (speech.locale_only);
 
   speech.current_voice_index = settings->value ("current_voice_index", 0).toInt();
-  speech.set_voice_by_index (speech.current_voice_index);
+
+  if (speech.current_voice_index < speech.voices.size() && speech.current_voice_index > -1)
+      speech.set_voice_by_index (speech.current_voice_index);
 
   qDebug() << "speech.voices.size(): " << speech.voices.size();
 
   qDebug() << "---------CTEA::create_speech()--------2";
-
 }
 
 #endif
@@ -9780,9 +9812,8 @@ void CTEA::leaving_options()
 
 //РАЗОБРАТЬСЯ В ПЕРЕЗАГРУЗКОЙ ГОЛОСОВ НА УРОВНЕ НАЖАТИЯ НА ЧЕКБОКСЫ
 
-
-  settings->setValue ("current_voice_index", cmb_cpeech_voices->currentIndex());
   speech.current_voice_index = cmb_cpeech_voices->currentIndex();
+  settings->setValue ("current_voice_index", speech.current_voice_index);
 
 
 

@@ -1069,6 +1069,7 @@ Tune page callbacks
 #ifdef SPEECH_ENABLE
 
   void cmb_cpeech_voices_currentIndexChanged (int i);
+  void cb_locale_only_stateChanged (int state);
 
 #endif
 

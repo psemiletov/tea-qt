@@ -4803,14 +4803,6 @@ void CTEA::fn_speech_pause_resume()
   if (! speech.initialized)
      return;
 
-  //CDocument *d = documents->get_current();
-//  if (! d)
-  //   return;
-
-  //QString text = d->get();
-  //if (text.isEmpty())
-    // return;
-
   if (g_state == SPCH_STATE_PAUSED)
      speech.resume();
   else speech.pause();

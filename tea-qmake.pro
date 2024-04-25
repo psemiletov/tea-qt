@@ -114,11 +114,11 @@ SOURCES += src/tea.cpp \
     src/logmemo.cpp \
     src/img_viewer.cpp \
     src/tio.cpp \
-    src/tzipper.cpp \
     src/single_application_shared.cpp \
     src/exif_reader.cpp \
     src/myjoystick.cpp \
-    src/pugixml.cpp
+    src/pugixml.cpp \
+    src/zip.c
 
 
 HEADERS += src/tea.h \
@@ -136,38 +136,14 @@ HEADERS += src/tea.h \
     src/gui_utils.h \
     src/wavinfo.h \
     src/tio.h \
-    src/tzipper.h \
     src/single_application_shared.h \
     src/exif_reader.h \
     src/myjoystick.h \
     src/pugixml.hpp \
     src/pugiconfig.hpp \
-    src/miniz.h
+    src/miniz.h \
+    src/zip.h
 
-
-HEADERS += \
-        src/ioapi.h \
-        src/quagzipfile.h \
-        src/quaziodevice.h \
-        src/quazipdir.h \
-        src/quazipfile.h \
-        src/quazipfileinfo.h \
-        src/quazip_global.h \
-        src/quazip.h \
-        src/quazipnewinfo.h \
-        src/unzip.h \
-        src/zip.h
-
-SOURCES += src/qioapi.cpp \
-           src/quagzipfile.cpp \
-           src/quaziodevice.cpp \
-           src/quazip.cpp \
-           src/quazipdir.cpp \
-           src/quazipfile.cpp \
-           src/quazipfileinfo.cpp \
-           src/quazipnewinfo.cpp \
-           src/unzip.c \
-           src/zip.c
 
 
 TEMPLATE = app
@@ -267,10 +243,10 @@ icons/tea-icon-v3-03.png
 
 
 unix: {
-       system (pkg-config --exists zlib) {
-               message ("Zlib found")
-               PKGCONFIG += zlib
-               }
+#       system (pkg-config --exists zlib) {
+#               message ("Zlib found")
+#               PKGCONFIG += zlib
+#               }
 
        contains (USE_ASPELL,true) {
                 exists ("/usr/include/aspell.h") {
@@ -291,9 +267,9 @@ unix: {
 
 
 usepoppler{
-system(pkg-config --exists poppler-qt5) {
+system(pkg-config --exists poppler-cpp) {
     message ("Poppler enabled")
-        PKGCONFIG += poppler-qt5
+        PKGCONFIG += poppler-cpp
         DEFINES += POPPLER_ENABLE
         }
 }
@@ -317,7 +293,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
        message ("QT > 4")
 
-       LIBS += zlib1.dll
+#       LIBS += zlib1.dll
 
         contains(USE_ASPELL,true)
                  {
@@ -349,9 +325,9 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                 }
 
   } else {
-   LIBS += zlib1.dll
+#   LIBS += zlib1.dll
 
-   INCLUDEPATH+=c:\\Qt\\4.8.4\\src\\3rdparty\\zlib     
+#   INCLUDEPATH+=c:\\Qt\\4.8.4\\src\\3rdparty\\zlib
 
         contains(USE_ASPELL,true)
                  {
@@ -379,10 +355,10 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 os2: {
 
-system(pkg-config --exists zlib) {
-    message ("Zlib found")
-        PKGCONFIG += zlib
-        }
+#system(pkg-config --exists zlib) {
+#    message ("Zlib found")
+#        PKGCONFIG += zlib
+#        }
 
 
 contains(USE_ASPELL,true){
@@ -404,9 +380,9 @@ message ("hunspell enabled")
                 }
 
 usepoppler{
-system(pkg-config --exists poppler-qt5) {
+system(pkg-config --exists poppler-cpp) {
     message ("Poppler enabled")
-        PKGCONFIG += poppler-qt5
+        PKGCONFIG += poppler-cpp
         DEFINES += POPPLER_ENABLE
         }
 }

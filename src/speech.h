@@ -46,6 +46,8 @@ class CSpeech
 
   int locale_only;
 
+  //int state;
+
   SPDConnection *spd_connection;
 
   std::vector <std::string> voices; //module-specific

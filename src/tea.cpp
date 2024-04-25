@@ -104,6 +104,7 @@ extern bool b_recent_off;
 extern bool b_destroying_all;
 extern int recent_list_max_items;
 extern bool boring;
+extern int g_state;
 
 
 CTEA *main_window;
@@ -789,7 +790,7 @@ void CTEA::fman_del_bmk()
 
   //else TEA places
 
-  qDebug() << "TEA places, i: " << i;
+//  qDebug() << "TEA places, i: " << i;
 
   QString s = lv_places->item(i)->text();
   if (s.isEmpty())
@@ -4760,9 +4761,9 @@ void CTEA::fn_speech_say_selection()
   if (! speech.initialized)
      return;
 
-  qDebug() << "speech.locale_name: " << speech.locale_name;
-  qDebug() << "speech.language_name: " << speech.language_name;
-  qDebug() << "voice: " << speech.voices [speech.current_voice_index];
+//  qDebug() << "speech.locale_name: " << speech.locale_name;
+//  qDebug() << "speech.language_name: " << speech.language_name;
+//  qDebug() << "voice: " << speech.voices [speech.current_voice_index];
 
   CDocument *d = documents->get_current();
   if (! d)
@@ -4775,6 +4776,47 @@ void CTEA::fn_speech_say_selection()
   speech.say (text.toUtf8().data());
 }
 
+
+void CTEA::fn_speech_stop()
+{
+  last_action = sender();
+
+  if (! speech.initialized)
+     return;
+
+  CDocument *d = documents->get_current();
+  if (! d)
+     return;
+
+  //QString text = d->get();
+  //if (text.isEmpty())
+    // return;
+
+  speech.stop();
+}
+
+
+void CTEA::fn_speech_pause_resume()
+{
+  last_action = sender();
+
+  if (! speech.initialized)
+     return;
+
+  //CDocument *d = documents->get_current();
+//  if (! d)
+  //   return;
+
+  //QString text = d->get();
+  //if (text.isEmpty())
+    // return;
+
+  if (g_state == SPCH_STATE_PAUSED)
+     speech.resume();
+  else speech.pause();
+
+ //speech.stop();
+}
 
 
 void CTEA::cb_locale_only_stateChanged (int state)
@@ -7409,6 +7451,8 @@ Functions menu
   tm = menu_functions->addMenu (tr ("Speech"));
   tm->setTearOffEnabled (true);
   add_to_menu (tm, tr ("Say the selected text"), SLOT(fn_speech_say_selection()));
+  add_to_menu (tm, tr ("Speech pause/resume"), SLOT(fn_speech_pause_resume()));
+  add_to_menu (tm, tr ("Stop speech"), SLOT(fn_speech_stop()));
 
 #endif
 

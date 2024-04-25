@@ -15,6 +15,31 @@ this code is Public Domain
 
 
 
+/*
+void create_menu_from_list (QObject *handler,
+                            QMenu *menu,
+                            const QStringList &list,
+                            const char *method
+                           )
+{
+  menu->setTearOffEnabled (true);
+
+  for (QList <QString>::const_iterator i = list.begin(); i != list.end(); ++i)
+      {
+       if (! i->startsWith ("#"))
+          {
+            QAction *act = new QAction (*i, menu);
+            act->setData (*i);
+
+           //QAction *act = menu->addAction (*i);
+           //act->setData (*i);
+           handler->connect (act, SIGNAL(triggered()), handler, method);
+           menu->addAction (act);
+          }
+      }
+}
+*/
+
 void create_menu_from_list (QObject *handler,
                             QMenu *menu,
                             const QStringList &list,

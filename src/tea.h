@@ -546,6 +546,7 @@ public:
 
 #ifdef SPEECH_ENABLE
    void create_speech();
+
 #endif
 
   void create_manual();
@@ -893,6 +894,8 @@ Fn menu callbacks
 
 #ifdef SPEECH_ENABLE
   void fn_speech_say_selection();
+  void fn_speech_stop();
+  void fn_speech_pause_resume();
 
 
 #endif

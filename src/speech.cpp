@@ -35,10 +35,14 @@ void f_signal_handler (int signal)
 void cbk_end_of_speech (size_t msg_id, size_t client_id, SPDNotificationType type)
 {
 
-  if (type == SPD_EVENT_END)
-       g_position++;
+ //if (type == SPD_EVENT_END)
+     //  g_position++;
 
 //  sem_post(&g_semaphore);
+
+ if (type == SPD_EVENT_END)
+    g_state = SPCH_STATE_STOPPED;
+
 
 }
 
@@ -61,7 +65,10 @@ CSpeech::CSpeech()
   spd_connection = 0;
   locale_only = 0;
 
+
   current_voice_index = -1;
+
+  //g_state = SPCH_STATE_STOPPED;
 
   g_state = SPCH_STATE_STOPPED;
 
@@ -209,7 +216,10 @@ void CSpeech::resume()
   if (! initialized)
      return;
 
-   if (spd_resume (spd_connection) != -1)
+  if (! g_state == SPCH_STATE_PAUSED)
+      return;
+
+  if (spd_resume (spd_connection) != -1)
       g_state = SPCH_STATE_SAYING;
 }
 

@@ -100,6 +100,9 @@ DJVU read code taken fromdvutxt.c:
 #include "textproc.h"
 #include "zip.h"
 
+#include "enc.h"
+
+
 using namespace std;
 
 extern QSettings *settings;
@@ -150,23 +153,23 @@ std::string html_strip (const std::string &source)
 
   while (html.find ("<") != std::string::npos)
         {
-         auto startpos = html.find("<");
-         auto endpos = html.find(">") + 1;
+         auto startpos = html.find ("<");
+         auto endpos = html.find (">") + 1;
 
          if (endpos != std::string::npos)
-            html.erase(startpos, endpos - startpos);
+            html.erase (startpos, endpos - startpos);
         }
 
   return html;
 }
 
 
-template <typename T>
-void remove_duplicates(std::vector<T>& vec)
+template <typename T> void remove_duplicates(std::vector<T>& vec)
 {
   std::sort(vec.begin(), vec.end());
   vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
 }
+
 
 std::vector <std::string> extract_hrefs (const std::string &source, const std::string &prefix)
 {
@@ -292,9 +295,51 @@ bool CTioPlainText::load (const QString &fname)
 
   file.seek(0);
 
+  /*
   QByteArray ba = file.readAll();
   QTextCodec *codec = QTextCodec::codecForName (charset.toUtf8().data());
   data = codec->toUnicode (ba);
+*/
+
+  QByteArray ba = file.readAll();
+
+  qDebug() << "charset:" << charset;
+
+//ok
+  if (charset == "UTF-8")
+     {
+      //ushort* filedata = TextConverter::ConvertFromUTF8ToUTF16 (ba.data());
+      //data = QString::fromUtf16 (filedata);
+      //delete [] filedata;
+      data = QString::fromUtf8 (ba.data());
+
+     }
+
+ if (charset == "UTF-16")
+     data = QString::fromUtf16 ((UTF16TEXT *)ba.data());
+
+
+  //ok
+  if (charset == "CP-1251")
+     {
+      UTF16TEXT* filedata = CTextConverter::ConvertFromCP1251ToUTF16 (ba.data());
+      data = QString::fromUtf16 (filedata);
+      delete [] filedata;
+     }
+
+
+  if (charset == "IBM866")
+     {
+      UTF16TEXT* filedata = CTextConverter::ConvertFromDOS866ToUTF16 (ba.data());
+      data = QString::fromUtf16 (filedata);
+
+     // std::cout << *filedata << std::endl;
+   //   qDebug() << ba.data();
+  //    std::wcout << reinterpret_cast<wchar_t*>(filedata) << std::endl;
+
+      delete [] filedata;
+     }
+
 
   if (eol == "\r\n")
      data.replace (eol, "\n");
@@ -317,13 +362,45 @@ bool CTioPlainText::save (const QString &fname)
       return false;
      }
 
-  QTextCodec *codec = QTextCodec::codecForName(charset.toUtf8().data());
-  QByteArray ba = codec->fromUnicode(data);
 
-  file.write(ba);
-  file.close();
+   qDebug() << "Saving at encoding: " << charset;
+//  QTextCodec *codec = QTextCodec::codecForName(charset.toUtf8().data());
+//  QByteArray ba = codec->fromUnicode(data);
 
-  return true;
+  if (charset == "UTF-8")
+    {
+     QByteArray ba = data.toUtf8();
+     file.write(ba);
+     file.close();
+     return true;
+    }
+
+
+  if (charset == "UTF-16")
+    {
+     QByteArray ba = QByteArray((const char*)data.utf16(), (data.length() + 1) * 2);
+     file.write (ba);
+     file.close();
+     return true;
+    }
+
+    //не работает
+  if (charset == "CP-1251")
+    {
+//     char* text = CTextConverter::ConvertFromUTF16ToDOS866 ((UTF16TEXT*)data.utf16());
+
+     char* text = CTextConverter::ConvertFromUTF16ToCP1251 ((UTF16TEXT*)data.utf16());
+
+
+     file.write (text);
+     file.close();
+
+     delete [] text;
+
+     return true;
+    }
+
+  return false;
 }
 
 

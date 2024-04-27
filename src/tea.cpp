@@ -83,7 +83,7 @@ C++/Qt branch started at 08 November 2007
 #include "exif_reader.h"
 
 #include "spellchecker.h"
-
+#include "enc.h"
 
 //′
 const int UQS = 8242;
@@ -406,7 +406,7 @@ void CTEA::closeEvent (QCloseEvent *event)
   if (main_tab_widget->currentIndex() == idx_tab_tune)
      leaving_options();
 
-  qstring_save (dir_config + "/last_used_charsets", sl_last_used_charsets.join ("\n").trimmed());
+ // qstring_save (dir_config + "/last_used_charsets", sl_last_used_charsets.join ("\n").trimmed());
 
   if (settings->value("session_restore", false).toBool())
      {
@@ -734,7 +734,7 @@ void CTEA::fman_file_activated (const QString &full_path)
   if (d)
       charset = d->charset;
 
-  add_to_last_used_charsets (cb_fman_codecs->currentText());
+  //add_to_last_used_charsets (cb_fman_codecs->currentText());
   main_tab_widget->setCurrentIndex (idx_tab_edit);
 }
 
@@ -815,7 +815,7 @@ void CTEA::fman_open()
       if (d)
          {
           charset = d->charset;
-          add_to_last_used_charsets (cb_fman_codecs->currentText());
+          //add_to_last_used_charsets (cb_fman_codecs->currentText());
           main_tab_widget->setCurrentIndex (idx_tab_edit);
          }
 
@@ -831,7 +831,7 @@ void CTEA::fman_open()
       if (d)
          {
           charset = d->charset;
-          add_to_last_used_charsets (cb_fman_codecs->currentText());
+          //add_to_last_used_charsets (cb_fman_codecs->currentText());
           main_tab_widget->setCurrentIndex (idx_tab_edit);
          }
 
@@ -853,7 +853,7 @@ void CTEA::fman_open()
            }
       }
 
-  add_to_last_used_charsets (cb_fman_codecs->currentText());
+  //add_to_last_used_charsets (cb_fman_codecs->currentText());
 
   if (opened)
      main_tab_widget->setCurrentIndex (idx_tab_edit);
@@ -914,10 +914,12 @@ void CTEA::cb_button_saves_as()
          return;
 
 
+   qDebug() << "CTEA::cb_button_saves_as(): " << filename << " - " <<  cb_fman_codecs->currentText();
+
   d->file_save_with_name (filename, cb_fman_codecs->currentText());
   d->set_markup_mode();
 
-  add_to_last_used_charsets (cb_fman_codecs->currentText());
+  //add_to_last_used_charsets (cb_fman_codecs->currentText());
 
   d->set_hl();
 
@@ -1199,9 +1201,9 @@ void CTEA::file_open()
   dialog.layout()->addWidget (l);
   dialog.layout()->addWidget (cb_codecs);
 
-  if (sl_last_used_charsets.size () > 0)
-     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
-  else
+  //if (sl_last_used_charsets.size () > 0)
+//     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
+//  else
      {
       cb_codecs->addItems (sl_charsets);
       cb_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
@@ -1221,7 +1223,7 @@ void CTEA::file_open()
            if (dc)
                charset = dc->charset;
 
-           add_to_last_used_charsets (cb_codecs->currentText());
+          // add_to_last_used_charsets (cb_codecs->currentText());
           }
      }
   else
@@ -1448,9 +1450,9 @@ bool CTEA::file_save_as()
   dialog.layout()->addWidget (l);
   dialog.layout()->addWidget (cb_codecs);
 
-  if (sl_last_used_charsets.size () > 0)
-     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
-  else
+  //if (sl_last_used_charsets.size () > 0)
+//     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
+//  else
      {
       cb_codecs->addItems (sl_charsets);
       cb_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
@@ -1479,7 +1481,7 @@ bool CTEA::file_save_as()
       d->set_markup_mode();
       d->set_hl();
 
-      add_to_last_used_charsets (cb_codecs->currentText());
+//      add_to_last_used_charsets (cb_codecs->currentText());
       update_dyn_menus();
 
       QFileInfo f (d->file_name);
@@ -1590,9 +1592,9 @@ void CTEA::file_reload_enc()
 
   CTextListWnd *w = new CTextListWnd (tr ("Reload with encoding"), tr ("Charset"));
 
-  if (sl_last_used_charsets.size () > 0)
-     w->list->addItems (sl_last_used_charsets + sl_charsets);
-  else
+  //if (sl_last_used_charsets.size () > 0)
+//     w->list->addItems (sl_last_used_charsets + sl_charsets);
+//  else
       w->list->addItems (sl_charsets);
 
   connect (w->list, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
@@ -8545,9 +8547,9 @@ void CTEA::create_fman()
 
   cb_fman_codecs = new QComboBox;
 
-  if (sl_last_used_charsets.size () > 0)
-     cb_fman_codecs->addItems (sl_last_used_charsets + sl_charsets);
-  else
+  //if (sl_last_used_charsets.size () > 0)
+//     cb_fman_codecs->addItems (sl_last_used_charsets + sl_charsets);
+  //else
      {
       cb_fman_codecs->addItems (sl_charsets);
       cb_fman_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
@@ -9155,19 +9157,21 @@ void CTEA::update_logmemo_palette()
 
 void CTEA::update_charsets()
 {
-  QString fname  = dir_config + "/last_used_charsets";
+ // QString fname  = dir_config + "/last_used_charsets";
 
-  if (! file_exists (fname))
-     qstring_save (fname, "UTF-8");
+//  if (! file_exists (fname))
+//     qstring_save (fname, "UTF-8");
 
-  sl_last_used_charsets = qstring_load (fname).split ("\n");
+//  sl_last_used_charsets = qstring_load (fname).split ("\n");
 
-  QList<QByteArray> acodecs = QTextCodec::availableCodecs();
+//  QList<QByteArray> acodecs = QTextCodec::availableCodecs();
 
-  for (QList <QByteArray>::iterator codec = acodecs.begin(); codec != acodecs.end(); ++codec)
-      sl_charsets.prepend ((*codec));
+  //for (QList <QByteArray>::iterator codec = acodecs.begin(); codec != acodecs.end(); ++codec)
+    //  sl_charsets.prepend ((*codec));
 
-  sl_charsets.sort();
+ sl_charsets = CTextConverter::get_charsets();
+
+//  sl_charsets.sort();
 }
 
 
@@ -9943,7 +9947,7 @@ void CTEA::leaving_options()
   documents->apply_settings();
 }
 
-
+/*
 void CTEA::add_to_last_used_charsets (const QString &s)
 {
   int i = sl_last_used_charsets.indexOf (s);
@@ -9955,7 +9959,7 @@ void CTEA::add_to_last_used_charsets (const QString &s)
   if (sl_last_used_charsets.size() > 3)
      sl_last_used_charsets.removeLast();
 }
-
+*/
 
 void CTEA::count_substring (bool use_regexp)
 {

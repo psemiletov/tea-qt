@@ -69,8 +69,8 @@ QStringList read_dir_entries (const QString &path);
 
 /* io utils */
 
-bool qstring_save (const QString &fileName, const QString &data, const char *enc = "UTF-8");
-QString qstring_load (const QString &fileName, const char *enc = "UTF-8");
+bool qstring_save (const QString &fileName, const QString &data, const QString &enc = "UTF-8");
+QString qstring_load (const QString &fileName, const QString &enc = "UTF-8");
 QString qstring_load_first_line (const QString &fileName);
 QByteArray file_load (const QString &fileName);
 

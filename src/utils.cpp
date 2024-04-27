@@ -17,6 +17,7 @@ Peter Semiletov
 #include <fstream>
 
 #include "utils.h"
+#include "enc.h"
 
 using namespace std;
 
@@ -174,6 +175,58 @@ QStringList read_dir_entries (const QString &path)
 
 /* io utils */
 
+
+bool qstring_save (const QString &fileName, const QString &data, const QString &enc)
+{
+  if (fileName.isEmpty())
+      return false;
+
+  QFile file (fileName);
+  if (! file.open (QFile::WriteOnly))
+      return false;
+
+  if (enc == "UTF-8")
+    {
+     QByteArray ba = data.toUtf8();
+     file.write (ba);
+     file.close();
+     return true;
+    }
+
+
+
+  return false;
+}
+
+
+QString qstring_load (const QString &fileName, const QString &enc)
+{
+  if (fileName.isEmpty())
+      return QString();
+
+  QFile file (fileName);
+  QString result;
+
+  if (! file.open (QFile::ReadOnly))
+      return QString();
+
+  QByteArray ba = file.readAll();
+  file.close();
+
+
+  if (enc == "UTF-8")
+      result = QString::fromUtf8 (ba.data());
+
+  if (enc == "UTF-16")
+      result = QString::fromUtf16 ((char16_t *)ba.data());
+
+
+  return result;
+}
+
+
+
+/*
 bool qstring_save (const QString &fileName, const QString &data, const char *enc)
 {
   if (fileName.isEmpty())
@@ -217,7 +270,7 @@ QString qstring_load (const QString &fileName, const char *enc)
 
   return codec->toUnicode (ba);
 }
-
+*/
 
 QString qstring_load_first_line (const QString &fileName)
 {

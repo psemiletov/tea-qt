@@ -170,7 +170,7 @@ Variables
   QStringList sl_places_bmx;
   QStringList sl_urls;
   QStringList sl_charsets;
-  QStringList sl_last_used_charsets;
+  //QStringList sl_last_used_charsets;
   QStringList sl_fif_history;
   //QStringList sl_gtk_bookmarks;
 
@@ -612,7 +612,7 @@ Application misc. methods
   QString get_theme_icon_fname (const QString &name);
 
   void leaving_options();
-  void add_to_last_used_charsets (const QString &s);
+//  void add_to_last_used_charsets (const QString &s);
   void count_substring (bool use_regexp);
   void run_unitaz (int mode);
   void markup_text (const QString &mode);

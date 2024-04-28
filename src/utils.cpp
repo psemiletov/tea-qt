@@ -6,7 +6,7 @@ Peter Semiletov
 
 
 #include <QTextStream>
-#include <QTextCodec>
+//#include <QTextCodec>
 #include <QDebug>
 #include <QDir>
 #include <QImageReader>

@@ -55,7 +55,7 @@ C++/Qt branch started at 08 November 2007
 #include <QGroupBox>
 #include <QImageWriter>
 #include <QColorDialog>
-#include <QTextCodec>
+//#include <QTextCodec>
 #include <QMimeData>
 #include <QScrollArea>
 #include <QXmlStreamReader>
@@ -9447,8 +9447,10 @@ void CTEA::process_readyReadStandardOutput()
 {
   QProcess *p = qobject_cast<QProcess *>(sender());
   QByteArray a = p->readAllStandardOutput()/*.data()*/;
-  QTextCodec *c = QTextCodec::codecForLocale();
-  QString t = c->toUnicode (a);
+//  QTextCodec *c = QTextCodec::codecForLocale();
+ // QString t = c->toUnicode (a);
+  QString t = QString::fromUtf8 (a.data());
+
 
   log->terminal_output = true;
   log->log (t);

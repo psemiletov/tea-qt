@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2021 by Peter Semiletov                                          *
+ *   2007-2024 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,13 +31,14 @@
 #endif
 
 
-#include <QTextCodec>
+//#include <QTextCodec>
 #include <QDir>
 #include <QMessageBox>
 #include <QObject>
 
 #include "spellchecker.h"
 #include "utils.h"
+#include "enc.h"
 
 
 #ifdef ASPELL_ENABLE
@@ -303,6 +304,10 @@ void CHunspellChecker::load_dict()
   encoding = speller->get_dic_encoding();
 #else
   str_encoding = speller->get_dict_encoding();
+
+ // std::cout << "str_encoding : " << str_encoding << std::endl;
+  qDebug() << "str_encoding : " << str_encoding;
+
 #endif
 
 
@@ -367,14 +372,16 @@ void CHunspellChecker::add_to_user_dict (const QString &word)
 {
   if (! loaded || word.isEmpty())
      return;
-
+/*
 #if !defined (H_DEPRECATED)
   QTextCodec *codec = QTextCodec::codecForName (encoding);
 #else
   QTextCodec *codec = QTextCodec::codecForName (str_encoding.data());
 #endif
 
-  QByteArray es = codec->fromUnicode (word);
+  QByteArray es = codec->fromUnicode (word);*/
+
+  QByteArray es = word.toUtf8();
   speller->add (es.data());
   user_words.append (word);
   save_user_dict();
@@ -391,14 +398,16 @@ bool CHunspellChecker::check (const QString &word)
 
   if (! loaded)
      load_dict();
-
+/*
 #if ! defined (H_DEPRECATED)
  QTextCodec *codec = QTextCodec::codecForName (encoding);
 #else
  QTextCodec *codec = QTextCodec::codecForName (str_encoding.data());
 #endif
+*/
+ //QByteArray es = codec->fromUnicode (word);
 
- QByteArray es = codec->fromUnicode (word);
+  QByteArray es = word.toUtf8();
 
 #ifndef H_DEPRECATED
    return speller->spell (es.constData());
@@ -413,14 +422,17 @@ void CHunspellChecker::remove_from_user_dict (const QString &word)
 {
   if (! loaded || word.isEmpty())
       return;
-
+/*
 #ifndef H_DEPRECATED
   QTextCodec *codec = QTextCodec::codecForName (encoding);
 #else
  QTextCodec *codec = QTextCodec::codecForName (str_encoding.data());
 #endif
+*/
+//  QByteArray es = codec->fromUnicode (word);
 
-  QByteArray es = codec->fromUnicode (word);
+  QByteArray es = word.toUtf8();
+
   speller->remove (es.data());
   int i = user_words.indexOf (word);
   if (i != -1)
@@ -459,7 +471,7 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 
   if (! loaded || word.isEmpty())
      return sl;
-
+/*
 #if !defined (H_DEPRECATED)
   QTextCodec *codec = QTextCodec::codecForName (encoding);
 #else
@@ -467,6 +479,9 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
 #endif
 
   QByteArray es = codec->fromUnicode (word);
+*/
+
+  QByteArray es = word.toUtf8();
 
 #ifndef H_DEPRECATED
   char **slst;
@@ -474,7 +489,8 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
   int size = speller->suggest (&slst, es.data());
 
   for (int i = 0; i < size; i++)
-      sl.append (codec->toUnicode (slst[i]));
+     //sl.append (codec->toUnicode (slst[i]));
+     sl.append (QString::fromUtf8 slst[i]);
 
   speller->free_list (&slst, size);
 

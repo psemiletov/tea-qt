@@ -54,7 +54,7 @@ DJVU read code taken fromdvutxt.c:
 #include <QDataStream>
 #include <QTextStream>
 #include <QDebug>
-#include <QTextCodec>
+//#include <QTextCodec>
 #include <QTextBrowser>
 #include <QSettings>
 
@@ -705,7 +705,7 @@ bool is_valid_utf8 (const char *string)
 QString CCharsetMagic::guess_for_file (const QString &fname)
 {
   QString enc = "UTF-8";
-
+/*
   QByteArray bafile = file_load (fname);
   QString ext = file_get_ext (fname);
 
@@ -731,7 +731,7 @@ QString CCharsetMagic::guess_for_file (const QString &fname)
                    return enc;
                   }
               }
-
+*/
   return enc;
 }
 
@@ -1088,11 +1088,11 @@ CTioRTF::CTioRTF()
   extensions.append ("rtf");
 }
 
-
+//BROKEN
 bool CTioRTF::load (const QString &fname)
 {
   QByteArray ba = file_load (fname);
-
+/*
   QString text;
   text.reserve (ba.size());
 
@@ -1150,7 +1150,9 @@ bool CTioRTF::load (const QString &fname)
 
   data = rtf_strip (text);
 
-  return true;
+  return true;*/
+
+  return false;
 }
 
 #if defined (POPPLER_ENABLE)

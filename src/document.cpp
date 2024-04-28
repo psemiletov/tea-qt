@@ -41,7 +41,7 @@ code from qwriter:
 #include <bitset>
 #include <algorithm>
 
-#include <QTextCodec>
+//#include <QTextCodec>
 #include <QApplication>
 #include <QClipboard>
 #include <QSettings>
@@ -1529,14 +1529,16 @@ bool CDocument::file_save_with_name_plain (const QString &fileName)
   if (! file.open (QFile::WriteOnly))
       return false;
 
-  QTextCodec *codec = QTextCodec::codecForName (charset.toUtf8().data());
-  if (! codec)
-     return false;
 
-  QByteArray ba = codec->fromUnicode (toPlainText());
+  file_save_with_name (fileName, charset);
+  //QTextCodec *codec = QTextCodec::codecForName (charset.toUtf8().data());
+  //if (! codec)
+    // return false;
 
-  file.write (ba);
-  file.close();
+  //QByteArray ba = codec->fromUnicode (toPlainText());
+
+  //file.write (ba);
+  //file.close();
 
   holder->update_current_files_menu();
 

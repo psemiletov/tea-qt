@@ -328,16 +328,16 @@ bool CTioPlainText::load (const QString &fname)
      }
 
 
-  if (charset == "IBM866")
+  if (charset == "CP-866")
      {
       UTF16TEXT* filedata = CTextConverter::ConvertFromDOS866ToUTF16 (ba.data());
+
       data = QString::fromUtf16 (filedata);
 
+      delete [] filedata;
      // std::cout << *filedata << std::endl;
    //   qDebug() << ba.data();
   //    std::wcout << reinterpret_cast<wchar_t*>(filedata) << std::endl;
-
-      delete [] filedata;
      }
 
 

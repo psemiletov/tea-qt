@@ -1204,10 +1204,15 @@ void CTEA::file_open()
   //if (sl_last_used_charsets.size () > 0)
 //     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
 //  else
-     {
-      cb_codecs->addItems (sl_charsets);
-      cb_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
-     }
+
+  cb_codecs->addItems (sl_charsets);
+
+  int charset_index = sl_charsets.indexOf ("UTF-8");
+  if (charset_index == -1)
+     charset_index = 0;
+
+  cb_codecs->setCurrentIndex (charset_index);
+
 
   QStringList fileNames;
 
@@ -1453,10 +1458,14 @@ bool CTEA::file_save_as()
   //if (sl_last_used_charsets.size () > 0)
 //     cb_codecs->addItems (sl_last_used_charsets + sl_charsets);
 //  else
-     {
-      cb_codecs->addItems (sl_charsets);
-      cb_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
-     }
+
+  int charset_index = sl_charsets.indexOf ("UTF-8");
+  if (charset_index == -1)
+     charset_index = 0;
+
+
+  cb_codecs->addItems (sl_charsets);
+  cb_codecs->setCurrentIndex (charset_index);
 
   if (dialog.exec())
      {
@@ -2817,7 +2826,7 @@ void CTEA::search_in_files()
      return;
 
   QStringList lresult;
-  QString charset = cb_fman_codecs->currentText();
+  QString search_charset = cb_fman_codecs->currentText();
   QString path = fman->dir.path();
 
   CFTypeChecker fc;
@@ -2859,7 +2868,7 @@ void CTEA::search_in_files()
        log->log (fname);
 
        CTio *tio = documents->tio_handler.get_for_fname (fname);
-       tio->charset = charset;
+       tio->charset = search_charset;
 
        if (! tio->load (fname))
            log->log (tr ("cannot open %1 because of: %2")
@@ -2969,11 +2978,13 @@ void CTEA::search_replace_all()
           if (sl.size() < 1)
              return;
 
-          char *charset = cb_fman_codecs->currentText().toLatin1().data();
+         // char *charset = cb_fman_codecs->currentText().toLatin1().data();
+
+           QString search_charset = cb_fman_codecs->currentText();
 
           for (QList <QString>::iterator fname = sl.begin(); fname != sl.end(); ++fname)
               {
-               QString f = qstring_load ((*fname), charset);
+               QString f = qstring_load ((*fname), search_charset);
                QString r;
 
 #if (QT_VERSION_MAJOR < 5)
@@ -2992,7 +3003,7 @@ void CTEA::search_replace_all()
 
 #endif
 
-               qstring_save ((*fname), r, charset);
+               qstring_save ((*fname), r, search_charset);
                log->log (tr ("%1 is processed and saved").arg ((*fname)));
               }
         }
@@ -3319,13 +3330,14 @@ void CTEA::fn_use_table()
           if (sl.size() < 1)
              return;
 
-          char *charset = cb_fman_codecs->currentText().toLatin1().data();
+          //char *charset = cb_fman_codecs->currentText().toLatin1().data();
+          QString search_charset = cb_fman_codecs->currentText();
 
           for (QList <QString>::const_iterator fname = sl.begin(); fname != sl.end(); ++fname)
               {
-               QString f = qstring_load ((*fname), charset);
+               QString f = qstring_load ((*fname), search_charset);
                QString r = apply_table (f, a->data().toString(), menu_find_regexp->isChecked());
-               qstring_save ((*fname), r, charset);
+               qstring_save ((*fname), r, search_charset);
                log->log (tr ("%1 is processed and saved").arg ((*fname)));
               }
          }
@@ -6566,7 +6578,7 @@ void CTEA::handle_args()
   if (size < 2)
      return;
 
-  QString charset = settings->value ("cmdline_default_charset", "UTF-8").toString();//"UTF-8";
+  QString cmdline_charset = settings->value ("cmdline_default_charset", "UTF-8").toString();//"UTF-8";
 
   for (int i = 1; i < size; i++)
       {
@@ -6575,7 +6587,7 @@ void CTEA::handle_args()
           {
            QStringList pair = t.split ("=");
            if (pair.size() > 1)
-              charset = pair[1];
+              cmdline_charset = pair[1];
           }
        else
            {
@@ -6585,10 +6597,10 @@ void CTEA::handle_args()
                {
                 QString fullname (QDir::currentPath());
                 fullname.append ("/").append (l.at(i));
-                documents->open_file (fullname, charset);
+                documents->open_file (fullname, cmdline_charset);
                }
             else
-                documents->open_file (l.at(i), charset);
+                documents->open_file (l.at(i), cmdline_charset);
           }
       }
 }
@@ -7961,10 +7973,18 @@ OPTIONS::COMMON
   cmb_moon_phase_algos->setToolTip (tr ("0 - Trigonometrical v2, 1 - Trigonometrical v1, 2 - Conway, 3 - Leueshkanov"));
 
 
+  int cmdline_charset_index = sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString());
+
+  if (cmdline_charset_index < 0)
+     cmdline_charset_index = 0;
+
+  if (cmdline_charset_index > sl_charsets.size() - 1)
+     cmdline_charset_index = 0;
+
   cmb_cmdline_default_charset = new_combobox (page_common_layout,
                                               tr ("Charset for file open from command line"),
                                               sl_charsets,
-                                              sl_charsets.indexOf (settings->value ("cmdline_default_charset", "UTF-8").toString()));
+                                              cmdline_charset_index);
 /*
   cmb_zip_charset_in = new_combobox (page_common_layout,
                                      tr ("ZIP unpacking: file names charset"),
@@ -8550,10 +8570,12 @@ void CTEA::create_fman()
   //if (sl_last_used_charsets.size () > 0)
 //     cb_fman_codecs->addItems (sl_last_used_charsets + sl_charsets);
   //else
-     {
-      cb_fman_codecs->addItems (sl_charsets);
-      cb_fman_codecs->setCurrentIndex (sl_charsets.indexOf ("UTF-8"));
-     }
+
+   cb_fman_codecs->addItems (sl_charsets);
+
+   int charset_index = sl_charsets.indexOf ("UTF-8");
+   cb_fman_codecs->setCurrentIndex (charset_index);
+
 
   QPushButton *bt_fman_open = new QPushButton (tr ("Open"), this);
   connect (bt_fman_open, SIGNAL(clicked()), this, SLOT(fman_open()));
@@ -9169,7 +9191,7 @@ void CTEA::update_charsets()
   //for (QList <QByteArray>::iterator codec = acodecs.begin(); codec != acodecs.end(); ++codec)
     //  sl_charsets.prepend ((*codec));
 
- sl_charsets = CTextConverter::get_charsets();
+  sl_charsets = CTextConverter::get_charsets();
 
 //  sl_charsets.sort();
 }

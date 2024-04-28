@@ -1023,7 +1023,7 @@ void CDocument::keyPressEvent (QKeyEvent *event)
 //LCTRL = 2
 //LALT = 3
   //LWIN = 6
-
+/*
   if (settings->value ("wasd", "0").toBool())
      {
       bitset <32> btst (event->nativeModifiers());
@@ -1074,7 +1074,7 @@ void CDocument::keyPressEvent (QKeyEvent *event)
                 }
        }
     }
-
+*/
 
   if (auto_indent && event->key() == Qt::Key_Return)
      {

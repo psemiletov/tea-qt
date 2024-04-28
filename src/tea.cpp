@@ -7900,16 +7900,16 @@ OPTIONS::COMMON
   QWidget *page_common = new QWidget (tab_options);
   QVBoxLayout *page_common_layout = new QVBoxLayout;
   page_common_layout->setAlignment (Qt::AlignTop);
-
+/*
   cb_altmenu = new QCheckBox (tr ("Use Alt key to access main menu"), tab_options);
   cb_altmenu->setChecked (MyProxyStyle::b_altmenu);
 
   connect (cb_altmenu, SIGNAL(stateChanged(int)),
-           this, SLOT(cb_altmenu_stateChanged(int)));
-
+           this, SLOT(cb_altmenu_stateChanged(int)));*/
+/*
   cb_wasd = new QCheckBox (tr ("Use Left Alt + WASD as additional cursor keys"), tab_options);
   cb_wasd->setChecked (settings->value ("wasd", "0").toBool());
-
+*/
 
 #if defined(JOYSTICK_SUPPORTED)
 
@@ -7997,8 +7997,8 @@ OPTIONS::COMMON
                                       sl_charsets,
                                       sl_charsets.indexOf (settings->value ("zip_charset_out", "UTF-8").toString()));
 */
-  page_common_layout->addWidget (cb_altmenu);
-  page_common_layout->addWidget (cb_wasd);
+  //page_common_layout->addWidget (cb_altmenu);
+  //page_common_layout->addWidget (cb_wasd);
 
 #if defined(JOYSTICK_SUPPORTED)
   page_common_layout->addWidget (cb_use_joystick);
@@ -9849,7 +9849,7 @@ void CTEA::leaving_options()
   settings->setValue ("date_format", ed_date_format->text());
   settings->setValue ("time_format", ed_time_format->text());
   settings->setValue ("img_viewer_8156override_command", ed_img_viewer_override->text());
-  settings->setValue ("wasd", cb_wasd->isChecked());
+  //settings->setValue ("wasd", cb_wasd->isChecked());
 
   settings->setValue ("ui_mode", cmb_ui_mode->currentIndex());
 
@@ -10433,7 +10433,7 @@ void CTEA::cb_use_joystick_stateChanged (int state)
 }
 
 #endif
-
+/*
 void CTEA::cb_altmenu_stateChanged (int state)
 {
   if (state == Qt::Unchecked)
@@ -10443,7 +10443,7 @@ void CTEA::cb_altmenu_stateChanged (int state)
 
   settings->setValue ("b_altmenu", MyProxyStyle::b_altmenu);
 }
-
+*/
 
 void CTEA::cmb_ui_tabs_currentIndexChanged (int i)
 {

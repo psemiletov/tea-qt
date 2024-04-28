@@ -436,8 +436,8 @@ Preferences tab :: Common page UI elements
   //QComboBox *cmb_zip_charset_in;
   //QComboBox *cmb_zip_charset_out;
 
-  QCheckBox *cb_altmenu;
-  QCheckBox *cb_wasd;
+  //QCheckBox *cb_altmenu;
+ // QCheckBox *cb_wasd;
 
 #if defined(JOYSTICK_SUPPORTED)
   QCheckBox *cb_use_joystick;
@@ -1056,7 +1056,7 @@ Tune page callbacks
   void cb_use_joystick_stateChanged (int state);
 #endif
 
-  void cb_altmenu_stateChanged (int state);
+  //void cb_altmenu_stateChanged (int state);
   void cmb_ui_tabs_currentIndexChanged (int i);
   void cmb_docs_tabs_currentIndexChanged (int i);
   void cmb_icon_sizes_currentIndexChanged (int i);

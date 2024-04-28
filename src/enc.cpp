@@ -215,7 +215,6 @@ std::map<int, char> UTF16_to_CP1251 = {
 
 
 
-
 UTF16TEXT utf16_to_dos866[65536] = {
     // Для символов в диапазоне от 0x0000 до 0x007F используем ASCII
     // Остальные символы будут преобразованы в соответствующие символы DOS866
@@ -254,28 +253,6 @@ UTF16TEXT utf16_to_dos866[65536] = {
 };
 
 
-/*
-char utf16_to_cp1251[65536] = {
-    // 0x0000 - 0x007F: Соответствуют символам ASCII
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-    32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
-    48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
-    64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
-    80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95,
-    96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
-    // 0x0080 - 0x00FF: Символы CP1251
-    -128, -127, -126, -125, -124, -123, -122, -121, -120, -119, -118, -117, -116, -115, -114, -113,
-    -112, -111, -110, -109, -108, -107, -106, -105, -104, -103, -102, -101, -100, -99, -98, -97,
-    -96, -95, -94, -93, -92, -91, -90, -89, -88, -87, -86, -85, -84, -83, -82, -81,
-    -80, -79, -78, -77, -76, -75, -74, -73, -72, -71, -70, -69, -68, -67, -66, -65,
-    -64, -63, -62, -61, -60, -59, -58, -57, -56, -55, -54, -53, -52, -51, -50, -49,
-    -48, -47, -46, -45, -44, -43, -42, -41, -40, -39, -38, -37, -36, -35, -34, -33,
-    -32, -31, -30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20, -19, -18, -17,
-    -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1,
-};
-*/
 
 
 UTF16TEXT koi8r_to_utf16[256] = {
@@ -360,73 +337,45 @@ UTF16TEXT* CTextConverter::ConvertFromCP1251ToUTF16(const char* cp1251Text)
 {
   size_t len = strlen (cp1251Text);
 //  UTF16TEXT* utf16Text = new UTF16TEXT[2 * len + 1]; // Максимальная длина UTF-16 символа - 2 байта, учитываем нулевой символ
-   UTF16TEXT* utf16Text = new UTF16TEXT[len + 1]; // Максимальная длина UTF-16 символа - 2 байта, учитываем нулевой символ
+  UTF16TEXT* utf16Text = new UTF16TEXT[len + 1]; // Максимальная длина UTF-16 символа - 2 байта, учитываем нулевой символ
 
   UTF16TEXT* p = utf16Text;
 
   while (*cp1251Text)
-       {
+        {
          unsigned char c = *cp1251Text++;
          *p++ = cp1251_to_utf16[c]; // Преобразование всех символов
-       }
+        }
 
   *p = u'\0';
   return utf16Text;
 }
 
 
-
-
-
-char* CTextConverter::ConvertFromUTF16ToCP1251(const UTF16TEXT *s) {
-    std::string cp1251Text;
-    for (const char16_t *p = s; *p != u'\0'; ++p) {
-        auto it = UTF16_to_CP1251.find(*p);
-        if (it != UTF16_to_CP1251.end()) {
-            cp1251Text += it->second;
-        } else {
-            // If character not found in mapping table, add placeholder or handle differently
-            cp1251Text += '?'; // Placeholder for unknown characters
-        }
-    }
-
-    char *result = new char[cp1251Text.length() + 1];
-    std::strcpy(result, cp1251Text.c_str());
-    return result;
-}
-
-//портит текст
-/*
-char* CTextConverter::ConvertFromUTF16ToCP1251(const UTF16TEXT* utf16Text)
+//ok
+char* CTextConverter::ConvertFromUTF16ToCP1251(const UTF16TEXT *s)
 {
-    size_t len = 0;
-    const UTF16TEXT* p = utf16Text;
-    while (*p++) {
-        ++len;
-    }
+  std::string cp1251Text;
 
-    char* cp1251Text = new char[len + 1]; // Учитываем нулевой символ
-    char* q = cp1251Text;
-    while (*utf16Text) {
-        UTF16TEXT uc = *utf16Text++;
-        if (uc <= 0x7F) {
-            *q++ = uc;
-        } else if (uc >= 0x0400 && uc <= 0x045F) {
-            char c = utf16_to_cp1251[uc];
-            if (c != 0) {
-                *q++ = c;
-            }
-        }
-    }
-    *q = '\0';
-    return cp1251Text;
+  for (const char16_t *p = s; *p != u'\0'; ++p)
+      {
+       auto it = UTF16_to_CP1251.find (*p);
+
+       if (it != UTF16_to_CP1251.end())
+           cp1251Text += it->second;
+       else
+            // If character not found in mapping table, add placeholder or handle differently
+           cp1251Text += '?'; // Placeholder for unknown characters
+      }
+
+  char *result = new char[cp1251Text.length() + 1];
+  std::strcpy (result, cp1251Text.c_str());
+  return result;
 }
-*/
 
 
 
-//std::map <int, char> m{{1, 10}, {2, 15}, {3, 20}};
-
+//NOT TESTED
 char* CTextConverter::ConvertFromUTF16ToDOS866(const UTF16TEXT* utf16Text) {
     size_t len = 0;
     const UTF16TEXT* p = utf16Text;
@@ -452,6 +401,7 @@ char* CTextConverter::ConvertFromUTF16ToDOS866(const UTF16TEXT* utf16Text) {
 }
 
 
+//NOT TESTED
 UTF16TEXT* CTextConverter::ConvertFromKOI8RToUTF16(const char* koi8rText) {
     size_t len = strlen(koi8rText);
     UTF16TEXT* utf16Text = new UTF16TEXT[len + 1]; // Учитываем нулевой символ
@@ -464,7 +414,7 @@ UTF16TEXT* CTextConverter::ConvertFromKOI8RToUTF16(const char* koi8rText) {
     return utf16Text;
 }
 
-
+//NOT TESTED
 char* CTextConverter::ConvertFromUTF16ToKOI8R(const UTF16TEXT* utf16Text) {
     size_t len = 0;
     const UTF16TEXT* p = utf16Text;
@@ -490,7 +440,7 @@ char* CTextConverter::ConvertFromUTF16ToKOI8R(const UTF16TEXT* utf16Text) {
 }
 
 
-
+//NOT NEEDED
 UTF16TEXT* CTextConverter::ConvertFromUTF8ToUTF16(const char* utf8Text) {
     size_t len = strlen(utf8Text);
     UTF16TEXT* utf16Text = new UTF16TEXT[len + 1]; // Учитываем нулевой символ
@@ -516,6 +466,7 @@ UTF16TEXT* CTextConverter::ConvertFromUTF8ToUTF16(const char* utf8Text) {
 }
 
 
+//OK
 const UTF16TEXT CP866_to_UTF16[] = {
             /* 0x00 */ 0x0000, /* NUL */
     /* 0x01 */ 0x0001, /* SOH */
@@ -801,42 +752,6 @@ UTF16TEXT* CTextConverter::ConvertFromDOS866ToUTF16(const char* dos866Text)
    return utf16Text;
 }
 
-
-/*
-UTF16TEXT* CTextConverter::ConvertFromDOS866ToUTF16(const char* cp866Text)
-{
-  size_t len = strlen (cp866Text);
-  UTF16TEXT* utf16Text = new UTF16TEXT[2 * len + 1]; // Максимальная длина UTF-16 символа - 2 байта, учитываем нулевой символ
-  UTF16TEXT* p = utf16Text;
-
-  while (*cp866Text)
-       {
-         unsigned char c = *cp866Text++;
-         *p++ = CP866_to_UTF16[c]; // Преобразование всех символов
-       }
-
-  *p = u'\0';
-  return utf16Text;
-}
-*/
-
-
-/*
-UTF16TEXT* CTextConverter::ConvertFromDOS866ToUTF16(const char* dos866Text) {
-    size_t len = strlen(dos866Text);
-    UTF16TEXT* utf16Text = new UTF16TEXT[len + 1]; // +1 for null terminator
-    utf16Text[len] = 0; // Null-terminate the string
-
-    for (size_t i = 0; i < len; ++i)
-       {
-        unsigned char c = static_cast<unsigned char>(dos866Text[i]);
-        //UTF16TEXT c = dos866Text[i];
-        utf16Text[i] = CP866_to_UTF16[c];
-       }
-
-    return utf16Text;
-}
-*/
 
 QStringList CTextConverter::get_charsets()
 {

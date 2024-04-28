@@ -4037,7 +4037,7 @@ void CTEA::fn_math_sum_by_last_col()
        QStringList lt = l[i].split (" ");
        if (lt.size() > 0)
           {
-           QString s = lt.at (lt.size() - 1);
+           const QString s = lt.at (lt.size() - 1);
            if (! s.isNull())
               {
                std::string utf8_text = s.toUtf8().constData();

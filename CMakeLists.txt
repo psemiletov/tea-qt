@@ -216,13 +216,9 @@ endif()
 
 
 
-if (Qt6_FOUND)
-
-#find_package(Qt6 REQUIRED COMPONENTS TextToSpeech)
-#target_link_libraries(tea Qt6::TextToSpeech)
-target_link_libraries(tea Qt::Core5Compat)
-
-endif()
+#if (Qt6_FOUND)
+#target_link_libraries(tea Qt::Core5Compat)
+#endif()
 
 target_link_libraries(tea Qt::Widgets Qt::Core)
 

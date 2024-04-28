@@ -21,7 +21,7 @@ if (Qt6_FOUND)
 message("+ Qt6 found")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-find_package(Qt6 COMPONENTS Core5Compat REQUIRED)
+#find_package(Qt6 COMPONENTS Core5Compat REQUIRED)
 endif()
 
 

@@ -1,4 +1,4 @@
-#include <iostream>
+//#include <iostream>
 #include <cstring>
 #include <map>
 
@@ -369,7 +369,10 @@ char* CTextConverter::ConvertFromUTF16ToCP1251(const UTF16TEXT *s)
       }
 
   char *result = new char[cp1251Text.length() + 1];
-  std::strcpy (result, cp1251Text.c_str());
+  //std::strcpy (result, cp1251Text.c_str());
+
+  std::strncpy (result, cp1251Text.c_str(), cp1251Text.size());
+
   return result;
 }
 

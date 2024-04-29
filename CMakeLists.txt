@@ -36,10 +36,11 @@ project ($PROJECT VERSION 62.4.0 LANGUAGES CXX C)
 qt_add_resources(QT_RESOURCES resources.qrc)
 
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")
-add_definitions(-DNOCRYPT=1)
-add_definitions(-DNOUNCRYPT=1)
-add_definitions(-DQUAZIP_STATIC=1)
+#add_definitions(-DNOCRYPT=1)
+#add_definitions(-DNOUNCRYPT=1)
+#add_definitions(-DQUAZIP_STATIC=1)
 
+option(USE_NUSPELL "Use Nuspell" ON)
 option(USE_ASPELL "Use Aspell" OFF)
 option(USE_PRINTER "Use printer support" OFF)
 option(USE_PDF "Use libpoppler" OFF)
@@ -108,6 +109,17 @@ set_target_properties(tea PROPERTIES
 )
 
 find_package(PkgConfig REQUIRED)
+
+
+pkg_check_modules(nuspell QUIET nuspell)
+if(nuspell_FOUND)
+  add_definitions(-DNUSPELL_ENABLE)
+#  target_link_libraries(tea nuspell_LIBRARIES)
+  target_link_libraries(tea ${nuspell_LIBRARIES})
+  include_directories(${nuspell_INCLUDE_DIRS})
+
+  message("+ nuspell support")
+endif()
 
 pkg_check_modules(hunspell QUIET hunspell)
 if(hunspell_FOUND)

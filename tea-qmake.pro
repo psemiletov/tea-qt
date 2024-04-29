@@ -13,9 +13,9 @@ exists("/usr/include/linux/joystick.h") {
 }
 
 
-DEFINES += NOCRYPT \
-           NOUNCRYPT \
-           QUAZIP_STATIC
+#DEFINES += NOCRYPT \
+#           NOUNCRYPT \
+#           QUAZIP_STATIC
 
 
 #QMAKE_CXXFLAGS += -std=c++11
@@ -118,7 +118,8 @@ SOURCES += src/tea.cpp \
     src/exif_reader.cpp \
     src/myjoystick.cpp \
     src/pugixml.cpp \
-    src/zip.c
+    src/zip.c \
+    src/enc.cpp
 
 
 HEADERS += src/tea.h \
@@ -142,7 +143,8 @@ HEADERS += src/tea.h \
     src/pugixml.hpp \
     src/pugiconfig.hpp \
     src/miniz.h \
-    src/zip.h
+    src/zip.h \
+    src/enc.h
 
 
 
@@ -229,17 +231,17 @@ DISTFILES += ChangeLog \
     icons/edit-cut.png \
     icons/edit-paste-active.png \
     icons/edit-paste.png \
-icons/file-new.png \ 
-icons/file-open-active.png \
-icons/file-open.png \
-icons/file-save-active.png \
-icons/file-save-as.png \
-icons/file-save.png \ 
-icons/labels.png \
-icons/tea_icon_v2.png \
-icons/tea-icon-v3-01.png \
-icons/tea-icon-v3-02.png \
-icons/tea-icon-v3-03.png
+    icons/file-new.png \
+    icons/file-open-active.png \
+    icons/file-open.png \
+    icons/file-save-active.png \
+    icons/file-save-as.png \
+    icons/file-save.png \
+    icons/labels.png \
+    icons/tea_icon_v2.png \
+    icons/tea-icon-v3-01.png \
+    icons/tea-icon-v3-02.png \
+    icons/tea-icon-v3-03.png
 
 
 unix: {

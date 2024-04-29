@@ -438,7 +438,7 @@ void CTEA::closeEvent (QCloseEvent *event)
       delete wnd_about;
     }
 
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE) || defined (NUSPELL_ENABLE)
   delete spellchecker;
 #endif
 
@@ -914,7 +914,7 @@ void CTEA::cb_button_saves_as()
          return;
 
 
-   qDebug() << "CTEA::cb_button_saves_as(): " << filename << " - " <<  cb_fman_codecs->currentText();
+  // qDebug() << "CTEA::cb_button_saves_as(): " << filename << " - " <<  cb_fman_codecs->currentText();
 
   d->file_save_with_name (filename, cb_fman_codecs->currentText());
   d->set_markup_mode();
@@ -4857,7 +4857,7 @@ void CTEA::cb_locale_only_stateChanged (int state)
 #endif
 
 
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE) || defined (NUSPELL_ENABLE)
 
 void CTEA::fn_change_spell_lang()
 {
@@ -6496,7 +6496,7 @@ CTEA::CTEA()
 
   update_hls();
 
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE) || defined (NUSPELL_ENABLE)
   setup_spellcheckers();
 #endif
 
@@ -6749,24 +6749,41 @@ void CTEA::create_paths()
 
 
 
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE) || defined (NUSPELL_ENABLE)
 
 void CTEA::setup_spellcheckers()
 {
 
-#ifdef HUNSPELL_ENABLE
-  spellcheckers.append ("Hunspell");
-#endif
+  QString default_speller;
+
 
 #ifdef ASPELL_ENABLE
   spellcheckers.append ("Aspell");
+  default_speller = "Aspell";
 #endif
 
-  cur_spellchecker = settings->value ("cur_spellchecker", "Hunspell").toString();
+#ifdef NUSPELL_ENABLE
+  spellcheckers.append ("Nuspell");
+  default_speller = "Nuspell";
+#endif
+
+#ifdef HUNSPELL_ENABLE
+  spellcheckers.append ("Hunspell");
+  default_speller = "Hunspell";
+#endif
+
+qDebug() << "CTEA::setup_spellcheckers() 2";
+
+  cur_spellchecker = settings->value ("cur_spellchecker", default_speller).toString();
+
+  qDebug() << "CTEA::setup_spellcheckers() 1:" << cur_spellchecker;
+
 
   if (spellcheckers.size() > 0)
      if (! spellcheckers.contains (cur_spellchecker))
          cur_spellchecker = spellcheckers[0];
+
+qDebug() << "CTEA::setup_spellcheckers() 3";
 
 #ifdef ASPELL_ENABLE
   if (cur_spellchecker == "Aspell")
@@ -6782,23 +6799,41 @@ void CTEA::setup_spellcheckers()
 
 #endif
 
-
 #ifdef HUNSPELL_ENABLE
    if (cur_spellchecker == "Hunspell")
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
 #endif
 
- create_spellcheck_menu();
+   qDebug() << "CTEA::setup_spellcheckers() 4";
+
+#ifdef NUSPELL_ENABLE
+   if (cur_spellchecker == "Nuspell")
+      spellchecker = new CNuspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
+#endif
+
+qDebug() << "CTEA::setup_spellcheckers() 5";
+
+  create_spellcheck_menu();
+
+  qDebug() << "CTEA::setup_spellcheckers() 6";
+
 }
 
 
 void CTEA::create_spellcheck_menu()
 {
   menu_spell_langs->clear();
+
+qDebug() << "CTEA::create_spellcheck_menu 1";
   spellchecker->get_speller_modules_list();
+
+  qDebug() << "CTEA::create_spellcheck_menu2";
 
   if (spellchecker->modules_list.size() > 0)
      create_menu_from_list (this, menu_spell_langs, spellchecker->modules_list, SLOT(fn_change_spell_lang()));
+
+  qDebug() << "3";
+
 }
 
 #endif
@@ -7464,7 +7499,7 @@ Functions menu
 
 
 
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE) || defined (NUSPELL_ENABLE )
   menu_functions->addSeparator();
 
   menu_spell_langs = menu_functions->addMenu (tr ("Spell-checker languages"));
@@ -8081,7 +8116,7 @@ OPTIONS::FUNCTIONS
 
   QLabel *l_t = 0;
 
-#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE)
+#if defined (HUNSPELL_ENABLE) || defined (ASPELL_ENABLE) || defined (NUSPELL_ENABLE )
 
   QGroupBox *gb_spell = new QGroupBox (tr ("Spell checking"));
   QVBoxLayout *vb_spell = new QVBoxLayout;
@@ -10622,6 +10657,12 @@ void CTEA::cmb_spellchecker_currentIndexChanged (int)
    if (cur_spellchecker == "Hunspell")
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), hunspell_default_dict_path());
 #endif
+
+#ifdef NUSPELL_ENABLE
+   if (cur_spellchecker == "Nuspell")
+      spellchecker = new CNuspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), hunspell_default_dict_path());
+#endif
+
 
   settings->setValue ("spell_lang", "");
 

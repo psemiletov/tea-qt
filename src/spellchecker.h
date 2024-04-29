@@ -25,7 +25,14 @@
 #include "aspell.h"
 #endif
 
+#ifdef NUSPELL_ENABLE
+#include <nuspell/dictionary.hxx>
+#include <nuspell/finder.hxx>
+#endif
+
+
 #ifdef HUNSPELL_ENABLE
+#include <filesystem>
 #include <hunspell/hunspell.hxx>
 #endif
 
@@ -126,5 +133,38 @@ QString hunspell_default_dict_path();
 
 
 #endif
+
+
+#ifdef NUSPELL_ENABLE
+
+class CNuspellChecker: public CSpellchecker
+{
+
+public:
+
+  nuspell::Dictionary *speller;
+  //std::filesystem::path dir_path;
+  std::vector<std::filesystem::path> dirs;
+  std::filesystem::path dict_path;
+
+  QStringList user_words;
+  std::string str_encoding;
+
+  CNuspellChecker (const QString &lang, const QString &dir_path = "", const QString &dir_user = "");
+  ~CNuspellChecker();
+
+  void save_user_dict();
+  void load_dict();
+  void change_lang (const QString &lang);
+  void add_to_user_dict (const QString &word);
+  void remove_from_user_dict (const QString &word);
+  bool check (const QString &word);
+  void get_speller_modules_list();
+  QStringList get_suggestions_list (const QString &word);
+};
+
+
+#endif
+
 
 #endif

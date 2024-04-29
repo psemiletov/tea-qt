@@ -97,7 +97,7 @@ DJVU read code taken fromdvutxt.c:
 
 #include "tio.h"
 #include "utils.h"
-#include "textproc.h"
+//#include "textproc.h"
 #include "zip.h"
 
 #include "enc.h"

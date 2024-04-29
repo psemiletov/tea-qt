@@ -30,6 +30,11 @@
 
 #endif
 
+#ifdef NUSPELL_ENABLE
+#include <vector>
+#include <iostream>
+#include <string>
+#endif
 
 //#include <QTextCodec>
 #include <QDir>
@@ -524,3 +529,224 @@ QString hunspell_default_dict_path()
 }
 
 #endif
+
+
+
+
+
+
+
+#ifdef NUSPELL_ENABLE
+
+
+void CNuspellChecker::save_user_dict() //uses current language
+{
+
+#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+   QString filename = dir_user_dicts + QDir::separator() + language + ".dic";
+   filename = filename.replace ("/", "\\");
+#else
+   QString filename = dir_user_dicts + QDir::separator() + language + ".dic";
+#endif
+
+  if (user_words.size() > 0)
+     {
+      user_words.prepend (QString::number (user_words.size()));
+#if ! defined (H_DEPRECATED)
+      qstring_save (filename, user_words.join ("\n"), encoding);
+#else
+      qstring_save (filename, user_words.join ("\n"), str_encoding.data());
+#endif
+     }
+}
+
+
+void CNuspellChecker::load_dict()
+{
+  loaded = false;
+
+  speller = new nuspell::Dictionary;
+
+
+  try {
+     	speller->load_aff_dic(dict_path);
+      }
+  catch (const nuspell::Dictionary_Loading_Error& e)
+       {
+	   std::cout << e.what() << '\n';
+	   return;
+      }
+
+
+  //ДОПИСАТЬ ДОБАВЛЕНИЕ USER DICT!
+
+  loaded = true;
+
+}
+
+
+CNuspellChecker::CNuspellChecker (const QString &lang, const QString &dir_path, const QString &dir_user): CSpellchecker (lang, dir_path, dir_user)
+{
+qDebug() << "CNuspellChecker::CNuspellChecker ";
+
+  speller = 0;
+//  encoding = 0;
+  nuspell::append_default_dir_paths(dirs);
+
+  //qDebug << "dirs.size: " << dirs.size();
+
+
+  //auto dict_list = nuspell::search_default_dirs_for_dicts();
+}
+
+
+CNuspellChecker::~CNuspellChecker()
+{
+  delete speller;
+}
+
+
+void CNuspellChecker::change_lang (const QString &lang)
+{
+  qDebug() << "CNuspellChecker::change_lang: " << lang;
+
+  //if (language == lang)
+   //   return;
+
+  language = lang;
+//  save_user_dict();
+//  user_words.clear();
+
+  dict_path = nuspell::search_dirs_for_one_dict (dirs, language.toStdString());
+
+  qDebug() << "dict_path: " << dict_path.string();
+
+  //if (std::empty (dict_path))
+  if (dict_path.empty() )
+    {
+      qDebug() << "dict_path.empty()";
+      return; // Return error because we can not find the requested
+	          // dictionary.
+
+    }
+}
+
+
+void CNuspellChecker::add_to_user_dict (const QString &word)
+{
+  if (! loaded || word.isEmpty())
+     return;
+/*
+  QByteArray es = word.toUtf8();
+  speller->add (es.data());
+  user_words.append (word);
+  save_user_dict();*/
+}
+
+
+bool CNuspellChecker::check (const QString &word)
+{
+  if (modules_list.size() == 0)
+     {
+    //  QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Options - Functions page"));
+      return false;
+     }
+
+  if (! loaded)
+     load_dict();
+
+
+  return speller->spell (word.toStdString());
+}
+
+
+void CNuspellChecker::remove_from_user_dict (const QString &word)
+{
+  if (! loaded || word.isEmpty())
+      return;
+/*
+  QByteArray es = word.toUtf8();
+
+  speller->remove (es.data());
+  int i = user_words.indexOf (word);
+  if (i != -1)
+     {
+      user_words.removeAt (i);
+      save_user_dict();
+     }*/
+}
+
+
+void CNuspellChecker::get_speller_modules_list()
+{
+
+  modules_list.clear();
+
+  auto dict_list = nuspell::search_default_dirs_for_dicts();
+
+
+
+  for (int i = 0; i < dict_list.size(); i++)
+      {
+       QString dictname = QString::fromStdString (dict_list[i].stem().string());
+       qDebug() << "CNuspellChecker::get_speller_modules_list() - " << dictname;
+
+       modules_list.append (dictname);
+      }
+
+
+}
+
+
+/*
+void CNuspellChecker::get_speller_modules_list()
+{
+  modules_list.clear();
+
+  QDir dir (dir_dicts);
+  if (! dir.exists())
+     return;
+
+  QStringList filters;
+
+  filters << "*.dic";
+
+  dir.setSorting (QDir::Name);
+  QFileInfoList fil = dir.entryInfoList (filters);
+
+  for (int i = 0; i < fil.size(); i++)
+      {
+       modules_list.append (fil[i].baseName());
+      }
+}
+*/
+
+QStringList CNuspellChecker::get_suggestions_list (const QString &word)
+{
+  QStringList sl;
+
+  if (! loaded || word.isEmpty())
+     return sl;
+
+  QByteArray es = word.toUtf8();
+
+
+  auto suggestions = std::vector<std::string>();
+  speller->suggest(word.toStdString(), suggestions);
+
+  if (suggestions.empty())
+	  return sl;
+
+
+  sl.reserve (suggestions.size());
+  for (size_t i = 0, sz = suggestions.size(); i < sz; ++i)
+      sl.append (QString::fromStdString (suggestions[i]));
+
+
+  return sl;
+}
+
+
+#endif
+
+

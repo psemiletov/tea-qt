@@ -6808,7 +6808,11 @@ qDebug() << "CTEA::setup_spellcheckers() 3";
 
 #ifdef NUSPELL_ENABLE
    if (cur_spellchecker == "Nuspell")
-      spellchecker = new CNuspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
+      {
+       spellchecker = new CNuspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
+       spellchecker->change_lang (settings->value ("spell_lang", QLocale::system().name().left(2)).toString());
+
+      }
 #endif
 
 qDebug() << "CTEA::setup_spellcheckers() 5";

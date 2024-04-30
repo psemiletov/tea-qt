@@ -42,16 +42,22 @@
 #include <QStringList>
 #include <QHash>
 
+#include "utils.h"
+
 
 class CSpellchecker
 {
 
 public:
 
+  QString user_dict_filename;
+
   QString language;
   QString dir_dicts;
   QString dir_user_dicts;
   QStringList modules_list;
+
+  QStringList user_dict;
 
   bool loaded;
 
@@ -59,12 +65,23 @@ public:
   CSpellchecker (const QString &lang,
                  const QString &dir_path,
                  const QString &dir_user): language (lang), dir_dicts (dir_path), dir_user_dicts (dir_user), loaded(false)
-                 {};
+                 {
+                  user_dict_filename = dir_user + "/user_dict.txt";
 
-  virtual ~CSpellchecker() {};
+                  if (file_exists (user_dict_filename))
+                     {
+                      QString file_content = qstring_load (user_dict_filename);
+                      user_dict = file_content.split ("\n");
+                     }
+
+                };
+
+  virtual ~CSpellchecker() {
+                            if (user_dict.size() > 0)
+                                qstring_save (user_dict_filename, user_dict.join ("\n"));
+                            };
 
   virtual void load_dict() = 0; //uses current language
-  virtual void save_user_dict() = 0; //uses current language
   virtual void change_lang (const QString &lang) = 0; //set current language
   virtual void add_to_user_dict (const QString &word) = 0;
   virtual void remove_from_user_dict (const QString &word) = 0;
@@ -88,11 +105,12 @@ public:
   CAspellchecker (const QString &lang, const QString &dir_path = "", const QString &dir_user = "");
   ~CAspellchecker();
 
-  void save_user_dict() {}; //not needed due to Aspell implementation
-  void load_dict();
-  void change_lang (const QString &lang);
   void add_to_user_dict (const QString &word);
   void remove_from_user_dict (const QString &word);
+
+
+  void load_dict();
+  void change_lang (const QString &lang);
   bool check (const QString &word);
   void get_speller_modules_list();
   QStringList get_suggestions_list (const QString &word);
@@ -119,11 +137,11 @@ public:
   CHunspellChecker (const QString &lang, const QString &dir_path = "", const QString &dir_user = "");
   ~CHunspellChecker();
 
-  void save_user_dict();
-  void load_dict();
-  void change_lang (const QString &lang);
   void add_to_user_dict (const QString &word);
   void remove_from_user_dict (const QString &word);
+
+  void load_dict();
+  void change_lang (const QString &lang);
   bool check (const QString &word);
   void get_speller_modules_list();
   QStringList get_suggestions_list (const QString &word);
@@ -143,7 +161,6 @@ class CNuspellChecker: public CSpellchecker
 public:
 
   nuspell::Dictionary *speller;
-  //std::filesystem::path dir_path;
   std::vector<std::filesystem::path> dirs;
   std::filesystem::path dict_path;
 
@@ -153,11 +170,11 @@ public:
   CNuspellChecker (const QString &lang, const QString &dir_path = "", const QString &dir_user = "");
   ~CNuspellChecker();
 
-  void save_user_dict();
-  void load_dict();
-  void change_lang (const QString &lang);
   void add_to_user_dict (const QString &word);
   void remove_from_user_dict (const QString &word);
+
+  void load_dict();
+  void change_lang (const QString &lang);
   bool check (const QString &word);
   void get_speller_modules_list();
   QStringList get_suggestions_list (const QString &word);

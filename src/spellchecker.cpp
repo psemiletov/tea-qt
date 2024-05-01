@@ -189,8 +189,12 @@ bool CAspellchecker::check (const QString &word)
   if (! loaded)
      load_dict();
 
-  if (user_dict.indexOf (word) != -1) //найдено, выходим
+
+  if (user_dict_checker.check (word))
      return true;
+
+//  if (user_dict.indexOf (word) != -1) //найдено, выходим
+  //   return true;
 
   if (speller)
      return aspell_speller_check (speller, word.toUtf8().data(), -1);
@@ -231,7 +235,9 @@ void Aspellchecker::add_to_user_dict (const QString &word)
   if (word.isEmpty())
      return;
 
-  user_dict.append (word);
+//  user_dict.append (word);
+   user_dict_checker.add_word (word);
+
 }
 
 
@@ -261,7 +267,8 @@ void CHunspellChecker::add_to_user_dict (const QString &word)
   if (word.isEmpty())
      return;
 
-  user_dict.append (word);
+  //user_dict.append (word);
+  user_dict_checker.add_word (word);
 }
 
 
@@ -270,9 +277,12 @@ void CHunspellChecker::remove_from_user_dict (const QString &word)
   if (word.isEmpty())
      return;
 
+
+  user_dict_checker.remove_word (word);
+ /*
   int i = user_dict.indexOf (word);
   if (i != -1)
-     user_dict.removeAt (i);
+     user_dict.removeAt (i);*/
 }
 
 
@@ -419,8 +429,12 @@ bool CHunspellChecker::check (const QString &word)
 */
  //QByteArray es = codec->fromUnicode (word);
 
-  if (user_dict.indexOf (word) != -1)
+//  if (user_dict.indexOf (word) != -1)
+  //   return true;
+
+  if (user_dict_checker.check (word))
      return true;
+
 
   QByteArray es = word.toUtf8();
 
@@ -536,7 +550,9 @@ void CNuspellChecker::add_to_user_dict (const QString &word)
   if (word.isEmpty())
      return;
 
-  user_dict.append (word);
+// user_dict.append (word);
+
+  user_dict_checker.add_word (word);
 }
 
 
@@ -545,9 +561,12 @@ void CNuspellChecker::remove_from_user_dict (const QString &word)
   if (word.isEmpty())
      return;
 
-  int i = user_dict.indexOf (word);
+  /*int i = user_dict.indexOf (word);
   if (i != -1)
-     user_dict.removeAt (i);
+     user_dict.removeAt (i);*/
+
+  user_dict_checker.remove_word (word);
+
 }
 
 
@@ -580,11 +599,9 @@ CNuspellChecker::CNuspellChecker (const QString &lang, const QString &dir_path, 
   qDebug() << "CNuspellChecker::CNuspellChecker ";
 
   speller = 0;
-//  encoding = 0;
-  nuspell::append_default_dir_paths(dirs);
+  nuspell::append_default_dir_paths (dirs);
 
   //qDebug << "dirs.size: " << dirs.size();
-
 
   //auto dict_list = nuspell::search_default_dirs_for_dicts();
 }
@@ -604,8 +621,6 @@ void CNuspellChecker::change_lang (const QString &lang)
    //   return;
 
   language = lang;
-//  save_user_dict();
-//  user_words.clear();
 
   dict_path = nuspell::search_dirs_for_one_dict (dirs, language.toStdString());
 
@@ -641,8 +656,11 @@ bool CNuspellChecker::check (const QString &word)
   if (! loaded)
      load_dict();
 
-  if (user_dict.indexOf (word) != -1)
-     return true;
+ if (user_dict_checker.check (word))
+    return true;
+
+//  if (user_dict.indexOf (word) != -1)
+  //   return true;
 
   return speller->spell (word.toStdString());
 }
@@ -667,29 +685,6 @@ void CNuspellChecker::get_speller_modules_list()
 
 }
 
-
-/*
-void CNuspellChecker::get_speller_modules_list()
-{
-  modules_list.clear();
-
-  QDir dir (dir_dicts);
-  if (! dir.exists())
-     return;
-
-  QStringList filters;
-
-  filters << "*.dic";
-
-  dir.setSorting (QDir::Name);
-  QFileInfoList fil = dir.entryInfoList (filters);
-
-  for (int i = 0; i < fil.size(); i++)
-      {
-       modules_list.append (fil[i].baseName());
-      }
-}
-*/
 
 QStringList CNuspellChecker::get_suggestions_list (const QString &word)
 {
@@ -716,7 +711,90 @@ QStringList CNuspellChecker::get_suggestions_list (const QString &word)
   return sl;
 }
 
-
 #endif
+
+
+void CPlainSpellchecker::add_word (const QString &word)
+{
+
+  char16_t key = word[0].unicode();
+  map[key].append (word);
+}
+
+
+void CPlainSpellchecker::remove_word (const QString &word)
+{
+
+  char16_t key = word[0].unicode();
+
+  int i = map[key].indexOf (word);
+  if (i != -1)
+     map[key].removeAt (i);
+}
+
+
+
+bool CPlainSpellchecker::check (const QString &word)
+{
+  return map[word[0].unicode()].contains (word, Qt::CaseInsensitive);
+}
+
+
+void CPlainSpellchecker::load_from_file (const QString &fname)
+{
+  if (! file_exists (fname))
+      return;
+
+  user_dict_filename = fname;
+
+  QString text = qstring_load (fname);
+
+  QStringList sl = text.split ("\n");
+
+  for (int i = 0; i < sl.size(); i++)
+      {
+       if (sl[i] == "\n")
+          continue;
+
+       char16_t key = sl[i][0].unicode();
+       map[key].append (sl[i]);
+      }
+}
+
+
+void CPlainSpellchecker::save_to_file (const QString &fname)
+{
+   //QMap<QString, int> map;
+
+   QString text;
+
+   for (QStringList value : std::as_const(map))
+        //cout << value << endl;
+       {
+        //QString s = value[0];
+       // qDebug () << value.at (0);
+
+        if (value.size() > 0)
+           {
+            for (int i = 0; i < value.size(); i++)
+               {
+                QString t = value.at(i);
+
+                if (! t.isEmpty())
+                  {
+                    text += value.at(i);
+                    text += "\n";
+                    qDebug () << value.at (i);
+                  }
+
+               }
+           }
+
+
+       }
+
+    qstring_save (user_dict_filename, text);
+
+}
 
 

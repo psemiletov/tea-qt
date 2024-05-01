@@ -45,6 +45,25 @@
 #include "utils.h"
 
 
+class CPlainSpellchecker
+{
+  public:
+
+  QString user_dict_filename;
+
+  QMap <char16_t, QStringList> map;
+
+  void add_word (const QString &word);
+  void remove_word (const QString &word);
+
+  bool check (const QString &word);
+
+  void load_from_file (const QString &fname);
+  void save_to_file (const QString &fname);
+
+};
+
+
 class CSpellchecker
 {
 
@@ -57,7 +76,9 @@ public:
   QString dir_user_dicts;
   QStringList modules_list;
 
-  QStringList user_dict;
+  //QStringList user_dict;
+
+  CPlainSpellchecker user_dict_checker;
 
   bool loaded;
 
@@ -70,15 +91,18 @@ public:
 
                   if (file_exists (user_dict_filename))
                      {
-                      QString file_content = qstring_load (user_dict_filename);
-                      user_dict = file_content.split ("\n");
+                      //QString file_content = qstring_load (user_dict_filename);
+                      //user_dict = file_content.split ("\n");
+                      user_dict_checker.load_from_file (user_dict_filename);
+
                      }
 
                 };
 
   virtual ~CSpellchecker() {
-                            if (user_dict.size() > 0)
-                                qstring_save (user_dict_filename, user_dict.join ("\n"));
+                            //if (user_dict.size() > 0)
+                              //  qstring_save (user_dict_filename, user_dict.join ("\n"));
+                              user_dict_checker.save_to_file (user_dict_filename);
                             };
 
   virtual void load_dict() = 0; //uses current language

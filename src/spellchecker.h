@@ -49,18 +49,17 @@ class CPlainSpellchecker
 {
   public:
 
-  QString user_dict_filename;
+  QString user_dict_filename; //ok
 
-  QMap <char16_t, QStringList> map;
+  QMap <char16_t, QStringList> map; //ok
 
-  void add_word (const QString &word);
-  void remove_word (const QString &word);
+  void add_word (const QString &word); //ok
+  void remove_word (const QString &word); //ok
 
-  bool check (const QString &word);
+  bool check (const QString &word); //ok
 
-  void load_from_file (const QString &fname);
-  void save_to_file (const QString &fname);
-
+  void load_from_file (const QString &fname); //ok
+  void save_to_file (const QString &fname); //ok
 };
 
 
@@ -71,17 +70,14 @@ public:
 
   QString user_dict_filename;
 
-  QString language;
+  QString language; //current language
   QString dir_dicts;
   QString dir_user_dicts;
   QStringList modules_list;
 
-  //QStringList user_dict;
-
   CPlainSpellchecker user_dict_checker;
 
   bool loaded;
-
 
   CSpellchecker (const QString &lang,
                  const QString &dir_path,
@@ -103,7 +99,7 @@ public:
                             //if (user_dict.size() > 0)
                               //  qstring_save (user_dict_filename, user_dict.join ("\n"));
                               user_dict_checker.save_to_file (user_dict_filename);
-                            };
+                           };
 
   virtual void load_dict() = 0; //uses current language
   virtual void change_lang (const QString &lang) = 0; //set current language
@@ -131,7 +127,6 @@ public:
 
   void add_to_user_dict (const QString &word);
   void remove_from_user_dict (const QString &word);
-
 
   void load_dict();
   void change_lang (const QString &lang);

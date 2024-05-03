@@ -111,7 +111,8 @@ set_target_properties(tea PROPERTIES
 
 find_package(PkgConfig REQUIRED)
 
-
+if (Qt6_FOUND)
+if(USE_NUSPELL)
 pkg_check_modules(nuspell QUIET nuspell)
 if(nuspell_FOUND)
   add_definitions(-DNUSPELL_ENABLE)
@@ -121,6 +122,10 @@ if(nuspell_FOUND)
 
   message("+ nuspell support")
 endif()
+
+endif()
+endif()
+
 
 if(USE_HUNSPELL)
 pkg_check_modules(hunspell QUIET hunspell)

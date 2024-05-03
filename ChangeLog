@@ -1,5 +1,12 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+
+- per spellchecker user dict in a favour of the common one, for all languages
++ Nuspell support
+- Qt6::Core5Compat dependency
+- zlib dependency
+- Quazip bundled and dependency
+
 62.1.2
 
 * Spellchecker fix

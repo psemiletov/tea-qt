@@ -328,17 +328,29 @@ bool CTioPlainText::load (const QString &fname)
      }
 
 
+  //ok
   if (charset == "CP-866")
      {
       UTF16TEXT* filedata = CTextConverter::ConvertFromDOS866ToUTF16 (ba.data());
 
       data = QString::fromUtf16 (filedata);
-
       delete [] filedata;
      // std::cout << *filedata << std::endl;
    //   qDebug() << ba.data();
   //    std::wcout << reinterpret_cast<wchar_t*>(filedata) << std::endl;
      }
+
+  if (charset == "KOI8-R")
+     {
+      UTF16TEXT* filedata = CTextConverter::ConvertFromKOI8RToUTF16 (ba.data());
+      data = QString::fromUtf16 (filedata);
+      delete [] filedata;
+     // std::cout << *filedata << std::endl;
+   //   qDebug() << ba.data();
+  //    std::wcout << reinterpret_cast<wchar_t*>(filedata) << std::endl;
+     }
+
+
 
 
   if (eol == "\r\n")
@@ -384,23 +396,29 @@ bool CTioPlainText::save (const QString &fname)
      return true;
     }
 
-    //не работает
+   //ok
   if (charset == "CP-1251")
     {
-//     char* text = CTextConverter::ConvertFromUTF16ToDOS866 ((UTF16TEXT*)data.utf16());
-
      char* text = CTextConverter::ConvertFromUTF16ToCP1251 ((UTF16TEXT*)data.utf16());
-
-
      file.write (text);
      file.close();
-
      delete [] text;
-
      return true;
     }
 
-  return false;
+
+   if (charset == "KOI8-R") //портит
+    {
+     char* text = CTextConverter::ConvertFromUTF16ToKOI8R ((UTF16TEXT*)data.utf16());
+     file.write (text);
+     file.close();
+     delete [] text;
+     return true;
+    }
+
+
+
+    return false;
 }
 
 

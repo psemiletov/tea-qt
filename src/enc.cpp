@@ -173,8 +173,8 @@ UTF16_to_CP1251[0x044C] = 0xFC;  // CYRILLIC SMALL LETTER SOFT SIGN
 UTF16_to_CP1251[0x044D] = 0xFD;  // CYRILLIC SMALL LETTER E
 UTF16_to_CP1251[0x044E] = 0xFE;  // CYRILLIC SMALL LETTER YU
 UTF16_to_CP1251[0x044F] = 0xFF;  // CYRILLIC SMALL LETTER YA
-UTF16_to_CP1251[u'\n'] = '\n';    // Keep newline character
-UTF16_to_CP1251[u'\r'] = '\r';    // Keep carriage return character
+UTF16_to_CP1251[0x0a] = 0x0a;    // Keep newline character
+UTF16_to_CP1251[0x0d] =  0x0d;    // Keep carriage return character
 
 return UTF16_to_CP1251;
 };
@@ -442,7 +442,9 @@ UTF16TEXT* CTextConverter::ConvertFromCP1251ToUTF16(const char* cp1251Text)
          *p++ = cp1251_to_utf16[c]; // Преобразование всех символов
         }
 
-  *p = u'\0';
+//  *p = u'\0';
+  *p = '\0';
+
   return utf16Text;
 }
 
@@ -452,9 +454,12 @@ char* CTextConverter::ConvertFromUTF16ToCP1251(const UTF16TEXT *s)
 {
   std::string cp1251Text;
 
-  for (const char16_t *p = s; *p != u'\0'; ++p)
+ // for (const char16_t *p = s; *p != u'\0'; ++p)
+   for (const UTF16TEXT *p = s; *p != '\0'; ++p)
+
       {
-       auto it = UTF16_to_CP1251.find (*p);
+     //  auto it = UTF16_to_CP1251.find (*p);
+       std::map<UTF16TEXT, char>::iterator it = UTF16_to_CP1251.find(*p);
 
        if (it != UTF16_to_CP1251.end())
            cp1251Text += it->second;
@@ -484,7 +489,9 @@ UTF16TEXT* CTextConverter::ConvertFromKOI8RToUTF16(const char* koi8rText) {
         unsigned char c = *koi8rText++;
         *p++ = koi8r_to_utf16[c];
     }
-    *p = u'\0';
+//    *p = u'\0';
+    *p = '\0';
+
     return utf16Text;
 }
 
@@ -1537,7 +1544,7 @@ std::map<UTF16TEXT, char> create_UTF16_to_CP866()
     UTF16_to_CP866[0x0059] = 0x59;   // Y
     UTF16_to_CP866[0x005A] = 0x5A;   // Z
     UTF16_to_CP866[0x005B] = 0x5B;   // [
-    UTF16_to_CP866[0x005C] = 0x5C;   // \
+    UTF16_to_CP866[0x005C] = 0x5C;   // slash
     UTF16_to_CP866[0x005D] = 0x5D;   // ]
     UTF16_to_CP866[0x005E] = 0x5E;   // ^
     UTF16_to_CP866[0x005F] = 0x5F;   // _

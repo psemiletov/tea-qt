@@ -5,6 +5,7 @@
 
 
 #if QT_VERSION >= 0x050000
+#include <uchar.h>
 #define UTF16TEXT char16_t
 #else
 #define UTF16TEXT ushort

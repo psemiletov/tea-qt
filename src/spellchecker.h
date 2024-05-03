@@ -28,11 +28,20 @@
 #ifdef NUSPELL_ENABLE
 #include <nuspell/dictionary.hxx>
 #include <nuspell/finder.hxx>
+#include <filesystem>
 #endif
 
 
+
+
+#if QT_VERSION >= 0x050000
+#include <uchar.h>
+#define UTF16TEXT char16_t
+#else
+#define UTF16TEXT ushort
+#endif
+
 #ifdef HUNSPELL_ENABLE
-#include <filesystem>
 #include <hunspell/hunspell.hxx>
 #endif
 
@@ -51,7 +60,7 @@ class CPlainSpellchecker
 
   QString user_dict_filename; //ok
 
-  QMap <char16_t, QStringList> map; //ok
+  QMap <UTF16TEXT, QStringList> map; //ok
 
   void add_word (const QString &word); //ok
   void remove_word (const QString &word); //ok

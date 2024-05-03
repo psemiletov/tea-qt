@@ -153,8 +153,8 @@ std::string html_strip (const std::string &source)
 
   while (html.find ("<") != std::string::npos)
         {
-         auto startpos = html.find ("<");
-         auto endpos = html.find (">") + 1;
+         size_t startpos = html.find ("<");
+         size_t endpos = html.find (">") + 1;
 
          if (endpos != std::string::npos)
             html.erase (startpos, endpos - startpos);

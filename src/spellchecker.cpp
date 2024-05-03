@@ -228,7 +228,7 @@ QStringList CAspellchecker::get_suggestions_list (const QString &word)
 }
 
 
-void Aspellchecker::add_to_user_dict (const QString &word)
+void CAspellchecker::add_to_user_dict (const QString &word)
 {
   if (! loaded || ! speller)
      return;
@@ -242,14 +242,12 @@ void Aspellchecker::add_to_user_dict (const QString &word)
 }
 
 
-void Aspellchecker::remove_from_user_dict (const QString &word)
+void CAspellchecker::remove_from_user_dict (const QString &word)
 {
   if (word.isEmpty())
      return;
 
-  int i = user_dict.indexOf (word);
-  if (i != -1)
-     user_dict.removeAt (i);
+  user_dict_checker.remove_word (word);
 }
 
 
@@ -447,7 +445,7 @@ QStringList CHunspellChecker::get_suggestions_list (const QString &word)
   int size = speller->suggest (&slst, es.data());
 
   for (int i = 0; i < size; i++)
-      sl.append (QString::fromUtf8 slst[i]);
+      sl.append (QString::fromUtf8 (slst[i]));
 
   speller->free_list (&slst, size);
 
@@ -693,37 +691,50 @@ void CPlainSpellchecker::load_from_file (const QString &fname)
 
 void CPlainSpellchecker::save_to_file (const QString &fname)
 {
-   //QMap<QString, int> map;
-
-   QString text;
-
-   for (QStringList value : std::as_const(map))
-        //cout << value << endl;
-       {
-        //QString s = value[0];
-       // qDebug () << value.at (0);
-
-        if (value.size() > 0)
-           {
-            for (int i = 0; i < value.size(); i++)
+  QString text;
+/*
+  for (QStringList value : std::as_const (map))
+      {
+       if (value.size() > 0)
+          {
+           for (int i = 0; i < value.size(); i++)
                {
                 QString t = value.at(i);
 
                 if (! t.isEmpty())
-                  {
+                   {
                     text += value.at(i);
                     text += "\n";
                     qDebug () << value.at (i);
-                  }
-
+                   }
                }
            }
-
-
        }
+*/
 
-    qstring_save (user_dict_filename, text);
+  QList <QStringList> values = map.values();
 
+  for (int i = 0; i < values.size(); i++)
+      {
+       if (values.at(i).size() > 0)
+          {
+           for (int j = 0; j < values.at(j).size(); j++)
+               {
+                QString t = values.at(i).at(j);
+
+                if (! t.isEmpty())
+                   {
+                    text += t;
+                    text += "\n";
+                    qDebug () << t;
+                   }
+               }
+         }
+
+      }
+
+
+  qstring_save (user_dict_filename, text);
 }
 
 

@@ -13,12 +13,11 @@ exists("/usr/include/linux/joystick.h") {
 }
 
 
+#QMAKE_CXXFLAGS += -std=c++11
+
 #DEFINES += NOCRYPT \
 #           NOUNCRYPT \
 #           QUAZIP_STATIC
-
-
-#QMAKE_CXXFLAGS += -std=c++11
 
 
 USE_ASPELL = true

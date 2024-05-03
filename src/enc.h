@@ -20,7 +20,7 @@ public:
 
   static UTF16TEXT* ConvertFromDOS866ToUTF16 (const char* dos866Text); //ok
 
-static char* ConvertFromUTF16ToDOS866(const UTF16TEXT* utf16Text);
+static char* ConvertFromUTF16ToCP866(const UTF16TEXT* utf16Text); //НОЛЬ
 static UTF16TEXT* ConvertFromKOI8RToUTF16(const char* koi8rText); //ok
 static char* ConvertFromUTF16ToKOI8R(const UTF16TEXT* utf16Text); //ok
 

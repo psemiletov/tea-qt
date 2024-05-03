@@ -407,9 +407,18 @@ bool CTioPlainText::save (const QString &fname)
     }
 
 
-   if (charset == "KOI8-R") //портит
+   if (charset == "KOI8-R") //ok
     {
      char* text = CTextConverter::ConvertFromUTF16ToKOI8R ((UTF16TEXT*)data.utf16());
+     file.write (text);
+     file.close();
+     delete [] text;
+     return true;
+    }
+
+ if (charset == "CP-866") //ноль
+    {
+     char* text = CTextConverter::ConvertFromUTF16ToCP866 ((UTF16TEXT*)data.utf16());
      file.write (text);
      file.close();
      delete [] text;

@@ -668,7 +668,7 @@ ogd<br>
 <a name="mni_spell"></a>
 <h3>Functions  &gt; Spell-checking</h3>
 
-<p>TEA can use the power of two spell checking engines: Aspell and Hunspell. TEA can be built with or without them. In a positive case, to switch between engines use the list <b>Spell checker engine</b> at <b>Options - Functions</b> page.</p>
+<p>TEA can use the power of three spell checking engines: Aspell, Hunspell and Nuspell (TEA Qt6-build only). TEA can be built with or without them. In a positive case, to switch between engines use the list <b>Spell checker engine</b> at <b>Options - Functions</b> page.</p>
 
 <p>Aspell engine uses system-wide installed dictionaries (use your Linux distro package manager to install them). At the Windows, you need some extra things to do. First, download and install Aspell full installer from the <a href="http://aspell.net/win32/">http://aspell.net/win32/</a>. Then, from the same page, download and install some dictionaries. You need to put them into the directory, where Aspell is installed. By default, it is C:\Program Files\Aspell. Finally, at TEA, you need to set the path to the Aspell - go to the <b>Options - Functions</b>, change the <b>Aspell directory</b> option to the correct one and restart TEA.<p>
 
@@ -676,13 +676,19 @@ ogd<br>
 
 <p>There are files with OXT extension. Internally they are common ZIP-files. So  download and rename filename.oxt tofilenname.zip. Create some directory for dictionaries and unpack the <i>.aff</i> and <i>.dic</i> files from ZIP. Then select this directory using <b>Select</b> button at the <b>Options - Functions - Hunspell dictionaries path</b> option.</p> 
 
-<p>When the dictionary stuff is configured, you need to go to the menu <b>Functions - Spell checker languages</b> and select the language what you need. Without this last step the spell checking will fail. Also <b>select the language</b> in this way after you change the engine from Aspell to Hunspell or vice versa.</p>
+<p>To be clear - we need only <i>.aff</i> and <i>.dic</i> files at the directory that you set at TEA options. No subdirectories.</p>
+
+<p><b>Nuspell</b> searches the dictionaries in its own way, let's say it is system-wide installed Hunspell and LibreOffice dictionaries.</p>
+
+<p>When the dictionary stuff is configured, you need to go to the menu <b>Functions - Spell checker languages</b> and select the language what you need. <b>Without this step the spell checking will fail</b>. Alsom <b>set the current language</b> in this way after you switch between the engines (Aspell, Hunspell, Nuspell).</p>
 
 <p>It's a good idea to restart TEA after adding the dictionary.</p>
 
-<p><b>Spell-checker languages</b> -  At this menu you can find the list of dictionaries which installed for aspell (from the distro or so). To spell check, use one of those menu items. It works with the whole text, not with the selection only.</p>
+<p><b>Spell-checker languages</b> -  At this menu you can find the list of dictionaries which installed for the current spell-checker. To do the spell checking, use one of those menu items. It works with the whole text, not with the selection only.</p>
 
-<p>The menu item with the language name is used also to set the default spell-checker language. The default value is a language of your locale. To do a simple check with the default (last selected) language, use <b>Spell check</b> menu item.</p>
+<p>The menu item with the language name is used also to set the default spell-checker language. The default value is the language of your locale, but sometimes it went wrong, so select the language/dict manually is a good idea.</p>
+ 
+<p>To do a simple check with the default (last selected) language, use <b>Spell check</b> menu item.</p>
 
 <p><b>Suggest</b> - shows the list with suggestions for the current misspelled word (actually, the word under the cursor). To use this function, use <b>Spell check</b> first. Possibly incorrect words will be underlined.</p>
 
@@ -692,7 +698,7 @@ ogd<br>
 
 <p>Beware that some correct words TEA can mark as incorrect. It's due to the current word parsing, it will be fixed soon as possible.</p>
 
-<p><b>Remove from dictionary</b>- this function is Hunspell-only. An updated dictionary will be loaded after the next session.</p>
+<p><b>Remove from dictionary</b>- removes the word from the user's dict.</p>
 <br>
 
 

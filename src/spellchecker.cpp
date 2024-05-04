@@ -538,7 +538,7 @@ CNuspellChecker::CNuspellChecker (const QString &lang, const QString &dir_path, 
   speller = 0;
 
   nuspell::append_default_dir_paths (dirs);
-
+  nuspell::append_libreoffice_dir_paths (dirs);
   //qDebug << "dirs.size: " << dirs.size();
 
   //auto dict_list = nuspell::search_default_dirs_for_dicts();

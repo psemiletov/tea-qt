@@ -1,4 +1,10 @@
-use libpoppler instead ot qt popplers
+
+
+1. Выбрать Nuspell.
+2. Выбрать Hunspell
+3. Выбрать Проверку - сегфолт
+
+То же при смене с Hunspell
 
 
 переопределить контекстное меню!

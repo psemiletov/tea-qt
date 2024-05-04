@@ -2978,13 +2978,12 @@ void CTEA::search_replace_all()
           if (sl.size() < 1)
              return;
 
-         // char *charset = cb_fman_codecs->currentText().toLatin1().data();
 
-           QString search_charset = cb_fman_codecs->currentText();
+           //QString search_charset = cb_fman_codecs->currentText();
 
           for (QList <QString>::iterator fname = sl.begin(); fname != sl.end(); ++fname)
               {
-               QString f = qstring_load ((*fname), search_charset);
+               QString f = qstring_load ((*fname)/*, search_charset*/);
                QString r;
 
 #if (QT_VERSION_MAJOR < 5)
@@ -3003,7 +3002,7 @@ void CTEA::search_replace_all()
 
 #endif
 
-               qstring_save ((*fname), r, search_charset);
+               qstring_save ((*fname), r/*, search_charset*/);
                log->log (tr ("%1 is processed and saved").arg ((*fname)));
               }
         }
@@ -3331,13 +3330,13 @@ void CTEA::fn_use_table()
              return;
 
           //char *charset = cb_fman_codecs->currentText().toLatin1().data();
-          QString search_charset = cb_fman_codecs->currentText();
+       //   QString search_charset = cb_fman_codecs->currentText();
 
           for (QList <QString>::const_iterator fname = sl.begin(); fname != sl.end(); ++fname)
               {
-               QString f = qstring_load ((*fname), search_charset);
+               QString f = qstring_load ((*fname)/*, search_charset*/);
                QString r = apply_table (f, a->data().toString(), menu_find_regexp->isChecked());
-               qstring_save ((*fname), r, search_charset);
+               qstring_save ((*fname), r/*, search_charset*/);
                log->log (tr ("%1 is processed and saved").arg ((*fname)));
               }
          }
@@ -6756,7 +6755,6 @@ void CTEA::setup_spellcheckers()
 
   QString default_speller;
 
-
 #ifdef ASPELL_ENABLE
   spellcheckers.append ("Aspell");
   default_speller = "Aspell";
@@ -6777,7 +6775,6 @@ qDebug() << "CTEA::setup_spellcheckers() 2";
   cur_spellchecker = settings->value ("cur_spellchecker", default_speller).toString();
 
   qDebug() << "CTEA::setup_spellcheckers() 1:" << cur_spellchecker;
-
 
   if (spellcheckers.size() > 0)
      if (! spellcheckers.contains (cur_spellchecker))

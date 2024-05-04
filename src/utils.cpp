@@ -176,7 +176,7 @@ QStringList read_dir_entries (const QString &path)
 /* io utils */
 
 
-bool qstring_save (const QString &fileName, const QString &data, const QString &enc)
+bool qstring_save (const QString &fileName, const QString &data)
 {
   if (fileName.isEmpty())
       return false;
@@ -185,21 +185,21 @@ bool qstring_save (const QString &fileName, const QString &data, const QString &
   if (! file.open (QFile::WriteOnly))
       return false;
 
-  if (enc == "UTF-8")
-    {
+ // if (enc == "UTF-8")
+   // {
      QByteArray ba = data.toUtf8();
      file.write (ba);
      file.close();
      return true;
-    }
+    //}
 
 
 
-  return false;
+  //return false;
 }
 
 
-QString qstring_load (const QString &fileName, const QString &enc)
+QString qstring_load (const QString &fileName)
 {
   if (fileName.isEmpty())
       return QString();
@@ -214,11 +214,11 @@ QString qstring_load (const QString &fileName, const QString &enc)
   file.close();
 
 
-  if (enc == "UTF-8")
+ // if (enc == "UTF-8")
       result = QString::fromUtf8 (ba.data());
 
-  if (enc == "UTF-16")
-      result = QString::fromUtf16 ((char16_t *)ba.data());
+  //if (enc == "UTF-16")
+    //  result = QString::fromUtf16 ((char16_t *)ba.data());
 
 
   return result;

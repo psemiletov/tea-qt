@@ -190,12 +190,8 @@ bool CAspellchecker::check (const QString &word)
   if (! loaded)
      load_dict();
 
-
   if (user_dict_checker.check (word))
      return true;
-
-//  if (user_dict.indexOf (word) != -1) //найдено, выходим
-  //   return true;
 
   if (speller)
      return aspell_speller_check (speller, word.toUtf8().data(), -1);
@@ -236,9 +232,7 @@ void CAspellchecker::add_to_user_dict (const QString &word)
   if (word.isEmpty())
      return;
 
-//  user_dict.append (word);
    user_dict_checker.add_word (word);
-
 }
 
 
@@ -250,13 +244,12 @@ void CAspellchecker::remove_from_user_dict (const QString &word)
   user_dict_checker.remove_word (word);
 }
 
-
-
 #endif
 
 
-#ifdef HUNSPELL_ENABLE
+/****************** HUNSPELL **********************************/
 
+#ifdef HUNSPELL_ENABLE
 
 void CHunspellChecker::add_to_user_dict (const QString &word)
 {
@@ -266,7 +259,6 @@ void CHunspellChecker::add_to_user_dict (const QString &word)
   if (word.isEmpty())
      return;
 
-  //user_dict.append (word);
   user_dict_checker.add_word (word);
 }
 
@@ -276,24 +268,20 @@ void CHunspellChecker::remove_from_user_dict (const QString &word)
   if (word.isEmpty())
      return;
 
-
   user_dict_checker.remove_word (word);
- /*
-  int i = user_dict.indexOf (word);
-  if (i != -1)
-     user_dict.removeAt (i);*/
 }
-
 
 
 void CHunspellChecker::load_dict()
 {
   loaded = false;
 
+  qDebug() << "true HunspellChecker::load_dict()";
+
+
   if (! dir_exists (dir_dicts) || language.isEmpty())
      return;
 
- qDebug() << "true HunspellChecker::load_dict()";
 
   if (speller)
      delete speller;
@@ -302,30 +290,25 @@ void CHunspellChecker::load_dict()
 
   QString fname_aff = dir_dicts + QDir::separator() + language + ".aff";
   QString fname_dict = dir_dicts + QDir::separator() + language + ".dic";
-//  QString fname_userdict = dir_user_dicts + QDir::separator() + language + ".dic";
-//  QString fname_userdict_pure;
 
   fname_aff = fname_aff.replace ("/", "\\");
   fname_dict = fname_dict.replace ("/", "\\");
-//  fname_userdict = fname_userdict.replace ("/", "\\");
-//  fname_userdict_pure = fname_userdict;
 
 #else
 
   QString fname_aff = dir_dicts + QDir::separator() + language + ".aff";
   QString fname_dict = dir_dicts + QDir::separator() + language + ".dic";
-//  QString fname_userdict = dir_user_dicts + QDir::separator() + language + ".dic";
 
 #endif
 
+/* WTF?
 #if defined(Q_OS_WIN)
 
   fname_aff = "\\\\?\\" + fname_aff;
   fname_dict = "\\\\?\\" + fname_dict;
-//  fname_userdict = "\\\\?\\" + fname_userdict;
 
 #endif
-
+*/
   speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
 
 #if !defined (H_DEPRECATED)
@@ -362,8 +345,6 @@ void CHunspellChecker::change_lang (const QString &lang)
       return;
 
   language = lang;
- // save_user_dict();
- // user_words.clear();
 }
 
 /*
@@ -392,6 +373,13 @@ bool CHunspellChecker::check (const QString &word)
 
   if (! loaded)
      load_dict();
+
+  if (! loaded)
+    {
+
+     qDebug() << "still not loaded!";
+     return false;
+    }
 
   if (user_dict_checker.check (word))
      return true;
@@ -493,8 +481,6 @@ void CNuspellChecker::add_to_user_dict (const QString &word)
 
   if (word.isEmpty())
      return;
-
-// user_dict.append (word);
 
   user_dict_checker.add_word (word);
 }
@@ -669,23 +655,51 @@ bool CPlainSpellchecker::check (const QString &word)
 
 void CPlainSpellchecker::load_from_file (const QString &fname)
 {
+  if (fname.isEmpty())
+     {
+      std::cout << "CPlainSpellchecker::load_from_file - empty" << std::endl;
+      return;
+     }
+
+std::cout << "@1" << std::endl;
+
   if (! file_exists (fname))
       return;
 
+   std::cout << "@2" << std::endl;
+
+
   user_dict_filename = fname;
+
+    std::cout << "@3" << std::endl;
+
 
   QString text = qstring_load (fname);
 
+    std::cout << "@4" << std::endl;
+
+
   QStringList sl = text.split ("\n");
+
+  std::cout << "@5" << std::endl;
+
 
   for (int i = 0; i < sl.size(); i++)
       {
-       if (sl[i] == "\n")
+       QString s = sl.at(i);
+
+       if (s.isEmpty() || s == "\n")
           continue;
 
-       char16_t key = sl[i][0].unicode();
-       map[key].append (sl[i]);
+       //if (sl.at(i) == "\n")
+         // continue;
+
+       char16_t key = s[0].unicode();
+       map[key].append (s);
       }
+
+
+ std::cout << "@6" << std::endl;
 }
 
 

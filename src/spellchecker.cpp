@@ -127,6 +127,8 @@ CAspellchecker::CAspellchecker (const QString &lang, const QString &path,
   speller = 0;
   spell_config = 0;
 
+  loaded = false;
+
   spell_config = new_aspell_config();
   if (! spell_config)
      return;
@@ -189,6 +191,9 @@ bool CAspellchecker::check (const QString &word)
 
   if (! loaded)
      load_dict();
+
+  if (! loaded)
+      false; //still not loaded
 
   if (user_dict_checker.check (word))
      return true;
@@ -276,11 +281,8 @@ void CHunspellChecker::load_dict()
 {
   loaded = false;
 
-  //qDebug() << "true HunspellChecker::load_dict()";
-
   if (! dir_exists (dir_dicts) || language.isEmpty())
      return;
-
 
   if (speller)
      delete speller;
@@ -320,7 +322,6 @@ void CHunspellChecker::load_dict()
 #endif
 
   loaded = true;
-
 }
 
 
@@ -328,6 +329,7 @@ CHunspellChecker::CHunspellChecker (const QString &lang, const QString &dir_path
 {
   speller = 0;
   encoding = 0;
+  loaded = false;
 }
 
 
@@ -472,9 +474,7 @@ QString hunspell_default_dict_path()
 
 
 
-
 #ifdef NUSPELL_ENABLE
-
 
 void CNuspellChecker::add_to_user_dict (const QString &word)
 {
@@ -501,7 +501,6 @@ void CNuspellChecker::load_dict()
 {
   loaded = false;
 
-
   qDebug() << "true CNuspellChecker::load_dict";
 
   dict_path = nuspell::search_dirs_for_one_dict (dirs, language.toStdString());
@@ -519,17 +518,15 @@ void CNuspellChecker::load_dict()
 
 
   try {
-     	speller->load_aff_dic(dict_path);
+       speller->load_aff_dic(dict_path);
       }
   catch (const nuspell::Dictionary_Loading_Error& e)
-       {
-	   std::cout << e.what() << '\n';
-	   return;
-      }
-
+        {
+	     std::cout << e.what() << '\n';
+	     return;
+        }
 
   loaded = true;
-
 }
 
 
@@ -537,7 +534,9 @@ CNuspellChecker::CNuspellChecker (const QString &lang, const QString &dir_path, 
 {
   qDebug() << "CNuspellChecker::CNuspellChecker ";
 
+  loaded = false;
   speller = 0;
+
   nuspell::append_default_dir_paths (dirs);
 
   //qDebug << "dirs.size: " << dirs.size();
@@ -554,14 +553,10 @@ CNuspellChecker::~CNuspellChecker()
 
 void CNuspellChecker::change_lang (const QString &lang)
 {
-  qDebug() << "CNuspellChecker::change_lang: " << lang;
-
   if (language.isEmpty() || language == lang)
      return;
 
-
   language = lang;
-
 }
 
 
@@ -573,9 +568,12 @@ bool CNuspellChecker::check (const QString &word)
   if (! loaded)
      load_dict();
 
+  if (! loaded)
+      //still not loaded!
+      return false;
+
   if (user_dict_checker.check (word))
      return true;
-
 
   return speller->spell (word.toStdString());
 }
@@ -588,16 +586,12 @@ void CNuspellChecker::get_speller_modules_list()
 
   auto dict_list = nuspell::search_default_dirs_for_dicts();
 
-
   for (int i = 0; i < dict_list.size(); i++)
       {
        QString dictname = QString::fromStdString (dict_list[i].stem().string());
-       qDebug() << "CNuspellChecker::get_speller_modules_list() - " << dictname;
-
+//       qDebug() << "CNuspellChecker::get_speller_modules_list() - " << dictname;
        modules_list.append (dictname);
       }
-
-
 }
 
 
@@ -610,13 +604,11 @@ QStringList CNuspellChecker::get_suggestions_list (const QString &word)
 
   QByteArray es = word.toUtf8();
 
-
   auto suggestions = std::vector<std::string>();
   speller->suggest(word.toStdString(), suggestions);
 
   if (suggestions.empty())
 	  return sl;
-
 
   sl.reserve (suggestions.size());
   for (size_t i = 0, sz = suggestions.size(); i < sz; ++i)
@@ -631,8 +623,7 @@ QStringList CNuspellChecker::get_suggestions_list (const QString &word)
 
 void CPlainSpellchecker::add_word (const QString &word)
 {
-
-  char16_t key = word[0].unicode();
+  char16_t key = word.at(0).unicode();
   map[key].append (word);
 }
 
@@ -640,7 +631,7 @@ void CPlainSpellchecker::add_word (const QString &word)
 void CPlainSpellchecker::remove_word (const QString &word)
 {
 
-  char16_t key = word[0].unicode();
+  char16_t key = word.at(0).unicode();
 
   int i = map[key].indexOf (word);
   if (i != -1)

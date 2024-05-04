@@ -4964,7 +4964,17 @@ void CTEA::fn_spell_check()
      if (! spellchecker->check (stext))
         {
          f = cr.blockCharFormat();
+
+         #if defined(Q_OS_WIN)
+
+         f.setUnderlineStyle (QTextCharFormat::SingleUnderline);
+
+         #else
+
          f.setUnderlineStyle (QTextCharFormat::SpellCheckUnderline);
+
+         #endif
+
          f.setUnderlineColor (color_error);
          cr.mergeCharFormat (f);
         }

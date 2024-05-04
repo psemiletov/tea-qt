@@ -180,7 +180,7 @@ bool CAspellchecker::check (const QString &word)
 {
   if (modules_list.size() == 0)
      {
-      QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Options - Functions page"));
+      //QMessageBox::about (0, "!", QObject::tr ("Please set up spell checker dictionaries at\n Options - Functions page"));
       return false;
      }
 
@@ -204,7 +204,7 @@ QStringList CAspellchecker::get_suggestions_list (const QString &word)
 {
   QStringList l;
 
-  if (! loaded || word.isEmpty() || !speller)
+  if (! loaded || word.isEmpty() || ! speller)
      return l;
 
   const AspellWordList *suggestions = aspell_speller_suggest (speller, word.toUtf8().data(), -1);
@@ -276,8 +276,7 @@ void CHunspellChecker::load_dict()
 {
   loaded = false;
 
-  qDebug() << "true HunspellChecker::load_dict()";
-
+  //qDebug() << "true HunspellChecker::load_dict()";
 
   if (! dir_exists (dir_dicts) || language.isEmpty())
      return;
@@ -301,23 +300,22 @@ void CHunspellChecker::load_dict()
 
 #endif
 
-/* WTF?
+//need for Unicode path
 #if defined(Q_OS_WIN)
 
   fname_aff = "\\\\?\\" + fname_aff;
   fname_dict = "\\\\?\\" + fname_dict;
 
 #endif
-*/
+
   speller = new Hunspell (fname_aff.toUtf8().data(), fname_dict.toUtf8().data());
 
 #if !defined (H_DEPRECATED)
   encoding = speller->get_dic_encoding();
 #else
   str_encoding = speller->get_dict_encoding();
-
  // std::cout << "str_encoding : " << str_encoding << std::endl;
-  qDebug() << "str_encoding : " << str_encoding;
+  //qDebug() << "str_encoding : " << str_encoding;
 
 #endif
 
@@ -375,23 +373,27 @@ bool CHunspellChecker::check (const QString &word)
      load_dict();
 
   if (! loaded)
-    {
-
-     qDebug() << "still not loaded!";
-     return false;
-    }
+     {
+      qDebug() << "still not loaded!";
+      return false;
+     }
 
   if (user_dict_checker.check (word))
      return true;
 
 
-  QByteArray es = word.toUtf8();
+    QByteArray es = word.toUtf8();
 
 #ifndef H_DEPRECATED
+
    return speller->spell (es.constData());
-  //return speller->spell (es.data()); //old way
+
+   //return speller->spell (es.data()); //old way
 #else
+
   return speller->spell (QString(es).toStdString());
+ //  return speller->spell (word.toStdString());
+
 #endif
 }
 
@@ -656,33 +658,17 @@ bool CPlainSpellchecker::check (const QString &word)
 void CPlainSpellchecker::load_from_file (const QString &fname)
 {
   if (fname.isEmpty())
-     {
-      std::cout << "CPlainSpellchecker::load_from_file - empty" << std::endl;
       return;
-     }
-
-std::cout << "@1" << std::endl;
 
   if (! file_exists (fname))
       return;
 
-   std::cout << "@2" << std::endl;
-
 
   user_dict_filename = fname;
 
-    std::cout << "@3" << std::endl;
-
-
   QString text = qstring_load (fname);
 
-    std::cout << "@4" << std::endl;
-
-
   QStringList sl = text.split ("\n");
-
-  std::cout << "@5" << std::endl;
-
 
   for (int i = 0; i < sl.size(); i++)
       {
@@ -691,15 +677,9 @@ std::cout << "@1" << std::endl;
        if (s.isEmpty() || s == "\n")
           continue;
 
-       //if (sl.at(i) == "\n")
-         // continue;
-
        char16_t key = s[0].unicode();
        map[key].append (s);
       }
-
-
- std::cout << "@6" << std::endl;
 }
 
 

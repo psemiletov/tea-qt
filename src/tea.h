@@ -446,7 +446,7 @@ Preferences tab :: Common page UI elements
   QCheckBox *cb_auto_img_preview;
   QCheckBox *cb_session_restore;
   QCheckBox *cb_use_trad_dialogs;
-  QCheckBox *cb_use_enca_for_charset_detection;
+  //QCheckBox *cb_use_enca_for_charset_detection;
 
   QCheckBox *cb_override_img_viewer;
   QLineEdit *ed_img_viewer_override;
@@ -1037,7 +1037,7 @@ Misc callbacks
 
   void select_label();
   void run_program();
-  void guess_enc();
+//  void guess_enc();
   void clipboard_dataChanged();
   void main_tab_page_changed (int index);
   void calendar_clicked (const QDate &date);

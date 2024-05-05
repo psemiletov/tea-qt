@@ -2,10 +2,10 @@
 #include <iostream>
 #include <sstream>
 #include <list>
-#include <algorithm> 
-#include <iterator>
+//#include <algorithm>
+//#include <iterator>
 #include <ctype.h>
-#include <locale>
+//#include <locale>
 #include <math.h>
 
 #include "utils.h"

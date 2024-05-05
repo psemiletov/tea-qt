@@ -7971,8 +7971,8 @@ OPTIONS::COMMON
   cb_session_restore = new QCheckBox (tr ("Restore the last session on start-up"), tab_options);
   cb_session_restore->setChecked (settings->value ("session_restore", "0").toBool());
 
-  cb_use_enca_for_charset_detection = new QCheckBox (tr ("Use Enca for charset detection"), tab_options);
-  cb_use_enca_for_charset_detection->setChecked (settings->value ("use_enca_for_charset_detection", 0).toBool());
+  //cb_use_enca_for_charset_detection = new QCheckBox (tr ("Use Enca for charset detection"), tab_options);
+  //cb_use_enca_for_charset_detection->setChecked (settings->value ("use_enca_for_charset_detection", 0).toBool());
 
   cb_override_img_viewer = new QCheckBox (tr ("Use external image viewer for F2"), tab_options);
   cb_override_img_viewer->setChecked (settings->value ("override_img_viewer", 0).toBool());
@@ -8053,7 +8053,7 @@ OPTIONS::COMMON
   page_common_layout->addWidget (cb_auto_img_preview);
   page_common_layout->addWidget (cb_session_restore);
   page_common_layout->addWidget (cb_use_trad_dialogs);
-  page_common_layout->addWidget (cb_use_enca_for_charset_detection);
+  //page_common_layout->addWidget (cb_use_enca_for_charset_detection);
 
   page_common_layout->addLayout (hb_imgvovr);
 
@@ -8599,9 +8599,9 @@ void CTEA::create_fman()
 
   l_t = new QLabel (tr ("Charset"));
 
-  QPushButton *bt_magicenc = new QPushButton ("?", this);
-  bt_magicenc->setToolTip (tr ("Guess encoding!"));
-  connect (bt_magicenc, SIGNAL(clicked()), this, SLOT(guess_enc()));
+//  QPushButton *bt_magicenc = new QPushButton ("?", this);
+  //bt_magicenc->setToolTip (tr ("Guess encoding!"));
+//  connect (bt_magicenc, SIGNAL(clicked()), this, SLOT(guess_enc()));
 
   /*
 #if QT_VERSION >= 0x051100
@@ -8636,7 +8636,7 @@ void CTEA::create_fman()
   QHBoxLayout *lt_hb = new QHBoxLayout;
 
   lt_hb->addWidget (cb_fman_codecs);
-  lt_hb->addWidget (bt_magicenc);
+  //lt_hb->addWidget (bt_magicenc);
 
   lah_controls->addLayout (lt_hb);
 
@@ -9348,7 +9348,7 @@ void CTEA::run_program()
 
 //system (command.toUtf8().data());
 }
-
+/*
 void CTEA::guess_enc()
 {
   QString enc;
@@ -9376,7 +9376,7 @@ void CTEA::guess_enc()
   if (! enc.isEmpty())
      cb_fman_codecs->setCurrentIndex (cb_fman_codecs->findText (enc, Qt::MatchFixedString));
 }
-
+*/
 
 void CTEA::clipboard_dataChanged()
 {
@@ -9972,7 +9972,7 @@ void CTEA::leaving_options()
 
   settings->setValue ("cursor_width", spb_cursor_width->value());
   settings->setValue ("override_img_viewer", cb_override_img_viewer->isChecked());
-  settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->isChecked());
+  //settings->setValue ("use_enca_for_charset_detection", cb_use_enca_for_charset_detection->isChecked());
   settings->setValue ("use_trad_dialogs", cb_use_trad_dialogs->isChecked());
   settings->setValue ("start_week_on_sunday", cb_start_on_sunday->isChecked());
   settings->setValue ("northern_hemisphere", cb_northern_hemisphere->isChecked());

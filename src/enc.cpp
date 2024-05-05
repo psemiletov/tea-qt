@@ -1766,7 +1766,9 @@ std::string ConvertUTF16ToUTF8(const UTF16TEXT* utf16_text)
     std::string utf8_text;
 
     // Итерируемся по массиву UTF-16 до тех пор, пока не достигнем нулевого символа
-    for (int i = 0; utf16_text[i] != u'\0'; ++i) {
+    //for (int i = 0; utf16_text[i] != u'\0'; ++i) {
+      for (int i = 0; utf16_text[i] != '\0'; ++i) {
+
         UTF16TEXT unicode_value = utf16_text[i];
 
         // Если символ меньше или равен 0x7F, он в кодировке ASCII и представляется в UTF-8 одним байтом

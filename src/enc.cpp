@@ -1757,3 +1757,32 @@ char* CTextConverter::ConvertFromUTF16ToCP866(const UTF16TEXT* utf16Text)
 
   return result;
 }
+
+
+
+
+std::string ConvertUTF16ToUTF8(const UTF16TEXT* utf16_text)
+{
+    std::string utf8_text;
+
+    // Итерируемся по массиву UTF-16 до тех пор, пока не достигнем нулевого символа
+    for (int i = 0; utf16_text[i] != u'\0'; ++i) {
+        UTF16TEXT unicode_value = utf16_text[i];
+
+        // Если символ меньше или равен 0x7F, он в кодировке ASCII и представляется в UTF-8 одним байтом
+        if (unicode_value <= 0x7F) {
+            utf8_text.push_back(static_cast<char>(unicode_value));
+        } else if (unicode_value <= 0x7FF) {
+            // Если символ в диапазоне 0x80 - 0x7FF, он представляется в UTF-8 двумя байтами
+            utf8_text.push_back(static_cast<char>(0xC0 | (unicode_value >> 6))); // Первый байт
+            utf8_text.push_back(static_cast<char>(0x80 | (unicode_value & 0x3F))); // Второй байт
+        } else {
+            // В противном случае символ представляется в UTF-8 тремя байтами
+            utf8_text.push_back(static_cast<char>(0xE0 | (unicode_value >> 12))); // Первый байт
+            utf8_text.push_back(static_cast<char>(0x80 | ((unicode_value >> 6) & 0x3F))); // Второй байт
+            utf8_text.push_back(static_cast<char>(0x80 | (unicode_value & 0x3F))); // Третий байт
+        }
+    }
+
+    return utf8_text;
+}

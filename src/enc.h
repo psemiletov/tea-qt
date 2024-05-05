@@ -32,5 +32,8 @@ static QStringList get_charsets();
 
 };
 
+std::string ConvertUTF16ToUTF8(const UTF16TEXT* utf16_text);
+
+
 #endif
 

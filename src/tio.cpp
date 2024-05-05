@@ -571,23 +571,17 @@ bool CTioXMLZipped::load (const QString &fname)
       tags.append ( "text:s");
      }
 
-/*
-  CZipper zipper;
-  if (! zipper.read_as_utf8 (fname, source_fname))
-      return false;
-*/
-
 
   void *buf = NULL;
   size_t bufsize = 0;
 
-  struct zip_t *zip = zip_open(fn.c_str(), 0, 'r');
+  struct zip_t *zip = zip_open (fn.c_str(), 0, 'r');
 
   if (! zip)
      return false;
 
 
-  if (zip_entry_open(zip, source_fname.c_str()) < 0)
+  if (zip_entry_open (zip, source_fname.c_str()) < 0)
      return false;
 
 
@@ -599,8 +593,6 @@ bool CTioXMLZipped::load (const QString &fname)
 
   zip_close (zip);
   free(buf);
-
-  //data = extract_text_from_xml_pugi (zipper.string_data, tags);
 
   return true;
 }
@@ -808,12 +800,31 @@ bool CFB2_walker::for_each (pugi::xml_node &node)
 
 
 
+std::string string_between(const std::string &source,
+                           const std::string &sep1,
+                           const std::string &sep2)
+{
+    std::string result;
+    size_t pos1 = source.find(sep1);
+    if (pos1 == std::string::npos)
+        return result;
+
+    size_t pos2 = source.find(sep2, pos1 + sep1.size());
+    if (pos2 == std::string::npos)
+        return result;
+
+    pos1 += sep1.size();
+
+    result = source.substr(pos1, pos2 - pos1);
+    return result;
+}
+
 bool CTioFB2::load (const QString &fname)
 {
-  data.clear();
 
-  //std::vector <std::string> tags;
-  //tags.push_back ("p");
+  std::cout << "CTioFB2::load (const QString &fname" << std::endl;
+
+  data.clear();
 
   QStringList tags;
   tags.append ("p");
@@ -824,6 +835,22 @@ bool CTioFB2::load (const QString &fname)
   if (fname.endsWith ("fb2"))
      {
       std::string stemp = string_file_load (zip_file_name);
+
+      if (stemp.find ("encoding=\"windows-1251\"")  != std::string::npos)
+         {
+          std::cout << "1251^^^^^^^^^^^^^^^^^^^^^" << std::endl;
+          UTF16TEXT *t_utf16 = CTextConverter::ConvertFromCP1251ToUTF16 (stemp.c_str());
+          QString td = QString::fromUtf16 (t_utf16);
+          delete [] t_utf16;
+
+          data = extract_text_from_xml_pugi (td, tags);
+
+          if (data.isEmpty())
+             return false;
+          else
+              return true;
+         }
+
 
       data = extract_text_from_xml_pugi (stemp.c_str(), stemp.size(), tags);
 
@@ -848,21 +875,22 @@ bool CTioFB2::load (const QString &fname)
      return false;
 
 
+  int n = zip_entries_total(zip);
 
-  int i, n = zip_entries_total(zip);
-  for (i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
       {
-       zip_entry_openbyindex(zip, i);
+       zip_entry_openbyindex (zip, i);
 
-       const char *name = zip_entry_name(zip);
+       const char *name = zip_entry_name (zip);
 
        std::string tname = name;
-        if (ends_with (tname, "fb2"))
-           {
-            source_fname = tname;
-            zip_entry_close(zip);
-            break;
-           }
+
+       if (ends_with (tname, "fb2"))
+          {
+           source_fname = tname;
+           zip_entry_close(zip);
+           break;
+          }
 
         //int isdir = zip_entry_isdir(zip);
         //unsigned long long size = zip_entry_size(zip);
@@ -871,30 +899,192 @@ bool CTioFB2::load (const QString &fname)
       }
 
 
+  if (source_fname.empty())
+      return false;
 
+
+  void *buf = NULL;
+  size_t bufsize;
+
+
+  if (zip_entry_open (zip, source_fname.c_str()) < 0)
+     return false;
+
+  zip_entry_read (zip, &buf, &bufsize);
+
+  zip_entry_close (zip);
+
+  zip_close(zip);
+
+ // QString enc = string_between (tmp, "encoding=\"", "\"");
+
+
+  bool need_to_recode = false;
+  if (strstr ((char*)buf, "encoding=\"windows-1251\""))
+     need_to_recode = true;
+
+  std::string stemp =(char*)buf;
+
+  if (stemp.find ("encoding=\"windows-1251\"")  != std::string::npos)
+    {
+     std::cout << "1251^^^^^^^^^^^^^^^^^^^^^ ZIPPED" << std::endl;
+      UTF16TEXT *t_utf16 = CTextConverter::ConvertFromCP1251ToUTF16 (stemp.c_str());
+      QString td = QString::fromUtf16 (t_utf16);
+      delete [] t_utf16;
+
+          data = extract_text_from_xml_pugi (td, tags);
+
+          if (data.isEmpty())
+             return false;
+          else
+              return true;
+   }
+
+
+    data = extract_text_from_xml_pugi (stemp.c_str(), stemp.size(), tags);
+
+      if (data.isEmpty())
+         return false;
+      else
+          return true;
+
+    return false;
+}
+
+
+
+
+
+/*
+  pugi::xml_document doc;
+
+  pugi::xml_parse_result result = doc.load_buffer ((char*)buf, bufsize,
+                                                   pugi::parse_default,
+                                                   pugi::encoding_utf8);
+
+
+  free(buf);
+
+  if (! result)
+     return false;
+
+
+//  if (stemp.find ("encoding=\"windows-1251\"")  != std::string::npos)
+
+  CFB2_walker walker;
+  walker.text = &data;
+  walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
+
+  doc.traverse (walker);
+*/
+
+
+
+/*
+bool CTioFB2::load (const QString &fname)
+{
+
+  std::cout << "CTioFB2::load (const QString &fname" << std::endl;
+
+  data.clear();
+
+  QStringList tags;
+  tags.append ("p");
+
+
+  std::string zip_file_name = fname.toStdString();
+
+  if (fname.endsWith ("fb2"))
+     {
+      std::string stemp = string_file_load (zip_file_name);
+
+      if (stemp.find ("encoding=\"windows-1251\"")  != std::string::npos)
+         {
+          std::cout << "1251^^^^^^^^^^^^^^^^^^^^^" << std::endl;
+          UTF16TEXT *t_utf16 = CTextConverter::ConvertFromCP1251ToUTF16 (stemp.c_str());
+          QString td = QString::fromUtf16 (t_utf16);
+          delete [] t_utf16;
+
+          data = extract_text_from_xml_pugi (td, tags);
+
+          if (data.isEmpty())
+             return false;
+          else
+              return true;
+         }
+
+
+      data = extract_text_from_xml_pugi (stemp.c_str(), stemp.size(), tags);
+
+      if (data.isEmpty())
+         return false;
+      else
+          return true;
+     }
+
+   // else
+ // if (fname.endsWith (".fb2.zip") || fname.endsWith (".fbz"))
+
+
+
+  std::string source_fname; //достаем его из зипа
+
+  //we can have malformed internal filename, so find the first fb2 at the archive
+
+  struct zip_t *zip = zip_open (zip_file_name.c_str(), 0, 'r');
+
+  if (! zip)
+     return false;
+
+
+  int n = zip_entries_total(zip);
+
+  for (int i = 0; i < n; ++i)
+      {
+       zip_entry_openbyindex (zip, i);
+
+       const char *name = zip_entry_name (zip);
+
+       std::string tname = name;
+
+       if (ends_with (tname, "fb2"))
+          {
+           source_fname = tname;
+           zip_entry_close(zip);
+           break;
+          }
+
+        //int isdir = zip_entry_isdir(zip);
+        //unsigned long long size = zip_entry_size(zip);
+        //unsigned int crc32 = zip_entry_crc32(zip);
+       zip_entry_close(zip);
+      }
 
 
   if (source_fname.empty())
       return false;
 
 
-
-
   void *buf = NULL;
   size_t bufsize;
 
- // struct zip_t *zip = zip_open (fname.c_str(), 0, 'r');
 
   if (zip_entry_open (zip, source_fname.c_str()) < 0)
      return false;
 
-  zip_entry_read(zip, &buf, &bufsize);
+  zip_entry_read (zip, &buf, &bufsize);
 
-  zip_entry_close(zip);
-
-//  data = extract_text_from_xml_pugi ((char*)buf, bufsize, tags);
+  zip_entry_close (zip);
 
   zip_close(zip);
+
+ // QString enc = string_between (tmp, "encoding=\"", "\"");
+
+
+  bool need_to_recode = false;
+  if (strstr (buf, "encoding=\"windows-1251\""))
+     need_to_recode = true;
+
 
   pugi::xml_document doc;
 
@@ -908,14 +1098,18 @@ bool CTioFB2::load (const QString &fname)
   if (! result)
      return false;
 
+
+//  if (stemp.find ("encoding=\"windows-1251\"")  != std::string::npos)
+
   CFB2_walker walker;
   walker.text = &data;
   walker.fine_spaces = settings->value ("show_ebooks_fine", "0").toBool();
 
   doc.traverse (walker);
 
+
   return true;
-}
+}*/
 /*
 bool CTioFB2::load (const QString &fname)
 {

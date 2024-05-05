@@ -623,7 +623,7 @@ QStringList CNuspellChecker::get_suggestions_list (const QString &word)
 
 void CPlainSpellchecker::add_word (const QString &word)
 {
-  char16_t key = word.at(0).unicode();
+  UTF16TEXT key = word.at(0).unicode();
   map[key].append (word);
 }
 
@@ -631,7 +631,7 @@ void CPlainSpellchecker::add_word (const QString &word)
 void CPlainSpellchecker::remove_word (const QString &word)
 {
 
-  char16_t key = word.at(0).unicode();
+  UTF16TEXT key = word.at(0).unicode();
 
   int i = map[key].indexOf (word);
   if (i != -1)
@@ -668,7 +668,7 @@ void CPlainSpellchecker::load_from_file (const QString &fname)
        if (s.isEmpty() || s == "\n")
           continue;
 
-       char16_t key = s[0].unicode();
+       UTF16TEXT key = s[0].unicode();
        map[key].append (s);
       }
 }

@@ -1,18 +1,16 @@
-#include <iostream>
+//#include <iostream>
 #include <cstring>
 #include <map>
 
 
 
 #include <QStringList>
-//typedef unsigned short ushort;
-
 #include "enc.h"
 
 
-std::map<UTF16TEXT, char> create_UTF16_to_CP1251()
+std::map <UTF16TEXT, char> create_UTF16_to_CP1251()
 {
-std::map<UTF16TEXT, char> UTF16_to_CP1251;
+std::map <UTF16TEXT, char> UTF16_to_CP1251;
 UTF16_to_CP1251[0x0020] = 0x20;  // SPACE
 UTF16_to_CP1251[0x0021] = 0x21;  // EXCLAMATION MARK
 UTF16_to_CP1251[0x0022] = 0x22;  // QUOTATION MARK
@@ -385,7 +383,7 @@ std::map<UTF16TEXT, char> UTF16_to_CP1251 = {
 };
 */
 
-std::map<UTF16TEXT, char> UTF16_to_CP1251 = create_UTF16_to_CP1251();
+std::map <UTF16TEXT, char> UTF16_to_CP1251 = create_UTF16_to_CP1251();
 
 
 
@@ -428,7 +426,7 @@ UTF16TEXT koi8r_to_utf16[256] = {
 
 
 //ok
-UTF16TEXT* CTextConverter::ConvertFromCP1251ToUTF16(const char* cp1251Text)
+UTF16TEXT* CTextConverter::ConvertFromCP1251ToUTF16 (const char* cp1251Text)
 {
   size_t len = strlen (cp1251Text);
 //  UTF16TEXT* utf16Text = new UTF16TEXT[2 * len + 1]; // Максимальная длина UTF-16 символа - 2 байта, учитываем нулевой символ
@@ -1149,9 +1147,7 @@ UTF16TEXT* CTextConverter::ConvertFromDOS866ToUTF16(const char* dos866Text)
 {
   size_t len = strlen (dos866Text);
 
-  //UTF16TEXT* utf16Text = new UTF16TEXT[len + 1]; // +1 for null terminator
   UTF16TEXT* utf16Text = new UTF16TEXT[len + 1]; // +1 for null terminator
-
 
   utf16Text[len] = 0; // Null-terminate the string
 

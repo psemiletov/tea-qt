@@ -17,7 +17,7 @@ Peter Semiletov
 #include <fstream>
 
 #include "utils.h"
-#include "enc.h"
+//#include "enc.h"
 
 using namespace std;
 
@@ -43,7 +43,7 @@ bool has_css_file (const QString &path)
   return false;
 }
 
-
+/*
 QString guess_enc_for_file (const QString &fname)
 {
   if (fname.isEmpty())
@@ -63,7 +63,7 @@ QString guess_enc_for_file (const QString &fname)
 
   return enc;
 }
-
+*/
 
 bool file_is_writable (const QString &fname)
 {
@@ -329,8 +329,6 @@ std::string string_file_load (const std::string &fname)
 
  return s;
 }
-
-
 
 
 void strlist_swap (QStringList &l, int a, int b)

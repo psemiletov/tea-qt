@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyleft 2007-2021 by Peter Semiletov <peter.semiletov@gmail.com>     *
+ *   Copyleft 2007-2024 by Peter Semiletov <peter.semiletov@gmail.com>     *
  *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

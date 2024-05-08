@@ -117,7 +117,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Test</source>
-        <translation>Test</translation>
+        <translation type="vanished">Test</translation>
     </message>
     <message>
         <source>Files</source>
@@ -1045,27 +1045,19 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>ZIP</source>
-        <translation>ZIP</translation>
+        <translation type="vanished">ZIP</translation>
     </message>
     <message>
         <source>Create new ZIP</source>
-        <translation>Créer un nouveau ZIP</translation>
+        <translation type="vanished">Créer un nouveau ZIP</translation>
     </message>
     <message>
         <source>Add to ZIP</source>
-        <translation>Ajouter au ZIP</translation>
+        <translation type="vanished">Ajouter au ZIP</translation>
     </message>
     <message>
         <source>Save ZIP</source>
-        <translation>Sauvegarder au ZIP</translation>
-    </message>
-    <message>
-        <source>List ZIP content</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Unpack ZIP to current directory</source>
-        <translation></translation>
+        <translation type="vanished">Sauvegarder au ZIP</translation>
     </message>
     <message>
         <source>Images</source>
@@ -1172,18 +1164,6 @@ Voulez-vous le remplacer ?</translation>
         <translation></translation>
     </message>
     <message>
-        <source>UI mode (TEA restart needed)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>UI language (TEA restart needed)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>UI style (TEA restart needed)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Interface font</source>
         <translation>Police de caractères de l&apos;interface</translation>
     </message>
@@ -1217,10 +1197,6 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>TEA program icon</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>FIF at the top (restart needed)</source>
         <translation></translation>
     </message>
     <message>
@@ -1284,14 +1260,6 @@ Voulez-vous le remplacer ?</translation>
         <translation>Interface</translation>
     </message>
     <message>
-        <source>Use Alt key to access main menu</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Use Left Alt + WASD as additional cursor keys</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Use joystick as cursor keys</source>
         <translation></translation>
     </message>
@@ -1302,10 +1270,6 @@ Voulez-vous le remplacer ?</translation>
     <message>
         <source>Restore the last session on start-up</source>
         <translation>Restaurer la dernière session au lancement</translation>
-    </message>
-    <message>
-        <source>Use Enca for charset detection</source>
-        <translation></translation>
     </message>
     <message>
         <source>Use external image viewer for F2</source>
@@ -1329,14 +1293,6 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Charset for file open from command line</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ZIP unpacking: file names charset</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ZIP packing: file names charset</source>
         <translation></translation>
     </message>
     <message>
@@ -1409,7 +1365,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Zip directory with processed images</source>
-        <translation>Zipper le répertoire avec les images traitées</translation>
+        <translation type="vanished">Zipper le répertoire avec les images traitées</translation>
     </message>
     <message>
         <source>Web gallery options</source>
@@ -1563,10 +1519,6 @@ ff=firefox file:///%s</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <source>Guess encoding!</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Save as</source>
         <translation>Sauvegarder en tant que</translation>
     </message>
@@ -1650,11 +1602,11 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>Enter the archive name</source>
-        <translation>Entrez le nom de l&apos;archive</translation>
+        <translation type="vanished">Entrez le nom de l&apos;archive</translation>
     </message>
     <message>
         <source>new_archive</source>
-        <translation>nouvelle_archive</translation>
+        <translation type="vanished">nouvelle_archive</translation>
     </message>
     <message>
         <source>Open Directory</source>
@@ -1683,10 +1635,6 @@ ff=firefox file:///%s</source>
     <message>
         <source>There are %1 lines at %2 files</source>
         <translation>Il y a %1 de lignes aux %2 fichiers</translation>
-    </message>
-    <message>
-        <source>Enca is not installed, falling back to the built-in detection</source>
-        <translation></translation>
     </message>
     <message>
         <source>Enter your daily notes here.
@@ -1721,10 +1669,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     <message>
         <source>Total size = %1 kbytes in %2 files&lt;br&gt;</source>
         <translation>Taille totale = %1 ko dans %2 fichiers&lt;br&gt;</translation>
-    </message>
-    <message>
-        <source> is unpacked</source>
-        <translation></translation>
     </message>
     <message>
         <source>Word length: </source>
@@ -1863,10 +1807,6 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enable speech</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Enable locale only voices</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1876,6 +1816,38 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Speech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Say the selected text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Speech pause/resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop speech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI mode (TEA restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI language (TEA restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI style (TEA restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FIF at the top (restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable speech (TEA restart is needed)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1924,7 +1896,7 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     <name>QuaZipFile</name>
     <message>
         <source>ZIP/UNZIP API error %1</source>
-        <translation>erreur API ZIP/UNZIP %1</translation>
+        <translation type="vanished">erreur API ZIP/UNZIP %1</translation>
     </message>
 </context>
 </TS>

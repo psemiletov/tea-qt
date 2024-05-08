@@ -20,7 +20,7 @@ public:
   QList <QByteArray> words;
 };
 
-
+/*
 class CCharsetMagic: public QObject
 {
   Q_OBJECT
@@ -34,7 +34,7 @@ public:
   
   QString guess_for_file (const QString &fname);
 };
-
+*/
 
 class CTio: public QObject
 {
@@ -54,7 +54,6 @@ public:
   virtual bool load (const QString &fname) = 0;
   virtual bool save (const QString &fname) = 0;
 // virtual bool understand (const QString &fname) = 0;
-
 
   virtual ~CTio() {};
 };
@@ -118,7 +117,6 @@ public:
 };
 
 
-
 class CTioABW: public CTioReadOnly
 {
   Q_OBJECT
@@ -158,7 +156,6 @@ class CTioPDF: public CTioReadOnly
   Q_OBJECT
 
 public:
-
   CTioPDF();
   bool load (const QString &fname);
 };
@@ -166,15 +163,16 @@ public:
 
 
 #if defined(DJVU_ENABLE)
+
 class CTioDJVU: public CTioReadOnly
 {
   Q_OBJECT
 
 public:
-
   CTioDJVU();
   bool load (const QString &fname);
 };
+
 #endif
 
 
@@ -184,7 +182,7 @@ class CTioHandler: public QObject
 
 public:
 
-  std::vector <CTio *> list;
+  std::vector <CTio*> list;
 
   CTioPlainText *default_handler;
 

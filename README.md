@@ -42,24 +42,33 @@ https://www.facebook.com/groups/766324686841748/
 
 ### 01: INSTALLATION FROM THE SOURCE ###
 
-You can install TEA from the source in 4 ways, using build systems qmake/make, meson/ninja, cmake/make, cmake/ninja. But first, you need to install some development libraries.
+You can install TEA from the source in 4 ways, using build systems qmake/make, cmake/make, cmake/ninja. But first, you need to install some development libraries.
 
 **Mandatory:**
 
-Qt 4.8 or Qt 5.4+ or Qt 6, zlib
+Qt 4.8 or Qt 5.4+ or Qt 6
 
 **Optional:**
 
-libaspell (for spell checking engine), 
-libhunspell (for spell checking engine), 
-poppler-qt5 or poppler-qt6 (to read the text from PDF), ddjvuap (to read the text from DJVU)
+TEA has some optional dependencies, those extends the functionality and can be turned on/off during pre-build configuration. Here is a list with library names and cmake command line switches:
+
+libaspell: -DUSE_ASPELL=ON //enables Aspell spell checker, OFF by default
+
+nuspell: -DUSE_NUSPELL=ON //enables Nuspell engine, that uses Hunspell dictionaries, OFF by default
+
+libhunspell: -DUSE_HUNSPELL=ON //enables Hunspell engine, ON by default
+
+poppler-cpp: -DUSE_PDF=ON //to read the text from PDF, OFF by default  
+
+ddjvuapi: -DUSE_DJVU=ON //to read the text from DJVU,  OFF by default  
+
+speech-dispatcher: -DUSE_SPEECH=ON //makes TEA the speech-dispatcher client, to speach the text. OFF by default, and can be turned of when build with it. 
 
 **Note for FreeBSD users**: you need the pkgconf package - pkg install pkgconf
 
 Which build system you should use?
 
-Use qmake for: Qt 4, old distros and Windows. Use meson or cmake for modern distros. 
-cmake is the mainline build system for TEA. 
+Use qmake for: Qt 4, old distros and Windows. Use cmake for modern distros. cmake is the mainline build system for TEA. 
 
 
 #### 01.01 CMAKE #### 
@@ -85,66 +94,37 @@ ninja install
 
 By default, cmake builds TEA without some features: printer and aspell support, libpoppler and djvuapi. To enable them, use from the build directory:
 
-cmake .. -DUSE_ASPELL=ON -DUSE_PRINTER=ON -DUSE_PDF=ON -DUSE_DJVU=ON
+cmake .. -DUSE_ASPELL=ON -DUSE_PRINTER=ON -DUSE_PDF=ON -DUSE_DJVU=ON  
 
 If the Qt5 and Qt6 both are present on the system, use CMAKE_PREFIX_PATH variable to set the path to the QtN. Otherwise, Qt6 will be prefered.
 
    Examples:
 
-cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt ..
-//usr/lib/qt is the directory with qt5
+cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt ..  
+//usr/lib/qt is the directory with qt5  
 
-cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt6 ..
-//usr/lib/qt6 is the directory with qt6
+cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt6 ..  
+//usr/lib/qt6 is the directory with qt6  
 
 cmake -DCMAKE_PREFIX_PATH=$HOME/Qt/6.0.0/gcc_64/lib/cmake ..  
-//here we point to the locally installed Qt6
+//here we point to the locally installed Qt6  
 
 
-#### 01.02 MESON #### 
+#### 01.02 QMAKE ####
 
-With meson, TEA supports Qt5 build.
+QMake building system is outdated and supported by TEA just as legacy and to make TEA works at old distros or systems (Windows XP for example).
 
-To build and install TEA with meson/ninja and GCC, do:
-
-mkdir b  
-meson  
-cd b  
-ninja  
-ninja install  
-
-To build and install TEA with meson/ninja and CLANG, do:
-
-mkdir b  
-CC=clang CXX=clang++ meson b  
-cd b  
-ninja  
-ninja install  
-
-To enable PDF and DJVU text extraction support use, and Aspell support (disabled by default as well as the printing support):
-
-mkdir b  
-meson b  
-meson configure -Dpdf=enabled -Ddjvu=enabled -Daspell=enabled b  
-cd b  
-ninja  
-ninja install  
-
-
-#### 01.03 QMAKE ####
-
-With qmake, TEA supports Qt4 and Qt5 build.
+TEA's qmake project file supports Qt4 and Qt5 build.
 
 With qmake to build is simple:
 
 qmake  
 make  
-make install (as root or with sudo)  
-
+make install (as root or with sudo)
 
 To make some source configuration (with qmake), use CONFIG variable at qmake command line parameter. For example:
 
-qmake "CONFIG+=useclang" "CONFIG+=noaspell"
+qmake "CONFIG+=useclang" "CONFIG+=noaspell"  
 
 You can use some values:
 
@@ -153,7 +133,7 @@ nodesktop - do not install desktop files and icons
 useclang - TEA will be compiled with Clang  
 noaspell - disable the Aspell (if you have it installed, but  do not want to compile TEA with Aspell support)  
 nohunspell - disable Hunspell for TEA  
-usepoppler - use libpoppler-qt5 or qt4 for PDF text layer import. DISABLED by default  
+usepoppler - use libpoppler-cpp for PDF text layer import. DISABLED by default  
 usedjvu - use libdjvulibre to read DJVU files text (read only). DISABLED by default  
 noprinter - disable printing support  
 
@@ -202,9 +182,8 @@ Please note, that TEA source dir after unpacking will be tea-qt-${pkgver}
 
   **qmake** - the traditional one, good for Qt4-Win32-OS/2-Slackware builds. TEA's qmake project file is old and obscure. 
 
-  **cmake** - good for Qt5/Qt6 build, the reference one for TEA. I recommend to use cmake to build TEA package.
+  **cmake** - good for Qt5/Qt6 build, the reference number one for TEA. I recommend to use cmake to build TEA package.
 
-  **meson** - I use it internally. Does not have the printer support.
 
 4. For the qmake build, to override the default installation path (/usr/local, with binary at /usr/local/bin) use:
 

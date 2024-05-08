@@ -114,10 +114,6 @@ Do you want to overwrite?</source>
         <translation></translation>
     </message>
     <message>
-        <source>Test</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Files</source>
         <translation></translation>
     </message>
@@ -1042,30 +1038,6 @@ Do you want to overwrite?</source>
         <translation></translation>
     </message>
     <message>
-        <source>ZIP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Create new ZIP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Add to ZIP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Save ZIP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>List ZIP content</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Unpack ZIP to current directory</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Images</source>
         <translation></translation>
     </message>
@@ -1170,18 +1142,6 @@ Do you want to overwrite?</source>
         <translation></translation>
     </message>
     <message>
-        <source>UI mode (TEA restart needed)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>UI language (TEA restart needed)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>UI style (TEA restart needed)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Interface font</source>
         <translation></translation>
     </message>
@@ -1215,10 +1175,6 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>TEA program icon</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>FIF at the top (restart needed)</source>
         <translation></translation>
     </message>
     <message>
@@ -1282,14 +1238,6 @@ Do you want to overwrite?</source>
         <translation>Benutzeroberfläche</translation>
     </message>
     <message>
-        <source>Use Alt key to access main menu</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Use Left Alt + WASD as additional cursor keys</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Use joystick as cursor keys</source>
         <translation></translation>
     </message>
@@ -1299,10 +1247,6 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Restore the last session on start-up</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Use Enca for charset detection</source>
         <translation></translation>
     </message>
     <message>
@@ -1327,14 +1271,6 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Charset for file open from command line</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ZIP unpacking: file names charset</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ZIP packing: file names charset</source>
         <translation></translation>
     </message>
     <message>
@@ -1403,10 +1339,6 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Apply hard rotation by EXIF data</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Zip directory with processed images</source>
         <translation></translation>
     </message>
     <message>
@@ -1560,10 +1492,6 @@ ff=firefox file:///%s</source>
         <translation></translation>
     </message>
     <message>
-        <source>Guess encoding!</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Save as</source>
         <translation>Speichern unter</translation>
     </message>
@@ -1645,14 +1573,6 @@ ff=firefox file:///%s</source>
         <translation></translation>
     </message>
     <message>
-        <source>Enter the archive name</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>new_archive</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Open Directory</source>
         <translation></translation>
     </message>
@@ -1678,10 +1598,6 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>There are %1 lines at %2 files</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Enca is not installed, falling back to the built-in detection</source>
         <translation></translation>
     </message>
     <message>
@@ -1713,10 +1629,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Total size = %1 kbytes in %2 files&lt;br&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source> is unpacked</source>
         <translation></translation>
     </message>
     <message>
@@ -1856,10 +1768,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enable speech</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Enable locale only voices</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1869,6 +1777,38 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Speech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Say the selected text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Speech pause/resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop speech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI mode (TEA restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI language (TEA restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UI style (TEA restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FIF at the top (restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable speech (TEA restart is needed)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1911,13 +1851,6 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
         <source>Please set up spell checker dictionaries at
  Options - Functions page</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QuaZipFile</name>
-    <message>
-        <source>ZIP/UNZIP API error %1</source>
-        <translation></translation>
     </message>
 </context>
 </TS>

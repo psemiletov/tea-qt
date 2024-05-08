@@ -9,7 +9,7 @@ PHP hl module by Boo-boo
 Code from other projects: Diego Iastrubni, Qxt Foundation, Trolltech ASA, Franz Schmid, Adam Rogoyski, Michael Protasov, Angius Fabrizio, Kostya Gancov
 
 Pugixml (https://pugixml.org) by Arseny Kapoulkine
-Miniz - https://github.com/kuba--/zip
+ZIP/Miniz - https://github.com/kuba--/zip
 single application module (one of two) - Berenger Bramas (http://berenger.eu/blog/c-qt-singleapplication-single-app-instance/)
 exif.h/cpp - public domain code from http://imonad.com (based on Exif Jpeg header manipulation tool http://www.sentex.net/~mwandel/jhead/)
 Some code snippets were taken from qtcentre programming forum.

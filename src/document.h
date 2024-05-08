@@ -294,10 +294,6 @@ public:
 
   QStringList recent_files;
 
-
-//  CSpeech speech_thing;
-
-
 //regexp pattern and file name of syntax hl rules
 #if QT_VERSION >= 0x050000
   std::vector<std::pair <QRegularExpression, QString> > hl_files;
@@ -372,7 +368,6 @@ public:
   bool event (QEvent *ev);
   void handle_joystick_event (CJoystickAxisEvent *ev);
 #endif
-
 
 public slots:
 

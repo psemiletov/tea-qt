@@ -784,7 +784,7 @@ void CTEA::fman_del_bmk()
 
   if (i > sl_places_bmx.size() + 4) // -- GTK places
      {
-      qDebug() << "GTK bookmarks, i: " << i;
+     // qDebug() << "GTK bookmarks, i: " << i;
       return;
      }
 
@@ -6780,17 +6780,13 @@ void CTEA::setup_spellcheckers()
   default_speller = "Hunspell";
 #endif
 
-qDebug() << "CTEA::setup_spellcheckers() 2";
 
   cur_spellchecker = settings->value ("cur_spellchecker", default_speller).toString();
-
-  qDebug() << "CTEA::setup_spellcheckers() 1:" << cur_spellchecker;
 
   if (spellcheckers.size() > 0)
      if (! spellcheckers.contains (cur_spellchecker))
          cur_spellchecker = spellcheckers[0];
 
-qDebug() << "CTEA::setup_spellcheckers() 3";
 
 #ifdef ASPELL_ENABLE
   if (cur_spellchecker == "Aspell")
@@ -6811,7 +6807,6 @@ qDebug() << "CTEA::setup_spellcheckers() 3";
       spellchecker = new CHunspellChecker (settings->value ("spell_lang", QLocale::system().name().left(2)).toString(), settings->value ("hunspell_dic_path", hunspell_default_dict_path()).toString(), dir_user_dict);
 #endif
 
-   qDebug() << "CTEA::setup_spellcheckers() 4";
 
 #ifdef NUSPELL_ENABLE
    if (cur_spellchecker == "Nuspell")
@@ -6822,12 +6817,7 @@ qDebug() << "CTEA::setup_spellcheckers() 3";
       }
 #endif
 
-qDebug() << "CTEA::setup_spellcheckers() 5";
-
   create_spellcheck_menu();
-
-  qDebug() << "CTEA::setup_spellcheckers() 6";
-
 }
 
 
@@ -6835,16 +6825,10 @@ void CTEA::create_spellcheck_menu()
 {
   menu_spell_langs->clear();
 
-qDebug() << "CTEA::create_spellcheck_menu 1";
   spellchecker->get_speller_modules_list();
-
-  qDebug() << "CTEA::create_spellcheck_menu2";
 
   if (spellchecker->modules_list.size() > 0)
      create_menu_from_list (this, menu_spell_langs, spellchecker->modules_list, SLOT(fn_change_spell_lang()));
-
-  qDebug() << "3";
-
 }
 
 #endif
@@ -7743,7 +7727,7 @@ OPTIONS::INTERFACE
   sl_ui_modes << tr ("Classic") << tr ("Docked");
 
   cmb_ui_mode = new_combobox (page_interface_layout,
-                              tr ("UI mode (TEA restart needed)"),
+                              tr ("UI mode (TEA restart is needed)"),
                               sl_ui_modes,
                               settings->value ("ui_mode", 0).toInt());
 
@@ -7763,7 +7747,7 @@ OPTIONS::INTERFACE
      lng = "en";
 
   cmb_lng = new_combobox (page_interface_layout,
-                          tr ("UI language (TEA restart needed)"),
+                          tr ("UI language (TEA restart is needed)"),
                           sl_lngs,
                           settings->value ("lng", lng).toString());
 
@@ -7773,7 +7757,7 @@ OPTIONS::INTERFACE
      default_style = "Cleanlooks";
 
   cmb_styles = new_combobox (page_interface_layout,
-                             tr ("UI style (TEA restart needed)"),
+                             tr ("UI style (TEA restart is needed)"),
                              QStyleFactory::keys(),
                              settings->value ("ui_style", default_style).toString());
 
@@ -7850,7 +7834,7 @@ OPTIONS::INTERFACE
   connect (cmb_tea_icons, SIGNAL(currentIndexChanged(int)),
            this, SLOT(cmb_tea_icons_currentIndexChanged(int)));
 
-  cb_fif_at_toolbar = new QCheckBox (tr ("FIF at the top (restart needed)"), tab_options);
+  cb_fif_at_toolbar = new QCheckBox (tr ("FIF at the top (restart is needed)"), tab_options);
   cb_fif_at_toolbar->setChecked (settings->value ("fif_at_toolbar", "0").toBool());
   page_interface_layout->addWidget (cb_fif_at_toolbar);
 
@@ -8314,7 +8298,7 @@ OPTIONS::IMAGES
   page_speech_layout->setAlignment (Qt::AlignTop);
   page_speech->setLayout (page_speech_layout);
 
-  cb_speech_enable = new QCheckBox (tr ("Enable speech"), this);
+  cb_speech_enable = new QCheckBox (tr ("Enable speech (TEA restart is needed)"), this);
   cb_speech_enable->setChecked (settings->value ("speech_enabled", 0).toBool());
   page_speech_layout->addWidget (cb_speech_enable);
 
@@ -8480,7 +8464,7 @@ void CTEA::create_toolbars()
 
 void CTEA::create_speech()
 {
-  qDebug() << "---------CTEA::create_speech()--------1";
+//  qDebug() << "---------CTEA::create_speech()--------1";
 
   speech.locale_only = settings->value ("locale_only", 1).toInt();
 
@@ -8498,9 +8482,9 @@ void CTEA::create_speech()
   if (speech.current_voice_index < speech.voices.size() && speech.current_voice_index > -1)
       speech.set_voice_by_index (speech.current_voice_index);
 
-  qDebug() << "speech.voices.size(): " << speech.voices.size();
+  //qDebug() << "speech.voices.size(): " << speech.voices.size();
 
-  qDebug() << "---------CTEA::create_speech()--------2";
+//  qDebug() << "---------CTEA::create_speech()--------2";
 }
 
 #endif

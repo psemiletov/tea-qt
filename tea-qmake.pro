@@ -199,7 +199,6 @@ DISTFILES += ChangeLog \
     NEWS-RU \
     AUTHORS \
     TODO \
-    INSTALL \
     hls/* \
     palettes/* \
     encsign/* \

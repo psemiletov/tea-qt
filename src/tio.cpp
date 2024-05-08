@@ -68,10 +68,6 @@ DJVU read code taken fromdvutxt.c:
 
 //////////////////FOR PDF
 #include <stdio.h>
-//YOur project must also include zdll.lib (ZLIB) as a dependency.
-//ZLIB can be freely downloaded from the internet, www.zlib.org
-//Use 4 byte struct alignment in your project!
-//#include <zlib.h>
 //////////////////
 
 
@@ -97,7 +93,6 @@ DJVU read code taken fromdvutxt.c:
 
 #include "tio.h"
 #include "utils.h"
-//#include "textproc.h"
 #include "zip.h"
 
 #include "enc.h"
@@ -151,10 +146,10 @@ std::string html_strip (const std::string &source)
 {
   std::string html = source;
 
-  while (html.find ("<") != std::string::npos)
+  while (html.find ('<') != std::string::npos)
         {
-         size_t startpos = html.find ("<");
-         size_t endpos = html.find (">") + 1;
+         size_t startpos = html.find ('<');
+         size_t endpos = html.find ('>') + 1;
 
          if (endpos != std::string::npos)
             html.erase (startpos, endpos - startpos);
@@ -167,7 +162,7 @@ std::string html_strip (const std::string &source)
 template <typename T> void remove_duplicates(std::vector<T>& vec)
 {
   std::sort(vec.begin(), vec.end());
-  vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
+  vec.erase (std::unique (vec.begin(), vec.end()), vec.end());
 }
 
 
@@ -187,7 +182,7 @@ std::vector <std::string> extract_hrefs (const std::string &source, const std::s
          if (pos_start == string::npos)
             break;
 
-         size_t pos_end = source.find ("\"", pos_start + signature_size);
+         size_t pos_end = source.find ('\"', pos_start + signature_size);
          if (pos_end == string::npos)
             break;
 
@@ -218,7 +213,7 @@ QString extract_text_from_xml_pugi (const char *string_data, size_t datasizebyte
                                                    pugi::encoding_utf8);
   if (! result)
      {
-      std::cout << "NOT PARSED" << std::endl;
+      std::cout << "NOT PARSED\n";
       return QString("");
      }
 
@@ -407,7 +402,7 @@ bool CTioPlainText::save (const QString &fname)
     }
 
 
-   if (charset == "KOI8-R") //ok
+  if (charset == "KOI8-R") //ok
     {
      char* text = CTextConverter::ConvertFromUTF16ToKOI8R ((UTF16TEXT*)data.utf16());
      file.write (text);
@@ -416,18 +411,17 @@ bool CTioPlainText::save (const QString &fname)
      return true;
     }
 
- if (charset == "CP-866") //ноль
-    {
-     char* text = CTextConverter::ConvertFromUTF16ToCP866 ((UTF16TEXT*)data.utf16());
-     file.write (text);
-     file.close();
-     delete [] text;
-     return true;
-    }
 
+  if (charset == "CP-866") //ноль
+     {
+      char* text = CTextConverter::ConvertFromUTF16ToCP866 ((UTF16TEXT*)data.utf16());
+      file.write (text);
+      file.close();
+      delete [] text;
+      return true;
+     }
 
-
-    return false;
+  return false;
 }
 
 
@@ -597,7 +591,7 @@ bool CTioXMLZipped::load (const QString &fname)
   return true;
 }
 
-
+/*
 CCharsetMagic::CCharsetMagic()
 {
   QStringList fnames = read_dir_entries (":/encsign");
@@ -638,17 +632,7 @@ CCharsetMagic::CCharsetMagic()
   std::swap (*it1, *it2);
 
 //  qDebug() << "signatures.size: " << signatures.size();
-/*
-  int ku = signatures.indexOf (koi8u);
-  int kr = signatures.indexOf (koi8r);
 
-//#if QT_VERSION >= 0x051300
-#if (QT_VERSION_MAJOR >= 5 && QT_VERSION_MINOR >= 13)
-  signatures.swapItemsAt (ku, kr);
-#else
-  signatures.swap (ku, kr);
-#endif
-*/
 }
 
 
@@ -658,7 +642,7 @@ CCharsetMagic::~CCharsetMagic()
      for (vector <size_t>::size_type i = 0; i < signatures.size(); i++)
           delete signatures[i];
 }
-
+*/
 
 //from https://stackoverflow.com/questions/28270310/how-to-easily-detect-utf8-encoding-in-the-string
 bool is_valid_utf8 (const char *string)
@@ -721,9 +705,9 @@ bool is_valid_utf8 (const char *string)
 }
 
 
-QString CCharsetMagic::guess_for_file (const QString &fname)
-{
-  QString enc = "UTF-8";
+//QString CCharsetMagic::guess_for_file (const QString &fname)
+//{
+ //String enc = "UTF-8";
 /*
   QByteArray bafile = file_load (fname);
   QString ext = file_get_ext (fname);
@@ -751,8 +735,8 @@ QString CCharsetMagic::guess_for_file (const QString &fname)
                   }
               }
 */
-  return enc;
-}
+//  return enc;
+//}
 
 
 CTioFB2::CTioFB2()
@@ -800,9 +784,9 @@ bool CFB2_walker::for_each (pugi::xml_node &node)
 
 
 
-std::string string_between(const std::string &source,
-                           const std::string &sep1,
-                           const std::string &sep2)
+std::string string_between (const std::string &source,
+                            const std::string &sep1,
+                            const std::string &sep2)
 {
     std::string result;
     size_t pos1 = source.find(sep1);
@@ -819,16 +803,16 @@ std::string string_between(const std::string &source,
     return result;
 }
 
+
 bool CTioFB2::load (const QString &fname)
 {
 
-  std::cout << "CTioFB2::load (const QString &fname" << std::endl;
+//  std::cout << "CTioFB2::load (const QString &fname" << std::endl;
 
   data.clear();
 
   QStringList tags;
   tags.append ("p");
-
 
   std::string zip_file_name = fname.toStdString();
 
@@ -838,7 +822,7 @@ bool CTioFB2::load (const QString &fname)
 
       if (stemp.find ("encoding=\"windows-1251\"")  != std::string::npos)
          {
-          std::cout << "1251^^^^^^^^^^^^^^^^^^^^^" << std::endl;
+  //        std::cout << "1251^^^^^^^^^^^^^^^^^^^^^" << std::endl;
           UTF16TEXT *t_utf16 = CTextConverter::ConvertFromCP1251ToUTF16 (stemp.c_str());
           QString td = QString::fromUtf16 (t_utf16);
           delete [] t_utf16;
@@ -863,8 +847,6 @@ bool CTioFB2::load (const QString &fname)
    // else
  // if (fname.endsWith (".fb2.zip") || fname.endsWith (".fbz"))
 
-
-
   std::string source_fname; //достаем его из зипа
 
   //we can have malformed internal filename, so find the first fb2 at the archive
@@ -873,7 +855,6 @@ bool CTioFB2::load (const QString &fname)
 
   if (! zip)
      return false;
-
 
   int n = zip_entries_total(zip);
 
@@ -902,7 +883,6 @@ bool CTioFB2::load (const QString &fname)
   if (source_fname.empty())
       return false;
 
-
   void *buf = NULL;
   size_t bufsize;
 
@@ -918,42 +898,35 @@ bool CTioFB2::load (const QString &fname)
 
  // QString enc = string_between (tmp, "encoding=\"", "\"");
 
-
-  bool need_to_recode = false;
-  if (strstr ((char*)buf, "encoding=\"windows-1251\""))
-     need_to_recode = true;
+  //bool need_to_recode = false;
+  //if (strstr ((char*)buf, "encoding=\"windows-1251\""))
+//     need_to_recode = true;
 
   std::string stemp =(char*)buf;
 
   if (stemp.find ("encoding=\"windows-1251\"")  != std::string::npos)
-    {
-     std::cout << "1251^^^^^^^^^^^^^^^^^^^^^ ZIPPED" << std::endl;
+     {
+  //   std::cout << "1251^^^^^^^^^^^^^^^^^^^^^ ZIPPED" << std::endl;
       UTF16TEXT *t_utf16 = CTextConverter::ConvertFromCP1251ToUTF16 (stemp.c_str());
       QString td = QString::fromUtf16 (t_utf16);
       delete [] t_utf16;
 
-          data = extract_text_from_xml_pugi (td, tags);
-
-          if (data.isEmpty())
-             return false;
-          else
-              return true;
-   }
-
-
-    data = extract_text_from_xml_pugi (stemp.c_str(), stemp.size(), tags);
+      data = extract_text_from_xml_pugi (td, tags);
 
       if (data.isEmpty())
          return false;
       else
           return true;
+     }
 
-    return false;
+
+  data = extract_text_from_xml_pugi (stemp.c_str(), stemp.size(), tags);
+
+  if (data.isEmpty())
+     return false;
+  else
+      return true;
 }
-
-
-
-
 
 /*
   pugi::xml_document doc;
@@ -1421,7 +1394,6 @@ bool CTioPDF::load (const QString &fname)
   return true;
 }
 
-
 #endif
 
 
@@ -1518,7 +1490,6 @@ bool CTioDJVU::load (const QString &fname)
 
 
 
-
 CTioEpub::CTioEpub()
 {
   ronly = true;
@@ -1557,48 +1528,46 @@ std::vector <std::string> split_string_to_vector (const string& s, const string&
 }
 
 
-
-
 std::vector <std::string> extract_src_from_toc (const std::string &source, const std::string &prefix)
 {
- std::vector <std::string> result;
+  std::vector <std::string> result;
 
- size_t i = 0;
- size_t limit = source.size() - 1;
- std::string signature_str = "src=\"";
- size_t signature_size = signature_str.size();
+  size_t i = 0;
+  size_t limit = source.size() - 1;
+  std::string signature_str = "src=\"";
+  size_t signature_size = signature_str.size();
 
- while (i < limit)
-       {
-        size_t pos_start = source.find (signature_str, i);
-        if (pos_start == std::string::npos)
-           break;
+  while (i < limit)
+        {
+         size_t pos_start = source.find (signature_str, i);
+         if (pos_start == std::string::npos)
+            break;
 
-        size_t pos_end = source.find ("\"", pos_start + signature_size);
-        if (pos_end == std::string::npos)
-           break;
+         size_t pos_end = source.find ('\"', pos_start + signature_size);
+         if (pos_end == std::string::npos)
+            break;
 
-        //else
+         //else
 
-        std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
+         std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
 
-        //find "#" if any
-        //remove after # to the end of string
+         //find "#" if any
+         //remove after # to the end of string
 
-        size_t pos_part = url.find ("#");
-        if (pos_end != std::string::npos)
-            url = url.substr (0, pos_part);
+         size_t pos_part = url.find ('#');
+         if (pos_end != std::string::npos)
+             url = url.substr (0, pos_part);
 
-        if (ends_with (url, "html") || ends_with (url, "xhtml"))
-           {
-            std::string url_to_add = prefix + url;
-            result.push_back (url_to_add);
-           }
+         if (ends_with (url, "html") || ends_with (url, "xhtml"))
+            {
+             std::string url_to_add = prefix + url;
+             result.push_back (url_to_add);
+            }
 
-        i = pos_end + 1;
-       }
+         i = pos_end + 1;
+        }
 
-   return result;
+  return result;
 }
 
 
@@ -1637,7 +1606,7 @@ bool CTioEpub::load (const QString &fn)
   if (bufsize == 0)
     return false;
 
- // done with contentopf
+ // done with toc
   std::string content ((char*)toc);
   free (toc);
 
@@ -1655,11 +1624,12 @@ bool CTioEpub::load (const QString &fn)
 
   for (size_t i = 0; i < urls.size(); i++)
       {
+        //check duplicated urls, skip dups
         if (i + 1 != urls.size())
            if (urls[i] == urls[i+1])
               continue;
 
-       std::cout << "open: " << urls[i] << std::endl;
+//       std::cout << "open: " << urls[i] << std::endl;
 
        void *temp = NULL;
 
@@ -1683,8 +1653,6 @@ bool CTioEpub::load (const QString &fn)
       }
 
   zip_close(zip);
-
-
 
   return true;
 }

@@ -38,7 +38,7 @@ code from qwriter:
 *   kossne@mail.ru                                                        *
 */
 
-#include <bitset>
+//#include <bitset>
 #include <algorithm>
 
 //#include <QTextCodec>

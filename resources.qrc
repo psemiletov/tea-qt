@@ -97,7 +97,6 @@
     <file>hls/hs.xml</file>
     <file>hls/rust.xml</file>
 
-    <file>INSTALL</file>
     <file>README.md</file>
     <file>NEWS</file>
     <file>TODO</file>

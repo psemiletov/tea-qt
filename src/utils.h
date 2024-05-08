@@ -50,7 +50,7 @@ public:
 /* file utils */
 
 bool has_css_file (const QString &path);
-QString guess_enc_for_file (const QString &fname);
+//QString guess_enc_for_file (const QString &fname);
 
 bool file_is_writable (const QString &fname);
 bool file_is_readable (const QString &fname);

@@ -43,11 +43,11 @@
 
 <p>Now TEA has THREE branches. This, TEA-Qt, is the modern one. There also outdated TEA-GTK (Gtk 2) and TEA-GTK (GTK 3), the buggy and forgotten one. So use TEA-Qt.</p>
 
-<p>TEA has two homesites: <a href="http://semiletov.org/tea">semiletov.org/tea</a> and <a href="http://tea.ourproject.org/">tea.ourproject.org</a>. If one of them is down, go to another one. Happy Arch/Manjaro/etc. users can use my "tea-qt" package from AUR (<a href="https://aur.archlinux.org/packages/tea-qt">aur.archlinux.org/packages/tea-qt</a>). Also, welcome to <a href="http://github.com/psemiletov/tea-qt">github.com/psemiletov/tea-qt</a> - always up to date, but can be unstable.</p>
+<p>TEA home is and <a href="http://tea.ourproject.org/">tea.ourproject.org</a>.  Happy Arch/Manjaro/etc. users can use my "tea-qt-git" package from AUR (<a href="https://aur.archlinux.org/packages/tea-qt-git">aur.archlinux.org/packages/tea-qt-git</a>). Also, welcome to <a href="http://github.com/psemiletov/tea-qt">github.com/psemiletov/tea-qt</a> - always up to date, but can be unstable.</p>
 
 <p>TEA name means nothing. It's not "Text Editor Of Atomic Era" or somethink that you may read at TEA reviews. Initially, TEA = "Text Editing and Authoring". Then, TEA was associated with a common drink (I like to drink the tea). But for now, TEA is just TEA or ТИА.</p>
 
-<p>Normally, TEA holds its configuration data and other support files at $HOME/.config/tea (or, under Window, at C:\Documents and Settings\username\tea). But if you want to start TEA from the flash drive in the portable mode, TEA must read/write configuration data into the directory with the TEA binary. To start TEA in the portable mode, use "--p" command line option:
+<p>Normally, TEA holds its configuration data and other support files at $HOME/.config/tea (or, under Window, at C:\Documents and Settings\username\tea). But if you want to start TEA from the USB stick in the portable mode, TEA must read/write configuration data into the directory with the TEA binary. To start TEA in the portable mode, use "--p" command line option:
 </p>
 
 <p>tea --p</p>
@@ -98,7 +98,7 @@
 
 <p>You can also select several files (Ctrl-click or INSERT key) and then press the <b>Open</b> button.</p> 
 
-<p>The selected file is saved or opened with the encoding that is selected at the character set list below from the <b>Name</b> entry. There is also a "?" button. Select some file and press this button - it tries to autodetect the file's character set and activate it at the encodings list. Currently only HTML files or Russian charsets are supported for built-in automatic detection, and other via <b>enca</b> utility (See <b>Options - Common</b>).</p>
+<p>The selected file is saved or opened with the encoding that is selected at the character set list below from the <b>Name</b> entry.</p>
 
 <p><b>Bookmarks</b> list. You can easily add and remove the directory bookmarks using the "+" and "-" buttons. The "+" button adds a bookmark to the file system tree's current directory. The "-"  button removes the selected bookmark. To activate the bookmark and navigate to the respective directory, double click on the bookmark.</p>
 
@@ -134,11 +134,9 @@
 
 <p>If you are using the build-in file manager, read the <a href="#mni_manager">File manager</a> chapter. Otherwise, read the words of true about the File open dialog window.</p>
 
-<p>There is a small secret at the File open dialog window. The character set combobox. Yes. With that fine tool in the box, you can open a text file in any encoding that is known by a human being (actually, <b>libiconv</b>). But be careful! You must know exactly which encoding you need to use to read your file correctly. Otherwise you shall see many weird letters that can harm your spiritual calmness. If so, close your eyes quickly and type "hello" at seven times! Or you can try to load your file with another encoding selected. So choose wise. By the way, TEA can try to auto-detect the encoding - just press the "?" button (on the right from the character set list). Better to turn on the option <b>Use Enca for charset detection</b> at <b>Options - Common</b> page, if Enca is installed.</p>
+<p>TEA can open all plain text files, and also ODT (OpenDocument Text), KWD (old KWord's format), FB2, Epub, DOCX, SXW (old OOo/StarOffice format), ABW (Abiword) formats. But only the plain text files can be saved with TEA. About other mentioned formats - TEA just can extract text from them, trying to preserve the basic layout (indents, paragraphs). When compiled with PDF and DVJU support, TEA extracts text from them too. When use TEA's <b>Search in files</b>, TEA looks inside of all files of these formats.</p>
 
-<p>TEA can open all plain text files, and also ODT (OpenDocument Text), KWD (old KWord's format), FB2, DOCX, RTF, SXW (old OOo/StarOffice format), ABW (Abiword) formats and gzipped files. But only the plain text files can be saved with TEA. About other mentioned formats - TEA just can extract text from them, trying to preserve the basic layout (indents, paragraphs). When compiled with PDF and DVJU support, TEA extracts text from them too. When use TEA's <b>Search in files</b>, TEA looks inside of all files of these formats.</p>
-
-<p><b>Save</b> - if your file is already saved, this menu item saves it again. That is how it works. But, if a file is not saved, you shall see a surprise! A <a href="#mni_manager">File manager</a>. There, put the file name into the <b>Name</b> entry and press the <b>Save as</b> button.</p>
+<p><b>Save</b> - if your file is already saved, this menu item saves it again. That is how it works. But, if a file is not saved, you shall see a surprise! A <a href="#mni_manager">File manager</a> (if the traditional open/save dialogs are turned off at <b>Options &gt; Common &gt; Use traditional File Save/Open dialogs</b>). There, put the file name into the <b>Name</b> entry and press the <b>Save as</b> button.</p>
 
 <p><b>Last closed file</b> - opens a last closed file. This sentence is a greater paradox of XXI century CE.</p>
 
@@ -249,7 +247,7 @@ Here is: %s - the text from the clipboard, %date - current date, %time - current
 
 <p><b>[X]HTML tools &gt; Preview selected color</b> - previews the selected (within the text) color at the FIF. The color can be in the form of the hex value or the named color (darkBlue, red, white, etc).</p>
 
-<p><b>Antispam e-mail</b> - makes a selected mailto-link possibly invisible to those damned spammer e-mail harvesters, by converting an address into integer-coded entities. For example, if you will look at the source of that document, <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#101;&#97;&#64;&#108;&#105;&#115;&#116;&#46;&#114;&#117;">mailto:tea@list.ru</a> will look like the heap of a garbage. I hope that spam harvesters do not understand it.</p>
+<p><b>Antispam e-mail</b> - makes a selected mailto-link possibly invisible to those damned spammer e-mail harvesters, by converting an address into integer-coded entities.</p>
 
 <br><br>
 <a name="mni_search"></a>
@@ -289,7 +287,7 @@ Here is: %s - the text from the clipboard, %date - current date, %time - current
 
 <p>At the last, <b>Replace all in opened files</b> works as the <b>Replace all</b>, but in the scope of all opened files.</p>
 
-<p><b>Search in files</b> - searches the text given at FIF within all text files, starting from the current directory at the built-in file manager (the <b>Files</b> tab), and deeper into the subdirectories.  For a text encoding, TEA uses the charset that is selected at the charset list on the <b>Files</b> tab.</p>
+<p><b>Search in files</b> - searches the text given at FIF within all text files, starting from the current directory at the built-in file manager (the <b>Files</b> tab), and deeper into the subdirectories. For a text encoding, TEA uses UTF-8.</p>
 
 <p>Actually, TEA searches not in the ALL files. For the central processing unit, there is no difference between text files or mp3, or images. Programs must know the difference, but how? And why it is so important to identify the text file? If the program cannot do that, it will search the text in all files - images, sounds, videos, etc.. Too much time! Thus, TEA must know the difference. So TEA presumes that text files are the files with extensions those TEA recognizes for syntax highlighting. Also, TEA knows that text files are txt, odt, kwd, docx and other formats those TEA support. Finally, TEA know about some definitely text files those have names such as README, ChangeLog, etc.
 </p>
@@ -561,7 +559,6 @@ Apples 45.8<br>
 Oranges 11
 </p>
 
-
 <p><b>Math &gt; Evaluate</b> - calculates the expression that selected at the text. For example you can write 2+2, then select it and apply <b>Evaluate</b>. After such action you shall see the result at the logmemo. In your expression can may use the following operators: +, -, *, /, ^ (power), % (get percent value). The braces are supported. Here are some examples:</p>
 
 <pre>2/3*123
@@ -701,6 +698,23 @@ ogd<br>
 <p><b>Remove from dictionary</b>- removes the word from the user's dict.</p>
 <br>
 
+
+<br><br>
+<a name="mni_speech"></a>
+<h3>Functions  &gt; Speech</h3>
+
+<p>Currenly the Speech thing at TEA is experimental. To use it, you need that TEA build with Speech Dispatcher support.
+</p>
+
+<p>If it is, install some speech synth that Speech Dispatcher can use as the output module, for example Festival or RHVoice. Then install voices for such synth. Configure Speech Dispatcher. The following example is for RHVoice: </p>
+
+<p>1. Copy the speech-dispatcher directory to $HOME/.config</p>
+
+<p>2. There, edit speechd.conf, where uncomment the line with <i>AddModule "rhVoice"</i> and add the line:<i> DefaultModule rhvoice</i></p>
+
+<p>3. To avoid crackles when run other audio software (such as Reaper or Ardour), if you use Pipewire or Pulse, uncomment <i>AudioOutputMethod "pulse"</i></p>
+
+<p>At <b>Options</b> page of TEA, section <b>Speech</b>, you can turn on and off Speech support, and select the voice. If <b>Enable locale only voices</b> is On, you'll get the list of locale voices only, not for all languages available. For stability purposes, these setting take effect after TEA restart. </p>
 
 
 <br><br>

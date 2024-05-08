@@ -1,12 +1,5 @@
 
 
-1. Выбрать Nuspell.
-2. Выбрать Hunspell
-3. Выбрать Проверку - сегфолт
-
-То же при смене с Hunspell
-
-
 переопределить контекстное меню!
 
 * темы оформления в Win32 глючат при стиле интерфейса Windows XP //так и должно быть
@@ -14,8 +7,6 @@
 make single application with Dbus?
 
 опять single app не пашет при открытии файлов из thunar
-
-add Qt6 to Meson or drop Meson support at all?
 
 show empty spaces (at EOL? for Markdown)
 

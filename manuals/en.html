@@ -20,6 +20,7 @@
 <a href="#mni_markup">Markup</a><br>
 <a href="#mni_search">Search</a><br>
 <a href="#mni_functions">Functions</a><br>
+<a href="#mni_speech">Functions - Speech</a><br>
 <a href="#mni_spell">Functions - Spell checking</a><br>
 <a href="#mni_ide">IDE</a><br>
 <a href="#mni_run">Run</a><br>
@@ -708,7 +709,7 @@ ogd<br>
 
 <p>If it is, install some speech synth that Speech Dispatcher can use as the output module, for example Festival or RHVoice. Then install voices for such synth. Configure Speech Dispatcher. The following example is for RHVoice: </p>
 
-<p>1. Copy the speech-dispatcher directory to $HOME/.config</p>
+<p>1. Copy the <i>/etc/speech-dispatcher</i> directory to <i>$HOME/.config</i></p>
 
 <p>2. There, edit speechd.conf, where uncomment the line with <i>AddModule "rhVoice"</i> and add the line:<i> DefaultModule rhvoice</i></p>
 
@@ -850,13 +851,12 @@ page100.txt
 
 <p><b>Fm &gt; Images &gt; Scale by percentages/Scale by side</b> - among other non-text related functions TEA has the ability of batch conversion of images. It is useful when you want to scale them or convert to another format.</p>
 
-<p>For example, we want to scale selected images by 50 per cents, put the processed images into the new directory and zip that directory:</p>
+<p>For example, we want to scale selected images by 50 per cents, and put the processed images into the new directory:</p>
 
 <p>1. Select files at the File manager. To select them multiply, use Ctrl-Click (or Ctrl-A to select all).
 <br>
 2. Put the desired percentage into the Famous Input Field. The value must be a simple integer number without the % sign.<br>
-3. At the <b>Options &gt; Images</b> check the <b>Zip directory with processed images</b> option.<br>
-4. Apply the <b>Scale by percentages</b> function.</p>
+3. Apply the <b>Scale by percentages</b> function.</p>
 
 <p>After that, TEA creates a new directory as a subdirectory of a current one. This new directory has the random name that starts with "images-out-". Into this directory TEA put all converted images, leaving the originals unmodified.</p>
 
@@ -876,17 +876,6 @@ page100.txt
 <p>You can customize the gallery using the <b>Options  &gt;  Images  &gt; Web gallery options</b>. There is a thumbnail size, cells per row, et cetera.</p>
 
 
-<p><b>TEA as a ZIP packer/unpacker</b></p>
-
-<p>TEA provides simple functions to pack files (not directories) to the archive. To do such thing, set the archive name first (do that at the directory where you want to create the archive):<br>
-<b>Fm &gt; ZIP &gt; Create new ZIP</b><br>
-The input dialog box will be provided. Then, walk through your directories. Select any files and use <b>Add to ZIP</b> to add them into the archive. Please note - all that happens virtually until you do not use a <b>Save ZIP</b> function. To pack the files physically, apply <b>Save ZIP</b>.</p>
-
-<p>All files will be packed into the archive that has a one subdirectory names as the archive name, but without .zip-extension.</p>
-
-<p>You can also unpack the selected ZIP-file into the current directory. Use the <b>Unpack ZIP to current directory</b> function. Please note that the file names charset (inside of the ZIP-archive) are controlled via <b>Options - Common - ZIP unpacking: file names charset/ZIP packing: file names charset</b>  options. So, if you see weird characters after you unpacked ZIP-file, try to Options the charset. To do this less painful, select some charset at <b>ZIP unpacking: file names charset</b> and try how is looking file name - use <b>List ZIP content</b> menu item. It simply lists the archive content (file names) into the Logmemo using selected charset.</p>
-
-<p>And another note - TEA does not support password-protected ZIPs.</p>
 
 <br>
 <a name="mni_view"></a>
@@ -973,18 +962,15 @@ apple|orange
 <a name="mni_author"></a>
 <h3>Other projects by the author</h3>
 
-<p><a href="http://semiletov.org/">My home site with the prose, programs, music and other things.</a></p>
+<p><a href="https://github.com/psemiletov">My Github page.</a></p>
 
-<p><a href="http://semiletov.org/">My home site with the prose, programs, music and other things.</a></p>
-
-<p><a href="https://www.bandlab.com/peter_semiletov">My music</a></p>
 
 
 <br>
 <a name="mni_donate"></a>
 <h3>Support the development</h3>
 
-<p>If you want to support TEA development, here is <a href="https://www.patreon.com/semiletov">my Patreon page.</a>.</p>
+<p>If you want to support TEA development, here is my Paypal address: peter.semiletov@gmail.com</p>
 
 
 

@@ -24,8 +24,6 @@ Communities >
 
 https://t.me/teaqt
 
-https://vk.com/teaeditor
-
 https://www.facebook.com/groups/766324686841748/
 
 
@@ -42,7 +40,7 @@ https://www.facebook.com/groups/766324686841748/
 
 ### 01: INSTALLATION FROM THE SOURCE ###
 
-You can install TEA from the source in 4 ways, using build systems qmake/make, cmake/make, cmake/ninja. But first, you need to install some development libraries.
+You can install TEA from the source in many ways, using build systems qmake/make, cmake/make, cmake/ninja. But first, you need to install some development libraries.
 
 **Mandatory:**
 
@@ -52,11 +50,12 @@ Qt 4.8 or Qt 5.4+ or Qt 6
 
 TEA has some optional dependencies, those extends the functionality and can be turned on/off during pre-build configuration. Here is a list with library names and cmake command line switches:
 
-libaspell: -DUSE_ASPELL=ON //enables Aspell spell checker, OFF by default
 
-nuspell: -DUSE_NUSPELL=ON //enables Nuspell engine, that uses Hunspell dictionaries, OFF by default
+libaspell: -DUSE_ASPELL=ON //enables Aspell spell checker, OFF by default  
 
-libhunspell: -DUSE_HUNSPELL=ON //enables Hunspell engine, ON by default
+nuspell: -DUSE_NUSPELL=ON //enables Nuspell engine, that uses Hunspell dictionaries, OFF by default  
+
+libhunspell: -DUSE_HUNSPELL=ON //enables Hunspell engine, ON by default  
 
 poppler-cpp: -DUSE_PDF=ON //to read the text from PDF, OFF by default  
 
@@ -120,7 +119,7 @@ With qmake to build is simple:
 
 qmake  
 make  
-make install (as root or with sudo)
+make install (as root or with sudo)  
 
 To make some source configuration (with qmake), use CONFIG variable at qmake command line parameter. For example:
 
@@ -144,19 +143,19 @@ noprinter - disable printing support
 2. If the context menus in TEA are not localized, install the qttranslations or qt-translations package from your distro's repository.
 
 
-/*
+/* Some outdated snippets for Ubuntu.
+
 Basic snippet for Ubuntu users (Qt5 build) - run this from Terminal at the TEA source directory (unpacked):
 
 sudo apt-get install g++ pkg-config  
 sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev  
 sudo apt-get install qt5-default qttools5-dev-tools  
-sudo apt-get install libqt5qml5 libqt5quick5 qtdeclarative5-dev  
 qmake  
 make  
 sudo make install  
 
 
-Snippet for Ubuntu users (Qt4 build):
+Snippet for very old Ubuntu: (Qt4 build):
 
 sudo apt-get install g++ pkg-config  
 sudo apt-get install zlib1g-dev libaspell-dev libhunspell-dev  

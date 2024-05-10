@@ -1,4 +1,4 @@
-VERSION = 62.4.0
+VERSION = 63.0.0
 
 os2: {
 DEFINES += 'VERSION_NUMBER=\'"62.4.0"\''
@@ -311,15 +311,10 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                   exists ("c:\\Qt\\Qt5.3.1\\5.3\\mingw482_32\\include\\hunspell\\hunspell.hxx")
 
                          {
-
                           message ("hunspell enabled")
-
-
 #                          LIBS += c:\dev\hunspell-mingw-master\lib\hunspell.dll
                       #     LIBS += libhunspell.dll
-                           LIBS += hunspell.dll
-
-
+                          LIBS += hunspell.dll
                           DEFINES += HUNSPELL_ENABLE
                          }
                 }
@@ -336,7 +331,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
                           message ("ASpell enabled")
                           LIBS += -laspell-15
                           DEFINES += ASPELL_ENABLE
-                          }
+                         }
                   }
 
 
@@ -397,4 +392,3 @@ system(pkg-config --exists ddjvuapi) {
 }
 
 }
-

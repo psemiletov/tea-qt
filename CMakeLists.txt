@@ -136,7 +136,7 @@ endif()
 
 
 if(USE_SPEECH)
-pkg_check_modules(SPEECH REQUIRED speech-dispatcher>=0.0.1)
+pkg_check_modules(SPEECH QUIET speech-dispatcher>=0.0.1)
 if (SPEECH_FOUND)
    Message ("+ speech support")
    add_definitions(-DSPEECH_ENABLE)

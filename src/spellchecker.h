@@ -31,7 +31,7 @@
 #include <filesystem>
 #endif
 
-
+//#include <iostream>
 
 
 #if QT_VERSION >= 0x050000
@@ -93,20 +93,23 @@ public:
                  const QString &dir_user): language (lang), dir_dicts (dir_path), dir_user_dicts (dir_user), loaded(false)
                  {
                   user_dict_filename = dir_user + "/user_dict.txt";
+                  
+               //   std::cout << "user_dict_checker.map.size() " << user_dict_checker.map.size() << std::endl;
 
                   if (file_exists (user_dict_filename))
                      {
                       //QString file_content = qstring_load (user_dict_filename);
                       //user_dict = file_content.split ("\n");
                       user_dict_checker.load_from_file (user_dict_filename);
-
                      }
 
                 };
 
   virtual ~CSpellchecker() {
-                            //if (user_dict.size() > 0)
-                              //  qstring_save (user_dict_filename, user_dict.join ("\n"));
+                           //if (user_dict.size() > 0)
+                                 //  qstring_save (user_dict_filename, user_dict.join ("\n"));
+                 //             std::cout << "virtual ~CSpellchecker\n";
+    
                               user_dict_checker.save_to_file (user_dict_filename);
                            };
 

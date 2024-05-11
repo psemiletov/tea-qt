@@ -501,11 +501,11 @@ void CNuspellChecker::load_dict()
 {
   loaded = false;
 
-  qDebug() << "true CNuspellChecker::load_dict";
+  //qDebug() << "true CNuspellChecker::load_dict";
 
   dict_path = nuspell::search_dirs_for_one_dict (dirs, language.toStdString());
 
-  qDebug() << "dict_path: " << dict_path.string();
+  //qDebug() << "dict_path: " << dict_path.string();
 
   if (dict_path.empty() )
      {
@@ -532,7 +532,7 @@ void CNuspellChecker::load_dict()
 
 CNuspellChecker::CNuspellChecker (const QString &lang, const QString &dir_path, const QString &dir_user): CSpellchecker (lang, dir_path, dir_user)
 {
-  qDebug() << "CNuspellChecker::CNuspellChecker ";
+//  qDebug() << "CNuspellChecker::CNuspellChecker ";
 
   loaded = false;
   speller = 0;
@@ -623,13 +623,26 @@ QStringList CNuspellChecker::get_suggestions_list (const QString &word)
 
 void CPlainSpellchecker::add_word (const QString &word)
 {
+  //qDebug() << " CPlainSpellchecker::add_word: " << word;
+  
+  if (word.isEmpty())
+     return;
+  
   UTF16TEXT key = word.at(0).unicode();
   map[key].append (word);
+  
+  //qDebug() << "map.size() " << map.size();
+  //qDebug() << "map[key].size() " << map[key].size();
+  
+  
+  
 }
 
 
 void CPlainSpellchecker::remove_word (const QString &word)
 {
+  if (word.isEmpty())
+     return;
 
   UTF16TEXT key = word.at(0).unicode();
 
@@ -642,7 +655,9 @@ void CPlainSpellchecker::remove_word (const QString &word)
 
 bool CPlainSpellchecker::check (const QString &word)
 {
-  return map[word[0].unicode()].contains (word, Qt::CaseInsensitive);
+  
+  UTF16TEXT key = word[0].unicode();
+  return map.value(key).contains (word, Qt::CaseInsensitive);
 }
 
 
@@ -653,7 +668,6 @@ void CPlainSpellchecker::load_from_file (const QString &fname)
 
   if (! file_exists (fname))
       return;
-
 
   user_dict_filename = fname;
 
@@ -671,6 +685,9 @@ void CPlainSpellchecker::load_from_file (const QString &fname)
        UTF16TEXT key = s[0].unicode();
        map[key].append (s);
       }
+      
+      
+//    std::cout << "map.size() " << map.size() << std::endl;     
 }
 
 
@@ -696,11 +713,14 @@ void CPlainSpellchecker::save_to_file (const QString &fname)
            }
        }
 */
-
+/*
   QList <QStringList> values = map.values();
 
   for (int i = 0; i < values.size(); i++)
       {
+       qDebug() << "i:" << i; 
+       
+              
        if (values.at(i).size() > 0)
           {
            for (int j = 0; j < values.at(j).size(); j++)
@@ -711,14 +731,44 @@ void CPlainSpellchecker::save_to_file (const QString &fname)
                    {
                     text += t;
                     text += "\n";
-                    qDebug () << t;
+                    qDebug () << "at j:" << j << " t:" << t;
                    }
                }
          }
 
       }
 
+      
+  qstring_save (user_dict_filename, text);*/
 
+
+  QList <QStringList> values = map.values();
+
+  for (int i = 0; i < values.size(); i++)
+      {
+//       qDebug() << "i:" << i; 
+       
+       QStringList sl_char = values.at(i);
+       
+       //qDebug() << "sl_char.size():" << sl_char.size(); 
+             
+       if (sl_char.size() == 0)
+          continue;
+             
+        for (int j = 0; j < sl_char.size(); j++)
+            {
+             QString t = sl_char.at(j);
+             
+         //    qDebug () << "at j:" << j << " t:" << t;
+          
+             if (! t.isEmpty())
+                {
+                 text += t;
+                 text += "\n";
+                }
+            }
+      }
+      
   qstring_save (user_dict_filename, text);
 }
 

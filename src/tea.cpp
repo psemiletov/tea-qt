@@ -1686,8 +1686,8 @@ void CTEA::file_print()
 
   dialog->setWindowTitle (tr ("Print document"));
 
-  if (d->textCursor().hasSelection())
-      dialog->addEnabledOption (QAbstractPrintDialog::PrintSelection);
+  //if (d->textCursor().hasSelection())
+    //  dialog->addEnabledOption (QAbstractPrintDialog::PrintSelection);
 
   if (dialog->exec() != QDialog::Accepted)
       return;

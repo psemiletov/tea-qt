@@ -22,7 +22,6 @@ exists("/usr/include/linux/joystick.h") {
 
 USE_ASPELL = true
 USE_HUNSPELL = true
-USE_PRINTER = true
 
 win32:{
        isEmpty(PREFIX) {
@@ -82,12 +81,6 @@ noaspell {
           USE_ASPELL = false
          }
 
-DEFINES += PRINTER_ENABLE
-
-noprinter{
-DEFINES -= PRINTER_ENABLE
-message ("Printer OFF")
-}
 
 
 useclang{
@@ -161,11 +154,7 @@ QT += gui
 
 greaterThan(QT_MAJOR_VERSION, 4) {
        QT += widgets
-       QT += printsupport
 
-noprinter{
-       QT -= printsupport
-}
 
    } else {
 #QT += blah blah blah

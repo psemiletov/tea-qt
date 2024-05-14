@@ -1,34 +1,12 @@
 ====NEWS ABOUT TEA====
-TEA 63.0.0, May 2024
+TEA 63.0.2, May 2024
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-   Hello! This release removes a lot, and also brings a lot, it's all about changes and moving forward. The QT-version of TEA was born at 2007, with many functions of predecessors (the first TEA was developed at the year 2000 for Windows, with Delphi, and then 
-was reborn many times on different programming languages and toolkits).
-   So I recreated many old functions, those was useful in the past, and from yest to year TEA just grew with functionality. Different things became obscure and deprecated. I haven't touch some code over a decade. It was good working code at 2007, but now?
-   TEA version 63 is a try to refresh a program, make it more compact and clean, and also modern. Not just the "maintainance release". Despite this horrible promise, TEA is still C++ 98 code (and C++ 17 when build with Qt6), and can be compiled with Qt4, Qt5 or Qt6.
-   One of the core TEA features was ability to work with any possible character sets. This was implemented using Qt's wrapper around the iconv, and that wrapper was deprecated at Qt6, but still available there as the part of Qt5Compat.
-   At TEA 63 I removed this dependency, now TEA can handle only a limited number of charsets - UTF-8, UTF-16 and legacy Cyrillic encodings. If you need some specific 8-bit charset support, let me know.
-   Also, all charset auto-detection code is removed.
-  Another big and important thing in TEA is ZIP-support, that is needed to work with DOCX, ODT, EPUB, etc. Previously, TEA used the bundled Quazip and zlib to handle ZIPs. Sure, I was glad to use it at the full power and gave to TEA the packing abilities. Now even I don't use TEA as the zipper or unzipper.
-   So, now TEA uses another, the smaller library (ZIP/Miniz) for ZIP support, and cannot create archives.
-   As a result of these changes, I removed also: RTF reader (probably temporary), gzipped text files reader, and all code that related to zip/unzip, including the file names charset setting (it was important for the ancient zips with Cyrillic file names).  Noooo! Noooo! It broke my heart!
-   TEA 63 uses the code from my new program, the e-book reader and "speaker" Beseda (https://psemiletov.github.io/beseda/) designed for visually impaired people. Thus leaded me to rewrite and fix FB2 and Epub support for TEA.
-   Other removals are: Alt-WASD as cursor keys and Meson build system support. 
-   Meson is good, but it is too much for TEA to support all three build systems: qmake, Meson and cmake. So now we have legacy qmake support for Qt4 and Qt5 (but cmake for Qt5 is preferred), and cmake for Qt5 and Qt6.
-   Spellchecking now much improved. It is fixed at Windows port (at least with Hunspell, but I think there are some issues with Aspell, need to test more).
-   Among Aspell and Hunspell, you can use  shining modern Nuspell (if TEA is build with it support). 
-   Over all three spellchecking engines TEA provides own simple spellchecker, that works transparently and provides the user-defined dictionary, shared between all engines and languages.
-    Another new feature, the experimental one - Speech Dispatcher support, please read the TEA documentation how to use it. Briefly, TEA now can speak the text, but it will be enhanced in the future releases to make it really handy.
-   Another note about formats support. PDF support now uses libpoppler-cpp, not Qt bindings.
-   A known issue - all Alt-key based user-defined hotkeys works strange under Plasma 6, please avoid such hotkeys.
-
-   NOTE FOR PACKAGERS:
-
-- Removed dependency: zlib
-- Removed optional dependency: poppler-qt5/6
-+ New optional dependencies: popplercpp, nuspell  
+* Printer support fixed with cmake and Qt5/6/
+* Unicode handling improved
+- printer support with qmake
 
    Stay tuned.
    Peter Semiletov

@@ -602,7 +602,7 @@ QStringList CNuspellChecker::get_suggestions_list (const QString &word)
   if (! loaded || word.isEmpty())
      return sl;
 
-  QByteArray es = word.toUtf8();
+ // QByteArray es = word.toUtf8();
 
   auto suggestions = std::vector<std::string>();
   speller->suggest(word.toStdString(), suggestions);

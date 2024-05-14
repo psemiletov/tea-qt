@@ -3,13 +3,23 @@
 
 #include <qglobal.h>
 
-
+//#define char16_t uint16_t
+/*
 #if QT_VERSION >= 0x050000
 #include <uchar.h>
 #define UTF16TEXT char16_t
 #else
-#define UTF16TEXT ushort
+#define UTF16TEXT unsigned short
 #endif
+*/
+
+#if (__cplusplus < 201103L)
+//C++11 specific stuff here
+#include <stdint.h>
+#define char16_t uint16_t
+#endif
+
+#define UTF16TEXT char16_t
 
 
 class CTextConverter

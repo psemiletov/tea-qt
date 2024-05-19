@@ -173,6 +173,10 @@ UTF16_to_CP1251[0x044E] = 0xFE;  // CYRILLIC SMALL LETTER YU
 UTF16_to_CP1251[0x044F] = 0xFF;  // CYRILLIC SMALL LETTER YA
 UTF16_to_CP1251[0x0a] = 0x0a;    // Keep newline character
 UTF16_to_CP1251[0x0d] =  0x0d;    // Keep carriage return character
+UTF16_to_CP1251[0x401] = 0xA8;    // Ё
+UTF16_to_CP1251[0x451] = 0xB8 ;    // ё
+UTF16_to_CP1251[0x2013] = 0x96;    // малый пробел
+UTF16_to_CP1251[0x2014] = 0x97;    // большой пробел
 
 return UTF16_to_CP1251;
 };
@@ -448,22 +452,21 @@ UTF16TEXT* CTextConverter::ConvertFromCP1251ToUTF16 (const char* cp1251Text)
 
 
 //ok
-char* CTextConverter::ConvertFromUTF16ToCP1251(const UTF16TEXT *s)
+char* CTextConverter::ConvertFromUTF16ToCP1251 (const UTF16TEXT *s)
 {
   std::string cp1251Text;
 
  // for (const char16_t *p = s; *p != u'\0'; ++p)
    for (const UTF16TEXT *p = s; *p != '\0'; ++p)
-
-      {
+       {
      //  auto it = UTF16_to_CP1251.find (*p);
-       std::map<UTF16TEXT, char>::iterator it = UTF16_to_CP1251.find(*p);
+        std::map<UTF16TEXT, char>::iterator it = UTF16_to_CP1251.find(*p);
 
-       if (it != UTF16_to_CP1251.end())
-           cp1251Text += it->second;
-       else
+        if (it != UTF16_to_CP1251.end())
+            cp1251Text += it->second;
+        else
             // If character not found in mapping table, add placeholder or handle differently
-           cp1251Text += '?'; // Placeholder for unknown characters
+            cp1251Text += '?'; // Placeholder for unknown characters
       }
 
   char *result = new char[cp1251Text.length() + 1];

@@ -451,7 +451,7 @@ UTF16TEXT* CTextConverter::ConvertFromCP1251ToUTF16 (const char* cp1251Text)
 }
 
 
-//ok
+//ok, но дополнить таблицу
 char* CTextConverter::ConvertFromUTF16ToCP1251 (const UTF16TEXT *s)
 {
   std::string cp1251Text;
@@ -460,6 +460,10 @@ char* CTextConverter::ConvertFromUTF16ToCP1251 (const UTF16TEXT *s)
    for (const UTF16TEXT *p = s; *p != '\0'; ++p)
        {
      //  auto it = UTF16_to_CP1251.find (*p);
+           
+       //if (*p <= 0x7F)   
+         //  cp1251Text += *p; 
+           
         std::map<UTF16TEXT, char>::iterator it = UTF16_to_CP1251.find(*p);
 
         if (it != UTF16_to_CP1251.end())

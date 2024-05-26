@@ -2,15 +2,9 @@
 
 
 #include <iostream>
-//#include <ncurses.h>
 
 #include "speech.h"
 
-
-//sem_t g_semaphore;
-
-
-//bool saying;
 
 
 int g_state;
@@ -93,7 +87,7 @@ CSpeech::CSpeech()
 
 CSpeech::~CSpeech()
 {
-  if (initialized)
+//  if (initialized)
      if (spd_connection)
          spd_close (spd_connection);
 
@@ -102,7 +96,7 @@ CSpeech::~CSpeech()
 
 void CSpeech::done()
 {
-  if (initialized)
+  //if (initialized)
      if (spd_connection)
         {
          spd_close (spd_connection);
@@ -166,7 +160,7 @@ void CSpeech::say (const char* text)
 {
   if (! initialized)
       return;
-
+  
   g_state = SPCH_STATE_SAYING;
 
   int result = spd_say (spd_connection, SPD_TEXT, text);
@@ -202,7 +196,7 @@ void CSpeech::pause()
 
 void CSpeech::play()
 {
-   if (! initialized)
+  if (! initialized)
       return;
 
   g_state = SPCH_STATE_SAYING;
@@ -247,6 +241,9 @@ void CSpeech::get_voices (int locale_only)
   if (! initialized)
       return;
 
+  initialized = false;
+
+  
   voices.clear();
 
   char  **voices_array = (char**)spd_list_synthesis_voices (spd_connection);
@@ -268,48 +265,22 @@ void CSpeech::get_voices (int locale_only)
        {
         SPDVoice* voice = (SPDVoice*)voices_array[i]; // Приведение типа к SPDVoice*
 
-    /*   CVoice v;
-           v.name = voice->name;
-           v.language = voice->language;
 
-           voices.push_back (v);
-*/
+        if (locale_only == 1)
+           {
+            std::string voice_name = voice->name;
 
-       if (locale_only == 1)
-          {
-           /*CVoice v;
-           v.name = voice->name;
+            lang_name_short = voice->language;
+            lang_name_short = lang_name_short.substr(0, 2);
 
-           lang_name_short = voice->language;
-           lang_name_short = lang_name_short.substr(0, 2);
-           v.language = lang_name_short;
-
-           if (v.language == language_name)
-              voices.push_back (v);*/
-
-           std::string voice_name = voice->name;
-
-           lang_name_short = voice->language;
-           lang_name_short = lang_name_short.substr(0, 2);
-
-           if (lang_name_short == language_name)
+            if (lang_name_short == language_name)
                voices.push_back (voice_name);
-
-          }
+           }
        else
-          {
-           /*CVoice v;
-           v.name = voice->name;
-
-           lang_name_short = voice->language;
-           lang_name_short = lang_name_short.substr(0, 2);
-           v.language = lang_name_short;
-
-           voices.push_back (v);*/
-           std::string voice_name = voice->name;
+           {
+            std::string voice_name = voice->name;
             voices.push_back (voice_name);
-
-          }
+           }
 
 
        current_voice_index = 0;
@@ -329,14 +300,16 @@ void CSpeech::get_voices (int locale_only)
 
  //std::cout << "voices count: " << voices.size() << std::endl;
 
- free_spd_voices((SPDVoice**)voices_array);
-
+  free_spd_voices((SPDVoice**)voices_array);
+ 
+  if (voices.size() > 0)
+      initialized = true;
 }
 
 
 void CSpeech::set_voice_by_index (int index)
 {
-  if (index == -1)
+  if (index == -1 || ! initialized)
       return;
 
   if (index > voices.size() - 1)

@@ -1,12 +1,10 @@
 ====NEWS ABOUT TEA====
-TEA 63.0.2, May 2024
+TEA 63.1.0, June 2024
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-* Printer support fixed with cmake and Qt5/6/
-* Unicode handling improved
-- printer support with qmake
+* important fixes witn charsets and bak/version file saving
 
    Stay tuned.
    Peter Semiletov

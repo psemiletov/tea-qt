@@ -1530,7 +1530,7 @@ bool CDocument::file_save_with_name_plain (const QString &fileName)
       return false;
 
 
-  file_save_with_name (fileName, charset);
+  //file_save_with_name (fileName, charset);
   //QTextCodec *codec = QTextCodec::codecForName (charset.toUtf8().data());
   //if (! codec)
     // return false;
@@ -1539,6 +1539,30 @@ bool CDocument::file_save_with_name_plain (const QString &fileName)
 
   //file.write (ba);
   //file.close();
+
+  CTio *tio = holder->tio_handler.get_for_fname (fileName);
+
+  if (! tio)
+      return false;
+
+  if (fileName.contains (holder->dir_config))
+      tio->charset = "UTF-8";
+  else
+      tio->charset = charset;
+
+  tio->data = toPlainText();
+
+  if (eol != "\n")
+      tio->data.replace ("\n", eol);
+
+  if (! tio->save (fileName))
+     {
+      holder->log->log (tr ("cannot save %1 because of: %2")
+                           .arg (fileName)
+                           .arg (tio->error_string));
+      return false;
+    }
+
 
   holder->update_current_files_menu();
 

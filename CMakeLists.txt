@@ -41,7 +41,7 @@ add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_
 option(USE_NUSPELL "Use Nuspell" OFF)
 option(USE_ASPELL "Use Aspell" OFF)
 option(USE_HUNSPELL "Use Hunspell" ON)
-#option(USE_PRINTER "Use printer support" OFF)
+option(USE_PRINTER "Use printer support" OFF)
 option(USE_PDF "Use libpoppler" OFF)
 option(USE_DJVU "Use djvu support" OFF)
 option(USE_MAC "Build for Mac" OFF)

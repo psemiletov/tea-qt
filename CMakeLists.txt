@@ -8,6 +8,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+set(PROJECT "tea-qt")
+project ($PROJECT VERSION 63.1.0 LANGUAGES CXX C)
+
+
 enable_language(CXX)
 enable_language(C)
 
@@ -32,8 +36,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 
-set(PROJECT "tea-qt")
-project ($PROJECT VERSION 63.1.0 LANGUAGES CXX C)
 qt_add_resources(QT_RESOURCES resources.qrc)
 
 add_definitions(-DVERSION_NUMBER="\\"${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}\\"")

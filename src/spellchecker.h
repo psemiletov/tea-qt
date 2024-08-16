@@ -33,13 +33,22 @@
 
 //#include <iostream>
 
+#ifdef __APPLE__
 
+#include <stdint.h>
+#define UTF16TEXT char16_t
+
+#else
 #if QT_VERSION >= 0x050000
 #include <uchar.h>
 #define UTF16TEXT char16_t
 #else
 #define UTF16TEXT ushort
 #endif
+
+#endif
+
+
 
 #ifdef HUNSPELL_ENABLE
 #include <hunspell/hunspell.hxx>

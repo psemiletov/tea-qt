@@ -1527,7 +1527,7 @@ std::vector <std::string> split_string_to_vector (const string& s, const string&
   return result;
 }
 
-
+//BAD WITH EPUB OEBPS/
 std::vector <std::string> extract_src_from_toc (const std::string &source, const std::string &prefix)
 {
   std::vector <std::string> result;
@@ -1558,7 +1558,7 @@ std::vector <std::string> extract_src_from_toc (const std::string &source, const
          if (pos_end != std::string::npos)
              url = url.substr (0, pos_part);
 
-         if (ends_with (url, "html") || ends_with (url, "xhtml"))
+         if (ends_with (url, "html") || ends_with (url, "htm") || ends_with (url, "xhtml"))
             {
              std::string url_to_add = prefix + url;
              result.push_back (url_to_add);
@@ -1581,15 +1581,19 @@ bool CTioEpub::load (const QString &fn)
 
   struct zip_t *zip = zip_open (fname.c_str(), 0, 'r');
 
+
+  
   if (! zip)
      return false;
 
+  
+  
   //read toc.ncx
 
   void *toc = NULL;
   size_t bufsize;
 
-   std::string subdir = "OEBPS/";
+  std::string subdir = "OEBPS/";
 
   if (zip_entry_open (zip, "OEBPS/toc.ncx") < 0)
      {
@@ -1599,6 +1603,9 @@ bool CTioEpub::load (const QString &fn)
       subdir = "OPS/";
      }
 
+qDebug() << "3 ";
+       
+     
   zip_entry_read (zip, &toc, &bufsize);
 
   zip_entry_close (zip);
@@ -1606,6 +1613,8 @@ bool CTioEpub::load (const QString &fn)
   if (bufsize == 0)
     return false;
 
+
+  
  // done with toc
   std::string content ((char*)toc);
   free (toc);
@@ -1613,8 +1622,14 @@ bool CTioEpub::load (const QString &fn)
   std::vector <std::string> urls = extract_src_from_toc (content, subdir);
 //  remove_duplicates (urls);
 
+  qDebug() << "5 ";
+
+  
   //HERE WE ALREADY PARSED URLS
 
+  qDebug() << "urls.size(): " << urls.size();
+
+  
   if (urls.size() == 0)
      return false;
 
@@ -1622,6 +1637,8 @@ bool CTioEpub::load (const QString &fn)
 
   //read urls from epub
 
+  
+  
   for (size_t i = 0; i < urls.size(); i++)
       {
         //check duplicated urls, skip dups

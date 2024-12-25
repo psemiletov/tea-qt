@@ -44,7 +44,7 @@ public:
 
   bool ronly;
 
-  QString data;
+  QString data; //текст при load читается сюда
   QString charset;
   QString error_string;
   QString eol;

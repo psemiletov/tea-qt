@@ -389,6 +389,8 @@ QString extract_text_from_html (const QString &string_data)
 
 bool CTioPlainText::load (const QString &fname)
 {
+  data.clear();
+
   QFile file (fname);
 
   if (! file.open (QFile::ReadOnly))
@@ -581,15 +583,15 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
 {
   CTio *instance = 0;
 
-  //с нуля лишего смысла, ибо list[0] содержит умолчальный обработчик
+  //с нуля лишено смысла, ибо list[0] содержит умолчальный обработчик
   //в котором не создан список расширений файлов для обработки
   for (vector <size_t>::size_type i = 0; i < list.size(); i++)
       {
        instance = list.at (i);
 
-       for (int i = 0; i < instance->extensions.size(); i++)
+       for (int j = 0; j < instance->extensions.size(); j++)
            {
-            QString ext = "." + instance->extensions[i];
+            QString ext = "." + instance->extensions[j];
             if (fname.endsWith (ext))
                 return instance;
            }
@@ -614,6 +616,9 @@ CTioGzip::CTioGzip()
 
 bool CTioGzip::load (const QString &fname)
 {
+  data.clear();
+
+
 /*  QByteArray a = gzip_deflateFile (fname);
   data = a.data();
   return true;*/
@@ -637,6 +642,8 @@ CTioABW::CTioABW()
 
 bool CTioABW::load (const QString &fname)
 {
+  data.clear();
+
   QString temp = qstring_load (fname);
 
   QStringList tags;
@@ -1028,6 +1035,8 @@ bool CTioFB2::load (const QString &fname)
 
   std::string stemp =(char*)buf;
 
+  free (buf);
+
   if (stemp.find ("encoding=\"windows-1251\"")  != std::string::npos)
      {
   //   std::cout << "1251^^^^^^^^^^^^^^^^^^^^^ ZIPPED" << std::endl;
@@ -1409,6 +1418,9 @@ CTioRTF::CTioRTF()
 //BROKEN
 bool CTioRTF::load (const QString &fname)
 {
+
+  data.clear();
+
   QByteArray ba = file_load (fname);
 /*
   QString text;
@@ -1484,6 +1496,9 @@ CTioPDF::CTioPDF()
 
 bool CTioPDF::load (const QString &fname)
 {
+  data.clear();
+
+
   poppler::document *d = poppler::document::load_from_file (fname.toStdString ());
 
   if (! d)
@@ -1585,6 +1600,9 @@ CTioDJVU::CTioDJVU()
 
 bool CTioDJVU::load (const QString &fname)
 {
+   data.clear();
+
+
   if (! (ctx = ddjvu_context_create ("tea")))
      return false;
 
@@ -1671,16 +1689,16 @@ bool CTioEpub::load (const QString &fn)
 
   qDebug() << "CTioEpub::load " << fn;
 
+  data.clear();
+
+
   std::string fname = fn.toStdString();
   std::vector <std::string> tags;
 
   struct zip_t *zip = zip_open (fname.c_str(), 0, 'r');
-
-
   
   if (! zip)
      return false;
-
   
   
   //read toc.ncx

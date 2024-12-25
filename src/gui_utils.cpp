@@ -48,15 +48,22 @@ void create_menu_from_list (QObject *handler,
 {
   menu->setTearOffEnabled (true);
 
+ // qDebug() << "=========== create_menu_from_list START=========";
+
   for (QList <QString>::const_iterator i = list.begin(); i != list.end(); ++i)
       {
        if (! i->startsWith ("#"))
           {
+//           qDebug() << "*i" << *i;
+
            QAction *act = menu->addAction (*i);
            act->setData (*i);
            handler->connect (act, SIGNAL(triggered()), handler, method);
           }
       }
+
+  //qDebug() << "=========== create_menu_from_list END=========";
+
 }
 
 

@@ -30,6 +30,7 @@ C++/Qt branch started at 08 November 2007
 #include <cstdlib>
 
 
+//ВОТ ЭТО НИЖЕ ВСПОМНИТЬ
 #if QT_VERSION >= 0x050000
 #include <QRegularExpression>
 #else

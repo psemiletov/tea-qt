@@ -1425,11 +1425,11 @@ QMenu* CDocument::createStandardContextMenu()
 
 bool CDocument::file_open (const QString &fileName, const QString &codec)
 {
-  //qDebug() << "CDocument::file_open " << fileName;
+  qDebug() << "CDocument::file_open " << fileName;
 
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
 
-  //qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
+  qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
 
   if (! tio)
       return false;
@@ -2606,9 +2606,9 @@ void CDox::add_to_recent (CDocument *d)
   s += "*";
 
   if (! d->get_word_wrap())
-     s+="0";
+     s+= "0";
   else
-      s+="1";
+      s+= "1";
 
   recent_files.prepend (s);
   if (recent_files.size() > recent_list_max_items)
@@ -2948,16 +2948,20 @@ void CDox::open_recent()
 {
   QAction *act = qobject_cast<QAction *>(sender());
 
-  QString t = act->text();
-  t.remove ("&");
+  //QString t = act->text();
+  QString t = act->data().toString();
 
-  //qDebug() << "t:" << t;
+  //t.remove ("&");
 
-  int i = recent_files.indexOf (t);
-  if (i == -1)
-     return;
+  qDebug() << "t:" << t;
 
-  CDocument *d = open_file_triplex (recent_files[i]);
+//  int i = recent_files.indexOf (t);
+//  if (i == -1)
+//     return;
+
+//  CDocument *d = open_file_triplex (recent_files[i]);
+  CDocument *d = open_file_triplex (t);
+
   if (d)
       dir_last = get_file_path (d->file_name);
 

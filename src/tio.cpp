@@ -175,8 +175,6 @@ std::vector <std::string> split_string_to_vector (const string& s, const string&
 }
 
 
-
-
 //from https://stackoverflow.com/questions/13739924/remove-all-xml-tags-from-a-stdstring
 std::string xml_strip(std::string &xmlBuffer)
 {
@@ -260,9 +258,7 @@ std::string xml_strip_remove_empty_lines (std::string &xmlBuffer)
   return join_lines (v, "\n");
   
   //str.find_first_not_of(" \t\n\v\f\r") != std::string::npos
-  
-  
-  
+
 }
 
 
@@ -424,7 +420,7 @@ bool CTioPlainText::load (const QString &fname)
 
   QByteArray ba = file.readAll();
 
-  qDebug() << "charset:" << charset;
+  //qDebug() << "charset:" << charset;
 
 //ok
   if (charset == "UTF-8")
@@ -585,6 +581,8 @@ CTio* CTioHandler::get_for_fname (const QString &fname)
 {
   CTio *instance = 0;
 
+  //с нуля лишего смысла, ибо list[0] содержит умолчальный обработчик
+  //в котором не создан список расширений файлов для обработки
   for (vector <size_t>::size_type i = 0; i < list.size(); i++)
       {
        instance = list.at (i);
@@ -1646,7 +1644,7 @@ std::vector <std::string> extract_src_from_toc (const std::string &source, const
 
          std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
          
-         qDebug() << "url:" << url;
+//         qDebug() << "url:" << url;
 
          //find "#" if any
          //remove after # to the end of string
@@ -1731,7 +1729,6 @@ bool CTioEpub::load (const QString &fn)
   if (bufsize == 0)
     return false;
 
-
   
  // done with toc
   std::string content ((char*)toc);
@@ -1744,7 +1741,7 @@ bool CTioEpub::load (const QString &fn)
   
   //HERE WE ALREADY PARSED URLS
 
-  qDebug() << "urls.size(): " << urls.size();
+//  qDebug() << "urls.size(): " << urls.size();
 
   
   if (urls.size() == 0)
@@ -1763,7 +1760,7 @@ bool CTioEpub::load (const QString &fn)
            if (urls[i] == urls[i+1])
               continue;
         
-        qDebug() << "i: " << i;   
+       // qDebug() << "i: " << i;
  
 
 //       std::cout << "open: " << urls[i] << std::endl;
@@ -1772,13 +1769,13 @@ bool CTioEpub::load (const QString &fn)
 
        if (zip_entry_open (zip, urls[i].c_str()) >= 0)
           {
-           qDebug() << "opened " << urls[i].c_str();   
+         //  qDebug() << "opened " << urls[i].c_str();
   
             
            zip_entry_read (zip, &temp, &bufsize);
            zip_entry_close (zip);
 
-           qDebug() << "readed and closed";
+//           qDebug() << "readed and closed";
            
            std::string st; 
            
@@ -1801,7 +1798,7 @@ bool CTioEpub::load (const QString &fn)
              //  st_cleaned = html_strip (st); 
 
            
-           qDebug() << "cleanded";
+  //         qDebug() << "cleanded";
            
            
           //print_lines (file_lines);

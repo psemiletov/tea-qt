@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 set(PROJECT "tea-qt")
-project ($PROJECT VERSION 63.1.0 LANGUAGES CXX C)
+project ($PROJECT VERSION 63.2.0 LANGUAGES CXX C)
 
 
 enable_language(CXX)

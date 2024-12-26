@@ -1,10 +1,11 @@
 ====NEWS ABOUT TEA====
-TEA 63.1.0, June 2024
+TEA 63.2.0, December 26  2024
 ---------------------------------------------------
 http://tea.ourproject.org
 ---------------------------------------------------
 
-* important fixes witn charsets and bak/version file saving
+* Epub support fixed
+* Wrong loading of e-book formats fixed
 
    Stay tuned.
    Peter Semiletov

@@ -238,15 +238,20 @@ vector <string> split_string_to_vector (const string& s, const string& delimeter
 }
 */
 
-std::string join_lines (const std::vector<std::string> &lst, const std::string &delim)
+std::string join_lines (const std::vector <std::string> &lst, const std::string &delim)
 {
-    std::string ret;
-    for(const auto &s : lst) {
-        if(!ret.empty())
-            ret += delim;
-        ret += s;
-    }
-    return ret;
+  std::string ret;
+  
+  //for (const auto &s : lst) 
+  for (size_t i = 0; i < lst.size(); i++)
+      {
+       if (! ret.empty())
+           ret += delim;
+          
+       //ret += s;
+       ret += lst[i]; 
+     }
+  return ret;
 }
 
 std::string xml_strip_remove_empty_lines (std::string &xmlBuffer)

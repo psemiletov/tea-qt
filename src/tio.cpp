@@ -697,8 +697,8 @@ bool CTioXMLZipped::load (const QString &fname)
   if (ext == "odt" || ext == "sxw" )
      {
       source_fname = "content.xml";
-      tags.append ( "text:p");
-      tags.append ( "text:s");
+      tags.append ("text:p");
+      tags.append ("text:s");
      }
 
 
@@ -1689,6 +1689,95 @@ std::vector <std::string> extract_src_from_toc (const std::string &source, const
 }
 
 
+std::vector <std::string> extract_src_from_opf (const std::string &source, const std::string &prefix)
+{
+  std::vector <std::string> result;
+
+  size_t i = 0;
+  size_t limit = source.size() - 1;
+  std::string signature_str = "href=\"";
+  size_t signature_size = signature_str.size();
+
+  qDebug() << "limit: " << limit;  
+
+  while (i < limit)
+        {
+         size_t pos_start = source.find (signature_str, i);
+         
+         qDebug() << "pos_start: " << pos_start;  
+         
+         if (pos_start == std::string::npos)
+            break;
+
+         size_t pos_end = source.find ('\"', pos_start + signature_size);
+         
+         qDebug() << "pos_end: " << pos_end;  
+ 
+         
+         if (pos_end == std::string::npos)
+            break;
+
+         //else
+
+         
+
+         std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
+         
+         qDebug() << "url:" << url;
+
+         //find "#" if any
+         //remove after # to the end of string
+
+         size_t pos_part = url.find ('#');
+         if (pos_end != std::string::npos)
+             url = url.substr (0, pos_part);
+
+         if (ends_with (url, "html") || ends_with (url, "htm") || ends_with (url, "xhtml") || ends_with (url, "xml"))
+            {
+             std::string url_to_add = prefix + url;
+             result.push_back (url_to_add);
+            }
+
+         i = pos_end + 1;
+        }
+
+  return result;
+}
+
+
+/*
+
+переписать алгоритм!
+
+1 делаем анзип
+2 открываем META-INF/container.xml
+3 читаем оттуда full-path: <rootfile full-path="OPS/package.opf" media-type="application/oebps-package+xml" />            
+4. Открываем full-path
+5. Парсим все <item href="images/image089.jpg" id="image089" media-type="image/jpeg"/>              
+6. проверяем является ли расширение href == xml, xhtml, html, htm
+7. если да, создаем url и добавляем в список
+*/
+
+
+std::string str_between(const std::string &source,
+                           const std::string &sep1,
+                           const std::string &sep2)
+{
+    std::string result;
+    size_t pos1 = source.find(sep1);
+    if (pos1 == std::string::npos)
+        return result;
+
+    size_t pos2 = source.find(sep2, pos1 + sep1.size());
+    if (pos2 == std::string::npos)
+        return result;
+
+    pos1 += sep1.size();
+
+    result = source.substr(pos1, pos2 - pos1);
+    return result;
+}
+
 bool CTioEpub::load (const QString &fn)
 {
 
@@ -1701,31 +1790,184 @@ bool CTioEpub::load (const QString &fn)
   std::vector <std::string> tags;
 
   struct zip_t *zip = zip_open (fname.c_str(), 0, 'r');
+
   
   if (! zip)
      return false;
   
+  
+  //read META-INF/container.xml
+
+  void *buffer = NULL;
+  size_t bufsize;
+
+  std::string subdir;
+
+  if (zip_entry_open (zip, "META-INF/container.xml") < 0) //не можем открыть просто toc?
+      return false;
+
+  zip_entry_read (zip, &buffer, &bufsize);
+
+  zip_entry_close (zip);
+
+  if (bufsize == 0)
+    return false;
+
+  
+ // done with container_xml
+  std::string content ((char*)buffer);
+  free (buffer);
+
+  //qDebug() << "buffer:"  << buffer;
+
+
+//читаем оттуда full-path: <rootfile full-path="OPS/package.opf" media-type="application/oebps-package+xml" />
+
+   std::string rootfile_path = str_between (content, "rootfile full-path=\"", "\"");
+
+  qDebug() << "rootfile:"  << rootfile_path;
+
+
+   //get subdir!
+   
+   size_t separator_pos = rootfile_path.find ("/");
+   
+   if (separator_pos != std::string::npos)
+      {
+       subdir = rootfile_path.substr (0, separator_pos + 1);
+       qDebug() << "subdir: " << subdir;
+      }
+   
+
+  
+//read rootfile
+
+  if (zip_entry_open (zip, rootfile_path.c_str()) < 0) //не можем открыть просто toc?
+      return false;
+
+  zip_entry_read (zip, &buffer, &bufsize);
+
+  zip_entry_close (zip);
+
+  if (bufsize == 0)
+    return false;
+
+  std::string root_file_buffer ((char*)buffer);
+  free (buffer);
+
+
+
+  std::vector <std::string> urls = extract_src_from_opf (root_file_buffer, subdir);
+//  remove_duplicates (urls);
+
+ 
+  
+  //HERE WE ALREADY PARSED URLS
+
+  qDebug() << "urls.size(): " << urls.size();
+
+  
+  if (urls.size() == 0)
+     return false;
+
+  tags.push_back ("p");
+
+  //read urls from epub
+
+  
+  
+  for (size_t i = 0; i < urls.size(); i++)
+      {
+        //check duplicated urls, skip dups
+        if (i + 1 != urls.size())
+           if (urls[i] == urls[i+1])
+              continue;
+        
+       // qDebug() << "i: " << i;
+ 
+
+//       std::cout << "open: " << urls[i] << std::endl;
+
+       void *temp = NULL;
+
+       if (zip_entry_open (zip, urls[i].c_str()) >= 0)
+          {
+         //  qDebug() << "opened " << urls[i].c_str();
+  
+            
+           zip_entry_read (zip, &temp, &bufsize);
+           zip_entry_close (zip);
+
+//           qDebug() << "readed and closed";
+           
+           std::string st; 
+           
+           if (temp)
+              st = (char*) temp;
+            
+            
+           //std::string st_cleaned = html_strip (st); 
+
+           std::string st_cleaned; 
+           
+          // if (ends_with (urls[i].c_str(), "xml") || ends_with (urls[i].c_str(), "xhtml"))
+              
+           
+           //st_cleaned = xml_strip (st); 
+              
+             st_cleaned =  xml_strip_remove_empty_lines (st);
+              
+           //else
+             //  st_cleaned = html_strip (st); 
+
+           
+  //         qDebug() << "cleanded";
+           
+           
+          //print_lines (file_lines);
+
+          //if (file_lines.size() > 0)
+           //  lines.insert(std::end(lines), std::begin(file_lines), std::end(file_lines));
+
+           data += QString::fromStdString (st_cleaned);
+           data += "\n";
+           free (temp);
+          }
+      }
+
+  zip_close(zip);
+
+  return true;
+}
+
+
+/*
+bool CTioEpub::load (const QString &fn)
+{
+
+  qDebug() << "CTioEpub::load " << fn;
+
+  data.clear();
+
+
+  std::string fname = fn.toStdString();
+  std::vector <std::string> tags;
+
+  struct zip_t *zip = zip_open (fname.c_str(), 0, 'r');
+
+  qDebug() << "1";
+  
+  if (! zip)
+     return false;
+  
+  qDebug() << "2";
   
   //read toc.ncx
 
   void *toc = NULL;
   size_t bufsize;
 
-  /*
-  std::string subdir = "OEBPS/";
-
-  if (zip_entry_open (zip, "toc.ncx") < 0)
-  
-  
-  if (zip_entry_open (zip, "OEBPS/toc.ncx") < 0)
-     {
-      if (zip_entry_open (zip, "OPS/toc.ncx") < 0)
-          return false;
-
-      subdir = "OPS/";
-     }
-*/
-      
+   
  
   
   std::string subdir;
@@ -1733,16 +1975,26 @@ bool CTioEpub::load (const QString &fn)
   if (zip_entry_open (zip, "toc.ncx") < 0) //не можем открыть просто toc?
      {
       subdir = "OEBPS/";
+  
+       qDebug() << "3";
       
       if (zip_entry_open (zip, "OEBPS/toc.ncx") < 0) //пробуем еще так
          {
+         qDebug() << "4";
+  
+         
           if (zip_entry_open (zip, "OPS/toc.ncx") < 0) //и так
              return false;
+
+           qDebug() << "5";
+  
 
          subdir = "OPS/";
         }
      }
-      
+
+
+   qDebug() << "subdir:" << subdir;
      
  
   zip_entry_read (zip, &toc, &bufsize);
@@ -1839,7 +2091,7 @@ bool CTioEpub::load (const QString &fn)
 
   return true;
 }
-
+*/
 
 /*
 QStringList CTioHandler::get_supported_exts()

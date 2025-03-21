@@ -1723,7 +1723,7 @@ std::vector <std::string> extract_src_from_opf (const std::string &source, const
 
          std::string url = source.substr (pos_start + signature_size, pos_end - (pos_start + signature_size));
          
-         qDebug() << "url:" << url;
+        // qDebug() << "url:" << url;
 
          //find "#" if any
          //remove after # to the end of string
@@ -1832,7 +1832,7 @@ bool CTioEpub::load (const QString &fn)
    if (separator_pos != std::string::npos)
       {
        subdir = rootfile_path.substr (0, separator_pos + 1);
-       qDebug() << "subdir: " << subdir;
+      // qDebug() << "subdir: " << subdir;
       }
    
 

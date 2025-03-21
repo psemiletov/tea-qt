@@ -348,6 +348,8 @@ public:
 
   CDocument* create_new();
   CDocument* open_file (const QString &fileName, const QString &codec);
+  CDocument* open_file_without_reload (const QString &fileName, const QString &codec); //for IDE
+  
   CDocument* open_file_triplex (const QString &triplex);
   CDocument* get_document_by_fname (const QString &fileName);
   CDocument* get_current();

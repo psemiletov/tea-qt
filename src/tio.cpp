@@ -1825,9 +1825,6 @@ bool CTioEpub::load (const QString &fn)
 
    std::string rootfile_path = str_between (content, "rootfile full-path=\"", "\"");
 
-  qDebug() << "rootfile:"  << rootfile_path;
-
-
    //get subdir!
    
    size_t separator_pos = rootfile_path.find ("/");
@@ -1860,11 +1857,8 @@ bool CTioEpub::load (const QString &fn)
   std::vector <std::string> urls = extract_src_from_opf (root_file_buffer, subdir);
 //  remove_duplicates (urls);
 
- 
   
   //HERE WE ALREADY PARSED URLS
-
-  qDebug() << "urls.size(): " << urls.size();
 
   
   if (urls.size() == 0)

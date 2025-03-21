@@ -2714,6 +2714,50 @@ CDocument* CDox::open_file (const QString &fileName, const QString &codec)
   return d;
 }
 
+CDocument* CDox::open_file_without_reload  (const QString &fileName, const QString &codec)
+{
+  if (! file_exists (fileName) || ! path_is_file (fileName))
+     return 0;
+
+  if (is_image (fileName))
+     {
+      CDocument *td = get_current();
+      if (td)
+         {
+          td->insert_image (fileName);
+          td->setFocus (Qt::OtherFocusReason);
+         }
+      return td;
+     }
+
+
+  CDocument *d = get_document_by_fname (fileName);
+  if (d)
+     {
+      tab_widget->setCurrentIndex (tab_widget->indexOf (d->tab_page));
+      //d->reload (codec);
+      return d;
+     }
+
+
+//else truly create the new doc
+  d = create_new();
+  d->file_open (fileName, codec);
+
+  dir_last = get_file_path (d->file_name);
+
+  d->update_status();
+  d->update_title (settings->value ("full_path_at_window_title", 1).toBool());
+
+  main_tab_widget->setCurrentIndex (0);
+
+  update_current_files_menu();
+
+  return d;
+}
+
+
+
 
 CDocument* CDox::open_file_triplex (const QString &triplex)
 {

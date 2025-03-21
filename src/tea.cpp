@@ -5389,7 +5389,7 @@ void CTEA::ide_toggle_hs()
      return;
 
   if (file_exists (d->file_name))
-      documents->open_file (toggle_fname_header_source (d->file_name), d->charset);
+      documents->open_file_without_reload (toggle_fname_header_source (d->file_name), d->charset);
 }
 
 

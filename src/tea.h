@@ -703,6 +703,8 @@ File menu callbacks
   bool file_save_as();
   void file_save_bak();
   void file_save_version();
+  void file_save_all_existing();
+  
   void file_session_save_as();
   void file_reload();
   void file_reload_enc_itemDoubleClicked (QListWidgetItem *item);

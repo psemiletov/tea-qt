@@ -1558,6 +1558,25 @@ void CTEA::file_save_version()
 }
 
 
+void CTEA::file_save_all_existing()
+{
+  last_action = sender();
+
+  if (documents->items.size() == 0)
+     return;
+
+
+  for (int i = 0; i < documents->items.size(); i++)
+      {
+       CDocument *d = documents->items[i];
+       
+       if (file_exists (d->file_name))
+          d->file_save_with_name_plain (d->file_name);
+      
+      }
+}
+
+
 void CTEA::file_session_save_as()
 {
   last_action = sender();
@@ -7138,12 +7157,15 @@ File menu
   menu_file->addAction (saveAct);
   menu_file->addAction (saveAsAct);
 
-  QMenu *tm = menu_file->addMenu (tr ("Save as different"));
+  QMenu *tm = menu_file->addMenu (tr ("Save more"));
   tm->setTearOffEnabled (true);
 
   add_to_menu (tm, tr ("Save .bak"), SLOT(file_save_bak()), "Ctrl+B");
   add_to_menu (tm, tr ("Save timestamped version"), SLOT(file_save_version()));
   add_to_menu (tm, tr ("Save session"), SLOT(file_session_save_as()));
+  add_to_menu (tm, tr ("Save all existing"), SLOT(file_save_all_existing));
+  
+  
 
   menu_file->addSeparator();
 

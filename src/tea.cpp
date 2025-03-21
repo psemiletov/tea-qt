@@ -1570,7 +1570,7 @@ void CTEA::file_save_all_existing()
       {
        CDocument *d = documents->items[i];
        
-       if (file_exists (d->file_name))
+       if (file_exists (d->file_name) && d->document()->isModified())
           d->file_save_with_name_plain (d->file_name);
       
       }

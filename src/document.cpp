@@ -1,5 +1,5 @@
 /***************************************************************************
- *   2007-2024 by Peter Semiletov                                          *
+ *   2007-2025 by Peter Semiletov                                          *
  *   peter.semiletov@gmail.com                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -1429,7 +1429,7 @@ bool CDocument::file_open (const QString &fileName, const QString &codec)
 
   CTio *tio = holder->tio_handler.get_for_fname (fileName);
 
-  qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
+//  qDebug() << "tio->metaObject()->className()" << tio->metaObject()->className();
 
   if (! tio)
       return false;

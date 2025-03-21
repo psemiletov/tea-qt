@@ -1,5 +1,10 @@
 //it's lazy updated file, so the real ChangeLog is the activity on github
 
+63.3.0
+* "Save as different" renamed to "Save more"
++ File - Save more - Save all existing
+* in some cases, such as IDE - header/source switch, TEA now just opens file and not reload it if the file is already opened
+
 
 - per spellchecker user dict in a favour of the common one, for all languages
 + Nuspell support

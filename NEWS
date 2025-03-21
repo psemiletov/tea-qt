@@ -1,11 +1,12 @@
 ====NEWS ABOUT TEA====
-TEA 63.2.0, December 26  2024
----------------------------------------------------
+TEA 63.3.0, March 2025
+-------------------------------------------------
 http://tea.ourproject.org
----------------------------------------------------
+-------------------------------------------------
 
-* Epub support fixed
-* Wrong loading of e-book formats fixed
+* "Save as different" renamed to "Save more"
++ File - Save more - Save all existing
+* In some cases, such as IDE - header/source switch, TEA now just opens file and not reload it if the file is already opened (bug fixed)
 
    Stay tuned.
    Peter Semiletov

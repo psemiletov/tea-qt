@@ -233,7 +233,7 @@ Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <source>Save as different</source>
-        <translation>Sauvegarder en tant que différent</translation>
+        <translation type="vanished">Sauvegarder en tant que différent</translation>
     </message>
     <message>
         <source>Save .bak</source>
@@ -1848,6 +1848,14 @@ Pour utiliser des penses-bêtes horodatés, spécifiez l&apos;heure au format 24
     </message>
     <message>
         <source>Enable speech (TEA restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save more</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save all existing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

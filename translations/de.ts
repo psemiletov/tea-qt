@@ -226,10 +226,6 @@ Do you want to overwrite?</source>
         <translation></translation>
     </message>
     <message>
-        <source>Save as different</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Save .bak</source>
         <translation></translation>
     </message>
@@ -1809,6 +1805,14 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     </message>
     <message>
         <source>Enable speech (TEA restart is needed)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save more</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save all existing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -87,6 +87,7 @@
     <file>hls/lout.xml</file>
     <file>hls/lua.xml</file>
     <file>hls/perl.xml</file>
+    <file>hls/prql.xml</file>
     <file>hls/vala.xml</file>
     <file>hls/bash.xml</file>
     <file>hls/nasm.xml</file>

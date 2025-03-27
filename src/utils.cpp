@@ -583,6 +583,7 @@ CFTypeChecker::CFTypeChecker()
   ADDTEXTTYPE ("^.*\\.(pl|pm)$");
   ADDTEXTTYPE ("^.*\\.(php)$");
   ADDTEXTTYPE ("^.*\\.(po)$");
+  ADDTEXTTYPE ("^.*\\.(prql)$");
   ADDTEXTTYPE ("^.*\\.(py)$");
   ADDTEXTTYPE ("^.*\\.(r)$");
   ADDTEXTTYPE ("^.*\\.(sd7)$");
@@ -629,6 +630,7 @@ CFTypeChecker::CFTypeChecker()
   patterns.push_back (QRegExp ("^.*\\.(pl|pm)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(php)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(po)$", Qt::CaseInsensitive));
+  patterns.push_back (QRegExp ("^.*\\.(pqrl)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(py)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(r)$", Qt::CaseInsensitive));
   patterns.push_back (QRegExp ("^.*\\.(sd7)$", Qt::CaseInsensitive));
@@ -668,6 +670,7 @@ CFTypeChecker::CFTypeChecker()
   patterns.push_back (QRegularExpression ("^.*\\.(pl|pm)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(php)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(po)$", QRegularExpression::CaseInsensitiveOption));
+  patterns.push_back (QRegularExpression ("^.*\\.(prql)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(py)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(r)$", QRegularExpression::CaseInsensitiveOption));
   patterns.push_back (QRegularExpression ("^.*\\.(sd7)$", QRegularExpression::CaseInsensitiveOption));

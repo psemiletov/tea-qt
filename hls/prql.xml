@@ -1,0 +1,31 @@
+<document pattern="^.*\.(prql)$">
+
+<item name="options" wrap="0"></item>
+
+<item name="keywords" type="keywords" color="keywords" fontstyle="bold">
+\b(let|module|prql|false|null|true|this|that)\b</item>
+
+<item name="functions" type="keywords" color="functions">
+\b(aggregate|derive|filter|from|group|join|select|sort|take|window)\b</item>
+
+<item name="types" type="keywords" color="type">\b(int(8|16|32|64|128)?|float(32|64)|bool|text|date|time|timestamp)\b</item>
+
+<item name="operator" type="item" color="operator">[~-=\+\*\/\|]</item>
+
+<item name="bracket" type="item" color="brackets">[\(\)\[\]]</item>
+
+<item name="quotes" type="item" color="quotes">("[^\"]*"|'[^']*')</item>
+
+<item name="char" type="item" color="quotes">('[^']*')</item>
+
+<item name="single comment" type="item" color="single comment" fontstyle="italic">#[^\n]*</item>
+
+<item name="mcomment-start" type="mcomment-start" color="mcomment-start" fontstyle="italic">"""</item>
+
+<item name="mcomment-end" type="mcomment-end">"""</item>
+
+<item name="cm_mult" type="comment">"""%s\n"""</item>
+
+<item name="cm_single" type="comment">#/%s</item>
+
+</document>

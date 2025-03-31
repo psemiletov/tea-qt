@@ -1,12 +1,11 @@
 ====NEWS ABOUT TEA====
-TEA 63.3.0, March 2025
+TEA 63.3.1, April 2025
 -------------------------------------------------
 http://tea.ourproject.org
 -------------------------------------------------
 
-* "Save as different" renamed to "Save more"
-+ File - Save more - Save all existing
-* In some cases, such as IDE - header/source switch, TEA now just opens file and not reload it if the file is already opened (bug fixed)
++ PRQL hl module by vanillajonathan
+* Save all - fixed
 
    Stay tuned.
    Peter Semiletov

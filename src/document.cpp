@@ -1530,6 +1530,7 @@ bool CDocument::file_save_with_name_plain (const QString &fileName)
       return false;
 
 
+  //qDebug() << "CDocument::file_save_with_name_plain: " << fileName;
   //file_save_with_name (fileName, charset);
   //QTextCodec *codec = QTextCodec::codecForName (charset.toUtf8().data());
   //if (! codec)
@@ -1544,7 +1545,7 @@ bool CDocument::file_save_with_name_plain (const QString &fileName)
 
   if (! tio)
       return false;
-
+      
   if (fileName.contains (holder->dir_config))
       tio->charset = "UTF-8";
   else
@@ -1552,6 +1553,7 @@ bool CDocument::file_save_with_name_plain (const QString &fileName)
 
   tio->data = toPlainText();
 
+  
   if (eol != "\n")
       tio->data.replace ("\n", eol);
 
@@ -1563,7 +1565,7 @@ bool CDocument::file_save_with_name_plain (const QString &fileName)
       return false;
     }
 
-
+   
   holder->update_current_files_menu();
 
   return true;

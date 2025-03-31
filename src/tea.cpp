@@ -1571,7 +1571,10 @@ void CTEA::file_save_all_existing()
        CDocument *d = documents->items[i];
        
        if (file_exists (d->file_name) && d->document()->isModified())
-          d->file_save_with_name_plain (d->file_name);
+          {
+           d->file_save_with_name_plain (d->file_name);
+           d->document()->setModified (false);
+          } 
       
       }
 }
@@ -7163,7 +7166,7 @@ File menu
   add_to_menu (tm, tr ("Save .bak"), SLOT(file_save_bak()), "Ctrl+B");
   add_to_menu (tm, tr ("Save timestamped version"), SLOT(file_save_version()));
   add_to_menu (tm, tr ("Save session"), SLOT(file_session_save_as()));
-  add_to_menu (tm, tr ("Save all existing"), SLOT(file_save_all_existing));
+  add_to_menu (tm, tr ("Save all existing"), SLOT(file_save_all_existing()));
   
   
 

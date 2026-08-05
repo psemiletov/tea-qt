@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE" sourcelanguage="en">
+<TS version="2.1" language="de_DE" sourcelanguage="en_US">
 <context>
     <name>CAboutWindow</name>
     <message>
@@ -24,22 +24,22 @@
     <name>CDarkerWindow</name>
     <message>
         <source>Darker palette</source>
-        <translation></translation>
+        <translation>Dunklere Palette</translation>
     </message>
 </context>
 <context>
     <name>CDocument</name>
     <message>
         <source>cannot open %1 because of: %2</source>
-        <translation></translation>
+        <translation>Kann %1 nicht öffnen. Grund: %2</translation>
     </message>
     <message>
         <source>%1 is open</source>
-        <translation></translation>
+        <translation>%1 ist geöffnet</translation>
     </message>
     <message>
         <source>cannot save %1 because of: %2</source>
-        <translation></translation>
+        <translation>Kann %1 nicht speichern. Grund: %2</translation>
     </message>
     <message>
         <source>%1 is saved</source>
@@ -47,32 +47,33 @@
     </message>
     <message>
         <source>new[%1]</source>
-        <translation></translation>
+        <translation>neu[%1]</translation>
     </message>
     <message>
         <source>%1 has been modified.
 Do you want to save your changes?</source>
-        <translation></translation>
+        <translation>%1 wurde geändert.
+Wollen Sie die Änderungen speichern?</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished">Ausschneiden</translation>
+        <translation>Ausschneiden</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="unfinished">Einfügen</translation>
+        <translation>Einfügen</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="unfinished">Rückgängig</translation>
+        <translation>Rückgängig</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished">Wiederholen</translation>
+        <translation>Wiederholen</translation>
     </message>
 </context>
 <context>
@@ -86,23 +87,23 @@ Do you want to save your changes?</source>
     <name>CTEA</name>
     <message>
         <source>The famous input field. Use for search/replace, function parameters</source>
-        <translation></translation>
+        <translation>Das &quot;Famous Input Field&quot;. Es wird benutzt zum Suchen und Ersetzen sowie für Parameter, die an Tea-Funktionen übergeben werden</translation>
     </message>
     <message>
         <source>FIF</source>
-        <translation></translation>
+        <translation>FIF</translation>
     </message>
     <message>
         <source>editor</source>
-        <translation></translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <source>logmemo</source>
-        <translation></translation>
+        <translation>Protokoll</translation>
     </message>
     <message>
         <source>famous input field</source>
-        <translation></translation>
+        <translation>Famous Input Field</translation>
     </message>
     <message>
         <source>Charset</source>
@@ -111,15 +112,20 @@ Do you want to save your changes?</source>
     <message>
         <source>%1 already exists
 Do you want to overwrite?</source>
-        <translation></translation>
+        <translation>%1 gibt es schon.
+Wollen Sie es überschreiben?</translation>
+    </message>
+    <message>
+        <source>Test</source>
+        <translation>Test</translation>
     </message>
     <message>
         <source>Files</source>
-        <translation></translation>
+        <translation>Dateien</translation>
     </message>
     <message>
         <source>Labels</source>
-        <translation></translation>
+        <translation>Sprungmarken</translation>
     </message>
     <message>
         <source>New</source>
@@ -135,7 +141,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Open an existing file</source>
-        <translation></translation>
+        <translation>Öffnen einer vorhandenen Datei</translation>
     </message>
     <message>
         <source>Save</source>
@@ -143,7 +149,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Save the document to disk</source>
-        <translation></translation>
+        <translation>Die Datei auf einen Datenträger speichern</translation>
     </message>
     <message>
         <source>Save As</source>
@@ -151,7 +157,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Save the document under a new name</source>
-        <translation></translation>
+        <translation>Speichern des Dokuments mit neuem Namen</translation>
     </message>
     <message>
         <source>Exit</source>
@@ -159,7 +165,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Exit the application</source>
-        <translation>Beenden der Applikation</translation>
+        <translation>Beenden der Anwendung</translation>
     </message>
     <message>
         <source>Cut</source>
@@ -167,7 +173,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Cut the current selection&apos;s contents to the clipboard</source>
-        <translation></translation>
+        <translation>Die aktuelle Auswahl ausschneiden und in die Zwischenablage einfügen</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -175,7 +181,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Copy the current selection&apos;s contents to the clipboard</source>
-        <translation></translation>
+        <translation>Die aktuelle Auswahl in die Zwischenablage kopieren</translation>
     </message>
     <message>
         <source>Paste</source>
@@ -183,7 +189,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Paste the clipboard&apos;s contents into the current selection</source>
-        <translation></translation>
+        <translation>Den Inhalt der Zwischenablage in die aktuelle Auswahl schreiben</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -223,23 +229,27 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation></translation>
+        <translation>Anmerkungen</translation>
+    </message>
+    <message>
+        <source>Save as different</source>
+        <translation>Speichern als etwas anderes</translation>
     </message>
     <message>
         <source>Save .bak</source>
-        <translation></translation>
+        <translation>.bak speichern</translation>
     </message>
     <message>
         <source>Save timestamped version</source>
-        <translation></translation>
+        <translation>Speichere Version mit Zeitstempel</translation>
     </message>
     <message>
         <source>Save session</source>
-        <translation></translation>
+        <translation>Arbeitssitzung speichern</translation>
     </message>
     <message>
         <source>File actions</source>
-        <translation></translation>
+        <translation>Dateioptionen</translation>
     </message>
     <message>
         <source>Reload</source>
@@ -247,19 +257,19 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Reload with encoding</source>
-        <translation></translation>
+        <translation>Neu laden mit Zeichensatzauswahl</translation>
     </message>
     <message>
         <source>Set UNIX end of line</source>
-        <translation></translation>
+        <translation>Zeilenenden im UNIX-Format einsetzen</translation>
     </message>
     <message>
         <source>Set Windows end of line</source>
-        <translation></translation>
+        <translation>Zeilenenden im Windows-Format einsetzen</translation>
     </message>
     <message>
         <source>Set old Mac end of line (CR)</source>
-        <translation></translation>
+        <translation>Zeilenenden im alten MAC-Format (CR) einsetzen</translation>
     </message>
     <message>
         <source>Recent files</source>
@@ -279,7 +289,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Find obsolete paths</source>
-        <translation></translation>
+        <translation>Finden veralteter Pfade</translation>
     </message>
     <message>
         <source>Templates</source>
@@ -291,19 +301,19 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Configs</source>
-        <translation></translation>
+        <translation>Listen verwalten</translation>
     </message>
     <message>
         <source>Bookmarks list</source>
-        <translation>Liste der Lesezeichen</translation>
+        <translation>Lesezeichenliste</translation>
     </message>
     <message>
         <source>Programs list</source>
-        <translation>Liste der Programme</translation>
+        <translation>Programmliste</translation>
     </message>
     <message>
         <source>Do not add to recent</source>
-        <translation></translation>
+        <translation>Nicht zu den zuletzt Geöffneten hinzufügen</translation>
     </message>
     <message>
         <source>Print</source>
@@ -311,7 +321,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Close current</source>
-        <translation>Aktuelle Datei schließen</translation>
+        <translation>Schließe aktuelle Datei</translation>
     </message>
     <message>
         <source>Edit</source>
@@ -319,23 +329,23 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Block start</source>
-        <translation></translation>
+        <translation>Blockanfang</translation>
     </message>
     <message>
         <source>Block end</source>
-        <translation></translation>
+        <translation>Blockende</translation>
     </message>
     <message>
         <source>Copy block</source>
-        <translation></translation>
+        <translation>Block kopieren</translation>
     </message>
     <message>
         <source>Paste block</source>
-        <translation></translation>
+        <translation>Block einfügen</translation>
     </message>
     <message>
         <source>Cut block</source>
-        <translation></translation>
+        <translation>Block ausschneiden</translation>
     </message>
     <message>
         <source>Copy current file name</source>
@@ -347,27 +357,27 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Un-indent (shift+tab)</source>
-        <translation></translation>
+        <translation>Ausrücken (Shift+Tab)</translation>
     </message>
     <message>
         <source>Indent by first line</source>
-        <translation></translation>
+        <translation>Erste Zeile einrücken</translation>
     </message>
     <message>
         <source>Comment selection</source>
-        <translation></translation>
+        <translation>Auswahl auskommentieren</translation>
     </message>
     <message>
         <source>Set as storage file</source>
-        <translation></translation>
+        <translation>Als Speicherdatei festlegen</translation>
     </message>
     <message>
         <source>Copy to storage file</source>
-        <translation></translation>
+        <translation>In die Speicherdatei kopieren</translation>
     </message>
     <message>
         <source>Start/stop capture clipboard to storage file</source>
-        <translation></translation>
+        <translation>Beginn/Ende: Zwischenablage in die Speicherdatei schreiben</translation>
     </message>
     <message>
         <source>Markup</source>
@@ -383,23 +393,23 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Align</source>
-        <translation>Ausrichtung</translation>
+        <translation>Ausrichten</translation>
     </message>
     <message>
         <source>Center</source>
-        <translation></translation>
+        <translation>Zentrieren</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation></translation>
+        <translation>Links ausrichten</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation></translation>
+        <translation>Rechts ausrichten</translation>
     </message>
     <message>
         <source>Justify</source>
-        <translation></translation>
+        <translation>Blocksatz</translation>
     </message>
     <message>
         <source>Bold</source>
@@ -427,7 +437,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Break line</source>
-        <translation></translation>
+        <translation>Zeilenumbruch</translation>
     </message>
     <message>
         <source>Non-breaking space</source>
@@ -443,11 +453,11 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Text to [X]HTML</source>
-        <translation></translation>
+        <translation>Text zu [X]HTML</translation>
     </message>
     <message>
         <source>Convert tags to entities</source>
-        <translation>Konvertiere Tags zu HTML-Code</translation>
+        <translation>Konvertiere Tags in HTML-Entitäten</translation>
     </message>
     <message>
         <source>Antispam e-mail</source>
@@ -459,15 +469,15 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Preview selected color</source>
-        <translation></translation>
+        <translation>Anzeige der ausgewählten Farbe</translation>
     </message>
     <message>
         <source>Strip HTML tags</source>
-        <translation></translation>
+        <translation>HTML-Tags entfernen</translation>
     </message>
     <message>
         <source>Rename selected file</source>
-        <translation></translation>
+        <translation>Umbenennung der ausgewählten Datei</translation>
     </message>
     <message>
         <source>Search</source>
@@ -475,11 +485,11 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Find</source>
-        <translation>Suchen</translation>
+        <translation>Finde</translation>
     </message>
     <message>
         <source>Find next</source>
-        <translation>Vorwärts suchen</translation>
+        <translation>Finde nächsten Treffer vorwärts</translation>
     </message>
     <message>
         <source>Find previous</source>
@@ -487,7 +497,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Find in files</source>
-        <translation></translation>
+        <translation>Finde in den Dateien</translation>
     </message>
     <message>
         <source>Replace with</source>
@@ -495,39 +505,39 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Replace all</source>
-        <translation>Alles ersetzen</translation>
+        <translation>Alle ersetzen</translation>
     </message>
     <message>
         <source>Replace all in opened files</source>
-        <translation></translation>
+        <translation>Ersetze alle in den geöffneten Dateien</translation>
     </message>
     <message>
         <source>Mark all found</source>
-        <translation></translation>
+        <translation>Hervorheben aller Fundstellen</translation>
     </message>
     <message>
         <source>Unmark</source>
-        <translation></translation>
+        <translation>Hervorhebungen entfernen</translation>
     </message>
     <message>
         <source>Case sensitive</source>
-        <translation></translation>
+        <translation>Groß- und Kleinschreibung unterscheidend</translation>
     </message>
     <message>
         <source>Whole words</source>
-        <translation></translation>
+        <translation>Ganze Wörter</translation>
     </message>
     <message>
         <source>From cursor</source>
-        <translation></translation>
+        <translation>Ab der Cursorposition</translation>
     </message>
     <message>
         <source>Regexp mode</source>
-        <translation></translation>
+        <translation>Regex-Modus</translation>
     </message>
     <message>
         <source>Fuzzy mode</source>
-        <translation></translation>
+        <translation>Fuzzy-Modus</translation>
     </message>
     <message>
         <source>Functions</source>
@@ -535,15 +545,15 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Repeat last</source>
-        <translation></translation>
+        <translation>Wiederhole letztes Kommando</translation>
     </message>
     <message>
         <source>Tools</source>
-        <translation></translation>
+        <translation>Hilfsmittel</translation>
     </message>
     <message>
         <source>Scale image</source>
-        <translation></translation>
+        <translation>Bildgröße ändern</translation>
     </message>
     <message>
         <source>Snippets</source>
@@ -555,31 +565,31 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Tables</source>
-        <translation>Tabellen</translation>
+        <translation>Ersetzungstabellen</translation>
     </message>
     <message>
         <source>Place</source>
-        <translation></translation>
+        <translation>Einfügen (Vorlagen oder Datum, Zeit)</translation>
     </message>
     <message>
         <source>TEA project template</source>
-        <translation></translation>
+        <translation>TEA-Projekt-Vorlage</translation>
     </message>
     <message>
         <source>HTML template</source>
-        <translation></translation>
+        <translation>HTML-Vorlage</translation>
     </message>
     <message>
         <source>HTML5 template</source>
-        <translation></translation>
+        <translation>HTML5-Vorlage</translation>
     </message>
     <message>
         <source>C++ template</source>
-        <translation></translation>
+        <translation>C++-Vorlage</translation>
     </message>
     <message>
         <source>C template</source>
-        <translation></translation>
+        <translation>C-Vorlage</translation>
     </message>
     <message>
         <source>Date</source>
@@ -587,7 +597,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Time</source>
-        <translation>Zeit</translation>
+        <translation>Uhrzeit</translation>
     </message>
     <message>
         <source>Case</source>
@@ -595,11 +605,11 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>UPCASE</source>
-        <translation>GROSS-SCHREIBUNG</translation>
+        <translation>GROSSBUCHSTABEN</translation>
     </message>
     <message>
         <source>lower case</source>
-        <translation>kleinschreibung</translation>
+        <translation>klein schreiben</translation>
     </message>
     <message>
         <source>Sort</source>
@@ -607,47 +617,47 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Sort case sensitively</source>
-        <translation></translation>
+        <translation>Sortiere Groß- / Kleinbuchstaben verschieden</translation>
     </message>
     <message>
         <source>Sort case insensitively</source>
-        <translation></translation>
+        <translation>Sortiere ohne Groß- und Kleinbuchstaben zu unterscheiden</translation>
     </message>
     <message>
         <source>Sort case sensitively, with separator</source>
-        <translation></translation>
+        <translation>Sortiere mit Trennzeichen (Groß-/Kleinschreibung beachten)</translation>
     </message>
     <message>
         <source>Sort by length</source>
-        <translation></translation>
+        <translation>Sortiere nach Länge</translation>
     </message>
     <message>
         <source>Flip a list</source>
-        <translation></translation>
+        <translation>Liste umkehren</translation>
     </message>
     <message>
         <source>Flip a list with separator</source>
-        <translation></translation>
+        <translation>Liste mit Trennzeichen umkehren</translation>
     </message>
     <message>
         <source>Cells</source>
-        <translation></translation>
+        <translation>Tabellenzellen</translation>
     </message>
     <message>
         <source>Sort table by column ABC</source>
-        <translation></translation>
+        <translation>Sortiere Tabellenspalten alphabetisch</translation>
     </message>
     <message>
         <source>Swap cells</source>
-        <translation></translation>
+        <translation>Zellen gegeneinander austauschen</translation>
     </message>
     <message>
         <source>Delete by column</source>
-        <translation></translation>
+        <translation>Lösche spaltenweise</translation>
     </message>
     <message>
         <source>Copy by column[s]</source>
-        <translation></translation>
+        <translation>Kopiere Spalte[n]</translation>
     </message>
     <message>
         <source>Filter</source>
@@ -659,47 +669,47 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Remove empty lines</source>
-        <translation></translation>
+        <translation>Lösche leere Zeilen</translation>
     </message>
     <message>
         <source>Remove lines &lt; N size</source>
-        <translation></translation>
+        <translation>Lösche Zeilen &lt;= N Zeichen</translation>
     </message>
     <message>
         <source>Remove lines &gt; N size</source>
-        <translation></translation>
+        <translation>Lösche Zeilen &gt;= N Zeichen</translation>
     </message>
     <message>
         <source>Remove before delimiter at each line</source>
-        <translation></translation>
+        <translation>Lösche vor den Trennzeichen in jeder Zeile</translation>
     </message>
     <message>
         <source>Remove after delimiter at each line</source>
-        <translation></translation>
+        <translation>Lösche hinter dem Trennzeichen in jeder Zeile</translation>
     </message>
     <message>
         <source>Filter with regexp</source>
-        <translation></translation>
+        <translation>Filtere mit regulärem Ausdruck</translation>
     </message>
     <message>
         <source>Filter by repetitions</source>
-        <translation></translation>
+        <translation>Filtere nach Wiederholungsmuster</translation>
     </message>
     <message>
         <source>Math</source>
-        <translation></translation>
+        <translation>Mathematik</translation>
     </message>
     <message>
         <source>Evaluate</source>
-        <translation></translation>
+        <translation>Auswerten, Ausdruck berechnen</translation>
     </message>
     <message>
         <source>Arabic to Roman</source>
-        <translation></translation>
+        <translation>Arabische Zahl -&gt; römische Zahl</translation>
     </message>
     <message>
         <source>Roman to Arabic</source>
-        <translation></translation>
+        <translation>Römische Zahl -&gt; arabische Zahl</translation>
     </message>
     <message>
         <source>Decimal to binary</source>
@@ -711,23 +721,23 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Flip bits (bitwise complement)</source>
-        <translation></translation>
+        <translation>Bits umkehren (bitweises Komplement)</translation>
     </message>
     <message>
         <source>Enumerate</source>
-        <translation></translation>
+        <translation>Nummerieren</translation>
     </message>
     <message>
         <source>Sum by last column</source>
-        <translation></translation>
+        <translation>Summiere die letze Spalte</translation>
     </message>
     <message>
         <source>deg min sec &gt; dec degrees</source>
-        <translation></translation>
+        <translation>Grad Min Sek &gt; Dezimalgrad</translation>
     </message>
     <message>
         <source>dec degrees &gt; deg min sec</source>
-        <translation></translation>
+        <translation>Dezimalgrad &gt; Grad Min Sek</translation>
     </message>
     <message>
         <source>Morse code</source>
@@ -751,11 +761,11 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Analyze</source>
-        <translation></translation>
+        <translation>Analysen</translation>
     </message>
     <message>
         <source>Text statistics</source>
-        <translation></translation>
+        <translation>Textzählung (Wörter, Zeichen, Zeilen)</translation>
     </message>
     <message>
         <source>Extract words</source>
@@ -763,59 +773,59 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Words lengths</source>
-        <translation></translation>
+        <translation>Wortlängenhäufigkeit ermitteln (bis 32 Zeichen)</translation>
     </message>
     <message>
         <source>Count the substring</source>
-        <translation></translation>
+        <translation>Zeichenkettenhäufigkeit ermitteln</translation>
     </message>
     <message>
         <source>Count the substring (regexp)</source>
-        <translation></translation>
+        <translation>Zähle regex-definierte Teilzeichenkettenhäufigkeit</translation>
     </message>
     <message>
         <source>UNITAZ quantity sorting</source>
-        <translation></translation>
+        <translation>UNITAZ sortiert nach Anzahl</translation>
     </message>
     <message>
         <source>UNITAZ sorting by alphabet</source>
-        <translation></translation>
+        <translation>UNITAZ sortiert nach dem Alphabet</translation>
     </message>
     <message>
         <source>UNITAZ sorting by length</source>
-        <translation></translation>
+        <translation>UNITAZ sortiert nach Wortlänge</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation></translation>
+        <translation>Text</translation>
     </message>
     <message>
         <source>Apply to each line</source>
-        <translation></translation>
+        <translation>Auf jede Zeile anwenden</translation>
     </message>
     <message>
         <source>Remove formatting</source>
-        <translation></translation>
+        <translation>Formatierung entfernen</translation>
     </message>
     <message>
         <source>Remove formatting at each line</source>
-        <translation></translation>
+        <translation>Formatierung in jeder Zeile entfernen</translation>
     </message>
     <message>
         <source>Compress</source>
-        <translation></translation>
+        <translation>Verdichten - Leerraum entfernen</translation>
     </message>
     <message>
         <source>Anagram</source>
-        <translation></translation>
+        <translation>Anagramm</translation>
     </message>
     <message>
         <source>Remove trailing spaces</source>
-        <translation></translation>
+        <translation>Leerzeichen am Zeilenende entfernen</translation>
     </message>
     <message>
         <source>Escape regexp</source>
-        <translation></translation>
+        <translation>Regexp maskieren (Escape)</translation>
     </message>
     <message>
         <source>Reverse</source>
@@ -823,31 +833,31 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Compare two strings</source>
-        <translation></translation>
+        <translation>Vergleiche zwei Zeichenketten</translation>
     </message>
     <message>
         <source>Quotes</source>
-        <translation></translation>
+        <translation>Anführungszeichen</translation>
     </message>
     <message>
         <source>Straight to double angle quotes</source>
-        <translation></translation>
+        <translation>Gerade Anführungszeichen in Guillemets (« »)</translation>
     </message>
     <message>
         <source>Straight to curly double quotes</source>
-        <translation></translation>
+        <translation>Gerade in typografische Anführungszeichen („ “)</translation>
     </message>
     <message>
         <source>LaTeX: Straight to curly double quotes</source>
-        <translation></translation>
+        <translation>LaTeX: Gerade in typografische Anführungszeichen</translation>
     </message>
     <message>
         <source>LaTeX: Straight to double angle quotes</source>
-        <translation></translation>
+        <translation>LaTeX: Gerade in Guillemets</translation>
     </message>
     <message>
         <source>LaTeX: Straight to double angle quotes v2</source>
-        <translation></translation>
+        <translation>LaTeX: Gerade in Guillemets v2</translation>
     </message>
     <message>
         <source>Spell-checker languages</source>
@@ -871,51 +881,51 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Calendar</source>
-        <translation></translation>
+        <translation>Kalender</translation>
     </message>
     <message>
         <source>Moon mode on/off</source>
-        <translation></translation>
+        <translation>Mondmodus an/aus</translation>
     </message>
     <message>
         <source>Mark first date</source>
-        <translation></translation>
+        <translation>Erstes Datum markieren</translation>
     </message>
     <message>
         <source>Mark last date</source>
-        <translation></translation>
+        <translation>Letztes Datum markieren</translation>
     </message>
     <message>
         <source>Add or subtract</source>
-        <translation></translation>
+        <translation>Addieren oder Subtrahieren</translation>
     </message>
     <message>
         <source>Days</source>
-        <translation></translation>
+        <translation>Tage</translation>
     </message>
     <message>
         <source>Months</source>
-        <translation></translation>
+        <translation>Monate</translation>
     </message>
     <message>
         <source>Years</source>
-        <translation></translation>
+        <translation>Jahre</translation>
     </message>
     <message>
         <source>Go to current date</source>
-        <translation></translation>
+        <translation>Gehe zum aktuellen Datum</translation>
     </message>
     <message>
         <source>Calculate moon days between dates</source>
-        <translation></translation>
+        <translation>Berechne die Mondtage zwischen zwei Tagen</translation>
     </message>
     <message>
         <source>Number of days between two dates</source>
-        <translation></translation>
+        <translation>Anzahl Tage zwischen zwei Daten</translation>
     </message>
     <message>
         <source>Remove day record</source>
-        <translation></translation>
+        <translation>Löschen des Tagesdatensatzes</translation>
     </message>
     <message>
         <source>Run</source>
@@ -923,23 +933,23 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>IDE</source>
-        <translation></translation>
+        <translation>IDE</translation>
     </message>
     <message>
         <source>Run program</source>
-        <translation></translation>
+        <translation>Programm ausführen</translation>
     </message>
     <message>
         <source>Build program</source>
-        <translation></translation>
+        <translation>Programm erstellen (linken, kompilieren)</translation>
     </message>
     <message>
         <source>Clean program</source>
-        <translation></translation>
+        <translation>Programm aufräumen (clean)</translation>
     </message>
     <message>
         <source>Toggle header/source</source>
-        <translation></translation>
+        <translation>Umschalten zwischen Header und Quellcode</translation>
     </message>
     <message>
         <source>Nav</source>
@@ -959,59 +969,59 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Next tab</source>
-        <translation></translation>
+        <translation>Nächster Reiter (Tab)</translation>
     </message>
     <message>
         <source>Prev tab</source>
-        <translation></translation>
+        <translation>Vorheriger Reiter (Tab)</translation>
     </message>
     <message>
         <source>Focus the Famous input field</source>
-        <translation></translation>
+        <translation>Wechsele ins &quot;Famous input field&quot; (Parametereingabefeld)</translation>
     </message>
     <message>
         <source>Focus the editor</source>
-        <translation></translation>
+        <translation>Wechsele ins Texteingabefeld</translation>
     </message>
     <message>
         <source>Refresh labels</source>
-        <translation></translation>
+        <translation>Sprungmarken neu einlesen</translation>
     </message>
     <message>
         <source>Current files</source>
-        <translation></translation>
+        <translation>Aktuell geöffnete Dateien</translation>
     </message>
     <message>
         <source>Fm</source>
-        <translation></translation>
+        <translation>Dateimanager</translation>
     </message>
     <message>
         <source>Multi-rename</source>
-        <translation></translation>
+        <translation>Mehrere Dateien umbenennen</translation>
     </message>
     <message>
         <source>Zero pad file names</source>
-        <translation></translation>
+        <translation>Dateinamen mit führenden Nullen auffüllen</translation>
     </message>
     <message>
         <source>Delete N first chars at file names</source>
-        <translation></translation>
+        <translation>Die n ersten Zeichen der Dateinamen löschen</translation>
     </message>
     <message>
         <source>Replace in file names</source>
-        <translation></translation>
+        <translation>Ersetzung in Dateinamen</translation>
     </message>
     <message>
         <source>Apply template</source>
-        <translation></translation>
+        <translation>Vorlagenanwendung</translation>
     </message>
     <message>
         <source>File operations</source>
-        <translation></translation>
+        <translation>Dateioperationen</translation>
     </message>
     <message>
         <source>Create new directory</source>
-        <translation></translation>
+        <translation>Neues Verzeichnis anlegen</translation>
     </message>
     <message>
         <source>Rename</source>
@@ -1027,47 +1037,71 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Count lines in selected files</source>
-        <translation></translation>
+        <translation>Zeilen der ausgewählten Dateien zählen</translation>
     </message>
     <message>
         <source>Full info</source>
-        <translation></translation>
+        <translation>Dateidaten: (Zeilenende, Pfad, Größe, letzte Änderung)</translation>
+    </message>
+    <message>
+        <source>ZIP</source>
+        <translation>ZIP</translation>
+    </message>
+    <message>
+        <source>Create new ZIP</source>
+        <translation>Neue ZIP-Datei erstellen</translation>
+    </message>
+    <message>
+        <source>Add to ZIP</source>
+        <translation>Zu ZIP-Datei hinzufügen</translation>
+    </message>
+    <message>
+        <source>Save ZIP</source>
+        <translation>ZIP speichern</translation>
+    </message>
+    <message>
+        <source>List ZIP content</source>
+        <translation>Inhalt eines ZIP-Archivs anzeigen</translation>
+    </message>
+    <message>
+        <source>Unpack ZIP to current directory</source>
+        <translation>ZIP im aktuellen Verzeichnis entpacken</translation>
     </message>
     <message>
         <source>Images</source>
-        <translation></translation>
+        <translation>Bilder</translation>
     </message>
     <message>
         <source>Scale by side</source>
-        <translation></translation>
+        <translation>Nach Seitenverhältnis skalieren</translation>
     </message>
     <message>
         <source>Scale by percentages</source>
-        <translation></translation>
+        <translation>Prozentual skalieren</translation>
     </message>
     <message>
         <source>Create web gallery</source>
-        <translation></translation>
+        <translation>Web-Galerie erstellen</translation>
     </message>
     <message>
         <source>Go to home dir</source>
-        <translation></translation>
+        <translation>Wechsle ins Benutzerverzeichnis</translation>
     </message>
     <message>
         <source>Refresh current dir</source>
-        <translation></translation>
+        <translation>Verzeichnis neu laden</translation>
     </message>
     <message>
         <source>Preview image</source>
-        <translation></translation>
+        <translation>Bildvorschau</translation>
     </message>
     <message>
         <source>Select by regexp</source>
-        <translation></translation>
+        <translation>Mit Regexp auswählen</translation>
     </message>
     <message>
         <source>Deselect by regexp</source>
-        <translation></translation>
+        <translation>Auswahl mit Regexp aufheben</translation>
     </message>
     <message>
         <source>View</source>
@@ -1075,7 +1109,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Themes</source>
-        <translation></translation>
+        <translation>Designs (Themes)</translation>
     </message>
     <message>
         <source>Palettes</source>
@@ -1083,15 +1117,15 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Profiles</source>
-        <translation></translation>
+        <translation>Profile</translation>
     </message>
     <message>
         <source>Save profile</source>
-        <translation></translation>
+        <translation>Profil speichern</translation>
     </message>
     <message>
         <source>Toggle word wrap</source>
-        <translation></translation>
+        <translation>Zeilenumbruch umschalten</translation>
     </message>
     <message>
         <source>Hide error marks</source>
@@ -1099,15 +1133,15 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Toggle fullscreen</source>
-        <translation></translation>
+        <translation>Vollbild an/aus</translation>
     </message>
     <message>
         <source>Stay on top</source>
-        <translation></translation>
+        <translation>Im Vordergrund halten</translation>
     </message>
     <message>
         <source>Darker</source>
-        <translation></translation>
+        <translation>Dunkler</translation>
     </message>
     <message>
         <source>NEWS</source>
@@ -1119,7 +1153,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>not found!</source>
-        <translation></translation>
+        <translation>nicht gefunden!</translation>
     </message>
     <message>
         <source>%1 is saved</source>
@@ -1127,55 +1161,71 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>options</source>
-        <translation></translation>
+        <translation>Optionen</translation>
     </message>
     <message>
         <source>Classic</source>
-        <translation></translation>
+        <translation>Klassisch</translation>
     </message>
     <message>
         <source>Docked</source>
-        <translation></translation>
+        <translation>Angedockt</translation>
+    </message>
+    <message>
+        <source>UI mode (TEA restart needed)</source>
+        <translation>Oberflächen-Modus (TEA muss neu gestartet werden)</translation>
+    </message>
+    <message>
+        <source>UI language (TEA restart needed)</source>
+        <translation>Oberflächensprache (TEA muss neu gestartet werden)</translation>
+    </message>
+    <message>
+        <source>UI style (TEA restart needed)</source>
+        <translation>Oberflächenstil (TEA muss neu gestartet werden)</translation>
     </message>
     <message>
         <source>Interface font</source>
-        <translation></translation>
+        <translation>Schrift der Bedienoberfläche</translation>
     </message>
     <message>
         <source>Editor font</source>
-        <translation>Schriftart für Editor</translation>
+        <translation>Schriftart im Editor</translation>
     </message>
     <message>
         <source>Logmemo font</source>
-        <translation></translation>
+        <translation>Schrift im Protokollfeld</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation></translation>
+        <translation>oben</translation>
     </message>
     <message>
         <source>Bottom</source>
-        <translation></translation>
+        <translation>unten</translation>
     </message>
     <message>
         <source>GUI tabs align</source>
-        <translation></translation>
+        <translation>Ausrichtung der Bedienoberflächen-Reiter (GUI tabs)</translation>
     </message>
     <message>
         <source>Documents tabs align</source>
-        <translation></translation>
+        <translation>Ausrichtung der Dateireiter (document tabs)</translation>
     </message>
     <message>
         <source>Icons size</source>
-        <translation></translation>
+        <translation>Icon-Größe</translation>
     </message>
     <message>
         <source>TEA program icon</source>
-        <translation></translation>
+        <translation>TEA-Programm-Icon</translation>
+    </message>
+    <message>
+        <source>FIF at the top (restart needed)</source>
+        <translation>FIF, das Parametereingabefeld, oben anordnen (Neustart notwendig)</translation>
     </message>
     <message>
         <source>Show line numbers</source>
-        <translation></translation>
+        <translation>Zeilennummern anzeigen</translation>
     </message>
     <message>
         <source>Word wrap</source>
@@ -1183,7 +1233,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Syntax highlighting enabled</source>
-        <translation></translation>
+        <translation>Syntaxhervorhebung verwenden</translation>
     </message>
     <message>
         <source>Highlight current line</source>
@@ -1191,11 +1241,11 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Highlight paired brackets</source>
-        <translation>Gepaarte Klammern hervorheben</translation>
+        <translation>Zusammengehörende Klammern hervorheben</translation>
     </message>
     <message>
         <source>Automatic indent</source>
-        <translation>Automatisches Einrücken</translation>
+        <translation>Automatisch einrücken</translation>
     </message>
     <message>
         <source>Use spaces instead of tabs</source>
@@ -1211,79 +1261,99 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Cursor center on scroll</source>
-        <translation></translation>
+        <translation>Schreibmarke beim Scrollen zentrieren</translation>
     </message>
     <message>
         <source>Cursor blink time (msecs, zero is OFF)</source>
-        <translation></translation>
+        <translation>Blinkrate der Schreibmarke (ms, 0 ist AUS)</translation>
     </message>
     <message>
         <source>Cursor width</source>
-        <translation></translation>
+        <translation>Schreibmarkenbreite</translation>
     </message>
     <message>
         <source>Show margin at</source>
-        <translation></translation>
+        <translation>Rechten Rand anzeigen an Position</translation>
     </message>
     <message>
         <source>Show full path at window title</source>
-        <translation></translation>
+        <translation>Im Fenstertitel den absoluten Pfad anzeigen</translation>
     </message>
     <message>
         <source>Interface</source>
         <translation>Benutzeroberfläche</translation>
     </message>
     <message>
+        <source>Use Alt key to access main menu</source>
+        <translation>Alt-Taste öffnet Menüs</translation>
+    </message>
+    <message>
+        <source>Use Left Alt + WASD as additional cursor keys</source>
+        <translation>Linke Alt-Taste + WASD als zusätzliche Cursortasten nutzen</translation>
+    </message>
+    <message>
         <source>Use joystick as cursor keys</source>
-        <translation></translation>
+        <translation>Joystick als Cursortasten nutzen</translation>
     </message>
     <message>
         <source>Automatic preview images at file manager</source>
-        <translation></translation>
+        <translation>Automatische Bildvorschau im Dateimanager</translation>
     </message>
     <message>
         <source>Restore the last session on start-up</source>
-        <translation></translation>
+        <translation>Letzte Sitzung beim Neustart wiederherstellen</translation>
+    </message>
+    <message>
+        <source>Use Enca for charset detection</source>
+        <translation>Benutze ENCA zur Zeichensatzerkennung (&quot;Extremely Naive Charset Analyser&quot; von Mozilla)</translation>
     </message>
     <message>
         <source>Use external image viewer for F2</source>
-        <translation></translation>
+        <translation>Starte mit F2 einen externen Bildbetrachter</translation>
     </message>
     <message>
         <source>Use traditional File Save/Open dialogs</source>
-        <translation></translation>
+        <translation>Benutze traditionelle Dialoge fürs Speichern und Öffnen von Dateien</translation>
     </message>
     <message>
         <source>Start week on Sunday</source>
-        <translation></translation>
+        <translation>Wochenbeginn auf Sonntag festlegen</translation>
     </message>
     <message>
         <source>Northern hemisphere</source>
-        <translation></translation>
+        <translation>Nördliche Hemisphäre</translation>
     </message>
     <message>
         <source>Moon phase algorithm</source>
-        <translation></translation>
+        <translation>Mondphasenalgorithmus</translation>
     </message>
     <message>
         <source>Charset for file open from command line</source>
-        <translation></translation>
+        <translation>Zeichensatz für Dateien aus der Kommandozeile</translation>
+    </message>
+    <message>
+        <source>ZIP unpacking: file names charset</source>
+        <translation>ZIP-Entpackung: Zeichensatz der Dateinamen</translation>
+    </message>
+    <message>
+        <source>ZIP packing: file names charset</source>
+        <translation>ZIP-Komprimierung: Zeichensatz der Dateinamen</translation>
     </message>
     <message>
         <source>Common</source>
-        <translation></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <source>Label starts with: </source>
-        <translation></translation>
+        <translation>Sprungmarke beginnt mit: </translation>
     </message>
     <message>
         <source>Label ends with: </source>
-        <translation></translation>
+        <translation>Sprungmarke endet mit: </translation>
     </message>
     <message>
         <source>Date and time</source>
-        <translation></translation>
+        <translation>Datum und Uhrzeit</translation>
     </message>
     <message>
         <source>Date format</source>
@@ -1295,7 +1365,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Spell checking</source>
-        <translation></translation>
+        <translation>Rechtschreibprüfung</translation>
     </message>
     <message>
         <source>Spell checker engine</source>
@@ -1311,59 +1381,63 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>Aspell directory</source>
-        <translation></translation>
+        <translation>Aspell-Verzeichnis</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation></translation>
+        <translation>Verschiedenes</translation>
     </message>
     <message>
         <source>Fuzzy search factor</source>
-        <translation></translation>
+        <translation>Fuzzy-Suchfaktor</translation>
     </message>
     <message>
         <source>Image conversion output format</source>
-        <translation></translation>
+        <translation>Ausgabeformat der Bildkonvertierung</translation>
     </message>
     <message>
         <source>Scale images with bilinear filtering</source>
-        <translation></translation>
+        <translation>Bilder mit bilinearer Filterung skalieren</translation>
     </message>
     <message>
         <source>Output images quality</source>
-        <translation></translation>
+        <translation>Qualität der Ausgabebilder</translation>
     </message>
     <message>
         <source>Apply hard rotation by EXIF data</source>
-        <translation></translation>
+        <translation>Feste Drehung anhand von EXIF-Daten anwenden</translation>
+    </message>
+    <message>
+        <source>Zip directory with processed images</source>
+        <translation>Verzeichnis mit verarbeiteten Bildern komprimieren (ZIP)</translation>
     </message>
     <message>
         <source>Web gallery options</source>
-        <translation></translation>
+        <translation>Optionen für die Web-Galerie</translation>
     </message>
     <message>
         <source>Size of the side</source>
-        <translation></translation>
+        <translation>Seitenlänge</translation>
     </message>
     <message>
         <source>Link options</source>
-        <translation></translation>
+        <translation>Link-Optionen</translation>
     </message>
     <message>
         <source>Columns per row</source>
-        <translation></translation>
+        <translation>Spalten pro Zeile</translation>
     </message>
     <message>
         <source>EXIF</source>
-        <translation></translation>
+        <translation>EXIF</translation>
     </message>
     <message>
         <source>Use EXIF orientation at image viewer</source>
-        <translation></translation>
+        <translation>EXIF-Ausrichtung im Bildbetrachter nutzen</translation>
     </message>
     <message>
         <source>Shortcut</source>
-        <translation></translation>
+        <translation>Tastenkürzel</translation>
     </message>
     <message>
         <source>Assign</source>
@@ -1379,19 +1453,19 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>manual</source>
-        <translation></translation>
+        <translation>Handbuch</translation>
     </message>
     <message>
         <source>you can put here notes, etc</source>
-        <translation></translation>
+        <translation>Hier können Sie Notizen etc. eintragen</translation>
     </message>
     <message>
         <source>snippet %1 is not exists</source>
-        <translation></translation>
+        <translation>Baustein %1 existiert nicht</translation>
     </message>
     <message>
         <source>Print document</source>
-        <translation></translation>
+        <translation>Dokument drucken</translation>
     </message>
     <message>
         <source>%p% completed</source>
@@ -1399,7 +1473,7 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>elapsed milliseconds: %1</source>
-        <translation></translation>
+        <translation>Verstrichene Millisekunden: %1</translation>
     </message>
     <message>
         <source>%1 - saved</source>
@@ -1411,49 +1485,51 @@ Do you want to overwrite?</source>
     </message>
     <message>
         <source>chars: %1&lt;br&gt;chars without spaces: %2&lt;br&gt;lines: %3&lt;br&gt;author&apos;s sheets: %4</source>
-        <translation></translation>
+        <translation>Zeichen: %1&lt;br&gt;Zeichen ohne Leerzeichen: %2&lt;br&gt;Zeilen: %3&lt;br&gt;Normseiten: %4</translation>
     </message>
     <message>
         <source>%1 is processed and saved</source>
-        <translation></translation>
+        <translation>%1 wurde verarbeitet und gespeichert</translation>
     </message>
     <message>
         <source>#external programs list. example:
 opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</source>
-        <translation></translation>
+        <translation>#Liste externer Programme. Beispiel:
+opera=&quot;C:\Program Files\Opera\opera.exe &quot; &quot;%s&quot;</translation>
     </message>
     <message>
         <source>#external programs list. example:
 ff=firefox file:///%s</source>
-        <translation></translation>
+        <translation>#Liste externer Programme. Beispiel:
+ff=firefox file:///%s</translation>
     </message>
     <message>
         <source>Save the file first!</source>
-        <translation></translation>
+        <translation>Speichern Sie zuerst die Datei!</translation>
     </message>
     <message>
         <source>templates</source>
-        <translation></translation>
+        <translation>Vorlagen</translation>
     </message>
     <message>
         <source>snippets</source>
-        <translation></translation>
+        <translation>Code-Schnipsel</translation>
     </message>
     <message>
         <source>scripts</source>
-        <translation></translation>
+        <translation>Skripte</translation>
     </message>
     <message>
         <source>tables</source>
-        <translation></translation>
+        <translation>Ersetzungstabellen</translation>
     </message>
     <message>
         <source>configs</source>
-        <translation></translation>
+        <translation>Konfigurationen</translation>
     </message>
     <message>
         <source>Enter the name</source>
-        <translation></translation>
+        <translation>Name eingeben</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -1461,15 +1537,15 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>new_directory</source>
-        <translation></translation>
+        <translation>Neues_Verzeichnis</translation>
     </message>
     <message>
         <source>new_session</source>
-        <translation></translation>
+        <translation>Neue_Sitzung</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;%1&quot;&gt;COLOR SAMPLE&lt;/span&gt;</source>
-        <translation></translation>
+        <translation>&lt;span style=&quot;%1&quot;&gt;FARBBEISPIEL&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1477,15 +1553,19 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>Go</source>
-        <translation></translation>
+        <translation>Los</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation></translation>
+        <translation>Auffrischen</translation>
+    </message>
+    <message>
+        <source>Guess encoding!</source>
+        <translation>Kodierung erraten!</translation>
     </message>
     <message>
         <source>Save as</source>
@@ -1497,344 +1577,308 @@ ff=firefox file:///%s</source>
     </message>
     <message>
         <source>files</source>
-        <translation></translation>
+        <translation>Dateien</translation>
     </message>
     <message>
         <source>new</source>
-        <translation></translation>
+        <translation>neu</translation>
     </message>
     <message>
         <source>Are you sure to delete
 %1?</source>
-        <translation></translation>
+        <translation>Sind Sie sicher, dass Sie %1
+löschen möchten?</translation>
     </message>
     <message>
         <source>End of line: </source>
-        <translation></translation>
+        <translation>Zeilenende: </translation>
     </message>
     <message>
         <source>file name: %1</source>
-        <translation></translation>
+        <translation>Dateiname: %1</translation>
     </message>
     <message>
         <source>size: %1 kbytes</source>
-        <translation></translation>
+        <translation>Größe: %1 KByte</translation>
     </message>
     <message>
         <source>last modified: %1</source>
-        <translation></translation>
+        <translation>Zuletzt geändert: %1</translation>
     </message>
     <message>
         <source>bits per sample: %1</source>
-        <translation></translation>
+        <translation>Bits pro Abtastwert: %1</translation>
     </message>
     <message>
         <source>number of channels: %1</source>
-        <translation></translation>
+        <translation>Anzahl der Kanäle: %1</translation>
     </message>
     <message>
         <source>sample rate: %1</source>
-        <translation></translation>
+        <translation>Abtastrate: %1</translation>
     </message>
     <message>
         <source>RMS for all channels: %1 dB</source>
-        <translation></translation>
+        <translation>Effektivwert (RMS) für alle Kanäle: %1 dB</translation>
     </message>
     <message>
         <source>total to unique per cent diff: %1</source>
-        <translation></translation>
+        <translation>Prozentuale Differenz gesamt zu eindeutig: %1</translation>
     </message>
     <message>
         <source>total / unique: %1</source>
-        <translation></translation>
+        <translation>Gesamt / Eindeutig: %1</translation>
     </message>
     <message>
         <source>words unique: %1</source>
-        <translation></translation>
+        <translation>Eindeutige Wörter: %1</translation>
     </message>
     <message>
         <source>words total: %1</source>
-        <translation></translation>
+        <translation>Wörter gesamt: %1</translation>
     </message>
     <message>
         <source>text analysis of: %1</source>
-        <translation></translation>
+        <translation>Textanalyse von: %1</translation>
     </message>
     <message>
         <source>UNITAZ: UNIverlsal Text AnalyZer</source>
-        <translation></translation>
+        <translation>UNITAZ: Universal Text Analyzer</translation>
     </message>
     <message>
         <source>%1 number of occurrences of %2 is found</source>
-        <translation></translation>
+        <translation>%1 Vorkommen von %2 gefunden</translation>
+    </message>
+    <message>
+        <source>Enter the archive name</source>
+        <translation>Geben Sie den Archivnamen ein</translation>
+    </message>
+    <message>
+        <source>new_archive</source>
+        <translation>Neues_Archiv</translation>
     </message>
     <message>
         <source>Open Directory</source>
-        <translation></translation>
+        <translation>Verzeichnis öffnen</translation>
     </message>
     <message>
         <source>Getting files list...</source>
-        <translation></translation>
+        <translation>Dateiliste wird abgerufen...</translation>
     </message>
     <message>
         <source>Searching...</source>
-        <translation></translation>
+        <translation>Suche...</translation>
     </message>
     <message>
         <source>cannot open %1 because of: %2</source>
-        <translation></translation>
+        <translation>Kann %1 nicht öffnen. Grund: %2</translation>
     </message>
     <message>
         <source>Search results</source>
-        <translation></translation>
+        <translation>Suchergebnisse</translation>
     </message>
     <message>
         <source>new_profile</source>
-        <translation></translation>
+        <translation>Neues_Profil</translation>
     </message>
     <message>
         <source>There are %1 lines at %2 files</source>
-        <translation></translation>
+        <translation>Es gibt %1 Zeilen in %2 Dateien</translation>
+    </message>
+    <message>
+        <source>Enca is not installed, falling back to the built-in detection</source>
+        <translation>ENCA ist nicht installiert; es wird auf die eingebaute Erkennung zurückgegriffen</translation>
     </message>
     <message>
         <source>Enter your daily notes here.
 To use time-based reminders, specify the time signature in 24-hour format [hh:mm], i.e.:
 [06:00]good morning!
 [20:10]go to theatre</source>
-        <translation></translation>
+        <translation>Geben Sie hier Ihre täglichen Notizen ein.
+Für zeitbasierte Erinnerungen nutzen Sie das 24-Stunden-Format [hh:mm], z.B.:
+[06:00]Guten Morgen!
+[20:10]Theaterbesuch</translation>
     </message>
     <message>
         <source>Enter your daily notes here.</source>
-        <translation></translation>
+        <translation>Geben Sie hier Ihre täglichen Notizen ein.</translation>
     </message>
     <message>
         <source>dates</source>
-        <translation></translation>
+        <translation>Daten</translation>
     </message>
     <message>
         <source>Select the file name first!</source>
-        <translation></translation>
+        <translation>Wählen Sie zuerst den Dateinamen aus!</translation>
     </message>
     <message>
         <source>%1 is not found&lt;br&gt;</source>
-        <translation></translation>
+        <translation>%1 wurde nicht gefunden&lt;br&gt;</translation>
     </message>
     <message>
         <source>%1 kbytes %2 &lt;br&gt;</source>
-        <translation></translation>
+        <translation>%1 KByte %2 &lt;br&gt;</translation>
     </message>
     <message>
         <source>Total size = %1 kbytes in %2 files&lt;br&gt;</source>
-        <translation></translation>
+        <translation>Gesamtgröße = %1 KByte in %2 Dateien&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source> is unpacked</source>
+        <translation> ist entpackt</translation>
     </message>
     <message>
         <source>Word length: </source>
-        <translation></translation>
+        <translation>Wortlänge: </translation>
     </message>
     <message>
         <source>Number:</source>
-        <translation></translation>
+        <translation>Anzahl:</translation>
     </message>
     <message>
         <source>put your notes (for this file) here and they will be saved automatically</source>
-        <translation></translation>
+        <translation>Tragen Sie Ihre Notizen (für diese Datei) hier ein. Sie werden automatisch gespeichert.</translation>
     </message>
     <message>
         <source>There is no stylesheet file</source>
-        <translation></translation>
+        <translation>Keine Stylesheet-Datei vorhanden</translation>
     </message>
     <message>
         <source>sum: %1</source>
-        <translation></translation>
+        <translation>Summe: %1</translation>
     </message>
     <message>
         <source>Incorrect parameters at FIF</source>
-        <translation></translation>
+        <translation>Ungültige Parameter im FIF</translation>
     </message>
     <message>
         <source>Cannot save: %1</source>
-        <translation></translation>
+        <translation>Kann nicht gespeichert werden: %1</translation>
     </message>
     <message>
         <source>Saved: %1</source>
-        <translation></translation>
+        <translation>Gespeichert: %1</translation>
     </message>
     <message>
         <source>This file is opened in the read-only mode. You can save it with another name using &lt;b&gt;Save as&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Datei ist im Nur-Lese-Modus geöffnet. Sie können die Datei aber unter einem anderen Namen speichern. Benutzen Sie dafür &lt;b&gt;Speichern unter&lt;/b&gt;</translation>
     </message>
     <message>
         <source>The storage file is closed or not set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Speicherdatei ist geschlossen oder nicht definiert.</translation>
     </message>
     <message>
         <source>You are trying to rename the opened file, please close it first!</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie versuchen, die geöffnete Datei umzubenennen. Bitte schließen Sie sie zuerst!</translation>
     </message>
     <message>
         <source>matched</source>
-        <translation type="unfinished"></translation>
+        <translation>Stimmt überein</translation>
     </message>
     <message>
         <source>does not</source>
-        <translation type="unfinished"></translation>
+        <translation>Stimmt nicht überein</translation>
     </message>
     <message>
         <source>Check regexp match</source>
-        <translation type="unfinished"></translation>
+        <translation>Regexp-Übereinstimmung prüfen</translation>
     </message>
     <message>
         <source>0 - Trigonometrical v2, 1 - Trigonometrical v1, 2 - Conway, 3 - Leueshkanov</source>
-        <translation type="unfinished"></translation>
+        <translation>0 - Trigonometrisch v2, 1 - Trigonometrisch v1, 2 - Conway, 3 - Leueshkanov</translation>
     </message>
     <message>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktionen</translation>
     </message>
     <message>
         <source>Open a file from the file name provided above</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnet eine Datei mit dem oben angegebenen Dateinamen</translation>
     </message>
     <message>
         <source>Save the current opened file with the name provided above</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichert eine Datei mit dem oben angegebenen Dateinamen</translation>
     </message>
     <message>
         <source>Capitalize sentences</source>
-        <translation type="unfinished"></translation>
+        <translation>Satzanfang groß schreiben</translation>
     </message>
     <message>
         <source>GTK Bookmarks:</source>
-        <translation type="unfinished"></translation>
+        <translation>GTK-Lesezeichen:</translation>
     </message>
     <message>
         <source>Set as autosaving file</source>
-        <translation type="unfinished"></translation>
+        <translation>Als Datei für automatische Speicherung festlegen</translation>
     </message>
     <message>
         <source>Unset the autosaving file</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei für automatische Speicherung aufheben</translation>
     </message>
     <message>
         <source>Autosaving</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Speicherung</translation>
     </message>
     <message>
         <source>Temporary save unsaved buffers on exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Temporäre Speicherung ungespeicherter Puffer bei Programmende</translation>
     </message>
     <message>
         <source>Autosave buffers and autosaving files (each N seconds)</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Speicherung der Dateien und Puffer (alle N Sekunden)</translation>
     </message>
     <message>
         <source>Keyboards</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastaturen</translation>
     </message>
     <message>
         <source>&lt;b&gt;TEA %1&lt;/b&gt; by Peter Semiletov | tea.ourproject.org&lt;br&gt;Support TEA via PayPal: peter.semiletov@gmail.com&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;TEA %1&lt;/b&gt; von Peter Semiletov | tea.ourproject.org&lt;br&gt;Unterstützung für TEA via PayPal: peter.semiletov@gmail.com&lt;br&gt;Git: github.com/psemiletov/tea-qt&lt;br&gt;AUR: aur.archlinux.org/packages/tea-qt-git</translation>
     </message>
     <message>
         <source>Show ebooks fine</source>
-        <translation type="unfinished"></translation>
+        <translation>E-Books hübsch anzeigen</translation>
     </message>
     <message>
         <source>Show tabs and spaces</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabulator- und Leerzeichen anzeigen</translation>
     </message>
     <message>
         <source>Subtitles: shift timecodes by msecs</source>
-        <translation type="unfinished"></translation>
+        <translation>Untertitel: Zeitstempel um ms verschieben</translation>
     </message>
     <message>
         <source>Preview Markdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Markdown-Voransicht</translation>
     </message>
     <message>
         <source>All (*);;Text files (*.txt);;Markup files (*.xml *.html *.xhtml *.htm *.md);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle (*);;Textdateien (*.txt);;Markup-Dateien (*.xml *.html *.xhtml *.htm *.md);;C/C++ (*.c *.h *.cpp *.hh *.c++ *.h++ *.cxx)</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Case inverse</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enable locale only voices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Speach voice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Speech</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Say the selected text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Speech pause/resume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stop speech</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UI mode (TEA restart is needed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UI language (TEA restart is needed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UI style (TEA restart is needed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FIF at the top (restart is needed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enable speech (TEA restart is needed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save more</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save all existing</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle auswählen</translation>
     </message>
 </context>
 <context>
     <name>CTioReadOnly</name>
     <message>
         <source>Saving for this format is not supported</source>
-        <translation></translation>
+        <translation>Speichern dieses Formates wird von TEA nicht unterstützt.</translation>
     </message>
 </context>
 <context>
     <name>CTodo</name>
     <message>
         <source>Attention! Attention!</source>
-        <translation></translation>
+        <translation>Achtung! Achtung!</translation>
     </message>
 </context>
 <context>
     <name>CZORWindow</name>
     <message>
         <source>scaled to: </source>
-        <translation></translation>
+        <translation>skaliert auf:</translation>
     </message>
 </context>
 <context>
@@ -1854,7 +1898,14 @@ To use time-based reminders, specify the time signature in 24-hour format [hh:mm
     <message>
         <source>Please set up spell checker dictionaries at
  Options - Functions page</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte richten Sie Wörterbücher zur Rechtschreibprüfung ein! Gehen Sie zu Optionen – Funktionen.</translation>
+    </message>
+</context>
+<context>
+    <name>QuaZipFile</name>
+    <message>
+        <source>ZIP/UNZIP API error %1</source>
+        <translation>Fehler bei der ZIP/UNZIP-API: %1</translation>
     </message>
 </context>
 </TS>

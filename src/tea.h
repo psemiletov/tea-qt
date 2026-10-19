@@ -653,6 +653,9 @@ public slots:
 Main window slots
 ===========================
 */
+#if QT_VERSION >= 0x040500
+  void handleTabMoved(int from, int to);
+#endif
 
   void pageChanged (int index);
   void logmemo_double_click (const QString &txt);

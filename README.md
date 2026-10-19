@@ -15,16 +15,10 @@ Donate >
 
 PayPal: peter.semiletov@gmail.com
 
-BuyMeACoffee: https://www.buymeacoffee.com/semiletov
-
-Patreon: https://www.patreon.com/semiletov
-
 
 Communities >
 
 https://t.me/teaqt
-
-https://www.facebook.com/groups/766324686841748/
 
 
 ## CONTENTS OF THIS README: ##

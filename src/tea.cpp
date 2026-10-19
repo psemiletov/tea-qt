@@ -6870,8 +6870,12 @@ void CTEA::create_main_widget_splitter()
   tab_editor = new QTabWidget;
   tab_editor->setUsesScrollButtons (true);
 
-#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
-  //tab_editor->setMovable (true);
+//#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
+#if QT_VERSION >= 0x040500
+
+  tab_editor->setMovable (true);
+  connect(tab_editor->tabBar(), &QTabBar::tabMoved, this, &CTEA::handleTabMoved);
+  
 #endif
 
   tab_editor->setObjectName ("tab_editor");
@@ -6971,9 +6975,17 @@ void CTEA::create_main_widget_docked()
   tab_editor->setUsesScrollButtons (true);
 
 //#if QT_VERSION >= 0x040500
-#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
+//#if (QT_VERSION_MAJOR >= 4 && QT_VERSION_MINOR >= 5)
+//  tab_editor->setMovable (true);
+//#endif
+
+#if QT_VERSION >= 0x040500
+
   tab_editor->setMovable (true);
+  connect(tab_editor->tabBar(), &QTabBar::tabMoved, this, &CTEA::handleTabMoved);
+  
 #endif
+
 
   tab_editor->setObjectName ("tab_editor");
 
@@ -10731,5 +10743,18 @@ void CTEA::pb_choose_aspell_path_clicked()
 
   setup_spellcheckers();
   create_spellcheck_menu();
+}
+#endif
+
+#if QT_VERSION >= 0x040500
+
+void CTEA::handleTabMoved(int from, int to) 
+{
+  if (documents->items.size() == 0)
+    return;
+    
+  CDocument *temp = documents->items[to];
+  documents->items[to] = documents->items[from];  
+  documents->items[from] = temp;
 }
 #endif
